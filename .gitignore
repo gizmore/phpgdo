@@ -1,0 +1,66 @@
+#################
+### GDOv7-Core ###
+#######################
+# All rights rerserved #
+#######################
+
+# Eclipse
+.buildpath
+.project
+.settings/
+
+# Web3.0
+.well-known/
+favicon.*
+.htaccess
+.htpasswd
+
+# Composer
+vendor/
+
+# PHPUnit
+.phpunit.result.cache
+
+# Yarn
+**/node_modules/
+**/yarn.lock
+**/yarn-error.log
+
+# Bower
+**/bower_components/
+
+# GDO
+assets/
+files/
+files_test/
+protected/
+temp/
+temp_test/
+
+# Installer
+install/*
+!install/gdo-install.css
+!install/wizard.php
+
+# Core modules
+GDO/*
+!GDO/Admin/
+!GDO/CLI/
+!GDO/Core/
+!GDO/Cronjob/
+!GDO/Crypto/
+!GDO/Date/
+!GDO/DB/
+!GDO/File/
+!GDO/Form/
+!GDO/Install/
+!GDO/Javascript/
+!GDO/Language/
+!GDO/Net/
+!GDO/Perf/
+!GDO/PHPInfo/
+!GDO/Table/
+!GDO/Tests/
+!GDO/UI/
+!GDO/User/
+!GDO/Util/

@@ -1,0 +1,48 @@
+<?php
+namespace GDO\Util;
+
+/**
+ * @TODO: Move to module Crypto: BCrypt password hash object.
+ * 
+ * @author gizmore
+ * @version 6.10.6
+ * @since 6.0.0
+ */
+final class BCrypt
+{
+	###############
+	### Factory ###
+	###############
+	public static function options()
+	{
+	    return [
+	        'cost' => env('BCRYPT_COST', 11),
+	    ];
+	}
+	
+	public static function create($plaintext)
+	{
+		return new self(password_hash($plaintext, PASSWORD_BCRYPT, self::options()));
+	}
+	
+	###############
+	### Members ###
+	###############
+	public $hash;
+	
+	public function __construct($hash)
+	{
+		$this->hash = $hash;
+	}
+	
+	public function __toString()
+	{
+		return $this->hash;
+	}
+	
+	public function validate($password)
+	{
+		return password_verify($password, $this->hash);
+	}
+	
+}
