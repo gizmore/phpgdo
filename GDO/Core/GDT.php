@@ -4,7 +4,8 @@ namespace GDO\Core;
 /**
  * The base class for all GDT.
  * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Label.
- * A GDT can support up to 9 rendering functions. CLI/JSON/XML/HTML/CELL/FORM/CARD/BINARY/CHOICE.
+ * 
+ * A GDT can support these rendering functions; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/BINARY/CHOICE/FILTER.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -111,12 +112,12 @@ abstract class GDT
 		return $this;
 	}
 	
-	public function htmlVar()
+	public function htmlVar() : string
 	{
 		return html($this->getVar());
 	}
 	
-	public function htmlName()
+	public function htmlName() : string
 	{
 	}
 	

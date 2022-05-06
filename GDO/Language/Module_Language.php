@@ -65,14 +65,19 @@ final class Module_Language extends GDO_Module
 	 */
 	public function cfgSupported() : array
 	{
-		$supported = [GDO_LANGUAGE => GDO_Language::table()->find(GDO_LANGUAGE)];
-		if ($additional = $this->getConfigValue('languages'))
+		static $supported;
+		if (!isset($supported))
 		{
-			foreach ($additional as $lang)
+			$supported = [GDO_LANGUAGE => GDO_Language::table()->find(GDO_LANGUAGE)];
+			if ($additional = $this->getConfigValue('languages'))
 			{
-				$supported[$lang->getISO()] = $lang;
+				foreach ($additional as $lang)
+				{
+					$supported[$lang->getISO()] = $lang;
+				}
 			}
 		}
+		
 		return $supported;
 	}
 	
