@@ -7,7 +7,7 @@ use GDO\Util\Strings;
 
 /**
  * Debug backtrace and error handler.
- * Can send email on PHP fatal errors.
+ * Can send email on PHP errors, even fatals, if Module_Mail is installed.
  * Has a method to get debug timings.
  * 
  * @example Debug::enableErrorHandler(); fatal_ooops();
@@ -20,31 +20,35 @@ use GDO\Util\Strings;
  */
 final class Debug
 {
+	public static int $MAX_ARG_LEN = 23;
+
 	private static bool $DIE = false;
 	private static bool $ENABLED = false;
 	private static bool $EXCEPTION = false;
 	private static bool $MAIL_ON_ERROR = false;
-	public static int $MAX_ARG_LEN = 23;
 	
 	/**
 	 * Call this to auto include.
 	 */
-	public static function init() {}
+	public static function init() : void {}
 	
 	###############
 	## Settings ###
 	###############
-	public static function setDieOnError(bool $bool = true)
+	public static function setDieOnError(bool $bool = true) : void
 	{
 		self::$DIE = $bool;
 	}
 	
-	public static function setMailOnError(bool $bool = true)
+	public static function setMailOnError(bool $bool = true) : void
 	{
-		self::$MAIL_ON_ERROR = $bool;
+		if (module_enabled('Mail'))
+		{
+			self::$MAIL_ON_ERROR = $bool;
+		}
 	}
 	
-	public static function disableErrorHandler()
+	public static function disableErrorHandler() : void
 	{
 		if (self::$ENABLED)
 		{
@@ -53,7 +57,7 @@ final class Debug
 		}
 	}
 	
-	public static function enableErrorHandler()
+	public static function enableErrorHandler() : void
 	{
 		if (!self::$ENABLED)
 		{
@@ -80,7 +84,7 @@ final class Debug
 // 		}
 // 	}
 	
-	public static function error(\Error $ex)
+	public static function error(\Throwable $ex)
 	{
 	    self::error_handler($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine());
 	}
@@ -105,6 +109,7 @@ final class Debug
 		// Log as critical!
 		if (class_exists('GDO\Core\Logger', false))
 		{
+			# But only if logger already in memory.
 			Logger::logCritical(sprintf('%s in %s line %s', $errstr, $errfile, $errline));
 			Logger::flush();
 		}
@@ -114,7 +119,6 @@ final class Debug
 			case -1:
 				$errnostr = 'GDO Error';
 				break;
-			
 			case E_ERROR:
 			case E_CORE_ERROR:
 				$errnostr = 'PHP Fatal Error';
@@ -136,10 +140,10 @@ final class Debug
 				break;
 			case E_COMPILE_WARNING:
 			case E_COMPILE_ERROR:
-				$errnostr = 'PHP Compiling Error';
+				$errnostr = 'PHP Compile Error';
 				break;
 			case E_PARSE:
-				$errnostr = 'PHP Parsing Error';
+				$errnostr = 'PHP Parse Error';
 				break;
 			
 			default:
@@ -261,7 +265,7 @@ final class Debug
 	 * 
 	 * @param string $message			
 	 */
-	public static function sendDebugMail(string $message)
+	public static function sendDebugMail(string $message) : void
 	{
 		return Mail::sendDebugMail(': PHP Error', $message);
 	}
@@ -271,7 +275,7 @@ final class Debug
 	 * 
 	 * @TODO move?
 	 */
-	public static function getDebugText(string $message)
+	public static function getDebugText(string $message) : string
 	{
 		$user = "~~GHOST~~";
 		if (class_exists('GDO\\User\\GDO_User', false))
@@ -305,8 +309,8 @@ final class Debug
 	
 	private static function getMoMe() : string
 	{
-		$mo = isset($_REQUEST['mo']) ? (string)$_REQUEST['mo'] : '-none-';
-		$me = isset($_REQUEST['me']) ? (string)$_REQUEST['me'] : '-none-';
+		$mo = isset($_REQUEST['mo']) ? (string)$_REQUEST['mo'] : '-none';
+		$me = isset($_REQUEST['me']) ? (string)$_REQUEST['me'] : 'none-';
 		return "{$mo}/{$me}";
 	}
 	
@@ -325,7 +329,7 @@ final class Debug
 		return self::backtraceMessage($message, $html, debug_backtrace());
 	}
 	
-	public static function backtraceException(\Throwable $ex, $html = true, $message = '')
+	public static function backtraceException(\Throwable $ex, bool $html = true, string $message = '') : string
 	{
 		$message = sprintf("PHP %s: '%s' in %s line %s",
 			get_class($ex), $ex->getMessage(),
@@ -333,7 +337,7 @@ final class Debug
 		return self::backtraceMessage($message, $html, $ex->getTrace(), $ex->getLine(), $ex->getFile());
 	}
 	
-	private static function backtraceArgs(array $args = null)
+	private static function backtraceArgs(array $args = null) : string
 	{
 		$out = [];
 		if ($args)
@@ -346,7 +350,7 @@ final class Debug
 		return implode(", ", $out);
 	}
 	
-	private static function backtraceArg($arg)
+	private static function backtraceArg($arg) : string
 	{
 		if ($arg === null)
 		{
@@ -395,7 +399,7 @@ final class Debug
 		return $arg;
 	}
 
-	private static function backtraceMessage(string $message, bool $html, array $stack, string $lastLine='?', string $lastFile='[unknown file]')
+	private static function backtraceMessage(string $message, bool $html, array $stack, string $lastLine='?', string $lastFile='[unknown file]') : string
 	{
 		// Fix full path disclosure
 		$message = self::shortpath($message);
@@ -474,7 +478,7 @@ final class Debug
 	 * @param string $path			
 	 * @return string
 	 */
-	public static function shortpath($path, $newline="")
+	public static function shortpath(string $path, string $newline="") : string
 	{
 		$path = str_replace('\\', '/', $path);
 		$path = str_replace(GDO_PATH, '', $path);

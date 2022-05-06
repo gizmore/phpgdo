@@ -24,15 +24,15 @@ class Application
 		self::$INSTANCE = $this;
 	}
 	
-	############
-	### Time ###
-	############
+	################
+	### App Time ###
+	################
 	public static int $TIME;
-	public static float $TIME_F;
+	public static float $MICROTIME;
 	public static function time(float $time)
 	{
 		self::$TIME = (int)$time;
-		self::$TIME_F = $time;
+		self::$MICROTIME = $time;
 	}
 	
 	#################

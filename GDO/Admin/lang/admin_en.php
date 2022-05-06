@@ -1,5 +1,6 @@
 <?php
-return array(
+namespace GDO\Admin\lang;
+return [
 'list_admin_modules' => '%s Modules',
 'list_admin_users' => 'Admin overview of %s users',
 ################################################################
@@ -69,4 +70,4 @@ return array(
 'mtitle_admin_clearcache' => 'Clear Cache',
 ################################################################
 'list_admin_viewpermission' => '%s Users got this permission',
-);
+];

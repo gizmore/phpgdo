@@ -1,5 +1,6 @@
 <?php
-return array(
+namespace GDO\Admin\lang;
+return [
 'list_admin_modules' => '%s Moduli',
 'list_admin_users' => 'Panoramica amministrativa degli %s utenti',
 ################################################################
@@ -69,4 +70,4 @@ return array(
 'mtitle_admin_clearcache' => 'Elimina il buffer',
 ################################################################
 'list_admin_viewpermission' => '%s utenti hanno questa autorizzazione',
-);
+];
