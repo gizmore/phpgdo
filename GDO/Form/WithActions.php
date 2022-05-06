@@ -16,9 +16,13 @@ trait WithActions
 	 */
 	protected array $actions;
 	
+	/**
+	 * 
+	 * @return GDT[]
+	 */
 	public function actions() : array
 	{
-		if ($this->actions === null)
+		if (!isset($this->actions))
 		{
 			$this->actions = [];
 		}

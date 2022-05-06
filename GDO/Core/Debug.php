@@ -265,7 +265,7 @@ final class Debug
 	 * 
 	 * @param string $message			
 	 */
-	public static function sendDebugMail(string $message) : void
+	public static function sendDebugMail(string $message) : bool
 	{
 		return Mail::sendDebugMail(': PHP Error', $message);
 	}

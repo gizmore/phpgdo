@@ -9,7 +9,7 @@ use GDO\Date\Time;
 use GDO\Util\Regex;
 
 /**
- * GDO autoloader and public functions.
+ * GDO autoloader and global functions.
  *
  * @author gizmore
  * @version 7.0.0
@@ -32,7 +32,7 @@ $GDT_LOADED = 0; # perf
 spl_autoload_register(
 function (string $name) : void
 {
-	if (($name[0] === 'G') && ($name[3] === '\\'))
+	if (str_starts_with($name, 'GDO\\'))
 	{
 		$name = str_replace('\\', '/', $name) . '.php';
 		require GDO_PATH . $name;

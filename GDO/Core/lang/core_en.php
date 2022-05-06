@@ -7,6 +7,7 @@ return [
 	'err_db' => "SQL Error %s: %s\nQuery: %s",
 	'err_db_no_link' => 'The database connection could not be established.',
 	'err_gdo_not_found' => 'The Data for %s with ID: %s could not be found.',
+	'err_module' => 'The %s module is not installed.',
 	'err_unknown_gdo_column' => '´%s´ does not have a column named `%s`.',
 	'err_save_unpersisted_entity' => 'An object of type %s shall be saved / updated, but it was not persisted beforehand.',
 	'err_create_dir' => 'Cannot create directory ´%s´ in %s line %s.',
