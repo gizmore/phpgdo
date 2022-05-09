@@ -14,9 +14,8 @@ use GDO\UI\WithHREF;
 use GDO\UI\WithTitle;
 use GDO\UI\WithActions;
 use GDO\Core\WithFields;
-use GDO\Core\GDOException;
-use GDO\DB\WithCrud;
 use GDO\Core\GDO_Exception;
+use GDO\Form\WithCrud;
 
 /**
  * A filterable, searchable, orderable, paginatable, sortable collection of GDT[] in headers.
@@ -77,11 +76,11 @@ class GDT_Table extends GDT
 		$this->action = @urldecode(@$_SERVER['REQUEST_URI']);
 	}
 
-	public function gdo(GDO $gdo = null)
-	{
-		$this->gdtTable = $gdo->table();
-		return parent::gdo($gdo);
-	}
+// 	public function gdo(GDO $gdo = null)
+// 	{
+// 		$this->gdtTable = $gdo->table();
+// 		return parent::gdo($gdo);
+// 	}
 
 	# ####################
 	# ## Header fields ###

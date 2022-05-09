@@ -1,6 +1,7 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 
 /**
@@ -17,7 +18,7 @@ abstract class MethodPage extends Method
      * {@inheritDoc}
      * @see \GDO\Core\Method::execute()
      */
-	public function execute()
+	public function execute() : GDT
 	{
 		$name = strtolower($this->gdoShortName());
 		return $this->templatePHP("page/{$name}.php",

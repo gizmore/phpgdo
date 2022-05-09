@@ -253,7 +253,7 @@ class Database
 		$columns = [];
 		foreach ($gdo->gdoColumns() as $gdt)
 		{
-			$columns[$gdt->name] = $gdt->gdtTable($gdo);
+			$columns[$gdt->getName()] = $gdt; # FIXME #->gdtTable($gdo);
 		}
 		return $columns;
 	}

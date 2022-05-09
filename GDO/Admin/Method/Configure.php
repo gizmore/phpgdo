@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDO_ModuleVar;
@@ -11,18 +11,14 @@ use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
-use GDO\DB\GDT_Name;
-use GDO\DB\GDT_Version;
 use GDO\UI\GDT_Divider;
 use GDO\Core\ModuleLoader;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Panel;
-use GDO\Core\GDT_Response;
-use GDO\Core\GDT_Module;
-use GDO\Util\Arrays;
 use GDO\Install\Installer;
 use GDO\Util\Common;
 use GDO\UI\GDT_Container;
+use GDO\Core\GDT;
 
 /**
  * Configure a module.
@@ -59,7 +55,7 @@ class Configure extends MethodForm
 	    $this->configModule = $modules[$moduleName];
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 	    # Response
 		$response = GDT_Response::make();
@@ -156,9 +152,10 @@ class Configure extends MethodForm
 		# Update config
 		$info = [];
 		$moduleVarsChanged = false;
-		foreach ($form->getFieldsRec() as $gdt)
+		foreach ($form->getFields() as $gdt)
 		{
-			if ($gdt->hasChanged() && $gdt->writable && $gdt->editable)
+// 			if ($gdt->hasChanged() && $gdt->writable && $gdt->editable)
+			if ($gdt->hasChanged() && $gdt->writable)
 			{
 				$info[] = '<br/>';
 				GDO_ModuleVar::createModuleVar($mod, $gdt);

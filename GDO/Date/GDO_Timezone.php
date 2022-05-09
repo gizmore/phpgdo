@@ -2,10 +2,10 @@
 namespace GDO\Date;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_AutoInc;
+use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_String;
-use GDO\DB\GDT_Int;
-use GDO\DB\GDT_Index;
+use GDO\Core\GDT_Int;
+use GDO\Core\GDT_Index;
 
 /**
  * Timezone mapping.
@@ -19,7 +19,7 @@ final class GDO_Timezone extends GDO
 	###########
 	### GDO ###
 	###########
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return [
 			GDT_AutoInc::make('tz_id')->bytes(2),
@@ -38,7 +38,7 @@ final class GDO_Timezone extends GDO
 	###############
 	### Display ###
 	###############
-	public function displayName()
+	public function displayName() : string
 	{
 		return $this->getName() . ' ' . $this->displayOffset();
 	}

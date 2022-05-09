@@ -3,6 +3,7 @@ namespace GDO\Perf\Method;
 
 use GDO\Core\Method;
 use GDO\Perf\GDT_PerfBar;
+use GDO\Core\GDT;
 
 /**
  * Render performance statistics.
@@ -13,7 +14,7 @@ use GDO\Perf\GDT_PerfBar;
  */
 final class Perf extends Method
 {
-    public function execute()
+	public function execute() : GDT
     {
         return GDT_PerfBar::make();
     }

@@ -82,7 +82,7 @@ class GDT_Float extends GDT_Int
 	    return self::displayS($this->var, $this->decimals);
 	}
 	
-	public function gdoCompare(GDO $a, GDO $b)
+	public function gdoCompare(GDO $a, GDO $b) : int
 	{
 		$va = $a->getValue($this->name);
 		$vb = $b->getValue($this->name);

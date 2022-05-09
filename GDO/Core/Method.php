@@ -14,6 +14,8 @@ use GDO\Util\Strings;
  */
 abstract class Method
 {
+	use WithModule;
+	
 	public abstract function execute() : GDT;
 	
 	###################
@@ -56,10 +58,10 @@ abstract class Method
 	###################
 	public static function make() : self
 	{
-		return new self();
+		return new static();
 	}
 	
-	protected function __construct() : self
+	protected function __construct()
 	{
 	}
 	
@@ -77,14 +79,14 @@ abstract class Method
 	/**
 	 * @var GDT[]
 	 */
-	private $parameterCache = null;
+	private array $parameterCache;
 	
 	/**
 	 * @return GDT[]
 	 */
-	public function gdoParameterCache() : array
+	public function &gdoParameterCache() : array
 	{
-		if ($this->parameterCache === null)
+		if (!isset($this->parameterCache))
 		{
 			$this->parameterCache = [];
 			foreach ($this->gdoParameters() as $gdt)
@@ -150,6 +152,11 @@ abstract class Method
 	#############
 	### Error ###
 	#############
+	public function message($key, array $args = null, int $code = 200, bool $log = true) : GDT
+	{
+		return $this->success($key, args, $code, $log);
+	}
+	
 	public function success($key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
 		Application::setResponseCode($code);
@@ -170,5 +177,12 @@ abstract class Method
 		return GDT_Error::make()->titleRaw($this->getModuleName())->text($key, $args);
 	}
 
-	### 
+	################
+	### Template ###
+	################
+	public function templatePHP(string $path, array $tVars=null) : GDT_Template
+	{
+		return GDT_Template::make()->template($this->getModuleName(), $path, $tVars);
+	}
+	
 }

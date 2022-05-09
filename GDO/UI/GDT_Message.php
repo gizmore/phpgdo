@@ -6,7 +6,7 @@ use GDO\Core\GDO;
 use GDO\Util\Strings;
 use GDO\User\GDO_User;
 use GDO\Profile\GDT_ProfileLink;
-use GDO\DB\GDT_Text;
+use GDO\Core\GDT_Text;
 
 /**
  * A message is a GDT_Text with an editor. Classic uses a textarea.
@@ -228,7 +228,7 @@ class GDT_Message extends GDT_Text
         return parent::var($var);
     }
     
-    public function blankData()
+    public function blankData() : array
     {
         return [
             "{$this->name}_input" => $this->input,
@@ -273,7 +273,7 @@ class GDT_Message extends GDT_Text
     ##############
     ### Getter ###
     ##############
-    public function getVar()
+    public function getVar() : ?string
     {
         $form = $this->formVariable();
         if ($form)

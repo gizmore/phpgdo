@@ -2,7 +2,7 @@
 namespace GDO\Date\Method;
 
 use GDO\Core\Method;
-use GDO\DB\GDT_EnumNoI18n;
+use GDO\Core\GDT_EnumNoI18n;
 use GDO\Core\Application;
 
 /**
@@ -21,7 +21,7 @@ final class Epoch extends Method
         ];
     }
     
-    public function execute()
+    public function execute() : GDT
     {
         $format = $this->gdoParameterVar('format');
         switch ($format)

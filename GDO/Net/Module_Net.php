@@ -14,8 +14,6 @@ final class Module_Net extends GDO_Module
 {
 	public int $priority = 10;
 	
-	public function isCoreModule() { return true; }
-	
 	public function getClasses() : array
 	{
 		return [

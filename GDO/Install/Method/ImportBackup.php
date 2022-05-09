@@ -21,9 +21,9 @@ final class ImportBackup extends MethodForm
 	
 	public function createForm(GDT_Form $form)
 	{
-		$form->addFields(array(
+		$form->addFields(
 			GDT_File::make('backup_file'),
-		));
+		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
 	

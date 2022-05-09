@@ -30,8 +30,10 @@ use GDO\Util\Regex;
  * @since 3.2.0
  * @license GDOv7-LICENSE
  */
-abstract class GDO extends GDT
+abstract class GDO# extends GDT
 {
+	use WithModule;
+	
 	#################
 	### Constants ###
 	#################
@@ -259,12 +261,9 @@ abstract class GDO extends GDT
 	 * @param string $key
 	 * @return string
 	 */
-	public function gdoVar($key) : string
+	public function gdoVar($key) : ?string
 	{
-		if (isset($this->gdoVars[$key]))
-		{
-			return $this->gdoVars[$key];
-		}
+		return isset($this->gdoVars[$key]) ? $this->gdoVars[$key] : null;
 	}
 	
 	public function getVars(array $keys) : array
@@ -280,7 +279,7 @@ abstract class GDO extends GDT
 	 * @param boolean $markDirty
 	 * @return self
 	 */
-	public function setVar($key, $var, $markDirty=true)
+	public function setVar(string $key, string $var, bool $markDirty=true) : self
 	{
 		# @TODO: Better use temp? @see Vote/Up
 		if (!$this->hasColumn($key))
@@ -302,10 +301,10 @@ abstract class GDO extends GDT
 				}
 			}
 		}
-		return $markDirty && $d ? $this->markDirty($key) : $this;
+		return ($markDirty && $d) ? $this->markDirty($key) : $this;
 	}
 	
-	public function setVars(array $vars=null, $markDirty=true)
+	public function setVars(array $vars=null, $markDirty=true) : self
 	{
 		foreach ($vars as $key => $value)
 		{
@@ -314,7 +313,7 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function setValue($key, $value, $markDirty=true)
+	public function setValue(string $key, $value, bool $markDirty=true) : self
 	{
 		if ($vars = $this->gdoColumn($key)->value($value)->getGDOData())
 		{
@@ -335,7 +334,7 @@ abstract class GDO extends GDT
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function gdoValue($key)
+	public function gdoValue(string $key)
 	{
 		return $this->gdoColumn($key)->getValue();
 	}
@@ -343,7 +342,7 @@ abstract class GDO extends GDT
 	#############
 	### Dirty ###
 	#############
-	public function markClean($key)
+	public function markClean(string $key) : self
 	{
 		if ($this->dirty === false)
 		{
@@ -357,7 +356,7 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function markDirty($key)
+	public function markDirty(string $key) : self
 	{
 		if ($this->dirty === false)
 		{
@@ -370,16 +369,16 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function isDirty()
+	public function isDirty() : bool
 	{
-		return is_bool($this->dirty) ? $this->dirty : count($this->dirty) > 0;
+		return is_bool($this->dirty) ? $this->dirty : (count($this->dirty) > 0);
 	}
 	
 	/**
 	 * Get gdoVars that have been changed.
 	 * @return string[]
 	 */
-	public function getDirtyVars()
+	public function getDirtyVars() : array
 	{
 		if ($this->dirty === true)
 		{
@@ -562,7 +561,7 @@ abstract class GDO extends GDT
 	 * @param string $key
 	 * @return GDT
 	 */
-	public function gdoColumn($key, $throw=true)
+	public function gdoColumn(string $key, bool $throw=true) : GDT
 	{
 		/** @var $gdt GDT **/
 		if ($gdt = $this->gdoColumnsCache()[$key])
@@ -573,19 +572,20 @@ abstract class GDO extends GDT
 		{
 			throw new GDO_Error('err_unknown_gdo_column', [$this->displayName(), html($key)]);
 		}
+		return null;
 	}
 	
-	/**
-	 * Get a copy of a GDT column.
-	 * @param string $key
-	 * @return GDT
-	 */
-	public function gdoColumnCopy($key)
-	{
-		/** @var $column GDT **/
-		$column = clone $this->gdoColumnsCache()[$key];
-		return $column->gdo($this);#->var($column->initial);
-	}
+// 	/**
+// 	 * Get a copy of a GDT column.
+// 	 * @param string $key
+// 	 * @return GDT
+// 	 */
+// 	public function gdoColumnCopy($key)
+// 	{
+// 		/** @var $column GDT **/
+// 		$column = clone $this->gdoColumnsCache()[$key];
+// 		return $column->gdo($this);#->var($column->initial);
+// 	}
 	
 	/**
 	 * Get all GDT columns except those listed.
@@ -605,52 +605,14 @@ abstract class GDO extends GDT
 		return $columns;
 	}
 	
-	//     /**
-	//      * Get a copy of all GDT columns except those listed. Slow.
-	//      * Used in MethodCRUD because some GDO have not correct fields in gdoColumns().
-	//      *
-	//      * @param string[] ...$except
-	//      * @return GDT[]
-	//      */
-	//     public function gdoColumnsCopyExcept(...$except)
-	//     {
-	//         $columns = array();
-	//         foreach (array_keys($this->gdoColumnsCache()) as $key)
-		//         {
-		//             if (!in_array($key, $except, true))
-			//             {
-			//                 $columns[$key] = $this->gdoColumnCopy($key);
-			//             }
-		//         }
-	//         return $columns;
-	//     }
-	
-	//     /**
-	//      * Get a copy of multiple gdt.
-	//      * @param string[] ...$names
-	//      * @return GDT[]
-	//      */
-	//     public function gdoColumnsCopy(...$names)
-	//     {
-	//         $columns = array();
-	//         foreach (array_keys($this->gdoColumnsCache()) as $key)
-		//         {
-		//             if (in_array($key, $names, true))
-			//             {
-			//                 $columns[$key] = $this->gdoColumnCopy($key);
-			//             }
-		//         }
-	//         return $columns;
-	//     }
-	
 	##########
 	### DB ###
 	##########
 	/**
 	 * Create a new query for this GDO table.
-	 * @return \GDO\DB\Query
+	 * @return Query
 	 */
-	public function query()
+	public function query() : Query
 	{
 		return new Query(self::table());
 	}
@@ -660,13 +622,13 @@ abstract class GDO extends GDT
 	 * @param string $id
 	 * @return static
 	 */
-	public function find($id=null, $exception=true)
+	public function find(string $id=null, bool $throw=true)
 	{
 		if ($id && ($gdo = $this->getById($id)))
 		{
 			return $gdo;
 		}
-		if ($exception)
+		if ($throw)
 		{
 			self::notFoundException(html($id));
 		}
@@ -1128,26 +1090,25 @@ abstract class GDO extends GDT
 	 * @param array $initial data to copy
 	 * @return array the new blank data1
 	 */
-	public static function blankData(array $initial = null)
+	public static function getBlankData(array $initial = null)
 	{
 		$table = self::table();
 		$gdoVars = [];
-		foreach ($table->gdoColumnsCache() as $column)
+		foreach ($table->gdoColumnsCache() as $gdt)
 		{
 			# init gdt with initial var.
-			if (isset($initial[$column->name]))
+			if (isset($initial[$gdt->name]))
 			{
-				$var = $initial[$column->name];
-				$column->var($var);
-				//                 $column->var($column->inputToVar($var));
+				$var = $initial[$gdt->name];
+				$gdt->var($var);
 			}
 			else
 			{
-				$column->var($column->initial);
+				$gdt->var($gdt->initial);
 			}
 			
 			# loop over blank data
-			if ($data = $column->blankData())
+			if ($data = $gdt->blankData())
 			{
 				foreach ($data as $k => $v)
 				{
@@ -1173,7 +1134,7 @@ abstract class GDO extends GDT
 	 */
 	public static function blank(array $initial = null) : self
 	{
-		return self::entity(self::blankData($initial))->dirty()->setPersisted(false);
+		return self::entity(self::getBlankData($initial))->dirty()->setPersisted(false);
 	}
 	
 	public function dirty($dirty=true) : self
@@ -1185,12 +1146,12 @@ abstract class GDO extends GDT
 	##############
 	### Get ID ###
 	##############
-	private string $id;
+	private ?string $id = null;
 	/**
 	 * Id cache
 	 * @var $id string
 	 */
-	public function getID() : string
+	public function getID() : ?string
 	{
 		if ($this->id)
 		{
@@ -1292,9 +1253,9 @@ abstract class GDO extends GDT
 		{
 			$i = 0;
 			$query = $table->select();
-			foreach ($table->gdoPrimaryKeyColumns() as $column)
+			foreach ($table->gdoPrimaryKeyColumns() as $gdt)
 			{
-				$condition = $table->gdoTableName() . '.' . $column->identifier() .
+				$condition = $table->gdoTableName() . '.' . $gdt->identifier() .
 				'=' . self::quoteS($id[$i++]);
 				$query->where($condition);
 			}
@@ -1374,9 +1335,9 @@ abstract class GDO extends GDT
 			$i = 0;
 			$id = explode(':', $id);
 			$query = $this->select();
-			foreach ($this->gdoPrimaryKeyColumns() as $column)
+			foreach ($this->gdoPrimaryKeyColumns() as $gdt)
 			{
-				$query->where($column->identifier() . '=' . self::quoteS($id[$i++]));
+				$query->where($gdt->identifier() . '=' . self::quoteS($id[$i++]));
 			}
 			$object = $query->uncached()->first()->exec()->fetchObject();
 			return $object ? $table->cache->recache($object) : null;

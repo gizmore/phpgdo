@@ -88,8 +88,8 @@ class GDT_String extends GDT_DBField
 	###############
 	### Pattern ###
 	###############
-	public $pattern;
-	public function pattern($pattern) : self
+	public string $pattern;
+	public function pattern(string $pattern) : self
 	{
 		$this->pattern = $pattern;
 		return $this;

@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Core\lang;
 return [
-	'sitename' => 'GDOv7',
+	'sitename' => def('GDO_SITENAME', 'GDOv7'),
 	
 	# Errors
 	'err_db' => "SQL Error %s: %s\nQuery: %s",
@@ -26,5 +26,6 @@ return [
 	'err_int_too_small' => 'This number has to be larger than or be equal to %s.',
 	'err_int_too_large' => 'This number has to be smaller than or be equal to %s.',
 	'err_invalid_string_encoding' => 'This text has set an invalid string encoding.',
-	
+	'err_properitary_asset_code' => 'You may not access asset files in the GDO folder.',
+	'err_invalid_choice' => 'Your selection is invalid.',
 ];

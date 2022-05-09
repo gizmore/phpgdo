@@ -32,7 +32,7 @@ final class GDT_RangeSlider extends GDT_Slider
 	###################
 	### Var / Value ###
 	###################
-	public function toVar($value) { return $value === null ? null : json_encode($value); }
+	public function toVar($value) : string { return $value === null ? null : json_encode($value); }
 	public function toValue($var) { return $var === null ? null : json_decode($var); }
 	public function getLow() { return $this->getVal(0); }
 	public function getHigh() { return $this->getVal(1); }

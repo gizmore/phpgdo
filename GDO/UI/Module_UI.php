@@ -7,6 +7,4 @@ final class Module_UI extends GDO_Module
 {
     public int $priority = 20;
     
-    public function isCoreModule() { return true; }
-
 }

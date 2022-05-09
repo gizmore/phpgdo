@@ -5,7 +5,7 @@ use GDO\Core\GDT_Template;
 use GDO\Session\GDO_Session;
 use GDO\Util\Arrays;
 use GDO\Core\GDO;
-use GDO\DB\GDT_Object;
+use GDO\Core\GDT_Object;
 use GDO\UI\WithHREF;
 use GDO\Core\GDT_Error;
 use GDO\Core\GDT_Success;
@@ -204,7 +204,7 @@ class GDT_File extends GDT_Object
 	### Value ###
 	#############
 	protected $files = [];
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 		if ($value)
 		{
@@ -227,7 +227,7 @@ class GDT_File extends GDT_Object
 		}
 	}
 	
-	public function getVar()
+	public function getVar() : ?string
 	{
 		return $this->toVar($this->getValue());
 	}

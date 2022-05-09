@@ -34,7 +34,7 @@ class GDT_Token extends GDT_Char
 		return $this;
 	}
 	
-	public function blankData()
+	public function blankData() : array
 	{
 		return [
 		    $this->name => $this->initialNull ? 

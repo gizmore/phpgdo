@@ -38,6 +38,15 @@ abstract class GDT_Field extends GDT
 		return $obj->name($name ? $name : $obj->getDefaultName());
 	}
 	
+	public function blankData() : array
+	{
+		if ($key = $this->getName())
+		{
+			return [$key => $this->getVar()];
+		}
+		return [$this->getVar()];
+	}
+	
 	################
 	### Validate ###
 	################

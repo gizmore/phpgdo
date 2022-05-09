@@ -7,7 +7,7 @@ use GDO\User\GDO_User;
 use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Core\GDT_Hook;
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\UI\GDT_EditButton;
 use GDO\User\GDT_Username;
 
@@ -25,10 +25,10 @@ final class UserCreate extends MethodForm
     
 	public function createForm(GDT_Form $form)
 	{
-		$form->addFields([
+		$form->addFields(
 			GDT_Username::make('user_name')->notNull()->exists(false),
 			GDT_AntiCSRF::make(),
-		]);
+		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
 	

@@ -1,7 +1,7 @@
 <?php
 namespace GDO\UI;
 
-use GDO\DB\GDT_EnumNoI18n;
+use GDO\Core\GDT_EnumNoI18n;
 
 /**
  * Font weight enum select.

@@ -16,8 +16,8 @@ namespace GDO\Core;
  */
 class GDT_UInt extends GDT_Int
 {
-    public $min = 0;
-    public $unsigned = true;
+    public ?int $min = 0;
+    public bool $unsigned = true;
     
     public function isOrderDefaultAsc() : bool { return false; }
     

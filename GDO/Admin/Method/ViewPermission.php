@@ -1,9 +1,9 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
-use GDO\DB\GDT_CreatedAt;
-use GDO\DB\GDT_CreatedBy;
+use GDO\Admin\MethodAdmin;
+use GDO\Core\GDT_CreatedAt;
+use GDO\Core\GDT_CreatedBy;
 use GDO\Table\GDT_Count;
 use GDO\Table\GDT_Table;
 use GDO\Table\MethodQueryTable;
@@ -69,7 +69,7 @@ class ViewPermission extends MethodQueryTable
 			uncached();
 	}
     
-	public function execute()
+	public function execute() : GDT
 	{
 	    $this->renderPermTabs('Admin');
 	    return parent::execute();

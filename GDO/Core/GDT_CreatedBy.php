@@ -29,10 +29,8 @@ final class GDT_CreatedBy extends GDT_User
 	/**
 	 * Initial data.
 	 * Force persistance on current user.
-	 * {@inheritDoc}
-	 * @see \GDO\Core\GDT::blankData()
 	 */
-	public function blankData()
+	public function blankData() : array
 	{
 	    if ($this->var)
 	    {

@@ -12,6 +12,7 @@ use GDO\Tests\Module_Tests;
 use GDO\File\FileUtil;
 use GDO\Util\Strings;
 use GDO\UI\GDT_Link;
+use GDO\Table\GDT_Sort;
 
 /**
  * GDO base module class.
@@ -55,7 +56,7 @@ class GDO_Module extends GDO
 	 * Override this.
 	 * @return string[]
 	 */
-	public function getDependencies() : array {}
+	public function getDependencies() : array { return GDT::EMPTY_ARRAY; }
 	
 //     /**
 //      * A list of optional modules that enhance this one.
@@ -94,7 +95,7 @@ class GDO_Module extends GDO
 	 * Provided theme name in module /thm/$themeName/ folder.
 	 * @return string $themeName
 	 */
-	public function getTheme() : string {}
+	public function getTheme() : ?string { return null; }
 	
 	/**
 	 * GDO classes to install.
@@ -106,7 +107,7 @@ class GDO_Module extends GDO
 	 * Module config GDTs
 	 * @return GDT[]
 	 */
-	public function getConfig() : array {}
+	public function getConfig() : array { return GDT::EMPTY_ARRAY; }
 	
 	############
 	### Info ###
@@ -244,6 +245,7 @@ class GDO_Module extends GDO
 	{
 		return [
 			GDT_AutoInc::make('module_id'),
+			GDT_Sort::make('module_priority'),
 			GDT_Name::make('module_name')->notNull()->unique(),
 			GDT_Version::make('module_version')->notNull(),
 			GDT_Checkbox::make('module_enabled')->notNull()->initial('0'),
@@ -270,10 +272,10 @@ class GDO_Module extends GDO
 	##############
 	### Getter ###
 	##############
-	public function getID() : string { return $this->gdoVar('module_id'); }
+	public function getID() : ?string { return $this->gdoVar('module_id'); }
 	public function getName() : string { return $this->gdoVar('module_name'); }
 	public function getVersion() : string { return $this->gdoVar('module_version'); }
-	public function isEnabled() : bool { return $this->gdoVar('module_enabled'); }
+	public function isEnabled() : string { return $this->gdoVar('module_enabled'); }
 	public function isInstalled() : bool { return $this->isPersisted(); }
 	
 	###############
@@ -416,7 +418,7 @@ class GDO_Module extends GDO
 	/**
 	 * @var GDT[]
 	 */
-	private array $configCache;
+	private array $configCache = [];
 	
 	/**
 	 * Get module configuration hashed and cached.
@@ -424,7 +426,7 @@ class GDO_Module extends GDO
 	 */
 	public function &buildConfigCache() : array
 	{
-	    if ($this->configCache === null)
+		if (!isset($this->configCache))
 	    {
 	        if ($config = $this->getConfig())
 	        {

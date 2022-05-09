@@ -16,7 +16,7 @@ use GDO\File\GDO_File;
  */
 final class Security extends MethodForm
 {
-	public function execute()
+	public function execute() : GDT
 	{
 		Database::init();
 		ModuleLoader::instance()->loadModulesA();

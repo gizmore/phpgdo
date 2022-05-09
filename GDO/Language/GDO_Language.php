@@ -2,7 +2,7 @@
 namespace GDO\Language;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_Char;
+use GDO\Core\GDT_Char;
 use GDO\Core\GDT_Template;
 
 /**
@@ -42,16 +42,16 @@ final class GDO_Language extends GDO
 	    }
 	}
 	
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return [
 		    GDT_Char::make('lang_iso')->primary()->ascii()->caseS()->length(2),
 		];
 	}
 	
-	public function getID() { return $this->getISO(); }
+	public function getID() : ?string { return $this->getISO(); }
 	public function getISO() { return $this->gdoVar('lang_iso'); }
-	public function displayName() { return t('lang_'.$this->getISO()); }
+	public function displayName() : string { return t('lang_'.$this->getISO()); }
 	public function displayNameISO($iso) { return tiso($iso, 'lang_'.$this->getISO()); }
 	public function renderCell() : string
 	{

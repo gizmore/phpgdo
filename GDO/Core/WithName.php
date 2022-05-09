@@ -1,8 +1,14 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Language\Trans;
+
 /**
  * Add a name to a GDT.
+ * Display human classname.
+ * Add trait WithModule.
+ * 
+ * @see WithModule
  * 
  * @author gizmore
  * @version 7.0.0
@@ -10,24 +16,55 @@ namespace GDO\Core;
  */
 trait WithName
 {
-	public string $name;
+	use WithModule;
 	
-	public function getDefaultName() : string
+	public ?string $name = null;
+	
+	public function hasName() : bool
 	{
-		# default null
+		return !!$this->name;
 	}
 	
-	public function name(string $name) : self
+	public function getName() : ?string
+	{
+		return $this->name;
+	}
+	
+	public function getDefaultName() : ?string
+	{
+		return null;
+	}
+	
+	public function name(string $name = null) : self
 	{
 		$this->name = $name;
 		return $this;
 	}
 	
-	public static function make($name = null)
+	public static function make(string $name = null) : self
 	{
 		$obj = new static();
-		$obj->name($name ? $name : $obj->getDefaultName());
+		$name = $name ? $name : $obj->getDefaultName();
+		if ($name)
+		{
+			$obj->name($name);
+		}
 		return $obj;
 	}
 
+	public function gdoHumanName() : string
+	{
+		$shortname = self::gdoShortNameS();
+		$key = strtolower($shortname);
+		if (Trans::hasKey($key))
+		{
+			return t($key);
+		}
+		$key = strtolower($this->getName());
+		if (Trans::hasKey($key))
+		{
+			return t($key);
+		}
+		return $shortname;
+	}
 }

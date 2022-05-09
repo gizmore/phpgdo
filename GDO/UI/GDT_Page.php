@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithFields;
+use GDO\Core\WithInstance;
 
 /**
  * A website page object.
@@ -14,6 +15,7 @@ final class GDT_Page extends GDT
 {
 	use WithTitle;
 	use WithFields;
+	use WithInstance;
 	use WithDescription;
 	
 	public function renderHTML()

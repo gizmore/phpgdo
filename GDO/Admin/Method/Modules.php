@@ -2,12 +2,12 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\GDT_ModuleVersionFS;
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
 use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
 use GDO\Core\GDT_Checkbox;
-use GDO\DB\GDT_Decimal;
+use GDO\Core\GDT_Decimal;
 use GDO\Core\ModuleLoader;
 use GDO\Table\GDT_Sort;
 use GDO\Admin\GDT_ModuleNameLink;
@@ -40,7 +40,7 @@ class Modules extends MethodTable
 	
 	public function getPermission() { return 'staff'; }
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		$this->modules = ModuleLoader::instance()->loadModules(false, true);
 		return parent::execute();

@@ -2,10 +2,10 @@
 namespace GDO\File;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_AutoInc;
-use GDO\DB\GDT_Object;
-use GDO\DB\GDT_CreatedBy;
-use GDO\DB\GDT_CreatedAt;
+use GDO\Core\GDT_AutoInc;
+use GDO\Core\GDT_Object;
+use GDO\Core\GDT_CreatedBy;
+use GDO\Core\GDT_CreatedAt;
 use GDO\User\GDO_User;
 
 /**
@@ -28,9 +28,9 @@ class GDO_FileTable extends GDO
 	###########
 	### GDO ###
 	###########
-	public function gdoCached() { return false; }
+	public function gdoCached() : bool { return false; }
 	public function gdoAbstract() { return $this->gdoFileObjectTable() === null; }
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return array(
 			GDT_AutoInc::make('files_id'),

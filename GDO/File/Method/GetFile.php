@@ -6,7 +6,7 @@ use GDO\File\GDO_File;
 use GDO\File\FileUtil;
 use GDO\Net\Stream;
 use GDO\Util\Common;
-use GDO\DB\GDT_Int;
+use GDO\Core\GDT_Int;
 use GDO\Core\GDT_String;
 
 /**
@@ -43,7 +43,7 @@ final class GetFile extends Method
 		);
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		return $this->executeWithId(
 			Common::getRequestString('file'),

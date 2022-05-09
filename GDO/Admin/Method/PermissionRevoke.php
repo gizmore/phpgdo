@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -47,7 +47,7 @@ class PermissionRevoke extends MethodForm
 	    }
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 	    $this->renderPermTabs();
 		return parent::execute();
@@ -55,11 +55,11 @@ class PermissionRevoke extends MethodForm
 	
 	public function createForm(GDT_Form $form)
 	{
-		$form->addFields([
+		$form->addFields(
 			GDT_User::make('perm_user_id')->notNull()->initial($this->user ? $this->user->getID() : '0'),
 			GDT_Permission::make('perm_perm_id')->notNull()->initial($this->permission ? $this->permission->getID() : '0'),
 			GDT_AntiCSRF::make(),
-		]);
+		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
 	

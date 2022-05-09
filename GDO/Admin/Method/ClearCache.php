@@ -2,7 +2,7 @@
 namespace GDO\Admin\Method;
 
 use GDO\Core\GDO;
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
 use GDO\DB\Cache;
@@ -11,6 +11,7 @@ use GDO\Javascript\MinifyJS;
 use GDO\Core\Module_Core;
 use GDO\Core\Website;
 use GDO\Core\ModuleLoader;
+use GDO\Core\GDT;
 
 /**
  * Clears all client and server caches.
@@ -29,7 +30,7 @@ final class ClearCache extends Method
 	
 	public function getPermission() { return 'staff'; }
 	
-	public function execute()
+	public function execute() : GDT
 	{
 	    $this->clearCache();
 		return Website::redirectMessage('msg_cache_flushed', null, Website::hrefBack());

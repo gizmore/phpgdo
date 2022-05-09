@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Date;
 
-use GDO\DB\GDT_ObjectSelect;
+use GDO\Core\GDT_ObjectSelect;
 
 /**
  * Timezone select.

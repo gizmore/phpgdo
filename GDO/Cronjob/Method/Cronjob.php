@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Cronjob\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;

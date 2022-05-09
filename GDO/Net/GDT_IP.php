@@ -58,8 +58,8 @@ final class GDT_IP extends GDT_String
 	##############
 	public $min = 3;
 	public $max = 45;
-	public $encoding = self::ASCII;
-	public $caseSensitive = true;
+	public int $encoding = self::ASCII;
+	public bool $caseSensitive = true;
 	public $pattern = "/^[.:0-9A-Fa-f]{3,45}$/";
 	public $writable = false;
 	public $editable = false;

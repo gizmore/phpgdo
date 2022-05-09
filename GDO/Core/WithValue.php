@@ -15,9 +15,9 @@ trait WithValue
 	### Input / Var / Value ###
 	###########################
 	public bool $valueConverted = false; # Has var been converted to value already?
-	public string $initial; # initial var
-	public string $input; # input string
-	public string $var; # input db var
+	public ?string $initial = null; # initial var
+	public ?string $input = null; # input string
+	public ?string $var = null; # input db var
 	public $value; # output value
 	
 	public function initial(string $initial) : self
@@ -26,13 +26,13 @@ trait WithValue
 		return $this->var($initial);
 	}
 
-	public function input(string $input) : self
+	public function input(?string $input) : self
 	{
 		$this->input = $input;
 		return $this;
 	}
 
-	public function var(string $var) : self
+	public function var(?string $var) : self
 	{
 		$this->var = $var;
 		$this->valueConverted = false;
@@ -47,7 +47,7 @@ trait WithValue
 		return $this;
 	}
 	
-	public function getVar() : string
+	public function getVar() : ?string
 	{
 		return $this->var;
 	}

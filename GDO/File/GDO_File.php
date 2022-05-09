@@ -2,13 +2,13 @@
 namespace GDO\File;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_AutoInc;
+use GDO\Core\GDT_AutoInc;
 use GDO\Date\GDT_Duration;
 use GDO\Core\GDT_String;
 use GDO\Core\GDOError;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDOException;
-use GDO\DB\GDT_UInt;
+use GDO\Core\GDT_UInt;
 use GDO\Core\Debug;
 use GDO\Core\Application;
 use GDO\User\GDO_User;
@@ -32,7 +32,7 @@ final class GDO_File extends GDO
 	###########
 	### GDO ###
 	###########
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return [
 			GDT_AutoInc::make('file_id')->label('id'),
@@ -47,7 +47,7 @@ final class GDO_File extends GDO
 	}
 	
 	public function getName() { return $this->gdoVar('file_name'); }
-	public function displayName() { return html($this->getName()); }
+	public function displayName() : string { return html($this->getName()); }
 	public function getSize() { return $this->gdoVar('file_size'); }
 	public function getType() { return $this->gdoVar('file_type'); }
 	public function displaySize() { return FileUtil::humanFilesize($this->getSize()); }
@@ -93,7 +93,7 @@ final class GDO_File extends GDO
 	/**
 	 * Delete variant- and original file when deleted from database. 
 	 */
-	public function gdoAfterDelete()
+	public function gdoAfterDelete() : void
 	{
 	    # Delete variants
 		Filewalker::traverse(self::filesDir(), "/^{$this->getID()}_/", [$this, 'deleteVariant']);

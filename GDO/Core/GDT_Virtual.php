@@ -40,7 +40,7 @@ class GDT_Virtual extends GDT
     /**
      * Select this virtual column as subselect.
      */
-    public function gdoBeforeRead(Query $query)
+    public function gdoBeforeRead(Query $query) : void
     {
         if ($this->subquery)
         {

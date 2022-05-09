@@ -21,9 +21,9 @@ final class GDO_UserSetting extends GDO
 	###########
 	### GDO ###
 	###########
-	public function gdoCached() { return false; }
+	public function gdoCached() : bool { return false; }
 	public function gdoDependencies() { return ['GDO\User\GDO_User', 'GDO\Core\GDO_Module']; }
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return array(
 			GDT_User::make('uset_user')->primary(),

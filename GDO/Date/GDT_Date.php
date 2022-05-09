@@ -32,7 +32,7 @@ class GDT_Date extends GDT_Timestamp
 	public function renderCell() : string { return $this->renderCellSpan($this->display()); }
 	public function renderForm() : string { return GDT_Template::php('Date', 'form/date.php', ['field'=>$this]); }
 	
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 	    if ($value)
 	    {

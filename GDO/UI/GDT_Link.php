@@ -30,18 +30,18 @@ class GDT_Link extends GDT_String
 	################
 	### GDO href ###
 	################
-	public function gdo(GDO $gdo=null)
-	{
-	    if ($gdo)
-	    {
-    	    $method = "href_{$this->name}";
-    	    if (method_exists($gdo, $method))
-    	    {
-    	        $this->href(call_user_func([$gdo, $method]));
-    	    }
-	    }
-	    return parent::gdo($gdo);
-	}
+// 	public function gdo(GDO $gdo=null)
+// 	{
+// 	    if ($gdo)
+// 	    {
+//     	    $method = "href_{$this->name}";
+//     	    if (method_exists($gdo, $method))
+//     	    {
+//     	        $this->href(call_user_func([$gdo, $method]));
+//     	    }
+// 	    }
+// 	    return parent::gdo($gdo);
+// 	}
 	
 	################
 	### Relation ###
@@ -60,7 +60,7 @@ class GDT_Link extends GDT_String
 	const REL_SEARCH = 'search';
 	const REL_TAG = 'tag';
 	
-	public $caseSensitive = true;
+	public bool $caseSensitive = true;
 	
 	/**
 	 * Output a link / anchor.

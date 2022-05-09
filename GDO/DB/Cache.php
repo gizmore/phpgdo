@@ -31,17 +31,17 @@ use GDO\Core\Application;
  */
 class Cache
 {
-	private static $MEMCACHED; # Memcached server
+	private static \Memcached $MEMCACHED; # Memcached server
 	
 	/**
 	 * This holds the GDO that need a recache after the method has been executed.
 	 * @var GDO[]
 	 */
-	private static $RECACHING = [];
+	private static array $RECACHING = [];
 
-	public $pkNames;   # Primary Key Column Names
-    public $pkColumns; # Primary Key Columns
-    public $tableName; # Cached transformed table name
+	public array $pkNames;   # Primary Key Column Names
+    public array $pkColumns; # Primary Key Columns
+    public string $tableName; # Cached transformed table name
 
 	#################
 	### Memcached ###
@@ -116,7 +116,7 @@ class Cache
 	public function __construct(GDO $gdo)
 	{
 		$this->table = $gdo;
-		$this->klass = $gdo->gdoClassName();
+		$this->klass = get_class($gdo);
 		$this->tableName = strtolower($gdo->gdoShortName());
 	}
 	

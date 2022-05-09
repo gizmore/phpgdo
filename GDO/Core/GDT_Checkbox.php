@@ -56,15 +56,6 @@ class GDT_Checkbox extends GDT_Select
 		  "{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
 	}
 	
-	/**
-	 * Return no collation for a tinyint.
-	 * @see GDT_String::gdoCollateDefine()
-	 */
-	public function gdoCollateDefine($caseSensitive)
-	{
-	    return '';
-	}
-	
 	####################
 	### Undetermined ###
 	####################

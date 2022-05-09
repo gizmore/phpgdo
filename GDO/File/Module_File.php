@@ -28,13 +28,11 @@ final class Module_File extends GDO_Module
 	##############
 	### Module ###
 	##############
-	public function isCoreModule() { return true; }
-	
-	public function getDependencies()
-	{
-		# @TODO remove Cronjob dependency by scaling images on the fly. Add cronjob dependencies where necessary.
-		return ['Cronjob'];
-	}
+// 	public function getDependencies() : array
+// 	{
+// 		# @TODO remove Cronjob dependency by scaling images on the fly. Add cronjob dependencies where necessary.
+// 		return ['Cronjob'];
+// 	}
 	
 	public function getClasses() : array
 	{
@@ -43,9 +41,9 @@ final class Module_File extends GDO_Module
 		];
 	}
 	
-	public function onLoadLanguage() { $this->loadLanguage('lang/file'); }
+	public function onLoadLanguage() : void { $this->loadLanguage('lang/file'); }
 	
-	public function onIncludeScripts()
+	public function onIncludeScripts() : void
 	{
 		$this->addBowerJS("flow.js/dist/flow.js");
 		$this->addJS('js/gdo-flow.js');

@@ -3,7 +3,7 @@ namespace GDO\Table;
 use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
-use GDO\DB\GDT_AutoInc;
+use GDO\Core\GDT_AutoInc;
 use GDO\Util\Common;
 
 abstract class MethodQueryCard extends Method
@@ -29,7 +29,7 @@ abstract class MethodQueryCard extends Method
 		return $this->gdoTable()->find(Common::getRequestString('id'));
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		return $this->renderCard();
 	}

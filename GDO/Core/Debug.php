@@ -62,6 +62,7 @@ final class Debug
 		if (!self::$ENABLED)
 		{
 			set_error_handler([self::class, 'error_handler']);
+// 			register_shutdown_function([self::class, 'shutdown_function']);
 			self::$ENABLED = true;
 		}
 	}
@@ -69,20 +70,20 @@ final class Debug
 	#####################
 	## Error Handlers ###
 	#####################
-// 	/**
-// 	 * @TODO: shutdown function shall show debug stacktrace on fatal error. If an error was already shown, print nothing.
-// 	 * No stacktrace available and some vars are messed up.
-// 	 */
-// 	public static function shutdown_function()
-// 	{
-// 		if ($error = error_get_last())
-// 		{
+	/**
+	 * @TODO: shutdown function shall show debug stacktrace on fatal error. If an error was already shown, print nothing.
+	 * No stacktrace available and some vars are messed up.
+	 */
+	public static function shutdown_function()
+	{
+		if ($error = error_get_last())
+		{
 // 			if ($error && ($error['type'] === 1))
-// 			{
-// 				self::error_handler(1, $error['message'], self::shortpath($error['file']), $error['line'], NULL);
-// 			}
-// 		}
-// 	}
+			{
+				self::error_handler(1, $error['message'], self::shortpath($error['file']), $error['line'], NULL);
+			}
+		}
+	}
 	
 	public static function error(\Throwable $ex)
 	{
@@ -370,7 +371,10 @@ final class Debug
 			$back = Strings::rsubstrFrom($class, '\\', $class);
 			if ($arg instanceof GDO)
 			{
-				$back .= '#' . $arg->getID();
+				if (defined('GDO_CORE_STABLE'))
+				{
+					$back .= '#' . $arg->getID();
+				}
 			}
 			return $back;
 		}

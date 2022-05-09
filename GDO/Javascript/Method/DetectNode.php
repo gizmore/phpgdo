@@ -2,7 +2,7 @@
 namespace GDO\Javascript\Method;
 
 use GDO\Core\Website;
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Util\Process;
 use GDO\Javascript\Module_Javascript;
 use GDO\Form\GDT_Form;

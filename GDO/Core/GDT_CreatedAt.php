@@ -31,7 +31,7 @@ class GDT_CreatedAt extends GDT_Timestamp
 	 * Fill with creation date timestamp.
 	 * @see \GDO\Core\GDT::blankData()
 	 */
-	public function blankData()
+	public function blankData() : array
 	{
 	    $var = $this->var ? $this->var : Time::getDate();
 		return [$this->name => $var];

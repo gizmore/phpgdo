@@ -3,15 +3,16 @@ namespace GDO\User\Method;
 
 use GDO\Core\GDT_Response;
 use GDO\Core\Method;
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\UI\GDT_Bar;
 use GDO\UI\GDT_Link;
+use GDO\Core\GDT;
 
 final class Admin extends Method
 {
 	use MethodAdmin;
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		# Admin menu
 		$menu = GDT_Bar::make()->horizontal();

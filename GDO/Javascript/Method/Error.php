@@ -3,7 +3,7 @@ namespace GDO\Javascript\Method;
 
 use GDO\Core\MethodAjax;
 use GDO\Core\GDT_String;
-use GDO\DB\GDT_Text;
+use GDO\Core\GDT_Text;
 use GDO\Mail\Mail;
 
 /**
@@ -24,7 +24,7 @@ final class Error extends MethodAjax
 		];
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		if (GDO_ERROR_MAIL)
 		{

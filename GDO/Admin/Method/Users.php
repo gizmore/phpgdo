@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Table\MethodQueryTable;
 use GDO\Core\GDT_String;
 use GDO\UI\GDT_IconButton;
@@ -27,7 +27,7 @@ class Users extends MethodQueryTable
 	
 	public function getPermission() { return 'staff'; }
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		$createLink = GDT_IconButton::make()->icon('create')->href(href('Admin', 'UserCreate'))->label('link_create_user');
 		return parent::execute()->addField($createLink);

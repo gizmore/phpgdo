@@ -14,7 +14,7 @@ namespace GDO\Core;
  */
 class GDT_JSON extends GDT_Text
 {
-	public $caseSensitive = true;
+	public bool $caseSensitive = true;
 
 	public function defaultName() { return 'data'; }
     

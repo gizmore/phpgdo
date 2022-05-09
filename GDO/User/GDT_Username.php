@@ -1,7 +1,7 @@
 <?php
 namespace GDO\User;
 
-use GDO\DB\GDT_String;
+use GDO\Core\GDT_String;
 
 /**
  * Username field without completion.
@@ -16,13 +16,13 @@ class GDT_Username extends GDT_String
 {
 	const LENGTH = 32;
 	
-	public $min = 2;
-	public $max = 32;
+	public int $min = 2;
+	public int $max = 32;
 	
 	public $icon = 'face';
 	
 	# Allow - _ LETTERS DIGITS
-	public $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,31}$/iuD";
+	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,31}$/iuD";
 
 	public function defaultLabel() { return $this->label('username'); }
 	
@@ -39,7 +39,7 @@ class GDT_Username extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderCell()
+	public function renderCell() : string
 	{
 	    return $this->display();
 	}
@@ -49,7 +49,7 @@ class GDT_Username extends GDT_String
 	    return $this->renderCLI();
 	}
 	
-	public function renderCLI()
+	public function renderCLI() : string
 	{
 		return $this->gdo ? 
 			$this->gdo->displayName() :
@@ -59,7 +59,7 @@ class GDT_Username extends GDT_String
 	################
 	### Validate ###
 	################
-	public function validate($value)
+	public function validate($value) : bool
 	{
 		if (!parent::validate($value))
 		{
@@ -89,7 +89,7 @@ class GDT_Username extends GDT_String
 		return true;
 	}
 	
-	public function plugVar()
+	public function plugVar() : string
 	{
 	    return 'Lazer'; # new created user in unit tests.
 	}

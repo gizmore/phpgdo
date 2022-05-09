@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Table;
 
-use GDO\DB\GDT_UInt;
+use GDO\Core\GDT_UInt;
 
 /**
  * Items per page for headers.

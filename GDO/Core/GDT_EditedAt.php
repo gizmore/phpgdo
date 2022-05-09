@@ -22,7 +22,7 @@ final class GDT_EditedAt extends GDT_Timestamp
 	public function isWritable() : bool { return false; }
 	public function isOrderDefaultAsc() : bool { return false; }
 	
-	public function gdoBeforeUpdate(Query $query)
+	public function gdoBeforeUpdate(Query $query) : void
 	{
 		$now = Time::getDate();
 		$query->set($this->identifier() . "=" . quote($now));

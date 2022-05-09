@@ -4,7 +4,7 @@ namespace GDO\UI;
 use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Util\Common;
-use GDO\DB\GDT_Object;
+use GDO\Core\GDT_Object;
 use GDO\Core\GDT_ResponseCard;
 
 /**
@@ -22,7 +22,7 @@ abstract class MethodCard extends Method
     
     public function idName() { return 'id'; }
 
-    public function getID() { return Common::getRequestString($this->idName()); }
+    public function getID() : ?string { return Common::getRequestString($this->idName()); }
     
     public function gdoParameters()
     {
@@ -39,7 +39,7 @@ abstract class MethodCard extends Method
         return $this->gdoTable()->find($this->getID());
     }
     
-    public function execute()
+    public function execute() : GDT
     {
         $gdo = $this->getObject();
         if (!$gdo)

@@ -2,9 +2,9 @@
 namespace GDO\User;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_Name;
-use GDO\DB\GDT_Text;
-use GDO\DB\GDT_Index;
+use GDO\Core\GDT_Name;
+use GDO\Core\GDT_Text;
+use GDO\Core\GDT_Index;
 
 /**
  * User settings for larger blob values, e.g. PMSignature.
@@ -18,9 +18,9 @@ final class GDO_UserSettingBlob extends GDO
 	###########
 	### GDO ###
 	###########
-	public function gdoCached() { return false; }
+	public function gdoCached() : bool { return false; }
 	public function gdoDependencies() { return ['GDO\User\GDO_User', 'GDO\Core\GDO_Module']; }
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return array(
 			GDT_User::make('uset_user')->primary(),

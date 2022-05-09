@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Install\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\File\FileUtil;
 use GDO\File\GDO_File;
@@ -11,7 +12,7 @@ use GDO\File\GDO_File;
  */
 final class SystemTest extends Method
 {
-	public function execute()
+	public function execute() : GDT
 	{
 		$tVars = array(
 			'tests' => array(
@@ -41,8 +42,9 @@ final class SystemTest extends Method
 		return $version >= 8.0;
 	}
 
-	private function testYarn() : bool;
+	private function testYarn() : bool
 	{
+		return true;
 	}
 	
 }

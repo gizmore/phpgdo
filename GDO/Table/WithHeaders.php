@@ -14,7 +14,7 @@ use GDO\Util\Arrays;
  * - Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
  * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 6.5.0
  */
 trait WithHeaders
@@ -31,7 +31,7 @@ trait WithHeaders
 	 * @return GDT_Fields
 	 */
 	public function makeHeaders() { if ($this->headers === null) $this->headers = GDT_Fields::make($this->nextOrderName()); return $this->headers; }
-	public function addHeaders(array $fields) { return count($fields) ? $this->makeHeaders()->addFields($fields) : $this; }
+	public function addHeaders(array $fields) { return count($fields) ? $this->makeHeaders()->addFields(...$fields) : $this; }
 	public function addHeader(GDT $field) { return $this->makeHeaders()->addField($field); }
 	
 	##############################
@@ -84,7 +84,11 @@ trait WithHeaders
 		return $result;
 	}
 	
-	private function make_cmp(array $sorting)
+	/**
+	 * Create a comperator function.
+	 * @param array $sorting
+	 */
+	private function make_cmp(array $sorting) : callable
 	{
 		$headers = $this->headers;
 		return function (GDO $a, GDO $b) use (&$sorting, &$headers)

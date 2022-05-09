@@ -26,7 +26,7 @@ final class TimezoneComplete extends MethodCompletion
 		];
 	}
 	
-    public function execute()
+	public function execute() : GDT
     {
 //     	$country = $this->gdoParameterVar('country');
     	$timezones = GDO_Timezone::table()->select()->exec();

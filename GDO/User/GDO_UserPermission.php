@@ -2,9 +2,9 @@
 namespace GDO\User;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_CreatedAt;
-use GDO\DB\GDT_CreatedBy;
-use GDO\DB\GDT_Index;
+use GDO\Core\GDT_CreatedAt;
+use GDO\Core\GDT_CreatedBy;
+use GDO\Core\GDT_Index;
 use GDO\Core\GDT_Hook;
 
 /**
@@ -16,9 +16,9 @@ use GDO\Core\GDT_Hook;
  */
 final class GDO_UserPermission extends GDO
 {
-	public function gdoCached() { return false; }
+	public function gdoCached() : bool { return false; }
 	
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return array(
 			GDT_User::make('perm_user_id')->primary(),

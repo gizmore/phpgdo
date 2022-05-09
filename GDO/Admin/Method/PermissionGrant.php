@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -23,11 +23,11 @@ class PermissionGrant extends MethodForm
 	public function createForm(GDT_Form $form)
 	{
 		$gdo = GDO_UserPermission::table();
-		$form->addFields([
+		$form->addFields(
 			$gdo->gdoColumn('perm_user_id'),
 			$gdo->gdoColumn('perm_perm_id')->notNull()->emptyInitial(t('choose_permission')),
 			GDT_AntiCSRF::make(),
-		]);
+		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
 	

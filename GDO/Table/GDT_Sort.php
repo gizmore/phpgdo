@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Table;
 
-use GDO\DB\GDT_UInt;
+use GDO\Core\GDT_UInt;
 
 /**
  * This GDT makes a GDO table sortable.
@@ -27,7 +27,7 @@ class GDT_Sort extends GDT_UInt
 		$this->initial('0');
 	}
 	
-	public function gdoAfterCreate()
+	public function gdoAfterCreate() : void
 	{
 	    # @TODO use count(*) for sorting?
 		$this->gdo->saveVar($this->name, $this->gdo->getID());

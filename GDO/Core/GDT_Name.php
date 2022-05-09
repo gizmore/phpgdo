@@ -17,12 +17,13 @@ class GDT_Name extends GDT_String
 
 	const LENGTH = 64;
 	
-	public $min = 2, $max = self::LENGTH;
-	public $encoding = self::ASCII;
-	public $caseSensitive = true;
-	public $pattern = "/^[A-Za-z][-A-Za-z _0-9;:]{1,63}$/sD";
-	public $notNull = true;
-	public $unique = true;
+	public int $min = 2;
+	public int $max = self::LENGTH;
+	public int $encoding = self::ASCII;
+	public bool $caseSensitive = true;
+	public string $pattern = "/^[A-Za-z][-A-Za-z _0-9;:]{1,63}$/sD";
+	public bool $notNull = true;
+	public bool $unique = true;
 	
 	##############
 	### Render ###

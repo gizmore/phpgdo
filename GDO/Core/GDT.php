@@ -7,6 +7,9 @@ namespace GDO\Core;
  * 
  * A GDT can support these rendering functions; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/BINARY/CHOICE/FILTER.
  * 
+ * @see GDO
+ * @see GDT_Field
+ * 
  * @author gizmore
  * @version 7.0.0
  * @since 5.0.0
@@ -25,6 +28,12 @@ abstract class GDT
 	
 	protected function __construct()
 	{
+		# Make protected so it cannot be used without ::make()
+	}
+	
+	public function blankData() : array 
+	{
+		return self::EMPTY_ARRAY;
 	}
 	
 	##############
@@ -86,16 +95,24 @@ abstract class GDT
 	#########################
 	### Bridge for traits ###
 	#########################
-	public function getName() : string
+	public function getName() : ?string
 	{
+		return null;
 	}
 	
-	public function getInput() : string
+	public function hasName() : bool
 	{
+		return false;
 	}
 	
-	public function getVar() : string
+	public function getInput() : ?string
 	{
+		return null;
+	}
+	
+	public function getVar() : ?string
+	{
+		return null;
 	}
 	
 	public function getValue()
@@ -109,7 +126,7 @@ abstract class GDT
 	
 	public function gdo(GDO $gdo) : self
 	{
-		return $this;
+		return $this->var($gdo->gdoVar($this->getName()));
 	}
 	
 	public function htmlVar() : string
@@ -144,6 +161,11 @@ abstract class GDT
 	public function isVirtual() : bool
 	{
 		return false;
+	}
+	
+	public function gdoCompare(GDO $a, GDO $b) : int
+	{
+		return 0;
 	}
 	
 	#############

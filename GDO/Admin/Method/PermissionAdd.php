@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -21,7 +21,7 @@ class PermissionAdd extends MethodForm
 	
 	public function getPermission() { return 'staff'; }
 	
-	public function execute()
+	public function execute() : GDT
 	{
 	    $this->renderPermTabs();
 		return parent::execute();
@@ -30,11 +30,11 @@ class PermissionAdd extends MethodForm
 	public function createForm(GDT_Form $form)
 	{
 		$gdo = GDO_Permission::table();
-		$form->addFields([
+		$form->addFields(
 			$gdo->gdoColumn('perm_name'),
 		    $gdo->gdoColumn('perm_level'),
 			GDT_AntiCSRF::make(),
-		]);
+		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
 

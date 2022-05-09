@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Language;
 
-use GDO\DB\GDT_ObjectSelect;
+use GDO\Core\GDT_ObjectSelect;
 
 final class GDT_Language extends GDT_ObjectSelect
 {

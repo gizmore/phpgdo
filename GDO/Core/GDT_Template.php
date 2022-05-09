@@ -55,7 +55,7 @@ class GDT_Template extends GDT
 		Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
 	}
 
-	public function render()
+	public function render() : string
 	{
 		return $this->renderTemplate();
 	}

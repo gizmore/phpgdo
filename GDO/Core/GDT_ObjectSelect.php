@@ -117,12 +117,12 @@ class GDT_ObjectSelect extends GDT_Select
 	#############
 	### Value ###
 	#############
-	public function getVar()
+	public function getVar() : ?string
 	{
 		return parent::getVar(); # required to overwrite trait.
 	}
 	
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 		if ($value === null)
 		{

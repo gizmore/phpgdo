@@ -2,7 +2,7 @@
 namespace GDO\User;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_AutoInc;
+use GDO\Core\GDT_AutoInc;
 
 /**
  * The holy user class.
@@ -19,8 +19,7 @@ final class GDO_User extends GDO
 	{
 		return [
 			GDT_AutoInc::make('user_id'),
-			GDT_String::make('user_name'),
-			
+			GDT_Username::make('user_name'),
 		];
 	}
 	

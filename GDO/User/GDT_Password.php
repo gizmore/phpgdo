@@ -3,7 +3,7 @@ namespace GDO\User;
 
 use GDO\Core\GDT_Template;
 use GDO\Util\BCrypt;
-use GDO\DB\GDT_String;
+use GDO\Core\GDT_String;
 
 /**
  * Bcrypt hash form and database value.

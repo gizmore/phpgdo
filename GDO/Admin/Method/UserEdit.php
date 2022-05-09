@@ -3,7 +3,7 @@ namespace GDO\Admin\Method;
 
 use GDO\Core\Application;
 use GDO\Core\GDT_Hook;
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;

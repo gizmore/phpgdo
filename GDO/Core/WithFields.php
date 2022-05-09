@@ -10,7 +10,12 @@ namespace GDO\Core;
  */
 trait WithFields
 {
-	protected $fields = [];
+	protected array $fields = [];
+	
+	public function getField(string $key)
+	{
+		return $this->fields[$key];
+	}
 	
 	/**
 	 * Get all children.

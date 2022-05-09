@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Net;
 
-use GDO\DB\GDT_Object;
+use GDO\Core\GDT_Object;
 
 final class GDT_Domain extends GDT_Object
 {

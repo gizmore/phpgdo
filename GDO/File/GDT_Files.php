@@ -33,7 +33,7 @@ class GDT_Files extends GDT_File
 	/**
 	 * @var $value GDO_File[]
 	 */
-	public function toVar($value) {} # cannot be saved as column.
+	public function toVar($value) : string {} # cannot be saved as column.
 	
 	##################
 	### File Table ###
@@ -88,7 +88,7 @@ class GDT_Files extends GDT_File
 	/**
 	 * After creation and update we have to create the entry in the relation table.
 	 */
-	public function gdoAfterCreate()
+	public function gdoAfterCreate() : void
 	{
 		$this->gdoAfterUpdate();
 	}
@@ -96,7 +96,7 @@ class GDT_Files extends GDT_File
 	/**
 	 * After creation and update we have to create the entry in the relation table.
 	 */
-	public function gdoAfterUpdate()
+	public function gdoAfterUpdate() : void
 	{
 		if ($files = $this->getValidationValue())
 		{

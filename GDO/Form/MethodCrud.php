@@ -4,14 +4,14 @@ namespace GDO\Form;
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\Captcha\GDT_Captcha;
-use GDO\DB\GDT_Object;
+use GDO\Core\GDT_Object;
 use GDO\Core\GDT;
-use GDO\DB\GDT_DeletedAt;
-use GDO\DB\GDT_DeletedBy;
+use GDO\Core\GDT_DeletedAt;
+use GDO\Core\GDT_DeletedBy;
 use GDO\Date\Time;
 use GDO\Core\Website;
 use GDO\Util\Common;
-use GDO\DB\GDT_CreatedBy;
+use GDO\Core\GDT_CreatedBy;
 
 /**
  * Abstract Create|Update|Delete for a GDO using MethodForm.

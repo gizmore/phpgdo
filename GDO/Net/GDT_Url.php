@@ -60,7 +60,7 @@ class GDT_Url extends GDT_String
 		return $var ? new URL($var) : null;
 	}
 	
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 	    return $value ? $value->raw : null;
 	}

@@ -3,6 +3,9 @@ namespace GDO\Core;
 
 /**
  * An html select.
+ * 
+ * @see GDT_ObjectSelect
+ * 
  * @author gizmore
  * @version 7.0.0
  * @since 6.0.0
@@ -11,9 +14,12 @@ class GDT_Select extends GDT_ComboBox
 {
 	const SELECTED = ' selected="selected"';
 	
-	public function inputToVar($input) { return $input; }
+	public function inputToVar(string $input) : string
+	{
+		return $input;
+	}
 	
-	public function getVar()
+	public function getVar() : ?string
 	{
 		if (null === ($var = parent::getVar()))
 		{
@@ -42,7 +48,7 @@ class GDT_Select extends GDT_ComboBox
 		return parent::getValue();
 	}
 
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 		if ($this->multiple)
 		{
@@ -69,7 +75,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 
-	public function toValue($var)
+	public function toValue(string $var)
 	{
 	    if ($var === null)
 	    {
@@ -179,8 +185,8 @@ class GDT_Select extends GDT_ComboBox
 	public function validate($value) : bool
 	{
 		return $this->multiple ?
-		  $this->validateMultiple($value) :
-		  $this->validateSingle($value);
+			$this->validateMultiple($value) :
+			$this->validateSingle($value);
 	}
 	
 	private function validateMultiple($values)
@@ -220,7 +226,6 @@ class GDT_Select extends GDT_ComboBox
 			return $this->notNull ? $this->errorNotNull() : true;
 		}
 		
-		
 		if (is_object($value))
 		{
     		if (isset($this->choices[$value->getID()])) # check memcached by id
@@ -253,7 +258,7 @@ class GDT_Select extends GDT_ComboBox
 	###############
 	### Choices ###
 	###############
-	public $emptyValue = '0'; # @TODO rename to emptyVar
+	public $emptyValue = '0'; # @TODO rename emptyValue to emptyVar
 	public function emptyValue($emptyValue='0')
 	{
 		$this->emptyValue = $emptyValue;
@@ -304,18 +309,18 @@ class GDT_Select extends GDT_ComboBox
 	### Multiple ###
 	################
 	public $multiple = false;
-	public function multiple($multiple=true) { $this->multiple = $multiple; return $this; }
-	public function htmlMultiple() { return $this->multiple ? ' multiple="multiple"' : ''; }
+	public function multiple($multiple=true) : self { $this->multiple = $multiple; return $this; }
+	public function htmlMultiple() : string { return $this->multiple ? ' multiple="multiple"' : ''; }
 	
 	public $minSelected;
 	public $maxSelected;
-	public function minSelected($minSelected)
+	public function minSelected($minSelected) : self
 	{
 		$this->minSelected = $minSelected;
 		return $this;
 	}
 	
-	public function maxSelected($maxSelected)
+	public function maxSelected($maxSelected) : self
 	{
 		$this->maxSelected = $maxSelected;
 		return $this->multiple($maxSelected > 1);

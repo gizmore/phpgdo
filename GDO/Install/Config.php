@@ -94,7 +94,7 @@ class Config
 		if (!defined('GDO_THEMES')) define('GDO_THEMES', '[default]');
 		if (!defined('GDO_MODULE')) define('GDO_MODULE', 'Core');
 		if (!defined('GDO_METHOD')) define('GDO_METHOD', 'Welcome');
-// 		if (!defined('GDO_SEO_URLS')) define('GDO_SEO_URLS', false);
+		if (!defined('GDO_SEO_URLS')) define('GDO_SEO_URLS', false);
 		if (!defined('GDO_IPC')) define('GDO_IPC', 'none');
 		if (!defined('GDO_IPC_DEBUG')) define('GDO_IPC_DEBUG', false);
 		if (!defined('GDO_GDT_DEBUG')) define('GDO_GDT_DEBUG', false);
@@ -213,9 +213,9 @@ class Config
 			GDT_Divider::make()->label('install_config_section_email'),
 			GDT_Checkbox::make('enable_email')->initialValue(GDO_ENABLE_EMAIL),
 			GDT_Realname::make('bot_name')->required()->initialValue(GDO_BOT_NAME)->label('bot_name'),
-			GDT_Email::make('bot_email')->required()->initialValue(GDO_BOT_EMAIL)->label('bot_mail'),
-			GDT_Email::make('admin_email')->required()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail'),
-			GDT_Email::make('error_email')->required()->initialValue(GDO_ERROR_EMAIL)->label('error_mail'),
+			GDT_String::make('bot_email')->required()->initialValue(GDO_BOT_EMAIL)->label('bot_mail'),
+			GDT_String::make('admin_email')->required()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail'),
+			GDT_String::make('error_email')->required()->initialValue(GDO_ERROR_EMAIL)->label('error_mail'),
 			GDT_Checkbox::make('debug_email')->initialValue(GDO_DEBUG_EMAIL),
 		];
 	}

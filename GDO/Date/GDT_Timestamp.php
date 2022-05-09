@@ -43,12 +43,12 @@ class GDT_Timestamp extends GDT_DBField
 	    }
 	}
 	
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 		return $value === null ? null : Time::displayTimestamp($value, 'db', null, Time::UTC);
 	}
 	
-	public function getVar()
+	public function getVar() : ?string
 	{
 		if ($var = parent::getVar())
 		{

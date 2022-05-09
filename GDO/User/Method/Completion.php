@@ -7,6 +7,7 @@ use GDO\Util\Common;
 use GDO\Core\MethodAjax;
 use GDO\Core\Module_Core;
 use GDO\Core\GDT_Array;
+use GDO\Core\GDT;
 
 /**
  * Auto completion for GDT_User.
@@ -21,7 +22,7 @@ class Completion extends MethodAjax
 	
 	public function isGuestAllowed() { return Module_Core::instance()->cfgAllowGuests(); }
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		$q = GDO::escapeS(Common::getRequestString('query'));
 		$condition = sprintf('user_type IN ("guest","member") AND user_name LIKE \'%%%1$s%%\' OR user_real_name LIKE \'%%%1$s%%\' OR user_guest_name LIKE \'%%%1$s%%\'', $q);

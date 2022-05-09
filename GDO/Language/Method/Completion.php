@@ -8,7 +8,7 @@ use GDO\Core\MethodCompletion;
 
 final class Completion extends MethodCompletion
 {
-	public function execute()
+	public function execute() : GDT
 	{
 		$response = [];
 		$q = $this->getSearchTerm();

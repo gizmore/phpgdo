@@ -1,7 +1,7 @@
 <?php
 namespace GDO\File;
 
-use GDO\DB\GDT_UInt;
+use GDO\Core\GDT_UInt;
 
 /**
  * Display int as human readable filesize.

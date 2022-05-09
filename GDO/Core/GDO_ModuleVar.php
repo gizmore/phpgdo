@@ -10,12 +10,12 @@ namespace GDO\Core;
  */
 final class GDO_ModuleVar extends GDO
 {
-	public function gdoCached() { return false; }
+	public function gdoCached() : bool { return false; }
 	
 	###########
 	### GDO ###
 	###########
-	public function gdoColumns()
+	public function gdoColumns() : array
 	{
 		return [
 			GDT_Object::make('mv_module_id')->table(GDO_Module::table())->primary(),

@@ -53,19 +53,19 @@ trait WithObject
 	###################
 	### Var / Value ###
 	###################
-// 	public function getVar()
-// 	{
-// // 	    $var = $this->getRequestVar($this->formVariable(), $this->var);
-// 	    $var = $this->var;
-// 	    return empty($var) ? null : $var;
-// 	}
+	public function getVar() : ?string
+	{
+// 	    $var = $this->getRequestVar($this->formVariable(), $this->var);
+	    $var = $this->var;
+	    return empty($var) ? null : $var;
+	}
 
-	public function toVar($value)
+	public function toVar($value) : string
 	{
 		return $value !== null ? $value->getID() : null;
 	}
 	
-	public function toValue($var)
+	public function toValue(string $var)
 	{
 		if ($var !== null)
 		{
@@ -248,7 +248,7 @@ trait WithObject
 	/**
 	 * If object columns are not null, they cascade upon deletion.
 	 */
-	public function notNull($notNull=true)
+	public function notNull(bool $notNull=true) : self
 	{
 		$this->notNull = $notNull;
 		return $this->cascade();
@@ -257,7 +257,7 @@ trait WithObject
 	/**
 	 * If object columns are primary, they cascade upon deletion.
 	 */
-	public function primary($primary=true)
+	public function primary(bool $primary=true) : self
 	{
 		$this->primary = $primary;
 		return $this->notNull();
@@ -382,7 +382,7 @@ trait WithObject
 // 		return $this;
 // 	}
 	
-// 	public function gdoBeforeRead(Query $query)
+// 	public function gdoBeforeRead(Query $query) : void
 // 	{
 // 		if ($this->autojoin)
 // 		{

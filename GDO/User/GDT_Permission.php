@@ -1,7 +1,7 @@
 <?php
 namespace GDO\User;
 
-use GDO\DB\GDT_ObjectSelect;
+use GDO\Core\GDT_ObjectSelect;
 
 /**
  * Permission select.

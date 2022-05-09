@@ -34,12 +34,12 @@ final class Module_Core extends GDO_Module
 	 * Sometimes just counts up to be in sync and poison some other module caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.0-r1006';
+	const GDO_REVISION = '7.0.0-r1010';
 	
 	##############
 	### Module ###
 	##############
-	public $module_priority = 1;
+	public int $priority = 1;
 	
 	public function isCoreModule() : bool { return true; }
 	
@@ -76,11 +76,11 @@ final class Module_Core extends GDO_Module
 	public function getConfig() : array
 	{
 		return [
-			GDT_User::make('system_user')->editable(false)->initial('1'), # System user / id should be 1.
-			GDT_Checkbox::make('show_impressum')->initial($this->env('show_impressum', '0')), # show impressum in footer.
-			GDT_Checkbox::make('show_privacy')->initial($this->env('show_privacy', '0')), # show privacy link in footer.
-			GDT_Checkbox::make('allow_guests')->initial($this->env('allow_guests', '1')), # generally allow guests.
-			GDT_Version::make('asset_revision')->initial($this->module_version), # append this version to asset include urls?v=.
+			GDT_User::make('system_user')->writeable(false)->initial('1'), # System user / id should be 1.
+			GDT_Checkbox::make('show_impressum')->initial('show_impressum', '0'), # show impressum in footer.
+			GDT_Checkbox::make('show_privacy')->initial('show_privacy', '0'), # show privacy link in footer.
+			GDT_Checkbox::make('allow_guests')->initial('allow_guests', '1'), # generally allow guests.
+			GDT_Version::make('asset_revision')->initial($this->version), # append this version to asset include urls?v=.
 			GDT_Checkbox::make('siteshort_title_append')->initial('1'),
 			GDT_Checkbox::make('mail_403')->initial('1'), # mail 403 error mails?
 			GDT_Checkbox::make('mail_404')->initial('1'), # mail 404 error mails?

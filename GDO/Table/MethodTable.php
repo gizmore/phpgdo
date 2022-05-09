@@ -226,7 +226,7 @@ abstract class MethodTable extends Method
 	###############
 	### Execute ###
 	###############
-	public function execute()
+	public function execute() : GDT
 	{
 		return GDT_Response::makeWith(
 		    $this->renderTable());

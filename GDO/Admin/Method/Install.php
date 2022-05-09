@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
@@ -51,7 +51,7 @@ class Install extends MethodForm
 		$this->configModule = $loader->getModule($moduleName);
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
 		$form = $this->formName();

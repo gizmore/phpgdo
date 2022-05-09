@@ -9,8 +9,8 @@ namespace GDO\Core;
  */
 class GDT_Char extends GDT_String
 {
-	public $encoding = self::ASCII;
-	public $caseSensitive = true;
+	public int $encoding = self::ASCII;
+	public bool $caseSensitive = true;
 	
 	public function length($size)
 	{

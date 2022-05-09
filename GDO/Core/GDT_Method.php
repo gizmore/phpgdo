@@ -23,7 +23,7 @@ final class GDT_Method extends GDT
 		}
 	}
 	
-	public function execute()
+	public function execute() : GDT
 	{
 		$this->method->setInputs($this->inputs);
 		return $this->method->execute();

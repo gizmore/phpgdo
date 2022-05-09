@@ -6,7 +6,6 @@ use PHPUnit\TextUI\Command;
 use GDO\Core\Application;
 use GDO\Session\GDO_Session;
 use GDO\File\FileUtil;
-use GDO\UI\GDT_Page;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
@@ -118,7 +117,7 @@ if ($argc === 2)
     }, $modules);
         
     usort($modules, function(GDO_Module $m1, GDO_Module $m2) {
-        return $m1->module_priority - $m2->module_priority;
+        return $m1->priority - $m2->priority;
     });
 
     foreach ($modules as $module)

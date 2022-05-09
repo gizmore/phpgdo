@@ -2,10 +2,10 @@
 namespace GDO\Cronjob;
 
 use GDO\Core\GDO;
-use GDO\DB\GDT_AutoInc;
+use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Checkbox;
-use GDO\DB\GDT_CreatedAt;
+use GDO\Core\GDT_CreatedAt;
 
 /**
  * This table holds info about the cronjob runnings.
@@ -17,7 +17,7 @@ use GDO\DB\GDT_CreatedAt;
  */
 final class GDO_Cronjob extends GDO
 {
-    public function gdoColumns()
+	public function gdoColumns() : array
     {
         return [
             GDT_AutoInc::make('cron_id'),

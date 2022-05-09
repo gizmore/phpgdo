@@ -13,6 +13,7 @@ use GDO\Util\Regex;
  *
  * @author gizmore
  * @version 7.0.0
+ * @since 6.0.0
  */
 
 # performance
@@ -46,27 +47,27 @@ function (string $name) : void
 # #####################
 require GDO_PATH . 'GDO/Util/Shim.php';
 
-function sitename()
+function sitename() : string
 {
 	return t('sitename');
 }
 
-function url($module, $method, $append = '', $lang = true)
+function url(string $module, string $method, string $append = '', bool $lang = true) : string
 {
 	return GDT_Url::absolute(href($module, $method, $append, $lang));
 }
 
-function jxhref($module, $method, $append = '', $lang = true)
+function jxhref(string $module, string $method, string $append = '', bool $lang = true) : string
 {
 	return href($module, $method, $append . '&_ajax=1&_fmt=json', $lang);
 }
 
-function hrefDefault()
+function hrefDefault() : string
 {
 	return href(GDO_MODULE, GDO_METHOD);
 }
 
-function href($module, $method, $append = null, $lang = true)
+function href(string $module, string $method, string $append = null, bool $lang = true) : string
 {
 	if (GDO_SEO_URLS)
 	{
@@ -145,7 +146,7 @@ function json_quote($s)
 	return str_replace("'", "&#39;", $s);
 }
 
-function html($html)
+function html(string $html) : string
 {
 	return Application::instance()->isCLI() ? $html : str_replace(
 	[
@@ -160,22 +161,22 @@ function html($html)
 		'&#39;',
 		'&lt;',
 		'&gt;'
-	], (string) $html);
+	], $html);
 }
 
-function def($key, $default = null)
+function def(string $key, $default = null)
 {
 	return defined($key) ? constant($key) : $default;
 }
 
-function hdrc($header, $replace = true)
+function hdrc(string $header, bool $replace = true)
 {
 	hdr($header, $replace);
 	$code = (int) Regex::firstMatch('#HTTP/1.1 (\\d+)#', $header);
 	Application::setResponseCode($code);
 }
 
-function hdr($header, $replace = true)
+function hdr(string $header, bool $replace = true)
 {
 	$app = Application::instance();
 	if ($app->isUnitTests())
@@ -188,49 +189,10 @@ function hdr($header, $replace = true)
 	}
 }
 
-function uridecode($url)
+function uridecode(string $url=null) : string
 {
-	if ($url)
-	{
-		return urldecode($url);
-	}
+	return $url ? urldecode($url) : '';
 }
-
-# #################
-# ## Method API ###
-# #################
-// /**
-//  *
-//  * @deprecated - Use GDO\\Module\\Method\\Class::make() instead
-//  * @param string $module
-//  * @param string $method
-//  * @return \GDO\Core\Method
-//  */
-// function method($moduleName, $methodName)
-// {
-// 	$klass = "GDO\\$moduleName\\Method\\$methodName";
-// 	return new $klass();
-// }
-
-// /**
-//  * Get requested module name.
-//  *
-//  * @return string
-//  */
-// function mo()
-// {
-// 	return Common::getRequestString('mo', GDO_MODULE);
-// }
-
-// /**
-//  * Get requested method name
-//  *
-//  * @return string
-//  */
-// function me()
-// {
-// 	return Common::getRequestString('me', GDO_METHOD);
-// }
 
 /**
  * Check if a module is enabled.
@@ -238,9 +200,9 @@ function uridecode($url)
  * @param string $moduleName
  * @return boolean
  */
-function module_enabled($moduleName)
+function module_enabled(string $moduleName) : bool
 {
-	$module = ModuleLoader::instance()->getModule($moduleName);
+	$module = ModuleLoader::instance()->getModule($moduleName, false, false);
 	return $module ? $module->isEnabled() : false;
 }
 
@@ -255,7 +217,7 @@ function module_enabled($moduleName)
  * @param array $args
  * @return string
  */
-function t($key, array $args = null)
+function t(string $key, array $args = null) : string
 {
 	return Trans::t($key, $args);
 }
@@ -268,7 +230,7 @@ function t($key, array $args = null)
  * @param array $args
  * @return string
  */
-function ten($key, array $args = null)
+function ten(string $key, array $args = null) : string
 {
 	return Trans::tiso('en', $key, $args);
 }
@@ -281,7 +243,7 @@ function ten($key, array $args = null)
  * @param array $args
  * @return string
  */
-function tiso($iso, $key, array $args = null)
+function tiso(string $iso, string $key, array $args = null) : string
 {
 	return Trans::tiso($iso, $key, $args);
 }
@@ -294,7 +256,7 @@ function tiso($iso, $key, array $args = null)
  * @param array $args
  * @return string
  */
-function tusr(GDO_User $user, $key, array $args = null)
+function tusr(GDO_User $user, string $key, array $args = null) : string
 {
 	return Trans::tiso($user->getLangISO(), $key, $args);
 }
@@ -310,7 +272,7 @@ function tusr(GDO_User $user, $key, array $args = null)
  *        the default string to display when date is null or invalid.
  * @return string
  */
-function tt($date = null, $format = 'short', $default = '---')
+function tt(string $date = null, string $format = 'short', string $default = '---') : string
 {
 	return Time::displayDate($date, $format, $default);
 }

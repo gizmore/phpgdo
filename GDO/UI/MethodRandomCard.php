@@ -2,7 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Util\Random;
-use GDO\DB\GDT_DeletedAt;
+use GDO\Core\GDT_DeletedAt;
 
 /**
  * View a single random item from a gdo table as card.

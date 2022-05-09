@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Session\GDO_Session;
+
 /**
  * Application runtime data.
  * 
@@ -70,6 +72,37 @@ class Application
 	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
 	public function isFormat(string $format) : bool { return $this->getFormat() === $format; }
 	public function getFormat() : string { return isset($_REQUEST['_fmt']) ? $_REQUEST['_fmt'] : 'html'; }
+	
+	##############
+	### Themes ###
+	##############
+	private array $themes;
+	public function getThemes()
+	{
+		if (!isset($this->themes))
+		{
+			$themes = def('GDO_THEMES', 'default');
+			$this->themes = explode(',', $themes);
+			$this->themes = array_combine($this->themes, $this->themes);
+		}
+		return $this->themes;
+	}
+	
+	public function hasTheme($theme) { return isset($this->getThemes()[$theme]); }
+	public function initThemes()
+	{
+		if ( (!$this->isInstall()) && (!$this->isCLI()) )
+		{
+			if (class_exists('GDO\\Session\\GDO_Session', false))
+			{
+				if (GDO_Session::get('theme_name'))
+				{
+					$this->themes = GDO_Session::get('theme_chain');
+				}
+			}
+		}
+		return $this;
+	}
 	
 }
 

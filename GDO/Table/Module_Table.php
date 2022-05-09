@@ -2,7 +2,7 @@
 namespace GDO\Table;
 
 use GDO\Core\GDO_Module;
-use GDO\DB\GDT_UInt;
+use GDO\Core\GDT_UInt;
 use GDO\Core\Application;
 
 /**
@@ -21,8 +21,6 @@ use GDO\Core\Application;
 final class Module_Table extends GDO_Module
 {
 	public int $priority = 10;
-	
-	public function isCoreModule() { return true; }
 	
 	##############
 	### Config ###

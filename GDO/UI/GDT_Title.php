@@ -1,7 +1,7 @@
 <?php
 namespace GDO\UI;
 
-use GDO\DB\GDT_String;
+use GDO\Core\GDT_String;
 
 /**
  * A short utf8 title.
@@ -25,8 +25,8 @@ class GDT_Title extends GDT_String
 	public $max = 128;
 	public $icon = 'title';
 	public $notNull = true;
-	public $encoding = self::UTF8;
-	public $caseSensitive = false;
+	public int $encoding = self::UTF8;
+	public bool $caseSensitive = false;
 	
 	public function renderCell()
 	{

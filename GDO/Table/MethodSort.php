@@ -4,7 +4,7 @@ namespace GDO\Table;
 use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDO;
-use GDO\DB\GDT_Object;
+use GDO\Core\GDT_Object;
 
 /**
  * Generic ajax adapter that swaps two items using their GDT_Sort column.
@@ -59,7 +59,7 @@ abstract class MethodSort extends Method
 	 * {@inheritDoc}
 	 * @see Method::execute()
 	 */
-	public function execute()
+	public function execute() : GDT
 	{
 	    # Compatibility check
 		$table = $this->gdoSortObjects();

@@ -32,7 +32,7 @@ class GDT_Object extends GDT_UInt
 		return $this->getVar();
 	}
 	
-	public function renderChoice($choice) : string
+	public function renderChoice() : string
 	 {
 	     /** @var $obj GDO **/
 		 if ($obj = $this->getValue())

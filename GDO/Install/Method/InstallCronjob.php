@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Install\Method;
+
 use GDO\DB\Database;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\Core\GDT_Hook;
@@ -11,7 +13,7 @@ use GDO\UI\GDT_Container;
  */
 final class InstallCronjob extends Method
 {
-	public function execute()
+	public function execute() : GDT
 	{
 		Database::init();
 		$hasdb = GDO_DB_HOST !== null;

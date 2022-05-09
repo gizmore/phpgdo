@@ -4,6 +4,7 @@ namespace GDO\CLI\Method;
 use GDO\Core\Method;
 use GDO\Core\GDT_Message;
 use GDO\UI\GDT_Label;
+use GDO\Core\GDT;
 
 /**
  * Reply the input back.
@@ -21,7 +22,7 @@ final class Ekko extends Method
 		];
 	}
 	
-	public function execute() : GDT_Label
+	public function execute() : GDT
 	{
 		$text = $this->gdoParameterVar('text');
 		return GDT_Label::make()->labelRaw($text);

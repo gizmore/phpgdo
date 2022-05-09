@@ -1,11 +1,13 @@
-# GDOv7 history and changelog
+# GDOv7 History and Changelog
 
 Please refer to the [GDOv6 History](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
 
 
-## 7.0.0 - 06.May.2022
+## 7.0.0 / released 06.May.2022
 
 A fresh restart of the GDO project. :)
+
+ - 
 
  - [Module_CSS](https://github.com/gizmore/phpgdo-css) is not a core module anymore.
 

@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\MethodAdmin;
+use GDO\Admin\MethodAdmin;
 use GDO\Table\MethodQueryTable;
 use GDO\User\GDO_Permission;
 use GDO\UI\GDT_IconButton;

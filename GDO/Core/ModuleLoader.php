@@ -57,7 +57,7 @@ final class ModuleLoader
 	/**
 	 * @var GDO_Module[]
 	 */
-	public static array $ENABLED_MODULES;
+	public static ?array $ENABLED_MODULES = null;
 	
 	/**
 	 * Get all enabled and loaded modules.
@@ -86,7 +86,7 @@ final class ModuleLoader
 		});
 	}
 	
-	public function getModule(string $moduleName, bool $fs = false, bool $throw = true) : GDO_Module
+	public function getModule(string $moduleName, bool $fs = false, bool $throw = true) : ?GDO_Module
 	{
 	    $moduleName = strtolower($moduleName);
 	    if (isset($this->modules[$moduleName]))
@@ -101,7 +101,7 @@ final class ModuleLoader
 	    {
 	    	throw new GDO_Error('err_module', [html($moduleName)]);
 	    }
-	    return false;
+	    return null;
 	}
 	
 	/**
@@ -339,7 +339,7 @@ final class ModuleLoader
 			$className = "GDO\\$name\\Module_$name";
 			if (@class_exists($className, true))
 			{
-				$moduleData = GDO_Module::table()->blankData(['module_name' => $name]);
+				$moduleData = GDO_Module::table()->getBlankData(['module_name' => $name]);
 				if ($module = self::instanciate($moduleData, true))
 				{
 					$this->modules[$lowerName] = $module;
@@ -374,7 +374,7 @@ final class ModuleLoader
 	 * @throws GDO_Error
 	 * @return \GDO\Core\GDO_Module
 	 */
-	public static function instanciate(array $moduleData, $dirty = false)
+	public static function instanciate(array $moduleData, bool $dirty = false) : GDO_Module
 	{
 		$name = $moduleData['module_name'];
 		$klass = "GDO\\$name\\Module_$name";
@@ -383,7 +383,7 @@ final class ModuleLoader
 		{
     		$instance = new $klass();
     		$instance->isTable = false;
-    		$moduleData['module_priority'] = $instance->module_priority;
+    		$moduleData['module_priority'] = $instance->priority;
     		$instance->setGDOVars($moduleData, $dirty);
     		return $instance;
 		}

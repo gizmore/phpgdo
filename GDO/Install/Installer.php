@@ -58,7 +58,7 @@ class Installer
 		{
 			$version = $module->module_version;
 			GDO_Module::table()->deleteWhere('module_name = '.$module->quoted('module_name'));
-			$module->setVars(['module_enabled'=>'1', 'module_version'=>$version, 'module_priority' => $module->module_priority]);
+			$module->setVars(['module_enabled'=>'1', 'module_version'=>$version, 'module_priority' => $module->priority]);
 			$module->insert();
 		}
 		

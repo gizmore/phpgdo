@@ -353,7 +353,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
     foreach ($deps as $moduleName)
     {
         $mod = ModuleLoader::instance()->getModule($moduleName);
-        $deps2[$moduleName] = $mod->module_priority;
+        $deps2[$moduleName] = $mod->priority;
     }
     asort($deps2);
     
