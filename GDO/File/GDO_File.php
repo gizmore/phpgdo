@@ -5,15 +5,15 @@ use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Date\GDT_Duration;
 use GDO\Core\GDT_String;
-use GDO\Core\GDOError;
 use GDO\Core\GDT_Template;
-use GDO\Core\GDOException;
 use GDO\Core\GDT_UInt;
 use GDO\Core\Debug;
 use GDO\Core\Application;
 use GDO\User\GDO_User;
 use GDO\Net\Stream;
 use GDO\Core\Website;
+use GDO\Core\GDO_Exception;
+use GDO\Core\GDO_Error;
 
 /**
  * File database storage.
@@ -180,14 +180,14 @@ final class GDO_File extends GDO
 	/**
 	 * @param string $name
 	 * @param string $path
-	 * @throws GDOException
+	 * @throws GDO_Exception
 	 * @return \GDO\File\GDO_File
 	 */
 	public static function fromPath($name, $path)
 	{
 		if (!FileUtil::isFile($path))
 		{
-			throw new GDOException(t('err_file_not_found', [$path]));
+			throw new GDO_Exception(t('err_file_not_found', [$path]));
 		}
 		$values = [
 			'name' => $name,
@@ -204,7 +204,7 @@ final class GDO_File extends GDO
 	/**
 	 * This saves the uploaded file to the files folder and inserts the db row.
 	 * 
-	 * @throws GDOError
+	 * @throws GDO_Error
 	 * @return self
 	 */
 	public function copy()
@@ -212,7 +212,7 @@ final class GDO_File extends GDO
 		FileUtil::createDir(self::filesDir());
 		if (!@copy($this->path, $this->getDestPath()))
 		{
-			throw new GDOError('err_upload_move', [
+			throw new GDO_Error('err_upload_move', [
 			    html(Debug::shortpath($this->path)), 
 			    html(Debug::shortpath($this->getDestPath()))]);
 		}

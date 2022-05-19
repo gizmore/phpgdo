@@ -8,14 +8,14 @@ use GDO\Core\GDT_String;
  * Lots todo. But one can already use it.
  * 
  * @author gizmore
- * @version 6.11.2
- * @since 6.10
+ * @version 7.0.0
+ * @since 6.1.2
  */
 final class GDT_MimeType extends GDT_String
 {
-	public $max = 96;
-	public bool $caseSensitive = true;
 	public int $encoding = self::ASCII;
+	public int $max = 96;
+	public bool $caseSensitive = true;
 	
 	public function defaultLabel() : self { return $this->label('file_type'); }
 

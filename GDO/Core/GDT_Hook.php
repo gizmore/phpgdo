@@ -109,7 +109,7 @@ final class GDT_Hook extends GDT
 		
 		$response = self::callWebHooks($event, $args);
 		
-		if (GDO_IPC && $ipc)
+		if (GDO_IPC && $ipc && (GDO_IPC !== 'none'))
 		{
 			if ($r2 = self::callIPCHooks($event, $args))
 			{

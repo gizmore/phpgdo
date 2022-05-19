@@ -2,10 +2,11 @@
 namespace GDO\UI;
 
 /**
- * Adds a descr to a GDT.
+ * Adds a description to a GDT.
  * 
  * @author gizmore
  * @version 7.0.0
+ * @since 7.0.0
  */
 trait WithDescription
 {
@@ -52,7 +53,7 @@ trait WithDescription
 		return $this->descrRaw;
 	}
 	
-	public function noTitle() : WithDescription
+	public function noDescription() : self
 	{
 		return $this->descrRaw(null);
 	}

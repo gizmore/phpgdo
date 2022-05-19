@@ -61,7 +61,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $_REQUEST = $_POST = $_GET = $_FILES = [];
         
         # Clear code
-        GDT_Response::$CODE = 200;
+        Application::$RESPONSE_CODE = 200;
         
         # Clear navs
         $p = GDT_Page::$INSTANCE;
@@ -157,7 +157,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function assertCode($code, $message)
     {
     	$message .= 'OUT: ' . Website::renderTopResponse();
-        assertEquals($code, GDT_Response::$CODE, $message);
+        assertEquals($code, Application::$RESPONSE_CODE, $message);
     }
     
     protected function assertStringContainsStrings(array $needles, string $haystack, string $message='')

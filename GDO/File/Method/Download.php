@@ -1,6 +1,7 @@
 <?php
 namespace GDO\File\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Secret;
 use GDO\Core\Method;
 use GDO\File\GDT_File;

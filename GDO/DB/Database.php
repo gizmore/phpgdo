@@ -353,13 +353,13 @@ class Database
 		}
 	}
 	
-	public function dropTable(GDO $gdo) : mysqli_result
+	public function dropTable(GDO $gdo)
 	{
 	    $tableName = $gdo->gdoTableIdentifier();
 		return $this->queryWrite("DROP TABLE IF EXISTS {$tableName}");
 	}
 	
-	public function truncateTable(GDO $gdo) : mysqli_result
+	public function truncateTable(GDO $gdo)
 	{
 	    $tableName = $gdo->gdoTableIdentifier();
 	    return $this->queryWrite("TRUNCATE TABLE {$tableName}");
@@ -368,19 +368,19 @@ class Database
 	###################
 	### DB Creation ###
 	###################
-	public function createDatabase($databaseName) : mysqli_result
+	public function createDatabase($databaseName)
 	{
 		return $this->queryWrite("CREATE DATABASE $databaseName");
 	}
 	
-	public function dropDatabase($databaseName) : mysqli_result
+	public function dropDatabase($databaseName)
 	{
 		return $this->queryWrite("DROP DATABASE $databaseName");
 	}
 	
-	public function useDatabase($databaseName) : mysqli_result
+	public function useDatabase($databaseName)
 	{
-	    $this->queryRead("USE $databaseName");
+	    return $this->queryRead("USE $databaseName");
 	}
 	
 	###################

@@ -42,10 +42,7 @@ final class Debug
 	
 	public static function setMailOnError(bool $bool = true) : void
 	{
-		if (module_enabled('Mail'))
-		{
-			self::$MAIL_ON_ERROR = $bool;
-		}
+		self::$MAIL_ON_ERROR = $bool;
 	}
 	
 	public static function disableErrorHandler() : void
@@ -62,7 +59,7 @@ final class Debug
 		if (!self::$ENABLED)
 		{
 			set_error_handler([self::class, 'error_handler']);
-			register_shutdown_function([self::class, 'shutdown_function']);
+// 			register_shutdown_function([self::class, 'shutdown_function']);
 			self::$ENABLED = true;
 		}
 	}
@@ -270,7 +267,11 @@ final class Debug
 	 */
 	public static function sendDebugMail(string $message) : bool
 	{
-		return Mail::sendDebugMail(': PHP Error', $message);
+		if (module_enabled('Mail'))
+		{
+			return Mail::sendDebugMail(': PHP Error', $message);
+		}
+		return false;
 	}
 	
 	/**

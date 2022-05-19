@@ -11,6 +11,7 @@ use GDO\Core\GDO_ModuleVar;
 use GDO\UI\GDT_Success;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
+use GDO\User\GDT_UserType;
 use GDO\DB\Cache;
 use GDO\Install\Installer;
 use GDO\Core\GDO_Module;
@@ -376,16 +377,15 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 
 elseif ($argv[1] === 'admin')
 {
-    if (($argc !== 4) && (($argc !== 5)))
+    if ($argc !== 4)
     {
         printUsage();
     }
-    if (!($user = GDO_User::table()->getBy('user_name', $argv[2])))
+    if (!($user = GDO_User::getByName($argv[2])))
     {
         $user = GDO_User::blank([
             'user_name' => $argv[2],
-            'user_type' => GDO_User::MEMBER,
-            'user_email' => $argc === 5 ? $argv[4] : null,
+            'user_type' => GDT_UserType::MEMBER,
         ])->insert();
         GDT_Hook::callWithIPC('UserActivated', $user, null);
     }

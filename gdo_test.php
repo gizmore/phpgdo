@@ -37,8 +37,9 @@ final class gdo_test extends Application
 	}
 }
 $app = new gdo_test();
+$loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
-Logger::init('system', GDO_ERROR_LEVEL);
+Logger::init('gdo_test', GDO_ERROR_LEVEL);
 Debug::init();
 Debug::setMailOnError(GDO_ERROR_EMAIL);
 // Debug::setDieOnError(GDO_ERROR_DIE);
@@ -77,7 +78,7 @@ Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
 Database::instance()->useDatabase(GDO_DB_NAME);
 
 echo "Loading modules from filesystem\n";
-$modules = $app->loader->loadModules(false, true);
+$modules = $loader->loadModules(false, true);
 
 FileUtil::removeDir(GDO_PATH . '/temp_test');
 

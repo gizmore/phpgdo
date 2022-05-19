@@ -2,9 +2,10 @@
 namespace GDO\File;
 
 use GDO\Util\Arrays;
+use GDO\UI\GDT_Success;
 use GDO\User\GDO_User;
 use GDO\Core\GDO;
-use GDO\Core\Website;
+use GDO\Core\GDT_Response;
 
 /**
  * Use this GDT in a has_many files relationship.

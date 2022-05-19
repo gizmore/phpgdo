@@ -167,9 +167,19 @@ abstract class GDO extends GDT
 	 * @var mixed[]
 	 */
 	public array $temp;
-	public function tempReset() { unset($this->temp); return $this; }
-	public function tempGet($key) { return @$this->temp[$key]; }
-	public function tempSet($key, $value)
+	
+	public function tempReset() : self
+	{
+		unset($this->temp);
+		return $this;
+	}
+	
+	public function tempGet(string $key)
+	{
+		return isset($this->temp) ? @$this->temp[$key] : null;
+	}
+	
+	public function tempSet(string $key, $value) : self
 	{
 		if (!isset($this->temp))
 		{
@@ -178,8 +188,17 @@ abstract class GDO extends GDT
 		$this->temp[$key] = $value;
 		return $this;
 	}
-	public function tempUnset($key) { unset($this->temp[$key]); return $this; }
-	public function tempHas($key) { return isset($this->temp[$key]); }
+
+	public function tempUnset($key) : self
+	{
+		unset($this->temp[$key]);
+		return $this;
+	}
+	
+	public function tempHas($key) : bool
+	{
+		return isset($this->temp[$key]);
+	}
 	
 	##############
 	### Render ###

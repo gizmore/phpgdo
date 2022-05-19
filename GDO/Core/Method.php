@@ -23,6 +23,7 @@ abstract class Method
 	### Override ###
 	################
 	public abstract function execute() : GDT;
+	public function isTrivial() { return true; }
 	public function isTransactional() : bool { return false; }
 	public function isAlwaysTransactional() : bool { return false; }
 	public function onInit() : ?GDT { return null; }

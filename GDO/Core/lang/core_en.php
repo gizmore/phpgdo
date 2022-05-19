@@ -5,6 +5,7 @@ return [
 	
 	# Errors
 	'err_db' => "SQL Error %s: %s\nQuery: %s",
+	'err_db_connect' => 'The database connection could not be established: %s.',
 	'err_db_no_link' => 'The database connection could not be established.',
 	'err_gdo_not_found' => 'The Data for %s with ID: %s could not be found.',
 	'err_module' => 'The %s module is not installed.',
@@ -29,7 +30,6 @@ return [
 	'err_properitary_asset_code' => 'You may not access asset files in the GDO folder.',
 	'err_invalid_choice' => 'Your selection is invalid.',
 	'err_gdt_should_have_a_name' => '%s should have a name!',
-
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',

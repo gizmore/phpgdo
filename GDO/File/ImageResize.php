@@ -1,7 +1,7 @@
 <?php
 namespace GDO\File;
 
-use GDO\Core\GDOError;
+use GDO\Core\GDO_Error;
 
 /**
  * Utility that resizes images.
@@ -117,7 +117,7 @@ final class ImageResize
 			case "image/gif": imagegif($desired_gdim, $file->path); break;
 			case "image/jpeg": imagejpeg($desired_gdim, $file->path); break;
 			case "image/png": imagepng($desired_gdim, $file->path); break;
-			default: throw new GDOError('err_image_format_not_supported', [$toFormat]);
+			default: throw new GDO_Error('err_image_format_not_supported', [$toFormat]);
 		}
 		imagedestroy($desired_gdim);
 		return true;
@@ -149,7 +149,7 @@ final class ImageResize
 			case "image/gif": $source = imagecreatefromgif($file->path); break;
 			case "image/jpeg": $source = imagecreatefromjpeg($file->path); break;
 			case "image/png": $source = imagecreatefrompng($file->path); break;
-			default: throw new GDOError('err_image_format_not_supported', [$file->getType()]);
+			default: throw new GDO_Error('err_image_format_not_supported', [$file->getType()]);
 		}
 		return $source;
 	}
@@ -178,7 +178,7 @@ final class ImageResize
 			case "image/gif": imagegif($image2, $file->path); break;
 			case "image/jpeg": imagejpeg($image2, $file->path); break;
 			case "image/png": imagepng($image2, $file->path); break;
-			default: throw new GDOError('err_image_format_not_supported', [$file->getType()]);
+			default: throw new GDO_Error('err_image_format_not_supported', [$file->getType()]);
 		}
 		
 		imagedestroy($image2);

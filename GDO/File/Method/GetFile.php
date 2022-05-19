@@ -6,6 +6,7 @@ use GDO\File\GDO_File;
 use GDO\File\FileUtil;
 use GDO\Net\Stream;
 use GDO\Util\Common;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Int;
 use GDO\Core\GDT_String;
 

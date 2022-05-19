@@ -37,6 +37,11 @@ class Application
 		self::$MICROTIME = $time;
 	}
 	
+	public static function updateTime()
+	{
+		self::time(microtime(true));
+	}
+	
 	#################
 	### HTTP Code ###
 	#################
@@ -107,4 +112,4 @@ class Application
 	
 }
 
-Application::time(microtime(true));
+Application::updateTime();

@@ -8,6 +8,7 @@ use function PHPUnit\Framework\assertContains;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\UI\GDT_Container;
 use function PHPUnit\Framework\assertEquals;
+use GDO\Core\Application;
 
 final class ResponseTest extends TestCase
 {
@@ -38,7 +39,7 @@ final class ResponseTest extends TestCase
         $p1 = GDT_Paragraph::make()->textRaw('par1');
         $r1->addField($p1);
         $r1->addField(null);
-        assertEquals(200, GDT_Response::$CODE);
+        assertEquals(200, Application::$RESPONSE_CODE);
     }
 
 }

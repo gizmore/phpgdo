@@ -9,6 +9,7 @@ use function PHPUnit\Framework\assertEquals;
 use GDO\Form\MethodForm;
 use GDO\Core\GDT_Response;
 use GDO\Form\GDT_Form;
+use GDO\Core\Application;
 
 /**
  * Helper Class to test a gdo method.
@@ -83,7 +84,7 @@ final class MethodTest
     public function execute($btn='submit')
     {
         # Reset request and response.
-        GDT_Response::$CODE = 200;
+        Application::$RESPONSE_CODE = 200;
         $_GET = [];
         $_POST = [];
         $_REQUEST = [];
