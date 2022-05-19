@@ -56,14 +56,14 @@ class Installer
 		
 		if (!$module->isPersisted())
 		{
-			$version = $module->module_version;
-			GDO_Module::table()->deleteWhere('module_name = '.$module->quoted('module_name'));
+			$version = $module->version;
+// 			GDO_Module::table()->deleteWhere('module_name = '.$module->quoted('module_name'));
 			$module->setVars(['module_enabled'=>'1', 'module_version'=>$version, 'module_priority' => $module->priority]);
 			$module->insert();
 		}
 		
 		$upgraded = false;
-		while ($module->getVersion() != $module->module_version)
+		while ($module->getVersion() != $module->version)
 		{
 			self::upgrade($module);
 			$upgraded = true;
@@ -327,7 +327,7 @@ class Installer
 	{
 	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	    $module = ModuleLoader::instance()->getModule($moduleName);
-	    $deps = $module->dependencies();
+	    $deps = $module->getDependencies();
 	    $cnt = 0;
 	    $allResolved = true; # All required modules provided?
 	    while ($cnt !== count($deps))
@@ -367,7 +367,7 @@ class Installer
 	                continue;
 	            }
 	            
-	            $deps = array_unique(array_merge($depmod->dependencies(), $deps));
+	            $deps = array_unique(array_merge($depmod->getDependencies(), $deps));
 	        }
 	    }
 

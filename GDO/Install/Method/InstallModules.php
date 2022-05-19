@@ -2,13 +2,14 @@
 namespace GDO\Install\Method;
 
 use GDO\DB\Database;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
+use GDO\UI\GDT_Success;
 use GDO\Util\Common;
 use GDO\Core\GDO_Module;
 use GDO\Install\Installer;
 use GDO\Install\Config;
-use GDO\Core\GDT_Success;
 use GDO\DB\Cache;
 use GDO\Core\GDT_Response;
 
@@ -95,7 +96,7 @@ final class InstallModules extends Method
 		$deps = [];
 		foreach ($this->modules as $module)
 		{
-			$deps[$module->getName()] = $module->dependencies();
+			$deps[$module->getName()] = $module->getDependencies();
 		}
 		return $deps;
 	}

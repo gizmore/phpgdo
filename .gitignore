@@ -29,6 +29,9 @@ vendor/
 # Bower
 **/bower_components/
 
+# Various
+hax.php
+
 # GDO
 assets/
 files/

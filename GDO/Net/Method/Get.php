@@ -13,7 +13,7 @@ use GDO\Net\HTTP;
  */
 final class Get extends MethodCLI
 {
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields([
 			GDT_Url::make('url'),

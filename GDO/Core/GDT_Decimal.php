@@ -84,7 +84,7 @@ class GDT_Decimal extends GDT_Int
 		return "3.14";
 	}
 	
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		$var = $value === null ? null : sprintf("%.0{$this->digitsAfter}f", $value);
 		return $var;

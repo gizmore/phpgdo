@@ -6,14 +6,12 @@ use GDO\UI\GDT_Divider;
 use GDO\Core\GDT_Enum;
 use GDO\Core\GDT_Select;
 use GDO\Form\GDT_Hidden;
-use GDO\User\GDT_Realname;
 use GDO\Util\Strings;
 use GDO\Date\Time;
 use GDO\Core\GDT_Checkbox;
 use GDO\Util\Random;
 use GDO\Core\GDT_Int;
 use GDO\Net\GDT_Port;
-use GDO\Mail\GDT_Email;
 use GDO\Core\Application;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
@@ -37,7 +35,7 @@ class Config
 	####################
 	public static function hrefStep(int $step) : string { return $_SERVER['SCRIPT_NAME'] . '?step=' . $step; }
 	public static function linkStep(int $step) : string { return self::linkStepGDT($step)->renderCell(); }
-	public static function linkStepGDT(int $step) : string { return GDT_Link::make("step$step")->href(self::hrefStep($step))->label("install_title_$step"); }
+	public static function linkStepGDT(int $step) : GDT_Link { return GDT_Link::make("step$step")->href(self::hrefStep($step))->label("install_title_$step"); }
 	public static function steps() : array
 	{
 		return [
@@ -87,7 +85,7 @@ class Config
 	public static function configure() : void
 	{
 		# Site
-		if (!defined('GDO_SITENAME')) define('GDO_SITENAME', 'GDO6');
+		if (!defined('GDO_SITENAME')) define('GDO_SITENAME', 'GDOv7');
 		if (!defined('GDO_SITECREATED')) define('GDO_SITECREATED', Time::getDate(microtime(true)));
 		if (!defined('GDO_LANGUAGE')) define('GDO_LANGUAGE', 'en');
 // 		if (!defined('GDO_TIMEZONE')) define('GDO_TIMEZONE', ini_get('date.timezone'));
@@ -130,7 +128,7 @@ class Config
 		if (!defined('GDO_MEMCACHE_PORT')) define('GDO_MEMCACHE_PORT', 61221);
 		if (!defined('GDO_MEMCACHE_TTL')) define('GDO_MEMCACHE_TTL', 1800);
 		# Cookies
-		if (!defined('GDO_SESS_NAME')) define('GDO_SESS_NAME', 'GDO6');
+		if (!defined('GDO_SESS_NAME')) define('GDO_SESS_NAME', 'GDO7');
 		if (!defined('GDO_SESS_DOMAIN')) define('GDO_SESS_DOMAIN', GDO_DOMAIN);
 		if (!defined('GDO_SESS_TIME')) define('GDO_SESS_TIME', Time::ONE_DAY*2);
 		if (!defined('GDO_SESS_JS')) define('GDO_SESS_JS', false);
@@ -178,7 +176,7 @@ class Config
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
 			GDT_Checkbox::make('log_request')->initialValue(GDO_LOG_REQUEST),
-			GDT_Checkbox::make('console_verbose')->initialValue(GDO_CONSOLE_VERBOSE),
+// 			GDT_Checkbox::make('console_verbose')->initialValue(GDO_CONSOLE_VERBOSE),
 			GDT_Hidden::make('error_level')->initialValue(GDO_ERROR_LEVEL),
 			GDT_Checkbox::make('error_stacktrace')->initialValue(GDO_ERROR_STACKTRACE),
 			GDT_Checkbox::make('error_die')->initialValue(GDO_ERROR_DIE),
@@ -212,7 +210,7 @@ class Config
 			# Email
 			GDT_Divider::make()->label('install_config_section_email'),
 			GDT_Checkbox::make('enable_email')->initialValue(GDO_ENABLE_EMAIL),
-			GDT_Realname::make('bot_name')->required()->initialValue(GDO_BOT_NAME)->label('bot_name'),
+			GDT_String::make('bot_name')->required()->initialValue(GDO_BOT_NAME)->label('bot_name'),
 			GDT_String::make('bot_email')->required()->initialValue(GDO_BOT_EMAIL)->label('bot_mail'),
 			GDT_String::make('admin_email')->required()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail'),
 			GDT_String::make('error_email')->required()->initialValue(GDO_ERROR_EMAIL)->label('error_mail'),

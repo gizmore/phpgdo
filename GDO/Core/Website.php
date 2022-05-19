@@ -3,9 +3,11 @@ namespace GDO\Core;
 
 use GDO\UI\GDT_Link;
 use GDO\Session\GDO_Session;
+use GDO\UI\GDT_Error;
+use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
-use GDO\CSS\Minifier;
-use GDO\CSS\Module_CSS;
+use GDO\UI\GDT_Container;
+use GDO\UI\GDT_Success;
 
 /**
  * General Website utility and storage for header and javascript elements.
@@ -105,12 +107,18 @@ final class Website
 	
 	public static function addInlineCSS($css)
 	{
-	    Minifier::addInline($css);
+		if (class_exists('GDO\\CSS\\Module_CSS', false))
+		{
+			\GDO\CSS\Minifier::addInline($css);
+		}
 	}
 	
 	public static function addCSS($path)
 	{
-	    Minifier::addFile($path);
+		if (class_exists('GDO\\CSS\\Module_CSS', false))
+		{
+			\GDO\CSS\Minifier::addFile($path);
+		}
 	}
 	
 	/**
@@ -252,7 +260,7 @@ final class Website
 	{
 	    $app = Application::instance();
 	 
-	    self::topResponse()->addField(GDT_Success::withText($message));
+	    self::topResponse()->addField(GDT_Success::make()->textRaw($message));
 	  
 	    if ($app->isCLI())
 	    {
@@ -260,6 +268,7 @@ final class Website
 	        {
 	            echo "Redirect => $url\n";
 	        }
+	        echo "{$message}\n";
 	        return;
 	    }
 	    
@@ -281,7 +290,7 @@ final class Website
 	{
 	    $app = Application::instance();
 
-	    self::topResponse()->addField(GDT_Error::withText($message, $code));
+	    self::topResponse()->addField(GDT_Error::make()->textRaw($message, $code));
 	    
 	    if ($app->isCLI())
 	    {

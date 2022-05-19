@@ -33,10 +33,10 @@ final class Module_Table extends GDO_Module
 		    GDT_UInt::make('ipp_http')->initial('20')->min(1)->max(1000),
 		];
 	}
-	public function cfgSuggestionsPerRequest() { return $this->getConfigValue('spr'); }
-	public function cfgItemsPerPageCLI() { return $this->getConfigValue('ipp_cli'); }
-	public function cfgItemsPerPageHTTP() { return $this->getConfigValue('ipp_http'); }
-	public function cfgItemsPerPage()
+	public function cfgSuggestionsPerRequest() : int { return $this->getConfigValue('spr'); }
+	public function cfgItemsPerPageCLI() : int { return $this->getConfigValue('ipp_cli'); }
+	public function cfgItemsPerPageHTTP() : int { return $this->getConfigValue('ipp_http'); }
+	public function cfgItemsPerPage() : int
 	{
 	    return Application::instance()->isCLI() ?
 	       $this->cfgItemsPerPageCLI() :

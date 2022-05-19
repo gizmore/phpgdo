@@ -56,13 +56,13 @@ final class GDT_IP extends GDT_String
 	##############
 	### String ###
 	##############
-	public $min = 3;
-	public $max = 45;
+	public int $min = 3;
+	public int $max = 45;
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
-	public $pattern = "/^[.:0-9A-Fa-f]{3,45}$/";
-	public $writable = false;
-	public $editable = false;
+	public string $pattern = "/^[.:0-9A-Fa-f]{3,45}$/";
+	public bool $writable = false;
+	public bool $editable = false;
 	public $icon = 'url';
 	
 	public function defaultLabel() { return $this->label('ip'); }

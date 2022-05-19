@@ -35,13 +35,13 @@ class GDT_Title extends GDT_String
 	    return '<h3 class="gdt-title">' . $text . '</h3>'; 
 	}
 	
-	public function renderCLI()
+	public function renderCLI() : string
 	{
 	    return $this->displayLabel() . ': ' .
 	       $this->renderTitle();
 	}
 	
-	public function var($var=null)
+	public function var(string $var = null) : self
 	{
 	    $this->titleRaw = $var;
 	    return parent::var($var);

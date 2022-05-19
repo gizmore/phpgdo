@@ -30,7 +30,7 @@ trait WithPHPJQuery
 		return $this;
 	}
 	
-	public function htmlAttributes()
+	public function htmlAttributes() : string
 	{
 		$html = '';
 		if ($this->htmlAttributes)
@@ -88,25 +88,4 @@ trait WithPHPJQuery
 		return $this->attr('style', $rules);
 	}
 
-	/**
-	 * @var callable
-	 */
-	public callable $click;
-	
-	/**
-	 * Click handler.
-	 * @param callable $callable
-	 * @return self
-	 */
-	public function onclick(callable $callable) : self
-	{
-		$this->click = $callable;
-		return $this;
-	}
-	
-	public function click(...$args)
-	{
-		return call_user_func($this->click, ...$args);
-	}
-	
 }

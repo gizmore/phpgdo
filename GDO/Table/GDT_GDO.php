@@ -14,7 +14,7 @@ final class GDT_GDO extends GDT
 {
 	public function renderCard() { return $this->gdo->renderCard(); }
 	public function renderCell() { return $this->gdo->renderCell(); }
-	public function renderCLI() { return $this->gdo->renderCLI(); }
+	public function renderCLI() : string { return $this->gdo->renderCLI(); }
 	public function renderList() { return $this->gdo->renderList(); }
 	public function renderJSON() { return $this->gdo->renderJSON(); }
 	public function renderXML() { return $this->gdo->renderXML(); }

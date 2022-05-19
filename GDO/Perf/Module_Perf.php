@@ -27,7 +27,7 @@ final class Module_Perf extends GDO_Module
     public function getConfig() : array
     {
         return [
-            GDT_Enum::make('perf_bottom_bar')->enumValues('all', 'staff', 'none')->initial('staff'),
+        	GDT_Enum::make('perf_bottom_bar')->enumValues('all', 'staff', 'none')->initial('staff'),
         ];
     }
     public function cfgBottomPermission() : string { return $this->getConfigVar('perf_bottom_bar'); }

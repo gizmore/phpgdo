@@ -1,15 +1,11 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\withFields;
 use GDO\Core\GDT_Template;
 
-class GDT_Bar extends GDT
+class GDT_Bar extends GDT_Container
 {
-	use WithFlex;
-	use withFields;
-	
 	public function renderCard() : string { return $this->renderHTML(); }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderForm() : string { return $this->renderHTML(); }

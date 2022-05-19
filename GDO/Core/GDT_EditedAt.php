@@ -17,12 +17,11 @@ final class GDT_EditedAt extends GDT_Timestamp
 {
 	public function defaultLabel() { return $this->label('edited_at'); }
 
-	public $hidden = true;
-
+	public function isHidden() : bool { return true; }
 	public function isWritable() : bool { return false; }
 	public function isOrderDefaultAsc() : bool { return false; }
 	
-	public function gdoBeforeUpdate(Query $query) : void
+	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void
 	{
 		$now = Time::getDate();
 		$query->set($this->identifier() . "=" . quote($now));

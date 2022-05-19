@@ -1,12 +1,13 @@
 <?php
 namespace GDO\Language\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\Website;
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
 use GDO\Session\GDO_Session;
-use GDO\Core\GDT_Success;
+use GDO\UI\GDT_Success;
 use GDO\Net\GDT_Url;
 
 /**
@@ -23,7 +24,7 @@ use GDO\Net\GDT_Url;
  */
 final class SwitchLanguage extends Method
 {
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 		return [
 			GDT_Language::make('_lang')->notNull(),
@@ -72,7 +73,7 @@ final class SwitchLanguage extends Method
 		Trans::setISO($iso);
 		
 		# Build response
-		$response = GDT_Success::responseWith('msg_language_set', [$this->getLanguage()->displayName()]);
+		$response = GDT_Success::make()->text('msg_language_set', [$this->getLanguage()->displayName()]);
 		
 		# Redirect if 'ref' is set
 		if ($url = $this->gdoParameterVar('ref'))

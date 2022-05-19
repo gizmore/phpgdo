@@ -21,6 +21,7 @@ class Module_Cronjob extends GDO_Module
 	{
 		return [
 			GDT_Timestamp::make('last_run')->initialAgo(60),
+// 			GDT_Percent::make('lottery_chance')->initial('0.5'),
 		];
 	}
 	
@@ -52,6 +53,11 @@ class Module_Cronjob extends GDO_Module
 	public function href_administrate_module()
 	{
 		return href('Cronjob', 'Cronjob');
+	}
+	
+	public function onInit() : void
+	{
+		# @TODO: Cronjob shall run via any request randomly.
 	}
 	
 }

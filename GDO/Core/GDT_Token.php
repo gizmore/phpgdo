@@ -7,7 +7,7 @@ use GDO\Util\Random;
  * Default random token is 16 chars alphanumeric.
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.0
  * @since 4.0.0
  */
 class GDT_Token extends GDT_Char
@@ -21,14 +21,14 @@ class GDT_Token extends GDT_Char
 	    $this->length(GDO::TOKEN_LENGTH);
 	}
 	
-	public function length($size)
+	public function length($size) : self
 	{
 		$this->pattern = '/^[a-zA-Z0-9]{'.$size.'}$/D';
 		return parent::length($size);
 	}
 	
-	public $initialNull = false;
-	public function initialNull($initialNull=true)
+	public bool $initialNull = false;
+	public function initialNull(bool $initialNull=true) : self
 	{
 		$this->initialNull = $initialNull;
 		return $this;

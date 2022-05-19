@@ -1,15 +1,16 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Form\GDT_Select;
 use GDO\File\FileUtil;
+use GDO\Core\GDT_Select;
 use GDO\Core\GDT_Template;
 use GDO\Util\Strings;
 
 /**
  * Scan the fonts dir for a select.
+ * 
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.0.3
  */
 class GDT_Font extends GDT_Select
@@ -24,7 +25,7 @@ class GDT_Font extends GDT_Select
 	    $this->choices($this->fontChoices());
 	}
 	
-	public function renderForm()
+	public function renderForm() : string
 	{
 		$this->choices = $this->fontChoices();
 		return parent::renderForm();

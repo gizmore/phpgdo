@@ -44,23 +44,23 @@ class GDT_Url extends GDT_String
 	
 	public function defaultLabel() { return $this->label('url'); }
 	
-	public $reachable = false;
-	public $allowLocal = true;
-	public $allowExternal = true;
-	public $schemes = ['http', 'https'];
-	public $noFollow = false;
+	public bool $reachable = false;
+	public bool $allowLocal = true;
+	public bool $allowExternal = true;
+	public array $schemes = ['http', 'https'];
+	public bool $noFollow = false;
 	
-	public $min = 0;
-	public $max = 768; # Max length for a unique constraint on older mysql systems
+	public int $min = 0;
+	public int $max = 768; # Max length for a unique constraint on older mysql systems
 	
 	public $icon = 'url';
 	
-	public function toValue($var)
+	public function toValue(string $var)
 	{
 		return $var ? new URL($var) : null;
 	}
 	
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 	    return $value ? $value->raw : null;
 	}

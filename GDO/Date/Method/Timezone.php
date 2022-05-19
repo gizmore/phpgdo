@@ -18,12 +18,12 @@ use GDO\Date\GDO_Timezone;
  */
 final class Timezone extends MethodForm
 {
-    public function isTransactional() { return false; }
-    public function isUserRequired() { return false; }
+    public function isTransactional() : bool { return false; }
+    public function isUserRequired() : bool { return false; }
     
     public function formName() { return 'tzform'; }
     
-    public function createForm(GDT_Form $form)
+    public function createForm(GDT_Form $form) : void
     {
         $tz = GDO_User::current()->getTimezone();
         $form->action(href('Date', 'Timezone'));

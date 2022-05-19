@@ -4,7 +4,14 @@ namespace GDO\Form;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
 
-final class GDT_Hidden extends GDT_String
+/**
+ * An HTML Hidden Form Fields.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 5.0.0
+ */
+class GDT_Hidden extends GDT_String
 {
 	public function renderHTML() : string
 	{

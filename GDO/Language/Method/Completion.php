@@ -3,6 +3,7 @@ namespace GDO\Language\Method;
 
 use GDO\Language\GDO_Language;
 use GDO\Language\GDT_Language;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodCompletion;
 

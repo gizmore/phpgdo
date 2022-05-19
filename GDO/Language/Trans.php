@@ -1,10 +1,10 @@
 <?php
 namespace GDO\Language;
 
-use GDO\Core\GDT_Error;
-use GDO\Core\GDOError;
 use GDO\File\FileUtil;
+use GDO\UI\GDT_Error;
 use GDO\DB\Cache;
+use GDO\Core\GDO_Error;
 
 /**
  * Very cheap i18n.
@@ -232,7 +232,7 @@ final class Trans
 				    catch (\Throwable $e)
 				    {
 				        self::$CACHE[$iso] = $trans;
-				        echo GDT_Error::responseException($e)->renderCell();
+				        echo GDT_Error::make()->exception($e)->renderCell();
 				    }
 				}
 				else
@@ -249,7 +249,7 @@ final class Trans
 					{
 					    self::$CACHE[$iso] = $trans;
 					    echo GDT_Error::responseException($e)->renderCell();
-					    throw new GDOError('err_langfile_corrupt', [$pathEN]);
+					    throw new GDO_Error('err_langfile_corrupt', [$pathEN]);
 					}
 				}
 			}

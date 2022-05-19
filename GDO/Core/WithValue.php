@@ -11,6 +11,14 @@ namespace GDO\Core;
  */
 trait WithValue
 {
+	################
+	### Required ###
+	################
+	public function required(bool $required = true)
+	{
+		return $this->notNull($required);
+	}
+	
 	###########################
 	### Input / Var / Value ###
 	###########################
@@ -20,19 +28,24 @@ trait WithValue
 	public ?string $var = null; # input db var
 	public $value; # output value
 	
-	public function initial(string $initial) : self
+	public function initial(string $initial = null) : self
 	{
 		$this->initial = $initial;
 		return $this->var($initial);
 	}
 
-	public function input(?string $input) : self
+	public function input(string $input = null) : self
 	{
 		$this->input = $input;
 		return $this;
 	}
 
-	public function var(?string $var) : self
+	public function hasInput() : bool
+	{
+		return !empty($this->input);
+	}
+	
+	public function var(string $var = null) : self
 	{
 		$this->var = $var;
 		$this->valueConverted = false;
@@ -45,6 +58,11 @@ trait WithValue
 		$this->value = $value;
 		$this->valueConverted = true;
 		return $this;
+	}
+	
+	public function getInitial() : ?string
+	{
+		return $this->initial;
 	}
 	
 	public function getVar() : ?string
@@ -63,21 +81,11 @@ trait WithValue
 	}
 
 	##################
-	### Conversion ###
+	### Positional ###
 	##################
-	public function inputToVar(string $input) : string
+	public function isPositional() : bool
 	{
-		return $input;
-	}
-	
-	public function toVar($value) : string
-	{
-		return $value;
-	}
-	
-	public function toValue(string $var)
-	{
-		return $var;
+		return $this->isRequired() && (!$this->initial);
 	}
 
 }

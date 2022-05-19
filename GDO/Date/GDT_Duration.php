@@ -15,7 +15,7 @@ class GDT_Duration extends GDT_String
 {
 	public function defaultLabel() { return $this->label('duration'); }
 	
-	public $pattern = '/^(?:[0-9 ]+[smhdwy]? *)+$/iD';
+	public string $pattern = '/^(?:[0-9 ]+[smhdwy]? *)+$/iD';
 
 	protected function __construct()
 	{
@@ -38,7 +38,7 @@ class GDT_Duration extends GDT_String
 	    return $var === null ? null : Time::humanToSeconds($var);
 	}
 	
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 	    return $value === null ? null : Time::humanDuration($value);
 	}

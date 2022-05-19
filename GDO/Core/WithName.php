@@ -22,7 +22,7 @@ trait WithName
 	
 	public function hasName() : bool
 	{
-		return !!$this->name;
+		return isset($this->name);
 	}
 	
 	public function getName() : ?string
@@ -45,10 +45,7 @@ trait WithName
 	{
 		$obj = new static();
 		$name = $name ? $name : $obj->getDefaultName();
-		if ($name)
-		{
-			$obj->name($name);
-		}
+		$obj->name($name);
 		return $obj;
 	}
 

@@ -61,5 +61,13 @@ trait WithText
 	{
 		return $this->textRaw(null);
 	}
+	
+// 	###############
+// 	### Factory ###
+// 	###############
+// 	public static function withText(string $textKey, array $textArgs = null)
+// 	{
+// 		return self::make()->text($textKey, $textArgs);
+// 	}
 
 }

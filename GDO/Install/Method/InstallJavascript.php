@@ -1,10 +1,14 @@
 <?php
 namespace GDO\Install\Method;
+
 use GDO\DB\Database;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
+
 /**
  * Show info howto install bower components.
+ * 
  * @author gizmore
  */
 final class InstallJavascript extends Method
@@ -20,4 +24,5 @@ final class InstallJavascript extends Method
 	{
 		return $this->templatePHP('page/installjavascript.php');
 	}
+	
 }

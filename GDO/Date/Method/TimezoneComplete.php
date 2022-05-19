@@ -1,11 +1,11 @@
 <?php
 namespace GDO\Date\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodCompletion;
 use GDO\Date\GDO_Timezone;
 use GDO\UI\GDT_SearchField;
-use GDO\Country\GDT_Country;
 
 /**
  * Timezone autocompletion.
@@ -18,10 +18,10 @@ final class TimezoneComplete extends MethodCompletion
 {
 	public function isUserRequired() { return false; }
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 		return [
-			GDT_Country::make('country'),
+// 			GDT_Country::make('country'),
 			GDT_SearchField::make('query')->notNull(),
 		];
 	}

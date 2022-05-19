@@ -4,7 +4,7 @@ namespace GDO\Date;
 use GDO\Language\Trans;
 use DateTime;
 use GDO\Core\Application;
-use GDO\Core\GDOError;
+use GDO\Core\GDO_Error;
 
 /**
  * Time helper class.
@@ -191,7 +191,7 @@ final class Time
 	 * @param string $date
 	 * @param int $timezone
 	 * @param string $format
-	 * @throws GDOError
+	 * @throws GDO_Error
 	 * @return \DateTime
 	 */
 	public static function parseDateTimeISO($iso, $date, $timezone=null, $format='parse')
@@ -233,7 +233,7 @@ final class Time
 	    $timezone = self::getTimezoneObject($timezone);
 	    if (!($d = DateTime::createFromFormat($format, $date, $timezone)))
 	    {
-	        throw new GDOError('err_invalid_date', [html($date), $format]);
+	        throw new GDO_Error('err_invalid_date', [html($date), $format]);
 	    }
 	    return $d;
 	}

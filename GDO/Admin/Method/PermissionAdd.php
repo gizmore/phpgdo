@@ -19,7 +19,7 @@ class PermissionAdd extends MethodForm
 {
 	use MethodAdmin;
 	
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 	
 	public function execute() : GDT
 	{
@@ -27,7 +27,7 @@ class PermissionAdd extends MethodForm
 		return parent::execute();
 	}
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$gdo = GDO_Permission::table();
 		$form->addFields(

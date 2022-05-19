@@ -8,13 +8,14 @@ namespace GDO\Core;
  * 
  * @author gizmore
  * @see GDT_String
- *
+ * @version 7.0.0
+ * @since 5.0.2
  */
 class GDT_Text extends GDT_String
 {
 	public function defaultLabel() { return $this->label('message'); }
 	
-	public $max = 65535;
+	public int $max = 65535;
 	
 	public function gdoColumnDefine() : string
 	{

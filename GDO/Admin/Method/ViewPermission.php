@@ -25,7 +25,7 @@ class ViewPermission extends MethodQueryTable
 	
 	private $permission;
 	
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 	
 	public function gdoTable()
 	{
@@ -37,7 +37,7 @@ class ViewPermission extends MethodQueryTable
 	    $table->fetchAs(GDO_User::table());
 	}
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 	    return [
 	        GDT_Permission::make('permission')->notNull(),

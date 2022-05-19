@@ -15,11 +15,11 @@ class GDT_Paragraph extends GDT
 {
     use WithText;
 
-    public function render() { return $this->renderCell(); }
-    public function renderCard() { return $this->renderCell(); }
-	public function renderCell() { return sprintf('<p class="gdt-paragraph">%s</p>', $this->renderText()); }
-	public function renderCLI() { return $this->renderText() . "\n"; }
+    public function render() : string { return $this->renderCell(); }
+    public function renderCard() : string { return $this->renderCell(); }
+    public function renderCell() : string { return sprintf('<p class="gdt-paragraph">%s</p>', $this->renderText()); }
+	public function renderCLI() : string { return $this->renderText() . "\n"; }
 	public function renderJSON() { return $this->renderCLI(); }
-	public function renderForm() { return $this->renderCell(); }
+	public function renderForm() : string { return $this->renderCell(); }
 
 }

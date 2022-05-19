@@ -1,6 +1,14 @@
 <?php
 namespace GDO\Core;
 
+/**
+ * A GDT_Method holds a Method and inputs to bind.
+ * An input s either a string or a GDT_Method.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 7.0.0
+ */
 final class GDT_Method extends GDT
 {
 	public Method $method;
@@ -11,7 +19,7 @@ final class GDT_Method extends GDT
 	}
 	
 	public array $inputs = [];
-	public function addInput(string $key, $input)
+	public function addInput(?string $key, $input)
 	{
 		if ($key)
 		{
@@ -23,9 +31,15 @@ final class GDT_Method extends GDT
 		}
 	}
 	
+	public function exec() : GDT
+	{
+		$this->method->parameters($this->inputs);
+		return $this->method->exec();
+	}
+	
 	public function execute() : GDT
 	{
-		$this->method->setInputs($this->inputs);
+		$this->method->parameters($this->inputs);
 		return $this->method->execute();
 	}
 	

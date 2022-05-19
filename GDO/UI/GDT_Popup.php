@@ -30,7 +30,7 @@ final class GDT_Popup extends GDT
         return $this->renderText();
     }
     
-    public function renderCLI()
+    public function renderCLI() : string
     {
         # Echo instead of return... kinda popup
         echo $this->renderText();

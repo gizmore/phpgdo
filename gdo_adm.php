@@ -7,7 +7,6 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\ModuleProviders;
 use GDO\DB\Database;
 use GDO\Language\Trans;
-use GDO\Install\Method\Configure;
 use GDO\Core\GDO_ModuleVar;
 use GDO\UI\GDT_Success;
 use GDO\User\GDO_User;
@@ -25,6 +24,7 @@ use GDO\Install\Method\InstallCronjob;
 use GDO\Install\Method\SystemTest;
 use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_Error;
+use GDO\Core\GDT_Expression;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -109,7 +109,7 @@ else
 }
 
 # App is CLI and an installer
-final class gdoadm extends Application
+final class gdo_adm extends Application
 {
 	public function isInstall() : bool { return true; }
 	public function isCLI() : bool { return true; }
@@ -117,7 +117,7 @@ final class gdoadm extends Application
 	public function isHTML() : bool { return false; }
 	public function isJSON() : bool { return false; }
 }
-new gdoadm(); # Create App
+new gdo_adm(); # Create App
 
 # Load config defaults
 if (!defined('GDO_CONFIGURED'))
@@ -133,7 +133,7 @@ Database::init();
 Cache::flush();
 Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
-Logger::init(null, GDO_ERROR_LEVEL); # init without username
+Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init();
 Debug::enableErrorHandler();
 Debug::enableExceptionHandler();
@@ -157,11 +157,12 @@ elseif ($argv[1] === 'configure')
     # @TODO gdoadm.php: write a repl configurator.
 	if ($argc === 2)
 	{
-		$argv[2] = 'config.php'; # default config filename
+		$argv[2] = 'protected/config.php'; # default config filename
 	}
 	
-	$response = Configure::make()->requestParameters(['filename' => $argv[2]])->formParameters(['save_config' => 1])->executeWithInit();
-    if ($response->isError())
+	$line = "install.configure \"--filename={$argv[2]}\" --save_config=1";
+	$response = GDT_Expression::fromLine($line)->execute();
+    if (Application::isError())
     {
         echo json_encode($response->renderJSON(), JSON_PRETTY_PRINT);
     }
@@ -236,7 +237,7 @@ elseif ($argv[1] === 'modules')
         }
         else
         {
-            $deps = implode(', ', $module->dependencies());
+            $deps = implode(', ', $module->getDependencies());
             echo "Module: {$moduleName}\n";
             echo "License: {$module->module_license}\n";
             echo $module->getModuleDescription();
@@ -283,7 +284,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
             echo "Unknown module. Try {$argv[0]} modules.\n";
             die(1);
         }
-        $deps = $module->dependencies();
+        $deps = $module->getDependencies();
         $deps[] = $module->getName();
 	}
 	elseif ($mode === 2)
@@ -337,7 +338,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 				continue;
 			}
             
-            $deps = array_unique(array_merge($depmod->dependencies(), $deps));
+            $deps = array_unique(array_merge($depmod->getDependencies(), $deps));
         }
     }
 	
@@ -543,7 +544,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     		{
     			if ($module = $loader->getModule($dep))
     			{
-    				$moreDeps = $module->dependencies();
+    				$moreDeps = $module->getDependencies();
     			}
     			else
     			{

@@ -1,8 +1,10 @@
 <?php
 namespace GDO\Core;
 
+use GDO\DB\Database;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Success;
+use GDO\User\GDO_User;
 use GDO\Util\Strings;
 
 /**
@@ -15,13 +17,22 @@ use GDO\Util\Strings;
 abstract class Method
 {
 	use WithModule;
-	
+	use WithInstance;
+
+	################
+	### Override ###
+	################
 	public abstract function execute() : GDT;
+	public function isTransactional() : bool { return false; }
+	public function isAlwaysTransactional() : bool { return false; }
+	public function onInit() : ?GDT { return null; }
+	public function beforeExecute() : void {}
+	public function afterExecute() : void {}
+	public function getPermission() : ?string { return null; }
 	
 	###################
 	### Alias Cache ###
 	###################
-	
 	/**
 	 * @var Method[]
 	 */
@@ -38,18 +49,27 @@ abstract class Method
 	 * @param string $alias
 	 * @return Method
 	 */
-	public static function getMethod(string $alias) : self
+	public static function getMethod(string $alias, bool $throw=true) : self
 	{
+		$alias = strtolower($alias);
 		if (isset(self::$CLI_ALIASES[$alias]))
 		{
-			return self::$CLI_ALIASES[$alias];
+			$klass = self::$CLI_ALIASES[$alias];
+			return $klass::make();
 		}
 		else
 		{
-			$moduleName = Strings::substrTo($alias, '.');
-			$methodName = Strings::substrFrom($alias, '.');
+			$moduleName = Strings::substrTo($alias, '.', $alias);
+			$methodName = Strings::substrFrom($alias, '.', $alias);
 			$module = ModuleLoader::instance()->getModule($moduleName);
-			return $module->getMethod($methodName);
+			if ($method = $module->getMethod($methodName))
+			{
+				return $method;
+			}
+			if ($throw)
+			{
+				throw new GDO_Error('err_unknown_method', [html($alias)]);
+			}
 		}
 	}
 
@@ -61,10 +81,6 @@ abstract class Method
 		return new static();
 	}
 	
-	protected function __construct()
-	{
-	}
-	
 	##################
 	### Parameters ###
 	##################
@@ -74,6 +90,11 @@ abstract class Method
 	public function gdoParameters() : array
 	{
 		return [];
+	}
+	
+	protected function gdoParametersB() : array
+	{
+		return $this->gdoParameters();
 	}
 	
 	/**
@@ -89,9 +110,16 @@ abstract class Method
 		if (!isset($this->parameterCache))
 		{
 			$this->parameterCache = [];
-			foreach ($this->gdoParameters() as $gdt)
+			foreach ($this->gdoParametersB() as $gdt)
 			{
-				$this->parameterCache[$gdt->name] = $gdt;
+				if ($gdt->hasName())
+				{
+					$this->parameterCache[$gdt->name] = $gdt;
+				}
+// 				else
+// 				{
+// 					$this->parameterCache[] = $gdt;
+// 				}
 			}
 		}
 		return $this->parameterCache;
@@ -112,7 +140,7 @@ abstract class Method
 		return $this->gdoParameter($name)->getValue();
 	}
 	
-	public function setInputs(array $inputs)
+	public function parameters(array $inputs, bool $throw=true) : self
 	{
 		$i = 0;
 		/**
@@ -129,10 +157,18 @@ abstract class Method
 			if ($gdt->isPositional())
 			{
 				$positional[] = $gdt;
+				if ($gdt->hasName())
+				{
+					$namedional[$gdt->getName()] = $gdt;
+				}
 			}
-			else
+			elseif ($gdt->hasName())
 			{
 				$namedional[$gdt->getName()] = $gdt;
+			}
+			elseif ($throw)
+			{
+				throw new GDO_Error('err_gdt_should_have_a_name', [$gdt->gdoShortName()]);
 			}
 		}
 
@@ -142,19 +178,226 @@ abstract class Method
 			{
 				$positional[$i++]->input($input);
 			}
-			else
+			elseif (isset($namedional[$key]))
 			{
 				$namedional[$key]->input($input);
 			}
+			elseif ($throw)
+			{
+				throw new GDO_Error('err_gdt_should_have_a_name', [html($key)]);
+			}
+		}
+		
+		return $this;
+	}
+	
+	############
+	### Exec ###
+	############
+	/**
+	 * Test permissions and execute method.
+	 */
+	public function exec()
+	{
+		if ($this->isAjax())
+		{
+			$_REQUEST['_ajax'] = '1';
+		}
+		
+		$user = GDO_User::current();
+		
+		if (!($this->isEnabled()))
+		{
+			return GDT_Error::make()->text('err_method_disabled');
+		}
+		
+		if ( (!$this->isGuestAllowed()) && (!$user->isMember()) )
+		{
+			return GDT_Error::make()->text('err_members_only');
+		}
+		
+		if ( ($this->isUserRequired()) && (!$user->isAuthenticated()) )
+		{
+			if (module_enabled('Register') && Module_Register::instance()->cfgGuestSignup())
+			{
+				$hrefGuest = href('Register', 'Guest', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
+				return GDT_Error::make()->text('err_user_required', [$hrefGuest]);
+			}
+			else
+			{
+				return GDT_Error::make()->text('err_members_only');
+			}
+		}
+		
+		if ($mt = $this->getUserType())
+		{
+			$ut = $user->getType();
+			if (is_array($mt))
+			{
+				if (!in_array($ut, $mt))
+				{
+					return GDT_Error::responseWith(
+						'err_user_type', [implode(' / ', $this->getUserType())]);
+				}
+			}
+			elseif ($ut !== $mt)
+			{
+				return GDT_Error::make()->text('err_user_type', [$this->getUserType()]);
+			}
+		}
+		
+		if ( ($permission = $this->getPermission()) && (!$user->hasPermission($permission)) )
+		{
+			return GDT_Error::make()->text('err_permission_required', [t('perm_'.$permission)]);
+		}
+		
+		if (true !== ($error = $this->hasPermission($user)))
+		{
+			return $error;
+		}
+		
+		return $this->execWrap();
+	}
+	
+	public function execMethod()
+	{
+		return $this->execWrap();
+	}
+	
+	public function transactional()
+	{
+		return
+		($this->isAlwaysTransactional()) ||
+		($this->isTransactional() && (count($_POST)>0) );
+	}
+	
+	/**
+	 * Wrap execution in transaction if desired from method.
+	 * @throws \Exception
+	 * @return GDT_Response
+	 */
+	public function execWrap()
+	{
+		# Exec
+		$response = $this->executeWithInit();
+		
+		if ( (!$response) || (!$response->isError()) )
+		{
+			$this->setupSEO();
+		}
+		
+		return $response;
+	}
+	
+	public function setupSEO()
+	{
+		# SEO
+		Website::setTitle($this->getTitle());
+		Website::addMeta(['keywords', $this->getKeywords(), 'name']);
+		Website::addMeta(['description', $this->getDescription(), 'name']);
+		
+		# Store last URL in session
+		$this->storeLastURL();
+		
+		# Store last activity in user
+		$this->storeLastActivity();
+	}
+	
+	public function executeWithInit()
+	{
+		$db = Database::instance();
+		$transactional = $this->transactional();
+		try
+		{
+			# Wrap transaction start
+			if ($transactional)
+			{
+				$db->transactionBegin();
+			}
+			
+			# Init method
+			$response = GDT_Response::make();
+			
+			$this->inited = false;
+			$response->addField($this->onInit());
+			
+			if (Application::isError())
+			{
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
+				return $response;
+			}
+			
+			# Exec 1.before - 2.execute - 3.after
+			GDT_Hook::callHook('BeforeExecute', $this, $response);
+			
+			$response = GDT_Response::make();
+			if ($response->hasError())
+			{
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
+				return $response;
+			}
+			
+			$response->addField($this->beforeExecute());
+			if ($response->hasError())
+			{
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
+				return $response;
+			}
+			
+			$response->addField($this->execute());
+			
+			if (Application::isSuccess())
+			{
+				$response->addField($this->afterExecute());
+				GDT_Hook::callHook('AfterExecute', $this, $response);
+				if ($transactional)
+				{
+					$db->transactionEnd();
+				}
+			}
+			
+			# Wrap transaction end
+			else if ($transactional)
+			{
+				$db->transactionRollback();
+			}
+			
+			return $response;
+		}
+		catch (GDO_PermissionException $e)
+		{
+			if ($transactional)
+			{
+				$db->transactionRollback();
+			}
+			return $this->errorRaw($e->getMessage());
+		}
+		catch (\Throwable $e)
+		{
+			if ($transactional)
+			{
+				$db->transactionRollback();
+			}
+			throw $e;
 		}
 	}
+	
 	
 	#############
 	### Error ###
 	#############
 	public function message($key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
-		return $this->success($key, args, $code, $log);
+		return $this->success($key, $args, $code, $log);
 	}
 	
 	public function success($key, array $args = null, int $code = 200, bool $log = true) : GDT
@@ -167,7 +410,7 @@ abstract class Method
 		return GDT_Success::make()->titleRaw($this->getModuleName())->text($key, $args);
 	}
 	
-	public function error($key, array $args = null, int $code = 409, bool $log = true) : GDT
+	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
 	{
 		Application::setResponseCode($code);
 		if ($log)
@@ -175,6 +418,16 @@ abstract class Method
 			Logger::logError(ten($key, $args));
 		}
 		return GDT_Error::make()->titleRaw($this->getModuleName())->text($key, $args);
+	}
+	
+	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
+	{
+		Application::setResponseCode($code);
+		if ($log)
+		{
+			Logger::logError($message);
+		}
+		return GDT_Error::make()->titleRaw($this->getModuleName())->textRaw($message);
 	}
 
 	################
@@ -185,4 +438,5 @@ abstract class Method
 		return GDT_Template::make()->template($this->getModuleName(), $path, $tVars);
 	}
 	
+
 }

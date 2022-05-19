@@ -27,13 +27,13 @@ class GDT_Files extends GDT_File
 	########################
 	public function gdoColumnNames() {} # NO DB column.
 	public function gdoColumnDefine() : string { return null; } # NO DB column. Your GDO_FileTable has the data.
-	public function getGDOData() {} # Only relation table. Handled by onCreate and onUpdate.
+	public function getGDOData() : ?array {} # Only relation table. Handled by onCreate and onUpdate.
 	public function setGDOData(GDO $gdo=null) { return $this; }
 	
 	/**
 	 * @var $value GDO_File[]
 	 */
-	public function toVar($value) : string {} # cannot be saved as column.
+	public function toVar($value) : ?string {} # cannot be saved as column.
 	
 	##################
 	### File Table ###
@@ -88,15 +88,15 @@ class GDT_Files extends GDT_File
 	/**
 	 * After creation and update we have to create the entry in the relation table.
 	 */
-	public function gdoAfterCreate() : void
+	public function gdoAfterCreate(GDO $gdo) : void
 	{
-		$this->gdoAfterUpdate();
+		$this->gdoAfterUpdate($gdo);
 	}
 	
 	/**
 	 * After creation and update we have to create the entry in the relation table.
 	 */
-	public function gdoAfterUpdate() : void
+	public function gdoAfterUpdate(GDO $gdo) : void
 	{
 		if ($files = $this->getValidationValue())
 		{

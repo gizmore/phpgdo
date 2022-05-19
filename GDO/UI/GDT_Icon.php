@@ -30,7 +30,7 @@ class GDT_Icon extends GDT
 	public function renderCLI() { return $this->icon; }
 	public function renderJSON() {}
 	
-	public function var($var=null)
+	public function var(string $var = null) : self
 	{
 	    parent::var($var);
 	    return $this->icon($var);

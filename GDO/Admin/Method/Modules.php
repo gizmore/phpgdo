@@ -38,7 +38,7 @@ class Modules extends MethodTable
 	
 	public function getDefaultOrder() { return 'module_name ASC'; }
 	
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 	
 	public function execute() : GDT
 	{

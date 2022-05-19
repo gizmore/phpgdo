@@ -12,7 +12,7 @@ class Download extends Method
 {
     public function isTrivial() { return false; }
     
-    public function gdoParameters()
+    public function gdoParameters() : array
     {
         return [
             GDT_File::make('id')->notNull(),

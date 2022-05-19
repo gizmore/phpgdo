@@ -47,6 +47,10 @@ class GDT_String extends GDT_DBField
 	public function utf8() : self { return $this->encoding(self::UTF8); }
 	public function ascii() : self { return $this->encoding(self::ASCII); }
 	public function binary() : self { return $this->encoding(self::BINARY); }
+
+// 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
+// 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
+	public function isBinary() : bool { return $this->encoding === self::BINARY; }
 	
 	#################
 	### Min / Max ###
@@ -150,7 +154,7 @@ class GDT_String extends GDT_DBField
 		return "{$this->identifier()} VARCHAR({$this->max}) CHARSET {$charset}{$collate}{$null}";
 	}
 	
-	private function gdoCharsetDefine() : string
+	protected function gdoCharsetDefine() : string
 	{
 		switch ($this->encoding)
 		{
@@ -161,13 +165,14 @@ class GDT_String extends GDT_DBField
 		}
 	}
 	
-	private function gdoCollateDefine(bool $caseSensitive) : string
+	protected function gdoCollateDefine(bool $caseSensitive) : string
 	{
 		if (!$this->isBinary())
 		{
 			$append = $caseSensitive ? '_bin' : '_general_ci';
 			return ' COLLATE ' . $this->gdoCharsetDefine() . $append;
 		}
+		return '';
 	}
 	
 }

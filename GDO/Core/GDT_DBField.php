@@ -32,6 +32,12 @@ abstract class GDT_DBField extends GDT_Field
 	####################
 	public abstract function gdoColumnDefine() : string;
 	
+	public function gdoInitialDefine() : string
+	{
+		return isset($this->initial) ?
+			(" DEFAULT ".GDO::quoteS($this->initial)) : '';
+	}
+	
 	###############
 	### Primary ###
 	###############
@@ -40,6 +46,11 @@ abstract class GDT_DBField extends GDT_Field
 	{
 		$this->primary = $primary;
 		return $this;
+	}
+	
+	public function isPrimary() : bool
+	{
+		return $this->primary;
 	}
 	
 	##############
@@ -52,6 +63,11 @@ abstract class GDT_DBField extends GDT_Field
 		return $this;
 	}
 	
+	public function isUnique() : bool
+	{
+		return $this->unique;
+	}
+	
 	###############
 	### Virtual ###
 	###############
@@ -60,6 +76,14 @@ abstract class GDT_DBField extends GDT_Field
 	{
 		$this->virtual = $virtual;
 		return $this;
+	}
+	
+	##################
+	### Identifier ###
+	##################
+	public function identifier()
+	{
+		return $this->name;
 	}
 	
 }

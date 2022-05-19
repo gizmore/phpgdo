@@ -47,6 +47,16 @@ abstract class GDT_Field extends GDT
 		return [$this->getVar()];
 	}
 	
+	############
+	### Data ###
+	############
+	public function getGDOData() : ?array
+	{
+		$v = $this->getVar();
+		$v = ($v === null) || ($v === '') ? null : $v;
+		return [$this->name => $v];
+	}
+	
 	################
 	### Validate ###
 	################
@@ -64,7 +74,8 @@ abstract class GDT_Field extends GDT
 		{
 			$input = trim($input);
 		}
-		return $input ? $input : null;
+		return ($input === null) || ($input === '') ?
+			null : $input;
 	}
 	
 	##################

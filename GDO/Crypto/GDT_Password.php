@@ -2,24 +2,29 @@
 namespace GDO\Crypto;
 
 use GDO\Core\GDT_Template;
+use GDO\Util\BCrypt;
 use GDO\Core\GDT_String;
 
 /**
- * Bcrypt hash - form and database value.
+ * Bcrypt hash form and database value.
  * 
  * @author gizmore
  * @version 7.0.0
- * @since 5.0.0
+ * @since 5.0
  */
 class GDT_Password extends GDT_String
 {
+    public function isSerializable() : bool { return true; }
+    public function isSearchable() : bool { return false; }
+    public function isOrderable() : bool { return false; }
+    
     protected function __construct()
 	{
         parent::__construct();
 		$this->min = 59;
 		$this->max = 60;
-		$this->encoding = self::BINARY;
-		$this->caseS = true;
+		$this->encoding = self::ASCII;
+		$this->caseSensitive = true;
 		$this->icon('lock');
 		$this->tooltip('tt_password');
 	}
@@ -31,7 +36,7 @@ class GDT_Password extends GDT_String
 		return $var === null ? null : new BCrypt($var);
 	}
 	
-	public function getGDOData()
+	public function getGDOData() : ?array
 	{
 		$pass = $this->getValue();
 		return [$this->name => $pass ? $pass->__toString() : null];

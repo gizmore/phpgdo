@@ -9,6 +9,8 @@ A fresh restart of the GDO project. :)
 
  - 
 
+ - [Module_Tests](https://github.com/gizmore/gdo6-tests) *is* now a core module. See [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods)
+
  - [Module_CSS](https://github.com/gizmore/phpgdo-css) is not a core module anymore.
 
  - [Module_Country](https://github.com/gizmore/phpgdo-country) is not a core module anymore.

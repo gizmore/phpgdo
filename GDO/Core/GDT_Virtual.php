@@ -19,11 +19,13 @@ use GDO\UI\WithLabel;
  */
 class GDT_Virtual extends GDT
 {
-    use WithLabel;
-    
+	use WithName;
+	use WithLabel;
+	use WithValue;
+	
     public function isVirtual() : bool { return true; }
     public function isSerializable() : bool { return true; }
-    
+
     #############
     ### Query ###
     #############
@@ -40,15 +42,13 @@ class GDT_Virtual extends GDT
     /**
      * Select this virtual column as subselect.
      */
-    public function gdoBeforeRead(Query $query) : void
+    public function gdoBeforeRead(GDO $gdo, Query $query) : void
     {
         if ($this->subquery)
         {
-            $query->select("({$this->subquery}) AS {$this->name}");
+            $query->select("({$this->subquery}) AS {$this->getName()}");
         }
     }
-    
-    public function getGDOData() {} # virtual => no data
     
     #############
     ### Proxy ###
@@ -68,17 +68,17 @@ class GDT_Virtual extends GDT
         return $this->gdtType->gdo($this->gdo)->label($this->label, $this->labelArgs);
     }
     
-    public function gdtType(GDT $gdt)
+    public function gdtType(GDT $gdt) : self
     {
         $this->gdtType = $gdt;
-        $this->gdtType->name = $this->name;
-        if (isset($gdt->virtual))
-        {
-            $this->gdtType->virtual = true;
-        }
-        $this->filterable = $gdt->filterable;
-        $this->orderable = $gdt->orderable;
-        $this->searchable = $gdt->searchable;
+        $this->gdtType->name($this->getName());
+//         if (isset($gdt->virtual))
+//         {
+//             $this->gdtType->virtual = true;
+//         }
+//         $this->filterable = $gdt->filterable;
+//         $this->orderable = $gdt->orderable;
+//         $this->searchable = $gdt->searchable;
         return $this;
     }
     

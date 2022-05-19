@@ -21,7 +21,7 @@ class GDT_JSON extends GDT_Text
 	public static function encode($data) : string { return json_encode($data, JSON_PRETTY_PRINT); }
 	public static function decode(string $string) : array { return json_decode($string, true); }
 	
-	public function toVar($value) : string { return $value === null ? null : self::encode($value); }
+	public function toVar($value) : ?string { return $value === null ? null : self::encode($value); }
 	public function toValue(string $var) { return $var === null ? null : self::decode($var); }
 
 	public function renderJSON() { return $this->getValue(); }

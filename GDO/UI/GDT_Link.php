@@ -78,11 +78,11 @@ class GDT_Link extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderForm() { return $this->renderCell(); }
-	public function renderCard() { return $this->renderCell(); }
-	public function renderCell() { return GDT_Template::php('UI', 'cell/link.php', ['link' => $this]); }
+	public function renderForm() : string { return $this->renderCell(); }
+	public function renderCard() : string { return $this->renderCell(); }
+	public function renderCell() : string { return GDT_Template::php('UI', 'cell/link.php', ['link' => $this]); }
 	public function renderJSON() { return trim($this->displayLabel() . " ( $this->href )"); }
-	public function renderFilter($f) { return GDT_String::make($this->name)->renderFilter($f); }
+	public function renderFilter($f) : string { return GDT_String::make($this->name)->renderFilter($f); }
 	
 	###################
 	### Link target ###

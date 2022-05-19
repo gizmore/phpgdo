@@ -12,6 +12,14 @@ use GDO\Core\Expression\Parser;
  */
 final class GDT_Expression extends GDT
 {
+	
+	public self $parent;
+	public function parent(self $parent) : self
+	{
+		$this->parent = $parent;
+		return $this;
+	}
+	
 	public GDT_Method $method;
 	public function method(Method $method) : self
 	{
@@ -50,9 +58,14 @@ final class GDT_Expression extends GDT
 		return $parser->parse();
 	}
 	
+	public function exec() : GDT
+	{
+		return $this->method->exec();
+	}
+	
 	public function execute() : GDT
 	{
 		return $this->method->execute();
 	}
-
+	
 }

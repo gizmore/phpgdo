@@ -29,7 +29,7 @@ class Install extends MethodForm
 	use MethodAdmin;
 	
 	public function formName() { return 'form_install'; }
-	public function getPermission() { return 'admin'; }
+	public function getPermission() : ?string { return 'admin'; }
 	public function beforeExecute() {} # hide tabs (multi method configure page fix)
 	
 	/**
@@ -37,7 +37,7 @@ class Install extends MethodForm
 	 */
 	private $configModule;
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 	    return [
 	        GDT_Module::make('module')->uninstalled()->notNull(),
@@ -82,7 +82,7 @@ class Install extends MethodForm
 	 * {@inheritDoc}
 	 * @see \GDO\Form\MethodForm::createForm()
 	 */
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 	    $form->action(href('Admin', 'Configure', '&module='.Common::getRequestString('module')));
 	    

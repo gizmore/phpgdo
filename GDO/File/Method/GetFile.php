@@ -33,9 +33,9 @@ final class GetFile extends Method
 {
     public function isTrivial() { return false; } # no trivial method testing.
     
-	public function getPermission() { return 'admin'; }
+	public function getPermission() : ?string { return 'admin'; }
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 		return array(
 			GDT_Int::make('file')->notNull(),

@@ -20,7 +20,7 @@ class PermissionGrant extends MethodForm
 	    $this->renderPermTabs();
 	}
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$gdo = GDO_UserPermission::table();
 		$form->addFields(

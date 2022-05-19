@@ -101,7 +101,7 @@ class GDO_Module extends GDO
 	 * GDO classes to install.
 	 * @return string[]
 	 */
-	public function getClasses() : array {}
+	public function getClasses() : array { return GDT::EMPTY_ARRAY; }
 	
 	/**
 	 * Module config GDTs
@@ -239,8 +239,8 @@ class GDO_Module extends GDO
 	###########
 	public function &gdoColumnsCache() : array { return Database::columnsS(self::class); } # Polymorph fix
 	public function gdoTableName() : string { return 'gdo_module'; } # Polymorph fix
-	public function gdoClassName() { return self::class; } # Polymorph fix
-	public function gdoRealClassName() { return static::class; } # Polymorph fix fix
+	public function gdoClassName() : string { return self::class; } # Polymorph fix
+	public function gdoRealClassName() : string { return static::class; } # Polymorph fix fix
 	public function gdoColumns() : array
 	{
 		return [
@@ -281,7 +281,7 @@ class GDO_Module extends GDO
 	###############
 	### Display ###
 	###############
-	public function render_fs_version() { return $this->module_version; }
+	public function render_fs_version() { return $this->version; }
 	
 	############
 	### Href ###
@@ -294,7 +294,7 @@ class GDO_Module extends GDO
 	##############
 	### Helper ###
 	##############
-	public function canUpdate() { return $this->module_version != $this->getVersion(); }
+	public function canUpdate() { return $this->version != $this->getVersion(); }
 	public function canInstall() { return !$this->isPersisted(); }
 	
 	/**
@@ -418,7 +418,7 @@ class GDO_Module extends GDO
 	/**
 	 * @var GDT[]
 	 */
-	private array $configCache = [];
+	private array $configCache;
 	
 	/**
 	 * Get module configuration hashed and cached.
@@ -428,13 +428,13 @@ class GDO_Module extends GDO
 	{
 		if (!isset($this->configCache))
 	    {
-	        if ($config = $this->getConfig())
-	        {
-                $this->configCache = [];
-	            foreach ($config as $gdt)
-	            {
-	                $this->configCache[$gdt->name] = $gdt; #->gdo($this);
-	            }
+			$this->configCache = [];
+        	foreach ($this->getConfig() as $gdt)
+            {
+            	if ($gdt->hasName())
+            	{
+	                $this->configCache[$gdt->getName()] = $gdt; #->gdo($this);
+            	}
 	        }
 	    }
 	    return $this->configCache;
@@ -442,7 +442,7 @@ class GDO_Module extends GDO
 	
 	public function &getConfigCache()
 	{
-	    if ($this->configCache === null)
+		if (!isset($this->configCache))
 	    {
     	    $this->buildConfigCache();
 	    }
@@ -470,6 +470,8 @@ class GDO_Module extends GDO
 	 */
 	public function getConfigColumn($key, $throwError=true)
 	{
+		$this->buildConfigCache();
+		
 	    if (isset($this->configCache[$key]))
 	    {
 	        return $this->configCache[$key];

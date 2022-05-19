@@ -8,27 +8,27 @@ use GDO\Core\GDT_String;
  * Input type is set to search.
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.0
  * @since 6.2.0
  */
 class GDT_SearchField extends GDT_String
 {
-    public $hidden = true;
-    public $orderable = false;
-    public $searchable = false;
-    public $filterable = false;
-    
-    public function isSerializable() { return false; }
+	public $icon = 'search';
+	public $_inputType = 'search';
+	
+	public int $min = 3;
+	public int $max = 128;
+	
+	public bool $hidden = true;
     
     public function defaultName() { return 'search'; }
 	public function defaultLabel() { return $this->label('search'); }
+	
+    public function isSerializable() : bool { return false; }
+    public function isOrderable() : bool { return false; }
+    public function isSearchable() : bool { return false; }
+    public function isFilterable() : bool { return false; }
 
-	public $_inputType = 'search';
-	public $icon = 'search';
-	
-	public $min = 3;
-	public $max = 128;
-	
 	public function gdoExampleVars()
 	{
 	    return t('search_term');

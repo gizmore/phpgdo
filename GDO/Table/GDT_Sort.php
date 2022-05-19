@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Table;
 
+use GDO\Core\GDO;
 use GDO\Core\GDT_UInt;
 
 /**
@@ -10,7 +11,7 @@ use GDO\Core\GDT_UInt;
  * @TODO on GDO with non auto-increment this will crash.
  * 
  * @author gizmore
- * @version 6.10.1
+ * @version 7.0.0
  * @since 6.3.0
  */
 class GDT_Sort extends GDT_UInt
@@ -27,10 +28,9 @@ class GDT_Sort extends GDT_UInt
 		$this->initial('0');
 	}
 	
-	public function gdoAfterCreate() : void
+	public function gdoAfterCreate(GDO $gdo) : void
 	{
-	    # @TODO use count(*) for sorting?
-		$this->gdo->saveVar($this->name, $this->gdo->getID());
+		$gdo->saveVar($this->name, $gdo->getID());
 	}
 
 }

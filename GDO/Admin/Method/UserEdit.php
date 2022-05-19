@@ -37,7 +37,7 @@ class UserEdit extends MethodForm
 	 */
 	private $user;
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 	    return [
 	        GDT_User::make('user')->notNull(),
@@ -71,7 +71,7 @@ class UserEdit extends MethodForm
 	    return t('ft_admin_useredit', [$user->displayName()]);
 	}
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		# Add all columns
 	    $table = GDO_User::table();

@@ -34,7 +34,7 @@ final class Module_Core extends GDO_Module
 	 * Sometimes just counts up to be in sync and poison some other module caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.0-r1010';
+	const GDO_REVISION = '7.0.0-r1011';
 	
 	##############
 	### Module ###
@@ -60,6 +60,16 @@ final class Module_Core extends GDO_Module
 			GDO_User::class,
 			GDO_UserPermission::class,
 		];
+	}
+	
+	/**
+	 * Real core modules.
+	 * {@inheritDoc}
+	 * @see \GDO\Core\GDO_Module::getDependencies()
+	 */
+	public function getDependencies() : array
+	{
+		return ['User'];
 	}
 	
 	public function onInstall() : void

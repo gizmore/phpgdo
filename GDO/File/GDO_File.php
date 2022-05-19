@@ -46,7 +46,7 @@ final class GDO_File extends GDO
 		];
 	}
 	
-	public function getName() { return $this->gdoVar('file_name'); }
+	public function getName() : ?string { return $this->gdoVar('file_name'); }
 	public function displayName() : string { return html($this->getName()); }
 	public function getSize() { return $this->gdoVar('file_size'); }
 	public function getType() { return $this->gdoVar('file_type'); }
@@ -93,7 +93,7 @@ final class GDO_File extends GDO
 	/**
 	 * Delete variant- and original file when deleted from database. 
 	 */
-	public function gdoAfterDelete() : void
+	public function gdoAfterDelete(GDO $gdo) : void
 	{
 	    # Delete variants
 		Filewalker::traverse(self::filesDir(), "/^{$this->getID()}_/", [$this, 'deleteVariant']);

@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\DB\Query;
+
 /**
  * The base class for all GDT.
  * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Label.
@@ -16,6 +18,8 @@ namespace GDO\Core;
  */
 abstract class GDT
 {
+	use WithModule;
+	
 	const EMPTY_ARRAY = [];
 	
 	###################
@@ -39,7 +43,7 @@ abstract class GDT
 	##############
 	### Render ###
 	##############
-	public function render() : string {}
+	public function render() : string { return ''; }
 	public function renderCLI() : string { return $this->render(); }
 	public function renderXML() : string { return $this->render(); }
 	public function renderCard() : string { return $this->renderHTML(); }
@@ -65,6 +69,19 @@ abstract class GDT
 	public function isOrderable() : bool { return false; }
 	public function isSearchable() : bool { return false; }
 	public function isFilterable() : bool { return false; }
+	
+	##############
+	### Events ###
+	##############
+	public function gdoBeforeCreate(GDO $gdo, Query $query) : void {}
+	public function gdoBeforeRead(GDO $gdo, Query $query) : void {}
+	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void {}
+	public function gdoBeforeDelete(GDO $gdo, Query $query) : void {}
+	
+	public function gdoAfterCreate(GDO $gdo) : void {}
+	public function gdoAfterRead(GDO $gdo) : void {}
+	public function gdoAfterUpdate(GDO $gdo) : void {}
+	public function gdoAfterDelete(GDO $gdo) : void {}
 	
 	################
 	### Validate ###
@@ -105,6 +122,16 @@ abstract class GDT
 		return false;
 	}
 	
+	public function hasInput() : bool
+	{
+		return false;
+	}
+	
+	public function getInitial() : ?string
+	{
+		return null;
+	}
+	
 	public function getInput() : ?string
 	{
 		return null;
@@ -136,21 +163,52 @@ abstract class GDT
 	
 	public function htmlName() : string
 	{
+		return '';
 	}
 	
-	public function input(string $input) : self
+	public function htmlID() : string
+	{
+		return '';
+	}
+	
+	public function htmlAttributes() : string
+	{
+		return '';
+	}
+	
+	public function input(string $input = null) : self
 	{
 		return $this;
 	}
 	
-	public function var(string $var) : self
+	public function initial(string $initial = null) : self
 	{
 		return $this;
+	}
+	
+	public function initialValue($value) : self
+	{
+		return $this->initial($this->toVar($value));
+	}
+	
+	public function var(string $var = null) : self
+	{
+		return $this;
+	}
+	
+	public function getGDOData() : ?array
+	{
+		return null;
 	}
 	
 	public function value($value) : self
 	{
 		return $this;
+	}
+
+	public function isRequired() : bool
+	{
+		return false;
 	}
 	
 	public function isPositional() : bool
@@ -163,10 +221,39 @@ abstract class GDT
 		return false;
 	}
 	
+	public function isPrimary() : bool
+	{
+		return false;
+	}
+	
+	public function isUnique() : bool
+	{
+		return false;
+	}
+	
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
 		return 0;
 	}
+	
+	##################
+	### Conversion ###
+	##################
+	public function inputToVar(string $input) : string
+	{
+		return $input;
+	}
+	
+	public function toVar($value) : ?string
+	{
+		return $value;
+	}
+	
+	public function toValue(string $var)
+	{
+		return $var;
+	}
+	
 	
 	#############
 	### Tests ###

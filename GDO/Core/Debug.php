@@ -62,7 +62,7 @@ final class Debug
 		if (!self::$ENABLED)
 		{
 			set_error_handler([self::class, 'error_handler']);
-// 			register_shutdown_function([self::class, 'shutdown_function']);
+			register_shutdown_function([self::class, 'shutdown_function']);
 			self::$ENABLED = true;
 		}
 	}
@@ -78,10 +78,12 @@ final class Debug
 	{
 		if ($error = error_get_last())
 		{
-// 			if ($error && ($error['type'] === 1))
+			$type = $error['type'];
+			if ($type === 64)
 			{
-				self::error_handler(1, $error['message'], self::shortpath($error['file']), $error['line'], NULL);
+				self::error_handler($type, $error['message'], self::shortpath($error['file']), $error['line'], null);
 			}
+			die(-1);
 		}
 	}
 	

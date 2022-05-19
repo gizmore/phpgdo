@@ -1,9 +1,32 @@
 <?php
 namespace GDO\Form;
 
-use GDO\Core\GDT;
+use GDO\Core\GDT_Template;
+use GDO\Core\WithName;
+use GDO\UI\GDT_Button;
+use GDO\Core\WithValue;
 
-class GDT_Submit extends GDT
+/**
+ * An input submit button.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 6.0.2
+ */
+class GDT_Submit extends GDT_Button
 {
+	use WithName;
+	use WithValue;
+	use WithClickHandler;
+	
+	public function getDefaultName() : ?string
+	{
+		return 'submit';
+	}
+	
+	public function renderHTML() : string
+	{
+		return GDT_Template::php('Form', 'submit_form.php', ['field' => $this]);
+	}
 	
 }

@@ -35,9 +35,13 @@ trait WithFields
 		return $this;
 	}
 	
-	public function addField(GDT $field) : self
+	public function addField(GDT $field = null) : self
 	{
-		if ($field->hasName())
+		if ($field === null)
+		{
+			return $this;
+		}
+		elseif ($field->hasName())
 		{
 			$this->fields[$field->getName()] = $field;
 		}
@@ -46,6 +50,37 @@ trait WithFields
 			$this->fields[] = $field;
 		}
 		return $this;
+	}
+	
+	/**
+	 * @return GDT[]
+	 */
+	public function getFieldsRec() : array
+	{
+		return $this->_getFieldsRec($this);
+	}
+	
+	private function _getFieldsRec(GDT $gdt) : array
+	{
+		$fields = [];
+		foreach ($gdt->getFields() as $_gdt)
+		{
+			if ($_gdt->hasName())
+			{
+				$fields[$_gdt->name] = $_gdt;
+			}
+			else
+			{
+				$fields[] = $_gdt;
+			}
+			if (isset($_gdt->fields))
+			{
+				$fields = array_merge($fields,
+					$this->_getFieldsRec($_gdt)
+					);
+			}
+		}
+		return $fields;
 	}
 	
 	###################

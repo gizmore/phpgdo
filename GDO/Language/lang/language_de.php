@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Language\lang;
 return [
 'lbl_langswitch' => 'Sprache',
 'msg_language_set' => 'Ihre Sprache wurde auf %s geändert.',

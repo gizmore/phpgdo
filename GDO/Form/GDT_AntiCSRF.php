@@ -31,7 +31,7 @@ class GDT_AntiCSRF extends GDT_Hidden
 	###########
 	### GDT ###
 	###########
-	public function getGDOData()
+	public function getGDOData() : ?array
 	{
 	    # Override GDT_Hidden with null data.
 	}
@@ -180,7 +180,7 @@ class GDT_AntiCSRF extends GDT_Hidden
 	##############
 	### Render ###
 	##############
-	public function renderForm()
+	public function renderForm() : string
 	{
 		return GDT_Template::php('Form', 'form/csrf.php', ['field'=>$this]);
 	}

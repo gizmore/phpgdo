@@ -1,5 +1,5 @@
 <?php
-namespace GDO\User;
+namespace GDO\Realname;
 
 use GDO\Core\GDT_String;
 

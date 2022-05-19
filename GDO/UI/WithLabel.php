@@ -43,9 +43,9 @@ trait WithLabel
 	##############
 	public function displayLabel() : string
 	{
-		if ($this->label)
+		if ($this->labelKey)
 		{
-			return t($this->label, $this->labelArgs);
+			return t($this->labelKey, $this->labelArgs);
 		}
 		if ($this->labelRaw)
 		{

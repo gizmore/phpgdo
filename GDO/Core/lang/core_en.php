@@ -28,4 +28,9 @@ return [
 	'err_invalid_string_encoding' => 'This text has set an invalid string encoding.',
 	'err_properitary_asset_code' => 'You may not access asset files in the GDO folder.',
 	'err_invalid_choice' => 'Your selection is invalid.',
+	'err_gdt_should_have_a_name' => '%s should have a name!',
+
+	# Checkbox
+	'enum_yes' => 'Yes',
+	'enum_no' => 'No',
 ];

@@ -24,7 +24,7 @@ abstract class MethodCard extends Method
 
     public function getID() : ?string { return Common::getRequestString($this->idName()); }
     
-    public function gdoParameters()
+    public function gdoParameters() : array
     {
         return [
             GDT_Object::make($this->idName())->table($this->gdoTable())->notNull(),

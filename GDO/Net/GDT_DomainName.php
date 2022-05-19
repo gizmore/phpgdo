@@ -5,7 +5,7 @@ use GDO\Core\GDT_String;
 
 final class GDT_DomainName extends GDT_String
 {
-	public $pattern = "/[\\.a-z]+\\.[a-z]+/D";
+	public string $pattern = "/[\\.a-z]+\\.[a-z]+/D";
 	
 	public $tldonly = false;
 	public function tldonly($tldonly=true)

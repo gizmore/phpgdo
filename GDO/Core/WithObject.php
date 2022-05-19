@@ -35,11 +35,6 @@ trait WithObject
 		return $this;
 	}
 
-// 	/**
-// 	 * @return GDO
-// 	 */
-// 	public function foreignTable() { return $this->table; }
-	
 	###################
 	### Composition ### @TODO unused, implement composite CRUD forms?
 	###################
@@ -60,7 +55,7 @@ trait WithObject
 	    return empty($var) ? null : $var;
 	}
 
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		return $value !== null ? $value->getID() : null;
 	}
@@ -141,7 +136,7 @@ trait WithObject
 		}
 	}
 	
-	public function getGDOData()
+	public function getGDOData() : ?array
 	{
 		return [$this->name => $this->var];
 		# @TODO: This may break various stuff!
@@ -284,7 +279,7 @@ trait WithObject
 	 */
 	public function gdoColumnDefine() : string
 	{
-		if (!($table = $this->foreignTable()))
+		if (!($table = $this->table))
 		{
 			throw new GDO_Error('err_gdo_object_no_table', [$this->identifier()]);
 		}
@@ -345,7 +340,7 @@ trait WithObject
 	 */
 	public function searchQuery(Query $query, $searchTerm, $first)
 	{
-        $table = $this->foreignTable();
+        $table = $this->table;
 	    $nameT = GDO::escapeIdentifierS('t_' . $this->name);
 	    
 	    if ($first) // first time joined this table?

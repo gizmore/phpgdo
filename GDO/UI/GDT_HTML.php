@@ -36,7 +36,7 @@ final class GDT_HTML extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderHTML()
+	public function renderHTML() : string
 	{
 	    $html = $this->html;
 	    foreach ($this->getFieldsRec() as $gdt)
@@ -46,17 +46,17 @@ final class GDT_HTML extends GDT
 	    return $html;
 	}
 	
-	public function render()
+	public function render() : string
 	{
 	    return $this->renderCell();
 	}
 	
-	public function renderCard()
+	public function renderCard() : string
 	{
 	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
 	}
 	
-	public function renderCell()
+	public function renderCell() : string
 	{
 	    return $this->renderHTML();
 	}
@@ -66,7 +66,7 @@ final class GDT_HTML extends GDT
 	    return $this->renderHTML();
 	}
 	
-	public function renderCLI()
+	public function renderCLI() : string
 	{
 	    return $this->renderHTML();
 	}

@@ -10,7 +10,7 @@ use GDO\Core\GDT_DeletedAt;
  */
 abstract class MethodRandomCard extends MethodCard
 {
-    public function gdoParameters()
+	public function gdoParameters() : array
     {
     }
     

@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Language;
 
-use GDO\Form\GDT_Select;
+use GDO\Core\GDT_Select;
 use GDO\Core\GDT_Template;
 use GDO\Util\Strings;
 

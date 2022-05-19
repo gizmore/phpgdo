@@ -24,7 +24,7 @@ final class GDT_Version extends GDT_String
 	 * @param Version $value
 	 * @return string
 	 */
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		return sprintf('%d.%d.%d', $value->major, $value->minor, $value->patch);
 	}

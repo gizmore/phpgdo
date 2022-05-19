@@ -54,7 +54,7 @@ final class Query
 	private string $type;
 	private string $set;
 	public  array  $order;
-	public  string $values;
+	public  array  $values;
 	private string $limit;
 	private string $raw;
 	private bool $write = false; # Is it a write query?
@@ -177,7 +177,7 @@ final class Query
 	 */
 	public function where(string $condition, string $op="AND") : self
 	{
-		$this->where = $this->where ? $this->where . " $op ($condition)" : "($condition)";
+		$this->where = isset($this->where) ? $this->where . " $op ($condition)" : "($condition)";
 		return $this;
 	}
 	
@@ -188,7 +188,7 @@ final class Query
 	
 	public function getWhere() : string
 	{
-		return $this->where ? " WHERE {$this->where}" : "";
+		return isset($this->where) ? " WHERE {$this->where}" : "";
 	}
 	
 	/**
@@ -198,7 +198,7 @@ final class Query
 	 */
 	public function having(string $condition, string $op="AND") : self
 	{
-		if ($this->having)
+		if (isset($this->having))
 		{
 			$this->having .= " $op ($condition)";
 		}
@@ -211,7 +211,7 @@ final class Query
 	
 	public function getHaving() : string
 	{
-		return $this->having ? " HAVING {$this->having}" : "";
+		return isset($this->having) ? " HAVING {$this->having}" : "";
 	}
 	
 		
@@ -221,7 +221,7 @@ final class Query
 	 */	
 	public function from(string $tableName) : self
 	{
-		$this->from = $this->from ? $this->from . ", $tableName" : $tableName;
+		$this->from = isset($this->from) ? $this->from . ", $tableName" : $tableName;
 		return $this;
 	}
 	
@@ -232,7 +232,7 @@ final class Query
 	
 	public function getFrom() : string
 	{
-		return $this->from ? " {$this->from}" : "";
+		return isset($this->from) ? " {$this->from}" : "";
 	}
 	
 	/**
@@ -245,8 +245,9 @@ final class Query
 		$this->type = self::SELECT;
 		if ($columns) # ignore empty
 		{
-			$this->columns = $this->columns ? 
-			     "{$this->columns}, $columns" : " $columns";
+			$this->columns = isset($this->columns) ? 
+				"{$this->columns}, $columns" :
+				" $columns";
 		}
 		return $this;
 	}
@@ -261,7 +262,7 @@ final class Query
 	{
 	    if ($columns)
 	    {
-	        $this->columns = $this->columns ? 
+	        $this->columns = isset($this->columns) ? 
 	           " {$columns}, {$this->columns}" : " $columns";
 	    }
 	    return $this;
@@ -306,7 +307,7 @@ final class Query
 		
 	public function getLimit() : string
 	{
-		return $this->limit ? $this->limit : '';
+		return isset($this->limit) ? $this->limit : '';
 	}
 	
 	public function getSelect() : string
@@ -333,7 +334,7 @@ final class Query
 	 */
 	public function set(string $set) : self
 	{
-		if ($this->set)
+		if (isset($this->set))
 		{
 			$this->set .= ',' . $set;
 		}
@@ -346,7 +347,7 @@ final class Query
 	
 	public function getSet() : string
 	{
-		return $this->set ? " SET {$this->set}" : "";
+		return isset($this->set) ? " SET {$this->set}" : "";
 	}
 
 	
@@ -365,7 +366,7 @@ final class Query
 	{
 		if ($order)
 		{
-		    if (!$this->order)
+		    if (!isset($this->order))
 		    {
 		        $this->order = [$order];
 		    }
@@ -379,7 +380,7 @@ final class Query
 	
 	public function join(string $join) : self
 	{
-		if ($this->join)
+		if (isset($this->join))
 		{
 			$this->join .= " $join";
 		}
@@ -420,7 +421,7 @@ final class Query
 		elseif ( ($gdt instanceof GDT_Object) ||
 			($gdt instanceof GDT_ObjectSelect) )
 		{
-			$table = $gdt->foreignTable();
+			$table = $gdt->table;
 			$ftbl = $tableAlias ? $tableAlias : $table->gdoTableIdentifier();
 			$atbl = $this->table->gdoTableIdentifier();
 			$tableAlias = $tableAlias ? " AS {$tableAlias}" : '';
@@ -437,19 +438,19 @@ final class Query
 	
 	public function group($group)
 	{
-		$this->group = $this->group ? "{$this->group},{$group}" : $group;
+		$this->group = isset($this->group) ? "{$this->group},{$group}" : $group;
 		return $this;
 	}
 	
 	public function values(array $values)
 	{
-	    $this->values = $this->values ? array_merge($this->values, $values) : $values;
+	    $this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
 		return $this;
 	}
 	
 	public function getValues()
 	{
-		if (!$this->values)
+		if (!isset($this->values))
 		{
 			return '';
 		}
@@ -467,7 +468,7 @@ final class Query
 	
 	public function getJoin() : string
 	{
-		return $this->join ? " {$this->join}" : "";
+		return isset($this->join) ? " {$this->join}" : "";
 	}
 	
 	public function noJoins() : self
@@ -478,12 +479,12 @@ final class Query
 	
 	public function getGroup() : string
 	{
-		return $this->group ? " GROUP BY $this->group" : "";
+		return isset($this->group) ? " GROUP BY $this->group" : "";
 	}
 	
 	public function getOrderBy() : string
 	{
-		return $this->order ? ' ORDER BY ' . implode(', ', $this->order) : '';
+		return isset($this->order) ? ' ORDER BY ' . implode(', ', $this->order) : '';
 	}
 	
 	public function raw(string $raw) : self
@@ -499,7 +500,7 @@ final class Query
 	 */
 	public function buildQuery() : string
 	{
-	    return $this->raw ?
+	    return isset($this->raw) ?
     	    $this->raw :
     	    $this->type .
     	    $this->getSelect() .
@@ -520,7 +521,7 @@ final class Query
 	 * @see Result
 	 * @return Result
 	 */
-	public function exec() : Result
+	public function exec()
 	{
 		$db = Database::instance();
 

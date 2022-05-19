@@ -36,7 +36,7 @@ class GDT_Slider extends GDT
 	################
 	### Validate ###
 	################
-	public function getGDOData() { return [$this->name => $this->var]; }
+	public function getGDOData() : ?array { return [$this->name => $this->var]; }
 	
 	public function validate($value) : bool
 	{

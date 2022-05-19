@@ -14,12 +14,12 @@ final class GDT_Pre extends GDT
 {
     use WithText;
     
-    public function renderCell()
+    public function renderCell() : string
     {
     	return sprintf('<pre>%s</pre>', $this->renderText());
     }
     
-    public function renderCard()
+    public function renderCard() : string
     {
     	return $this->renderText();
     }
@@ -29,7 +29,7 @@ final class GDT_Pre extends GDT
         return $this->renderText();
     }
     
-    public function renderCLI()
+    public function renderCLI() : string
     {
         return $this->renderText();
     }

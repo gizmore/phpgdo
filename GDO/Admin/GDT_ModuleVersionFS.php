@@ -34,15 +34,15 @@ final class GDT_ModuleVersionFS extends GDT_Float
 
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
-		$va = $a->module_version;
-		$vb = $b->module_version;
+		$va = $a->version;
+		$vb = $b->version;
 		return $va == $vb ? 0 : ($va < $vb ? -1 : 1);
 	}
 	
 	public function getVar() : ?string
 	{
 	    $m = $this->getModule();
-	    return $m ? $m->module_version : '0';
+	    return $m ? $m->version : '0';
 	}
 
 }

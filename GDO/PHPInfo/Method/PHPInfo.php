@@ -6,7 +6,7 @@ use GDO\Core\Method;
 
 final class PHPInfo extends Method
 {
-    public function getPermission() { return 'staff'; }
+    public function getPermission() : ?string { return 'staff'; }
     
     public function execute() : GDT
 	{

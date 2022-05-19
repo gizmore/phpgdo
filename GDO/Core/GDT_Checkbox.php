@@ -70,7 +70,7 @@ class GDT_Checkbox extends GDT_Select
 	###################
 	### Var / Value ###
 	###################
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		if ($value === true) { return '1'; }
 		elseif ($value === false) { return '0'; }

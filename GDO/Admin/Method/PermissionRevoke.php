@@ -23,7 +23,7 @@ class PermissionRevoke extends MethodForm
 {
 	use MethodAdmin;
 	
-	public function getPermission() { return 'admin'; }
+	public function getPermission() : ?string { return 'admin'; }
 	
 	/**
 	 * @var GDO_User
@@ -53,7 +53,7 @@ class PermissionRevoke extends MethodForm
 		return parent::execute();
 	}
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields(
 			GDT_User::make('perm_user_id')->notNull()->initial($this->user ? $this->user->getID() : '0'),

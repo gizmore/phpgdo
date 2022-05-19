@@ -204,7 +204,7 @@ class GDT_File extends GDT_Object
 	### Value ###
 	#############
 	protected $files = [];
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		if ($value)
 		{
@@ -259,7 +259,7 @@ class GDT_File extends GDT_Object
 // 		return $this;
 // 	}
 	
-	public function getGDOData()
+public function getGDOData() : ?array
 	{
 		if ($file = $this->getValue())
 		{

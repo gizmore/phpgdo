@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Cronjob;
 
+use GDO\Core\GDT;
 use GDO\Core\Logger;
 use GDO\Core\Method;
 
@@ -17,7 +18,7 @@ abstract class MethodCronjob extends Method
 {
 	public abstract function run();
 
-	public function getPermission() { return 'cronjob'; }
+	public function getPermission() : ?string { return 'cronjob'; }
 
 	/**
 	 * Override runAt() to set interval via crontab runat syntax.

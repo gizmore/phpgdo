@@ -48,7 +48,7 @@ class GDT_Select extends GDT_ComboBox
 		return parent::getValue();
 	}
 
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		if ($this->multiple)
 		{
@@ -144,7 +144,7 @@ class GDT_Select extends GDT_ComboBox
 	    }
 	}
 	
-	public function getGDOData()
+	public function getGDOData() : ?array
 	{
 		return [$this->name => ($this->var === $this->emptyValue ? null : $this->var)];
 	}

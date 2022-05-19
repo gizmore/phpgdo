@@ -8,7 +8,6 @@ use GDO\DB\Result;
 use GDO\Date\Time;
 use GDO\Language\Trans;
 use GDO\User\GDO_User;
-use GDO\Util\Regex;
 
 /**
  * A Data exchange object.
@@ -30,7 +29,7 @@ use GDO\Util\Regex;
  * @since 3.2.0
  * @license GDOv7-LICENSE
  */
-abstract class GDO# extends GDT
+abstract class GDO extends GDT
 {
 	use WithModule;
 	
@@ -168,7 +167,7 @@ abstract class GDO# extends GDT
 	 * @var mixed[]
 	 */
 	public array $temp;
-	public function tempReset() { $this->temp = null; return $this; }
+	public function tempReset() { unset($this->temp); return $this; }
 	public function tempGet($key) { return @$this->temp[$key]; }
 	public function tempSet($key, $value)
 	{
@@ -484,11 +483,12 @@ abstract class GDO# extends GDT
 	 * Get primary key column names.
 	 * @return string[]
 	 */
-	public function gdoPrimaryKeyColumnNames()
+	public function gdoPrimaryKeyColumnNames() : array
 	{
-		$cache = self::table()->cache;
+		$table = self::table();
+		$cache = isset($table->cache) ? $table->cache : null;
 		
-		if (isset($cache->pkNames))
+		if ($cache && isset($cache->pkNames))
 		{
 			return $cache->pkNames;
 		}
@@ -511,7 +511,10 @@ abstract class GDO# extends GDT
 			$names = array_map(function(GDT $gdt){ return $gdt->name; }, $this->gdoColumnsCache());
 		}
 		
-		$cache->pkNames = $names;
+		if ($cache)
+		{
+			$cache->pkNames = $names;
+		}
 		
 		return $names;
 	}
@@ -1097,14 +1100,14 @@ abstract class GDO# extends GDT
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
 			# init gdt with initial var.
-			if (isset($initial[$gdt->name]))
+			if (isset($initial[$gdt->getName()]))
 			{
-				$var = $initial[$gdt->name];
-				$gdt->var($var);
+				$var = $initial[$gdt->getName()];
+				$gdt->initial($var);
 			}
 			else
 			{
-				$gdt->var($gdt->initial);
+				$gdt->initial($gdt->getInitial());
 			}
 			
 			# loop over blank data
@@ -1197,6 +1200,16 @@ abstract class GDO# extends GDT
 		return $this->gdoHumanName() . "#" . $this->getID();
 	}
 	
+	public function gdoClassName() : string
+	{
+		return static::class;
+	}
+	
+	public static function gdoClassNameS() : string
+	{
+		return static::class;
+	}
+	
 	##############
 	### Get by ###
 	##############
@@ -1206,7 +1219,7 @@ abstract class GDO# extends GDT
 	 * @param string $value
 	 * @return self
 	 */
-	public static function getBy(string $key, string $var) : self
+	public static function getBy(string $key, string $var) : ?self
 	{
 		return self::table()->getWhere($key . '=' . self::quoteS($var));
 	}
@@ -1218,7 +1231,7 @@ abstract class GDO# extends GDT
 	 * @param string $value
 	 * @return self
 	 */
-	public static function findBy(string $key, string $var) : self
+	public static function findBy(string $key, string $var) : ?self
 	{
 		if (!($gdo = self::getBy($key, $var)))
 		{
@@ -1246,7 +1259,7 @@ abstract class GDO# extends GDT
 	 * @param string ...$id
 	 * @return self
 	 */
-	public static function getById(string...$id)
+	public static function getById(string...$id) : ?self
 	{
 		$table = self::table();
 		if ( (!$table->cached()) || (!($object = $table->cache->findCached(...$id))) )
@@ -1312,7 +1325,10 @@ abstract class GDO# extends GDT
 	#############
 	public Cache $cache;
 	
-	public function initCache() : void { $this->cache = new Cache($this); }
+	public function initCache() : void
+	{
+		$this->cache = new Cache($this);
+	}
 	
 	public function initCached(array $row, bool $useCache=true) : self
 	{
@@ -1537,97 +1553,73 @@ abstract class GDO# extends GDT
 	##############
 	private function beforeCreate(Query $query) : void
 	{
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoBeforeCreate($query);
-		}
-		$this->gdoBeforeCreate();
+		$this->beforeEvent('gdoBeforeCreate', $query);
 	}
 	
 	private function beforeRead(Query $query) : void
 	{
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdoBeforeRead($query);
-		}
-		$this->gdoBeforeRead();
+		$this->beforeEvent('gdoBeforeRead', $query);
 	}
 	
 	private function beforeUpdate(Query $query) : void
 	{
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoBeforeUpdate($query);
-		}
-		$this->gdoBeforeUpdate();
+		$this->beforeEvent('gdoBeforeUpdate', $query);
 	}
 	
 	private function beforeDelete(Query $query) : void
 	{
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoBeforeDelete($query);
-		}
-		$this->gdoBeforeDelete();
+		$this->beforeEvent('gdoBeforeDelete', $query);
 	}
 	
-	public function afterCreate() : void
+	private function beforeEvent(string $methodName, Query $query) : self
+	{
+		foreach ($this->gdoColumnsCache() as $gdt)
+		{
+			$gdt->gdo($this);
+			call_user_func([$gdt, $methodName], $this, $query);
+		}
+		call_user_func([$this, $methodName], $this, $query);
+		return $this;
+	}
+	
+	private function afterCreate() : void
 	{
 		# Flags
 		$this->dirty = false;
 		$this->setPersisted();
-		# Trigger event for AutoCol, EditedAt, EditedBy, etc.
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoAfterCreate();
-		}
-		$this->gdoAfterCreate();
+		# Trigger event for GDT like AutoInc, EditedAt, CreatedBy, etc.
+		$this->afterEvent('gdoAfterCreate');
 	}
 	
-	public function afterRead() : void
+	private function afterRead() : void
 	{
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoAfterRead();
-		}
-		$this->gdoAfterRead();
+		$this->afterEvent('gdoAfterRead');
 	}
 	
-	public function afterUpdate() : void
+	private function afterUpdate() : void
 	{
 		# Flags
 		$this->dirty = false;
-		# Trigger event for AutoCol, EditedAt, EditedBy, etc.
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoAfterUpdate();
-		}
-		$this->gdoAfterUpdate();
+		$this->afterEvent('gdoAfterUpdate');
 	}
 	
-	public function afterDelete() : void
+	private function afterDelete() : void
 	{
 		# Flags
 		$this->dirty = false;
 		$this->persisted = false;
-		# Trigger events on GDTs.
-		foreach ($this->gdoColumnsCache() as $gdt)
-		{
-			$gdt->gdo($this)->gdoAfterDelete();
-		}
-		$this->gdoAfterDelete();
+		$this->afterEvent('gdoAfterDelete');
 	}
 	
-	# Overrides
-	public function gdoBeforeCreate() : void {}
-	public function gdoBeforeRead() : void {}
-	public function gdoBeforeUpdate() : void {}
-	public function gdoBeforeDelete() : void {}
+	private function afterEvent(string $methodName) : void
+	{
+		foreach ($this->gdoColumnsCache() as $gdt)
+		{
+			call_user_func([$gdt->gdo($this), $methodName], $this);
+		}
+		call_user_func([$this, $methodName], $this);
+	}
 	
-	public function gdoAfterCreate() : void {}
-	public function gdoAfterRead() : void {}
-	public function gdoAfterUpdate() : void {}
-	public function gdoAfterDelete() : void {}
 	
 	################
 	### Hashcode ###
@@ -1747,23 +1739,23 @@ abstract class GDO# extends GDT
 		return mysqli_fetch_field($result) === '1';
 	}
 	
-	##############
-	### Module ###
-	##############
-	/**
-	 * Get the module for a gdo.
-	 * @return GDO_Module
-	 */
-	public function getModule() : GDO_Module
-	{
-		$name = $this->getModuleName();
-		return ModuleLoader::instance()->getModule($name);
-	}
+// 	##############
+// 	### Module ###
+// 	##############
+// 	/**
+// 	 * Get the module for a gdo.
+// 	 * @return GDO_Module
+// 	 */
+// 	public function getModule() : GDO_Module
+// 	{
+// 		$name = $this->getModuleName();
+// 		return ModuleLoader::instance()->getModule($name);
+// 	}
 	
-	public function getModuleName() : string
-	{
-		$klass = get_class($this);
-		return Regex::firstMatch('/^GDO\\\\([^\\\\]+)\\\\/', $klass);
-	}
+// 	public function getModuleName() : string
+// 	{
+// 		$klass = get_class($this);
+// 		return Regex::firstMatch('/^GDO\\\\([^\\\\]+)\\\\/', $klass);
+// 	}
 	
 }

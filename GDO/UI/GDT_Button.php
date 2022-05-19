@@ -21,15 +21,10 @@ class GDT_Button extends GDT
 	use WithHREF;
 	use WithAnchorRelation;
 	
-	public function defaultName()
-	{
-		# important to override submit default.
-	}
-	
 	##############
 	### Render ###
 	##############
-	public function renderCell()
+	public function renderCell() : string
 	{
 	    if ($this->checkEnabled)
 	    {
@@ -38,12 +33,12 @@ class GDT_Button extends GDT
 		return GDT_Template::php('UI', 'cell/button.php', ['field'=>$this, 'href'=>$this->gdoHREF()]);
 	}
 	
-	public function renderForm()
+	public function renderForm() : string
 	{
 	    return $this->renderCell();
 	}
 	
-	public function renderJSON()
+	public function renderJSON() : string
 	{
 	    return sprintf('<a href="%s">%s</a>', $this->gdoHREF(), $this->htmlIcon());
 	}

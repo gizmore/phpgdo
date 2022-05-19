@@ -23,7 +23,7 @@ final class UserCreate extends MethodForm
 {
     use MethodAdmin;
     
-	public function createForm(GDT_Form $form)
+    public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields(
 			GDT_Username::make('user_name')->notNull()->exists(false),

@@ -29,11 +29,6 @@ class GDT_Index extends GDT
 	    return $this->indexUsing === false ? '' : $this->indexUsing;
 	}
 	
-	public function getGDOData()
-	{
-	    # no data
-	}
-	
 	###############
 	### Columns ###
 	###############

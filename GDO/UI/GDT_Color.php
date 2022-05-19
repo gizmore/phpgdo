@@ -10,31 +10,28 @@ use GDO\Core\GDT_String;
  * Include hash character(#) in db var.
  *
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 6.0.0
  */
 class GDT_Color extends GDT_String
 {
-
-	public $min = 4;
-
-	public $max = 7;
-
-	public $pattern = "/^#(?:[a-z0-9]{3}){1,2}$/i";
+	public int $min = 4;
+	public int $max = 7;
+	public string $pattern = "/^#(?:[a-z0-9]{3}){1,2}$/i";
 
 	public function defaultLabel()
 	{
 		return $this->label('color');
 	}
 
-	public function renderForm()
+	public function renderForm() : string
 	{
 		return GDT_Template::php('UI', 'form/color.php', [
 			'field' => $this
 		]);
 	}
 
-	public function renderCell()
+	public function renderCell() : string
 	{
 		return GDT_Template::php('UI', 'cell/color.php', [
 			'field' => $this

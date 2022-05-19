@@ -18,7 +18,7 @@ final class Wait extends MethodCLI
 {
 	public function getCLITrigger() { return 'wait'; }
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields(
 			GDT_Duration::make('duration'),

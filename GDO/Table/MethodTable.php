@@ -330,7 +330,7 @@ abstract class MethodTable extends Method
 	    $table->result($result);
 	}
 	
-	public function renderCLIHelp()
+	public function renderCLIHelp() : string
 	{
 	    $this->calculateTable($this->initTable());
 	    return parent::renderCLIHelp();

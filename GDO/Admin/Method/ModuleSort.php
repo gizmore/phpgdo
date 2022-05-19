@@ -20,7 +20,7 @@ final class ModuleSort extends MethodSort
 	 * {@inheritDoc}
 	 * @see Method::getPermission()
 	 */
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 
 	public function gdoSortObjects() { return GDO_Module::table(); }
 

@@ -1,7 +1,14 @@
 <?php
 namespace GDO\Util;
-use GDO\Core\GDOError;
 
+use GDO\Core\GDO_Error;
+
+/**
+ * APACHE 2.2 / 2.4 .htaccess utility
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ */
 final class HTAccess
 {
 	public static function protectFolder($path)
@@ -22,7 +29,7 @@ EOF;
 		    
 		if ( (!is_dir($path)) || (!is_readable($path)) )
 		{
-		    throw new GDOError('err_no_dir');
+		    throw new GDO_Error('err_no_dir');
 		}
 		else
 		{

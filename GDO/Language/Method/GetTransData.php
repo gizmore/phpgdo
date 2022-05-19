@@ -1,10 +1,11 @@
 <?php
 namespace GDO\Language\Method;
 
-use GDO\Core\MethodAjax;
 use GDO\Language\Trans;
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
+use GDO\Core\MethodAjax;
 
 /**
  * Get all translation data for the current language.

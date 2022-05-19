@@ -18,7 +18,7 @@ final class GDT_EditedBy extends GDT_User
 	
 	public function defaultLabel() { return $this->label('edited_by'); }
 	
-	public function gdoBeforeUpdate(Query $query) : void
+	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void
 	{
   		$userId = GDO_User::current()->getID();
    		$userId = $userId > 0 ? $userId : 1;

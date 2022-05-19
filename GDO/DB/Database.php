@@ -95,13 +95,13 @@ class Database
 		if (isset($this->link))
 		{
 			@mysqli_close($this->link);
-			$this->link = null;
+			unset($this->link);
 		}
 	}
 	
 	public function getLink() : mysqli
 	{
-		return $this->link ? $this->link : $this->openLink();
+		return isset($this->link) ? $this->link : $this->openLink();
 	}
 	
 	private function openLink() : mysqli
@@ -137,35 +137,47 @@ class Database
 	#############
 	### Query ###
 	#############
-	public function queryRead(string $query, bool $buffered=true) : mysqli_result
+	public function queryRead(string $query, bool $buffered=true)
 	{
 		self::$READS++;
 		$this->reads++;
 		return $this->query($query, $buffered);
 	}
 	
-	public function queryWrite($query) : mysqli_result
+	public function queryWrite($query)
 	{
 		self::$WRITES++;
 		$this->writes++;
 		return $this->query($query);
 	}
 	
-	private function query(string $query, bool $buffered=true) : mysqli_result
+	private function query(string $query, bool $buffered=true)
+	{
+		try
+		{
+			return $this->queryB($query);
+		}
+		catch (\mysqli_sql_exception $ex)
+		{
+			throw new GDO_DBException("err_db", [$ex->getCode(), $ex->getMessage(), html($query)]);
+		}
+	}
+	
+	private function queryB(string $query, bool $buffered=true)
 	{
 		$t1 = microtime(true);
 		
 		if ($buffered)
 		{
-		    $result = mysqli_query($this->getLink(), $query);
+			$result = mysqli_query($this->getLink(), $query);
 		}
-		else 
+		else
 		{
 			$result = false;
-		    if (mysqli_real_query($this->getLink(), $query))
-		    {
-		        $result = mysqli_use_result($this->getLink());
-		    }
+			if (mysqli_real_query($this->getLink(), $query))
+			{
+				$result = mysqli_use_result($this->getLink());
+			}
 		}
 		
 		if (!$result)
@@ -181,7 +193,7 @@ class Database
 				$error = t('err_db_no_link');
 				$errno = 0;
 			}
-			throw new GDO_DBException("err_db", [$errno, $error, $query]);
+			throw new GDO_DBException("err_db", [$errno, html($error), html($query)]);
 		}
 		$t2 = microtime(true);
 		$timeTaken = $t2 - $t1;
@@ -193,11 +205,11 @@ class Database
 		{
 			$timeTaken = sprintf('%.04f', $timeTaken);
 			Logger::log('queries', "#" . self::$QUERIES .
-			    ": ({$timeTaken}s) ".$query);
+				": ({$timeTaken}s) ".$query);
 			if ($this->debug > 1)
 			{
-			    Logger::log('queries', 
-			    Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false));
+				Logger::log('queries',
+					Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false));
 			}
 		}
 		return $result;
@@ -282,13 +294,16 @@ class Database
 		
 		foreach ($gdo->gdoColumnsCache() as $column)
 		{
-			if ($define = $column->gdoColumnDefine())
+			if (!$column->isVirtual())
 			{
-				$columns[] = $define;
-			}
-			if ($column->primary)
-			{
-				$primary[] = $column->identifier();
+				if ($define = $column->gdoColumnDefine())
+				{
+					$columns[] = $define;
+				}
+				if (isset($column->primary) && $column->primary) # isPrimary() not used, because of AutoInc hack.
+				{
+					$primary[] = $column->identifier();
+				}
 			}
 		}
 		
@@ -300,7 +315,7 @@ class Database
 		
 		foreach ($gdo->gdoColumnsCache() as $column)
 		{
-			if ($column->unique)
+			if ($column->isUnique())
 			{
 				$columns[] = "UNIQUE({$column->identifier()})";
 			}
@@ -419,13 +434,13 @@ class Database
 	###############
 	### FKCheck ###
 	###############
-	public function enableForeignKeyCheck(bool $bool) : mysqli
+	public function enableForeignKeyCheck(bool $bool = true)
 	{
 		$check = $bool ? '1' : '0';
 		return $this->query("SET foreign_key_checks = $check");
 	}
 
-	public function disableForeignKeyCheck() : mysqli
+	public function disableForeignKeyCheck()
 	{
 		return $this->enableForeignKeyCheck(false);
 	}

@@ -12,14 +12,14 @@ final class GDT_DIV extends GDT
     use WithText;
     use WithPHPJQuery;
     
-    public function renderCell()
+    public function renderCell() : string
     {
         return sprintf("<div %s>%s</div>",
             $this->htmlAttributes(), $this->renderText());
     }
     
-    public function renderForm() { return $this->renderCell(); }
+    public function renderForm() : string { return $this->renderCell(); }
     
-    public function renderCard() { return $this->renderCell(); }
+    public function renderCard() : string { return $this->renderCell(); }
 
 }

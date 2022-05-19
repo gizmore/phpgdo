@@ -10,17 +10,18 @@ use GDO\Core\WithFields;
  * No template is used yet.
  * 
  * @author gizmore
- * @version 6.10.4
- * @since 6.7.1
+ * @version 7.0.0
+ * @since 5.7.1
  */
 class GDT_Container extends GDT
 {
+	const HORIZONTAL = 1;
+	const VERTICAL = 2;
+	
     use WithFlex;
 	use WithFields;
 	use WithPHPJQuery;
 	
-	public function defaultName() { return 'cont'; }
-
 	private function setupHTML()
 	{
 	    $this->addClass('gdt-container');
@@ -34,7 +35,7 @@ class GDT_Container extends GDT
 	    }
 	}
 	
-	public function renderCell()
+	public function renderCell() : string
 	{
 	    if ($this->fields)
 	    {
@@ -49,12 +50,12 @@ class GDT_Container extends GDT
 	    }
 	}
 	
-	public function renderCLI()
+	public function renderCLI() : string
 	{
 	    return $this->renderCLIFields();
 	}
 	
-	public function renderForm()
+	public function renderForm() : string
 	{
 	    if ($this->fields)
 	    {
@@ -69,7 +70,7 @@ class GDT_Container extends GDT
 	    }
 	}
 	
-	public function renderCard()
+	public function renderCard() : string
 	{
 	    if ($this->fields)
 	    {

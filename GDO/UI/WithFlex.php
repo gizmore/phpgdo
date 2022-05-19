@@ -14,9 +14,6 @@ namespace GDO\UI;
  */
 trait WithFlex
 {
-    const HORIZONTAL = 1;
-    const VERTICAL = 2;
-    
     #################
     ### Paramters ###
     #################

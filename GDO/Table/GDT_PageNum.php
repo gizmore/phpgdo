@@ -11,17 +11,17 @@ use GDO\Core\GDT_UInt;
  */
 final class GDT_PageNum extends GDT_UInt
 {
-    public $hidden = true;
-    public $orderable = false;
-    public $searchable = false;
-    public $filterable = false;
+    public bool $hidden = true;
+    public bool $orderable = false;
+    public bool $searchable = false;
+    public bool $filterable = false;
     
-    public $bytes = '2';
-    public $initial = '1';
+    public int $bytes = '2';
+    public ?string $initial = '1';
     
     public function defaultLabel() { return $this->label('page'); }
 
-    public function isSerializable() { return false; }
+    public function isSerializable() : bool{ return false; }
     
     #############
     ### Table ###

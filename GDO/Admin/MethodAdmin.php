@@ -13,9 +13,9 @@ use GDO\UI\GDT_Page;
  */
 trait MethodAdmin
 {
-	public function getPermission() { return 'admin'; }
+	public function getPermission() : ?string { return 'admin'; }
 	
-	public function beforeExecute()
+	public function beforeExecute() : void
 	{
 		GDT_Page::instance()->topBar()->addField(GDT_AdminBar::make());
 	}

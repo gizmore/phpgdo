@@ -36,11 +36,11 @@ final class GDT_AutoInc extends GDT_UInt
 	##############
 	### Events ###
 	##############
-	public function gdoAfterCreate() : void
+	public function gdoAfterCreate(GDO $gdo) : void
 	{
-		if ($id = Database::$INSTANCE->insertId())
+		if ($id = Database::instance()->insertId())
 		{
-			$this->gdo->setVar($this->name, $id, false);
+			$gdo->setVar($this->name, $id, false);
 		}
 	}
 	

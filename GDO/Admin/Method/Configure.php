@@ -37,10 +37,10 @@ class Configure extends MethodForm
 	 */
 	private $configModule;
 	
-	public function getPermission() { return 'admin'; }
+	public function getPermission() : ?string { return 'admin'; }
 	public function showInSitemap() { return false; }
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 	    return [
 	        GDT_Module::make('module')->notNull(),
@@ -96,7 +96,7 @@ class Configure extends MethodForm
 	    }
 	}
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		if (!($mod = $this->configModule))
 		{

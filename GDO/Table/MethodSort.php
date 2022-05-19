@@ -28,7 +28,7 @@ abstract class MethodSort extends Method
 	 */
 	public function canSort(GDO $gdo) { return true; }
 	
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 	    $table = $this->gdoSortObjects();
 	    return [

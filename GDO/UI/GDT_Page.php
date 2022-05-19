@@ -18,12 +18,12 @@ final class GDT_Page extends GDT
 	use WithInstance;
 	use WithDescription;
 	
-	public function renderHTML()
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('UI', 'page.php', ['page' => $this]);
 	}
 	
-	public function renderCLI()
+	public function renderCLI() : string
 	{
 		$back = '';
 		foreach ($this->getFields() as $gdt)

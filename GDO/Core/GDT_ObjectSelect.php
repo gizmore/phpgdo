@@ -52,7 +52,7 @@ class GDT_ObjectSelect extends GDT_Select
 	public function errorNotFound()
 	{
 	    return $this->error('err_gdo_not_found', [
-	        $this->foreignTable()->gdoHumanName(), html($this->getVar())]);
+	        $this->table->gdoHumanName(), html($this->getVar())]);
 	}
 	
 	##############
@@ -122,7 +122,7 @@ class GDT_ObjectSelect extends GDT_Select
 		return parent::getVar(); # required to overwrite trait.
 	}
 	
-	public function toVar($value) : string
+	public function toVar($value) : ?string
 	{
 		if ($value === null)
 		{
@@ -143,21 +143,20 @@ class GDT_ObjectSelect extends GDT_Select
 		return json_encode(array_values($ids));
 	}
 	
-	public function toValue($var)
+	public function toValue(string $var = null)
 	{
-	    if ($this->foreignTable())
-	    {
+		if ($var)
+		{
     		return $this->multiple ? $this->getValueMulti($var) : $this->getValueSingle($var);
 	    }
-	    return $this->multiple ? [] : null;
 	}
 	
-	public function getValueSingle($id)
+	public function getValueSingle(string $id)
 	{
-		return $this->foreignTable()->find($id, false);
+		return $this->table->find($id, false);
 	}
 	
-	public function getValueMulti($var)
+	public function getValueMulti(string $var)
 	{
 		$back = [];
 		

@@ -13,9 +13,8 @@ use GDO\User\GDT_User;
  */
 final class GDT_DeletedBy extends GDT_User
 {
-	public $writable = false;
-	public $hidden = true;
-	
+	public bool $writable = false;
+	public function isHidden() : bool { return true; }
 	public function defaultLabel() { return $this->label('deleted_by'); }
 
 }

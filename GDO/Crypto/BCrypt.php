@@ -2,10 +2,10 @@
 namespace GDO\Crypto;
 
 /**
- * @TODO: Move to module Crypto: BCrypt password hash object.
+ * BCrypt crypto utility.
  * 
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.0.0
  */
 final class BCrypt
@@ -16,7 +16,7 @@ final class BCrypt
 	public static function options()
 	{
 	    return [
-	        'cost' => env('BCRYPT_COST', 11),
+	        'cost' => Module_Crypto::instance()->cfgBCryptCost(),
 	    ];
 	}
 	

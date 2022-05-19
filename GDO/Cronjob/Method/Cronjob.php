@@ -19,10 +19,10 @@ class Cronjob extends MethodForm
 {
 	use MethodAdmin;
 	
-	public function isTransactional() { return false; }
-	public function getPermission() { return 'admin'; }
+	public function isTransactional() : bool { return false; }
+	public function getPermission() : ?string { return 'admin'; }
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$form->actions()->addField(GDT_Submit::make()->label('btn_run_cronjob'));
 		$form->addField(GDT_AntiCSRF::make());

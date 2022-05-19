@@ -15,7 +15,7 @@ use GDO\Mail\Mail;
  */
 final class Error extends MethodAjax
 {
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 		return [
 			GDT_String::make('url'),

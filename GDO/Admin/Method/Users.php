@@ -25,7 +25,7 @@ class Users extends MethodQueryTable
 	
 	public function gdoTable() { return GDO_User::table(); }
 	
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 	
 	public function execute() : GDT
 	{

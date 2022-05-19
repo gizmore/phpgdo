@@ -292,7 +292,7 @@ final class CLI
      * @param GDT[] $fields
      * @return string
      */
-    public static function renderCLIHelp(Method $method, array $fields)
+    public static function renderCLIHelp(Method $method, array $fields) : string
     {
         $usage1 = [];
         $usage2 = [];
@@ -322,7 +322,7 @@ final class CLI
             trim(strtolower($mome).' '.$usage), $method->getDescription()]));
     }
     
-    private static function renderCLIHelpButtons(Method $method)
+    private static function renderCLIHelpButtons(Method $method) : string
     {
         $impl = [];
         $buttons = $method->getButtons();

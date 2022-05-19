@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Install\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Database;
 use GDO\Form\GDT_Form;
@@ -28,7 +29,7 @@ final class Security extends MethodForm
 		return $this->templatePHP('page/security.php', ['form'=>$this->getForm()]);
 	}
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		$form->actions()->addField(GDT_Submit::make()->label('protect_folders'));
 	}

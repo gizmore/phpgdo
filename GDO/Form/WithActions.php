@@ -2,6 +2,7 @@
 namespace GDO\Form;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_Fields;
 
 /**
  * Add an array of action GDT like buttons.
@@ -14,17 +15,17 @@ trait WithActions
 	/**
 	 * @var GDT[]
 	 */
-	protected array $actions;
+	protected GDT_Fields $actions;
 	
 	/**
 	 * 
 	 * @return GDT[]
 	 */
-	public function actions() : array
+	public function actions() : GDT_Fields
 	{
 		if (!isset($this->actions))
 		{
-			$this->actions = [];
+			$this->actions = GDT_Fields::make();
 		}
 		return $this->actions;
 	}

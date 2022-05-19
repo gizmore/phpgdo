@@ -21,14 +21,18 @@ final class GDT_Hostname extends GDT_String
 	##################
 	### GDT_String ###
 	##################
-	public $min = 1;
-	public $max = 128;
+	public int $min = 1;
+	public int $max = 128;
 	
 	#################
 	### Reachable ###
 	#################
-	public $reachable;
-	public function reachable($reachable=true) { $this->reachable = $reachable; return $this; }
+	public bool $reachable = false;
+	public function reachable(bool $reachable=true) : self
+	{
+		$this->reachable = $reachable;
+		return $this;
+	}
 	
 	################
 	### Validate ###

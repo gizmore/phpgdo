@@ -12,12 +12,12 @@ use GDO\Core\GDT;
  */
 final class GDT_CardView extends GDT
 {
-	public function renderCell()
+	public function renderCell() : string
 	{
 		return $this->gdo->renderCard();
 	}
 	
-	public function renderCard()
+	public function renderCard() : string
 	{
 		return $this->gdo->renderCard();
 	}

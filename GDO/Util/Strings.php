@@ -20,7 +20,7 @@ final class Strings
 	 * @param ?string $default Default result
 	 * @return ?string
 	 */
-	public static function substrTo(string $s, string $to, string $default=null) : string
+	public static function substrTo(string $s, string $to, string $default=null) : ?string
 	{
 		if (false !== ($index = strpos($s, $to)))
 		{
@@ -37,7 +37,7 @@ final class Strings
 	 * @param string $default
 	 * @return string
 	 */
-	public static function substrFrom(string $s, string $from, string $default=null) : string
+	public static function substrFrom(string $s, string $from, string $default=null) : ?string
 	{
 		if (false !== ($index = strpos($s, $from)))
 		{
@@ -54,7 +54,7 @@ final class Strings
 	 * @param string $default
 	 * @return string
 	 */
-	public static function rsubstrTo(string $s, string $to, string $default=null) : string
+	public static function rsubstrTo(string $s, string $to, string $default=null) : ?string
 	{
 		if (false !== ($index = strrpos($s, $to)))
 		{
@@ -71,7 +71,7 @@ final class Strings
 	 * @param string $default
 	 * @return string
 	 */
-	public static function rsubstrFrom(string $s, string $from, string $default=null) : string
+	public static function rsubstrFrom(string $s, string $from, string $default=null) : ?string
 	{
 		if (false !== ($index = strrpos($s, $from)))
 		{
@@ -135,6 +135,8 @@ final class Strings
 	###################
 	/**
 	 * Parse a line into args.
+	 * 
+	 * @deprecated because unused
 	 * @see https://stackoverflow.com/a/18229461/13599483
 	 * @param string $line
 	 * @return string[]
@@ -170,7 +172,7 @@ REGEX;
 	###################
 	### Trim dotted ###
 	###################
-	public static function dotted($text, $maxlen=50, $dots='…')
+	public static function dotted(string $text, int $maxlen=50, string $dots='…') : string
 	{
 		$len = mb_strlen($text);
 		if ($len > $maxlen)

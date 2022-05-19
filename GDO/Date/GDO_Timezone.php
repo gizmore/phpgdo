@@ -32,7 +32,7 @@ final class GDO_Timezone extends GDO
 	###############
 	### Getters ###
 	###############
-	public function getName() { return $this->gdoVar('tz_name'); }
+	public function getName() : ?string { return $this->gdoVar('tz_name'); }
 	public function getOffset() { return $this->gdoVar('tz_offset'); }
 
 	###############

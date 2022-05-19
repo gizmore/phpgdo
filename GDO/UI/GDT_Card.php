@@ -72,10 +72,10 @@ final class GDT_Card extends GDT
 	        return $this->renderCell();
 // 	    }
 	}
-	public function renderCard() { return $this->renderCell(); }
-	public function renderCell() { return GDT_Template::php('UI', 'cell/card.php', ['field' => $this]); }
+	public function renderCard() : string { return $this->renderCell(); }
+	public function renderCell() : string { return GDT_Template::php('UI', 'cell/card.php', ['field' => $this]); }
 	
-	public function renderCLI()
+	public function renderCLI() : string
 	{
 	    $back = [];
 	    

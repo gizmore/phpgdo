@@ -83,12 +83,12 @@ final class GDT_Hook extends GDT
 	##############
 	### Engine ###
 	##############
-	public static function callHook($event, ...$args)
+	public static function callHook(string $event, ...$args)
 	{
 		return self::call($event, false, $args);
 	}
 	
-	public static function callWithIPC($event, ...$args)
+	public static function callWithIPC(string $event, ...$args)
 	{
 		return self::call($event, true, $args);
 	}
@@ -103,7 +103,7 @@ final class GDT_Hook extends GDT
 	 * @param boolean $ipc
 	 * @param array $args
 	 */
-	private static function call($event, $ipc, array $args)
+	private static function call(string $event, bool $ipc, array $args)
 	{
 		self::init();
 		
@@ -125,7 +125,7 @@ final class GDT_Hook extends GDT
 	 * @param array $args
 	 * @return GDT_Response
 	 */
-	private static function callWebHooks($event, array $args)
+	private static function callWebHooks(string $event, array $args)
 	{
 		# Count num calls up.
 		self::$CALLS++;
@@ -156,7 +156,7 @@ final class GDT_Hook extends GDT
 		return $response;
 	}
 	
-	private static function callIPCHooks($event, $args)
+	private static function callIPCHooks(string $event, array $args)
 	{
 		self::$IPC_CALLS++;
 		
@@ -250,7 +250,7 @@ final class GDT_Hook extends GDT
 	 */
 	public static function init()
 	{
-		if (self::$CACHE === null)
+		if (!isset(self::$CACHE))
 		{
 			if ($hooks = Cache::fileGetSerialized(self::CACHE_KEY))
 			{
@@ -264,12 +264,13 @@ final class GDT_Hook extends GDT
 		}
 	}
 	
-	private static function getHookModuleNames($event)
+	private static function getHookModuleNames($event) : array
 	{
 		if (isset(self::$CACHE[$event]))
 		{
 			return self::$CACHE[$event];
 		}
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	/**
@@ -278,7 +279,7 @@ final class GDT_Hook extends GDT
 	 * 
 	 * @return array<string, string[]>
 	 */
-	private static function buildHookCache()
+	private static function buildHookCache() : array
 	{
 		$cache = [];
 		$modules = ModuleLoader::instance()->getEnabledModules();

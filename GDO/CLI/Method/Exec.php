@@ -6,7 +6,7 @@ use GDO\Form\GDT_Form;
 
 final class Exec extends MethodCLI
 {
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 	}
 

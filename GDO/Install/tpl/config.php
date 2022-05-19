@@ -11,22 +11,22 @@ use GDO\Core\Module_Core;
  */
 echo '<';echo '?';echo "php\n";
 ?>
-###############################
-### GDO6 Configuration File ###
-###############################
+################################
+### GDOv7 Configuration File ###
+################################
 if (defined('GDO_CONFIGURED')) return; // double include
 
 /**
  * Please work down each section carefully.
  * Common pitfall is that there are 2 domains to set: GDO_DOMAIN and GDO_SESS_DOMAIN.
- * GDO <?=Module_Core::GDO_REVISION; ?>
+ * phpGDOv<?=Module_Core::GDO_REVISION; ?>
  **/
 <?php
 // $tz = $form->getField('timezone')->var;
 $created = Time::getDate(microtime(true));
 $form->getField('sitecreated')->var($created);
 
-foreach ($form->fields as $field) :
+foreach ($form->getFieldsRec() as $field) :
 
 if ($field instanceof GDT_Divider)
 {

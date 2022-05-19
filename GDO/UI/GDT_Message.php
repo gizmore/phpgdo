@@ -205,7 +205,7 @@ class GDT_Message extends GDT_Text
     ######################
     ### 3 column hacks ###
     ######################
-    public function initial($var=null)
+    public function initial(string $var=null) : self
     {
         $this->input = $var;
         $this->output = self::decodeMessage($var);
@@ -219,7 +219,7 @@ class GDT_Message extends GDT_Text
      * {@inheritDoc}
      * @see \GDO\Core\GDT::var()
      */
-    public function var($var=null)
+    public function var(string $var = null) : self
     {
         $this->input = $var;
         $this->output = self::decodeMessage($var);
@@ -260,7 +260,7 @@ class GDT_Message extends GDT_Text
      * {@inheritDoc}
      * @see \GDO\Core\GDT::getGDOData()
      */
-    public function getGDOData()
+    public function getGDOData() : ?array
     {
         return [
             "{$this->name}_input" => $this->input,
@@ -289,11 +289,11 @@ class GDT_Message extends GDT_Text
     ##############
 	### Render ###
 	##############
-    public function renderCLI() { return $this->getVarText(); }
-    public function renderCell() { return $this->getVarOutput(); }
-    public function renderCard() { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
-    public function renderForm() { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
-	public function renderList() { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }
+    public function renderCLI() : string { return $this->getVarText(); }
+    public function renderCell() : string { return $this->getVarOutput(); }
+    public function renderCard() : string : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
+    public function renderForm() : string { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
+    public function renderList() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }
 	
 	##############
 	### Editor ###

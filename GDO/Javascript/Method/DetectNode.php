@@ -25,11 +25,11 @@ final class DetectNode extends MethodForm
 {
 	use MethodAdmin;
 	
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 	public function showInSitemap() { return false; }
 	public function getTitleLangKey() { return 'cfg_link_node_detect'; }
 	
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 	    $form->info(t('info_detect_node_js'));
 	    $form->actions()->addField(GDT_Submit::make());

@@ -11,7 +11,7 @@ use GDO\UI\GDT_Panel;
 $valid = true;
 foreach ($tests as $i => $test)
 {
-	printf("<tr><td>%s</td><td>%s</td></tr>\n", t("install_test_$i"), GDT_Checkbox::make()->value($test)->renderCell());
+	printf("<tr><td>%s</td> <td>%s</td></tr>\n", t("install_test_$i"), GDT_Checkbox::make()->value($test)->renderCell());
 	$valid = $test === false ? false : $valid;
 }
 
@@ -21,7 +21,7 @@ foreach ($tests as $i => $test)
 <?php
 foreach ($optional as $i => $test)
 {
-	printf("<tr><td>%s</td><td>%s</td></tr>\n", t("install_optional_$i"), GDT_Checkbox::make()->value($test)->renderCell());
+	printf("<tr><td>%s</td> <td>%s</td></tr>\n", t("install_optional_$i"), GDT_Checkbox::make()->value($test)->renderCell());
 }
 
 ?>

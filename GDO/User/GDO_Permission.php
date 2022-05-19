@@ -31,7 +31,7 @@ final class GDO_Permission extends GDO
 		];
 	}
 	
-	public static function getByName(string $name) : self { return self::getBy('perm_name', $name); }
+	public static function getByName(string $name) : ?self { return self::getBy('perm_name', $name); }
 	
 	public static function getOrCreateByName(string $name, string $level='0') : self { return self::create($name, $level); }
 	
@@ -55,7 +55,7 @@ final class GDO_Permission extends GDO
 	##############
 	### Getter ###
 	##############
-	public function getName() : string { return $this->gdoVar('perm_name'); }
+	public function getName() : ?string { return $this->gdoVar('perm_name'); }
 	public function getLevel() : string { return $this->gdoVar('perm_level'); }
 	
 	###############
@@ -70,7 +70,7 @@ final class GDO_Permission extends GDO
 	
 	public function display_perm_edit() { return GDT_EditButton::make()->href($this->hrefEdit()); }
 	public function display_user_count() { return $this->gdoVar('user_count'); }
-	public function renderChoice() { return sprintf('%s–%s', $this->getID(), $this->displayName()); }
+	public function renderChoice() : string { return sprintf('%s–%s', $this->getID(), $this->displayName()); }
 	
 	############
 	### HREF ###

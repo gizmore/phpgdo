@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Date\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDT_EnumNoI18n;
 use GDO\Core\Application;
@@ -14,7 +15,7 @@ use GDO\Core\Application;
  */
 final class Epoch extends Method
 {
-    public function gdoParameters()
+	public function gdoParameters() : array
     {
         return [
             GDT_EnumNoI18n::make('format')->enumValues('unix', 'java', 'micro')->notNull()->initial('unix'),

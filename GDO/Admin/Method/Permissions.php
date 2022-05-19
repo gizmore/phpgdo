@@ -19,7 +19,7 @@ class Permissions extends MethodQueryTable
 	
 	public function gdoTable() { return GDO_Permission::table(); }
 	
-	public function getPermission() { return 'staff'; }
+	public function getPermission() : ?string { return 'staff'; }
 	
 	public function getTableTitle()
 	{

@@ -10,6 +10,6 @@ use GDO\Core\GDT_String;
  */
 final class GDT_RunAt extends GDT_String
 {
-	public $pattern = "#([*/0-9,]+\\s*){5}#";
+	public string $pattern = "#([*/0-9,]+\\s*){5}#";
 	
 }

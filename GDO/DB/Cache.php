@@ -133,7 +133,7 @@ class Cache
 
 	public function getDummy()
 	{
-	    return $this->dummy ? $this->dummy : $this->newDummy();
+	    return isset($this->dummy) ? $this->dummy : $this->newDummy();
 	}
 	
 	private function newDummy()

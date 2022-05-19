@@ -16,7 +16,7 @@ use GDO\Session\GDO_Session;
 
 class InstallAdmins extends MethodForm
 {
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 		Debug::init();
 		Database::init();

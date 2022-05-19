@@ -38,7 +38,7 @@ final class GDO_UserPermission extends GDO
 	/**
 	 * @return GDO_Permission
 	 */
-	public function getPermission() { return $this->getValue('perm_perm_id'); }
+	public function getPermission() : ?string { return $this->getValue('perm_perm_id'); }
 	public function getPermissionID() { return $this->gdoVar('perm_perm_id'); }
 
 	##############

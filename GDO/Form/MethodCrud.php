@@ -2,6 +2,7 @@
 namespace GDO\Form;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_PermissionException;
 use GDO\User\GDO_User;
 use GDO\Captcha\GDT_Captcha;
 use GDO\Core\GDT_Object;
@@ -122,7 +123,7 @@ abstract class MethodCrud extends MethodForm
 	##############
 	### Method ###
 	##############
-	public function gdoParameters()
+	public function gdoParameters() : array
 	{
 	    $p = [
 	        GDT_Object::make($this->crudName())->table($this->gdoTable())->positional(),
@@ -141,7 +142,7 @@ abstract class MethodCrud extends MethodForm
 	        $this->crudMode = self::EDITED;
 	        if (!$this->canRead($this->gdo))
 	        {
-	            throw new PermissionException('err_permission_read');
+	            throw new GDO_PermissionException('err_permission_read');
 	        }
 	        elseif (!$this->canUpdate($this->gdo))
 	        {
@@ -154,7 +155,7 @@ abstract class MethodCrud extends MethodForm
 	    }
 	    elseif (!$this->canCreate($table))
 	    {
-	        throw new PermissionException('err_permission_create');
+	        throw new GDO_PermissionException('err_permission_create');
 	    }
 	    
 	    $this->getForm();
@@ -163,7 +164,7 @@ abstract class MethodCrud extends MethodForm
 	##############
 	### Create ###
 	##############
-	public function createForm(GDT_Form $form)
+	public function createForm(GDT_Form $form) : void
 	{
 	    $table = $this->gdoTable();
 	    $form->gdo($this->gdo);
@@ -176,7 +177,7 @@ abstract class MethodCrud extends MethodForm
 		$this->createFormButtons($form);
 	}
 	
-	public function createFormRec(GDT_Form $form, GDT $gdt)
+	public function createFormRec(GDT_Form $form, GDT $gdt) : void
 	{
 		if ($gdt->editable)
 		{
@@ -199,7 +200,7 @@ abstract class MethodCrud extends MethodForm
 		}
 	}
 	
-	public function createFormButtons(GDT_Form $form)
+	public function createFormButtons(GDT_Form $form) : void
 	{
 		$form->addField(GDT_AntiCSRF::make());
 		
@@ -217,7 +218,7 @@ abstract class MethodCrud extends MethodForm
 		{
 			$form->actions()->addField(GDT_DeleteButton::make());
 		}
-		
+
 		if ($this->gdo)
 		{
     	    $form->withGDOValuesFrom($this->gdo);
