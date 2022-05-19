@@ -91,7 +91,6 @@ abstract class GDT_Field extends GDT
 	### Features ###
 	################
 	public function isOrderable() : bool { return true; }
-	public function isOrderDefaultAsc() : bool { return true; }
 	public function isSearchable() : bool { return true; }
 	public function isFilterable() : bool { return true; }
 	public function isSerializable() : bool { return true; }

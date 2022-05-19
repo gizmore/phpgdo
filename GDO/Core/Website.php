@@ -379,7 +379,7 @@ final class Website
 	public static function setTitle($title)
 	{
 	    self::$TITLE = $title;
-	    GDT_Page::$INSTANCE->titleRaw(self::displayTitle());
+	    GDT_Page::instance()->titleRaw(self::displayTitle());
 	}
 	
 	public static function displayTitle()

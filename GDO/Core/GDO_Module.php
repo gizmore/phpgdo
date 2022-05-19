@@ -258,7 +258,7 @@ class GDO_Module extends GDO
 	/**
 	 * @return self
 	 */
-	public static function instance() : self { return ModuleLoader::instance()->getModule(self::getNameS()); }
+	public static function instance() : self { return ModuleLoader::instance()->getModule(self::getNameS(), true); }
 	
 	private static array $nameCache = [];
 

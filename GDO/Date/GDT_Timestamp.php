@@ -53,8 +53,8 @@ class GDT_Timestamp extends GDT_DBField
 		if ($var = parent::getVar())
 		{
 			$var = trim($var);
-			return $var ? $var : null;
 		}
+		return $var ? $var : null;
 	}
 	
 	public function initialSnap($mod)
@@ -216,7 +216,7 @@ class GDT_Timestamp extends GDT_DBField
 	public function renderAge() { return Time::displayAge($this->getVar()); }
 	public function renderCLI() : string { return $this->displayLabel() . ': ' . $this->display(); }
 	public function renderJSON() { return Time::getTimestamp($this->getVar()) * 1000; }
-	public function displayVar($var)
+	public function displayVar(string $var = null) : string
 	{
 		if ($dt = Time::parseDateTimeDB($var))
 		{

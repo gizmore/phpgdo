@@ -58,7 +58,7 @@ class GDT_Object extends GDT_UInt
 	##############
 	public function filterVar($rq=null)
 	{
-		return $this->_getRequestVar("{$rq}[f]", null, $this->filterField ? $this->filterField : $this->name);
+// 		return $this->_getRequestVar("{$rq}[f]", null, $this->filterField ? $this->filterField : $this->name);
 	}
 	
 	##############

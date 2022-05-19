@@ -19,6 +19,7 @@ class GDT_Button extends GDT
 {
 	use WithText;
 	use WithHREF;
+	use WithLabel;
 	use WithAnchorRelation;
 	
 	##############
@@ -38,7 +39,7 @@ class GDT_Button extends GDT
 	    return $this->renderCell();
 	}
 	
-	public function renderJSON() : string
+	public function renderJSON()
 	{
 	    return sprintf('<a href="%s">%s</a>', $this->gdoHREF(), $this->htmlIcon());
 	}

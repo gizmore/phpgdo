@@ -1,18 +1,18 @@
 <?php
 namespace install;
 chdir('../');
-require 'GDO6.php';
+require 'GDO7.php';
 
 # Configure by config file or autoconf
 @include 'protected/config.php';
 
 ####
 use GDO\Core\Application;
+use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Page;
 use GDO\Util\Common;
 use GDO\Language\Trans;
 use GDO\Util\Math;
-use GDO\Core\GDT_Error;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Debug;
 use GDO\Core\Logger;

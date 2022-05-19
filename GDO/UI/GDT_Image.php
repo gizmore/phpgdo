@@ -8,7 +8,7 @@ use GDO\File\GDO_File;
 /**
  * HTML Image element.
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.0
  * @since 6.10.0
  */
 final class GDT_Image extends GDT
@@ -31,7 +31,7 @@ final class GDT_Image extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderCell()
+	public function renderCell() : string
 	{
 		return GDT_Template::php('UI', 'cell/image.php', ['field' => $this]);
 	}

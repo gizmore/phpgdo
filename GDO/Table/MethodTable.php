@@ -15,7 +15,7 @@ use GDO\User\GDO_User;
  * The basic API is identical for static memory results and queried data.
  * 
  * @author gizmore
- * @version 6.11.3
+ * @version 7.0.0
  * @since 5.0.0
  * @see ArrayResult
  * @see GDT_Table
@@ -24,46 +24,55 @@ use GDO\User\GDO_User;
  */
 abstract class MethodTable extends Method
 {
-	/**
-	 * Build and/or get the GET parameter cache.
-	 * @return GDT[]
-	 */
-	public function &gdoParameterCache()
+	public function gdoParametersB() : array
 	{
-		if ($this->paramCache === null)
-		{
-			$this->init();
-			$this->paramCache = [];
-			if ($params = $this->gdoParameters())
-			{
-				foreach ($params as $gdt)
-				{
-					$this->paramCache[$gdt->name] = $gdt;
-				}
-			}
-			if ($params = $this->table->headers->getFieldsRec())
-			{
-				foreach ($params as $gdt)
-				{
-					if ($gdt->name)
-					{
-						$this->paramCache[$gdt->name] = $gdt;
-					}
-				}
-			}
-		}
-		return $this->paramCache;
+		$p = $this->gdoParameters();
+		$this->table->headers->withFields(function(GDT $gdt) use (&$p) {
+			$p[] = $gdt;
+		});
+		return $p;
 	}
 	
-    public function gdoParameterVar($key)
-    {
-        $gdt = $this->gdoParameter($key);
-        if ($this->table->headers->hasField($key))
-        {
-            return $gdt->getRequestVar($this->table->headers->name, $gdt->var);
-        }
-        return parent::gdoParameterVar($key);
-    }
+// 	/**
+// 	 * Build and/or get the GET parameter cache.
+// 	 * @return GDT[]
+// 	 */
+// 	public function &gdoParameterCache() : array
+// 	{
+// 		if ($this->paramCache === null)
+// 		{
+// 			$this->init();
+// 			$this->paramCache = [];
+// 			if ($params = $this->gdoParameters())
+// 			{
+// 				foreach ($params as $gdt)
+// 				{
+// 					$this->paramCache[$gdt->name] = $gdt;
+// 				}
+// 			}
+// 			if ($params = $this->table->headers->getFieldsRec())
+// 			{
+// 				foreach ($params as $gdt)
+// 				{
+// 					if ($gdt->name)
+// 					{
+// 						$this->paramCache[$gdt->name] = $gdt;
+// 					}
+// 				}
+// 			}
+// 		}
+// 		return $this->paramCache;
+// 	}
+	
+//     public function gdoParameterVar($key)
+//     {
+//         $gdt = $this->gdoParameter($key);
+//         if ($this->table->headers->hasField($key))
+//         {
+//             return $gdt->getRequestVar($this->table->headers->name, $gdt->var);
+//         }
+//         return parent::gdoParameterVar($key);
+//     }
     
     ################
     ### Abstract ###
@@ -137,7 +146,8 @@ abstract class MethodTable extends Method
     {
         $this->table = GDT_Table::make($this->gdoTableName());
         $this->table->headerName($this->getHeaderName());
-        return $this->table->gdtTable($this->gdoTable());
+        return $this->table;
+//         return $this->table->gdtTable($this->gdoTable());
     }
     
     ##################
@@ -185,19 +195,19 @@ abstract class MethodTable extends Method
 	############
 	### CRUD ###
 	############
-	public function isCreateable(GDO_User $user) { return false; }
-	public function isReadable(GDO_User $user) { return false; }
-	public function isUpdateable(GDO_User $user) { return false; }
-	public function isDeleteable(GDO_User $user) { return false; }
+	public function isCreateable(GDO_User $user) : bool { return false; }
+	public function isReadable(GDO_User $user) : bool { return false; }
+	public function isUpdateable(GDO_User $user) : bool { return false; }
+	public function isDeleteable(GDO_User $user) : bool { return false; }
 	
 	###
 	public function getDefaultOrder()
 	{
 	    foreach ($this->table->getHeaderFields() as $gdt)
 	    {
-	        if ($gdt->orderable)
+	        if ($gdt->isOrderable())
 	        {
-	            return $gdt->name . ($gdt->orderDefaultAsc ? ' ASC' : ' DESC');
+	            return $gdt->name . ($gdt->isOrderDefaultAsc() ? ' ASC' : ' DESC');
 	        }
 	    }
 	}
@@ -270,9 +280,15 @@ abstract class MethodTable extends Method
 	    $table->fetchInto($this->useFetchInto());
 	}
 	
-	public function onInit()
+	public static function make() : self
 	{
-		parent::onInit();
+		$obj = parent::make();
+		$obj->onInitTable();
+		return $obj;
+	}
+	
+	public function onInitTable() : void
+	{
 		if (!$this->table)
 		{
 			$this->table = $this->createCollection();

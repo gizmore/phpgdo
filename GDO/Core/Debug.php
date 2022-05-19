@@ -152,7 +152,8 @@ final class Debug
 		}
 		
 		$app = Application::instance();
-		$is_html = (!$app->isCLI()) && (!$app->isUnitTests()) && ($app->isHTML());
+		$is_html = $app->isHTML();
+		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 		
 		if ($is_html)
 		{
@@ -172,9 +173,9 @@ final class Debug
 		hdrc('HTTP/1.1 500 Server Error');
 
 		// Output error
-		if ($app->isCLI())
+		if ($app->isCLI() || $app->isUnitTests())
 		{
-			file_put_contents('php://stderr', self::backtrace($message, false) . PHP_EOL);
+			fwrite(STDERR, self::backtrace($message, false) . PHP_EOL);
 		}
 		else
 		{

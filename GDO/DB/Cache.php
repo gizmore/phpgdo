@@ -193,6 +193,8 @@ class Cache
 	{
 	    $this->all = null;
 	    $this->cache = [];
+	    $this->flush();
+	    $this->table->clearCache();
 	}
 	
 	public function recache(GDO $object) : GDO
@@ -387,12 +389,13 @@ class Cache
 	 * @param string|null $key
 	 * @return boolean
 	 */
-	public static function fileFlush($key=null)
+	public static function fileFlush(string $key=null) : bool
 	{
 	    if ($key === null)
 	    {
-	        FileUtil::removeDir(GDO_PATH.'temp/cache/');
-	        FileUtil::createDir(GDO_PATH.'temp/cache/');
+	    	return
+	    		FileUtil::removeDir(GDO_TEMP_PATH.'cache/') &&
+	    		FileUtil::createDir(GDO_TEMP_PATH.'cache/');
 	    }
 	    else
 	    {
@@ -409,7 +412,7 @@ class Cache
 	{
 	    $domain = GDO_DOMAIN;
 	    $version = Module_Core::GDO_REVISION;
-	    return GDO_PATH . "temp/cache/{$domain}_{$version}/{$key}";
+	    return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}";
 	}
 	
 }
@@ -428,3 +431,5 @@ if (!defined('GDO_FILECACHE'))
 {
     define('GDO_FILECACHE', 1);
 }
+
+define('GDO_TEMP_PATH', GDO_PATH . Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/');

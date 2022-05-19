@@ -80,6 +80,7 @@ class Installer
 		
 		Cache::flush();
 		Cache::fileFlush();
+		ModuleLoader::instance()->flushEnabledModules();
 	}
 	
 	public static function installModuleClasses(GDO_Module $module)

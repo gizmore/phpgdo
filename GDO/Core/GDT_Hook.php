@@ -183,7 +183,7 @@ final class GDT_Hook extends GDT
 	{
 		if (!self::$QUEUE)
 		{
-			$key = ftok(GDO_PATH . 'temp/ipc.socket', 'G');
+			$key = ftok(GDO_TEMP_PATH . 'ipc.socket', 'G');
 			self::$QUEUE = msg_get_queue($key);
 		}
 		return self::$QUEUE;

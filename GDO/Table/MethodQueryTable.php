@@ -2,11 +2,11 @@
 namespace GDO\Table;
 
 use GDO\DB\Query;
-use GDO\Core\GDOException;
 use GDO\Core\GDT_Hook;
 use GDO\Form\GDT_DeleteButton;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_EditButton;
+use GDO\Core\GDO_Exception;
 
 /**
  * A method that displays a table via a query.
@@ -52,7 +52,7 @@ abstract class MethodQueryTable extends MethodTable
 	 */
 	public function getResult()
 	{
-	    throw new GDOException("Shuld not return result for queried methods!");
+	    throw new GDO_Exception("Shuld not return result for queried methods!");
 	}
     
 	/**

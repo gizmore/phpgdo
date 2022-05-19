@@ -1,17 +1,44 @@
 # GDOv7 History and Changelog
 
+Please read from bottom to top :)
+
 Please refer to the [GDOv6 History](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
 
 
-## 7.0.0 / released 06.May.2022
+## 7.0.2 / scheduled 26.Jun.2022
+
+GDOv7.0.2 will come with a polished Bootstrap5 theme and feature a new demo site.
+
+ - New demo site [RendlessCode](https://rendless.code.wechall.net) which is a hacking challenge.
+
+ - Refurbished [Module_Boostrap5](https://github.com/gizmore/phpgdo-bootstrap5) and [Module_Boostrap5Theme](https://github.com/gizmore/phpgdo-bootstrap5-theme).
+
+
+## 7.0.1 / scheduled 05.Jun.2022
+
+GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API. 
+
+ - Modules can now come with a [LOGFILE.md](../GDO/Core/LOGFILE.md) which will be the default location for a module's todo and changelog. I chose LOGFILE.md because it fits a nice position in a module directory tree.
+
+ - New / first GDOv7 [Mailer module](https://github.com/gizmore/phpgdo-mailer). A mailer for symfony or alike will follow.
+ 
+ - [Module_DOMPDF](https://github.com/gizmore/phpgdo-dompdf) replaces [Module_TCPDPF](https://github.com/gizmore/phpgdo-dompdf) (which never got finished). We are now using a HTML to PDF strategy. New GDT render method renderPDF() which defaults renderHTML(). It's the first module to use composer as 3rd party library provider.
+
+
+## 7.0.0 / release 22.May.2022
 
 A fresh restart of the GDO project. :)
+GDOv7.0.0 comes with all core and some secret modules all unit tested (around 350 asserts). HTTP still not working.
 
  - 
 
- - [Module_Tests](https://github.com/gizmore/gdo6-tests) *is* now a core module. See [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods)
+ - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name and more...
 
- - [Module_CSS](https://github.com/gizmore/phpgdo-css) is not a core module anymore.
+ - [Module_Tests](https://github.com/gizmore/gdo6-tests) *is* now a core module. See [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods) for auto-generated testing. All test cases now pass for the very core and testing modules.
+
+ - [Module_CSS](https://github.com/gizmore/phpgdo-css) is *not* a core module anymore.
+
+ - [Module_Javascript](https://github.com/gizmore/phpgdo-javascript) is *not* a core module anymore.
 
  - [Module_Country](https://github.com/gizmore/phpgdo-country) is not a core module anymore.
 
@@ -31,10 +58,12 @@ A fresh restart of the GDO project. :)
  
  - [Module_Mail](https://github.com/gizmore/phpgdo-mail) now takes care of all email setting and configuration stuff. Users can approve emails on their behalf. No more email stuff in [Module_Account](https://github.com/gizmore/phpgdo-account) or elsewhere. Similiar goes for other user settings like gender or geoposition.
  
- - [Module_Mail](https://github.com/gizmore/phpgdo-mail) now needs a MailProvider module. (TODO). Planned is to use own mailer until i find time to write a better 3rd party module.
+ - [Module_Mail](https://github.com/gizmore/phpgdo-mail) now needs a [Mailer Provider](https://github.com/gizmore/phpgdo-mailer) module to actually send mails. (TODO). Planned is to use own mailer until i find time to write a better 3rd party module.
 
- - [New License](../LICENSE)! GDOv7 is now my exclusive own property. Of course you can still fork, use and enhance [GDOv6](https://github.com/gizmore/gdo6).
+ - [GDT](../GDO/Core/GDT.php) start completely blank without any attributes now. This is important to be able to serve (P)lain(O)ld(O)bjects.
  
- - [GDT](../GDO/Core/GDT.php) start completely blank without any attributes now.
+ - [Methods](../GDO/Core/Method.php) may now return a GDT, a string or null/none.
  
  - [GDO](../GDO/Core/GDO.php) now inherits from [GDT](../GDO/Core/GDT.php). This means you can return it as a result and call rendering on it.
+
+ - [New License](../LICENSE)! GDOv7 is now my exclusive own property. Of course you can still fork, use and enhance [GDOv6](https://github.com/gizmore/gdo6).

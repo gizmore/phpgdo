@@ -30,7 +30,17 @@ return [
 	'err_properitary_asset_code' => 'You may not access asset files in the GDO folder.',
 	'err_invalid_choice' => 'Your selection is invalid.',
 	'err_gdt_should_have_a_name' => '%s should have a name!',
+	'err_permission_required' => 'You need the %s permission to execute that.',
+
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
+	
+	# Permissions
+	'perm_admin' => 'Admin',
+	'perm_staff' => 'Staff',
+	'perm_cronjob' => 'Cronjob',
+	
+	# Buttons
+	'btn_send' => 'Send',
 ];

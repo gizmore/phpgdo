@@ -40,7 +40,7 @@ final class BCrypt
 		return $this->hash;
 	}
 	
-	public function validate($password)
+	public function validate($password) : bool
 	{
 		return password_verify($password, $this->hash);
 	}

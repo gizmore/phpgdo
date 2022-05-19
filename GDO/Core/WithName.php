@@ -1,8 +1,6 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Language\Trans;
-
 /**
  * Add a name to a GDT.
  * Display human classname.
@@ -54,19 +52,4 @@ trait WithName
 		return $obj;
 	}
 
-	public function gdoHumanName() : string
-	{
-		$shortname = self::gdoShortNameS();
-		$key = strtolower($shortname);
-		if (Trans::hasKey($key))
-		{
-			return t($key);
-		}
-		$key = strtolower($this->getName());
-		if (Trans::hasKey($key))
-		{
-			return t($key);
-		}
-		return $shortname;
-	}
 }

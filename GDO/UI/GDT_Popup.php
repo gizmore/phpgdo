@@ -18,7 +18,7 @@ final class GDT_Popup extends GDT
     ##############
     ### Render ###
     ##############
-    public function renderCell()
+    public function renderCell() : string
     {
         return GDT_Template::php('UI', 'cell/popup.php', [
             'field' => $this,

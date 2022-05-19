@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Language\Trans;
 use GDO\Util\Strings;
 use GDO\Util\Regex;
 
@@ -32,6 +33,28 @@ trait WithModule
 	{
 		$k = static::class;
 		return Strings::rsubstrFrom($k, '\\', $k);
+	}
+	
+	##################
+	### Human Name ###
+	##################
+	public function gdoHumanName() : string
+	{
+		$shortname = self::gdoShortNameS();
+		$key = strtolower($shortname);
+		if (Trans::hasKey($key))
+		{
+			return t($key);
+		}
+		if ($name = $this->getName())
+		{
+			$key = strtolower($name);
+			if (Trans::hasKey($key))
+			{
+				return t($key);
+			}
+		}
+		return $shortname;
 	}
 	
 	##############

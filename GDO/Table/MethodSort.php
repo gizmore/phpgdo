@@ -45,14 +45,14 @@ abstract class MethodSort extends Method
 	 * {@inheritDoc}
 	 * @see Method::isAlwaysTransactional()
 	 */
-	public function isAlwaysTransactional() { return true; }
+	public function isAlwaysTransactional() : bool { return true; }
 
 	/**
 	 * Force ajax and JSON rendering.
 	 * {@inheritDoc}
 	 * @see Method::isAjax()
 	 */
-	public function isAjax() { return true; }
+	public function isAjax() : bool { return true; }
 	
 	/**
 	 * Find the sort column name and swap item sorting.

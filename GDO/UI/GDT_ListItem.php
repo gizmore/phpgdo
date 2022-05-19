@@ -6,8 +6,6 @@ use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;
 use GDO\Core\GDT_CreatedBy;
 use GDO\Core\GDT_CreatedAt;
-use GDO\Avatar\GDT_Avatar;
-use GDO\Profile\GDT_ProfileLink;
 use GDO\Date\GDT_DateDisplay;
 use GDO\Core\Application;
 use GDO\Table\GDT_List;
@@ -107,22 +105,22 @@ final class GDT_ListItem extends GDT
 		return $this->actions;
 	}
 	
-	public function renderCell() { return GDT_Template::php('UI', 'cell/list_item.php', ['gdt'=>$this]); }
+	public function renderCell() : string { return GDT_Template::php('UI', 'cell/list_item.php', ['gdt'=>$this]); }
 	
-	public function render()
-	{
-	    switch (Application::instance()->getFormat())
-	    {
-	        case 'json': 
-	            GDT_List::$CURRENT->data[] = $this->renderJSON();
-	            break;
-	        case 'xml':
-                GDT_List::$CURRENT->data[] = $this->renderJSON();
-                break;
-	        default:
-	            return $this->renderCell();
-	    }
-	}
+// 	public function render() : string
+// 	{
+// 	    switch (Application::instance()->getFormat())
+// 	    {
+// 	        case 'json': 
+// 	            GDT_List::$CURRENT->data[] = $this->renderJSON();
+// 	            break;
+// 	        case 'xml':
+//                 GDT_List::$CURRENT->data[] = $this->renderJSON();
+//                 break;
+// 	        default:
+// 	            return $this->renderCell();
+// 	    }
+// 	}
 	
 	public function renderJSON()
 	{

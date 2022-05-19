@@ -9,8 +9,8 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\User\GDO_User;
-use GDO\Util\BCrypt;
 use GDO\Core\Website;
+use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_Bar;
 use GDO\UI\GDT_Link;
 use GDO\Form\GDT_DeleteButton;
@@ -44,7 +44,7 @@ class UserEdit extends MethodForm
 	    ];
 	}
 	
-	public function onInit()
+	public function onInit() : void
 	{
 	    $this->user = $this->getUser();
 	}
@@ -54,14 +54,14 @@ class UserEdit extends MethodForm
 	    return GDO_User::table()->getById(Common::getRequestString('user'));
 	}
 	
-	public function beforeExecute()
+	public function beforeExecute() : void
 	{
 	    if (Application::instance()->isHTML())
 	    {
     	    $this->renderNavBar();
     	    $barPermissions = GDT_Bar::make()->horizontal();
     	    $barPermissions->addField(GDT_Link::make('link_edit_permissions')->href(href('Admin', 'PermissionGrant', '&_form[perm_user_id]='.$this->user->getID())));
-    	    GDT_Page::$INSTANCE->topTabs->addField($barPermissions);
+    	    GDT_Page::instance()->topTabs->addField($barPermissions);
 	    }
 	}
 	

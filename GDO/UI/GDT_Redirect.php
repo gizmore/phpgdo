@@ -17,7 +17,7 @@ final class GDT_Redirect extends GDT
 		return $this->href(Website::hrefBack());
 	}
 	
-	public function renderCell()
+	public function renderCell() : string
 	{
 		Website::redirect($this->href, $this->redirectTime);
 		return t('gdt_redirect_to', [html($this->href)]);

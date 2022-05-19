@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\GDO;
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
@@ -10,17 +9,18 @@ use GDO\File\FileUtil;
 use GDO\Javascript\MinifyJS;
 use GDO\Core\Module_Core;
 use GDO\Core\Website;
-use GDO\Core\ModuleLoader;
 use GDO\Core\GDT;
+use GDO\DB\Database;
 
 /**
  * Clears all client and server caches.
  * 
- * @TODO move to module core.
+ * @TODO move AdminClearCache to Module_Core.
  * 
  * @author gizmore
- * @version 6.11.1
+ * @version 7.0.0
  * @since 6.0.1
+ * @see Module_Core
  */
 final class ClearCache extends Method
 {
@@ -44,29 +44,32 @@ final class ClearCache extends Method
 	    $core->saveConfigVar('asset_revision', sprintf('%.02f', round($assetVersion, 2)));
 	    # Flush memcached.
 	    Cache::flush();
+	    # Flush filecache
 	    Cache::fileFlush();
 	    # Flush GDO cache
-	    $this->flushAllGDOCaches();
+	    Database::instance()->clearCache();
+	    # Flush GDO cache
+// 	    $this->flushAllGDOCaches();
 	    # Remove minified JS
 	    FileUtil::removeDir(MinifyJS::tempDirS());
 	    # Call hook
 	    GDT_Hook::callWithIPC('ClearCache');
 	}
 	
-	private function flushAllGDOCaches()
-	{
-	    foreach (ModuleLoader::instance()->getEnabledModules() as $module)
-	    {
-	        if ($classes = $module->getClasses())
-	        {
-	            foreach ($classes as $classname)
-	            {
-	                /** @var $table GDO **/
-	                $table = call_user_func([$classname, 'table']);
-	                $table->clearCache();
-	            }
-	        }
-	    }
-	}
+// 	private function flushAllGDOCaches()
+// 	{
+// 	    foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+// 	    {
+// 	        if ($classes = $module->getClasses())
+// 	        {
+// 	            foreach ($classes as $classname)
+// 	            {
+// 	                /** @var $table GDO **/
+// 	                $table = call_user_func([$classname, 'table']);
+// 	                $table->clearCache();
+// 	            }
+// 	        }
+// 	    }
+// 	}
 
 }

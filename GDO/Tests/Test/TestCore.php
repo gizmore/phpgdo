@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Core\Test;
+namespace GDO\Tests\Test;
 
 use GDO\Tests\TestCase;
 use GDO\Core\GDT_Expression;

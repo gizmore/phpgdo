@@ -2,6 +2,7 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDT;
 use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
 use GDO\Table\GDT_Count;
@@ -44,7 +45,7 @@ class ViewPermission extends MethodQueryTable
 	    ];
 	}
 	
-	public function onInit()
+	public function onInit() : void
 	{
 		parent::onInit();
 		$this->permission = $this->gdoParameterValue('permission');

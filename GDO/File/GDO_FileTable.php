@@ -12,8 +12,9 @@ use GDO\User\GDO_User;
  * Inherit from this table when using GDT_Files and provide your table to it.
  * Override gdoFileObjectTable() and return your GDO that shall have the files.
  * 
- * @author gizmore@wechall.net
- *
+ * @author gizmore
+ * @version 7.0.0
+ * @since 6.1.0
  */
 class GDO_FileTable extends GDO
 {
@@ -29,7 +30,7 @@ class GDO_FileTable extends GDO
 	### GDO ###
 	###########
 	public function gdoCached() : bool { return false; }
-	public function gdoAbstract() { return $this->gdoFileObjectTable() === null; }
+	public function gdoAbstract() : bool { return $this->gdoFileObjectTable() === null; }
 	public function gdoColumns() : array
 	{
 		return array(

@@ -7,7 +7,7 @@ use GDO\DB\Query;
  * The base class for all GDT.
  * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Label.
  * 
- * A GDT can support these rendering functions; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/BINARY/CHOICE/FILTER.
+ * A GDT can support these rendering functions; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/FILTER.
  * 
  * @see GDO
  * @see GDT_Field
@@ -43,17 +43,67 @@ abstract class GDT
 	##############
 	### Render ###
 	##############
-	public function render() : string { return ''; }
+	const RENDER_CLI = 0;
+	const RENDER_HTML = 1;
+	const RENDER_FORM = 2;
+	const RENDER_CELL = 3;
+	const RENDER_FILTER = 4;
+	const RENDER_HEADER = 5;
+	const RENDER_CARD = 6;
+	const RENDER_XML = 7;
+	const RENDER_JSON = 8;
+	const RENDER_BINARY = 9;
+	const RENDER_PDF = 10;
+	
+	public static int $RENDER_MODE = self::RENDER_HTML;
+	
+	public function render() : string { return $this->renderGDT(); }
+	
+	public function renderGDT() : string
+	{
+		switch (self::$RENDER_MODE)
+		{
+			case self::RENDER_CLI: return $this->renderCLI();
+			case self::RENDER_HTML: return $this->renderHTML();
+			case self::RENDER_FORM: return $this->renderForm();
+			case self::RENDER_CELL: return $this->renderHTML();
+			case self::RENDER_FILTER: return $this->renderFilter('');
+			case self::RENDER_HEADER: return $this->renderHeader();
+			case self::RENDER_CARD: return $this->renderCard();
+			case self::RENDER_XML: return $this->renderXML();
+			case self::RENDER_JSON: return $this->renderJSON();
+			case self::RENDER_BINARY: return $this->renderBinary();
+			case self::RENDER_PDF: return $this->renderPDF();
+			default: return '';
+		}
+	}
+	
 	public function renderCLI() : string { return $this->render(); }
 	public function renderXML() : string { return $this->render(); }
+	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderCard() : string { return $this->renderHTML(); }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderForm() : string { return $this->renderHTML(); }
-	public function renderHTML() : string { return $this->render(); }
+	public function renderHTML() : string { return ''; }
 	public function renderJSON() { return $this->renderCLI(); }
 	public function renderBinary() : string {}
 	public function renderChoice() : string { return $this->renderHTML(); }
 	public function renderFilter($f) : string {}
+	public function renderHeader() : string {}
+	
+	public function displayVar(string $var=null) : string
+	{
+		return $var ? html($var) : '';
+	}
+	
+	public function renderMode(int $mode)
+	{
+		$old = self::$RENDER_MODE;
+		self::$RENDER_MODE = $mode;
+		$result = $this->render();
+		self::$RENDER_MODE = $old;
+		return $result;
+	}
 	
 	###################
 	### Permissions ###
@@ -67,6 +117,7 @@ abstract class GDT
 	### Features ###
 	################
 	public function isOrderable() : bool { return false; }
+	public function isOrderDefaultAsc() : bool { return true; }
 	public function isSearchable() : bool { return false; }
 	public function isFilterable() : bool { return false; }
 	
@@ -263,7 +314,6 @@ abstract class GDT
 		return $var;
 	}
 	
-	
 	#############
 	### Tests ###
 	#############
@@ -275,6 +325,22 @@ abstract class GDT
 	public function plugVar() : string
 	{
 		return '';
+	}
+	
+	##################
+	### DEPRECATED ### backwards compat :(
+	##################
+	/**
+	 * @deprecated SLOW AND FUCK AND NEW
+	 * @return string
+	 */
+	public function getRequestVar($name, $default=null, $bla=null)
+	{
+		if ($input = $this->getInput())
+		{
+			return $this->inputToVar($input);
+		}
+		return $default;
 	}
 	
 }

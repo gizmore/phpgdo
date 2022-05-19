@@ -6,6 +6,7 @@ use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
 use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Checkbox;
 use GDO\Core\GDT_Decimal;
 use GDO\Core\ModuleLoader;

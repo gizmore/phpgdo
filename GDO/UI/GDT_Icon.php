@@ -9,7 +9,7 @@ use GDO\Core\GDT;
  * @see WithIcon
  * 
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.0.0
  */
 class GDT_Icon extends GDT
@@ -26,8 +26,8 @@ class GDT_Icon extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderCell() { return $this->htmlIcon(); }
-	public function renderCLI() { return $this->icon; }
+	public function renderCell() : string { return $this->htmlIcon(); }
+	public function renderCLI() : string { return $this->icon; }
 	public function renderJSON() {}
 	
 	public function var(string $var = null) : self
@@ -36,7 +36,7 @@ class GDT_Icon extends GDT
 	    return $this->icon($var);
 	}
 	
-	public function value($value)
+	public function value($value) : self
 	{
 	    parent::value($value);
 	    return $this->icon($value);

@@ -7,8 +7,6 @@ use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Form\MethodForm;
-use GDO\Core\GDT_Response;
-use GDO\Form\GDT_Form;
 use GDO\Core\Application;
 
 /**
@@ -96,22 +94,24 @@ final class MethodTest
         $_REQUEST['_fmt'] = $_GET['_fmt'] = $this->json ? 'json' : 'html';
         $_REQUEST['_ajax'] = $_GET['_ajax'] = $this->json ? '1' : '0';
 
-        # Get params
-        foreach ($this->getParameters as $k => $v)
-        {
-            $_REQUEST[$k] = $_GET[$k] = $v;
-        }
+        $p = array_merge($this->getParameters, $this->parameters);
+        $this->method->parameters($p);
+//         # Get params
+//         foreach ($this->getParameters as $k => $v)
+//         {
+//             $_REQUEST[$k] = $_GET[$k] = $v;
+//         }
         
-        $frm = ($this->method instanceof MethodForm) ? $this->method->formName() : GDT_Form::DEFAULT_NAME;
+//         $frm = ($this->method instanceof MethodForm) ? $this->method->formName() : GDT_Form::DEFAULT_NAME;
         
         # Form params
-        $_REQUEST[$frm] = [];
-        $_REQUEST[$frm][$btn] = $btn;
-        foreach ($this->parameters as $key => $value)
-        {
-//             $_POST[$frm][$key] = $value;
-            $_REQUEST[$frm][$key] = $value;
-        }
+//         $_REQUEST[$frm] = [];
+//         $_REQUEST[$frm][$btn] = $btn;
+//         foreach ($this->parameters as $key => $value)
+//         {
+// //             $_POST[$frm][$key] = $value;
+//             $_REQUEST[$frm][$key] = $value;
+//         }
         
         $_GET['mo'] = $_REQUEST['mo'] = $this->method->getModuleName();
         $_GET['me'] = $_REQUEST['me'] = $this->method->getMethodName();
@@ -122,7 +122,7 @@ final class MethodTest
         $response = $this->method->exec();
         ob_flush();
         
-        $_REQUEST = []; $_GET = []; $_POST = [];
+//         $_REQUEST = []; $_GET = []; $_POST = [];
         
         return $response;
     }

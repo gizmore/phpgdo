@@ -12,7 +12,7 @@ use GDO\Core\GDT_Template;
  */
 final class GDT_RangeSlider extends GDT_Slider
 {
-	public function renderForm() { return GDT_Template::php('UI', 'form/range_slider.php', ['field' => $this]); }
+	public function renderForm() : string { return GDT_Template::php('UI', 'form/range_slider.php', ['field' => $this]); }
 	
 	###########
 	### GDO ###
@@ -39,7 +39,7 @@ final class GDT_RangeSlider extends GDT_Slider
 	private function getVal($i) { $v = $this->getValue(); return $v ? $v[$i] : $v; }
 	public function initialLow() { return $this->var ? json_decode($this->var)[0] : null; }
 	public function initialHigh() { return $this->var ? json_decode($this->var)[1] : null; }
-	public function initialValue($value) { $this->initial = $this->var = $this->toVar($value); return parent::initialValue($value); }
+	public function initialValue($value) : self { $this->initial = $this->var = $this->toVar($value); return parent::initialValue($value); }
 	public function getValue()
 	{
 		if ($lo = $this->getRequestVar($this->formVariable(), $this->initial))
@@ -60,7 +60,7 @@ final class GDT_RangeSlider extends GDT_Slider
 	################
 	### Validate ###
 	################
-	public function validate($value)
+	public function validate($value) : bool
 	{
 		list($lo, $hi) = $value;
 		if ( (parent::validate($lo)) && (parent::validate($hi)) )

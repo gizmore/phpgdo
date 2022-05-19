@@ -22,7 +22,7 @@ final class GDT_Level extends GDT_UInt
 	public $icon = 'level';
 	public ?string $var = '0';
 	public ?string $initial = '0';
-	public bool $notNull  = true;
+	public bool $notNull = true;
 	
 	public function isSearchable() : bool { return false; }
 	

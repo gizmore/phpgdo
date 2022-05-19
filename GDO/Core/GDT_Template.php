@@ -136,7 +136,7 @@ class GDT_Template extends GDT
 		return $this;
 	}
 
-	public function renderHeader()
+	public function renderHeader() : string
 	{
 		if ( !$this->templateModuleHead)
 		{

@@ -21,7 +21,7 @@ class GDT_Dialog extends GDT
     use WithPHPJQuery;
     use WithActions;
     
-	public function renderCell()
+	public function renderCell() : string
 	{
 		return GDT_Template::php('UI', 'cell/dialog.php', ['field' => $this]);
 	}

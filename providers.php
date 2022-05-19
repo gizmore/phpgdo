@@ -7,8 +7,8 @@ use GDO\File\Filewalker;
 use GDO\Util\Regex;
 
 # Use gdo6 core
-include "protected/config.php";
-include "GDO7.php";
+require "protected/config.php";
+require "GDO7.php";
 
 global $mode;
 
@@ -17,8 +17,10 @@ $mode = @$argv[1];
 
 if ($mode)
 {
-	echo "'Captcha' => ['gdo6-captcha', 'gdo6-recaptcha2'],\n";
-	echo "'Session' => ['gdo6-session-db', 'gdo6-session-cookie'],\n";
+	echo "'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],\n";
+	echo "'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite],\n";
+	echo "'Mailer' => ['phpgdo-mailer', 'phpgdo-mailer-symfony'],\n";
+	echo "'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],\n";
 }
 
 Filewalker::traverse("GDO", null, false,

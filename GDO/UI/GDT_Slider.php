@@ -1,13 +1,15 @@
 <?php
 namespace GDO\UI;
+
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
-use GDO\Form\WithFormFields;
+
 /**
- * A numeric slider.
+ * A numeric slider with min and max values. 
+ * 
  * @author gizmore
- * @version 6.0
- * @since 7.0
+ * @version 7.0.0
+ * @since 6.0.0
  */
 class GDT_Slider extends GDT
 {
@@ -16,12 +18,11 @@ class GDT_Slider extends GDT
 	##############
 	use WithIcon;
 	use WithLabel;
-	use WithFormFields;
 	
 	##############
 	### Render ###
 	##############
-	public function renderForm() { return GDT_Template::php('UI', 'form/slider.php', ['field' => $this]); }
+	public function renderForm() : string { return GDT_Template::php('UI', 'form/slider.php', ['field' => $this]); }
 
 	###############
 	### Options ###

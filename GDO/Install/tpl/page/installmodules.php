@@ -29,7 +29,7 @@ $table->fetchInto(false);
 $install = GDT_Submit::make('btn_install');
 $skip = Config::linkStepGDT('5');
 $hiddenStep = GDT_Hidden::make('step')->var('4');
-$table->actions()->addFields([$install, $skip, $hiddenStep]);
+$table->actions()->addFields($install, $skip, $hiddenStep);
 $table->ordered(true);
 $table->multisort($table->getResult(), 'module_name', true);
 echo $table->render();

@@ -110,7 +110,7 @@ trait WithObject
 	##############
 	### Render ###
 	##############
-	public function displayVar($var)
+	public function displayVar(string $var = null) : string
 	{
 		if (isset($this->multiple) && $this->multiple)
 		{

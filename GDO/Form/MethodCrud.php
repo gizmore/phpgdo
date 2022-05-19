@@ -57,7 +57,7 @@ abstract class MethodCrud extends MethodForm
 	################
 	### Override ###
 	################
-	public function isUserRequired() { return true; }
+	public function isUserRequired() : bool { return true; }
 	public function isCaptchaRequired() { return !GDO_User::current()->isMember(); }
 	public function showInSitemap() { return false; }
 	
@@ -131,7 +131,7 @@ abstract class MethodCrud extends MethodForm
 	    return array_merge($p, parent::gdoParameters());
 	}
 	
-	public function onInit()
+	public function onInit() : void
 	{
 		parent::onInit();
 	    $this->crudMode = self::CREATED;

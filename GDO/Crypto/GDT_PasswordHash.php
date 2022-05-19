@@ -1,8 +1,6 @@
 <?php
 namespace GDO\Crypto;
 
-use GDO\Util\BCrypt;
-
 /**
  * Bcrypt hash form and database value
  * @author gizmore

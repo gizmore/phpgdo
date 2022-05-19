@@ -20,6 +20,6 @@ final class GDT_Label extends GDT
 	public function renderCard() : string { return $this->displayLabel(); }
 	public function renderForm() : string { return $this->displayLabel(); }
 	public function renderCell() : string { return $this->displayLabel(); }
-	public function renderJSON() : string { return $this->displayLabel(); }
+	public function renderJSON() { return $this->displayLabel(); }
 	
 }

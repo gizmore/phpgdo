@@ -151,7 +151,7 @@ abstract class GDO extends GDT
 	public function isPersisted() : bool { return $this->persisted; }
 	public function setPersisted(bool $persisted=true) : self
 	{
-		$this->id = null;
+		unset($this->id);
 		$this->persisted = $persisted;
 		return $this;
 	}
@@ -342,7 +342,7 @@ abstract class GDO extends GDT
 	
 	public function setGDOVars(array $vars, $dirty=false)
 	{
-		$this->id = null;
+		unset($this->id);
 		$this->gdoVars = $vars;
 		return $this->dirty($dirty);
 	}
@@ -1168,14 +1168,14 @@ abstract class GDO extends GDT
 	##############
 	### Get ID ###
 	##############
-	private ?string $id = null;
+	private string $id;
 	/**
 	 * Id cache
 	 * @var $id string
 	 */
 	public function getID() : ?string
 	{
-		if ($this->id)
+		if (isset($this->id))
 		{
 			return $this->id;
 		}
@@ -1426,6 +1426,7 @@ abstract class GDO extends GDT
 	
 	public function clearCache() : self
 	{
+		unset($this->id);
 		if ($this->cached())
 		{
 			$cache = self::table()->cache;
@@ -1480,7 +1481,7 @@ abstract class GDO extends GDT
 	 * @param boolean $asc
 	 * @return self[]
 	 */
-	public function &allCached($order=null, $json=false) : array
+	public function &allCached(string $order=null, bool $json=false) : array
 	{
 		if ($this->cached())
 		{

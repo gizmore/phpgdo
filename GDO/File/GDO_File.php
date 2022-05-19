@@ -169,7 +169,7 @@ final class GDO_File extends GDO
 	public static function fromString($name, $content)
 	{
 		# Create temp dir
-		$tempDir = GDO_PATH . 'temp/file';
+		$tempDir = GDO_TEMP_PATH . 'file';
 		FileUtil::createDir($tempDir);
 		# Copy content to temp file
 		$tempPath = $tempDir . '/' . md5(md5($name).md5($content));

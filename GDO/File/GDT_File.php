@@ -243,7 +243,8 @@ class GDT_File extends GDT_Object
 	
 	public function getInitialFile()
 	{
-	    $var = $this->getRequestVar($this->formVariable(), $this->var);
+// 		$var = $this->getRequestVar($this->formVariable(), $this->var);
+		$var = $this->getInput();
 		if ($var !== null)
 		{
 			return GDO_File::getById($var);
@@ -259,7 +260,7 @@ class GDT_File extends GDT_Object
 // 		return $this;
 // 	}
 	
-public function getGDOData() : ?array
+	public function getGDOData() : ?array
 	{
 		if ($file = $this->getValue())
 		{
@@ -297,14 +298,14 @@ public function getGDOData() : ?array
 	##############
 	### Delete ###
 	##############
-	public $noDelete = false;
-	public function noDelete($noDelete=true)
+	public bool $noDelete = false;
+	public function noDelete(bool $noDelete=true) : self
 	{
 	    $this->noDelete = $noDelete;
 	    return $this;
 	}
 	
-	public function notNull($notNull=true)
+	public function notNull(bool $notNull=true) : self
 	{
 	    $this->noDelete = $notNull;
 	    return parent::notNull($notNull);
@@ -434,7 +435,7 @@ public function getGDOData() : ?array
 	###################
 	private function getTempDir($key='')
 	{
-		return GDO_PATH.'temp/flow/'.GDO_Session::instance()->getID().'/'.$key;
+		return GDO_TEMP_PATH.'flow/'.GDO_Session::instance()->getID().'/'.$key;
 	}
 	
 	private function getChunkDir($key)

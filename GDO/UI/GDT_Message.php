@@ -5,13 +5,12 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDO;
 use GDO\Util\Strings;
 use GDO\User\GDO_User;
-use GDO\Profile\GDT_ProfileLink;
 use GDO\Core\GDT_Text;
 
 /**
  * A message is a GDT_Text with an editor. Classic uses a textarea.
  * The content is html, filtered through a whitelist with html-purifier.
- * A gdo6-tinymce / ckeditor is available. Planned is markdown and bbcode.
+ * A gdo6-tinymce / ckeditor is available. Planned is markdown(done) and bbcode(planned).
  * 
  * @TODO: write a Markdown module. Hook into DECODE() to turn input markdown into output html.
  * 
@@ -20,29 +19,29 @@ use GDO\Core\GDT_Text;
  * @see \GDO\Markdown\Module_Markdown
  * 
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 4.0.0
  */
 class GDT_Message extends GDT_Text
 {
     public $icon = 'message';
     
-    private $input; # Raw user input
-    private $output; # Decoded input to output 
-    private $text; # Output with removed html for search
-    private $editor; # Message Codec Provider used for this message.
+    private ?string $msgInput = null;  # Raw user input
+    private ?string $msgOutput = null; # Decoded input to output 
+    private ?string $msgText = null;   # Output with removed html for search
+    private ?string $msgEditor = null; # Message Codec Provider used for this message.
     
     ###########
     ### GDT ###
     ###########
-    public static $NUM = 1;
-    public $num = 0;
+    public static int $NUM = 1;
+    public int $num = 0;
     /**
      * On make, setup order and search field.
      * @param string $name
      * @return self
      */
-    public static function make($name=null)
+    public static function make(string $name=null) : self
     {
         $gdt = parent::make($name);
         $gdt->num = self::$NUM++;
@@ -152,9 +151,9 @@ class GDT_Message extends GDT_Text
     /**
      * Validate via String validation twice, the input and output variants.
      * {@inheritDoc}
-     * @see \GDO\DB\GDT_Text::validate()
+     * @see GDT_Text::validate()
      */
-    public function validate($value)
+    public function validate($value) : bool
     {
         # Check raw input for length and pattern etc.
         if (!parent::validate($value))
@@ -173,17 +172,17 @@ class GDT_Message extends GDT_Text
         }
         
         # Assign input variations.
-        $this->input = $value;
-        $this->output = $decoded;
-        $this->text = $text;
-        $this->editor = self::$EDITOR_NAME;
+        $this->msgInput = $value;
+        $this->msgOutput = $decoded;
+        $this->msgText = $text;
+        $this->msgEditor = self::$EDITOR_NAME;
         return true;
     }
     
     ##########
     ### DB ###
     ##########
-    public function gdoColumnNames()
+    public function gdoColumnNames() : array
     {
     	return [
     		"{$this->name}_input",
@@ -193,7 +192,7 @@ class GDT_Message extends GDT_Text
     	];
     }
     
-    public function gdoColumnDefine()
+    public function gdoColumnDefine() : string
     {
         return
         "{$this->name}_input {$this->gdoColumnDefineB()},\n".
@@ -207,10 +206,10 @@ class GDT_Message extends GDT_Text
     ######################
     public function initial(string $var=null) : self
     {
-        $this->input = $var;
-        $this->output = self::decodeMessage($var);
-        $this->text = self::plaintext($this->output);
-        $this->editor = $this->nowysiwyg ? 'GDT' : self::$EDITOR_NAME;
+        $this->msgInput = $var;
+        $this->msgOutput = self::decodeMessage($var);
+        $this->msgText = self::plaintext($this->output);
+        $this->msgEditor = $this->nowysiwyg ? 'GDT' : self::$EDITOR_NAME;
         return parent::initial($var);
     }
     
@@ -221,19 +220,19 @@ class GDT_Message extends GDT_Text
      */
     public function var(string $var = null) : self
     {
-        $this->input = $var;
-        $this->output = self::decodeMessage($var);
-        $this->text = self::plaintext($this->output);
-        $this->editor = $this->nowysiwyg ? 'GDT' : self::$EDITOR_NAME;
+        $this->msgInput = $var;
+        $this->msgOutput = self::decodeMessage($var);
+        $this->msgText = self::plaintext($this->msgOutput);
+        $this->msgEditor = $this->nowysiwyg ? 'GDT' : self::$EDITOR_NAME;
         return parent::var($var);
     }
     
     public function blankData() : array
     {
         return [
-            "{$this->name}_input" => $this->input,
-            "{$this->name}_output" => $this->output,
-            "{$this->name}_text" => $this->text,
+            "{$this->name}_input" => $this->msgInput,
+            "{$this->name}_output" => $this->msgOutput,
+            "{$this->name}_text" => $this->msgText,
             "{$this->name}_editor" => self::$EDITOR_NAME,
         ];
     }
@@ -247,10 +246,10 @@ class GDT_Message extends GDT_Text
     public function setGDOData(GDO $gdo)
     {
         $name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
-        $this->input = $gdo->getVar("{$name}_input");
-        $this->output = $gdo->getVar("{$name}_output");
-        $this->text = $gdo->getVar("{$name}_text");
-        $this->editor = $gdo->getVar("{$name}_editor");
+        $this->msgInput = $gdo->getVar("{$name}_input");
+        $this->msgOutput = $gdo->getVar("{$name}_output");
+        $this->msgText = $gdo->getVar("{$name}_text");
+        $this->msgEditor = $gdo->getVar("{$name}_editor");
         return $this;
     }
     
@@ -263,10 +262,10 @@ class GDT_Message extends GDT_Text
     public function getGDOData() : ?array
     {
         return [
-            "{$this->name}_input" => $this->input,
-            "{$this->name}_output" => $this->output,
-            "{$this->name}_text" => $this->text,
-            "{$this->name}_editor" => $this->editor,
+            "{$this->name}_input" => $this->msgInput,
+            "{$this->name}_output" => $this->msgOutput,
+            "{$this->name}_text" => $this->msgText,
+            "{$this->name}_editor" => $this->msgEditor,
         ];
     }
     
@@ -278,28 +277,28 @@ class GDT_Message extends GDT_Text
         $form = $this->formVariable();
         if ($form)
         {
-            return $this->getRequestVar($form, $this->input);
+            return $this->getRequestVar($form, $this->msgInput);
         }
         return $this->var;
     }
-    public function getVarInput() { return $this->input; }
-    public function getVarOutput() { return $this->output; }
-    public function getVarText() { return $this->text; }
+    public function getVarInput() { return $this->msgInput; }
+    public function getVarOutput() { return $this->msgOutput; }
+    public function getVarText() { return $this->msgText; }
     
     ##############
 	### Render ###
 	##############
     public function renderCLI() : string { return $this->getVarText(); }
     public function renderCell() : string { return $this->getVarOutput(); }
-    public function renderCard() : string : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
+    public function renderCard() : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
     public function renderForm() : string { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
-    public function renderList() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }
+    public function renderChoice() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }
 	
 	##############
 	### Editor ###
 	##############
-	public $nowysiwyg = false;
-	public function nowysiwyg($nowysiwyg=true) { $this->nowysiwyg = $nowysiwyg; return $this; }
-	public function classEditor() { return $this->nowysiwyg ? 'as-is' : 'wysiwyg'; }
+	public bool $nowysiwyg = false;
+	public function nowysiwyg(bool $nowysiwyg=true) : self { $this->nowysiwyg = $nowysiwyg; return $this; }
+	public function classEditor() : string { return $this->nowysiwyg ? 'as-is' : 'wysiwyg'; }
 	
 }

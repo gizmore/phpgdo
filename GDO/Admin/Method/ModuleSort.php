@@ -10,7 +10,7 @@ use GDO\Table\MethodSort;
  * Drag and drop sorting of modules.
  * 
  * @author gizmore
- * @version 6.10.1
+ * @version 7.0.0
  * @since 5.0.0
  */
 final class ModuleSort extends MethodSort
@@ -24,7 +24,7 @@ final class ModuleSort extends MethodSort
 
 	public function gdoSortObjects() { return GDO_Module::table(); }
 
-	public function afterExecute()
+	public function afterExecute() : void
 	{
 		Cache::remove('gdo_modules');
 	}

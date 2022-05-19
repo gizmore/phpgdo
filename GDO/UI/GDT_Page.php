@@ -33,4 +33,9 @@ final class GDT_Page extends GDT
 		return $back;
 	}
 	
+	public function reset() : self
+	{
+		return $this;
+	}
+
 }

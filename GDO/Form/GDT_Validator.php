@@ -36,7 +36,7 @@ class GDT_Validator extends GDT
 		return GDT_Form::$VALIDATING_INSTANCE->fields[$this->validateField];
 	}
 	
-	public function validate($value)
+	public function validate($value) : bool
 	{
 		$form = GDT_Form::$VALIDATING_INSTANCE;
 		$field = $this->validatorField();

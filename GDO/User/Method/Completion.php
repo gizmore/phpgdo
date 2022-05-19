@@ -20,8 +20,6 @@ class Completion extends MethodAjax
 {
 	public static $MAXCOUNT = 20;
 	
-	public function isGuestAllowed() { return Module_Core::instance()->cfgAllowGuests(); }
-	
 	public function execute() : GDT
 	{
 		$q = GDO::escapeS(Common::getRequestString('query'));

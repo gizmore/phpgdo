@@ -143,7 +143,7 @@ final class HTTP
 			curl_setopt($ch, CURLOPT_COOKIE, $cookie);
 		}
 		# Enable cookie engine with not saving the cookies to disk
-		curl_setopt($ch, CURLOPT_COOKIEFILE, GDO_PATH."temp/test.cookie");
+		curl_setopt($ch, CURLOPT_COOKIEFILE, GDO_TEMP_PATH."test.cookie");
 		
 		
 		curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
@@ -221,7 +221,7 @@ final class HTTP
 			curl_setopt($ch, CURLOPT_COOKIE, $cookie);
 		}
 		# Enable cookie engine with not saving the cookies to disk
-		curl_setopt($ch, CURLOPT_COOKIEFILE, GDO_PATH."temp/test.cookie");
+		curl_setopt($ch, CURLOPT_COOKIEFILE, GDO_TEMP_PATH."test.cookie");
 		
 		curl_setopt($ch, CURLOPT_URL, $url);
  		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);

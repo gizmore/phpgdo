@@ -22,14 +22,27 @@ abstract class Method
 	################
 	### Override ###
 	################
+	# execution
+	public function isEnabled() : bool { return $this->getModule()->isEnabled(); }
+	public function getMethodName() : string { return $this->gdoShortName(); }
+	public function getPermission() : ?string { return null; }
 	public abstract function execute() : GDT;
+	
+	# toggles
+	public function isCLI() : bool { return false; }
+	public function isAjax() { return false; }
 	public function isTrivial() { return true; }
+	public function saveLastUrl() { return true; }
+	public function getUserType() : ?string { return null; }
+	public function isUserRequired() : bool { return false; }
+	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
 	public function isTransactional() : bool { return false; }
 	public function isAlwaysTransactional() : bool { return false; }
-	public function onInit() : ?GDT { return null; }
+	
+	# events
+	public function onInit() : void {}
 	public function beforeExecute() : void {}
 	public function afterExecute() : void {}
-	public function getPermission() : ?string { return null; }
 	
 	###################
 	### Alias Cache ###
@@ -233,15 +246,16 @@ abstract class Method
 		if ($mt = $this->getUserType())
 		{
 			$ut = $user->getType();
-			if (is_array($mt))
-			{
-				if (!in_array($ut, $mt))
-				{
-					return GDT_Error::responseWith(
-						'err_user_type', [implode(' / ', $this->getUserType())]);
-				}
-			}
-			elseif ($ut !== $mt)
+// 			if (is_array($mt))
+// 			{
+// 				if (!in_array($ut, $mt))
+// 				{
+// 					return GDT_Error::responseWith(
+// 						'err_user_type', [implode(' / ', $this->getUserType())]);
+// 				}
+// 			}
+// 			else
+			if ($ut !== $mt)
 			{
 				return GDT_Error::make()->text('err_user_type', [$this->getUserType()]);
 			}

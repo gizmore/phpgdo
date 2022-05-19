@@ -34,7 +34,7 @@ class Module_Admin extends GDO_Module
 	{
 		if (GDO_User::current()->isAdmin())
 		{
-		    GDT_Page::$INSTANCE->rightNav->addField(
+		    GDT_Page::instance()->rightNav->addField(
 		        GDT_Link::make('btn_admin')->label('btn_admin')->href(
 		            href('Admin', 'Modules')));
 		}

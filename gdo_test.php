@@ -10,6 +10,7 @@ use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
 use GDO\Core\ModuleLoader;
+use GDO\CLI\CLI;
 
 /**
  * Launch all unit tests.
@@ -17,56 +18,45 @@ use GDO\Core\ModuleLoader;
  */
 if (PHP_SAPI !== 'cli') { die('Tests can only be run from the command line.'); }
 
+echo "######################################\n";
+echo "### Welcome to the GDOv7 testsuite ###\n";
+echo "######################################\n";
+
 require 'protected/config_test.php';
 require 'GDO7.php';
 require 'vendor/autoload.php';
 
+/**
+ * Override a few toggles for unit test mode.
+ * @author gizmore
+ */
 final class gdo_test extends Application
 {
 	private $cli = true;
-	public function cli($cli) : self { $this->cli = $cli; return $this; }
+	public function cli(bool $cli) : self { $this->cli = $cli; return $this; }
 	public function isCLI() : bool { return $this->cli; } # override CLI mode to test HTML rendering.
-	/**
-	 * @override
-	 * {@inheritDoc}
-	 * @see \GDO\Core\Application::isUnitTests()
-	 */
-	public function isUnitTests() : bool
-	{
-		return true;
-	}
+	public function isUnitTests() : bool { return true; }
 }
-$app = new gdo_test();
-$loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Logger::init('gdo_test', GDO_ERROR_LEVEL);
 Debug::init();
+
+$app = new gdo_test();
+$loader = new ModuleLoader(GDO_PATH . 'GDO/');
+
 Debug::setMailOnError(GDO_ERROR_EMAIL);
-// Debug::setDieOnError(GDO_ERROR_DIE);
+Debug::setDieOnError(false);
 Debug::enableErrorHandler();
 Debug::enableExceptionHandler();
 Cache::init();
 Cache::flush();
-Database::init();
+Database::init(null);
 GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
 
-#############################
-### Simulate HTTP env a bit #
-$_SERVER['SERVER_NAME'] = trim(GDO_DOMAIN, "\r\n\t .");
-$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$_SERVER['HTTP_USER_AGENT'] = 'Firefox Gecko MS Opera';
-$_SERVER['REQUEST_URI'] = '/index.php?mo=' . GDO_MODULE . '&me=' . GDO_METHOD;
-$_SERVER['HTTP_REFERER'] = 'http://'.GDO_DOMAIN.'/index.php';
-$_SERVER['HTTP_ORIGIN'] = '127.0.0.2';
-$_SERVER['SCRIPT_NAME'] = '/index.php';
-$_SERVER['SERVER_SOFTWARE']	= 'Apache/2.4.41 (Win64) PHP/7.4.0';
-$_SERVER['HTTP_HOST'] = GDO_DOMAIN;
-$_SERVER['HTTPS'] = 'off';
-$_SERVER['PHP_SELF'] = '/index.php';
-$_SERVER['QUERY_STRING'] = 'mo=' . GDO_MODULE . '&me=' . GDO_METHOD;
-$_SERVER['REQUEST_METHOD'] = 'GET';
-$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
-#########################################################################
+###########################
+# Simulate HTTP env a bit  #
+CLI::setServerVars();       #
+############################
 
 /** @var $argc int **/
 /** @var $argv string[] **/
@@ -77,10 +67,15 @@ Database::instance()->queryWrite("DROP DATABASE IF EXISTS " . GDO_DB_NAME);
 Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
 Database::instance()->useDatabase(GDO_DB_NAME);
 
-echo "Loading modules from filesystem\n";
-$modules = $loader->loadModules(false, true);
-
 FileUtil::removeDir(GDO_PATH . '/temp_test');
+
+# 1. Try the install process
+echo "Running installer first...\n";
+$install = $loader->loadModuleFS('Install', true, true);
+runTestSuite($install);
+
+echo "Loading modules from filesystem...\n";
+$modules = $loader->loadModules(false, true);
 
 if ($argc === 2)
 {
@@ -138,12 +133,7 @@ foreach ($modules as $module)
         echo "Installing {$module->getName()}\n";
         Installer::installModule($module);
     }
-    
-    $testDir = $module->filePath('Test');
-    if (FileUtil::isDir($testDir))
-    {
-        runTestSuite($module);
-    }
+	runTestSuite($module);
 }
 
 echo "Finished.\n";

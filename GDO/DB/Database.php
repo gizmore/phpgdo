@@ -35,7 +35,8 @@ class Database
 	
 	# Connection
 	private mysqli $link;
-	private string $host, $user, $pass, $db;
+	private string $host, $user, $pass;
+	private string $usedb, $db; # used and configured db.
 
 	# Debug
 	private int $debug = 0; # Set to 0/off, 1/on, 2/backtraces
@@ -69,20 +70,29 @@ class Database
 	 */
 	private static array $COLUMNS = [];
 	
-	public static function init() : self
+	public static function init(?string $databaseName=GDO_DB_NAME) : self
 	{
 		Cache::init();
-	    return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, GDO_DB_NAME, GDO_DB_DEBUG);
+	    return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, $databaseName, GDO_DB_DEBUG);
 	}
 	
-	public function __construct(string $host, string $user, string $pass, string $db, int $debug=0)
+	public function __construct(string $host, string $user, string $pass, string $db = null, int $debug=0)
 	{
 		self::$INSTANCE = $this;
 		$this->debug = $debug;
 		$this->host = $host;
 		$this->user = $user;
 		$this->pass = $pass;
+		if ($db)
+		{
+			$this->db = $db;
+		}
+	}
+	
+	public function db(string $db)
+	{
 		$this->db = $db;
+		return $this;
 	}
 	
 	public function __destruct()
@@ -101,7 +111,12 @@ class Database
 	
 	public function getLink() : mysqli
 	{
-		return isset($this->link) ? $this->link : $this->openLink();
+		$this->link = isset($this->link) ? $this->link : $this->openLink();
+		if ( (!isset($this->usedb)) && (isset($this->db)) )
+		{
+			$this->useDatabase($this->db);
+		}
+		return $this->link;
 	}
 	
 	private function openLink() : mysqli
@@ -114,6 +129,10 @@ class Database
 				# This is more like a read because nothing is written to the disk.
 				$this->queryRead("SET NAMES UTF8");
 				$this->queryRead("SET time_zone = '+00:00'");
+				if (isset($this->db))
+				{
+					$this->useDatabase($this->db);
+				}
 				return $this->link;
 			}
 		}
@@ -131,7 +150,7 @@ class Database
 	
 	public function connect() : mysqli
 	{
-		return mysqli_connect($this->host, $this->user, $this->pass, $this->db);
+		return mysqli_connect($this->host, $this->user, $this->pass);
 	}
 	
 	#############
@@ -256,6 +275,17 @@ class Database
 	}
 	
 	/**
+	 * Clear cache for all GDO.
+	 */
+	public static function clearCache() : void
+	{
+		foreach (self::$TABLES as $gdo)
+		{
+			$gdo->clearCache();
+		}
+	}
+	
+	/**
 	 * Extract name from gdo columns for hashmap.
 	 * @param GDT[] $gdoColumns
 	 * @return GDT[]
@@ -274,7 +304,7 @@ class Database
 	 * @param string $classname
 	 * @return GDT[]
 	 */
-	public static function &columnsS($classname) : array
+	public static function &columnsS(string $classname) : array
 	{
 		if (!isset(self::$COLUMNS[$classname]))
 		{
@@ -368,19 +398,20 @@ class Database
 	###################
 	### DB Creation ###
 	###################
-	public function createDatabase($databaseName)
+	public function createDatabase(string $databaseName)
 	{
 		return $this->queryWrite("CREATE DATABASE $databaseName");
 	}
 	
-	public function dropDatabase($databaseName)
+	public function dropDatabase(string $databaseName)
 	{
 		return $this->queryWrite("DROP DATABASE $databaseName");
 	}
 	
-	public function useDatabase($databaseName)
+	public function useDatabase(string $databaseName)
 	{
-	    return $this->queryRead("USE $databaseName");
+		$this->usedb = $databaseName;
+		return $this->queryRead("USE $databaseName");
 	}
 	
 	###################

@@ -27,7 +27,7 @@ use GDO\Date\GDO_Timezone;
  * Adds cli test function for convinient testing.
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.0
  * @since 6.10.1
  */
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -54,6 +54,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
         # Increase Time
         Application::updateTime();
         
+    	Application::instance()->cli(false);
+        
         # Increase IP
         GDT_IP::$CURRENT = $this->nextIP();
         
@@ -64,9 +66,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
         Application::$RESPONSE_CODE = 200;
         
         # Clear navs
-        $p = GDT_Page::$INSTANCE;
+        $p = GDT_Page::instance();
         $p->reset();
-        GDT_Response::newWith();
+//         GDT_Response::newWith();
         
         # Set gizmore user
         if (Module_User::instance()->isPersisted())
@@ -209,7 +211,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         {
             # Clean
             $_REQUEST = $_GET = $_POST = [];
-            GDT_Page::$INSTANCE->reset();
+            GDT_Page::instance()->reset();
             GDT_Response::newWith();
             Application::instance()->cli(true);
             

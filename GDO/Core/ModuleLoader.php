@@ -20,11 +20,12 @@ use GDO\CLI\CLIUtil;
  */
 final class ModuleLoader
 {
+	private static self $INSTANCE;
+
 	/**
 	 * @return ModuleLoader
 	 */
 	public static function instance() : self { return self::$INSTANCE; }
-	private static ModuleLoader $INSTANCE;
 	
 	/**
 	 * Base modules path, the modules folder.
@@ -73,6 +74,11 @@ final class ModuleLoader
 	        self::$ENABLED_MODULES = &$enabled;
 	    }
 	    return self::$ENABLED_MODULES;
+	}
+	
+	public function flushEnabledModules() : void
+	{
+		self::$ENABLED_MODULES = null;
 	}
 	
 	/**
@@ -217,9 +223,7 @@ final class ModuleLoader
 	{
 		if ($refresh)
 		{
-		    $this->loadedDB = false;
-		    $this->loadedFS = false;
-			$this->modules = [];
+			$this->reset();
 		}
 		
 		# Load maybe 0, 1 or 2 sources
@@ -254,6 +258,19 @@ final class ModuleLoader
 			$this->initModules();
 		}
 		return $this->modules;
+	}
+	
+	/**
+	 * Force module reloading.
+	 * @return true
+	 */
+	public function reset() : bool
+	{
+		$this->loadedDB = false;
+		$this->loadedFS = false;
+		$this->modules = [];
+		self::$ENABLED_MODULES = null;
+		return true;
 	}
 	
 	private function loadModulesDB()

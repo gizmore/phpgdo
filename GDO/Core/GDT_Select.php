@@ -308,19 +308,19 @@ class GDT_Select extends GDT_ComboBox
 	################
 	### Multiple ###
 	################
-	public $multiple = false;
-	public function multiple($multiple=true) : self { $this->multiple = $multiple; return $this; }
+	public bool $multiple = false;
+	public function multiple(bool $multiple=true) : self { $this->multiple = $multiple; return $this; }
 	public function htmlMultiple() : string { return $this->multiple ? ' multiple="multiple"' : ''; }
 	
-	public $minSelected;
-	public $maxSelected;
-	public function minSelected($minSelected) : self
+	public ?int $minSelected;
+	public ?int $maxSelected;
+	public function minSelected(int $minSelected) : self
 	{
 		$this->minSelected = $minSelected;
 		return $this;
 	}
 	
-	public function maxSelected($maxSelected) : self
+	public function maxSelected(int $maxSelected) : self
 	{
 		$this->maxSelected = $maxSelected;
 		return $this->multiple($maxSelected > 1);

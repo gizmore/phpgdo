@@ -3,7 +3,9 @@ namespace GDO\Core;
 
 /**
  * A secret is a config string that is shown as asterisks to the user.
- * In various transport protocols (json, websocket) this field is not transmitted.
+ * In most(all?) transport protocols (json, websocket) this field is not transmitted.
+ * 
+ * @see GDT_String
  * 
  * @author gizmore
  * @version 7.0.0
@@ -11,12 +13,11 @@ namespace GDO\Core;
  */
 class GDT_Secret extends GDT_String
 {
-    public function isSerializable() : bool { return false; }
-
     public bool $hidden = true;
-    public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	
-	public function renderCell() { return '********'; }
+    public function isSerializable() : bool { return false; }
+
+	public function renderCell() : string { return '****'; }
 
 }

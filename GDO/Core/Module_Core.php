@@ -34,7 +34,7 @@ final class Module_Core extends GDO_Module
 	 * Sometimes just counts up to be in sync and poison some other module caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.0-r1012';
+	const GDO_REVISION = '7.0.0-r1015';
 	
 	##############
 	### Module ###
@@ -75,9 +75,9 @@ final class Module_Core extends GDO_Module
 	public function onInstall() : void
 	{
 		FileUtil::createDir(GDO_PATH.'assets');
-		FileUtil::createDir(GDO_PATH.'temp');
-		FileUtil::createDir(GDO_PATH.'temp/cache');
-		FileUtil::createFile(GDO_PATH.'temp/ipc.socket');
+		FileUtil::createDir(GDO_TEMP_PATH);
+		FileUtil::createDir(GDO_TEMP_PATH.'cache');
+		FileUtil::createFile(GDO_TEMP_PATH.'ipc.socket');
 	}
 	
 	##############
@@ -103,8 +103,8 @@ final class Module_Core extends GDO_Module
 	/**
 	 * @return GDO_User
 	 */
-	public function cfgSystemUser() { return $this->getConfigValue('system_user'); }
-	public function cfgSystemUserID() { return $this->getConfigVar('system_user'); }
+	public function cfgSystemUser() : GDO_User { return $this->getConfigValue('system_user'); }
+	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
 	public function cfgShowImpressum() { return $this->getConfigVar('show_impressum'); }
 	public function cfgShowPrivacy() { return $this->getConfigVar('show_privacy'); }
 	public function cfgAssetVersion() { return sprintf('%.02f', $this->getConfigVar('asset_revision')); }
@@ -121,7 +121,7 @@ final class Module_Core extends GDO_Module
 	#############
 	public function onInitSidebar() : void
 	{
-		$navbar = GDT_Page::$INSTANCE->bottomNav;
+		$navbar = GDT_Page::instance()->bottomNav;
 		if ($this->cfgShowImpressum())
 		{
 			$navbar->addField(GDT_Link::make('link_impressum')->href(href('Core', 'Impressum')));

@@ -96,4 +96,16 @@ trait WithFields
 		return parent::make($name)->addFields(...$fields);
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function render() : string
+	{
+		$rendered = '';
+		$this->withFields(function(GDT $gdt) use(&$rendered) {
+			$rendered .= $gdt->render();
+		});
+		return $rendered;
+	}
+
 }

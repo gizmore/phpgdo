@@ -8,8 +8,9 @@ class GDT_Toolbar extends GDT
 {
 	use WithFields;
 	
-	public function renderCell()
+	public function renderCell() : string
 	{
 		return GDT_Template::php('UI', 'cell/toolbar.php', ['field' => $this]);
 	}
+
 }

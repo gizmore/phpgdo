@@ -16,7 +16,7 @@ use GDO\UI\GDT_SearchField;
  */
 final class TimezoneComplete extends MethodCompletion
 {
-	public function isUserRequired() { return false; }
+	public function isUserRequired() : bool { return false; }
 	
 	public function gdoParameters() : array
 	{

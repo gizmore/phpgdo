@@ -1,42 +1,29 @@
 <?php
 namespace GDO\Admin;
 
-use GDO\Core\GDO_Module;
 use GDO\Core\GDO;
-use GDO\Core\GDT_Float;
+use GDO\Core\GDT_Version;
 
-final class GDT_ModuleVersionFS extends GDT_Float
+/**
+ * The filesystem version of a module.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 6.3.0
+ */
+final class GDT_ModuleVersionFS extends GDT_Version
 {
-	/**
-	 * @return GDO_Module
-	 */
-	public function getModule() { return $this->gdo; }
-	
-	protected function __construct()
-	{
-		parent::__construct();
-		$this->decimals(2);
-	}
-	
 	public function gdo(GDO $gdo=null) : self
 	{
-	    $this->var = $gdo->module_version;
+	    $this->var = $gdo->version;
 	    return $this;
 	}
 	
-// 	public function renderCell()
-// 	{
-// 		$this->c
-// 		$module = $this->getModule();
-// 		$class = $module->canUpdate() ? ' class="can-update"' : '';
-// 		return sprintf('<div%s>%.02f</div>', $class, $this->gdo->module_version);
-// 	}
-
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
 		$va = $a->version;
 		$vb = $b->version;
-		return $va == $vb ? 0 : ($va < $vb ? -1 : 1);
+		return $va === $vb ? 0 : ($va < $vb ? -1 : 1);
 	}
 	
 	public function getVar() : ?string

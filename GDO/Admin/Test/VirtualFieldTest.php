@@ -16,7 +16,7 @@ final class VirtualFieldTest extends TestCase
         $mod = Module_Core::instance();
         $gdt = GDT_ModuleVersionFS::make()->gdo($mod);
         $html = $gdt->displayVar($gdt->getVar());
-        assertEquals("6.11", $html);
+        assertEquals("7.0.0", $html);
     }
     
     public function testCustomField()

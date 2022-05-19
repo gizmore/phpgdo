@@ -2,21 +2,24 @@
 namespace GDO\Table;
 
 use GDO\Core\GDT;
+use GDO\Core\WithGDO;
 
 /**
  * Rendering wrapper for GDOs.
  * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 6.2.0
  */
 final class GDT_GDO extends GDT
 {
-	public function renderCard() { return $this->gdo->renderCard(); }
-	public function renderCell() { return $this->gdo->renderCell(); }
+	use WithGDO;
+	
+	public function renderCard() : string { return $this->gdo->renderCard(); }
+	public function renderCell() : string { return $this->gdo->renderCell(); }
 	public function renderCLI() : string { return $this->gdo->renderCLI(); }
-	public function renderList() { return $this->gdo->renderList(); }
+	public function renderChoice() : string { return $this->gdo->renderChoice(); }
 	public function renderJSON() { return $this->gdo->renderJSON(); }
-	public function renderXML() { return $this->gdo->renderXML(); }
+	public function renderXML() : string { return $this->gdo->renderXML(); }
 	
 }

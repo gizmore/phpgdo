@@ -362,7 +362,7 @@ final class Query
 	 * @param string $order
 	 * @return self
 	 */
-	public function order(string $order) : self
+	public function order(string $order = null) : self
 	{
 		if ($order)
 		{

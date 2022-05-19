@@ -122,7 +122,7 @@ class GDT_AntiCSRF extends GDT_Hidden
 	################
 	### Validate ###
 	################
-	public function validate($value)
+	public function validate($value) : bool
 	{
 	    $headers = getallheaders();
 	    if (isset($headers['X-CSRF-TOKEN']))

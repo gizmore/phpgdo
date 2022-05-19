@@ -11,6 +11,7 @@ namespace GDO\Core;
 trait WithInstance
 {
 	private static self $INSTANCE;
+	
 	public static function instance()
 	{
 		if (!isset(self::$INSTANCE))
@@ -20,9 +21,9 @@ trait WithInstance
 		return self::$INSTANCE;
 	}
 	
-	protected function __construct() 
-	{
-		self::$INSTANCE = $this;
-	}
+// 	protected function __construct() 
+// 	{
+// 		self::$INSTANCE = $this;
+// 	}
 
 }

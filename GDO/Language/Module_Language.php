@@ -98,7 +98,7 @@ final class Module_Language extends GDO_Module
 	{
 		if ($this->cfgSwitchLeft())
 		{
-		    $navbar = GDT_Page::$INSTANCE->leftNav;
+		    $navbar = GDT_Page::instance()->leftNav;
 		    $navbar->addField(GDT_LangSwitch::make());
 		    $navbar->addField(GDT_Divider::make());
 		}

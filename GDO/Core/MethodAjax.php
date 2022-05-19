@@ -17,7 +17,6 @@ namespace GDO\Core;
  */
 abstract class MethodAjax extends Method
 {
-    public function isCLI() { return false; }
     public function isAjax() { return true; }
 	public function saveLastUrl() { return false; }
 	public function isSEOIndexed() { return false; }

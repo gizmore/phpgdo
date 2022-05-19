@@ -6,9 +6,19 @@ use GDO\UI\GDT_Button;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Form\GDT_Form;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
+use GDO\UI\GDT_Label;
+use GDO\Core\GDT;
 
 final class UITest extends TestCase
 {
+	public function testSimpleLabel()
+	{
+		$label = GDT_Label::make()->labelRaw('teyst');
+		$result = $label->renderMode(GDT::RENDER_CELL);
+		assertStringContainsString("teyst", $result, 'Test if basic rendering works.');
+		assertStringContainsString("<label", $result, 'Test if basic html rendering works.');
+	}
+	
     public function testButtons()
     {
         $btn = GDT_Button::make()->href(hrefDefault());

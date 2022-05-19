@@ -15,9 +15,10 @@ final class UserTest extends TestCase
     {
         $u1 = Module_Core::instance()->cfgSystemUser();
         $u2 = GDO_User::system();
+        assertTrue($u1 === $u2, 'Test single identity cache with system user.');
+
         $id = Module_Core::instance()->cfgSystemUserID();
-        assertTrue($u1 === $u2);
-        assertEquals($id, $u1->getID(), 'Test single identity cache with system user');
+        assertEquals($id, $u1->getID(), 'Test single identity cache with config system user.');
     }
     
     public function testGuestCreation()

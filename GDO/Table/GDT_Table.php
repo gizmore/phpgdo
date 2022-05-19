@@ -85,9 +85,14 @@ class GDT_Table extends GDT
 	# ####################
 	# ## Header fields ###
 	# ####################
-	public function getHeaderFields()
+	/**
+	 * @return GDT[]
+	 */
+	public function getHeaderFields() : array
 	{
-		return $this->headers ? $this->headers->getFields() : [];
+		return isset($this->headers) ?
+			$this->headers->getFieldsRec() :
+			GDT::EMPTY_ARRAY;
 	}
 
 	/**

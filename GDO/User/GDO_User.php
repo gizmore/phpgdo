@@ -4,7 +4,10 @@ namespace GDO\User;
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Crypto\GDT_PasswordHash;
+use GDO\Date\GDT_Timezone;
+use GDO\Date\Time;
 use GDO\Session\GDO_Session;
+use GDO\Language\GDT_Language;
 
 /**
  * The holy user class.
@@ -19,6 +22,10 @@ use GDO\Session\GDO_Session;
  */
 final class GDO_User extends GDO
 {
+	const GUEST_NAME_PREFIX = '~';
+	const GHOST_NAME_PREFIX = '~~';
+	
+	# Instances
 	private static self $SYSTEM;
 	private static self $CURRENT;
 	
@@ -44,9 +51,13 @@ final class GDO_User extends GDO
 	 * Not neccisarilly via session!
 	 * @return self
 	 */
-	public static function current() : ?self
+	public static function current() : self
 	{
-		return isset(self::$CURRENT) ? self::$CURRENT : null;
+		if (!isset(self::$CURRENT))
+		{
+			self::$CURRENT = self::ghost();
+		}
+		return self::$CURRENT;
 	}
 	
 	public static function setCurrent(GDO_User $user)
@@ -78,9 +89,51 @@ final class GDO_User extends GDO
 			GDT_AutoInc::make('user_id'),
 			GDT_UserType::make('user_type'),
 			GDT_Username::make('user_name'),
+			GDT_Username::make('user_guest_name')->unique(),
+			GDT_Language::make('user_language')->notNull()->initial(GDO_LANGUAGE),
+			GDT_Timezone::make('user_timezone')->notNull()->initial('1')->cascadeRestrict(),
 			GDT_Level::make('user_level'),
 			GDT_PasswordHash::make('user_password'),
 		];
+	}
+	
+	##############
+	### Getter ###
+	##############
+	public function getType() : string { return $this->gdoVar('user_type'); }
+	public function getLangISO() : string { return $this->gdoVar('user_language'); }
+	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
+	
+	### Type ###
+	############
+	
+	public function isBot() { return $this->isType(GDT_UserType::BOT); }
+	public function isGhost() { return $this->isType(GDT_UserType::GHOST); }
+	public function isAnon() { return $this->isGuest() && (!$this->getGuestName()); }
+	public function isMember() { return $this->isType(GDT_UserType::MEMBER); }
+	public function isType($type) { return $this->getType() === $type; }
+	public function isGuest(bool $andAuthenticated=true) : bool
+	{
+		$a = $andAuthenticated;
+		return $this->isType(GDT_UserType::GUEST) ?
+			($a ? (!!$this->getGuestName()) : true) : # guest type checks for auth or true
+			false; # non guest
+	}
+	
+	
+	
+	################
+	### Timezone ###
+	################
+	/**
+	 * Get the appropiate timezone object for this user.
+	 * @return \DateTimeZone
+	 */
+	public function getTimezone() : string { return $this->getVar('user_timezone') > 1 ? $this->getVar('user_timezone') : GDO_Session::get('timezone', '1'); }
+	
+	public function getTimezoneObject()
+	{
+		return Time::getTimezoneObject($this->getTimezone());
 	}
 	
 	#############

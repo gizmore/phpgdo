@@ -5,7 +5,7 @@ use GDO\Core\GDT_UInt;
 
 /**
  * Items per page for headers.
- * Defaults to Module_Table->cfgIPP()
+ * Defaults to Module_Table->cfgIPP() (cli and http variants exist)
  * 
  * @author gizmore
  * @version 7.0.0

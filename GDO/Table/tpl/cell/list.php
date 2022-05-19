@@ -47,7 +47,7 @@ echo $pagemenu;
 <?php
 $dummy = $field->fetchAs->cache->getDummy();
 while ($gdo = $result->fetchInto($dummy)) :
-	echo $template->gdo($gdo)->renderList();
+	echo $template->gdo($gdo)->renderChoice();
 endwhile;
 ?>
 </div>

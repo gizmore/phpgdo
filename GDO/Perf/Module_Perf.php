@@ -9,7 +9,7 @@ use GDO\UI\GDT_Page;
 /**
  * Performance statistics in footer.
  * Config perf_bottom_bar to restrict footer to staff or all or none.
- * This module is part of the gdo6 core.
+ * This module is part of the gdo7 core.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -48,7 +48,7 @@ final class Module_Perf extends GDO_Module
 	    }
 	    if ($show)
 	    {
-	        GDT_Page::$INSTANCE->bottomNav->addField(GDT_PerfBar::make('perf'));
+	        GDT_Page::instance()->bottomNav->addField(GDT_PerfBar::make('perf'));
 	    }
 	}
 

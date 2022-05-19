@@ -15,6 +15,8 @@ final class GDT_Timezone extends GDT_ObjectSelect
     public function defaultName() { return 'timezone'; }
     public function defaultLabel() : self { return $this->label('timezone'); }
     
+    public function isSearchable() : bool { return false; }
+    
     protected function __construct()
     {
         parent::__construct();
@@ -23,7 +25,6 @@ final class GDT_Timezone extends GDT_ObjectSelect
         $this->initial('1');
         $this->icon('time');
         $this->completionHref(href('Date', 'TimezoneComplete'));
-        $this->searchable(false);
     }
     
     public function plugVar() : string

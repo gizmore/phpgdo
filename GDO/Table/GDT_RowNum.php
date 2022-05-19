@@ -11,16 +11,17 @@ use GDO\Core\GDT_Checkbox;
  */
 final class GDT_RowNum extends GDT_Checkbox
 {
-	public $multiple = true;
+	public int $num = 0;
+
+	public bool $multiple = true;
 	
-	public $orderable = false;
+	public function isOrderable() : bool { return false; }
 	
-	public $name = 'rbx';
-	public function name($name=null) { return $this; }
+	public ?string $name = 'rbx';
+	public function name(string $name=null) : self { return $this; }
 	
-	public $num = 0;
 	
-	public $toggleAll = false;
+	public bool $toggleAll = false;
 	public function toggleAll($toggleAll)
 	{
 		$this->toggleAll = $toggleAll;
@@ -32,7 +33,7 @@ final class GDT_RowNum extends GDT_Checkbox
 	###############################
 	public function displayHeaderLabel() { return ''; }
 
-	public function renderHeader()
+	public function renderHeader() : string
 	{
 		return GDT_Template::php('Table', 'filter/rownum.php', ['field'=>$this]);
 	}

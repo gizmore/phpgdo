@@ -1,17 +1,21 @@
 <?php
 namespace GDO\UI;
+
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT;
+use GDO\Core\WithFields;
 
 /**
- * A navigation tab menu.
+ * A navigation tab menu with tabs.
  * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 6.2.0
  */
 final class GDT_Tabs extends GDT
 {
+	use WithFields;
+	
 	public function defaultName()
 	{
 		return 'tabs';
@@ -20,22 +24,23 @@ final class GDT_Tabs extends GDT
 	/**
 	 * @var GDT_Tab[]
 	 */
-	private $tabs = [];
-	public function getTabs()
+// 	private $tabs = [];
+	public function getTabs() : array
 	{
-		return $this->tabs;
+		return $this->getFields();
 	}
 
 	public function tab(GDT_Tab $tab)
 	{
-		$this->tabs[] = $tab;
-		return $this;
+		return $this->addField($tab);
+// 		$this->tabs[] = $tab;
+// 		return $this;
 	}
 	
-	public function getFields()
-	{
-		return $this->tabs;
-	}
+// 	public function getFields() : array
+// 	{
+// 		return $this->tabs;
+// 	}
 	
 	##############
 	### Render ###

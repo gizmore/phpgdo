@@ -1,16 +1,16 @@
 <?php
 namespace GDO\CLI;
 
-use GDO\Core\GDO_ArgException;
 use GDO\UI\GDT_Error;
-use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Error;
+use GDO\Core\GDO_ArgException;
+use GDO\Core\GDT_Response;
+use GDO\Core\ModuleLoader;
 use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
 use GDO\Form\GDT_Submit;
 use GDO\Util\Strings;
-use GDO\Net\GDT_Url;
 
 /**
  * CLI utilities.
@@ -19,7 +19,7 @@ use GDO\Net\GDT_Url;
  * @see Method
  * 
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.10.2
  */
 final class CLI
@@ -72,12 +72,12 @@ final class CLI
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
     }
     
-    public static function br2nl($s, $nl=PHP_EOL)
+    public static function br2nl(string $s, string $nl=PHP_EOL) : string
     {
         return preg_replace('#< *br */? *>#is', $nl, $s);
     }
     
-    public static function htmlToCLI($html)
+    public static function htmlToCLI(string $html) : string
     {
         $html = preg_replace('/<a .*href="([^"]+)".*>([^<]+)<\\/a>/ius', "$1 ($2)", $html);
         $html = self::br2nl($html);
@@ -86,86 +86,86 @@ final class CLI
         return $html;
     }
     
-    public static function execute($line)
-    {
-        if (!($line = trim($line, "\r\n\t ")))
-        {
-            throw new GDOError('err_need_input');
-        }
+//     public static function execute($line)
+//     {
+//         if (!($line = trim($line, "\r\n\t ")))
+//         {
+//             throw new GDO_Error('err_need_input');
+//         }
             
-        # Parse 'module.method' part
-        $mome = trim(Strings::substrTo($line, ' ', $line), '"');
-        $lin = Strings::substrFrom($line, ' ', '');
+//         # Parse 'module.method' part
+//         $mome = trim(Strings::substrTo($line, ' ', $line), '"');
+//         $lin = Strings::substrFrom($line, ' ', '');
         
-        $matches = null;
-        if (preg_match('#^([a-z]+)\\.?([a-z]*)(\\.?)([a-z]*)$#iD', $mome, $matches))
-        {
-            $mo = $matches[1];
-            $me = @$matches[2];
-            $exec = $lin ? true : (!!@$matches[3]);
-            $button = @$matches[4] ? $matches[4] : null;
-        }
-        else
-        {
-            throw new GDOError('err_module_method');
-        }
+//         $matches = null;
+//         if (preg_match('#^([a-z]+)\\.?([a-z]*)(\\.?)([a-z]*)$#iD', $mome, $matches))
+//         {
+//             $mo = $matches[1];
+//             $me = @$matches[2];
+//             $exec = $lin ? true : (!!@$matches[3]);
+//             $button = @$matches[4] ? $matches[4] : null;
+//         }
+//         else
+//         {
+//             throw new GDO_Error('err_module_method');
+//         }
         
-        if (!($module = ModuleLoader::instance()->getModule($mo, true)))
-        {
-            throw new GDOError('err_module_method');
-        }
+//         if (!($module = ModuleLoader::instance()->getModule($mo, true)))
+//         {
+//             throw new GDO_Error('err_module_method');
+//         }
         
-        if (!$module->isEnabled())
-        {
-            return GDT_Error::responseWith('err_method_disabled');
-        }
+//         if (!$module->isEnabled())
+//         {
+//             return GDT_Error::responseWith('err_method_disabled');
+//         }
         
-        if (!$me)
-        {
-            return self::showMethods($module);
-        }
+//         if (!$me)
+//         {
+//             return self::showMethods($module);
+//         }
         
-        $method = $module->getMethodByName($me);
-        if (!$method)
-        {
-            throw new GDOError('err_module_method');
-        }
+//         $method = $module->getMethodByName($me);
+//         if (!$method)
+//         {
+//             throw new GDO_Error('err_module_method');
+//         }
         
-        if (!$exec)
-        {
-            return self::showHelp($method);
-        }
+//         if (!$exec)
+//         {
+//             return self::showHelp($method);
+//         }
 
-        if (!$button)
-        {
-            if ($buttons = $method->getButtons())
-            {
-                $button = array_keys($buttons)[0];
-            }
+//         if (!$button)
+//         {
+//             if ($buttons = $method->getButtons())
+//             {
+//                 $button = array_keys($buttons)[0];
+//             }
             
-        }
+//         }
         
-        # Parse everything after
-        $params = self::parseArgline($lin, $method);
-//         Logger::log('cli', 'PARAMS: ' . json_encode($params));
+//         # Parse everything after
+//         $params = self::parseArgline($lin, $method);
+// //         Logger::log('cli', 'PARAMS: ' . json_encode($params));
         
-        if ($button)
-        {
-            $params[$button] = $button;
-        }
+//         if ($button)
+//         {
+//             $params[$button] = $button;
+//         }
         
-        $method->requestParameters($params);
+//         $method->requestParameters($params);
         
-        # Execute the method
-        try
-        {
-            return $method->exec();
-        }
-        catch (GDOParameterException $ex)
-        {
-            return GDT_Response::makeWithHTML($ex->getMessage());
-        }
-    }
+//         # Execute the method
+//         try
+//         {
+//             return $method->exec();
+//         }
+//         catch (GDO_ArgException $ex)
+//         {
+//             return GDT_Response::makeWithHTML($ex->getMessage());
+//         }
+//     }
     
     private static function showHelp(Method $method)
     {
@@ -344,6 +344,6 @@ final class CLI
 }
 
 # Required gdo constants :(
-if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', 'gdo6.localhost');
+if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', 'gdo7.localhost');
 if (!defined('GDO_MODULE')) define('GDO_MODULE', 'Core');
 if (!defined('GDO_METHOD')) define('GDO_METHOD', 'Welcome');

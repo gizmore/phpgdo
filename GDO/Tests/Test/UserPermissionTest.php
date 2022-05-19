@@ -2,8 +2,8 @@
 namespace GDO\Tests\Test;
 
 use GDO\User\GDO_User;
-use GDO\Util\BCrypt;
 use GDO\User\GDO_UserPermission;
+use GDO\Crypto\BCrypt;
 use GDO\Tests\MethodTest;
 use GDO\Tests\TestCase;
 use function PHPUnit\Framework\assertTrue;
@@ -13,7 +13,7 @@ use function PHPUnit\Framework\assertFalse;
  * Generate a few users to work with.
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.0
  * @since 6.10.0
  */
 final class UserPermissionTest extends TestCase

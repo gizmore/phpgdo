@@ -14,7 +14,11 @@ use GDO\Session\GDO_Session;
  */
 final class Module_User extends GDO_Module
 {
+	##############
+	### Module ###
+	##############
 	public int $priority = 4; # start very early
+	
 	
 	public function getDependencies() : array
 	{

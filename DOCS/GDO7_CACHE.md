@@ -4,14 +4,13 @@ There are 3 caches in use.
 
  - Process GDO object cache
  - Memcached GDO object cache
- - Filecache (pre-rendered)
+ - Filecache (pre-rendered output, lang files, etc)
 
 
-## GDOv7 Process Cache
+## GDOv7 [Process Cache](../GDO/DB/Cache.php)
 
 
-## GDOv7 Memcached Cache
+## GDOv7 [Memcached](../GDO/DB/Cache.php)
 
 
-## GDOv7 File Cache
-
+## GDOv7 [File Cache](../GDO/DB/Cache.php)

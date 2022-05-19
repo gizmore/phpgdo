@@ -71,7 +71,7 @@ class GDT_List extends GDT_Table
 	    $table = $result->table;
 	    while ($gdo = $table->fetch($result))
 	    {
-	        $gdo->renderList();
+	        $gdo->renderChoice();
 	    }
 	    return $this->data;
 	}

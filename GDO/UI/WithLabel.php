@@ -37,6 +37,11 @@ trait WithLabel
 		return $this;
 	}
 	
+	public function noLabel() : self
+	{
+		return $this->labelRaw('');
+	}
+	
 	public function hasLabel() : bool
 	{
 		return $this->labelKey || $this->labelRaw;
@@ -51,7 +56,7 @@ trait WithLabel
 		{
 			return t($this->labelKey, $this->labelArgs);
 		}
-		elseif ($this->labelRaw)
+		elseif ($this->labelRaw !== null)
 		{
 			return $this->labelRaw;
 		}

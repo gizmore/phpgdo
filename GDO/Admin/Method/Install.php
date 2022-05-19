@@ -3,6 +3,8 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
+use GDO\Core\GDT_Module;
 use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
@@ -12,7 +14,6 @@ use GDO\Install\Installer;
 use GDO\Core\ModuleLoader;
 use GDO\UI\GDT_Button;
 use GDO\Util\Strings;
-use GDO\Core\GDT_Module;
 use GDO\Util\Common;
 
 /**
@@ -30,7 +31,7 @@ class Install extends MethodForm
 	
 	public function formName() { return 'form_install'; }
 	public function getPermission() : ?string { return 'admin'; }
-	public function beforeExecute() {} # hide tabs (multi method configure page fix)
+	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	
 	/**
 	 * @var GDO_Module
@@ -44,7 +45,7 @@ class Install extends MethodForm
 	    ];
 	}
 	
-	public function onInit()
+	public function onInit() : void
 	{
 	    $loader = ModuleLoader::instance();
 		$moduleName = strtolower(Common::getRequestString('module', ''));

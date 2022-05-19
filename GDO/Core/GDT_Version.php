@@ -12,7 +12,7 @@ namespace GDO\Core;
  * @version 7.0.0
  * @since 6.0.0
  */
-final class GDT_Version extends GDT_String
+class GDT_Version extends GDT_String
 {
 	public int $min = 5;
 	public int $max = 14;
@@ -26,11 +26,19 @@ final class GDT_Version extends GDT_String
 	 */
 	public function toVar($value) : ?string
 	{
+		if (!$value)
+		{
+			return null;
+		}
 		return sprintf('%d.%d.%d', $value->major, $value->minor, $value->patch);
 	}
 	
 	public function toValue(string $var)
 	{
+		if (!$var)
+		{
+			return null;
+		}
 		return new Version($var);
 	}
 	

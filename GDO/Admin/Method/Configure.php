@@ -5,6 +5,10 @@ use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDO_ModuleVar;
+use GDO\Core\GDT_Module;
+use GDO\Core\GDT_Name;
+use GDO\Core\GDT_Response;
+use GDO\Core\GDT_Version;
 use GDO\DB\Cache;
 use GDO\File\GDT_Path;
 use GDO\Form\GDT_AntiCSRF;
@@ -16,6 +20,7 @@ use GDO\Core\ModuleLoader;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Panel;
 use GDO\Install\Installer;
+use GDO\Util\Arrays;
 use GDO\Util\Common;
 use GDO\UI\GDT_Container;
 use GDO\Core\GDT;
@@ -47,7 +52,7 @@ class Configure extends MethodForm
 	    ];
 	}
 	
-	public function onInit()
+	public function onInit() : void
 	{
 	    # Load
 	    $modules = ModuleLoader::instance()->loadModules(true, true);

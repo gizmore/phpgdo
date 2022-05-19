@@ -3,9 +3,9 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Table\MethodQueryTable;
+use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\UI\GDT_IconButton;
-use GDO\User\GDT_Username;
 use GDO\User\GDO_User;
 
 /**
@@ -39,15 +39,16 @@ class Users extends MethodQueryTable
 		return [
 			GDT_IconButton::make('edit_admin')->icon('edit'),
 			$gdo->gdoColumn('user_id'),
-			$gdo->gdoColumn('user_country')->withName(false),
-			GDT_String::make('user_name'),
+// 			$gdo->gdoColumn('user_country')->withName(false),
 			$gdo->gdoColumn('user_type'),
+			GDT_String::make('user_name'),
+			GDT_String::make('user_guest_name'),
 			$gdo->gdoColumn('user_level'),
-			GDT_Username::make('username')->orderable(false),
-			$gdo->gdoColumn('user_credits'),
-			$gdo->gdoColumn('user_email'),
-			$gdo->gdoColumn('user_register_time'),
-			$gdo->gdoColumn('user_last_activity'),
+// 			GDT_Username::make('username')->orderable(false),
+// 			$gdo->gdoColumn('user_credits'),
+// 			$gdo->gdoColumn('user_email'),
+// 			$gdo->gdoColumn('user_register_time'),
+// 			$gdo->gdoColumn('user_last_activity'),
 		];
 	}
 	

@@ -16,7 +16,7 @@ final class GDT_PageNum extends GDT_UInt
     public bool $searchable = false;
     public bool $filterable = false;
     
-    public int $bytes = '2';
+    public int $bytes = 2;
     public ?string $initial = '1';
     
     public function defaultLabel() : self { return $this->label('page'); }
