@@ -16,7 +16,10 @@ final class GDT_IPP extends GDT_UInt
 	#############
 	### Field ###
 	#############
-    public function defaultLabel() { return $this->label('ipp'); }
+    public function defaultLabel() : self
+    {
+    	return $this->label('ipp');
+    }
 
     ################
     ### Features ###

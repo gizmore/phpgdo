@@ -16,7 +16,7 @@ use GDO\Core\GDT_UInt;
  */
 class GDT_Sort extends GDT_UInt
 {
-    public function defaultLabel() { return $this->label('sorting'); }
+    public function defaultLabel() : self { return $this->label('sorting'); }
     
 	protected function __construct()
 	{

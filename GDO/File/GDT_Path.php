@@ -16,7 +16,7 @@ final class GDT_Path extends GDT_String
 {
 	public string $pattern = "#^[^?!:]+$#iD";
 	
-	public function defaultLabel() { return $this->label('path'); }
+	public function defaultLabel() : self { return $this->label('path'); }
 	
 	public function htmlClass()
 	{

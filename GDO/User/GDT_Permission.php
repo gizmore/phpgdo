@@ -11,7 +11,7 @@ use GDO\Core\GDT_ObjectSelect;
  */
 final class GDT_Permission extends GDT_ObjectSelect
 {
-	public function defaultLabel() { return $this->label('permission'); }
+	public function defaultLabel() : self { return $this->label('permission'); }
 	
 	protected function __construct()
 	{

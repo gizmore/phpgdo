@@ -453,13 +453,26 @@ elseif ($argv[1] === 'wipe')
 
 elseif ($argv[1] === 'config')
 {
-    if ( ($argc === 2) || ($argc > 5) )
+    if ( ($argc < 2) || ($argc > 5) )
     {
         printUsage();
     }
-    $module = ModuleLoader::instance()->loadModuleFS($argv[2]);
+    
+    if ($argc === 2)
+    {
+    	$modules = ModuleLoader::instance()->getEnabledModules();
+    	$names = array_map(function(GDO_Module $module) { return $module->getName(); }, $modules);
+    	echo t('msg_installed_modules', [implode(', ', $names)]) . "";
+    	die(0);
+    }
     if ($argc === 3)
     {
+    	$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
+	    if ( (!$module) || (!$module->isPersisted()) )
+	    {
+	    	echo t('err_module_disabled', [html($argv[2])]) . "\n";
+	    	die(-1);
+	    }
         if ($config = $module->getConfigCache())
         {
             $vars = [];
@@ -483,7 +496,13 @@ elseif ($argv[1] === 'config')
     $key = $argv[3];
     if ($argc === 4)
     {
-        $config = $module->getConfigColumn($key);
+    	$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
+    	if ( (!$module) || (!$module->isPersisted()) )
+    	{
+    		echo t('err_module_disabled', [html($argv[2])]) . "\n";
+    		die(-1);
+    	}
+    	$config = $module->getConfigColumn($key);
         echo t('msg_set_config', [$key, $module->getName(), $config->initial, $config->gdoExampleVars()]);
         echo PHP_EOL;
         die(0);
@@ -492,7 +511,13 @@ elseif ($argv[1] === 'config')
     $var = $argv[4];
     if ($argc === 5)
     {
-        $gdt = $module->getConfigColumn($key)->var($var);
+    	$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
+    	if ( (!$module) || (!$module->isPersisted()) )
+    	{
+    		echo t('err_module_disabled', [html($argv[2])]) . "\n";
+    		die(-1);
+    	}
+    	$gdt = $module->getConfigColumn($key)->var($var);
         if (!$gdt->validate($gdt->toValue($var)))
         {
             echo json_encode($gdt->configJSON());

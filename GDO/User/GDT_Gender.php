@@ -16,7 +16,7 @@ class GDT_Gender extends GDT_Enum
 	const MALE = 'male';
 	const FEMALE = 'female';
 	
-	public function defaultLabel() { return $this->label('gender'); }
+	public function defaultLabel() : self { return $this->label('gender'); }
 	
 	protected function __construct()
 	{

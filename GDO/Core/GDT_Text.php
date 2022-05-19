@@ -13,7 +13,7 @@ namespace GDO\Core;
  */
 class GDT_Text extends GDT_String
 {
-	public function defaultLabel() { return $this->label('message'); }
+	public function defaultLabel() : self { return $this->label('message'); }
 	
 	public int $max = 65535;
 	

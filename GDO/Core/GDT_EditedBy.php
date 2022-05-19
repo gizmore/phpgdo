@@ -16,7 +16,7 @@ final class GDT_EditedBy extends GDT_User
 	public bool $hidden = true;
 	public bool $writable = false;
 	
-	public function defaultLabel() { return $this->label('edited_by'); }
+	public function defaultLabel() : self { return $this->label('edited_by'); }
 	
 	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void
 	{

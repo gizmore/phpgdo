@@ -11,7 +11,7 @@ class GDT_IconButton extends GDT_Button
 {
 	use WithIcon;
 	
-	public function defaultLabel() { return $this; }
+	public function defaultLabel() : self { return $this; }
 	
 	public function renderHTML()
 	{

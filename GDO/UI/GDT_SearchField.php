@@ -22,7 +22,7 @@ class GDT_SearchField extends GDT_String
 	public bool $hidden = true;
     
     public function defaultName() { return 'search'; }
-	public function defaultLabel() { return $this->label('search'); }
+	public function defaultLabel() : self { return $this->label('search'); }
 	
     public function isSerializable() : bool { return false; }
     public function isOrderable() : bool { return false; }

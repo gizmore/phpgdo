@@ -13,7 +13,7 @@ use GDO\Util\Random;
 class GDT_Token extends GDT_Char
 {
 	public function defaultName() { return 'token'; }
-	public function defaultLabel() { return $this->label('token'); }
+	public function defaultLabel() : self { return $this->label('token'); }
 	
 	protected function __construct()
 	{

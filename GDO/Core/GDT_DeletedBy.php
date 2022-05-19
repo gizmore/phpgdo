@@ -15,6 +15,6 @@ final class GDT_DeletedBy extends GDT_User
 {
 	public bool $writable = false;
 	public function isHidden() : bool { return true; }
-	public function defaultLabel() { return $this->label('deleted_by'); }
+	public function defaultLabel() : self { return $this->label('deleted_by'); }
 
 }

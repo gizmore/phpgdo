@@ -301,7 +301,7 @@ final class ModuleLoader
 		}
 	}
 	
-	private function loadModulesFS($init=true)
+	private function loadModulesFS(bool $init=true) : void
 	{
 // 	    Trans::inited(false);
 		Filewalker::traverse($this->path, null, null, [$this, '_loadModuleFS'], 0, $init);
@@ -317,11 +317,11 @@ final class ModuleLoader
 		}
 	}
 	
-	public function _loadModuleFS($entry, $path, $init)
+	public function _loadModuleFS(string $entry, string $path, bool $init)
 	{
 		if (FileUtil::isFile("$path/Module_$entry.php"))
 		{
-			$this->loadModuleFS($entry, $init);
+			$this->loadModuleFS($entry, true, $init);
 		}
 	}
 	
@@ -331,9 +331,10 @@ final class ModuleLoader
 	 * @param boolean $throw If it shall throw an exception if not found.
 	 * @return \GDO\Core\GDO_Module
 	 */
-	public function loadModuleFS($name, $throw=true)
+	public function loadModuleFS(string $name, bool $throw=true, bool $init=false)
 	{
 	    $lowerName = strtolower($name);
+	    
 		if (!isset($this->modules[$lowerName]))
 		{
 			$className = "GDO\\$name\\Module_$name";
@@ -348,11 +349,6 @@ final class ModuleLoader
 				    {
 				        GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
 				    }
-// 				    if (!Application::instance()->isInstall())
-// 				    {
-//     				    $module->buildConfigCache();
-//     				    $module->buildSettingsCache();
-// 				    }
 				}
 			}
 			elseif ($throw)
@@ -363,6 +359,12 @@ final class ModuleLoader
 			{
 			    return null;
 			}
+		}
+		if ($init)
+		{
+			$module = $this->modules[$lowerName];
+			$module->buildConfigCache();
+			$this->initModuleVars($module->getName());
 		}
 		return $this->modules[$lowerName];
 	}
@@ -395,7 +397,7 @@ final class ModuleLoader
 	/**
 	 * Load module vars from database.
 	 */
-	public function initModuleVars()
+	public function initModuleVars(string $singleModuleName=null)
 	{
 	    foreach ($this->modules as $module)
 	    {
@@ -407,9 +409,13 @@ final class ModuleLoader
 		{
 		    if (Database::instance())
 		    {
-    		    $result = GDO_ModuleVar::table()->
-        			select('module_name, mv_name, mv_value')->
-    		    	exec();
+    		    $query = GDO_ModuleVar::table()->select('module_name, mv_name, mv_value')->joinObject('mv_module');
+        		if ($singleModuleName)
+        		{
+        			$query->where('module_name='.quote($singleModuleName));
+        		}
+    		    $result = $query->exec();
+    		    
         		# Assign them to the modules
         		while ($row = $result->fetchRow())
         		{
@@ -426,7 +432,8 @@ final class ModuleLoader
 		}
 		catch (\GDO\Core\GDO_DBException $e)
 		{
-		    if (Application::instance()->isCLI())
+			$app = Application::instance();
+		    if ($app->isCLI()) # && (!$app->isInstall()))
 		    {
 		        echo "No database available yet...\n";
 		    }

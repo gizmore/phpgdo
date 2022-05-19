@@ -20,8 +20,8 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			'Core', 'Cronjob', 'Crypto',
-			'Date', 'Language', 'Session',
-			'Table', 'UI',
+			'Date', 'Language', 'Net',
+			'Session', 'Table', 'UI',
 		];
 	}
 	

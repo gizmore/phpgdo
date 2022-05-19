@@ -13,7 +13,7 @@ use GDO\Core\GDT_ObjectSelect;
 final class GDT_Timezone extends GDT_ObjectSelect
 {
     public function defaultName() { return 'timezone'; }
-    public function defaultLabel() { return $this->label('timezone'); }
+    public function defaultLabel() : self { return $this->label('timezone'); }
     
     protected function __construct()
     {

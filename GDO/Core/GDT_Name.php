@@ -13,7 +13,7 @@ class GDT_Name extends GDT_String
 {
 	public function plugVar() : string { return 'Name_' . self::$COUNT; }
 	
-	public function defaultLabel() { return $this->label('name'); }
+	public function defaultLabel() : self { return $this->label('name'); }
 
 	const LENGTH = 64;
 	

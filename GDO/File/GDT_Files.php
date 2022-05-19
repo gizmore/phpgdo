@@ -20,7 +20,7 @@ use GDO\Core\Website;
  */
 class GDT_Files extends GDT_File
 {
-	public function defaultLabel() { return $this->label('files'); }
+	public function defaultLabel() : self { return $this->label('files'); }
 	
 	########################
 	### STUB GDT methods ###

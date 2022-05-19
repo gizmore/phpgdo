@@ -18,7 +18,7 @@ final class GDO_ModuleVar extends GDO
 	public function gdoColumns() : array
 	{
 		return [
-			GDT_Object::make('mv_module_id')->table(GDO_Module::table())->primary(),
+			GDT_Object::make('mv_module')->table(GDO_Module::table())->primary(),
 			GDT_Name::make('mv_name')->primary()->unique(false),
 			GDT_String::make('mv_value'),
 		];
@@ -37,7 +37,7 @@ final class GDO_ModuleVar extends GDO
 		else
 		{
 		    $moduleVar = self::table()->blank([
-    			'mv_module_id' => $module->getID(),
+    			'mv_module' => $module->getID(),
     		    'mv_name' => $gdt->name,
     			'mv_value' => $var,
     		])->replace();
@@ -49,9 +49,9 @@ final class GDO_ModuleVar extends GDO
 	public static function removeModuleVar(GDO_Module $module, $varname)
 	{
 		$varname = GDO::escapeS($varname);
-		self::table()->deleteWhere("mv_module_id={$module->getID()} AND mv_name='$varname'");
+		self::table()->deleteWhere("mv_module={$module->getID()} AND mv_name='$varname'");
 		return self::table()->blank([
-		    'mv_module_id' => $module->getID(),
+		    'mv_module' => $module->getID(),
 		    'mv_name' => $varname,
 		    'mv_value' => null,
 		]);

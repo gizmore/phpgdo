@@ -13,7 +13,7 @@ use GDO\Core\Website;
  */
 final class GDT_Back extends GDT_Link
 {
-	public function defaultLabel() { return $this->label('btn_back'); }
+	public function defaultLabel() : self { return $this->label('btn_back'); }
 
 	protected function __construct()
 	{

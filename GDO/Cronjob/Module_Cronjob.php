@@ -14,6 +14,8 @@ use GDO\Date\Time;
  */
 class Module_Cronjob extends GDO_Module
 {
+	public int $priority = 10;
+	
 	##############
 	### Config ###
 	##############

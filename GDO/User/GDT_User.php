@@ -23,7 +23,7 @@ use GDO\Core\GDT_Object;
  */
 class GDT_User extends GDT_Object
 {
-	public function defaultLabel() { return $this->label('user'); }
+	public function defaultLabel() : self { return $this->label('user'); }
 	
 	protected function __construct()
 	{

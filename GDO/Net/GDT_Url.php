@@ -42,7 +42,7 @@ class GDT_Url extends GDT_String
 	public static function absolute($url) { return sprintf('%s://%s%s', self::protocol(), self::hostWithPort(), $url); }
 	public static function relative($url) { return GDO_WEB_ROOT . $url; }
 	
-	public function defaultLabel() { return $this->label('url'); }
+	public function defaultLabel() : self { return $this->label('url'); }
 	
 	public bool $reachable = false;
 	public bool $allowLocal = true;

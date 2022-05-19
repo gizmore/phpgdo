@@ -56,7 +56,7 @@ class GDO_Module extends GDO
 	 * Override this.
 	 * @return string[]
 	 */
-	public function getDependencies() : array { return GDT::EMPTY_ARRAY; }
+	public function getDependencies() : array { return ['Core']; }
 	
 //     /**
 //      * A list of optional modules that enhance this one.
@@ -255,6 +255,9 @@ class GDO_Module extends GDO
 	##############
 	### Static ###
 	##############
+	/**
+	 * @return self
+	 */
 	public static function instance() : self { return ModuleLoader::instance()->getModule(self::getNameS()); }
 	
 	private static array $nameCache = [];
@@ -470,8 +473,10 @@ class GDO_Module extends GDO
 	 */
 	public function getConfigColumn($key, $throwError=true)
 	{
-		$this->buildConfigCache();
-		
+		if (!isset($this->configCache))
+		{
+			$this->buildConfigCache();
+		}
 	    if (isset($this->configCache[$key]))
 	    {
 	        return $this->configCache[$key];

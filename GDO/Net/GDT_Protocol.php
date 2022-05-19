@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Net;
 
-use GDO\Form\GDT_Select;
+use GDO\Core\GDT_Select;
 
 final class GDT_Protocol extends GDT_Select
 {

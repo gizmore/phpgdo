@@ -17,7 +17,7 @@ use GDO\Core\GDT_UInt;
  */
 final class GDT_Level extends GDT_UInt
 {
-	public function defaultLabel() { return $this->label('level'); }
+	public function defaultLabel() : self { return $this->label('level'); }
 	
 	public $icon = 'level';
 	public ?string $var = '0';

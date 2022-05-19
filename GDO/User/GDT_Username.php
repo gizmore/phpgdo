@@ -24,7 +24,7 @@ class GDT_Username extends GDT_String
 	# Allow - _ LETTERS DIGITS
 	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,31}$/iuD";
 
-	public function defaultLabel() { return $this->label('username'); }
+	public function defaultLabel() : self { return $this->label('username'); }
 	
 	##############
 	### Exists ###

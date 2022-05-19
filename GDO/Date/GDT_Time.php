@@ -6,7 +6,7 @@ use GDO\Core\GDT_String;
 
 class GDT_Time extends GDT_String
 {
-// 	public function defaultLabel() { return $this->label('date'); }
+// 	public function defaultLabel() : self { return $this->label('date'); }
 	
 	public function gdoColumnDefine() : string
 	{

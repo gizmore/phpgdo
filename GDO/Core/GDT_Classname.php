@@ -12,7 +12,7 @@ class GDT_Classname extends GDT_String
 {
 	public function plugVar() : string { return GDT_Name::class; }
 	
-	public function defaultLabel() { return $this->label('classname'); }
+	public function defaultLabel() : self { return $this->label('classname'); }
 
 	const LENGTH = 255;
 	

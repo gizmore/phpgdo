@@ -43,6 +43,11 @@ trait WithName
 	
 	public static function make(string $name = null) : self
 	{
+		return self::makeNamed($name)->defaultLabel();
+	}
+	
+	public static function makeNamed(string $name = null) : self
+	{
 		$obj = new static();
 		$name = $name ? $name : $obj->getDefaultName();
 		$obj->name($name);

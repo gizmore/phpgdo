@@ -13,9 +13,8 @@ use GDO\Core\GDT_Template;
 class GDT_DeleteButton extends GDT_Submit
 {
 	public $icon = 'delete';
-// 	public function name($name=null) { $this->name = $name ? $name : 'delete'; return $this->defaultLabel(); }
 	public function renderCell() : string { return GDT_Template::php('Form', 'form/delete.php', ['field'=>$this]); }
-	public function defaultLabel() { return $this->label('btn_delete'); }
+	public function defaultLabel() : self { return $this->label('btn_delete'); }
 	public function defaultName() { return 'delete'; }
 	
 	############

@@ -18,7 +18,6 @@ use GDO\UI\WithLabel;
  */
 abstract class GDT_Field extends GDT
 {
-	use WithName;
 	use WithIcon;
 	use WithLabel;
 	use WithValue;
@@ -28,15 +27,6 @@ abstract class GDT_Field extends GDT
 	################
 	### Creation ###
 	################
-	/**
-	 * @param string $name
-	 * @return \GDO\Core\GDT_Field
-	 */
-	public static function make(string $name = null) : self
-	{
-		$obj = new static();
-		return $obj->name($name ? $name : $obj->getDefaultName());
-	}
 	
 	public function blankData() : array
 	{

@@ -5,7 +5,7 @@ use GDO\Core\GDT_ObjectSelect;
 
 final class GDT_Language extends GDT_ObjectSelect
 {
-	public function defaultLabel() { return $this->label('language'); }
+	public function defaultLabel() : self { return $this->label('language'); }
 	
 	protected function __construct()
 	{

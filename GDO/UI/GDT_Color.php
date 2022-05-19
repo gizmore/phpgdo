@@ -19,7 +19,7 @@ class GDT_Color extends GDT_String
 	public int $max = 7;
 	public string $pattern = "/^#(?:[a-z0-9]{3}){1,2}$/i";
 
-	public function defaultLabel()
+	public function defaultLabel() : self
 	{
 		return $this->label('color');
 	}

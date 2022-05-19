@@ -17,6 +17,6 @@ class GDT_Realname extends GDT_String
 	public string $icon = 'face';
 	public string $pattern = '#\\w[\\w ]+#iD';
 	
-	public function defaultLabel() { return $this->label('realname'); }
+	public function defaultLabel() : self { return $this->label('realname'); }
 	
 }

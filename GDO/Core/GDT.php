@@ -122,6 +122,15 @@ abstract class GDT
 		return false;
 	}
 	
+	/**
+	 * Setup the default label. None by default.
+	 * @return self
+	 */
+	public function defaultLabel() : self
+	{
+		return $this;
+	}
+	
 	public function hasInput() : bool
 	{
 		return false;
@@ -265,6 +274,7 @@ abstract class GDT
 	 */
 	public function plugVar() : string
 	{
+		return '';
 	}
 	
 }

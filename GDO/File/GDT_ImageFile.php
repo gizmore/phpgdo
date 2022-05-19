@@ -17,7 +17,7 @@ final class GDT_ImageFile extends GDT_File
 {
 	use WithImageFile;
 	
-	public function defaultLabel() { return $this->label('image'); }
+	public function defaultLabel() : self { return $this->label('image'); }
 	
 	public $icon = 'image';
 	

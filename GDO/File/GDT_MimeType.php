@@ -17,6 +17,6 @@ final class GDT_MimeType extends GDT_String
 	public bool $caseSensitive = true;
 	public int $encoding = self::ASCII;
 	
-	public function defaultLabel() { return $this->label('file_type'); }
+	public function defaultLabel() : self { return $this->label('file_type'); }
 
 }

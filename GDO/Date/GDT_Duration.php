@@ -13,7 +13,7 @@ use GDO\Core\GDT_String;
  */
 class GDT_Duration extends GDT_String
 {
-	public function defaultLabel() { return $this->label('duration'); }
+	public function defaultLabel() : self { return $this->label('duration'); }
 	
 	public string $pattern = '/^(?:[0-9 ]+[smhdwy]? *)+$/iD';
 

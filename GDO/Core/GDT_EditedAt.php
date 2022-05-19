@@ -15,7 +15,7 @@ use GDO\Date\Time;
  */
 final class GDT_EditedAt extends GDT_Timestamp
 {
-	public function defaultLabel() { return $this->label('edited_at'); }
+	public function defaultLabel() : self { return $this->label('edited_at'); }
 
 	public function isHidden() : bool { return true; }
 	public function isWritable() : bool { return false; }

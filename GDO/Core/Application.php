@@ -68,6 +68,7 @@ class Application
 	public function isAjax() : bool { return !!$this->getAjax(); }
 	public function isJSON() : bool { return $this->isFormat('json'); }
 	public function isHTML() : bool { return $this->isFormat('html'); }
+	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
 	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
 	public function isFormat(string $format) : bool { return $this->getFormat() === $format; }

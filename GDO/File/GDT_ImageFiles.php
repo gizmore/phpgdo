@@ -12,7 +12,7 @@ final class GDT_ImageFiles extends GDT_Files
 {
 	use WithImageFile;
 	
-	public function defaultLabel() { return $this->label('images'); }
+	public function defaultLabel() : self { return $this->label('images'); }
 	
 	protected function __construct()
 	{

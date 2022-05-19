@@ -27,7 +27,7 @@ class GDT_File extends GDT_Object
 	
 	public $multiple = false;
 	
-	public function defaultLabel() { return $this->label('file'); }
+	public function defaultLabel() : self { return $this->label('file'); }
 	public function isImageFile() { return false; }
 	
 	protected function __construct()

@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\WithName;
+
 /**
  * Add label fields to a GDT.
  * 
@@ -10,6 +12,8 @@ namespace GDO\UI;
  */
 trait WithLabel
 {
+	use WithName;
+	
 	##############
 	### Label ####
 	##############
@@ -47,9 +51,17 @@ trait WithLabel
 		{
 			return t($this->labelKey, $this->labelArgs);
 		}
-		if ($this->labelRaw)
+		elseif ($this->labelRaw)
 		{
 			return $this->labelRaw;
+		}
+		elseif (isset($this->name))
+		{
+			return t($this->name);
+		}
+		else
+		{
+			return '';
 		}
 	}
 	

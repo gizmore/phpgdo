@@ -19,7 +19,7 @@ final class GDT_PageNum extends GDT_UInt
     public int $bytes = '2';
     public ?string $initial = '1';
     
-    public function defaultLabel() { return $this->label('page'); }
+    public function defaultLabel() : self { return $this->label('page'); }
 
     public function isSerializable() : bool{ return false; }
     

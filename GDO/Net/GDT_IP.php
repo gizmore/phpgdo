@@ -65,7 +65,7 @@ final class GDT_IP extends GDT_String
 	public bool $editable = false;
 	public $icon = 'url';
 	
-	public function defaultLabel() { return $this->label('ip'); }
+	public function defaultLabel() : self { return $this->label('ip'); }
 
 }
 
