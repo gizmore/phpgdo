@@ -16,7 +16,7 @@ use GDO\Form\GDT_Form;
 <?php endif; ?>
   </div>
   <div class="gdt-form-fields">
-    <form method="<?=$field->htmlMethod()?>">
+    <form method="<?=$field->verb?>">
       <?php foreach ($field->getFields() as $gdt) : ?>
         <?=$gdt->renderForm()?>
       <?php endforeach; ?>

@@ -21,12 +21,6 @@ namespace GDO\Core;
  */
 abstract class GDT_DBField extends GDT_Field
 {
-	#################
-	### GDT_Field ###
-	#################
-	public bool $readable = true;
-	public bool $writable = true;
-	
 	####################
 	### Create Table ###
 	####################

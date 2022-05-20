@@ -33,7 +33,14 @@ final class Debug
 	/**
 	 * Call this to auto include.
 	 */
-	public static function init() : void {}
+	public static function init(bool $die, bool $mail) : void
+	{
+		self::enableErrorHandler();
+		self::enableExceptionHandler();
+		self::setDieOnError($die);
+		self::setMailOnError($mail);
+	}
+	
 	
 	###############
 	## Settings ###

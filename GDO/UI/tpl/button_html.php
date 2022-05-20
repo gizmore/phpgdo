@@ -1,12 +1,9 @@
 <?php
 namespace GDO\UI\tpl;
 use GDO\UI\GDT_Button;
-/**
- * @var $field GDT_Button
- */
+/** @var $field GDT_Button **/
 ?>
-<div class="gdt-button">
-  <a <?=$field->htmlHREF()?>
-   <?=$field->htmlDisabled()?>
-  ><?=$field->renderText()?></a>
-</div>
+<div class="gdt-button"<?=$field->htmlAttributes()?>><?=$field->htmlIcon()?><a
+<?=$field->htmlRelation()?>
+<?=$field->htmlHREF()?>
+<?=$field->htmlDisabled()?>><?=$field->displayLabel()?></a></div>

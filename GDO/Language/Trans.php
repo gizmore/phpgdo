@@ -7,13 +7,13 @@ use GDO\DB\Cache;
 use GDO\Core\GDO_Error;
 
 /**
- * Very cheap i18n.
- * Look at bottom for API.
+ * Very cheap i18n. All data is stored in a single file to let you re-use i18n easily.
+ * Look at the bottom for the API.
  * 
- * @TODO: Check if ini file parsing and using would be faster than php include.
+ * @TODO: Trans: Check if ini file parsing (or other techniques) would be faster than php include.
  * 
  * @author gizmore
- * @version 6.11.3
+ * @version 7.0.1
  * @since 1.0.0
  */
 final class Trans
@@ -21,66 +21,61 @@ final class Trans
     /**
      * @var string
      */
-	public static $ISO = 'en';
+	public static string $ISO = 'en';
 	
-	public static $FILE_CACHE = GDO_FILECACHE;
+	public static bool $FILE_CACHE = GDO_FILECACHE;
 	
-	private static $HAS_LOADED_FILE_CACHE = false;
+	private static bool $HAS_LOADED_FILE_CACHE = false;
 
 	/**
 	 * Base pathes for translation data files.
 	 * @var string[]
 	 */
-	private static $PATHS = [];
+	private static array $PATHS = [];
 	
 	/**
 	 * Translation data cache.
 	 * @var string[string]
 	 */
-	private static $CACHE = [];
+	private static array $CACHE = [];
 	
 	/**
 	 * Are all pathes added?
 	 * @var boolean
 	 */
-	private static $INITED = false;
+	private static bool $INITED = false;
 	
 	/**
-	 * Shall sitename be appended to seo titles?
-	 * @TODO move
+	 * @TODO move Shall sitename be appended to seo titles? Implement it?
 	 * @var boolean
 	 */
-	public static $NO_SITENAME = false;
+	public static bool $NO_SITENAME = false;
 	
 	/**
 	 * Number of missing translation keys for stats and testing.
 	 * @var integer
 	 */
-	public static $MISS = 0;
+	public static int $MISS = 0;
 	
 	/**
 	 * The keys that are missing in translation.
 	 * @var string[]
 	 */
-	public static $MISSING = [];
+	public static array $MISSING = [];
 	
 	/**
 	 * Set the current ISO
 	 * @param string $iso
 	 */
-	public static function setISO($iso)
+	public static function setISO(string $iso) : void
 	{
 	    if ($iso !== self::$ISO)
 	    {
     		# Set Trans locale
     		self::$ISO = $iso;
-    		# Generate utf8 locale identifier, e.g: de_DE.utf8 and setlocale
+    		# Generate utf8 locale identifier, e.g: de_DE.utf8
     		$iso = $iso . '_' . strtoupper($iso) . '.utf-8';
-//     		if (!setlocale(LC_TIME, $iso))
-    		{
-    			setlocale(LC_TIME, $iso); # Bug... sometimes it needs two calls?!
-    		}
-//     		self::inited(true);
+   			setlocale(LC_TIME, $iso); # Bug... sometimes it needs two calls?!
 	    }
 	}
 	
@@ -101,7 +96,7 @@ final class Trans
 	 * Add a translation file to the language file pathes.
 	 * @param string $path
 	 */
-	public static function addPath($path)
+	public static function addPath(string $path) : void
 	{
 	    self::$PATHS[$path] = $path;
 	}
@@ -111,7 +106,7 @@ final class Trans
 	 * @TODO separate calls. maybe cache should not be cleared quickly? no idea. Make performance tests for language loading on init.
 	 * @param bool $inited
 	 */
-	public static function inited($inited)
+	public static function inited(bool $inited) : void
 	{
 		self::$INITED = $inited;
 	    self::$CACHE = [];
@@ -122,7 +117,7 @@ final class Trans
 	 * @param string $iso
 	 * @return string[string]
 	 */
-	public static function getCache($iso)
+	public static function getCache(string $iso) : array
 	{
 		return self::load($iso);
 	}
@@ -132,7 +127,7 @@ final class Trans
 	 * @param string $iso
 	 * @return string[string]
 	 */
-	public static function &load($iso)
+	public static function &load(string $iso) : array
 	{
 		if (!isset(self::$CACHE[$iso]))
 		{
@@ -147,7 +142,7 @@ final class Trans
 	 * @param array $args
 	 * @return string
 	 */
-	public static function t($key, array $args=null)
+	public static function t(string $key, array $args=null) : string
 	{
 		return self::tiso(self::$ISO, $key, $args);
 	}
@@ -159,13 +154,8 @@ final class Trans
 	 * @param array $args
 	 * @return string
 	 */
-	public static function tiso($iso, $key, array $args=null)
+	public static function tiso(string $iso, string $key, array $args=null) : string
 	{
-	    if (!$key)
-	    {
-	        return '';
-	    }
-	    
 		$cache = self::load($iso);
 
 		if (isset($cache[$key]))
@@ -196,13 +186,13 @@ final class Trans
 		return $text;
 	}
 
-	private static function getCacheKey($iso)
+	private static function getCacheKey(string $iso) : string
 	{
 		$key = md5("$iso;" . implode(',', self::$PATHS));
 		return $key;
 	}
 	
-	private static function &reload($iso)
+	private static function &reload(string $iso) : array
 	{
 		$trans = [];
 		$trans2 = [];
@@ -274,7 +264,7 @@ final class Trans
 	 * @param string $key
 	 * @return boolean
 	 */
-	public static function hasKey($key, $withMiss=false)
+	public static function hasKey(string $key, bool $withMiss=false) : bool
 	{
 	    $result = self::hasKeyIso(self::$ISO, $key);
 	    if ($withMiss && (!$result))
@@ -291,7 +281,7 @@ final class Trans
 	 * @param string $key
 	 * @return boolean
 	 */
-	public static function hasKeyIso($iso, $key)
+	public static function hasKeyIso(string $iso, string $key) : bool
 	{
 		$cache = self::load($iso);
 		return isset($cache[$key]);

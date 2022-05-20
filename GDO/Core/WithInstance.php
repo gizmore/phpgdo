@@ -5,7 +5,7 @@ namespace GDO\Core;
  * Add instance capabilities.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 trait WithInstance
@@ -21,9 +21,4 @@ trait WithInstance
 		return self::$INSTANCE;
 	}
 	
-// 	protected function __construct() 
-// 	{
-// 		self::$INSTANCE = $this;
-// 	}
-
 }

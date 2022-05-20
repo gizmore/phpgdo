@@ -4,43 +4,23 @@ namespace GDO\Core;
 /**
  * A GDT_Method holds a Method and inputs to bind.
  * An input s either a string or a GDT_Method.
+ * A method saves it response [WithResult.php]()
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
-final class GDT_Method extends GDT
+class GDT_Method extends GDT
 {
-	public Method $method;
-	public function method(Method $method) : self
-	{
-		$this->method = $method;
-		return $this;
-	}
-	
-	public array $inputs = [];
-	public function addInput(?string $key, $input)
-	{
-		if ($key)
-		{
-			$this->inputs[$key] = $input;
-		}
-		else
-		{
-			$this->inputs[] = $input;
-		}
-	}
-	
-	public function exec() : GDT
-	{
-		$this->method->parameters($this->inputs);
-		return $this->method->exec();
-	}
+	use WithName;
+	use WithFields;
+	use WithEnvironment;
 	
 	public function execute() : GDT
 	{
-		$this->method->parameters($this->inputs);
-		return $this->method->execute();
+		$this->method->inputs($this->inputs);
+		$gdt = $this->changeUser()->method->exec();
+		return $this->result($gdt);
 	}
 	
 }

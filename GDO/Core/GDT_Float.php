@@ -13,10 +13,12 @@ class GDT_Float extends GDT_Int
 	#######################
 	public function toValue(string $var = null)
 	{
-		if ($var)
+		if ($var === null)
 		{
-			return floatval($var);
+			return null;
 		}
+		$var = trim($var);
+		return $var === '' ? null : floatval($var);
 	}
 
 	##########
@@ -33,9 +35,6 @@ class GDT_Float extends GDT_Int
 		return sprintf(' gdt-float %s', parent::htmlClass());
 	}
 
-	/**
-	 * Replace , with . for user input.
-	 */
 	public function _inputToVar($input)
 	{
 		if (parent::_inputToVar($input))
@@ -44,22 +43,80 @@ class GDT_Float extends GDT_Int
 		}
 	}
 	
-	public static function inputToVarS($input)
+	/**
+	 * Handle german and english inputs by keeping only the most right separator.
+	 * More than one separator removes them all.
+	 */
+	public static function inputToVarS(string $input=null) : ?string
 	{
-	    return str_replace(',', '.', $input);
+		if ($input === null)
+		{
+			return null;
+		}
+		
+		$input = trim($input);
+		$pd = strrpos($input, '.'); # decimal
+		$pk = strrpos($input, ','); # komma
+
+		# 4 cases:
+		if ( ($pd === false) && ($pk === false) )
+		{
+			# no separators
+		}
+		elseif ( ($pd === false) && ($pk !== false) )
+		{
+			# only kommas
+			$c = substr_count($input, ',');
+			if ($c === 1)
+			{
+				$input = str_replace(',', '.', $input);
+			}
+			else # mehr als ein komma
+			{
+				$input = str_replace(',', '', $input);
+			}
+		}
+		elseif ( ($pd !== false) && ($pk === false) )
+		{
+			# only decimals
+			$c = substr_count($input, '.');
+			if ($c === 1)
+			{
+				# exactly 1 decimal point. ok!
+			}
+			else # mehr als ein decimal? Oo
+			{
+				$input = str_replace('.', '', $input);
+			}
+		}
+		elseif ( ($pd !== false) && ($pk !== false) )
+		{
+			# both... keep the most right
+			if ($pd > $pk)
+			{
+				$input = str_replace(',', '', $input);
+			}
+			else
+			{
+				$input = str_replace('.', '', $input);
+				$input = str_replace(',', '.', $input);
+			}
+		}
+
+		return $input;
 	}
 	
-	public static function thousandSeperator()
+	public static function thousandSeperator() : string
 	{
 	    return t('thousands_seperator');
 	}
 	
-	public static function decimalPoint()
+	public static function decimalPoint() : string
 	{
 	    return t('decimal_point');
 	}
 	
-	public static function displayS($var, $decimals=4, $dot=null, $comma=null)
+	public static function displayS(string $var, int $decimals=4, string $dot=null, string $comma=null) : string
 	{
 		if ($var !== null)
 		{
@@ -68,10 +125,11 @@ class GDT_Float extends GDT_Int
 		    $display = number_format($var, $decimals, $dot, $comma);
 		    return $display;
 		}
+		return '';
 	}
 	
-	public $decimals = 4;
-	public function decimals($decimals)
+	public int $decimals = 4;
+	public function decimals(int $decimals) : self
 	{
 	    $this->decimals = $decimals;
 	    return $this;

@@ -2,6 +2,7 @@
 namespace GDO\Net;
 
 use GDO\Core\Application;
+use GDO\Util\Regex;
 
 /**
  * This class holds url parts and the raw url.
@@ -63,7 +64,7 @@ final class URL
 	
 	public function getTLD()
 	{
-	    return Common::regex('/([^.]+\\.[^.]+)$/ui', $this->getHost());
+	    return Regex::firstMatch('/([^.]+\\.[^.]+)$/ui', $this->getHost());
 	}
 
 }

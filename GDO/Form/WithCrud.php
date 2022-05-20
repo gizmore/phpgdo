@@ -5,7 +5,7 @@ namespace GDO\Form;
  * Add 4 CRUD boolean flags to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.11.4
  */
 trait WithCrud

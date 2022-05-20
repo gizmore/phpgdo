@@ -6,17 +6,22 @@ use GDO\Util\Strings;
 use GDO\Util\Regex;
 
 /**
+ * Very basic trait.
+ * 
  * Extract the short classname.
  * 
- * Extract the module name.
+ * Extract the gdo module name.
  * This is easy for any \GDO\ class.
- * If a class is not \GDO\ it is a 3rd party lib, and we could try to get the gdo module via the absolute realpath of the class definition via reflection.
+ * @TODO: If a class is not \GDO\ it is a 3rd party lib, and we could try to get the gdo module via the absolute realpath of the class definition via reflection.
+ * 
+ * Provide human names for classes.
  * 
  * Offers static and non static versions.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
+ * @see WithName
  */
 trait WithModule
 {
@@ -26,18 +31,35 @@ trait WithModule
 	public function gdoShortName() : string
 	{
 		$k = get_class($this);
-		return Strings::rsubstrFrom($k, '\\', $k);
+		return Strings::rsubstrFrom($k, '\\');
 	}
 	
 	public static function gdoShortNameS() : string
 	{
 		$k = static::class;
-		return Strings::rsubstrFrom($k, '\\', $k);
+		return Strings::rsubstrFrom($k, '\\');
+	}
+	
+	##################
+	### Class Name ###
+	##################
+	public function gdoClassName() : string
+	{
+		return get_class($this);
+	}
+	
+	public static function gdoClassNameS() : string
+	{
+		return static::class;
 	}
 	
 	##################
 	### Human Name ###
 	##################
+	/**
+	 * Human readable classname.
+	 * @return string
+	 */
 	public function gdoHumanName() : string
 	{
 		$shortname = self::gdoShortNameS();
@@ -46,45 +68,31 @@ trait WithModule
 		{
 			return t($key);
 		}
-// 		if ($name = $this->getName())
-// 		{
-// 			$key = strtolower($name);
-// 			if (Trans::hasKey($key))
-// 			{
-// 				return t($key);
-// 			}
-// 		}
 		return $shortname;
 	}
 	
 	##############
 	### Module ###
 	##############
+	public function getModule() : GDO_Module
+	{
+		$klass = get_class($this);
+		return self::getModuleByKlass($klass);
+	}
+	
 	public function getModuleName() : string
 	{
 		$klass = get_class($this);
 		return self::getModuleNameByKlass($klass);
 	}
 	
-	public function getModule() 
-	{
-		$klass = get_class($this);
-		return self::getModuleByKlass($klass);
-	}
-	
-// 	public static function getModuleS()
-// 	{
-// 		$klass = static::class;
-// 		return self::getModuleByKlass($klass);
-// 	}
-	
-	private static function getModuleByKlass(string $klass)
+	private static function getModuleByKlass(string $klass) : GDO_Module
 	{
 		$moduleName = self::getModuleNameByKlass($klass);
 		return ModuleLoader::instance()->getModule($moduleName, true, true);
 	}
 	
-	private static function getModuleNameByKlass(string $klass)
+	private static function getModuleNameByKlass(string $klass) : string
 	{
 		return Regex::firstMatch('#GDO\\\\([\\dA-Z_]+)#iD', $klass);
 	}

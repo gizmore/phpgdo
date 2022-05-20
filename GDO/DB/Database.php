@@ -16,7 +16,7 @@ use GDO\Core\GDO_DBException;
  * @TODO support sqlite? This can be achieved by a few string tricks maybe. No foreign keys? no idea.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  * 
  * @see GDO
@@ -73,7 +73,7 @@ class Database
 	public static function init(?string $databaseName=GDO_DB_NAME) : self
 	{
 		Cache::init();
-	    return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, $databaseName, GDO_DB_DEBUG);
+	    return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, $databaseName, intval(GDO_DB_DEBUG));
 	}
 	
 	public function __construct(string $host, string $user, string $pass, string $db = null, int $debug=0)

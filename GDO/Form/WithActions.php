@@ -1,8 +1,8 @@
 <?php
 namespace GDO\Form;
 
-use GDO\Core\GDT;
 use GDO\Core\GDT_Fields;
+use GDO\UI\GDT_Menu;
 
 /**
  * Add an array of action GDT like buttons.
@@ -12,27 +12,23 @@ use GDO\Core\GDT_Fields;
  */
 trait WithActions
 {
-	/**
-	 * @var GDT[]
-	 */
-	protected GDT_Fields $actions;
+	private GDT_Menu $actions;
 	
 	/**
-	 * 
-	 * @return GDT[]
+	 * @return GDT_Menu
 	 */
 	public function actions() : GDT_Fields
 	{
 		if (!isset($this->actions))
 		{
-			$this->actions = GDT_Fields::make();
+			$this->actions = GDT_Menu::make();
 		}
 		return $this->actions;
 	}
 	
 	public function hasActions() : bool
 	{
-		return !!$this->actions;
+		return isset($this->actions);
 	}
 
 }

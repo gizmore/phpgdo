@@ -15,7 +15,7 @@ use GDO\CLI\CLIUtil;
  * Uses memcached for fast modulecache loading.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 final class ModuleLoader
@@ -124,6 +124,29 @@ final class ModuleLoader
 			}
 		}
 	}
+	
+	############
+	### Init ###
+	############
+	/**
+	 * Init the module loader for website mode.
+	 * 
+	 * @param bool $withDb
+	 * @return GDO_Module[]
+	 */
+	public static function init(bool $withDb=true) : array
+	{
+		$loader = new ModuleLoader(GDO_PATH . 'GDO/');
+		if ($withDb)
+		{
+			return $loader->loadModulesCache();
+		}
+		else
+		{
+			return $loader->loadModules(false, true);
+		}
+	}
+	
 	
 	#################
 	### Cacheload ###

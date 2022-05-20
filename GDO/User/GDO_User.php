@@ -14,15 +14,13 @@ use GDO\Language\GDT_Language;
  * Most user related fields are in other module settings.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 1.0.0
  * @see GDO
  * @see GDT
  */
 final class GDO_User extends GDO
 {
-// 	use WithTemp;
-	
 	const GUEST_NAME_PREFIX = '~';
 	const GHOST_NAME_PREFIX = '~~';
 	
@@ -114,8 +112,9 @@ final class GDO_User extends GDO
 	##############
 	public function getType() : string { return $this->gdoVar('user_type'); }
 	public function getLangISO() : string { return $this->gdoVar('user_language'); }
+	public function getUserName() : ?string { return $this->gdoVar('user_name'); }
 	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
-
+	
 	############
 	### Type ###
 	############
@@ -132,7 +131,21 @@ final class GDO_User extends GDO
 			false; # non guest
 	}
 	
-	
+	/**
+	 * Check if it is a legit user.
+	 * Either a guest with a name or a member.
+	 * 
+	 * @return boolean
+	 */
+	public function isUser() : bool
+	{
+		switch ($this->getType())
+		{
+			case GDT_UserType::GUEST: return !!$this->getGuestName();
+			case GDT_UserType::MEMBER: return true;
+			default: return false;
+		}
+	}
 	
 	################
 	### Timezone ###

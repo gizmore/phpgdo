@@ -3,41 +3,45 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Core\WithGDO;
+use GDO\Form\WithFormAttributes;
 
 /**
- * A simple button.
- * 
- * @see GDT_Submit
- * @see GDT_Link
- * @see GDT_IconButton
+ * A simple button with only a label.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
+ * @see GDT_Link
+ * @see GDT_Submit
  */
 class GDT_Button extends GDT
 {
-	use WithText;
+	use WithGDO;
 	use WithHREF;
+	use WithIcon;
 	use WithLabel;
+	use WithPHPJQuery;
+	use WithFormAttributes;
 	use WithAnchorRelation;
 	
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    if ($this->checkEnabled)
 	    {
     	    $this->writable(call_user_func($this->checkEnabled, $this));
 	    }
-		return GDT_Template::php('UI', 'cell/button.php', ['field'=>$this, 'href'=>$this->gdoHREF()]);
+	    $args = ['field' => $this, 'href' => $this->gdoHREF()];
+		return GDT_Template::php('UI', 'button_html.php', $args);
 	}
 	
-	public function renderForm() : string
-	{
-	    return $this->renderCell();
-	}
+// 	public function renderForm() : string
+// 	{
+// 	    return $this->renderCell();
+// 	}
 	
 	public function renderJSON()
 	{

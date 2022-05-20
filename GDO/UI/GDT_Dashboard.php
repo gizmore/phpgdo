@@ -5,6 +5,7 @@ class GDT_Dashboard extends GDT_Panel
 {
 	protected function __construct()
 	{
+		parent::__construct();
 		$this->addClass('gdt-dashboard');
 	}
 	

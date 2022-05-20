@@ -23,18 +23,18 @@ use GDO\Net\GDT_Url;
  * Very basic vanilla JS is loaded.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * @see Module_Javascript
  */
 final class Module_Core extends GDO_Module
 {
 	/**
-	 * GDO revision string.
-	 * Sometimes just counts up to be in sync and poison some other module caches for updates.
+	 * GDO Revision String.
+	 * Counts up to be in sync and poison caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.0-r1023';
+	const GDO_REVISION = '7.0.1-r1025';
 	
 	##############
 	### Module ###
@@ -82,9 +82,9 @@ final class Module_Core extends GDO_Module
 	{
 		return [
 			GDT_User::make('system_user')->writeable(false)->initial('1'), # System user / id should be 1.
-			GDT_Checkbox::make('show_impressum')->initial('show_impressum', '0'), # show impressum in footer.
-			GDT_Checkbox::make('show_privacy')->initial('show_privacy', '0'), # show privacy link in footer.
-			GDT_Checkbox::make('allow_guests')->initial('allow_guests', '1'), # generally allow guests.
+			GDT_Checkbox::make('show_impressum')->initial('0'), # show impressum in footer.
+			GDT_Checkbox::make('show_privacy')->initial('0'), # show privacy link in footer.
+			GDT_Checkbox::make('allow_guests')->initial('1'), # generally allow guests.
 			GDT_Version::make('asset_revision')->initial($this->version), # append this version to asset include urls?v=.
 			GDT_Checkbox::make('siteshort_title_append')->initial('1'),
 			GDT_Checkbox::make('mail_403')->initial('1'), # mail 403 error mails?
@@ -95,21 +95,18 @@ final class Module_Core extends GDO_Module
 		];
 	}
 	
-	/**
-	 * @return GDO_User
-	 */
 	public function cfgSystemUser() : GDO_User { return $this->getConfigValue('system_user'); }
 	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
-	public function cfgShowImpressum() { return $this->getConfigVar('show_impressum'); }
-	public function cfgShowPrivacy() { return $this->getConfigVar('show_privacy'); }
+	public function cfgShowImpressum() : string { return $this->getConfigVar('show_impressum'); }
+	public function cfgShowPrivacy() : string { return $this->getConfigVar('show_privacy'); }
 	public function cfgAssetVersion() : Version { return $this->getConfigValue('asset_revision'); }
-	public function cfgAllowGuests() { return $this->getConfigVar('allow_guests'); }
-	public function cfgSiteShortTitleAppend() { return $this->getConfigVar('siteshort_title_append'); }
-	public function cfgMail403() { return $this->getConfigVar('mail_404'); }
-	public function cfgMail404() { return $this->getConfigVar('mail_404'); }
-	public function cfgLoadSidebars() { return $this->getConfigValue('load_sidebars'); }
-	public function cfgDirectoryIndex() { return $this->getConfigVar('directory_indexing'); }
-	public function cfgModuleAssets() { return $this->getConfigVar('module_assets'); }
+	public function cfgAllowGuests() : string { return $this->getConfigVar('allow_guests'); }
+	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
+	public function cfgMail403() : string { return $this->getConfigVar('mail_404'); }
+	public function cfgMail404() : string { return $this->getConfigVar('mail_404'); }
+	public function cfgLoadSidebars() : string { return $this->getConfigVar('load_sidebars'); }
+	public function cfgDirectoryIndex() : string { return $this->getConfigVar('directory_indexing'); }
+	public function cfgModuleAssets() : string { return $this->getConfigVar('module_assets'); }
 	
 	#############
 	### Hooks ###

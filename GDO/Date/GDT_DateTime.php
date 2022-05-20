@@ -7,7 +7,8 @@ use GDO\Core\GDT_Template;
  * A datetime column has a bigger range of dates compared to a GDT_Timestamp.
  * 
  * @author gizmore
- * @version 6.11.2
+ * @version 7.0.0
+ * @since 6.11.2
  */
 class GDT_DateTime extends GDT_Date
 {
@@ -36,6 +37,7 @@ class GDT_DateTime extends GDT_Date
 	    	$value->setTimezone(Time::$UTC);
 	        return $value->format('Y-m-d H:i:s.u');
 	    }
+	    return null;
 	}
 	
 	public function displayValue($var)

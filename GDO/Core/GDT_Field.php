@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\WithNullable;
+use GDO\Form\WithFormAttributes;
 use GDO\UI\WithIcon;
 use GDO\UI\WithLabel;
 
@@ -13,7 +14,7 @@ use GDO\UI\WithLabel;
  * The make method sets the name to default or specified parameter.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 abstract class GDT_Field extends GDT
@@ -23,7 +24,8 @@ abstract class GDT_Field extends GDT
 	use WithValue;
 	use WithError;
 	use WithNullable;
-
+	use WithFormAttributes;
+	
 	################
 	### Creation ###
 	################
@@ -62,34 +64,15 @@ abstract class GDT_Field extends GDT
 	#######################
 	### Input/Var/Value ###
 	#######################
-	public function inputToVar(string $input) : string
+	public function inputToVar(string $input=null) : ?string
 	{
 		if (is_string($input))
 		{
 			$input = trim($input);
+			return $input === '' ? null : $input;
 		}
-		return ($input === null) || ($input === '') ?
-			null : $input;
+		return null;
 	}
-	
-	##################
-	### Permission ###
-	##################
-	public bool $hidden = false;
-	public function hidden(bool $hidden = true) : self { $this->hidden = $hidden; return $this; }
-	public function isHidden() : bool { return $this->hidden; }
-	
-	public bool $readable = true;
-	public function readable(bool $readable) : self { $this->readable = $readable; return $this; }
-	public function isReadable() : bool { return $this->readable; }
-	
-	public bool $writeable = true;
-	public function writeable(bool $writeable) : self { $this->writeable = $writeable; return $this; }
-	public function isWritable() : bool { return $this->writeable; }
-	
-	public bool $focusable = false;
-	public function focusable(bool $focusable = true) : self { $this->focusable = $focusable; return $this; }
-	public function isFocusable() : bool { return $this->focusable; }	
 	
 	################
 	### Features ###

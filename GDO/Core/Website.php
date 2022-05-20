@@ -11,16 +11,16 @@ use GDO\UI\GDT_Success;
 
 /**
  * General Website utility and storage for header and javascript elements.
- * Feauters redirect alerts.
- *
+ * Keeps lists of assets and feeds them to minifiers.
+ * Features redirects and alerts.
+ * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 3.0.5
  * @see Module_Website
  * @see Minifier
  * @see Javascript
  * @see GDO_Session
- * 
- * @author gizmore
- * @version 7.0.0
- * @since 3.0.5
  * @see GDT_Page
  */
 final class Website
@@ -29,14 +29,14 @@ final class Website
 	 * Redirection URL
 	 * @var string
 	 */
-	public static $REDIRECTED = null;
+	public static ?string $REDIRECTED = null;
 
 	/**
 	 * HTML page LINK elements.
 	 * array<array<string>>
 	 * @var array
 	 */
-	private static $LINKS = [];
+	private static array $LINKS = [];
 	
 	/**
 	 * @param number $time
@@ -60,12 +60,14 @@ final class Website
 	    }
 	    
 	    $sess = GDO_Session::instance();
+	    
 	    if ( (!$sess) || (!($url = $sess->getLastURL())) )
 	    {
 	        $url = isset($_SERVER['HTTP_REFERER']) ?
 	           $_SERVER['HTTP_REFERER'] :
 	           ($default ? $default : hrefDefault());
 	    }
+	    
 	    return $url;
 	}
 	
@@ -366,12 +368,12 @@ final class Website
 	### Generic Head ###
 	####################
 	private static $HEAD = '';
-	public static function addHead($string)
+	public static function addHead(string $string) : void
 	{
 		self::$HEAD .= $string . "\n";
 	}
 	
-	public static function displayHead()
+	public static function displayHead() : string
 	{
 		return self::$HEAD;
 	}
@@ -379,10 +381,10 @@ final class Website
 	#############
 	### Title ###
 	#############
-	private static $TITLE = GDO_SITENAME;
-	public static function setTitle($title)
+	private static string $TITLE = GDO_SITENAME;
+	public static function setTitle(string $key, array $args=null) : void
 	{
-	    self::$TITLE = $title;
+	    self::$TITLE = t($key, $args);
 	    GDT_Page::instance()->titleRaw(self::displayTitle());
 	}
 	
@@ -393,7 +395,7 @@ final class Website
 	    {
     	    if (Module_Core::instance()->cfgSiteShortTitleAppend())
     	    {
-    	        $title .= " [" . GDO_SITENAME . "]";
+    	        $title .= " [" . sitename() . "]";
     	    }
 	    }
 	    return $title;

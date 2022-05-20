@@ -3,151 +3,181 @@ namespace GDO\Core;
 
 /**
  * Add children fields to a GDT.
+ * Add $inputs array to allow serving of all children.
+ * 
+ * The logic i use for parameter filling
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.1
  * @see GDT
  */
 trait WithFields
 {
-	#############
-	### Input ###
-	#############
-	public array $input;
-	public function getInput()
-	{
-		return isset($this->input) ? $this->input : null;
-	}
+	##############
+	### Inputs ### (Plural)
+	##############
+	/**
+	 * @var GDT|string[]
+	 */
+	public array $inputs;
 	
-	public function input($input = null) : self
+	public function inputs(array $inputs) : self
 	{
-		$this->input = $input;
+		$this->inputs = $inputs;
 		return $this;
 	}
 	
 	##############
-	### Fields ###
+	### Fields ### More methods available here :)
 	##############
 	/**
+	 * Real tree.
 	 * @var GDT[]
 	 */
-	protected array $fields = [];
+	public array $fields;
 	
-	public function getField(string $key) : GDT
+	public function addFields(GDT...$gdts)
 	{
-		return $this->fields[$key];
+		foreach ($gdts as $gdt)
+		{
+			$this->addField($gdt);
+			if ($gdt->hasFields())
+			{
+				$this->addFields(...$gdt->getFields());
+			}
+		}
+		return $this;
 	}
+	
+	public function addField(GDT $gdt)
+	{
+		if (!isset($this->fields))
+		{
+			$this->fields = [];
+		}
+		
+		if ($name = $gdt->getName())
+		{
+			$this->fields[$name] = $gdt;
+		}
+		else
+		{
+			$this->fields[] = $gdt;
+		}
+		
+		return $this;
+	}
+	
+	
+	
+// 	/**
+// 	 * @var GDT[]
+// 	 */
+// 	protected array $namecache = [];
+	
+// 	/**
+// 	 * @var GDT[]
+// 	 */
+// 	protected array $posicache = [];
 	
 	public function hasFields() : bool
 	{
 		return count($this->fields) > 0;
 	}
 	
-	/**
-	 * Get all children.
-	 * @return GDT[]
-	 */
 	public function getFields() : array
 	{
 		return $this->fields;
 	}
 	
-	public function addFields(GDT... $fields) : self
+	public function getField($key) : GDT
 	{
-		foreach ($fields as $gdt)
-		{
-			$this->addField($gdt);
-		}
-		return $this;
+		return $this->fields[$key];
 	}
 	
-	public function addField(GDT $field = null) : self
-	{
-		if ($field)
-		{
-			if ($field->hasName())
-			{
-				$this->fields[$field->getName()] = $field;
-			}
-			else
-			{
-				$this->fields[] = $field;
-			}
-		}
-		return $this;
-	}
+// 	/**
+// 	 * Get the Nth positional field.
+// 	 * -1 for the last one, -2 second last.
+// 	 * May throw an exception!
+// 	 * @return GDT
+// 	 */
+// 	public function getFieldN(int $n=0) : GDT
+// 	{
+// 		return $this->fields[$n];
+// 	}
 	
-	/**
-	 * @return GDT[]
-	 */
-	public function getFieldsRec() : array
-	{
-		return $this->_getFieldsRec($this);
-	}
+// 	public function addFields(GDT...$fields) : self
+// 	{
+// 		foreach ($fields as $gdt)
+// 		{
+// 			$this->addField($gdt);
+// 		}
+// 		return $this;
+// 	}
 	
-	private function _getFieldsRec(GDT $gdt) : array
-	{
-		$fields = [];
-		foreach ($gdt->getFields() as $_gdt)
-		{
-			if ($_gdt->hasName())
-			{
-				$fields[$_gdt->name] = $_gdt;
-			}
-			else
-			{
-				$fields[] = $_gdt;
-			}
-			if (isset($_gdt->fields))
-			{
-				$fields = array_merge($fields,
-					$this->_getFieldsRec($_gdt)
-					);
-			}
-		}
-		return $fields;
-	}
+// 	public function addField(GDT $gdt) : void
+// 	{
+// 		$this->addFieldB($gdt);
+// 		if ($gdt->hasFields())
+// 		{
+// 			foreach ($gdt->getFields() as $gdt)
+// 			{
+// 				$this->addField($gdt);
+// 			}
+// 		}
+// 	}
 	
-	/**
-	 * Iterate recusively over the fields with a callback.
-	 * @param callable $callback
-	 * @return self
-	 */
-	public function withFields(callable $callback) : self
-	{
-		foreach ($this->getFields() as $gdt)
-		{
-			$callback($gdt);
-			if ($gdt->hasFields())
-			{
-				$gdt->withFields($callback);
-			}
-		}
-		return $this;
-	}
+// 	protected function addFieldB(GDT $gdt) : void
+// 	{
+// 		if ($name = $gdt->getName())
+// 		{
+// 			$this->fields[$name] = $gdt;
+// 		}
+// 		else
+// 		{
+// 			$this->fields[] = $gdt;
+// 		}
+// 	}
 	
-	###################
-	### Instanciate ###
-	###################
-	public static function makeWith(GDT... $fields) : self
-	{
-		return parent::make()->addFields(...$fields);
-	}
-	
-	public static function makeNamedWith(string $name = null, GDT... $fields) : self
-	{
-		return parent::make($name)->addFields(...$fields);
-	}
+// 	###########################
+// 	### Iterate recursively ###
+// 	###########################
+// 	/**
+// 	 * Iterate recusively over the fields with a callback.
+// 	 * If the result is truthy, break the loop early.
+// 	 * 
+// 	 * @param callable $callback
+// 	 * @return self
+// 	 */
+// 	public function withFields(callable $callback)
+// 	{
+// 		if ($result = $callback($this))
+// 		{
+// 			return $result;
+// 		}
+// 		foreach ($this->fields as $gdt)
+// 		{
+// 			if ($result = $callback($gdt))
+// 			{
+// 				return $result;
+// 			}
+// 		}
+// 	}
 	
 	##############
-	### Render ###
+	### Render ### - 
 	##############
 	public function render() : string
 	{
 		return $this->renderGDT();
 	}
 	
+	/**
+	 * WithFields, we simply iterate over them and render current mode.
+	 * 
+	 * @return string
+	 */
 	public function renderFields() : string
 	{
 		$rendered = '';

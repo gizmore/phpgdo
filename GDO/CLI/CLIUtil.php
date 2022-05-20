@@ -5,7 +5,7 @@ namespace GDO\CLI;
  * CLI utility.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class CLIUtil
 {

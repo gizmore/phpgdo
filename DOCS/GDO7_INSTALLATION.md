@@ -1,10 +1,15 @@
 # GDOv7 Installation
 
-You can either install via the Web Install Wizard or the gdoadm cli utility.
+You can either install GDOv7 via the Web Install Wizard or the gdo_adm.php CLI utility.
+Note that a webserver is not required to operate GDOv7.
+All methods can be operated via CLI or chat systems.
 
 
-## Install GDOv7 via the Web Install Wizard
+## GDOv7 Installation: Web
 
-## Install GDOv7 via the CLI Admin Utility
+## GDOv7 Installation: CLI
 
+## GDOv7 Installation: Web Modules
+
+## GDOv7 Installation: CLI Modules
 

@@ -7,17 +7,12 @@ namespace GDO\Core;
  * @see GDT_ObjectSelect
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_Select extends GDT_ComboBox
 {
 	const SELECTED = ' selected="selected"';
-	
-// 	public function inputToVar(string $input) : string
-// 	{
-// 		return $input;
-// 	}
 	
 	public function getVar() : ?string
 	{

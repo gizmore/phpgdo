@@ -9,17 +9,25 @@ use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Language\Trans;
+use GDO\Core\Application;
 
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
 require GDO_BIN_PATH . '../protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
-	echo "GDOv7 does not seem to be installed!\n";
+	echo "GDOv7 is not installed here.\n";
 	die(1);
 }
 require GDO_BIN_PATH . '../GDO7.php';
 
+class gdo extends Application
+{
+	public function isCLI() : bool { return true; }
+	
+}
+new gdo();
+$loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();
 Trans::$ISO = GDO_LANGUAGE;
@@ -29,7 +37,7 @@ Debug::enableErrorHandler();
 Debug::enableExceptionHandler();
 Debug::setDieOnError(GDO_ERROR_DIE);
 Debug::setMailOnError(GDO_ERROR_MAIL);
-ModuleLoader::instance()->loadModules(GDO_DB_ENABLED, true);
+$loader->loadModules(GDO_DB_ENABLED, !GDO_DB_ENABLED);
 
 define('GDO_CORE_STABLE', 1);
 

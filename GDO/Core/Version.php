@@ -1,18 +1,20 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Util\Strings;
+
 /**
  * Version number. Major.Minor.Patch.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see GDO_Module
  */
 final class Version
 {
 	const MAX_PATCH = 50;
-	const MAX_MINOR = 13;
+	const MAX_MINOR = 12;
 	
 	public int $major = 0;
 	public int $minor = 0;
@@ -22,7 +24,7 @@ final class Version
 	{
 		if ($var)
 		{
-			list($major, $minor, $patch) = explode('.', $var);
+			list($major, $minor, $patch) = explode('.', Strings::substrTo($var, 'r', $var));
 			$this->major = intval($major, 10);
 			$this->minor = intval($minor, 10);
 			$this->patch = intval($patch, 10);

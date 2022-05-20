@@ -95,7 +95,6 @@ class GDT_Virtual extends GDT
     public function renderHeader() : string { return $this->proxy()->renderHeader(); }
     public function renderFilter($f) : string { return $this->proxy()->renderFilter($f); }
     
-//  public function displayLabel() { return $this->gdtType->displayLabel(); }
     public function displayTableOrder(GDT_Table $table)
     {
         return $this->proxy()->displayTableOrder($table);

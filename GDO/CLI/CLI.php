@@ -1,11 +1,7 @@
 <?php
 namespace GDO\CLI;
 
-use GDO\UI\GDT_Error;
-use GDO\Core\GDO_Error;
-use GDO\Core\GDO_ArgException;
 use GDO\Core\GDT_Response;
-use GDO\Core\ModuleLoader;
 use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
@@ -16,11 +12,10 @@ use GDO\Util\Strings;
  * CLI utilities.
  * Can turn cmdlines into Method parameters.
  * 
- * @see Method
- * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.2
+ * @see Method
  */
 final class CLI
 {
@@ -34,22 +29,22 @@ final class CLI
         return get_current_user();
     }
     
-    /**
-     * Stop output buffering and start auto flush for CLI mode.
-     */
-    public static function autoFlush()
-    {
-        while (ob_get_level())
-        {
-            ob_end_flush();
-        }
-        ob_implicit_flush(true);
-    }
+//     /**
+//      * Stop output buffering and start auto flush for CLI mode.
+//      */
+//     public static function autoFlush()
+//     {
+//         while (ob_get_level())
+//         {
+//             ob_end_flush();
+//         }
+//         ob_implicit_flush(true);
+//     }
     
     /**
      * Simulate PHP $_SERVER vars.
      */
-    public static function setServerVars()
+    public static function setServerVars() : void
     {
         $_SERVER['HTTPS'] = 'off';
         $_SERVER['HTTP_HOST'] = GDO_DOMAIN;
@@ -68,7 +63,7 @@ final class CLI
         $_SERVER['REQUEST_URI'] = '/index.php';
         $_SERVER['QUERY_STRING'] = 'mo=' . GDO_MODULE . '&me=' . GDO_METHOD;
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        # @TODO use output of locale command?
+        # @TODO CLI::setServerVars() use output of locale command?
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
     }
     
@@ -343,7 +338,7 @@ final class CLI
     
 }
 
-# Required gdo constants :(
+# Required gdo constants
 if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', 'gdo7.localhost');
 if (!defined('GDO_MODULE')) define('GDO_MODULE', 'Core');
 if (!defined('GDO_METHOD')) define('GDO_METHOD', 'Welcome');

@@ -1,16 +1,17 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Util\Common;
 use GDO\Core\GDT_Object;
-use GDO\Core\GDT_ResponseCard;
 
 /**
  * Abstract method to render a single GDO as a card.
+ * 
  * @author gizmore
- * @version 6.11.0
+ * @version 7.0.1
  * @since 6.6.4
  */
 abstract class MethodCard extends Method
@@ -46,7 +47,7 @@ abstract class MethodCard extends Method
         {
             return $this->error('err_no_data_yet');
         }
-        return GDT_ResponseCard::newWith()->gdo($gdo);
+        return $gdo;
     }
     
     public function getTitle()

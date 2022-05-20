@@ -2,40 +2,36 @@
 namespace GDO\UI;
 
 /**
- * Adds an action bar to this gdo type.
+ * Adds an action menu to a GDT.
  * 
  * @author gizmore
- * @since 6.05
- * @version 6.10
+ * @since 7.0.1
+ * @version 6.10.1
  */
 trait WithActions
 {
 	/**
 	 * @var \GDO\UI\GDT_Bar
 	 */
-	public $actions;
+	public GDT_Menu $actions;
 
-	/**
-	 * Init or get action bar-
-	 * @return \GDO\UI\GDT_Bar
-	 */
-	public function actions()
+	public function actions() : GDT_Menu
 	{
-		if (!$this->actions)
+		if (!isset($this->actions))
 		{
-			$this->actions = GDT_Menu::make('actions');
+			$this->actions = GDT_Menu::make();
 		}
 		return $this->actions;
 	}
 	
-	public function getActions()
+	public function getActions() : GDT_Menu
 	{
 		return $this->actions;
 	}
 
-	public function hasActions()
+	public function hasActions() : bool
 	{
-		return $this->actions && (!empty($this->actions));
+		return isset($this->actions);
 	}
 	
 }

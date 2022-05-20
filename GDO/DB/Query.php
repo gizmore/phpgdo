@@ -9,19 +9,19 @@ use GDO\Core\Logger;
 use GDO\Core\GDO_Error;
 
 /**
- * GDO Query builder.
- * Part of the GDO DBA code.
- * You should use GDO classes to create queries.
+ * GDO Query Builder.
+ * Part of the GDO DBAL code.
+ * You should use GDO Classes to create queries.
  * 
  * @example GDO_User::table()->select()->execute()->fetchAll();
  * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 5.0.0
  * @see GDO
+ * @see Cache
  * @see Result
  * @see Database
- * 
- * @author gizmore
- * @version 7.0.0
- * @since 5.0.0
  */
 final class Query
 {
@@ -33,14 +33,12 @@ final class Query
 	const DELETE = "DELETE FROM";
 	
 	/**
-	 * The table to manipulate.
-	 * @var GDO
+	 * The table in FROM/INTO
 	 */
 	public GDO $table;
 	
 	/**
-	 * The fetch object gdo table.
-	 * @var GDO
+	 * The fetch into object gdo table / final class.
 	 */
 	public GDO $fetchTable;
 	
@@ -60,6 +58,7 @@ final class Query
 	private bool $write = false; # Is it a write query?
 	private bool $cached = true;
 	public  bool $buffered = true;
+	public  bool $debug = false;
 	
 	public function __construct(GDO $table)
 	{
@@ -74,20 +73,21 @@ final class Query
 	 * Use this to avoid using the GDO cache. This means the memcache might be still used? This means no single identity?
 	 * @return \GDO\DB\Query
 	 */
-	public function uncached() { return $this->cached(false); }
-	public function cached($cached=true) { $this->cached = $cached; return $this; }
+	public function uncached() : self { return $this->cached(false); }
+	public function cached(bool $cached=true) : self { $this->cached = $cached; return $this; }
 
 	/**
 	 * Mark this query's buffered mode.
 	 * @param boolean $buffered
 	 * @return self
 	 */
-	public function buffered($buffered)
+	public function buffered(bool $buffered) : self
 	{
-	    $this->buffered = !!$buffered;
+	    $this->buffered = $buffered;
 	    return $this;
 	}
-	public function unbuffered()
+	
+	public function unbuffered() : self
 	{
 	    return $this->buffered(false);
 	}
@@ -100,7 +100,6 @@ final class Query
 	 * @return \GDO\DB\Query
 	 */
 	public function debug($debug=true) : self { $this->debug = $debug; return $this; }
-	private bool $debug = false;
 	
 	#############
 	### Clone ###
@@ -269,13 +268,15 @@ final class Query
 	}
 	
 	/**
-	 * Build a select but reset columns.
+	 * Continue to build a select but reset columns.
+	 * This may be useful in pagination queries.
+	 * 
 	 * @param string $columns
 	 * @return self
 	 */
 	public function selectOnly(string $columns=null) : self
 	{
-	    $this->columns = null;
+		unset($this->columns);
 	    return $this->select($columns);
 	}
 	
@@ -286,13 +287,13 @@ final class Query
 	 */
 	public function limit(int $count, int $start=0) : self
 	{
-		$this->limit = " LIMIT $start, $count";
+		$this->limit = " LIMIT {$start}, {$count}";
 		return $this;
 	}
 	
 	public function noLimit() : self
 	{
-	    $this->limit = null;
+	    unset($this->limit);
 	    return $this;
 	}
 	
@@ -317,7 +318,7 @@ final class Query
 	
 	private function getSelectColumns() : string
 	{
-		return $this->columns ? $this->columns : ' *';
+		return isset($this->columns) ? $this->columns : ' *';
 	}
 	
 	public function delete(string $tableName) : self
@@ -353,7 +354,7 @@ final class Query
 	
 	public function noOrder() : self
 	{
-	    $this->order = null;
+	    unset($this->order);
 	    return $this;
 	}
 	
@@ -362,19 +363,16 @@ final class Query
 	 * @param string $order
 	 * @return self
 	 */
-	public function order(string $order = null) : self
+	public function order(string $order) : self
 	{
-		if ($order)
-		{
-		    if (!isset($this->order))
-		    {
-		        $this->order = [$order];
-		    }
-		    else
-		    {
-		        $this->order[] = $order;
-		    }
-		}
+	    if (!isset($this->order))
+	    {
+	        $this->order = [$order];
+	    }
+	    else
+	    {
+	        $this->order[] = $order;
+	    }
 		return $this;
 	}
 	
@@ -391,14 +389,19 @@ final class Query
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @var array
+	 */
 	private array $joinedObjects = [];
 	
 	/**
 	 * Automatically build a join based on a GDT_Object column of this queries GDO table.
-	 * @param string $key the GDO
-	 * @param string $join
-	 * @return \GDO\DB\Query
+	 * 
 	 * @see GDO
+	 * @param string $key the GDT_Object
+	 * @param string $join type
+	 * @return Query
 	 */
 	public function joinObject(string $key, string $join='JOIN', string $tableAlias=null) : self
 	{
@@ -436,19 +439,19 @@ final class Query
 		return $this->join($join);
 	}
 	
-	public function group($group)
+	public function group(string $group) : self
 	{
 		$this->group = isset($this->group) ? "{$this->group},{$group}" : $group;
 		return $this;
 	}
 	
-	public function values(array $values)
+	public function values(array $values) : self
 	{
 	    $this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
 		return $this;
 	}
 	
-	public function getValues()
+	public function getValues() : string
 	{
 		if (!isset($this->values))
 		{
@@ -458,7 +461,7 @@ final class Query
 		$values = [];
 		foreach ($this->values as $key => $value)
 		{
-			$fields[] = GDO::quoteIdentifierS($key);
+			$fields[] = $key;
 			$values[] = GDO::quoteS($value);
 		}
 		$fields = implode(',', $fields);

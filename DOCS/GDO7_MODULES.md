@@ -5,7 +5,7 @@ There are plenty of modules to [discover](?GDO7_MODULES: categorized Modules ove
 
 ## GDO7_MODULES: Installation
 
-To install a module, please read [GDO7_MODULE_INSTALLATION.md](GDO7_MODULE_INSTALLATION.md).
+To install a module, please read [GDO7_INSTALLATION.md](GDO7_INSTALLATION.md#gdov7-installation-of-a-module).
 
 
 ## GDO7_MODULES: Categorized Modules Overview
@@ -42,5 +42,4 @@ These modules wrap a 3rd party content editor library, like Markdown, BBCode or 
 ## GDO7_MODULES: GDO Modules
 
 These modules are the result of my coding work. Licensed to me. Prior Art!
-
 

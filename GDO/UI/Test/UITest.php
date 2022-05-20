@@ -22,12 +22,12 @@ final class UITest extends TestCase
     public function testButtons()
     {
         $btn = GDT_Button::make()->href(hrefDefault());
-        $html = $btn->render();
+        $html = $btn->renderMode(GDT::RENDER_CELL);
         assertStringContainsStringIgnoringCase(GDO_MODULE, $html, "Test if Button renders without name.");
         
         $form = GDT_Form::make();
         $form->addField($btn);
-        $html = $form->render();
+        $html = $form->renderMode(GDT::RENDER_HTML);
         assertStringContainsString('gdt-button', $html, "Test if Button renders without name inside forms.");
     }
     

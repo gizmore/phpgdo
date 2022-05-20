@@ -17,7 +17,7 @@ use GDO\Core\GDT_Response;
  * Install selected modules.
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.1
  * @since 3.0.0
  */
 final class InstallModules extends Method
@@ -93,7 +93,6 @@ final class InstallModules extends Method
 	
 	private function getModuleDependencies()
 	{
-		$deps = [];
 		foreach ($this->modules as $module)
 		{
 			$deps[$module->getName()] = $module->getDependencies();
@@ -127,7 +126,7 @@ final class InstallModules extends Method
 				}
 			}
 		}
-		catch (\Exception $e)
+		catch (\Throwable $e)
 		{
 			Database::instance()->transactionRollback();
 			throw $e;
@@ -137,7 +136,7 @@ final class InstallModules extends Method
 			Cache::flush();
 		}
 		
-		return $response->addField(GDT_Success::with(t('install_modules_completed', [Config::linkStep(5)])));
+		return $response->addField(GDT_Success::make()->text('install_modules_completed', [Config::linkStep(5)]));
 	}
 	
 }

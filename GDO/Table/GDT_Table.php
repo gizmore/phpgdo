@@ -42,10 +42,8 @@ use GDO\Form\WithCrud;
  * $_REQUEST[$headerName][s][ID]=[ID] for sorting (planned)
  *
  * @author gizmore
- *        
- * @version 6.11.3
+ * @version 7.0.1
  * @since 6.0.0
- *       
  * @see GDO
  * @see GDT
  * @see GDT_PageMenu
@@ -90,9 +88,7 @@ class GDT_Table extends GDT
 	 */
 	public function getHeaderFields() : array
 	{
-		return isset($this->headers) ?
-			$this->headers->getFieldsRec() :
-			GDT::EMPTY_ARRAY;
+		return isset($this->headers) ? $this->headers->getFields() : GDT::EMPTY_ARRAY;
 	}
 
 	/**
@@ -172,7 +168,7 @@ class GDT_Table extends GDT
 		}
 	}
 
-	public function getDefaultIPP()
+	public function getDefaultIPP() : int
 	{
 		return Module_Table::instance()->cfgItemsPerPage();
 	}
@@ -195,7 +191,6 @@ class GDT_Table extends GDT
 	# ## Searching ###
 	# ################
 	public $searched;
-
 	public function searched($searched = true)
 	{
 		$this->searched = $searched;

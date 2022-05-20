@@ -2,19 +2,22 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
+use GDO\Form\GDT_Validator;
 
 /**
  * The base class for all GDT.
- * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Label.
+ * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Icon.
  * 
- * A GDT can support these rendering functions; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/FILTER.
- * 
- * @see GDO
- * @see GDT_Field
+ * A GDT can, or has to, support the following rendering functions / output formats; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/FILTER.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
+ * @see GDO
+ * @see GDT_Pre
+ * @see GDT_Field
+ * @see WithPHPJQuery
+ * @see WithFormAttributes
  */
 abstract class GDT
 {
@@ -25,19 +28,57 @@ abstract class GDT
 	###################
 	### Instanciate ###
 	###################
+	/**
+	 * Create a GDT instance.
+	 * The very basic GDT don't know anything, don't have attributes or much functions.
+	 * @param string $name
+	 * @return self
+	 */
 	public static function make(string $name = null) : self
 	{
 		return new static();
 	}
 	
-	protected function __construct()
-	{
-		# Make protected so it cannot be used without ::make()
-	}
-	
-	public function blankData() : array 
+	public function blankData() : array
 	{
 		return self::EMPTY_ARRAY;
+	}
+	
+	#############
+	### Debug ###
+	#############
+	public static bool $GDT_DEBUG = GDO_GDT_DEBUG;
+	public static int  $GDT_COUNT = 0;
+	
+	/**
+	 * For the performance counter to work, you have to make sure the constructor chain works.
+	 */
+	protected function __construct()
+	{
+		$this->afterLoaded();
+	}
+	
+	public function __wakeup()
+	{
+		$this->afterLoaded();
+	}
+	
+	private function afterLoaded()
+	{
+		self::$GDT_COUNT++;
+		if (self::$GDT_DEBUG)
+		{
+			$this->logDebug();
+		}
+	}
+	
+	private function logDebug()
+	{
+		Logger::log('gdt', sprintf('%d: %s', self::$GDT_COUNT, get_class($this)));
+		if (self::$GDT_DEBUG > 1)
+		{
+			Logger::log('gdt', Debug::backtrace('Backtrace GDT allocation', false));
+		}
 	}
 	
 	##############
@@ -137,6 +178,41 @@ abstract class GDT
 	################
 	### Validate ###
 	################
+	/**
+	 * Validation is a great experience in GDOv7.
+	 * @TODO make validate use $var instead of $value. Or maybe make a second func validateVar.
+	 *
+	 * Almost all GDT have a quite decent validator. There is also a GDT to top that; The GDT_Validator.
+	 * This GDT parameterizes the target GDT to validate, the value to validate, and the form to check for related fields.
+	 * To indicate an error return false. Please use $gdt->error() to make the field in question blink and noting your error
+	 * description.
+	 *
+	 * The GDT_Field class only has a validator algorithm for notNull checks. "You need to fill out this field."
+	 * GDT_String takes care of almost 65% of the rest of the input validation. Regex, Lengths, Charset, NotNull, Uniqueness.
+	 * The rest is datetime and numbers. Then you almost got all validations figured out for free by object orientated
+	 * programming paradigms.
+	 * Well, to indicate an error to the form, you call an error method on the faulty GDT and give it an error message; "Your
+	 * input needs to be at least 2 chars in length.".
+	 * The UI is indicating the faulty field. Animations possibly help in identifying the problem.
+	 *
+	 * @example where the terms of service have to be clicked.
+	 * @example $gdt = GDT_Form::$CURRENT->getField('tos'); $tos = $gdt->getVar() return $tos === true ? true : $gdt->error('You
+	 *          need to acknowledge this checkbox and read the privacy guidelines first.');
+	 * @example return $value ? true : $gdt->error('err_tos_needs_to_be_truthy');
+	 *
+	 *          The target $gdt field is an argument as well as the $value and the $form, if you really have to add validation
+	 *          rules.
+	 *
+	 * @see GDT_Int for the integer validator.
+	 * @see GDT_String for the string validator.
+	 * @see GDT_Validator which is needed rarely. An example is the IP check in Register.
+	 * @see GDT_Select
+	 * @see GDT_ComboBox
+	 * @see GDT_Enum
+	 *
+	 * @param mixed $value
+	 * @return boolean
+	 */
 	public function validate($value) : bool
 	{
 		return true;
@@ -217,11 +293,11 @@ abstract class GDT
 		return self::EMPTY_ARRAY;
 	}
 	
-	public function gdo(GDO $gdo) : self
+	public function gdo(GDO $gdo = null) : self
 	{
-		return $this->var($gdo->gdoVar($this->getName()));
+		return $this;
 	}
-	
+
 	public function htmlVar() : string
 	{
 		return html($this->getVar());
@@ -305,11 +381,11 @@ abstract class GDT
 	##################
 	### Conversion ###
 	##################
-	public function inputToVar(string $input) : string
+	public function inputToVar(string $input=null) : ?string
 	{
 		if ($input === null)
 		{
-			return '';
+			return null;
 		}
 		$input = trim($input);
 		return $input === '' ? null : $input;
@@ -354,4 +430,10 @@ abstract class GDT
 		return $default;
 	}
 	
+}
+
+if (GDT::$GDT_DEBUG)
+{
+	Logger::log('gdt', '--- NEW RUN ---');
+	Logger::log('gdo', '--- NEW RUN ---');
 }

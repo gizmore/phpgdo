@@ -30,6 +30,18 @@ final class GDT_Form extends GDT
 	use WithActions; # menu
 	
 	############
+	### Verb ###
+	############
+	const GET = 'GET';
+	const POST = 'POST';
+	public string $verb = self::POST;
+	public function verb(string $verb) : self
+	{
+		$this->verb = $verb;
+		return $this;
+	}
+
+	############
 	### Slim ###
 	############
 	public bool $slim = false;
@@ -39,4 +51,5 @@ final class GDT_Form extends GDT
 		return $this;
 	}
 	
+
 }

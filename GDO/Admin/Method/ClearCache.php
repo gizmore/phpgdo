@@ -6,23 +6,25 @@ use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
 use GDO\DB\Cache;
 use GDO\File\FileUtil;
+use GDO\Tests\GDT_MethodTest;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Module_Core;
 use GDO\Core\Website;
 use GDO\Core\GDT;
 use GDO\DB\Database;
 use GDO\Core\Application;
-use GDO\Tests\MethodTest;
 
 /**
  * Clears all client and server caches.
+ * 
  * Does not save last url. Calls last url.
  * 
- * @TODO move AdminClearCache to Module_Core.
+ * @TODO move Admin::ClearCache to Module_Core.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.1
+ * @see GDO
  * @see Cache
  * @see Module_Core
  */
@@ -45,7 +47,7 @@ final class ClearCache extends Method
 	    # Retrigger assets
 	    $core = Module_Core::instance();
 	    $assetVersion = $core->cfgAssetVersion();
-	    $assetVersion->patch++;
+	    $assetVersion->increase();
 	    $core->saveConfigVar('asset_revision', $assetVersion->__toString());
 	    # Flush memcached.
 	    Cache::flush();
@@ -60,7 +62,7 @@ final class ClearCache extends Method
 	    # Clear module loader cache
 	    ModuleLoader::instance()->reset();
 	    # More caches
-	    MethodTest::$USERS = [];
+	    GDT_MethodTest::$USERS = [];
 	    # Call hook
 	    GDT_Hook::callWithIPC('ClearCache');
 	}

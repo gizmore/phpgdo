@@ -32,10 +32,12 @@ final class Sort
     public static function sortResult(ArrayResult $result, array $orders)
     {
         # Create a table to sort with
-        $table = GDT_Table::make('sort_table');
-        $table->addHeaders($result->table->gdoColumnsCache());
+        $table = GDT_Table::make()->addHeaders(...$result->table->gdoColumnsCache());
+//         $table->inputs($orders);
+        
+//         $table->addHeaders($result->table->gdoColumnsCache());
 //         $table->headers->name = '_mosort_';
-        $table->headers->input($orders);
+        $table->headers->inputs($orders);
         
         # Plug orders into request vars
 //         $o = $table->headers->name;

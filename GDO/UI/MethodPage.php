@@ -14,10 +14,6 @@ use GDO\Core\Method;
  */
 abstract class MethodPage extends Method
 {
-    /**
-     * {@inheritDoc}
-     * @see \GDO\Core\Method::execute()
-     */
 	public function execute() : GDT
 	{
 		$name = strtolower($this->gdoShortName());

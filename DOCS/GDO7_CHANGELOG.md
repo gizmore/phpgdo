@@ -1,4 +1,4 @@
-# GDOv7 History and Changelog
+# GDOv7 Changelog and Roadmap
 
 Please read from bottom to top :)
 
@@ -17,19 +17,26 @@ GDOv7.0.4 will be the first version with SQLite or Postgres support. Else, only 
 
 GDOv7.0.3 will come with a polished Bootstrap5 theme and feature a new demo site.
 
- - New demo site [RendlessCode](https://rendless.code.wechall.net) which is a hacking challenge.
+ - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
+
+ - New demo site [RendlessCode](https://rendless.code.wechall.net) which is a web exploit hacking challenge.
 
  - Refurbished [Module_Boostrap5](https://github.com/gizmore/phpgdo-bootstrap5) and [Module_Boostrap5Theme](https://github.com/gizmore/phpgdo-bootstrap5-theme).
 
 
 ## 7.0.2 / scheduled 19.Jun.2022
 
-GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Remember, write methods once, use them everywhere.
+GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Write methods once and use them everywhere.
 
 
 ## 7.0.1 / scheduled 05.Jun.2022
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
+
+
+ - New [Module_Gender](../). Nothing fancy like LBQGT, only male and female. User settings, etc.
+
+ - These GDT have been removed: [GDT_IconButton](../)
 
  - [GDT_ACL]() is now a core GDT.
 
@@ -37,7 +44,7 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
  - Modules can now come with a [LOGFILE.md](../GDO/Core/LOGFILE.md) which will be the default location for a module's todo and changelog. I chose LOGFILE.md because it fits a nice position in a module directory tree.
 
- - New / first GDOv7 [Mailer module](https://github.com/gizmore/phpgdo-mailer). A mailer for symfony or alike will follow.
+ - New / first [GDOv7 Mailer module](https://github.com/gizmore/phpgdo-mailer-gdo). A mailer for symfony or better will follow.
  
  - [Module_DOMPDF](https://github.com/gizmore/phpgdo-dompdf) replaces [Module_TCPDPF](https://github.com/gizmore/phpgdo-dompdf) (which never got finished). We are now using a HTML to PDF strategy. New GDT render method renderPDF() which defaults renderHTML(). It's the first module to use composer as 3rd party library provider.
 
@@ -45,7 +52,7 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 ## 7.0.0 / release 22.May.2022
 
 A fresh restart of the GDO project.
-GDOv7.0.0 comes with *all core* and *some secret* modules, all of them unit tested.
+GDOv7.0.0 comes with *all core* and *some secret* modules, all of them unit tested. (on it)
 
  - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name and more...
 

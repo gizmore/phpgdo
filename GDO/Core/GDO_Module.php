@@ -200,7 +200,7 @@ class GDO_Module extends GDO
 	 * Module description is fetched from README.md by default.
 	 * @return string
 	 */
-	public function getModuleDescription()
+	public function getModuleDescription() : ?string
 	{
 		if ($readme = @file_get_contents($this->filePath('README.md')))
 		{
@@ -210,6 +210,7 @@ class GDO_Module extends GDO
 				return $matches[1];
 			}
 		}
+		return null;
 	}
 	
 	################

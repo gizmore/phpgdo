@@ -1,0 +1,72 @@
+<?php
+namespace GDO\Core;
+
+use GDO\User\GDO_User;
+use GDO\Date\Time;
+use GDO\Language\Trans;
+
+/**
+ * WithEnvironment is for Method execution.
+ * GDT_Method uses it to keep track of the execution state.
+ * 
+ * Add GDT result attribute.
+ * Add effective GDO_User attribute.
+ * 
+ * @author gizmore
+ * @version 7.0.1
+ */
+trait WithEnvironment
+{
+	use WithFields; # $inputs
+	
+	##############
+	### Run As ###
+	##############
+	public GDO_User $runAs;
+	/**
+	 * Optional user for running the method. Default is GDO_User::current()
+	 * 
+	 * @param GDO_User $runAs
+	 * @return self
+	 */
+	public function runAs(GDO_User $runAs=null) : self
+	{
+		$this->runAs = $runAs ? $runAs : GDO_User::current();
+		return $this;
+	}
+	
+	##############
+	### Method ###
+	##############
+	public Method $method;
+	public function method(Method $method) : self
+	{
+		$this->method = $method;
+		return $this;
+	}
+	
+	##############
+	### Result ###
+	##############
+	public GDT $result;
+	public function result(GDT $result) : self
+	{
+		$this->result = $result;
+		return $this;
+	}
+	
+	###############
+	### Execute ###
+	###############
+	protected function changeUser() : self
+	{
+		if (isset($this->runAs))
+		{
+			GDO_User::setCurrent($this->runAs);
+			Time::setTimezone($this->runAs->getTimezone());
+			Trans::setISO($this->runAs->getLangISO());
+		}
+		return $this;
+	}
+	
+}

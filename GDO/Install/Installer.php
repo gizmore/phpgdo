@@ -338,6 +338,8 @@ class Installer
 	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	    $module = ModuleLoader::instance()->getModule($moduleName);
 	    $deps = $module->getDependencies();
+	    $deps[] = 'Core';
+	    $deps = array_unique($deps);
 	    $cnt = 0;
 	    $allResolved = true; # All required modules provided?
 	    while ($cnt !== count($deps))

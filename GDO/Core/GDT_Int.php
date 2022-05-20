@@ -2,10 +2,10 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
-use GDO\Util\Regex;
 
 /** 
  * Database capable base integer class.
+ * Is also is the base class for GDT_Objects
  * 
  * Control ->bytes(4) for size.
  * Control ->unsigned([true]) for unsigned.
@@ -19,21 +19,19 @@ use GDO\Util\Regex;
  * Uses WithLabel, WithFormFields, WithDatabase and WithOrder.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * 
  * @see GDT_UInt
  * @see GDT_Decimal
+ * @see GDT_Float
  * @see GDT_Object
  */
 class GDT_Int extends GDT_DBField
 {
 	public function toValue(string $var = null)
 	{
-		if (!empty($var))
-		{
-			return intval($var, 10);
-		}
+		return $var === null ? null : intval($var, 10);
 	}
 	
 	#############
@@ -77,10 +75,10 @@ class GDT_Int extends GDT_DBField
 	################
 	### Validate ###
 	################
-	public function is_numeric($input)
-	{
-		return !!Regex::firstMatch('/^([\\d+\\.,]+)$/iD', $input);
-	}
+// 	public function is_numeric(string $input) : bool
+// 	{
+// 		return !!Regex::firstMatch('/^([0-9][-+\\d\\.,]*)$/iD', $input);
+// 	}
 	
 	public function validate($value) : bool
 	{
@@ -105,9 +103,10 @@ class GDT_Int extends GDT_DBField
 			}
 			return true;
 		}
+		return false;
 	}
 	
-	protected function validateUnique($value)
+	protected function validateUnique($value) : bool
 	{
 		if ($this->unique)
 		{
@@ -121,7 +120,7 @@ class GDT_Int extends GDT_DBField
 		return true;
 	}
 	
-	private function numericError()
+	private function numericError() : bool
 	{
 		return $this->error('err_input_not_numeric');
 	}
@@ -130,7 +129,7 @@ class GDT_Int extends GDT_DBField
 	 * Appropiate min / max validation.
 	 * @return boolean
 	 */
-	private function intError()
+	private function intError() : bool
 	{
 		if (($this->min !== null) && ($this->max !== null))
 		{
@@ -146,9 +145,12 @@ class GDT_Int extends GDT_DBField
 		}
 	}
 	
+	/**
+	 * 4 === 4
+	 */
 	public function plugVar() : string
 	{
-	    return "4";
+	    return "4"; # don't get lost
 	}
 	
 	public function gdoExampleVars()
@@ -256,9 +258,14 @@ class GDT_Int extends GDT_DBField
 		return true;
 	}
 	
+	/**
+	 * Comparing two integers is not that hard.
+	 */
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
-		return $a->gdoValue($this->name) - $b->gdoValue($this->name);
+		return
+			$a->gdoValue($this->name) -
+			$b->gdoValue($this->name);
 	}
 	
 	##############

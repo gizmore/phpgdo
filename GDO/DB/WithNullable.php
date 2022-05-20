@@ -39,14 +39,9 @@ trait WithNullable
 	################
 	public function validateNull($value) : bool
 	{
-		if ($this->notNull)
-		{
-			if ($value === null)
-			{
-				return $this->errorNull();
-			}
-		}
-		return true;
+		return $this->notNull ?
+			($value === null ? $this->errorNull() : true) :
+			true;
 	}
 
 	protected function errorNull() : bool

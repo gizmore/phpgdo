@@ -24,14 +24,17 @@ use GDO\User\GDO_User;
  */
 abstract class MethodTable extends Method
 {
-	public function gdoParametersB() : array
-	{
-		$p = $this->gdoParameters();
-		$this->table->headers->withFields(function(GDT $gdt) use (&$p) {
-			$p[] = $gdt;
-		});
-		return $p;
-	}
+	
+	
+	
+// 	public function gdoParametersB() : array
+// 	{
+// 		$p = $this->gdoParameters();
+// 		$this->table->headers->withFields(function(GDT $gdt) use (&$p) {
+// 			$p[] = $gdt;
+// 		});
+// 		return $p;
+// 	}
 	
 // 	/**
 // 	 * Build and/or get the GET parameter cache.
@@ -300,7 +303,7 @@ abstract class MethodTable extends Method
 	
 	public function initTable()
 	{
-		$this->init();
+// 		$this->onInit();
 		$table = $this->table;
 		$this->table->result = null;
 	    $this->createTable($table);

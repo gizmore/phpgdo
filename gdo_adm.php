@@ -240,12 +240,12 @@ elseif ($argv[1] === 'modules')
         {
             $deps = implode(', ', $module->getDependencies());
             echo "Module: {$moduleName}\n";
-            echo "License: {$module->module_license}\n";
+            echo "License: {$module->license}\n";
             echo $module->getModuleDescription();
             echo "\n";
             if ($deps)
             {
-                echo "Dependencies: {$deps}";
+                echo "Dependencies: {$deps}\n";
             }
         }
     }
@@ -300,6 +300,9 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 	    $cnt = count($deps);
 	    echo "Installing all {$cnt} modules.\n";
 	}
+	
+	$deps[] = 'Core';
+	$deps = array_unique($deps);
     
     $cnt = 0;
 	$allResolved = true; # All required modules provided?
@@ -550,7 +553,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     $cd = 0;
     if ($argv[1] === 'provide_all')
     {
-    	$deps = [];
+    	$deps = ['Core'];
     	foreach (ModuleProviders::$PROVIDERS as $name => $providers)
     	{
     		if ($providers)
@@ -561,7 +564,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     }
     else
     {
-    	$deps = [$argv[2]];
+    	$deps = ['Core', $argv[2]];
     	while ($cd != count($deps))
     	{
     		$cd = count($deps);
@@ -587,6 +590,8 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     		}
     	}
     }
+
+    $deps = array_unique($deps);
     
     # Sort by name
     sort($deps);
@@ -595,7 +600,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     $missing = [];
     foreach ($deps as $dep)
     {
-        if (!$loader->getModule($dep))
+        if (!$loader->getModule($dep, false, false))
         {
             $missing[] = $dep;
         }

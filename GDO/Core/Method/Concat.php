@@ -27,7 +27,7 @@ final class Concat extends Method
 		$a = $this->gdoParameterVar('a');
 		$glue = $this->gdoParameterVar('glue');
 		$b = $this->gdoParameterVar('b');
-		return GDT_String::make()->var($a . $glue . $b);
+		return $a . $glue . $b;
 	}
 
 }

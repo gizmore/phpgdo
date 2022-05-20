@@ -7,22 +7,24 @@ use GDO\File\GDO_File;
 
 /**
  * HTML Image element.
+ * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class GDT_Image extends GDT
 {
 	use WithPHPJQuery;
 	
+	const GIF = 'image/gif';
 	const PNG = 'image/png';
 	const JPG = 'image/jpeg';
 	
 	############
 	### Vars ###
 	############
-	public $src;
-	public function src($src)
+	public string $src;
+	public function src(string $src) : self
 	{
 		$this->src = $src;
 		return $this;
@@ -45,4 +47,5 @@ final class GDT_Image extends GDT
 		$image->src($file->getHref());
 		return $image;
 	}
+	
 }

@@ -133,7 +133,7 @@ class GDT_Message extends GDT_Text
             $config->set('URI.DisableResources', false);
             $config->set('HTML.TargetBlank', true);
             $config->set('HTML.Allowed', 'br,a[href|rel|target],p,pre[class],code[class],img[src|alt],figure[style|class],figcaption,center,b,i,div[class],h1,h2,h3,h4,h5,h6');
-            $config->set('Attr.DefaultInvalidImageAlt', t('img_not_found'));
+            $config->set('Attr.DefaultInvalidImageAlt', t('err_img_not_found'));
             $config->set('HTML.SafeObject', true);
             $config->set('Attr.AllowedRel', array('nofollow'));
             $config->set('HTML.DefinitionID', 'gdo6-message');

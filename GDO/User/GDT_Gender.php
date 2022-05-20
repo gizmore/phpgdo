@@ -7,8 +7,8 @@ use GDO\Core\GDT_Enum;
  * Gender enum.
  * 
  * @author gizmore
- * @since 4.01
- * @version 6.07
+ * @version 6.0.7
+ * @since 4.0.1
  */
 class GDT_Gender extends GDT_Enum
 {
@@ -20,6 +20,7 @@ class GDT_Gender extends GDT_Enum
 	
 	protected function __construct()
 	{
+		parent::__construct();
 		$this->icon('gender');
 		$this->enumValues(self::NONE, self::MALE, self::FEMALE);
 		$this->initial(self::NONE);

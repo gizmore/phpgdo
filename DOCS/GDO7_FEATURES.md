@@ -4,11 +4,11 @@
  
  - Write a GDT once and have perfect sanitization and validation on any user input. Re-use your GDT nicely.
  
- - Almost no 3rd party dependency in the core. Only [CSS Minifier](https://github.com/matthiasmullie/minify) and [HTML purifier](https://github.com/ezyang/htmlpurifier) to sanitize user html input. PHPUnit is installed via composer, if wanted / required.
+ - Almost no 3rd party dependency in the core. Only [HTML purifier](https://github.com/ezyang/htmlpurifier) to sanitize user html input. 
  
- - Composer still not required nor wanted.
+ - Composer still not required. Used for PHPUnit and DOMPDF.
  
- - Blazing fast (4ms) for a PHP application with a good memory footprint (3MB). For some very simple pages that is.
+ - Blazing fast (8ms) for a PHP application with a good memory footprint (4MB). For some very simple pages that is.
 
  - Code driven database. Never write a single migration file again.
 

@@ -11,14 +11,16 @@ use GDO\Util\Strings;
  * Abstract baseclass for all methods.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.1
  */
 abstract class Method
 {
+// 	use WithFields;
 	use WithModule;
 	use WithInstance;
-
+	use WithParameters;
+	
 	################
 	### Override ###
 	################
@@ -99,132 +101,134 @@ abstract class Method
 	##################
 	### Parameters ###
 	##################
-	/**
-	 * @return GDT[]
-	 */
-	public function gdoParameters() : array
-	{
-		return GDT::EMPTY_ARRAY;
-	}
+// 	/**
+// 	 * @return GDT[]
+// 	 */
+// 	public function gdoParameters() : array
+// 	{
+// 		return GDT::EMPTY_ARRAY;
+// 	}
 	
-	/**
-	 * @return GDT[]
-	 */
-	protected function gdoParametersB() : array
-	{
-		return $this->gdoParameters();
-	}
+// 	/**
+// 	 * @return GDT[]
+// 	 */
+// 	protected function gdoParametersB() : array
+// 	{
+// 		return $this->gdoParameters();
+// 	}
 	
-	/**
-	 * Get a parameter GDT before the cache is generated.
-	 * @return GDT|NULL
-	 */
-	protected function gdoParameterB(string $name) : ?GDT
-	{
-		foreach ($this->gdoParameters() as $gdt)
-		{
-			if ($gdt->getName() === $name)
-			{
-				return $gdt;
-			}
-		}
-		return null;
-	}
+// 	/**
+// 	 * Get a parameter GDT before the cache is generated.
+// 	 * @return GDT|NULL
+// 	 */
+// 	protected function gdoParameterB(string $name) : ?GDT
+// 	{
+// 		foreach ($this->gdoParameters() as $gdt)
+// 		{
+// 			if ($gdt->getName() === $name)
+// 			{
+// 				return $gdt;
+// 			}
+// 		}
+// 		return null;
+// 	}
 	
 	
-	/**
-	 * @var GDT[]
-	 */
-	private array $parameterCache;
+// 	/**
+// 	 * @var GDT[]
+// 	 */
+// 	private array $parameterCache;
 	
-	/**
-	 * @return GDT[]
-	 */
-	public function &gdoParameterCache() : array
-	{
-		if (!isset($this->parameterCache))
-		{
-			$this->parameterCache = [];
-			foreach ($this->gdoParametersB() as $gdt)
-			{
-				if ($gdt->hasName())
-				{
-					$this->parameterCache[$gdt->name] = $gdt;
-				}
-// 				else
+// 	/**
+// 	 * @return GDT[]
+// 	 */
+// 	public function &gdoParameterCache() : array
+// 	{
+// 		if (!isset($this->parameterCache))
+// 		{
+// 			$this->parameterCache = [];
+			
+// 			foreach ($this->gdoParametersB() as $gdt)
+// 			{
+				
+// 				if ($gdt->hasName())
 // 				{
-// 					$this->parameterCache[] = $gdt;
+// 					$this->parameterCache[$gdt->name] = $gdt;
 // 				}
-			}
-		}
-		return $this->parameterCache;
-	}
+// // 				else
+// // 				{
+// // 					$this->parameterCache[] = $gdt;
+// // 				}
+// 			}
+// 		}
+// 		return $this->parameterCache;
+// 	}
 	
-	public function gdoParameter($name) : GDT
-	{
-		return $this->gdoParameterCache()[$name];
-	}
+// 	public function gdoParameter(string $name) : GDT
+// 	{
+// 		return $this->gdoParameterCache()[$name];
+// 	}
 	
-	public function gdoParameterVar($name) : string
-	{
-		return $this->gdoParameter($name)->var;
-	}
+// 	public function gdoParameterVar(string $name) : string
+// 	{
+// 		return $this->gdoParameter($name)->var;
+// 	}
 	
-	public function gdoParameterValue($name) : string
-	{
-		return $this->gdoParameter($name)->getValue();
-	}
+// 	public function gdoParameterValue(string $name) : string
+// 	{
+// 		return $this->gdoParameter($name)->getValue();
+// 	}
 	
-	public function parameters(array $inputs, bool $throw=true) : self
-	{
-		$i = 0;
-		/**
-		 * @var GDT[] $positional
-		 */
-		$positional = [];
-		/**
-		 * @var GDT[] $namedional
-		 */
-		$namedional = [];
+// 	public function parameters(array $inputs, bool $throw=true) : self
+// 	{
+// 		$i = 0;
+// 		/**
+// 		 * @var GDT[] $positional
+// 		 */
+// 		$positional = [];
+// 		/**
+// 		 * @var GDT[] $namedional
+// 		 */
+// 		$namedional = [];
 		
-		foreach ($this->gdoParameterCache() as $gdt)
-		{
-			if ($gdt->isPositional())
-			{
-				$positional[] = $gdt;
-				if ($gdt->hasName())
-				{
-					$namedional[$gdt->getName()] = $gdt;
-				}
-			}
-			elseif ($gdt->hasName())
-			{
-				$namedional[$gdt->getName()] = $gdt;
-			}
-			elseif ($throw)
-			{
-				throw new GDO_Error('err_gdt_should_have_a_name', [$gdt->gdoShortName()]);
-			}
-		}
+// 		foreach ($this->gdoParameterCache() as $gdt)
+// 		{
+// 			if ($gdt->isPositional())
+// 			{
+// 				$positional[] = $gdt;
+// 				if ($gdt->hasName())
+// 				{
+// 					$namedional[$gdt->getName()] = $gdt;
+// 				}
+// 			}
+// 			elseif ($gdt->hasName())
+// 			{
+// 				$namedional[$gdt->getName()] = $gdt;
+// 			}
+// 			elseif ($throw)
+// 			{
+// 				throw new GDO_Error('err_gdt_should_have_a_name', [$gdt->gdoShortName()]);
+// 			}
+// 		}
 
-		foreach ($inputs as $key => $input)
-		{
-			if (is_numeric($key))
-			{
-				$positional[$i++]->input($input);
-			}
-			elseif (isset($namedional[$key]))
-			{
-				$namedional[$key]->input($input);
-			}
-			elseif ($throw)
-			{
-				throw new GDO_Error('err_gdt_should_have_a_name', [html($key)]);
-			}
-		}
+// 		foreach ($inputs as $key => $input)
+// 		{
+// 			if (is_numeric($key))
+// 			{
+// 				$positional[$i++]->input($input);
+// 			}
+// 			elseif (isset($namedional[$key]))
+// 			{
+// 				$namedional[$key]->input($input);
+// 			}
+// 			elseif ($throw)
+// 			{
+// 				throw new GDO_Error('err_gdt_should_have_a_name', [html($key)]);
+// 			}
+// 		}
 		
-		return $this;
-	}
+// 		return $this;
+// 	}
 	
 	############
 	### Exec ###
@@ -315,13 +319,10 @@ abstract class Method
 	public function execWrap()
 	{
 		# Exec
-		$response = $this->executeWithInit();
-		
-		if ( (!$response) || (!$response->isError()) )
+		if ($response = $this->executeWithInit())
 		{
 			$this->setupSEO();
 		}
-		
 		return $response;
 	}
 	
@@ -342,6 +343,7 @@ abstract class Method
 	public function executeWithInit()
 	{
 		$db = Database::instance();
+		$response = GDT_Response::make();
 		$transactional = $this->transactional();
 		try
 		{
@@ -352,10 +354,9 @@ abstract class Method
 			}
 			
 			# Init method
-			$response = GDT_Response::make();
-			
 			$this->inited = false;
-			$response->addField($this->onInit());
+			
+			$this->onInit();
 			
 			if (Application::isError())
 			{
@@ -366,20 +367,9 @@ abstract class Method
 				return $response;
 			}
 			
-			# Exec 1.before - 2.execute - 3.after
+			$this->beforeExecute();
 			GDT_Hook::callHook('BeforeExecute', $this, $response);
 			
-			$response = GDT_Response::make();
-			if ($response->hasError())
-			{
-				if ($transactional)
-				{
-					$db->transactionRollback();
-				}
-				return $response;
-			}
-			
-			$response->addField($this->beforeExecute());
 			if ($response->hasError())
 			{
 				if ($transactional)
@@ -393,18 +383,24 @@ abstract class Method
 			
 			if (Application::isSuccess())
 			{
-				$response->addField($this->afterExecute());
+				$this->afterExecute();
 				GDT_Hook::callHook('AfterExecute', $this, $response);
-				if ($transactional)
+				if (!$response->hasError())
 				{
-					$db->transactionEnd();
+					if ($transactional)
+					{
+						$db->transactionEnd();
+					}
 				}
 			}
 			
 			# Wrap transaction end
-			else if ($transactional)
+			if ($response->hasError())
 			{
-				$db->transactionRollback();
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
 			}
 			
 			return $response;

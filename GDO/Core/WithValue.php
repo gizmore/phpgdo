@@ -5,10 +5,13 @@ use GDO\DB\WithNullable;
 
 /**
  * This trait adds initial/input/var/value schema to a GDT.
- * The very base GDT does not have this.
+ * The very base GDT do not even have this.
+ * 
+ * The lifecycle of a GDT is as follows;
+ * 
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 trait WithValue
@@ -18,7 +21,7 @@ trait WithValue
 	################
 	### Required ###
 	################
-	public function required(bool $required = true)
+	public function required(bool $required = true) : self
 	{
 		return $this->notNull($required);
 	}
@@ -26,11 +29,11 @@ trait WithValue
 	###########################
 	### Input / Var / Value ###
 	###########################
-	public bool $valueConverted = false; # Has var been converted to value already?
-	public ?string $initial = null; # initial var
-	public $input = null; # input string
-	public ?string $var = null; # input db var
-	public $value; # output value
+	public bool    $valueConverted = false; # remember value has been converted already
+	public ?string $initial = null; # initial dbinput var
+	public ?string $input = null; # userinput string
+	public ?string $var = null; # dbinput var
+	public         $value; # output value
 	
 	public function initial(string $initial = null) : self
 	{
@@ -71,38 +74,50 @@ trait WithValue
 	
 	public function getVar() : ?string
 	{
-		if ($input = $this->getInput())
+		$input = $this->getInput();
+		if ($input !== null)
 		{
-			$this->var($this->inputToVar($input));
+			$var = $this->inputToVar($input);
 		}
-		return $this->var;
+		else
+		{
+			$var = $this->var;
+		}
+		return $var;
 	}
 	
 	public function getValue()
 	{
 		if (!$this->valueConverted)
 		{
-			$this->value = $this->toValue($this->var);
+			$this->value = $this->toValue($this->getVar());
 			$this->valueConverted = true;
 		}
 		return $this->value;
 	}
 
+	/**
+	 * Setup this GDT from a GDO.
+	 * 
+	 * @param GDO $gdo
+	 * @return self
+	 */
 	public function gdo(GDO $gdo = null) : self
 	{
-// 		$this->getGDOData($gdo);
-		$var = $gdo->gdoVar($this->name);
-		return $this->var($var);
-// 		$this->var = $this->initial;
-// 		$this->input = $gdo->gdoV
+		return $this->var($gdo->gdoVar($this->name));
 	}
 	
 	##################
 	### Positional ###
 	##################
+	/**
+	 * Positional GDT cannot be referenced by name in GDT_Expressions.
+	 * 
+	 * @return bool
+	 */
 	public function isPositional() : bool
 	{
-		return $this->isRequired() && (!$this->initial);
+		return $this->isRequired() && ($this->initial === null);
 	}
 
 }

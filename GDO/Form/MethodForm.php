@@ -9,7 +9,7 @@ use GDO\Core\GDT_Response;
  * A method with a form.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.2
  */
 abstract class MethodForm extends Method
@@ -18,20 +18,20 @@ abstract class MethodForm extends Method
 	
 	public abstract function createForm(GDT_Form $form) : void;
 	
-	protected function gdoParametersB() : array
-	{
-		$form = $this->getForm();
-		return array_merge(
-			$this->gdoParameters(),
-			$form->getFieldsRec(),
-			$form->actions()->getFieldsRec());
-	}
+// 	protected function gdoParametersB() : array
+// 	{
+// 		$form = $this->getForm();
+// 		return array_merge(
+// 			$this->gdoParameters(),
+// 			$form->getFieldsRec(),
+// 			$form->actions()->getFieldsRec());
+// 	}
 	
 	public function getForm() : GDT_Form
 	{
 		if (!isset($this->form))
 		{
-			$this->form = GDT_Form::make('method_form');
+			$this->form = GDT_Form::make('form');
 			$this->createForm($this->form);
 		}
 		return $this->form;
@@ -40,17 +40,12 @@ abstract class MethodForm extends Method
 	public function execute() : GDT
 	{
 		$form = $this->getForm();
-		foreach ($form->actions()->getFieldsRec() as $gdt)
-		{
-			if ($gdt->hasName())
+		$form->actions()->withFields(function(GDT $gdt){
+			if ($gdt->hasInput())
 			{
-				if ($gdt->hasInput())
-				{
-					$gdt->click();
-				}
+				return $gdt->click();
 			}
-		}
-		return GDT_Response::make();
+		});
 	}
 	
 }

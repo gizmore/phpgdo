@@ -12,12 +12,12 @@ use GDO\Util\Regex;
  * GDO autoloader and global functions.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 
 # performance
-define('GDO_PERF_START', microtime(true));
+// define('GDO_PERF_START', microtime(true));
 
 # Autoconf path
 define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
@@ -206,8 +206,11 @@ function uridecode(string $url=null) : string
  */
 function module_enabled(string $moduleName) : bool
 {
-	$module = ModuleLoader::instance()->getModule($moduleName, false, false);
-	return $module ? $module->isEnabled() : false;
+	if (ModuleLoader::instance()->getModule($moduleName, false, false))
+	{
+		return true;
+	}
+	return false;
 }
 
 # ######################

@@ -7,19 +7,18 @@ use GDO\Core\GDO_ParseError;
 use GDO\Util\Strings;
 
 /**
- * Parse an expression into an expression tree.
+ * Parse a CLI expression into an expression tree for execution.
  * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 7.0.0
  * @see Method
  * @see GDT_Method
  * @see GDT_Expression
- * 
- * @author gizmore
- * @version 7.0.0
- * @since 7.0.0
  */
 final class Parser
 {
-	private $line;
+	private string $line;
 	
 	public function __construct(string $line)
 	{

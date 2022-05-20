@@ -117,17 +117,6 @@ class GDT_String extends GDT_DBField
 		return $this->error('err_pattern_mismatch', [$this->pattern]);
 	}
 	
-// 	#######################
-// 	### Input/Var/Value ###
-// 	#######################
-// 	public function inputToVar(string $input) : string
-// 	{
-// 		if ($input)
-// 		{
-// 			return trim($input);
-// 		}
-// 	}
-	
 	################
 	### Validate ###
 	################

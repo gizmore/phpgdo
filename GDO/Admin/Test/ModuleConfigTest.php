@@ -1,29 +1,38 @@
 <?php
 namespace GDO\Admin\Test;
 
-use GDO\Tests\MethodTest;
+use GDO\Tests\GDT_MethodTest;
 use GDO\Tests\TestCase;
 use GDO\Admin\Method\Configure;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Admin\Method\Modules;
+use GDO\Core\GDT;
+use GDO\Core\GDT_Method;
 
+/**
+ * Test method form for module admin configuration.
+ * 
+ * @author gizmore
+ */
 final class ModuleConfigTest extends TestCase
 {
     public function testModuleOverview()
     {
         $method = Modules::make();
-        $checky = MethodTest::make()->json()->method($method);
-        $checky->execute();
+        $checky = GDT_MethodTest::make()->method($method);
+        $result = $checky->execute();
+        $result = $result->renderMode(GDT::RENDER_JSON);
         $this->assert200("Check Admin::Modules for errors");
+        assertStringContainsString('17', $result, 'Test if Module table can be rendered in JSON.');
     }
     
     public function testConfigure()
     {
-        $gp = ['module' => 'Table'];
-        $m = Configure::make();
-        $r = MethodTest::make()->method($m)->getParameters($gp)->execute();
-        assertStringContainsString('"20"', $r->render(),
-            'Test if configure values are prefilled correctly.');
+        $inputs = ['module' => 'Table'];
+        $method = GDT_Method::make()->method(Configure::make())->runAsCurrent()->inputs($inputs);
+        $result = $method->execute();
+        $html = $result->renderHTML();
+        assertStringContainsString('"20"', $html, 'Test if configured values are prefilled correctly.');
     }
     
 }

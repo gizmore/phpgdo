@@ -34,19 +34,9 @@ final class GDT_Expression extends GDT
 		return $this;
 	}
 	
-// 	/**
-// 	 * @var GDT[]
-// 	 */
-// 	public array $inputs = [];
-// 	public function inputs(array $inputs) : self
-// 	{
-// 		$this->inputs = $inputs;
-// 		return $this;
-// 	}
-	
 	public function addInput(string $key, $input)
 	{
-		return $this->method->addInput($key, $input);
+		return $this->method->addField($key, $input);
 	}
 
 	##################
@@ -56,11 +46,6 @@ final class GDT_Expression extends GDT
 	{
 		$parser = new Parser($line);
 		return $parser->parse();
-	}
-	
-	public function exec() : GDT
-	{
-		return $this->method->exec();
 	}
 	
 	public function execute() : GDT

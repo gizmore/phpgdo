@@ -4,7 +4,7 @@ namespace GDO\Tests\Test;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\Crypto\BCrypt;
-use GDO\Tests\MethodTest;
+use GDO\Tests\GDT_MethodTest;
 use GDO\Tests\TestCase;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertFalse;
@@ -14,7 +14,7 @@ use function PHPUnit\Framework\assertFalse;
  * Test permission system.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  * @see GDO_User
  */
@@ -33,7 +33,7 @@ final class UserPermissionTest extends TestCase
         GDO_UserPermission::table()->grant($user, 'admin');
         GDO_UserPermission::table()->grant($user, 'cronjob');
         GDO_UserPermission::table()->grant($user, 'staff');
-        MethodTest::$USERS[] = $user;
+        GDT_MethodTest::$USERS[] = $user;
         $user->changedPermissions();
         assertTrue($user->isAdmin(), "Test if admin permissions can be granted.");
         
@@ -45,7 +45,7 @@ final class UserPermissionTest extends TestCase
             'user_password' => BCrypt::create('11111111')->__toString(),
         ])->replace();
         GDO_UserPermission::table()->grant($user, 'staff');
-        MethodTest::$USERS[] = $user;
+        GDT_MethodTest::$USERS[] = $user;
         $user->changedPermissions();
         assertFalse($user->isAdmin(), "Test if admin permissions are assigned correctly.");
         assertTrue($user->isStaff(), "Test if staff permissions are assigned correctly.");
@@ -57,7 +57,7 @@ final class UserPermissionTest extends TestCase
             'user_type' => 'member',
             'user_password' => BCrypt::create('11111111')->__toString(),
         ])->replace();
-        MethodTest::$USERS[] = $user;
+        GDT_MethodTest::$USERS[] = $user;
         $user->changedPermissions();
         assertFalse($user->isAdmin(), "Test if admin permissions are assigned correctly.");
         assertFalse($user->isStaff(), "Test if staff permissions are assigned correctly.");
@@ -70,7 +70,7 @@ final class UserPermissionTest extends TestCase
             'user_guest_name' => 'Gaston',
             'user_type' => 'guest',
         ])->replace();
-        MethodTest::$USERS[] = $user;
+        GDT_MethodTest::$USERS[] = $user;
         assertFalse($user->isAdmin(), "Test if admin permissions are assigned correctly.");
         assertFalse($user->isStaff(), "Test if staff permissions are assigned correctly.");
         assertTrue($user->isGuest(), 'Test if guests are guests.');
@@ -83,7 +83,7 @@ final class UserPermissionTest extends TestCase
             'user_type' => 'member',
         ])->replace();
         GDO_UserPermission::table()->grant($user, 'staff');
-        MethodTest::$USERS[] = $user;
+        GDT_MethodTest::$USERS[] = $user;
         $user->changedPermissions();
         assertFalse($user->isGhost(), "Test if staff is not ghost.");
         assertFalse($user->isGuest(), "Test if staff is not guest.");

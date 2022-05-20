@@ -31,6 +31,9 @@ use GDO\Core\Application;
  */
 class Cache
 {
+	#################
+	### Memcached ###
+	#################
 	private static \Memcached $MEMCACHED; # Memcached server
 	
 	/**
@@ -328,11 +331,8 @@ class Cache
 	
 	/**
 	 * Check if we have a recent cache for a key.
-	 * @param string $key
-	 * @param int $expire
-	 * @return boolean
 	 */
-	public static function fileHas($key, $expire=GDO_MEMCACHE_TTL)
+	public static function fileHas(string $key, int $expire=GDO_MEMCACHE_TTL) : bool
 	{
 	    if (!GDO_FILECACHE)
 	    {
@@ -373,14 +373,14 @@ class Cache
 	 * @param int $expire
 	 * @return string|boolean
 	 */
-	public static function fileGet($key, $expire=GDO_MEMCACHE_TTL)
+	public static function fileGet(string $key, int $expire=GDO_MEMCACHE_TTL) : ?string
 	{
-	    if (!self::fileHas($key, $expire))
+	    if (self::fileHas($key, $expire))
 	    {
-	        return false;
+		    $path = self::filePath($key);
+	    	return file_get_contents($path);;
 	    }
-	    $path = self::filePath($key);
-	    return file_get_contents($path);
+	    return null;
 	}
 	
 	/**
@@ -407,7 +407,7 @@ class Cache
 	 * @param string $key
 	 * @return string
 	 */
-	public static function filePath($key='')
+	public static function filePath(string $key='') : string
 	{
 	    $domain = GDO_DOMAIN;
 	    $version = Module_Core::GDO_REVISION;

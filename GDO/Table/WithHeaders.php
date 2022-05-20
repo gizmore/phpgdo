@@ -13,7 +13,7 @@ use GDO\Util\Arrays;
  * Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.5.0
  */
 trait WithHeaders
@@ -26,16 +26,16 @@ trait WithHeaders
 	/**
 	 * @return GDT_Fields
 	 */
-	public function makeHeaders() : GDT_Fields
+	public function makeHeaders() : self
 	{
 		if (!isset($this->headers))
 		{
-			$this->headers = GDT_Fields::make($this->nextOrderName());
+			$this->headers = GDT_Fields::make();
 		}
-		return $this->headers;
+		return $this;
 	}
 
-	public function addHeaders(array $fields) : self
+	public function addHeaders(GDT...$fields) : self
 	{
 		if (count($fields))
 		{
@@ -47,35 +47,39 @@ trait WithHeaders
 	
 	public function addHeader(GDT $field) : self
 	{
-		$this->makeHeaders()->addField($field);
+		$this->makeHeaders();
+		$this->headers->addField($field);
 		return $this;
 	}
 	
-	public function getOrdersInput() : array
-	{
-		return Arrays::arrayed($this->headers->getInput());
-	}
+// 	##############
+// 	### Inputs ###
+// 	##############
+// 	public function getOrdersInput() : array
+// 	{
+// 		return $this->headers->inputs;
+// 	}
 	
-	public function getFiltersInput() : array
-	{
-		return Arrays::arrayed($this->headers->getInput());
-	}
+// 	public function getFiltersInput() : array
+// 	{
+// 		return $this->headers->getInput();
+// 	}
 	
 	##############################
 	### REQUEST container name ###
 	##############################
-	public $headerName = null;
-	public function headerName($headerName)
-	{
-		$this->headerName = $headerName;
-		return $this;
-	}
+// 	public $headerName = null;
+// 	public function headerName($headerName)
+// 	{
+// 		$this->headerName = $headerName;
+// 		return $this;
+// 	}
 	
-	public static $ORDER_NAME = 0;
-	public function nextOrderName()
-	{
-		return $this->headerName ? $this->headerName : ("o" . (++self::$ORDER_NAME));
-	}
+// 	public static $ORDER_NAME = 0;
+// 	public function nextOrderName()
+// 	{
+// 		return $this->headerName ? $this->headerName : ("o" . (++self::$ORDER_NAME));
+// 	}
 	
 	###############
 	### Ordered ###
@@ -88,21 +92,14 @@ trait WithHeaders
 	 */
 	public function multisort(ArrayResult $result, $defaultOrder=null)
 	{
-		# Get order from request
-// 	    if ($orders = Common::getRequestArray($this->headers->name))
-// 	    {
-// 	        $orders = Arrays::arrayed(@$orders['o']);
-// 	    }
-
-		$orders = $this->getOrdersInput();
+		$orders = [];# $this->getOrdersInput();
 	    
 	    if (empty($orders) && $defaultOrder)
 	    {
 	        $col = Strings::substrTo($defaultOrder, ' ', $defaultOrder);
 	        $order = stripos($defaultOrder, ' DESC') ? '0' : '1';
 	        $orders[$col] = $order;
-	        $this->headers->input($orders);
-// 	        $_REQUEST[$this->headers->name]['o'] = $orders[$col];
+	        $this->headers->inputs($orders);
 	    }
 		
 		# Build sort func
@@ -120,7 +117,7 @@ trait WithHeaders
 	private function make_cmp() : callable
 	{
 		$headers = $this->headers;
-		$orders = $this->getOrdersInput();
+		$orders = $this->headers->inputs;
 		return function (GDO $a, GDO $b) use (&$orders, &$headers)
 		{
 			foreach ($orders as $column => $sortDir)

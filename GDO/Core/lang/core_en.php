@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\lang;
 return [
+	# Site
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
 	
 	# Errors
@@ -8,7 +9,8 @@ return [
 	'err_db_connect' => 'The database connection could not be established: %s.',
 	'err_db_no_link' => 'The database connection could not be established.',
 	'err_gdo_not_found' => 'The Data for %s with ID: %s could not be found.',
-	'err_module' => 'The %s module is not installed.',
+	'err_module' => 'Module `%s` is currently not installed.',
+	'err_img_not_found' => 'Image not found.',
 	'err_unknown_gdo_column' => '´%s´ does not have a column named `%s`.',
 	'err_save_unpersisted_entity' => 'An object of type %s shall be saved / updated, but it was not persisted beforehand.',
 	'err_create_dir' => 'Cannot create directory ´%s´ in %s line %s.',
@@ -30,10 +32,12 @@ return [
 	'err_properitary_asset_code' => 'You may not access asset files in the GDO folder.',
 	'err_invalid_choice' => 'Your selection is invalid.',
 	'err_gdt_should_have_a_name' => '%s should have a name!',
-	'err_permission_required' => 'You need the %s permission to execute that.',
+	'err_permission_required' => 'You need the %s permission to execute this function.',
 	'err_gdo_no_gdt' => 'The GDO `%2$s` does not allow the GDT method `%1$s`.',
-	'err_table_gdo' => 'The GDO is not a table object.',
+	'err_table_gdo' => 'This GDO is not a table object: %s.',
 
+	# Messages
+	
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
@@ -45,4 +49,9 @@ return [
 	
 	# Buttons
 	'btn_send' => 'Send',
+	'btn_back' => 'Back',
+
+	
+	
+	
 ];

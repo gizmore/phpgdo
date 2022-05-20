@@ -4,11 +4,10 @@ namespace GDO\Core;
 /**
  * Object is an integer in the database. Uses WithObject trait for magic.
  * 
- * @see WithObject
- * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.4
+ * @see WithObject
  */
 class GDT_Object extends GDT_UInt
 {

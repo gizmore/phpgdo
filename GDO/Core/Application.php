@@ -8,7 +8,7 @@ use GDO\UI\GDT_Page;
  * Application runtime data.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 class Application
@@ -44,6 +44,11 @@ class Application
 		self::time(microtime(true));
 	}
 	
+	public static function timingHeader()
+	{
+		hdr(sprintf('X-GDO-TIME: %.04f', (microtime(true) - GDO_PERF_START)));
+	}
+	
 	#################
 	### HTTP Code ###
 	#################
@@ -75,6 +80,7 @@ class Application
 	public function isAjax() : bool { return !!$this->getAjax(); }
 	public function isJSON() : bool { return $this->isFormat('json'); }
 	public function isHTML() : bool { return $this->isFormat('html'); }
+	public function isWebserver() : bool { return true; }
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
 	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
@@ -84,10 +90,9 @@ class Application
 	/**
 	 * Call when you create the next command in a loop.
 	 */
-	public function reset()
+	public function reset() : void
 	{
-		Application::$RESPONSE_CODE = 200;
-		$_REQUEST = $_GET = $_POST = [];
+		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
 		self::updateTime();
 	}
@@ -95,8 +100,12 @@ class Application
 	##############
 	### Themes ###
 	##############
+	/**
+	 * @var string[]
+	 */
 	private array $themes;
-	public function getThemes()
+	
+	public function &getThemes() : array
 	{
 		if (!isset($this->themes))
 		{
@@ -107,8 +116,12 @@ class Application
 		return $this->themes;
 	}
 	
-	public function hasTheme($theme) { return isset($this->getThemes()[$theme]); }
-	public function initThemes()
+	public function hasTheme($theme) : bool
+	{
+		return isset($this->getThemes()[$theme]);
+	}
+	
+	public function initThemes() : self
 	{
 		if ( (!$this->isInstall()) && (!$this->isCLI()) )
 		{
@@ -121,6 +134,23 @@ class Application
 			}
 		}
 		return $this;
+	}
+	
+	##################
+	### JSON Input ###
+	##################
+	/**
+	 * Turn JSON requests into normal Requests.
+	 * @since 6.11.8
+	 */
+	public function handleJSONRequests() : void
+	{
+		if (@$_SERVER["CONTENT_TYPE"] === 'application/json')
+		{
+			$data = file_get_contents('php://input');
+			$data = json_decode($data, true);
+			$_REQUEST = array_merge($_REQUEST, $data);
+		}
 	}
 	
 }
