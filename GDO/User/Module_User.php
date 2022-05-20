@@ -22,10 +22,14 @@ final class Module_User extends GDO_Module
 	public function getDependencies() : array
 	{
 		return [
-			'Core', 'Cronjob', 'Crypto',
-			'Date', 'Language', 'Net',
+			'Crypto', 'Date', 'Language', 'Net',
 			'Session', 'Table', 'UI',
 		];
+	}
+	
+	public function getFriendencies() : array
+	{
+		return ['Cronjob'];
 	}
 	
 	public function onInstall() : void { OnInstall::onInstall(); }

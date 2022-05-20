@@ -5,26 +5,33 @@ Please read from bottom to top :)
 Please refer to the [GDOv6 History](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
 
 
-## 7.0.3 / scheduled 21.Jul.2022
+## 7.0.4 / scheduled 21.Jul.2022
 
-GDOv7.0.3 will be the first version with SQLite or Postgres support. Else, only bugfixes are applied.
+GDOv7.0.4 will be the first version with SQLite or Postgres support. Else, only bugfixes are applied.
 
  - New providers for Module_DBMS.
  [MySQL](https://github.com/gizmore/phpgdo-dbms-mysql), [SQLite](https://github.com/gizmore/phpgdo-dbms-sqlite) and [Postgres](https://github.com/gizmore/phpgdo-dbms-postgres).
  
 
-## 7.0.2 / scheduled 26.Jun.2022
+## 7.0.3 / scheduled 26.Jun.2022
 
-GDOv7.0.2 will come with a polished Bootstrap5 theme and feature a new demo site.
+GDOv7.0.3 will come with a polished Bootstrap5 theme and feature a new demo site.
 
  - New demo site [RendlessCode](https://rendless.code.wechall.net) which is a hacking challenge.
 
  - Refurbished [Module_Boostrap5](https://github.com/gizmore/phpgdo-bootstrap5) and [Module_Boostrap5Theme](https://github.com/gizmore/phpgdo-bootstrap5-theme).
 
 
+## 7.0.2 / scheduled 19.Jun.2022
+
+GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Remember, write methods once, use them everywhere.
+
+
 ## 7.0.1 / scheduled 05.Jun.2022
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
+
+ - [GDT_ACL]() is now a core GDT.
 
  - [GDO_Module]s(../GDO/Core/GDO_Module.php) can now have "Friendency" modules. Suggestions that would enhance the features of an installed module.
 
@@ -37,14 +44,16 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
 ## 7.0.0 / release 22.May.2022
 
-A fresh restart of the GDO project. :)
+A fresh restart of the GDO project.
 GDOv7.0.0 comes with *all core* and *some secret* modules, all of them unit tested.
-
- - fuck
 
  - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name and more...
 
  - [Module_Tests](https://github.com/gizmore/gdo6-tests) *is* now a core module. See [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods) for auto-generated testing. All test cases now pass for the very core and testing modules.
+
+ - [Module_Cronjob](https://github.com/gizmore/phpgdo-cronjob) is *not* a core module anymore.
+
+ - [Module_File](https://github.com/gizmore/phpgdo-file) is *not* a core module anymore.
 
  - [Module_CSS](https://github.com/gizmore/phpgdo-css) is *not* a core module anymore.
 
@@ -60,7 +69,7 @@ GDOv7.0.0 comes with *all core* and *some secret* modules, all of them unit test
 
  - The core has been rewritten with better CLI and Chatbots in mind.
  
- - A slightly bigger bunch of [core modules](../GDO). As their stuff is almost always needed anyway. These do not require an additional module repository.
+ - A slightly changed bunch of [core modules](../GDO/). As their stuff is almost always needed anyway. These do not require an additional module repository.
  
  - [Module_Websocket](../GDO/Websocket/Module Websocket.php) makes now use of the new rendering method ´´´renderBinary´´´ - seems perfect to fuse websocket szenarios with a binary GDT driven protocol.
  

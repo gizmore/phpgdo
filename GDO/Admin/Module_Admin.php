@@ -16,7 +16,7 @@ use GDO\UI\GDT_Page;
  * @TODO: restrict admin methods to a second admin password (like in gwf3)
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.1
  * @since 3.0.0
  */
 class Module_Admin extends GDO_Module
@@ -24,8 +24,10 @@ class Module_Admin extends GDO_Module
 	##############
 	### Module ###
 	##############
-	public function onLoadLanguage() : void { $this->loadLanguage('lang/admin'); }
-// 	public function getDependencies() : array { return ['Login']; }
+	public function onLoadLanguage() : void
+	{
+		$this->loadLanguage('lang/admin');
+	}
 
 	###############
 	### Navbars ###

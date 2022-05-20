@@ -42,15 +42,20 @@ class GDO_Module extends GDO
 	 * Override this. Please add Core to your dependencies!
 	 * @return string[]
 	 */
-	public function getDependencies() : array { return ['Core']; }
+	public function getDependencies() : array
+	{
+		return GDT::EMPTY_ARRAY;
+	}
 	
-//     /**
-//      * A list of optional modules that enhance this one.
-//      * Override this.
-//      * @deprecated
-// 	 * @return string[]
-// 	 */
-// 	public function getFriendencies() {}
+    /**
+     * A list of optional modules that enhance this one.
+     * Override this.
+	 * @return string[]
+	 */
+	public function getFriendencies() : array
+	{
+		return GDT::EMPTY_ARRAY;
+	}
 	
     /**
 	 * Skip these folders in unit tests using strpos.
