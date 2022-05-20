@@ -27,7 +27,6 @@ abstract class GDT_Field extends GDT
 	################
 	### Creation ###
 	################
-	
 	public function blankData() : array
 	{
 		if ($key = $this->getName())
@@ -53,6 +52,11 @@ abstract class GDT_Field extends GDT
 	public function validate($value) : bool
 	{
 		return $this->validateNull($value);
+	}
+	
+	public function isRequired() : bool
+	{
+		return $this->notNull;
 	}
 	
 	#######################

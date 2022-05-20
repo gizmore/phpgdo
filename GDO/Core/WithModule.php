@@ -46,14 +46,14 @@ trait WithModule
 		{
 			return t($key);
 		}
-		if ($name = $this->getName())
-		{
-			$key = strtolower($name);
-			if (Trans::hasKey($key))
-			{
-				return t($key);
-			}
-		}
+// 		if ($name = $this->getName())
+// 		{
+// 			$key = strtolower($name);
+// 			if (Trans::hasKey($key))
+// 			{
+// 				return t($key);
+// 			}
+// 		}
 		return $shortname;
 	}
 	

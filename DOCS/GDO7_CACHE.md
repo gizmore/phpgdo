@@ -1,4 +1,4 @@
-# GDOv7 Caching mechanisms
+# GDOv7 Cache
 
 There are 3 caches in use.
 
@@ -6,8 +6,16 @@ There are 3 caches in use.
  - Memcached GDO object cache
  - Filecache (pre-rendered output, lang files, etc)
 
+If you want to clear all caches, use the [ClearCache Method](..GDO/Admin/Method/ClearCache.php)
 
-## GDOv7 [Process Cache](../GDO/DB/Cache.php)
+    ClearCache::make()->clearCache();
+
+
+## GDOv7 Cache: GDO Process cache
+
+All three caches are implemented in the [Cache class](../GDO/DB/Cache.php).
+The GDO process cache is caching GDO column structures and ID => GDO mappings for a cache.
+ The cash is fresh on each request.
 
 
 ## GDOv7 [Memcached](../GDO/DB/Cache.php)

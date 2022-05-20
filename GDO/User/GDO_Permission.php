@@ -18,7 +18,7 @@ use GDO\Core\GDT_UInt;
  */
 final class GDO_Permission extends GDO
 {
-    public function gdoCached() : bool { return false; }
+//     public function gdoCached() : bool { return false; }
     
 	public function gdoColumns() : array
 	{
@@ -44,7 +44,7 @@ final class GDO_Permission extends GDO
 		elseif ($perm->getLevel() != $level)
 		{
 		    # Fix level because install method makes sure the permission exists.
-		    if ($perm->getLevel() === '0')
+		    if ($perm->getLevel() == '0')
 		    {
     		    $perm->saveVar('perm_level', $level);
 		    }

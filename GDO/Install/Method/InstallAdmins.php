@@ -9,11 +9,18 @@ use GDO\Core\Debug;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\User\GDO_UserPermission;
-use GDO\Util\BCrypt;
 use GDO\User\GDO_Permission;
 use GDO\Core\ModuleLoader;
+use GDO\Crypto\BCrypt;
 use GDO\Session\GDO_Session;
 
+/**
+ * Install an admin account.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 3.0.5
+ */
 class InstallAdmins extends MethodForm
 {
 	public function createForm(GDT_Form $form) : void

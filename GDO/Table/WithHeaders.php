@@ -3,15 +3,14 @@ namespace GDO\Table;
 
 use GDO\Core\GDT_Fields;
 use GDO\DB\ArrayResult;
-use GDO\Util\Common;
 use GDO\Core\GDT;
 use GDO\Core\GDO;
 use GDO\Util\Strings;
 use GDO\Util\Arrays;
 
 /**
- * - A trait for tables and list which adds an extra headers variable. This has to be a \GDO\Core\GDT_Fields.
- * - Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
+ * A trait for tables and list which adds an extra headers variable. This has to be a \GDO\Core\GDT_Fields.
+ * Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -19,9 +18,6 @@ use GDO\Util\Arrays;
  */
 trait WithHeaders
 {
-	###############
-	### Headers ###
-	###############
 	/**
 	 * @var GDT_Fields
 	 */
@@ -30,9 +26,40 @@ trait WithHeaders
 	/**
 	 * @return GDT_Fields
 	 */
-	public function makeHeaders() { if (!isset($this->headers)) $this->headers = GDT_Fields::make($this->nextOrderName()); return $this->headers; }
-	public function addHeaders(array $fields) { return count($fields) ? $this->makeHeaders()->addFields(...$fields) : $this; }
-	public function addHeader(GDT $field) { return $this->makeHeaders()->addField($field); }
+	public function makeHeaders() : GDT_Fields
+	{
+		if (!isset($this->headers))
+		{
+			$this->headers = GDT_Fields::make($this->nextOrderName());
+		}
+		return $this->headers;
+	}
+
+	public function addHeaders(array $fields) : self
+	{
+		if (count($fields))
+		{
+			$this->makeHeaders();
+			$this->headers->addFields(...$fields);
+		}
+		return $this;
+	}
+	
+	public function addHeader(GDT $field) : self
+	{
+		$this->makeHeaders()->addField($field);
+		return $this;
+	}
+	
+	public function getOrdersInput() : array
+	{
+		return Arrays::arrayed($this->headers->getInput());
+	}
+	
+	public function getFiltersInput() : array
+	{
+		return Arrays::arrayed($this->headers->getInput());
+	}
 	
 	##############################
 	### REQUEST container name ###
@@ -62,17 +89,20 @@ trait WithHeaders
 	public function multisort(ArrayResult $result, $defaultOrder=null)
 	{
 		# Get order from request
-	    if ($orders = Common::getRequestArray($this->headers->name))
-	    {
-	        $orders = Arrays::arrayed(@$orders['o']);
-	    }
+// 	    if ($orders = Common::getRequestArray($this->headers->name))
+// 	    {
+// 	        $orders = Arrays::arrayed(@$orders['o']);
+// 	    }
+
+		$orders = $this->getOrdersInput();
 	    
 	    if (empty($orders) && $defaultOrder)
 	    {
 	        $col = Strings::substrTo($defaultOrder, ' ', $defaultOrder);
 	        $order = stripos($defaultOrder, ' DESC') ? '0' : '1';
 	        $orders[$col] = $order;
-	        $_REQUEST[$this->headers->name]['o'] = $orders[$col];
+	        $this->headers->input($orders);
+// 	        $_REQUEST[$this->headers->name]['o'] = $orders[$col];
 	    }
 		
 		# Build sort func
@@ -86,14 +116,14 @@ trait WithHeaders
 	
 	/**
 	 * Create a comperator function.
-	 * @param array $sorting
 	 */
-	private function make_cmp(array $sorting) : callable
+	private function make_cmp() : callable
 	{
 		$headers = $this->headers;
-		return function (GDO $a, GDO $b) use (&$sorting, &$headers)
+		$orders = $this->getOrdersInput();
+		return function (GDO $a, GDO $b) use (&$orders, &$headers)
 		{
-			foreach ($sorting as $column => $sortDir)
+			foreach ($orders as $column => $sortDir)
 			{
 			    if ($gdt = $headers->getField($column))
 			    {

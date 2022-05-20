@@ -63,7 +63,7 @@ class Installer
 		}
 		
 		$upgraded = false;
-		while ($module->getVersion() != $module->version)
+		while ($module->getVersion()->__toString() !== $module->version)
 		{
 			self::upgrade($module);
 			$upgraded = true;
@@ -267,9 +267,18 @@ class Installer
 		}
 	}
 	
-	private static function increaseVersion(GDO_Module $module, bool $write)
+	/**
+	 * Increase version by one patch level.
+	 * 
+	 * @param GDO_Module $module
+	 * @param bool $write
+	 * @return string
+	 */
+	private static function increaseVersion(GDO_Module $module, bool $write) : string
 	{
-		$v = sprintf('%.02f', (floatval($module->getVersion()) + 0.01));
+		$version = $module->getVersion();
+		$version->increase();
+		$v = $version->__toString();
 		if ($write)
 		{
 			$module->saveVar('module_version', $v);

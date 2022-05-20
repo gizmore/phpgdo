@@ -92,9 +92,9 @@ final class GDO_Language extends GDO
 		return Module_Language::instance()->cfgSupported();
 	}
 	
-	public static function getMainLanguage()
+	public static function getMainLanguage() : self
 	{
-		return self::getById(GDO_LANGUAGE);
+		return self::findById(GDO_LANGUAGE);
 	}
 	
 }

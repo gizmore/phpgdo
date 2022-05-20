@@ -12,15 +12,18 @@ use GDO\Util\Strings;
  * 
  * @example Debug::enableErrorHandler(); fatal_ooops();
  * 
- * @TODO: check, on an out of memory fatal error, if a shutdown function would draw a stack trace.
- * 
  * @author gizmore
  * @version 7.0.0
  * @since 3.0.1
+ * @see Mail
+ * @see Module_Perf
  */
 final class Debug
 {
-	public static int $MAX_ARG_LEN = 23;
+	const CLI_MAX_ARG_LEN = 100;
+	const WWW_MAX_ARG_LEN = 50;
+	
+	public static int $MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;
 
 	private static bool $DIE = false;
 	private static bool $ENABLED = false;
@@ -155,19 +158,14 @@ final class Debug
 		$is_html = $app->isHTML();
 		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 		
-		if ($is_html)
-		{
-			$message = sprintf('<p>%s(EH %s):&nbsp;%s&nbsp;in&nbsp;<b style=\"font-size:16px;\">%s</b>&nbsp;line&nbsp;<b style=\"font-size:16px;\">%s</b></p>', $errnostr, $errno, $errstr, $errfile, $errline);
-		}
-		else
-		{
-			$message = sprintf('%s(EH %s) %s in %s line %s.', $errnostr, $errno, $errstr, $errfile, $errline);
-		}
+		$messageHTML = sprintf('<p>%s(EH %s):&nbsp;%s&nbsp;in&nbsp;<b style=\"font-size:16px;\">%s</b>&nbsp;line&nbsp;<b style=\"font-size:16px;\">%s</b></p>', $errnostr, $errno, $errstr, $errfile, $errline);
+		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', $errnostr, $errno, $errstr, $errfile, $errline);
+		$message = $is_html ? $messageHTML : $messageCLI;
 		
 		// Send error to admin
 		if (self::$MAIL_ON_ERROR)
 		{
-			self::sendDebugMail(self::backtrace($message, false));
+			self::sendDebugMail(self::backtrace($messageCLI, false));
 		}
 		
 		hdrc('HTTP/1.1 500 Server Error');
@@ -175,7 +173,7 @@ final class Debug
 		// Output error
 		if ($app->isCLI() || $app->isUnitTests())
 		{
-			fwrite(STDERR, self::backtrace($message, false) . PHP_EOL);
+			fwrite(STDERR, self::backtrace($messageCLI, false) . PHP_EOL);
 		}
 		else
 		{
@@ -388,7 +386,9 @@ final class Debug
 		}
 		
 		$app = Application::instance();
-		$is_html = $app ? $app->isHTML() && (!$app->isUnitTests()) : true;
+		$is_html = $app ? $app->isHTML() : (php_sapi_name() !== 'cli');
+		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
+// 		$is_html = $app ? $app->isHTML() && (!$app->isUnitTests()) : true;
 		
 		$arg = $is_html ? html($arg) : $arg;
 		$arg = str_replace('&quot;', '"', $arg); # It is safe to inject quotes. Turn back to get length calc right.
@@ -396,9 +396,13 @@ final class Debug
 		$arg = str_replace('\\/', '/', $arg); # Double backslash was escaped always via json encode?
 		if (mb_strlen($arg) > self::$MAX_ARG_LEN)
 		{
-			if ($app->isCLI())
+			if ($app->isCLI() || $app->isUnitTests())
 			{
-				self::$MAX_ARG_LEN = 42;
+				self::$MAX_ARG_LEN = self::CLI_MAX_ARG_LEN;
+			}
+			else
+			{
+				self::$MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;
 			}
 			# @TODO: Debug parameter value output shows buggy parameter value for strings that are close to the limit. like {"foo":"bar", "bar":"fo..., "bar:foo"}. Only some basic math is needed.
 		    return mb_substr($arg, 0, self::$MAX_ARG_LEN) . '…' . mb_substr($arg, -14);

@@ -60,7 +60,7 @@ trait WithObject
 		return $value !== null ? $value->getID() : null;
 	}
 	
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 		if ($var !== null)
 		{

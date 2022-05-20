@@ -9,7 +9,7 @@ use GDO\Session\GDO_Session;
 use GDO\Core\Website;
 use GDO\UI\GDT_Divider;
 use GDO\Core\GDT_Checkbox;
-use GDO\Javascript\Javascript;
+use GDO\Core\Javascript;
 use GDO\UI\GDT_Page;
 use GDO\Net\GDT_Url;
 
@@ -59,14 +59,15 @@ final class Module_Language extends GDO_Module
 	public function cfgSwitchLeft() : string { return $this->getConfigVar('langswitch_left'); }
 	public function cfgJavascript() : string { return $this->getConfigVar('use_in_javascript'); }
 	
+	private array $supported;
+	
 	/**
 	 * Get the supported  languages, GDO_LANGUAGE first.
 	 * @return GDO_Language[]
 	 */
 	public function cfgSupported() : array
 	{
-		static $supported;
-		if (!isset($supported))
+		if (!isset($this->supported))
 		{
 			$supported = [GDO_LANGUAGE => GDO_Language::table()->find(GDO_LANGUAGE)];
 			if ($additional = $this->getConfigValue('languages'))
@@ -76,9 +77,15 @@ final class Module_Language extends GDO_Module
 					$supported[$lang->getISO()] = $lang;
 				}
 			}
+			$this->supported = $supported;
 		}
 		
-		return $supported;
+		return $this->supported;
+	}
+	
+	public function hookClearCache() : void
+	{
+		unset($this->supported);
 	}
 	
 	############

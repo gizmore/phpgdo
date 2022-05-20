@@ -55,7 +55,7 @@ class GDT_Url extends GDT_String
 	
 	public $icon = 'url';
 	
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 		return $var ? new URL($var) : null;
 	}

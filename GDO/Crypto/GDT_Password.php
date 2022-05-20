@@ -2,7 +2,6 @@
 namespace GDO\Crypto;
 
 use GDO\Core\GDT_Template;
-use GDO\Util\BCrypt;
 use GDO\Core\GDT_String;
 
 /**
@@ -31,7 +30,7 @@ class GDT_Password extends GDT_String
 
 	public function defaultLabel() : self { return $this->label('password'); }
 	
-	public function toValue($var)
+	public function toValue(string $var = null)
 	{
 		return $var === null ? null : new BCrypt($var);
 	}

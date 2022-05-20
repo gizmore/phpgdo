@@ -7,6 +7,7 @@ use GDO\UI\WithText;
  * A response is just like any container.
  * Backwards compatibility?
  * 
+ * @deprecated Why so many classes?
  * @author gizmore
  * @version 7.0.0
  * @since 5.0.0

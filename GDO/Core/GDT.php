@@ -163,14 +163,14 @@ abstract class GDT
 	#########################
 	### Bridge for traits ###
 	#########################
-	public function getName() : ?string
-	{
-		return null;
-	}
-	
 	public function hasName() : bool
 	{
 		return false;
+	}
+	
+	public function getName() : ?string
+	{
+		return null;
 	}
 	
 	/**
@@ -192,7 +192,7 @@ abstract class GDT
 		return null;
 	}
 	
-	public function getInput() : ?string
+	public function getInput()
 	{
 		return null;
 	}
@@ -204,6 +204,12 @@ abstract class GDT
 	
 	public function getValue()
 	{
+		return null;
+	}
+	
+	public function hasFields() : bool
+	{
+		return false;
 	}
 	
 	public function getFields() : array
@@ -236,7 +242,7 @@ abstract class GDT
 		return '';
 	}
 	
-	public function input(string $input = null) : self
+	public function input($input = null) : self
 	{
 		return $this;
 	}
@@ -301,7 +307,12 @@ abstract class GDT
 	##################
 	public function inputToVar(string $input) : string
 	{
-		return $input;
+		if ($input === null)
+		{
+			return '';
+		}
+		$input = trim($input);
+		return $input === '' ? null : $input;
 	}
 	
 	public function toVar($value) : ?string
@@ -309,7 +320,7 @@ abstract class GDT
 		return $value;
 	}
 	
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 		return $var;
 	}

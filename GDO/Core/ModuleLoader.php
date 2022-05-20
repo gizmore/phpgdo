@@ -34,8 +34,8 @@ final class ModuleLoader
 	private string $path;
 	public function __construct(string $path)
 	{
-		$this->path = $path;
 		self::$INSTANCE = $this;
+		$this->path = $path;
 	}
 	
 	#############
@@ -324,9 +324,9 @@ final class ModuleLoader
 		Filewalker::traverse($this->path, null, null, [$this, '_loadModuleFS'], 0, $init);
 		Trans::inited(true);
 		$this->sortModules(['module_priority' => true]);
-		foreach ($this->modules as $module)
+		if ($init)
 		{
-			if ($init)
+			foreach ($this->modules as $module)
 			{
 				$module->buildConfigCache();
 				$module->buildSettingsCache();

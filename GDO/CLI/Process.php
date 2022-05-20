@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Util;
+namespace GDO\CLI;
 
 /**
  * Process utilities.

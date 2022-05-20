@@ -2,7 +2,7 @@
 return array(
 # Welcome
 'install_title_1' => 'Welcome',
-'install_text_1' => 'Welcome to GDO6, Please continue here: %s',
+'install_text_1' => 'Welcome to GDOv7, Please continue here: %s',
 'install_text_2' => 'If you plan to use a Database, please execute the following mysql commands.',
     
 # System Test
@@ -22,8 +22,8 @@ return array(
 'install_optional_1' => 'Is PHP gd installed?',
 'install_optional_2' => 'Is PHP memcached installed?',
 'install_optional_3' => 'Is openssl extension available?',
-'install_system_ok' => 'Your system is able to run GDO6. You can continue with %s.',
-'install_system_not_ok' => 'Your system is currently not able to run GDO6. You can try again to run %s.',
+'install_system_ok' => 'Your system is able to run GDOv7. You can continue with %s.',
+'install_system_not_ok' => 'Your system is currently not able to run GDOv7. You can try again to run %s.',
 
 # Config
 'install_title_3' => 'GDO Configuration',

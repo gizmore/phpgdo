@@ -12,7 +12,7 @@ use GDO\Core\Application;
  * This way you can never have two dangling out of sync users in your application.
  * It also saves a bit mem.
  * Of course this comes with a slight overhead.
- * As GDO6 was written from scratch with this in mind, the overhead is quite small.
+ * As GDOv7 was written from scratch with this in mind, the overhead is quite small.
  * 
  * Suprising is the additional use of memcached (did not plan this) which adds a second layer of caching.
  * 
@@ -26,7 +26,7 @@ use GDO\Core\Application;
  * The other memcached keys work on a per row basis with table_name_id as key.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class Cache
@@ -191,10 +191,9 @@ class Cache
 	
 	public function clearCache() : void
 	{
-	    $this->all = null;
+	    unset($this->all);
 	    $this->cache = [];
 	    $this->flush();
-	    $this->table->clearCache();
 	}
 	
 	public function recache(GDO $object) : GDO

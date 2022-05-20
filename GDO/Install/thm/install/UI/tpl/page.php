@@ -12,7 +12,7 @@ use GDO\Core\Website;use GDO\Language\Trans;
 </head>
 <body>
   <header>
-	<h1>GDO6 Setup</h1>
+	<h1>GDOv7 Setup</h1>
 	<?=GDT_Template::php('Install', 'crumb/progress.php')?>
   </header>
   <div class="gdo-body">

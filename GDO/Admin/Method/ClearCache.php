@@ -6,20 +6,24 @@ use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
 use GDO\DB\Cache;
 use GDO\File\FileUtil;
-use GDO\Javascript\MinifyJS;
+use GDO\Core\ModuleLoader;
 use GDO\Core\Module_Core;
 use GDO\Core\Website;
 use GDO\Core\GDT;
 use GDO\DB\Database;
+use GDO\Core\Application;
+use GDO\Tests\MethodTest;
 
 /**
  * Clears all client and server caches.
+ * Does not save last url. Calls last url.
  * 
  * @TODO move AdminClearCache to Module_Core.
  * 
  * @author gizmore
  * @version 7.0.0
  * @since 6.0.1
+ * @see Cache
  * @see Module_Core
  */
 final class ClearCache extends Method
@@ -40,36 +44,25 @@ final class ClearCache extends Method
 	{
 	    # Retrigger assets
 	    $core = Module_Core::instance();
-	    $assetVersion = $core->cfgAssetVersion() + 0.01; # client cache
-	    $core->saveConfigVar('asset_revision', sprintf('%.02f', round($assetVersion, 2)));
+	    $assetVersion = $core->cfgAssetVersion();
+	    $assetVersion->patch++;
+	    $core->saveConfigVar('asset_revision', $assetVersion->__toString());
 	    # Flush memcached.
 	    Cache::flush();
 	    # Flush filecache
 	    Cache::fileFlush();
 	    # Flush GDO cache
 	    Database::instance()->clearCache();
-	    # Flush GDO cache
-// 	    $this->flushAllGDOCaches();
+	    # Reset application state
+	    Application::instance()->reset();
 	    # Remove minified JS
-	    FileUtil::removeDir(MinifyJS::tempDirS());
+	    FileUtil::removeDir(GDO_PATH . 'assets/');
+	    # Clear module loader cache
+	    ModuleLoader::instance()->reset();
+	    # More caches
+	    MethodTest::$USERS = [];
 	    # Call hook
 	    GDT_Hook::callWithIPC('ClearCache');
 	}
-	
-// 	private function flushAllGDOCaches()
-// 	{
-// 	    foreach (ModuleLoader::instance()->getEnabledModules() as $module)
-// 	    {
-// 	        if ($classes = $module->getClasses())
-// 	        {
-// 	            foreach ($classes as $classname)
-// 	            {
-// 	                /** @var $table GDO **/
-// 	                $table = call_user_func([$classname, 'table']);
-// 	                $table->clearCache();
-// 	            }
-// 	        }
-// 	    }
-// 	}
 
 }

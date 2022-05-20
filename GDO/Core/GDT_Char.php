@@ -6,6 +6,7 @@ namespace GDO\Core;
  * 
  * @author gizmore
  * @version 7.0.0
+ * @since 5.0.0
  */
 class GDT_Char extends GDT_String
 {
@@ -22,7 +23,8 @@ class GDT_Char extends GDT_String
 	{
 		$collate = $this->gdoCollateDefine($this->caseSensitive);
 		return
-		"{$this->identifier()} CHAR({$this->max}) CHARSET {$this->gdoCharsetDefine()} {$collate}" .
-		$this->gdoNullDefine() . $this->gdoInitialDefine();
+			"{$this->identifier()} CHAR({$this->max}) CHARSET {$this->gdoCharsetDefine()} {$collate}" .
+			$this->gdoNullDefine() . $this->gdoInitialDefine();
 	}
+	
 }

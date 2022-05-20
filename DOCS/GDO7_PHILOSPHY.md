@@ -6,4 +6,4 @@
 
  - Less is more. there are no getters, just public attributes. Setters have the same name and return $this for chaining. Example: function attr($attr) { $this->attr = $attr; return $this; }
  
- -
+ 

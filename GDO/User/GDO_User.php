@@ -13,21 +13,33 @@ use GDO\Language\GDT_Language;
  * The holy user class.
  * Most user related fields are in other module settings.
  * 
- * @see GDO
- * @see GDT
- * 
  * @author gizmore
  * @version 7.0.0
  * @since 1.0.0
+ * @see GDO
+ * @see GDT
  */
 final class GDO_User extends GDO
 {
+// 	use WithTemp;
+	
 	const GUEST_NAME_PREFIX = '~';
 	const GHOST_NAME_PREFIX = '~~';
 	
+	#############
+	### Cache ###
+	#############
 	# Instances
-	private static self $SYSTEM;
-	private static self $CURRENT;
+	private static ?self $SYSTEM = null;
+	private static ?self $CURRENT = null;
+	
+	public function clearCache() : self
+	{
+		self::$SYSTEM = null;
+		self::$CURRENT = null;
+		$this->tempReset();
+		return parent::clearCache();
+	}
 	
 	###############
 	### Factory ###
@@ -103,15 +115,15 @@ final class GDO_User extends GDO
 	public function getType() : string { return $this->gdoVar('user_type'); }
 	public function getLangISO() : string { return $this->gdoVar('user_language'); }
 	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
-	
+
+	############
 	### Type ###
 	############
-	
-	public function isBot() { return $this->isType(GDT_UserType::BOT); }
-	public function isGhost() { return $this->isType(GDT_UserType::GHOST); }
-	public function isAnon() { return $this->isGuest() && (!$this->getGuestName()); }
-	public function isMember() { return $this->isType(GDT_UserType::MEMBER); }
-	public function isType($type) { return $this->getType() === $type; }
+	public function isBot() : bool { return $this->isType(GDT_UserType::BOT); }
+	public function isGhost() : bool { return $this->isType(GDT_UserType::GHOST); }
+	public function isAnon() : bool { return $this->isGuest() && (!$this->getGuestName()); }
+	public function isMember() : bool { return $this->isType(GDT_UserType::MEMBER); }
+	public function isType($type) : bool { return $this->getType() === $type; }
 	public function isGuest(bool $andAuthenticated=true) : bool
 	{
 		$a = $andAuthenticated;
@@ -129,7 +141,7 @@ final class GDO_User extends GDO
 	 * Get the appropiate timezone object for this user.
 	 * @return \DateTimeZone
 	 */
-	public function getTimezone() : string { return $this->getVar('user_timezone') > 1 ? $this->getVar('user_timezone') : GDO_Session::get('timezone', '1'); }
+	public function getTimezone() : string { return $this->gdoVar('user_timezone') > 1 ? $this->getVar('user_timezone') : GDO_Session::get('timezone', '1'); }
 	
 	public function getTimezoneObject()
 	{
@@ -139,7 +151,7 @@ final class GDO_User extends GDO
 	#############
 	### Perms ###
 	#############
-	public function loadPermissions()
+	public function loadPermissions() : array
 	{
 		if ($this->isPersisted())
 		{
@@ -155,7 +167,7 @@ final class GDO_User extends GDO
 		}
 		return [];
 	}
-	public function hasPermissionID($permissionId)
+	public function hasPermissionID(string $permissionId=null) : bool
 	{
 		if ($permissionId)
 		{
@@ -164,24 +176,24 @@ final class GDO_User extends GDO
 		}
 		return true;
 	}
-	public function hasPermissionObject(GDO_Permission $permission) { return $this->hasPermission($permission->getName()); }
-	public function hasPermission($permission) { return array_key_exists($permission, $this->loadPermissions()); }
-	public function isAdmin() { return $this->hasPermission('admin'); }
-	public function isStaff() { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
-	public function changedPermissions()
+	public function hasPermissionObject(GDO_Permission $permission) : bool { return $this->hasPermission($permission->getName()); }
+	public function hasPermission(string $permission) : bool { return array_key_exists($permission, $this->loadPermissions()); }
+	public function isAdmin() : bool { return $this->hasPermission('admin'); }
+	public function isStaff() : bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
+	public function changedPermissions() : self
 	{
 		$this->tempUnset('gdo_permission');
 		return $this->recache();
 	}
 	
-	public function getLevel()
+	public function getLevel() : int
 	{
 		$level = $this->getVar('user_level');
 		$permLevel = $this->getPermissionLevel();
 		return (int)max([$level, $permLevel]);
 	}
 	
-	public function getPermissionLevel()
+	public function getPermissionLevel() : int
 	{
 		$max = 0;
 		if ($perms = $this->loadPermissions())
@@ -203,7 +215,7 @@ final class GDO_User extends GDO
 	/**
 	 * @return GDO_User
 	 */
-	public function persistent()
+	public function persistent() : self
 	{
 		if ($session = GDO_Session::instance())
 		{

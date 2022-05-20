@@ -5,6 +5,14 @@ Please read from bottom to top :)
 Please refer to the [GDOv6 History](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
 
 
+## 7.0.3 / scheduled 21.Jul.2022
+
+GDOv7.0.3 will be the first version with SQLite or Postgres support. Else, only bugfixes are applied.
+
+ - New providers for Module_DBMS.
+ [MySQL](https://github.com/gizmore/phpgdo-dbms-mysql), [SQLite](https://github.com/gizmore/phpgdo-dbms-sqlite) and [Postgres](https://github.com/gizmore/phpgdo-dbms-postgres).
+ 
+
 ## 7.0.2 / scheduled 26.Jun.2022
 
 GDOv7.0.2 will come with a polished Bootstrap5 theme and feature a new demo site.
@@ -16,7 +24,9 @@ GDOv7.0.2 will come with a polished Bootstrap5 theme and feature a new demo site
 
 ## 7.0.1 / scheduled 05.Jun.2022
 
-GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API. 
+GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
+
+ - [GDO_Module]s(../GDO/Core/GDO_Module.php) can now have "Friendency" modules. Suggestions that would enhance the features of an installed module.
 
  - Modules can now come with a [LOGFILE.md](../GDO/Core/LOGFILE.md) which will be the default location for a module's todo and changelog. I chose LOGFILE.md because it fits a nice position in a module directory tree.
 
@@ -28,9 +38,9 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 ## 7.0.0 / release 22.May.2022
 
 A fresh restart of the GDO project. :)
-GDOv7.0.0 comes with all core and some secret modules all unit tested (around 350 asserts). HTTP still not working.
+GDOv7.0.0 comes with *all core* and *some secret* modules, all of them unit tested.
 
- - 
+ - fuck
 
  - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name and more...
 

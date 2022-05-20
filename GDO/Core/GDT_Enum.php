@@ -56,7 +56,7 @@ class GDT_Enum extends GDT_DBField
 	    return $back ? "{$back}: {$cell}" : $cell;
 	}
 	
-	public function toValue($var)
+	public function toValue(string $var = null)
 	{
 		return $var === $this->emptyValue ? null : $var;
 	}

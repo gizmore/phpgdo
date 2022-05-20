@@ -2,7 +2,6 @@
 use GDO\DB\Database;
 use GDO\Install\Installer;
 use GDO\Core\Logger;
-use PHPUnit\TextUI\Command;
 use GDO\Core\Application;
 use GDO\Session\GDO_Session;
 use GDO\File\FileUtil;
@@ -11,17 +10,32 @@ use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
 use GDO\Core\ModuleLoader;
 use GDO\CLI\CLI;
+use GDO\Tests\Test\TestCore;
+use GDO\Tests\Module_Tests;
 
 /**
  * Launch all unit tests.
  * Unit tests should reside in <Module>/Test/FooTest.php
  */
-if (PHP_SAPI !== 'cli') { die('Tests can only be run from the command line.'); }
+if (PHP_SAPI !== 'cli')
+{
+	echo "Tests can only be run from the command line.\n";
+	die(-1);
+}
 
 echo "######################################\n";
 echo "### Welcome to the GDOv7 testsuite ###\n";
+echo "###        Enjoy your flight       ###\n";
 echo "######################################\n";
 
+# Rename the config in case an accident happened.
+if ( (is_file('protected/config_test2.php')) &&
+	 (!is_file('protected/config_test.php')) )
+{
+	rename('protected/config_test2.php', 'protected/config_test.php');
+}
+
+# Bootstrap GDOv7 wit PHPUnit support.
 require 'protected/config_test.php';
 require 'GDO7.php';
 require 'vendor/autoload.php';
@@ -41,7 +55,7 @@ final class gdo_test extends Application
 Logger::init('gdo_test', GDO_ERROR_LEVEL);
 Debug::init();
 
-$app = new gdo_test();
+new gdo_test();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Debug::setMailOnError(GDO_ERROR_EMAIL);
@@ -67,22 +81,26 @@ Database::instance()->queryWrite("DROP DATABASE IF EXISTS " . GDO_DB_NAME);
 Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
 Database::instance()->useDatabase(GDO_DB_NAME);
 
-FileUtil::removeDir(GDO_PATH . '/temp_test');
+FileUtil::removeDir(GDO_PATH . 'files_temp/');
+FileUtil::removeDir(GDO_TEMP_PATH);
 
 # 1. Try the install process
-echo "Running installer first...\n";
-$install = $loader->loadModuleFS('Install', true, true);
-runTestSuite($install);
+if ($argc === 1)
+{
+	echo "Running install all first...\n";
+	$install = $loader->loadModuleFS('Install', true, true);
+	Module_Tests::runTestSuite($install);
+}
 
 echo "Loading modules from filesystem...\n";
-$modules = $loader->loadModules(false, true);
+$modules = $loader->loadModules(false, true, true);
 
 if ($argc === 2)
 {
     $count = 0;
     $modules = explode(',', $argv[1]);
     
-    if ($app->loader->loadModuleFS('Tests', false))
+    if ($loader->loadModuleFS('Tests', false))
     {
         $modules[] = 'Tests';
     }
@@ -120,7 +138,7 @@ if ($argc === 2)
     {
         echo "Installing {$module->getName()}\n";
         Installer::installModule($module);
-        runTestSuite($module);
+        Module_Tests::runTestSuite($module);
     }
     echo "Finished.\n";
     return;
@@ -133,20 +151,7 @@ foreach ($modules as $module)
         echo "Installing {$module->getName()}\n";
         Installer::installModule($module);
     }
-	runTestSuite($module);
+    Module_Tests::runTestSuite($module);
 }
 
-echo "Finished.\n";
-
-function runTestSuite(GDO_Module $module)
-{
-    $testDir = $module->filePath('Test');
-    if (FileUtil::isDir($testDir))
-    {
-        echo "Verarbeite Tests für {$module->getName()}\n";
-        $command = new Command();
-        $command->run(['phpunit', $testDir], false);
-        echo "Done with {$module->getName()}\n";
-        echo "----------------------------------------\n";
-    }
-}
+printf("Finished %s asserts successfully.\n", TestCore::$ASSERT_COUNT);

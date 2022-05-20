@@ -11,6 +11,7 @@ use GDO\Core\Application;
 
 /**
  * Helper Class to test a gdo method.
+ * 
  * @author gizmore
  */
 final class MethodTest
@@ -22,9 +23,9 @@ final class MethodTest
     # 4 - Sven (staff)
     public static $USERS = []; # store some users here for testing.
     
-    public static function make()
+    public static function make() : self
     {
-        return new self();
+        return new static();
     }
     
     ###############
@@ -82,17 +83,20 @@ final class MethodTest
     public function execute($btn='submit')
     {
         # Reset request and response.
-        Application::$RESPONSE_CODE = 200;
-        $_GET = [];
-        $_POST = [];
-        $_REQUEST = [];
+//         Application::$RESPONSE_CODE = 200;
+//         $_GET = [];
+//         $_POST = [];
+//         $_REQUEST = [];
         
         # Set user if desired. Default is admin gizmore.
-        if ($this->user) GDO_User::setCurrent($this->user);
+        if ($this->user)
+        {
+        	GDO_User::setCurrent($this->user);
+        }
         
         # Set options
-        $_REQUEST['_fmt'] = $_GET['_fmt'] = $this->json ? 'json' : 'html';
-        $_REQUEST['_ajax'] = $_GET['_ajax'] = $this->json ? '1' : '0';
+//         $_REQUEST['_fmt'] = $_GET['_fmt'] = $this->json ? 'json' : 'html';
+//         $_REQUEST['_ajax'] = $_GET['_ajax'] = $this->json ? '1' : '0';
 
         $p = array_merge($this->getParameters, $this->parameters);
         $this->method->parameters($p);
@@ -113,11 +117,11 @@ final class MethodTest
 //             $_REQUEST[$frm][$key] = $value;
 //         }
         
-        $_GET['mo'] = $_REQUEST['mo'] = $this->method->getModuleName();
-        $_GET['me'] = $_REQUEST['me'] = $this->method->getMethodName();
+//         $_GET['mo'] = $_REQUEST['mo'] = $this->method->getModuleName();
+//         $_GET['me'] = $_REQUEST['me'] = $this->method->getMethodName();
         
         # Exec
-        echo "Executing Method {$this->method->getModuleName()}::{$this->method->getMethodName()}\n";
+        echo "Executing Method {$this->method->gdoHumanName()}\n";
         ob_flush();
         $response = $this->method->exec();
         ob_flush();

@@ -16,31 +16,25 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\UI\GDT_Divider;
-use GDO\Core\ModuleLoader;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Panel;
 use GDO\Install\Installer;
 use GDO\Util\Arrays;
-use GDO\Util\Common;
 use GDO\UI\GDT_Container;
 use GDO\Core\GDT;
 
 /**
  * Configure a module.
- * @TODO: Move Admin.Configure to core or make Admin a core module?
  * 
  * @author gizmore
- * @version 6.11.1
+ * @version 7.0.0
  * @since 3.4.0
  */
 class Configure extends MethodForm
 {
 	use MethodAdmin;
 	
-	/**
-	 * @var GDO_Module
-	 */
-	private $configModule;
+// 	private GDO_Module $configModule;
 	
 	public function getPermission() : ?string { return 'admin'; }
 	public function showInSitemap() { return false; }
@@ -52,13 +46,12 @@ class Configure extends MethodForm
 	    ];
 	}
 	
-	public function onInit() : void
-	{
-	    # Load
-	    $modules = ModuleLoader::instance()->loadModules(true, true);
-	    $moduleName = strtolower(Common::getRequestString('module'));
-	    $this->configModule = $modules[$moduleName];
-	}
+// 	public function onInit() : void
+// 	{
+// 	    # Load
+// 	    $moduleName = strtolower($this->gdoParameterVar('module'));
+// 	    $this->configModule = ModuleLoader::instance()->getModule($moduleName, true);
+// 	}
 	
 	public function execute() : GDT
 	{
@@ -87,10 +80,10 @@ class Configure extends MethodForm
 	
 	public function getTitle()
 	{
-	    if ($this->configModule)
-	    {
+// 	    if ($this->configModule)
+// 	    {
 	        return t('ft_admin_configure', [$this->configModule->displayName()]);
-	    }
+// 	    }
 	}
 	
 	public function getDescription()
@@ -103,12 +96,13 @@ class Configure extends MethodForm
 	
 	public function createForm(GDT_Form $form) : void
 	{
-		if (!($mod = $this->configModule))
-		{
-		    return;
-		}
+// 		if (!($mod = $this->configModule))
+// 		{
+// 		    return;
+// 		}
+		$mod = $this->gdoParameterB('module');
 		$deps = Installer::getDependencyModules($mod->getName());
-		$deps = array_filter($deps, function(GDO_Module $m) { return $m->getName() !== $this->configModule->getName() AND !$m->isCoreModule(); });
+		$deps = array_filter($deps, function(GDO_Module $m) { return $m->getName() !== $mod->getName() AND !$m->isCoreModule(); });
 		$deps = array_map(function(GDO_Module $m) { return $m->getName(); }, $deps);
 		$deps = array_map(function($nam) {
 		    $link = href('Admin', 'Configure', "&module=".urlencode($nam));

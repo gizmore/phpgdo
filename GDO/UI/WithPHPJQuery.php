@@ -2,10 +2,11 @@
 namespace GDO\UI;
 
 /**
- * Should be extended to reflect a jQuery API on PHP objects.
+ * Extend a GDT with an API similiar to jQuery.
+ * Render with htmlAttributes()
  * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 6.7.0
  */
 trait WithPHPJQuery
@@ -15,9 +16,9 @@ trait WithPHPJQuery
 	#######################
 	public array $htmlAttributes;
 	
-	public function attr($attribute, $value=null)
+	public function attr(string $attribute, $value=null)
 	{
-		if (!$this->htmlAttributes)
+		if (!isset($this->htmlAttributes))
 		{
 			$this->htmlAttributes = [];
 		}
@@ -33,7 +34,7 @@ trait WithPHPJQuery
 	public function htmlAttributes() : string
 	{
 		$html = '';
-		if ($this->htmlAttributes)
+		if (isset($this->htmlAttributes))
 		{
 			foreach ($this->htmlAttributes as $attribute => $value)
 			{
@@ -68,12 +69,21 @@ trait WithPHPJQuery
 		return $this->attr('class', implode(" ", $classes));
 	}
 	
-	# CSS
+	###########
+	### CSS ###
+	###########
 	private array $css;
-	public function css($attr, $value=null)
+	
+	public function css(string $attr, $value=null)
 	{
-		if (!$this->css) $this->css = [];
-		if ($value === null) { return $this->css[$attr]; }
+		if (!isset($this->css))
+		{
+			$this->css = [];
+		}
+		if ($value === null)
+		{
+			return @$this->css[$attr];
+		}
 		$this->css[$attr] = $value;
 		return $this->updateCSS();
 	}

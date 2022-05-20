@@ -35,7 +35,7 @@ class GDT_Timestamp extends GDT_DBField
 	#############
 	### Value ###
 	#############
-	public function toValue($var)
+	public function toValue(string $var = null)
 	{
 	    if ($var)
 	    {

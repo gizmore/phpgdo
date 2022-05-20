@@ -5,12 +5,38 @@ use GDO\Core\GDT;
 use GDO\Core\WithFields;
 use GDO\UI\WithTitle;
 use GDO\UI\WithText;
+use GDO\UI\WithTarget;
 
+/**
+ * A form has a title, a text, fields, menu actions and an html action/target.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 3.0.4
+ * @see MethodForm
+ * @see WithText
+ * @see WithTitle
+ * @see WithFields
+ * @see WithAction
+ * @see WithActions
+ */
 final class GDT_Form extends GDT
 {
-	use WithText;
-	use WithTitle;
-	use WithFields;
-	use WithActions;
+	use WithText; # form info
+	use WithTitle; # form title
+	use WithFields; # container
+	use WithTarget; # html target
+	use WithAction; # html action
+	use WithActions; # menu
+	
+	############
+	### Slim ###
+	############
+	public bool $slim = false;
+	public function slim(bool $slim=true) : self
+	{
+		$this->slim = $slim;
+		return $this;
+	}
 	
 }

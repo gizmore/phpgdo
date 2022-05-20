@@ -148,7 +148,11 @@ function json_quote($s)
 
 function html(string $html) : string
 {
-	return Application::instance()->isCLI() ? $html : str_replace(
+	$app = Application::instance();
+	$is_html = $app->isHTML();
+	$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
+	
+	return $is_html ? str_replace(
 	[
 		'&',
 		'"',
@@ -161,7 +165,7 @@ function html(string $html) : string
 		'&#39;',
 		'&lt;',
 		'&gt;'
-	], $html);
+	], $html) : $html;
 }
 
 function def(string $key, $default = null)

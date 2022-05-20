@@ -11,7 +11,7 @@ class GDT_PasswordHash extends GDT_Password
 {
     public function isSerializable() : bool { return false; }
     
-    public function toValue($var)
+    public function toValue(string $var = null)
 	{
 		return $var === null ? null : new BCrypt($var);
 	}

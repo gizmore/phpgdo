@@ -33,7 +33,7 @@ class GDT_Version extends GDT_String
 		return sprintf('%d.%d.%d', $value->major, $value->minor, $value->patch);
 	}
 	
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 		if (!$var)
 		{

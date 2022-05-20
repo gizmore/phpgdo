@@ -1,6 +1,6 @@
 <?php
 use GDO\Form\GDT_Form;
-use GDO\Form\GDT_Select;
+use GDO\Core\GDT_Select;
 use GDO\Form\GDT_Submit;
 use GDO\UI\GDT_Accordeon;
 use GDO\UI\GDT_SearchField;

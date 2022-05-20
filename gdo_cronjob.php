@@ -16,7 +16,7 @@ if (php_sapi_name() !== 'cli')
     die(-1);
 }
 
-require 'GDO6.php';
+require 'GDO7.php';
 require 'protected/config.php';
 
 CLI::setServerVars();

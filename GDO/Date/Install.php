@@ -5,7 +5,10 @@ use GDO\Date\Method\RefreshOffsets;
 
 /**
  * Install timezone table.
+ * Refresh hour offsets.
+ * 
  * @author gizmore
+ * @version 7.0.0
  */
 final class Install
 {

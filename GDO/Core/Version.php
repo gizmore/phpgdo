@@ -1,18 +1,53 @@
 <?php
 namespace GDO\Core;
 
+/**
+ * Version number. Major.Minor.Patch.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ * @since 7.0.0
+ * @see GDO_Module
+ */
 final class Version
 {
-	public int $major;
-	public int $minor;
-	public int $patch;
+	const MAX_PATCH = 50;
+	const MAX_MINOR = 13;
 	
-	public function __construct($var)
+	public int $major = 0;
+	public int $minor = 0;
+	public int $patch = 0;
+	
+	public function __construct(string $var = null)
 	{
-		list($major, $minor, $patch) = explode('.', $var);
-		$this->major = intval($major, 10);
-		$this->minor = intval($minor, 10);
-		$this->patch = intval($patch, 10);
+		if ($var)
+		{
+			list($major, $minor, $patch) = explode('.', $var);
+			$this->major = intval($major, 10);
+			$this->minor = intval($minor, 10);
+			$this->patch = intval($patch, 10);
+		}
+	}
+	
+	public function __toString() : string
+	{
+		return sprintf('%d.%d.%d', $this->major, $this->minor, $this->patch);
+	}
+	
+	public function increase() : self
+	{
+		$this->patch++;
+		if ($this->patch > self::MAX_PATCH)
+		{
+			$this->patch = 0;
+			$this->minor++;
+			if ($this->minor > self::MAX_MINOR)
+			{
+				$this->major++;
+				$this->minor = 0;
+			}
+		}
+		return $this;
 	}
 	
 }

@@ -13,15 +13,20 @@ use GDO\Date\Method\Timezone;
  * - timezone javascript detection. default: on
  * - sidebar timezone select in left panel. default: on
  * - Keeps timezone after user logout.
+ * - Time utility helper
  * 
  * @author gizmore
  * @version 7.0.0
  * @since 6.10.1
+ * @see Time
  */
 final class Module_Date extends GDO_Module
 {
     public int $priority = 2;
-    public function onLoadLanguage() : void { $this->loadLanguage('lang/date'); }
+    public function onLoadLanguage() : void
+    {
+    	$this->loadLanguage('lang/date');
+    }
     
     ##############
     ### Config ###

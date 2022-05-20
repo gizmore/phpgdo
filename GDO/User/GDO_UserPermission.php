@@ -23,26 +23,26 @@ final class GDO_UserPermission extends GDO
 	
 	public function gdoColumns() : array
 	{
-		return array(
+		return [
 			GDT_User::make('perm_user_id')->primary(),
 			GDT_Permission::make('perm_perm_id')->primary(),
 			GDT_CreatedAt::make('perm_created_at'),
 			GDT_CreatedBy::make('perm_created_by'),
 		    GDT_Index::make('perm_user_id_index')->hash()->indexColumns('perm_user_id'),
-		);
+		];
 	}
 	
 	/**
 	 * @return GDO_User
 	 */
-	public function getUser() { return $this->getValue('perm_user_id'); }
-	public function getUserID() { return $this->gdoVar('perm_user_id'); }
+	public function getUser() : GDO_User { return $this->gdoValue('perm_user_id'); }
+	public function getUserID() : string { return $this->gdoVar('perm_user_id'); }
 	
 	/**
 	 * @return GDO_Permission
 	 */
-	public function getPermission() : ?string { return $this->getValue('perm_perm_id'); }
-	public function getPermissionID() { return $this->gdoVar('perm_perm_id'); }
+	public function getPermission() : GDO_Permission { return $this->gdoValue('perm_perm_id'); }
+	public function getPermissionID() : string { return $this->gdoVar('perm_perm_id'); }
 
 	##############
 	### Static ###
@@ -83,7 +83,7 @@ final class GDO_UserPermission extends GDO
 	 * @param string $permission
 	 * @return self
 	 */
-	public static function grant(GDO_User $user, $permission)
+	public static function grant(GDO_User $user, string $permission)
 	{
 		return self::grantPermission($user, GDO_Permission::getByName($permission));
 	}
@@ -93,7 +93,7 @@ final class GDO_UserPermission extends GDO
 		return self::table()->deleteWhere("perm_user_id={$user->getID()} AND perm_perm_id={$permission->getID()}");
 	}
 	
-	public static function revoke(GDO_User $user, $permission)
+	public static function revoke(GDO_User $user, string $permission)
 	{
 		return self::revokePermission($user, GDO_Permission::getByName($permission));
 	}

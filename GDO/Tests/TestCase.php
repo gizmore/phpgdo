@@ -4,8 +4,7 @@ namespace GDO\Tests;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
-use GDO\Core\GDT_Response;
-use GDO\UI\GDT_Page;
+use GDO\Core\GDT_Expression;
 use GDO\User\GDO_User;
 use GDO\Session\GDO_Session;
 use GDO\Core\Method;
@@ -15,16 +14,18 @@ use GDO\User\GDO_UserPermission;
 use GDO\Core\Application;
 use GDO\File\FileUtil;
 use GDO\Language\Trans;
-use GDO\CLI\CLI;
 use GDO\Core\Website;
 use GDO\Date\Time;
 use GDO\Date\GDO_Timezone;
+use PHPUnit\Framework\Assert;
 
 /**
  * A GDO test case knows a few helper functions.
  * Sets up a clean response environment.
  * Allows user switching.
+ * Cycles IPs
  * Adds cli test function for convinient testing.
+ * Adds proc test function for convinient testing.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -32,11 +33,17 @@ use GDO\Date\GDO_Timezone;
  */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+	public static int $TEST_COUNT = 0;
+	public static int $TEST_FAILS = 0; #@ TODO: implement unit test counter
+	
+	public static int $ASSERT_COUNT = 0;
+	public static int $ASSERT_FAILS = 0; # @TODO: calculate assert fails.
+	
     #################
     ### Init test ###
     #################
-    private $ipc = 0;
-    private $ipd = 0;
+    private int $ipc = 0;
+    private int $ipd = 0;
     private function nextIP()
     {
         $this->ipd++;
@@ -51,24 +58,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
     
     protected function setUp(): void
     {
-        # Increase Time
-        Application::updateTime();
-        
-    	Application::instance()->cli(false);
+        Application::instance()->reset();
         
         # Increase IP
         GDT_IP::$CURRENT = $this->nextIP();
-        
-        # Clear input
-        $_REQUEST = $_POST = $_GET = $_FILES = [];
-        
-        # Clear code
-        Application::$RESPONSE_CODE = 200;
-        
-        # Clear navs
-        $p = GDT_Page::instance();
-        $p->reset();
-//         GDT_Response::newWith();
         
         # Set gizmore user
         if (Module_User::instance()->isPersisted())
@@ -85,11 +78,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
     
+    protected function tearDown() : void
+    {
+    	self::$ASSERT_COUNT += Assert::getCount();
+    }
+    
     /**
      * Restore gizmore because auto coverage messes with him a lot.
      * @param GDO_User $user
      */
-    protected function restoreUserPermissions(GDO_User $user)
+    protected function restoreUserPermissions(GDO_User $user) : void
     {
         if (count(MethodTest::$USERS))
         {
@@ -104,9 +102,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
     
-    protected $sessions = [];
+    /**
+     * @var GDO_Session[]
+     */
+    protected array $sessions = [];
     
-    protected function session(GDO_User $user)
+    protected function session(GDO_User $user) : GDO_Session
     {
         $uid = $user->getID();
         if (!isset($this->sessions[$uid]))
@@ -133,15 +134,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function userSystem() { return $this->user(GDO_User::system()); } # ID 1 
     protected function userGizmore() { return $this->user($this->gizmore()); } # Admin 
     protected function userPeter() { return $this->user($this->peter()); } # Staff
-    protected function userSven()
-    {
-        $user = $this->user($this->sven());
-//         GDO_UserPermission::grant($user, 'staff');
-//         $user->changedPermissions();
-        return $user;
-    }
     protected function userMonica() { return $this->user($this->monica()); } # Member
     protected function userGaston() { return $this->user($this->gaston()); } # Guest
+    protected function userSven() { return $this->user($this->sven()); }
     
     protected function user(GDO_User $user)
     {
@@ -205,36 +200,27 @@ class TestCase extends \PHPUnit\Framework\TestCase
     #################
     ### CLI Tests ###
     #################
-    public function cli($command)
+    public function proc(string $command) : string
     {
-        try
-        {
-            # Clean
-            $_REQUEST = $_GET = $_POST = [];
-            GDT_Page::instance()->reset();
-            GDT_Response::newWith();
-            Application::instance()->cli(true);
-            
-            # Exec
-            ob_start();
-            echo CLI::execute($command)->renderCLI();
-            $top = '';
-            $response = ob_get_contents();
-            if (Website::$TOP_RESPONSE)
-            {
-                $top = Website::$TOP_RESPONSE->renderCLI() . "\n";
-            }
-            return $top . $response;
-        }
-        catch (\Throwable $ex)
-        {
-            throw $ex;
-        }
-        finally
-        {
-            Application::instance()->cli(false);
-            ob_end_clean();
-        }
+    	$output = [];
+    	$retval = -2;
+    	exec($command, $output, $retval);
+    	assertEquals(0, $retval, 'Assert that this process works: ' . $command);
+    	$output = implode("\n", $output);
+    	$output .= $output ? "\n" : '';
+    	return $output;
+    }
+    
+    public function cli(string $command, bool $permissions=true) : string
+    {
+    	$app = Application::instance();
+    	$app->reset();
+    	$app->cli(true);
+    	$_POST = ['a' => '1'];
+       	$expression = GDT_Expression::fromLine($command);
+    	$response = $permissions ? $expression->exec() : $expression->execute();
+    	$result = $response->renderCLI();
+    	return $result;
     }
     
     ############

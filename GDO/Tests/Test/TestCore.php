@@ -7,7 +7,8 @@ use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Core\Module_Core;
 
 /**
- * Core tests without any users etc.
+ * Core tests.
+ * 
  * - Test Expression parser
  * 
  * @author gizmore
@@ -16,16 +17,19 @@ final class TestCore extends TestCase
 {
 	public function testVersion()
 	{
-		$result = GDT_Expression::fromLine('version')->execute();
-		$result = $result->renderCLI();
-		assertStringContainsString(Module_Core::GDO_REVISION, $result, 'Check if version can be printed');
+		$result = $this->cli("core.version");
+		$version = Module_Core::GDO_REVISION;
+		assertStringContainsString($version, $result, 'Test if version command works.');
 	}
 	
 	public function testNestedExpression()
 	{
-		$result = GDT_Expression::fromLine('core.concat $(core.concat "--glue= " b c) a')->execute();
+		$result = GDT_Expression::fromLine()->execute();
 		$result = $result->renderCLI();
-		assertStringContainsString('b ca', $result, 'Check if concat works');
+		
+		$command = 'core.concat $(core.concat "--glue=, " b,c),a';
+		$result = $this->cli($command);
+		assertStringContainsString('b ca', $result, 'Check if complex concat works');
 	}
 	
 }

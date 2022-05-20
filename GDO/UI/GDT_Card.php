@@ -2,6 +2,8 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_CreatedAt;
+use GDO\Core\GDT_CreatedBy;
 use GDO\Core\GDT_EditedAt;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;

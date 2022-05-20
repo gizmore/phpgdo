@@ -50,11 +50,9 @@ GDO/*
 !GDO/Admin/
 !GDO/CLI/
 !GDO/Core/
-!GDO/Cronjob/
 !GDO/Crypto/
 !GDO/Date/
 !GDO/DB/
-!GDO/File/
 !GDO/Form/
 !GDO/Install/
 !GDO/Language/

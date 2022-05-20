@@ -13,6 +13,7 @@ final class GDT_Language extends GDT_ObjectSelect
 		$this->table(GDO_Language::table());
 		$this->min = $this->max = 2;
 		$this->icon('language');
+		$this->cascadeRestrict();
 	}
 	
 	public $withName = false;

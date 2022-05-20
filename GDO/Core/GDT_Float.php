@@ -11,7 +11,7 @@ class GDT_Float extends GDT_Int
 	#######################
 	### Input/Var/Value ###
 	#######################
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 		if ($var)
 		{
@@ -84,11 +84,10 @@ class GDT_Float extends GDT_Int
 	
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
-		$va = $a->getValue($this->name);
-		$vb = $b->getValue($this->name);
-		if ($va > $vb) { return 1; }
-		if ($vb > $va) { return -1; }
-		return 0;
+		$va = $a->gdoValue($this->name);
+		$vb = $b->gdoValue($this->name);
+		return ($va === $vb) ? 0 :
+			(($va > $vb) ? 1 : - 1);
 	}
 	
 }

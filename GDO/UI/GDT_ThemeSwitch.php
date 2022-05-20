@@ -1,7 +1,7 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Form\GDT_Select;
+use GDO\Core\GDT_Select;
 
 final class GDT_ThemeSwitch extends GDT_Select
 {

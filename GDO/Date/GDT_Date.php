@@ -8,37 +8,34 @@ use GDO\Core\GDT_Template;
  * An example is the release date of a book, or a birthdate.
  * 
  * @author gizmore
- * @version 6.11.2
+ * @version 7.0.0
  * @since 5.0.0
- * 
  * @see GDT_Time
  * @see GDT_Timestamp
  * @see GDT_DateTime
  * @see GDT_Duration
- * @see Time for conversion
+ * @see Module_Birthday
  */
 class GDT_Date extends GDT_Timestamp
 {
-	public $dateStartView = 'year';
-	public $format = Time::FMT_DAY;
-	
 	public $icon = 'calendar';
+	public $format = Time::FMT_DAY;
+	public $dateStartView = 'year';
 	
+	##########
+	### DB ###
+	##########
 	public function gdoColumnDefine() : string
 	{
 		return "{$this->identifier()} DATE {$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
 	}
 
-	public function renderCell() : string { return $this->renderCellSpan($this->display()); }
-	public function renderForm() : string { return GDT_Template::php('Date', 'form/date.php', ['field'=>$this]); }
-	
+	###################
+	### Var / Value ###
+	###################
 	public function toVar($value) : ?string
 	{
-	    if ($value)
-	    {
-    	    /** @var $value \DateTime **/
-    	    return $value->format('Y-m-d');
-	    }
+	    return $value ? $value->format('Y-m-d') : null;
 	}
 	
 	public function _inputToVar($input)
@@ -50,7 +47,7 @@ class GDT_Date extends GDT_Timestamp
 		return $input;
 	}
 	
-	public function toValue($var)
+	public function toValue(string $var = null)
 	{
 	    return empty($var) ? null : Time::parseDateTimeDB($var);
 	}
@@ -58,6 +55,19 @@ class GDT_Date extends GDT_Timestamp
 	public function htmlValue()
 	{
 	    return sprintf(' value="%s"', $this->getVar());
+	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderCell() : string
+	{
+		return $this->renderCellSpan($this->display());
+	}
+	
+	public function renderForm() : string
+	{
+		return GDT_Template::php('Date', 'form/date.php', ['field'=>$this]);
 	}
 	
 	public function displayValue($value)

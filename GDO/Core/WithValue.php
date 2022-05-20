@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\DB\WithNullable;
+
 /**
  * This trait adds initial/input/var/value schema to a GDT.
  * The very base GDT does not have this.
@@ -11,6 +13,8 @@ namespace GDO\Core;
  */
 trait WithValue
 {
+	use WithNullable;
+	
 	################
 	### Required ###
 	################
@@ -24,7 +28,7 @@ trait WithValue
 	###########################
 	public bool $valueConverted = false; # Has var been converted to value already?
 	public ?string $initial = null; # initial var
-	public ?string $input = null; # input string
+	public $input = null; # input string
 	public ?string $var = null; # input db var
 	public $value; # output value
 	
@@ -34,7 +38,7 @@ trait WithValue
 		return $this->var($initial);
 	}
 
-	public function input(string $input = null) : self
+	public function input($input = null) : self
 	{
 		$this->input = $input;
 		return $this;
@@ -67,6 +71,10 @@ trait WithValue
 	
 	public function getVar() : ?string
 	{
+		if ($input = $this->getInput())
+		{
+			$this->var($this->inputToVar($input));
+		}
 		return $this->var;
 	}
 	
@@ -80,6 +88,15 @@ trait WithValue
 		return $this->value;
 	}
 
+	public function gdo(GDO $gdo = null) : self
+	{
+// 		$this->getGDOData($gdo);
+		$var = $gdo->gdoVar($this->name);
+		return $this->var($var);
+// 		$this->var = $this->initial;
+// 		$this->input = $gdo->gdoV
+	}
+	
 	##################
 	### Positional ###
 	##################

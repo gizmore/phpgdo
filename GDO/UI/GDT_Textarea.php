@@ -14,6 +14,6 @@ class GDT_Textarea extends GDT_Message
     ### Editor ###
     ##############
     public bool $nowysiwyg = true;
-    public function classEditor() { return 'as-is'; }
+    public function classEditor() : string { return 'as-is'; }
     
 }

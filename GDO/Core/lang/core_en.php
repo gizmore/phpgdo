@@ -31,6 +31,7 @@ return [
 	'err_invalid_choice' => 'Your selection is invalid.',
 	'err_gdt_should_have_a_name' => '%s should have a name!',
 	'err_permission_required' => 'You need the %s permission to execute that.',
+	'err_gdo_no_gdt' => 'The GDO `%2$s` does not allow the GDT method `%1$s`.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',

@@ -3,7 +3,6 @@ namespace GDO\Core;
 
 use GDO\UI\GDT_Link;
 use GDO\User\GDO_User;
-use GDO\Javascript\Javascript;
 use GDO\User\GDT_User;
 use GDO\Language\Trans;
 use GDO\User\GDO_Permission;
@@ -26,6 +25,7 @@ use GDO\Net\GDT_Url;
  * @author gizmore
  * @version 7.0.0
  * @since 6.0.0
+ * @see Module_Javascript
  */
 final class Module_Core extends GDO_Module
 {
@@ -34,7 +34,7 @@ final class Module_Core extends GDO_Module
 	 * Sometimes just counts up to be in sync and poison some other module caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.0-r1015';
+	const GDO_REVISION = '7.0.0-r1021';
 	
 	##############
 	### Module ###
@@ -47,7 +47,7 @@ final class Module_Core extends GDO_Module
 	
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/core'); }
 	
-	public function thirdPartyFolders() : array { return ['/protected/', '/htmlpurifier/', '/bin/']; }
+	public function thirdPartyFolders() : array { return ['/htmlpurifier/']; }
 	
 	public function getClasses() : array
 	{
@@ -62,11 +62,6 @@ final class Module_Core extends GDO_Module
 		];
 	}
 	
-	/**
-	 * Real core modules.
-	 * {@inheritDoc}
-	 * @see \GDO\Core\GDO_Module::getDependencies()
-	 */
 	public function getDependencies() : array
 	{
 		return ['User'];
@@ -107,7 +102,7 @@ final class Module_Core extends GDO_Module
 	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
 	public function cfgShowImpressum() { return $this->getConfigVar('show_impressum'); }
 	public function cfgShowPrivacy() { return $this->getConfigVar('show_privacy'); }
-	public function cfgAssetVersion() { return sprintf('%.02f', $this->getConfigVar('asset_revision')); }
+	public function cfgAssetVersion() : Version { return $this->getConfigValue('asset_revision'); }
 	public function cfgAllowGuests() { return $this->getConfigVar('allow_guests'); }
 	public function cfgSiteShortTitleAppend() { return $this->getConfigVar('siteshort_title_append'); }
 	public function cfgMail403() { return $this->getConfigVar('mail_404'); }
@@ -142,7 +137,7 @@ final class Module_Core extends GDO_Module
 	##################
 	public function onIncludeScripts() : void
 	{
-		$this->addCSS('css/gdo6-core.css');
+		$this->addCSS('css/gdo7.css');
 		$this->addJS('js/gdo-string-util.js');
 		$this->addJS('js/gdo-user.js');
 		$this->addJS('js/gdo-core.js');

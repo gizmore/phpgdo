@@ -28,7 +28,7 @@ use GDO\Util\Regex;
  */
 class GDT_Int extends GDT_DBField
 {
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 		if (!empty($var))
 		{
@@ -258,9 +258,7 @@ class GDT_Int extends GDT_DBField
 	
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
-		$va = $a->gdoVar($this->name);
-		$vb = $b->gdoVar($this->name);
-		return $va - $vb;
+		return $a->gdoValue($this->name) - $b->gdoValue($this->name);
 	}
 	
 	##############

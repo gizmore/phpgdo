@@ -251,7 +251,7 @@ class Database
 	 * @param string $classname
 	 * @return GDO
 	 */
-	public static function tableS(string $classname, bool $initCache=true) : GDO
+	public static function tableS(string $classname, bool $initCache=true) : ?GDO
 	{
 		if (!isset(self::$TABLES[$classname]))
 		{

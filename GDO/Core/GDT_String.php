@@ -101,7 +101,7 @@ class GDT_String extends GDT_DBField
 	
 	public function validatePattern($value) : bool
 	{
-		if (!$this->pattern)
+		if (!isset($this->pattern))
 		{
 			return true;
 		}
@@ -109,6 +109,7 @@ class GDT_String extends GDT_DBField
 		{
 			return $this->errorPattern();
 		}
+		return true;
 	}
 	
 	protected function errorPattern() : bool
@@ -116,16 +117,16 @@ class GDT_String extends GDT_DBField
 		return $this->error('err_pattern_mismatch', [$this->pattern]);
 	}
 	
-	#######################
-	### Input/Var/Value ###
-	#######################
-	public function inputToVar(string $input) : string
-	{
-		if ($input)
-		{
-			return trim($input);
-		}
-	}
+// 	#######################
+// 	### Input/Var/Value ###
+// 	#######################
+// 	public function inputToVar(string $input) : string
+// 	{
+// 		if ($input)
+// 		{
+// 			return trim($input);
+// 		}
+// 	}
 	
 	################
 	### Validate ###
@@ -175,4 +176,21 @@ class GDT_String extends GDT_DBField
 		return '';
 	}
 	
+	###########
+	### GDT ###
+	###########
+	public function gdoCompare(GDO $a, GDO $b) : int
+	{
+		$va = $a->gdoVar($this->name);
+		$vb = $b->gdoVar($this->name);
+		switch ($this->encoding)
+		{
+			case self::ASCII:
+			case self::UTF8:
+				return $this->caseSensitive ? strnatcmp($va, $vb) : strnatcasecmp($va, $vb);
+			case self::BINARY:
+				return strcmp($va, $vb);
+		}
+	}
+
 }

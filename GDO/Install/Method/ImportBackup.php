@@ -10,7 +10,10 @@ use GDO\Form\MethodForm;
 /**
  * Import a backup.
  * Requires Module_Backup.
+ * 
  * @author gizmore
+ * @version 7.0.0
+ * @since 6.12.3
  */
 final class ImportBackup extends MethodForm
 {
@@ -24,11 +27,12 @@ final class ImportBackup extends MethodForm
 		$form->addFields(
 			GDT_File::make('backup_file'),
 		);
-		$form->actions()->addField(GDT_Submit::make());
+		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onImportBackup']));
 	}
 	
-	public function formValidated(GDT_Form $form)
+	public function onImportBackup()
 	{
+		$form = $this->getForm();
 		if (module_enabled('Backup'))
 		{
 			return \GDO\Backup\Method\ImportBackup::make()->importBackup($form->getFormValue('backup_file'));

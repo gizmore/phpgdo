@@ -21,6 +21,6 @@ class GDT_Serialize extends GDT_Text
 	public bool $caseSensitive = true;
 	
 	public function toVar($value) : ?string { return empty($value) ? null : self::serialize($value); }
-	public function toValue(string $var) { return $var === null ? null : self::unserialize($var); }
+	public function toValue(string $var = null) { return $var === null ? null : self::unserialize($var); }
 
 }

@@ -19,7 +19,6 @@ final class Module_User extends GDO_Module
 	##############
 	public int $priority = 4; # start very early
 	
-	
 	public function getDependencies() : array
 	{
 		return [

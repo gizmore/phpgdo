@@ -9,7 +9,14 @@ use function PHPUnit\Framework\assertStringContainsString;
 use GDO\UI\GDT_Container;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Core\Application;
+use GDO\Core\GDT;
 
+/**
+ * Some very basic rendering tests.
+ * 
+ * @author gizmore
+ * @version 7.0.0
+ */
 final class ResponseTest extends TestCase
 {
     public function testRendersNestedFields()
@@ -26,7 +33,7 @@ final class ResponseTest extends TestCase
         $r2->addField($c);
         $r1->addField($r2);
         
-        $html = $r1->renderHTML();
+        $html = $r1->renderMode(GDT::RENDER_FORM);
         
         assertStringContainsString('par1', $html);
         assertStringContainsString('par2', $html);

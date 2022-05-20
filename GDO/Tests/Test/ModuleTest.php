@@ -5,6 +5,10 @@ use GDO\Core\Module_Core;
 use GDO\Tests\TestCase;
 use GDO\Core\ModuleLoader;
 
+/**
+ * Very simple module testing.
+ * @author gizmore
+ */
 final class ModuleTest extends TestCase
 {
     public function testAlreadyLoaded()

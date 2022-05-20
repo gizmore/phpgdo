@@ -12,7 +12,7 @@ use GDO\Core\GDT_String;
  * 
  * @author gizmore
  * 
- * @version 6.10.4
+ * @version 7.0.0
  * @since 6.2.0
  */
 class GDT_Title extends GDT_String
@@ -21,10 +21,10 @@ class GDT_Title extends GDT_String
     
 	public function defaultLabel() : self { return $this->label('title'); }
 	
-	public $min = 2;
-	public $max = 128;
+	public int $min = 2;
+	public int $max = 128;
 	public $icon = 'title';
-	public $notNull = true;
+	public bool $notNull = true;
 	public int $encoding = self::UTF8;
 	public bool $caseSensitive = false;
 	

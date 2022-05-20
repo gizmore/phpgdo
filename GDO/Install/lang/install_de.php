@@ -2,7 +2,7 @@
 return array(
 # Welcome
 'install_title_1' => 'Willkommen',
-'install_text_1' => 'Willkommen zu GDO6. Bitte fahren Sie hier fort: %s',
+'install_text_1' => 'Willkommen zu GDOv7. Bitte fahren Sie hier fort: %s',
 'install_text_2' => 'Falls Sie eine Datenbank verwenden wollen führen Sie bitte folgende MySQL Befehle als root aus.',
     
 # System Test
@@ -22,8 +22,8 @@ return array(
 'install_optional_1' => 'Ist PHP gd installiert?',
 'install_optional_2' => 'Ist PHP memcached installeiert?',
 'install_optional_3' => 'Is openssl extension available?',
-'install_system_ok' => 'Sie können GDO6 auf diesem System installieren. Sie können hier fortfahren: %s.',
-'install_system_not_ok' => 'Sie können GDO6 auf diesem System noch nicht installieren. Sie können erneut den Systemtest durchführen: %s.',
+'install_system_ok' => 'Sie können GDOv7 auf diesem System installieren. Sie können hier fortfahren: %s.',
+'install_system_not_ok' => 'Sie können GDOv7 auf diesem System noch nicht installieren. Sie können erneut den Systemtest durchführen: %s.',
 
 # Config
 'install_title_3' => 'GDO Konfiguration',
@@ -51,7 +51,7 @@ return array(
 'test_config' => 'Testen',
     
 # Modules
-'install_title_4' => 'GDO6 Module',
+'install_title_4' => 'GDOv7 Module',
 'install_modules_info_text' => 'Hier wählen Sie die Module zum Installieren.',
 'install_modules_completed' => 'Ihre Module wurden installiert. Sie können hier fortfahren: %s',
 'err_disable_core_module' => 'Sie können Core Module nicht abwählen.',

@@ -14,7 +14,7 @@ use GDO\Core\Application;
 use GDO\Core\GDO_Module;
 
 # Use gdo6 core
-include "GDO6.php";
+include "GDO7.php";
 include "protected/config.php";
 
 Database::init();

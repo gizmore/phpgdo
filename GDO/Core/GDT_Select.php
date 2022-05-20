@@ -14,10 +14,10 @@ class GDT_Select extends GDT_ComboBox
 {
 	const SELECTED = ' selected="selected"';
 	
-	public function inputToVar(string $input) : string
-	{
-		return $input;
-	}
+// 	public function inputToVar(string $input) : string
+// 	{
+// 		return $input;
+// 	}
 	
 	public function getVar() : ?string
 	{
@@ -75,7 +75,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 
-	public function toValue(string $var)
+	public function toValue(string $var = null)
 	{
 	    if ($var === null)
 	    {

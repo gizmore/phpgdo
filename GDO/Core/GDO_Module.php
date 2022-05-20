@@ -5,7 +5,6 @@ use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Language\Trans;
 use GDO\User\GDO_UserSetting;
-use GDO\Javascript\Javascript;
 use GDO\User\GDO_UserSettingBlob;
 use GDO\User\GDO_User;
 use GDO\Tests\Module_Tests;
@@ -38,22 +37,9 @@ class GDO_Module extends GDO
 	public function isSiteModule() : bool { return false; }
 	public function isInstallable() : bool { return true; }
 	
-// 	/**
-// 	 * All modules have at least these dependencies.
-// 	 * @TODO Would be nice to have no default dependencies, so a minimal install is possible.
-// 	 */
-// 	public function gdoDependencies()
-// 	{
-// 	    return [
-// 	        'Core', 'Country', 'Language', 'Date', 'Mail',
-// 	        'Table', 'User', 'Country', 'Javascript', 'UI',
-// 	        'Session', 'File', 'CSS',
-// 	    ];
-// 	}
-	
 	/**
-	 * A list of required dependencies, except core modules.
-	 * Override this.
+	 * A list of required dependencies.
+	 * Override this. Please add Core to your dependencies!
 	 * @return string[]
 	 */
 	public function getDependencies() : array { return ['Core']; }
@@ -214,7 +200,7 @@ class GDO_Module extends GDO
 		if ($readme = @file_get_contents($this->filePath('README.md')))
 		{
 			$matches = null;
-			if (preg_match("/^#.*[\\r\\n]+(.*)[\\r\\n]/", $readme, $matches))
+			if (preg_match("/^#.*[\\r\\n]+(.*)[\\r\\n]/iD", $readme, $matches))
 			{
 				return $matches[1];
 			}
@@ -224,12 +210,12 @@ class GDO_Module extends GDO
 	################
 	### Abstract ###
 	################
+	public function onWipe() : void {}
+	public function onInstall() : void {}
+	public function onAfterInstall() : void {}
 	public function onInit() : void {}
 	public function onInitCLI() : void {}
 	public function onInitSidebar() : void {}
-	public function onInstall() : void {}
-	public function onAfterInstall() : void {}
-	public function onWipe() : void {}
 	public function onLoad() : void {}
 	public function onLoadLanguage() : void {}
 	public function onIncludeScripts() : void {}
@@ -258,7 +244,10 @@ class GDO_Module extends GDO
 	/**
 	 * @return self
 	 */
-	public static function instance() : self { return ModuleLoader::instance()->getModule(self::getNameS(), true); }
+	public static function instance() : self
+	{
+		return ModuleLoader::instance()->getModule(self::getNameS(), true);
+	}
 	
 	private static array $nameCache = [];
 
@@ -276,8 +265,8 @@ class GDO_Module extends GDO
 	### Getter ###
 	##############
 	public function getID() : ?string { return $this->gdoVar('module_id'); }
-	public function getName() : string { return $this->gdoVar('module_name'); }
-	public function getVersion() : string { return $this->gdoVar('module_version'); }
+	public function getName() : ?string { return $this->getModuleName(); }
+	public function getVersion() : Version { return $this->gdoValue('module_version'); }
 	public function isEnabled() : string { return $this->gdoVar('module_enabled'); }
 	public function isInstalled() : bool { return $this->isPersisted(); }
 	
@@ -297,7 +286,7 @@ class GDO_Module extends GDO
 	##############
 	### Helper ###
 	##############
-	public function canUpdate() { return $this->version != $this->getVersion(); }
+	public function canUpdate() { return $this->version !== $this->getVersion()->__toString(); }
 	public function canInstall() { return !$this->isPersisted(); }
 	
 	/**
@@ -422,6 +411,23 @@ class GDO_Module extends GDO
 	 * @var GDT[]
 	 */
 	private array $configCache;
+	
+	/**
+	 * Helper to get the config var for a module.
+	 *  
+	 * @param string $moduleName
+	 * @param string $key
+	 * @param string $default
+	 * @return string|NULL
+	 */
+	public static function config_var(string $moduleName, string $key, string $default = null) : ?string
+	{
+		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
+		{
+			return $module->getConfigVar($key);
+		}
+		return null;
+	}
 	
 	/**
 	 * Get module configuration hashed and cached.
@@ -817,8 +823,17 @@ class GDO_Module extends GDO
 	 * nocache appendix
 	 * @var string
 	 */
-	private static $_NC;
-
+	public static string $_NC = '';
+	
+	public static function minAppend()
+	{
+		if (self::config_var('Javascript', 'minify_js', 'no') !== 'no')
+		{
+			return '.min';
+		}
+		return '';
+	}
+	
 	/**
 	 * Get the cache poisoner.
 	 * Base is gdo revision string.

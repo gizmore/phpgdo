@@ -21,22 +21,30 @@ final class GDT_Module extends GDT_ObjectSelect
         $this->table(GDO_Module::table());
     }
     
-    public function toVar($value) : ?string
-    {
-        if ($value)
-        {
-            return strtolower($value->getName());
-        }
-    }
+//     public function toVar($value) : ?string
+//     {
+//         if ($value)
+//         {
+//             return strtolower($value->getName());
+//         }
+//     }
     
     ####################
     ### Un/Installed ###
     ####################
-    public $installed = true;
-    public function installed($installed=true) { $this->installed = $installed; return $this; }
+    public bool $installed = true;
+    public function installed(bool $installed=true)
+    {
+    	$this->installed = $installed;
+    	return $this;
+    }
     
-    public $uninstalled = false;
-    public function uninstalled($uninstalled=true) { $this->uninstalled = $uninstalled; return $this; }
+    public bool $uninstalled = false;
+    public function uninstalled(bool $uninstalled=true)
+    {
+    	$this->uninstalled = $uninstalled;
+    	return $this;
+    }
     
     ###############
     ### Choices ###
@@ -68,12 +76,12 @@ final class GDT_Module extends GDT_ObjectSelect
         return 'Core';
     }
     
-    public function getValueSingle($moduleName)
+    public function getValueSingle(string $moduleName) : ?GDO_Module
     {
-        return ModuleLoader::instance()->getModule($moduleName);
+        return ModuleLoader::instance()->getModule($moduleName, true, false);
     }
     
-    public function getValueMulti($var)
+    public function getValueMulti(string $var) : array
     {
         $loader = ModuleLoader::instance();
         $back = [];

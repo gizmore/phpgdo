@@ -7,14 +7,41 @@ namespace GDO\Core;
  * @author gizmore
  * @version 7.0.0
  * @since 6.0.1
+ * @see GDT
  */
 trait WithFields
 {
+	#############
+	### Input ###
+	#############
+	public array $input;
+	public function getInput()
+	{
+		return isset($this->input) ? $this->input : null;
+	}
+	
+	public function input($input = null) : self
+	{
+		$this->input = $input;
+		return $this;
+	}
+	
+	##############
+	### Fields ###
+	##############
+	/**
+	 * @var GDT[]
+	 */
 	protected array $fields = [];
 	
-	public function getField(string $key)
+	public function getField(string $key) : GDT
 	{
 		return $this->fields[$key];
+	}
+	
+	public function hasFields() : bool
+	{
+		return count($this->fields) > 0;
 	}
 	
 	/**
@@ -37,17 +64,16 @@ trait WithFields
 	
 	public function addField(GDT $field = null) : self
 	{
-		if ($field === null)
+		if ($field)
 		{
-			return $this;
-		}
-		elseif ($field->hasName())
-		{
-			$this->fields[$field->getName()] = $field;
-		}
-		else
-		{
-			$this->fields[] = $field;
+			if ($field->hasName())
+			{
+				$this->fields[$field->getName()] = $field;
+			}
+			else
+			{
+				$this->fields[] = $field;
+			}
 		}
 		return $this;
 	}
@@ -83,6 +109,24 @@ trait WithFields
 		return $fields;
 	}
 	
+	/**
+	 * Iterate recusively over the fields with a callback.
+	 * @param callable $callback
+	 * @return self
+	 */
+	public function withFields(callable $callback) : self
+	{
+		foreach ($this->getFields() as $gdt)
+		{
+			$callback($gdt);
+			if ($gdt->hasFields())
+			{
+				$gdt->withFields($callback);
+			}
+		}
+		return $this;
+	}
+	
 	###################
 	### Instanciate ###
 	###################
@@ -101,11 +145,68 @@ trait WithFields
 	##############
 	public function render() : string
 	{
+		return $this->renderGDT();
+	}
+	
+	public function renderFields() : string
+	{
 		$rendered = '';
-		$this->withFields(function(GDT $gdt) use(&$rendered) {
+		$this->withFields(function(GDT $gdt) use (&$rendered) {
 			$rendered .= $gdt->render();
 		});
 		return $rendered;
 	}
-
+	
+	public function renderHTML() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderCell() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderForm() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderCLI() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderCard() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderPDF() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderXML() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderBinary() : string
+	{
+		return $this->renderFields();
+	}
+	
+	public function renderJSON()
+	{
+		$json = [];
+		$this->withFields(function(GDT $gdt) use (&$json) {
+			if ($gdt->hasName())
+			{
+				$json[$gdt->getName()] = $gdt->render();
+			}
+		});
+		return $json;
+	}
+	
 }

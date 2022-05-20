@@ -1,5 +1,6 @@
 # GDOv7 Response Formats
 
+A Method returns a GDT on execution, which is your ultimate result.
 A GDT can support the following rendering methods.
 PDF is supported via html2pdf libraries.
 
@@ -28,4 +29,4 @@ Roughly it boils down to:
  - IEEE Floats are supported.
  - Timestamps are 64 bit integers in ms.
  - DateTimes are strings.
- - Objects are IDs.
+ - Objects are IDs (strings atm).

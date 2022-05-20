@@ -10,11 +10,13 @@ use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertFalse;
 
 /**
- * Generate a few users to work with.
+ * Generate a few users to work with. Admin, staff, member, etc.
+ * Test permission system.
  * 
  * @author gizmore
  * @version 7.0.0
  * @since 6.10.0
+ * @see GDO_User
  */
 final class UserPermissionTest extends TestCase
 {
@@ -88,7 +90,6 @@ final class UserPermissionTest extends TestCase
         assertFalse($user->isAdmin(), "Test if staff is not admin.");
         assertTrue($user->isStaff(), "Test if staff has staff permissions assigned correctly.");
         assertTrue($user->isMember(), "Test if staff is a member.");
-        
     }
     
 }

@@ -26,6 +26,7 @@ abstract class Method
 	public function isEnabled() : bool { return $this->getModule()->isEnabled(); }
 	public function getMethodName() : string { return $this->gdoShortName(); }
 	public function getPermission() : ?string { return null; }
+	public function hasPermission(GDO_User $user) : bool { return true; }
 	public abstract function execute() : GDT;
 	
 	# toggles
@@ -103,13 +104,33 @@ abstract class Method
 	 */
 	public function gdoParameters() : array
 	{
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
 	
+	/**
+	 * @return GDT[]
+	 */
 	protected function gdoParametersB() : array
 	{
 		return $this->gdoParameters();
 	}
+	
+	/**
+	 * Get a parameter GDT before the cache is generated.
+	 * @return GDT|NULL
+	 */
+	protected function gdoParameterB(string $name) : ?GDT
+	{
+		foreach ($this->gdoParameters() as $gdt)
+		{
+			if ($gdt->getName() === $name)
+			{
+				return $gdt;
+			}
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * @var GDT[]
@@ -232,7 +253,7 @@ abstract class Method
 		
 		if ( ($this->isUserRequired()) && (!$user->isAuthenticated()) )
 		{
-			if (module_enabled('Register') && Module_Register::instance()->cfgGuestSignup())
+			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
 			{
 				$hrefGuest = href('Register', 'Guest', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
 				return GDT_Error::make()->text('err_user_required', [$hrefGuest]);
@@ -266,9 +287,9 @@ abstract class Method
 			return GDT_Error::make()->text('err_permission_required', [t('perm_'.$permission)]);
 		}
 		
-		if (true !== ($error = $this->hasPermission($user)))
+		if (!$this->hasPermission($user))
 		{
-			return $error;
+			return GDT_Error::make('err_no_permission');
 		}
 		
 		return $this->execWrap();

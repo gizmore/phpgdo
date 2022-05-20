@@ -105,20 +105,22 @@ final class Website
 		return sprintf('<script>setTimeout(function(){ window.location.href="%s" }, %d);</script>', $url, $time*1000);
 	}
 	
-	public static function addInlineCSS($css)
+	public static function addInlineCSS(string $css)
 	{
-		if (class_exists('GDO\\CSS\\Module_CSS', false))
-		{
-			\GDO\CSS\Minifier::addInline($css);
-		}
+		CSS::addInline($css);
+// 		if (class_exists('GDO\\CSS\\Module_CSS', false))
+// 		{
+// 			\GDO\CSS\Minifier::addInline($css);
+// 		}
 	}
 	
-	public static function addCSS($path)
+	public static function addCSS(string $path)
 	{
-		if (class_exists('GDO\\CSS\\Module_CSS', false))
-		{
-			\GDO\CSS\Minifier::addFile($path);
-		}
+		CSS::addFile($path);
+// 		if (class_exists('GDO\\CSS\\Module_CSS', false))
+// 		{
+// 			\GDO\CSS\Minifier::addFile($path);
+// 		}
 	}
 	
 	/**
@@ -154,12 +156,14 @@ final class Website
 			$back .= sprintf('<link rel="%s" type="%s" href="%s"%s />'."\n", $rel, $type, $href, $title);
 		}
 		
-		if (Module_CSS::instance()->cfgMinify())
-		{
-		    return $back . "\n" . Minifier::renderMinified();
-		}
+		$back .= CSS::render();
+		
+// 		if (Module_CSS::instance()->cfgMinify())
+// 		{
+// 		    return $back . "\n" . Minifier::renderMinified();
+// 		}
 
-		$back .= Minifier::renderOriginal();
+// 		$back .= Minifier::renderOriginal();
 		
 		return $back;
 	}
@@ -262,7 +266,7 @@ final class Website
 	 
 	    self::topResponse()->addField(GDT_Success::make()->textRaw($message));
 	  
-	    if ($app->isCLI())
+	    if ($app->isCLI() || $app->isUnitTests())
 	    {
 	        if ($app->isUnitTests())
 	        {

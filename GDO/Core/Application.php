@@ -2,12 +2,14 @@
 namespace GDO\Core;
 
 use GDO\Session\GDO_Session;
+use GDO\UI\GDT_Page;
 
 /**
  * Application runtime data.
  * 
  * @author gizmore
  * @version 7.0.0
+ * @since 3.0.0
  */
 class Application
 {
@@ -78,6 +80,17 @@ class Application
 	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
 	public function isFormat(string $format) : bool { return $this->getFormat() === $format; }
 	public function getFormat() : string { return isset($_REQUEST['_fmt']) ? $_REQUEST['_fmt'] : 'html'; }
+	
+	/**
+	 * Call when you create the next command in a loop.
+	 */
+	public function reset()
+	{
+		Application::$RESPONSE_CODE = 200;
+		$_REQUEST = $_GET = $_POST = [];
+		GDT_Page::instance()->reset();
+		self::updateTime();
+	}
 	
 	##############
 	### Themes ###
