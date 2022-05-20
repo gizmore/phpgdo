@@ -1,18 +1,16 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Util\Common;
 use GDO\Table\Module_Table;
 use GDO\UI\GDT_SearchField;
 
 /**
  * Generic autocompletion base code.
- * Override 1 methods for self implemented completion.
+ * Override 1 method for full implemented completion of a GDO.
  * 
  * @author gizmore
- * @version 6.10
- * @since 6.03
- * 
+ * @version 7.0.0
+ * @since 6.3.0
  * @see GDT_Table
  */
 abstract class MethodCompletion extends MethodAjax
@@ -27,15 +25,14 @@ abstract class MethodCompletion extends MethodAjax
     #############
     ### Input ###
     #############
-	public function getSearchTerm() : string { return trim(Common::getRequestString('query'), "\r\n\t "); }
-	public function getMaxSuggestions() : int { return Module_Table::instance()->cfgSuggestionsPerRequest(); }
+	public function getSearchTerm() : string
+	{
+		return $this->gdoParameterVar('query');
+	}
 	
-// 	############
-// 	### Exec ###
-// 	############
-// 	/**
-// 	 * The json should return id, text, display.
-// 	 */
-// 	public abstract function execute();
+	public function getMaxSuggestions() : int
+	{
+		return Module_Table::instance()->cfgSuggestionsPerRequest();
+	}
 	
 }

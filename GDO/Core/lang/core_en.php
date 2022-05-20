@@ -32,6 +32,7 @@ return [
 	'err_gdt_should_have_a_name' => '%s should have a name!',
 	'err_permission_required' => 'You need the %s permission to execute that.',
 	'err_gdo_no_gdt' => 'The GDO `%2$s` does not allow the GDT method `%1$s`.',
+	'err_table_gdo' => 'The GDO is not a table object.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',

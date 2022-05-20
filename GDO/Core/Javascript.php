@@ -1,11 +1,14 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Javascript\MinifyJS;
+
 /**
  * Add JS here.
+ * Can make use of minifier.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * @see Module_Javascript
  */
@@ -41,20 +44,14 @@ final class Javascript
 	##############
 	public static function displayJavascripts()
 	{
-		if (!module_enabled('Javascript'))
-		{
-			$minfied = false;
-		}
-		else
-		{
-			$minfied = Module_Javascript::instance()->cfgMinifyJS();
-		}
+		$minify = GDO_Module::config_var('Javascript', 'minify_js', 'no');
+		$minify = $minify === 'concat';
 		
 		$back = '';
 	    if (Application::instance()->allowJavascript())
 	    {
 	        $back .= self::displayJavascriptPreInline();
-    		$javascripts = $minfied ? MinifyJS::minified(self::$_JAVASCRIPTS) : self::$_JAVASCRIPTS;
+	        $javascripts = $minify ? MinifyJS::minified(self::$_JAVASCRIPTS) : self::$_JAVASCRIPTS;
     		foreach ($javascripts as $js)
     		{
     			$back .= sprintf('<script src="%s"></script>'."\n", $js);
