@@ -10,7 +10,6 @@ use GDO\Tests\GDT_MethodTest;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Module_Core;
 use GDO\Core\Website;
-use GDO\Core\GDT;
 use GDO\DB\Database;
 use GDO\Core\Application;
 

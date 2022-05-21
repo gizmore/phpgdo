@@ -134,7 +134,7 @@ window.GDO.openDialog = function(dialogId) {
  * @see GDO6.php
  */
 window.GDO.href = function(module, method, append) {
-	return GDO_WEB_ROOT + 'index.php?mo=' + module + '&me=' + method + append;
+	return GDO_WEB_ROOT + 'index.php?_mo=' + module + '&_me=' + method + append;
 };
 
 /**

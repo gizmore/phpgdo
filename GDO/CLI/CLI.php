@@ -52,7 +52,7 @@ final class CLI
         $_SERVER['SERVER_PORT'] = defined('GDO_PORT') ? GDO_PORT : (GDO_PROTOCOL === 'https' ? 443 : 80);
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1'; # @TODO use machines IP
         $_SERVER['HTTP_USER_AGENT'] = 'Firefox Gecko MS Opera';
-        $_SERVER['REQUEST_URI'] = '/index.php?mo=' . GDO_MODULE . '&me=' . GDO_METHOD;
+        $_SERVER['REQUEST_URI'] = '/index.php?_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['HTTP_REFERER'] = 'http://'.GDO_DOMAIN.'/index.php';
         $_SERVER['HTTP_ORIGIN'] = '127.0.0.2';

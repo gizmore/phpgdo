@@ -122,7 +122,7 @@ final class Module_Language extends GDO_Module
 	    {
     		# Add js trans
     		$href = sprintf(
-    			'%sindex.php?mo=Language&me=GetTransData&_lang=%s&_ajax=1&_fmt=html&%s',
+    			'%sindex.php?_mo=Language&_me=GetTransData&_lang=%s&_ajax=1&_fmt=html&%s',
     			GDO_WEB_ROOT, Trans::$ISO, $this->nocacheVersion());
     		$href = GDT_Url::absolute($href);
     		Javascript::addJS($href);

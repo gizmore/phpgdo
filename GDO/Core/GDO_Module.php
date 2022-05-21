@@ -17,7 +17,7 @@ use GDO\Table\GDT_Sort;
  * GDO base module class.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 1.0.0
  */
 class GDO_Module extends GDO
@@ -884,4 +884,18 @@ class GDO_Module extends GDO
 	    $href = $this->wwwPath($path.'?'.$v);
 	    Website::addPrefetch($href, $type);
 	}
+	
+	######################
+	### Default Method ###
+	######################
+	/**
+	 * Override this in case your module has a special default method.
+	 * The default case is that all modules reference to your config.php - GDO_MODULE + GDO_METHOD
+	 */
+	public function getDefaultMethod() : Method
+	{
+		$klass = sprintf('\\GDO\\%s\\Method\\%s', GDO_MODULE, GDO_METHOD);
+		return call_user_func([$klass, 'make']);
+	}
+	
 }

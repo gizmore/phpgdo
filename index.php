@@ -98,18 +98,22 @@ if (!isset($_REQUEST['_url']))
 {
 	if (isset($_REQUEST['_mo']))
 	{
-		$mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['mo']);
-		$me = $mo->getMethod((string) @$_REQUEST['_me']);
-		unset($_REQUEST['_mo']);
-		unset($_REQUEST['_me']);
-		if ($me instanceof Method)
+		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'])))
 		{
-			$me->inputs($_REQUEST);
-			$result = GDT_Method::make()->method($me)->inputs($_REQUEST)->execute();
+			throw new GDO_Error('err_unknown_module', [html($mo->gdoHumanName()), html($_REQUEST['_mo'])]);
+		}
+		unset($_REQUEST['_mo']);
+		if (isset($_REQUEST['_me']))
+		{
+			if (!($me = $mo->getMethod((string) @$_REQUEST['_me'])))
+			{
+				throw new GDO_Error('err_unknown_method', [html($mo->gdoShortName()), html($_REQUEST['_me'])]);
+			}
+			unset($_REQUEST['_me']);
 		}
 		else
 		{
-			throw new GDO_Error('err_unknown_method', [html($mo->gdoHumanName()), html($_REQUEST['me'])]);
+			$me = $mo->getDefaultMethod();
 		}
 	}
 	else
