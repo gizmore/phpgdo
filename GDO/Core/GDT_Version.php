@@ -1,9 +1,15 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Core\Method\Version;
+
 /**
- * Version field. It's value is a Version.
+ * Version field.
+ * 
  * The $var is "Major.Minor.Patch". 
+ * The $value is a \GDO\Core\Version
+ * 
+ * Validation via GDT_String::$pattern
  * 
  * @author gizmore
  * @version 7.0.1
@@ -17,28 +23,19 @@ class GDT_Version extends GDT_String
 	public int $max = 14;
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
-	public string $pattern = "/\\d+\\.\\d+\\.\\d+/iD";
+	public string $pattern = "/^\\d+\\.\\d+\\.\\d+$/iD";
 	
 	/**
 	 * @param Version $value
-	 * @return string
 	 */
 	public function toVar($value) : ?string
 	{
-		if (!$value)
-		{
-			return null;
-		}
-		return sprintf('%d.%d.%d', $value->major, $value->minor, $value->patch);
+		return $value ? $value->__toString() : null;
 	}
 	
 	public function toValue(string $var = null)
 	{
-		if (!$var)
-		{
-			return null;
-		}
-		return new Version($var);
+		return $var ? new Version($var) : null;
 	}
 	
 }

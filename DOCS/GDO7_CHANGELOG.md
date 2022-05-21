@@ -2,7 +2,7 @@
 
 Please read from bottom to top :)
 
-Please refer to the [GDOv6 History](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
+Please refer to the gdo6 [GDO_HISTORY.md](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
 
 
 ## 7.0.4 / scheduled 21.Jul.2022
