@@ -9,7 +9,9 @@ use GDO\Core\ModuleLoader;
 
 /**
  * A website page object.
- * Offers 4 sidebars and a top response box.
+ * Adds 4 sidebars and a top response box.
+ * 
+ * @TODO: Add $sidebar to opt-in for sidebar generation code.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -51,19 +53,10 @@ final class GDT_Page extends GDT
 		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
 		{
 			$module->onIncludeScripts();
+			$module->onInitSidebar();
 		}
 		return GDT_Template::php('UI', 'page.php', ['page' => $this]);
 	}
-	
-// 	public function renderCLI() : string
-// 	{
-// 		$back = '';
-// 		foreach ($this->getFields() as $gdt)
-// 		{
-// 			$back .= $gdt->renderCLI();
-// 		}
-// 		return $back;
-// 	}
 	
 	############
 	### Bars ###

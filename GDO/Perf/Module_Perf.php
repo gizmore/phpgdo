@@ -48,7 +48,7 @@ final class Module_Perf extends GDO_Module
 	    }
 	    if ($show)
 	    {
-	        GDT_Page::instance()->bottomNav->addField(GDT_PerfBar::make('perf'));
+	        GDT_Page::instance()->bottomBar()->addField(GDT_PerfBar::make('perf'));
 	    }
 	}
 

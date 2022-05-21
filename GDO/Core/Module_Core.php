@@ -34,7 +34,7 @@ final class Module_Core extends GDO_Module
 	 * Counts up to be in sync and poison caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.1-r1027';
+	const GDO_REVISION = '7.0.1-r1029';
 	
 	##############
 	### Module ###
@@ -113,14 +113,14 @@ final class Module_Core extends GDO_Module
 	#############
 	public function onInitSidebar() : void
 	{
-		$navbar = GDT_Page::instance()->bottomNav;
+		$page = GDT_Page::instance();
 		if ($this->cfgShowImpressum())
 		{
-			$navbar->addField(GDT_Link::make('link_impressum')->href(href('Core', 'Impressum')));
+			$page->leftBar()->addField(GDT_Link::make('link_impressum')->href(href('Core', 'Impressum')));
 		}
 		if ($this->cfgShowPrivacy())
 		{
-			$navbar->addField(GDT_Link::make('link_privacy')->href(href('Core', 'Privacy')));
+			$page->leftBar()->addField(GDT_Link::make('link_privacy')->href(href('Core', 'Privacy')));
 		}
 	}
 	

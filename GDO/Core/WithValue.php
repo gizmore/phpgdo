@@ -7,9 +7,6 @@ use GDO\DB\WithNullable;
  * This trait adds initial/input/var/value schema to a GDT.
  * The very base GDT do not even have this.
  * 
- * The lifecycle of a GDT is as follows;
- * 
- * 
  * @author gizmore
  * @version 7.0.1
  * @since 7.0.0
@@ -125,7 +122,7 @@ trait WithValue
 	##############
 	public function renderHTML() : string
 	{
-		return html($this->var);
+		return isset($this->var) ? html($this->getVar()) : '';
 	}
 
 }

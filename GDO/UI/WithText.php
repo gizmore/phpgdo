@@ -2,10 +2,17 @@
 namespace GDO\UI;
 
 /**
- * Adds a text to a GDT.
+ * WithText GDT trait.
+ * 
+ * Adds $text attribute.
+ * Adds text($key, $args) for I18n version
+ * Adds textRaw($s) for raw version
+ * Adds textUnescaped() for skipping escaping.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 6.2.0
+ * @see GDO7
  */
 trait WithText
 {
@@ -20,7 +27,7 @@ trait WithText
 	}
 	
 	public $textRaw;
-	public function textRaw($text) : self
+	public function textRaw(string $text) : self
 	{
 	    $this->textRaw = $text;
 	    $this->textKey = null;
@@ -33,6 +40,18 @@ trait WithText
 	{
 	    $this->textEscaped = $escaped;
 	    return $this;
+	}
+	public function textUnescaped(bool $unescaped=true) : self
+	{
+		return $this->textEscaped(!$unescaped);
+	}
+	
+	public function noText() : self
+	{
+		unset($this->textRaw);
+		unset($this->textKey);
+		unset($this->textArgs);
+		return $this;
 	}
 	
 	##############
@@ -57,17 +76,4 @@ trait WithText
 		return $t;
 	}
 	
-	public function noText() : self
-	{
-		return $this->textRaw(null);
-	}
-	
-// 	###############
-// 	### Factory ###
-// 	###############
-// 	public static function withText(string $textKey, array $textArgs = null)
-// 	{
-// 		return self::make()->text($textKey, $textArgs);
-// 	}
-
 }

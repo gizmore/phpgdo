@@ -76,7 +76,7 @@ final class Module_Date extends GDO_Module
         {
             if (!GDO_User::current()->hasTimezone())
             {
-                GDT_Page::instance()->leftNav->addField(
+                GDT_Page::instance()->leftBar()->addField(
                     Timezone::make()->getForm()->slim());
             }
         }
