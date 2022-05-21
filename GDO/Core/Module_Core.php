@@ -11,6 +11,7 @@ use GDO\File\FileUtil;
 use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
 use GDO\Net\GDT_Url;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 /**
  * The core module holds some generic config as well as the global revision string.
@@ -173,22 +174,15 @@ window.GDO_REVISION = '%s';
 		return $user->toJSON();
 	}
 	
-	public function checkAssetAllowance($url)
+	/**
+	 * Check if an url should be restricted due to GDO asset source restriction.
+	 * You should enable this in production.
+	 */
+	public function checkAssetAllowed(string $url) : bool
 	{
-		if (stripos($url, 'GDO/') !== false)
-		{
-			if (!$this->cfgModuleAssets())
-			{
-				$this->errorModuleAssetNotAllowed();
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	private function errorModuleAssetNotAllowed()
-	{
-		return $this->error('err_properitary_asset_code');
+		return $this->cfgModuleAssets() ?
+			true : 
+			(strpos($url, 'GDO/') === false);
 	}
 	
 }

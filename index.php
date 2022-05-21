@@ -9,14 +9,9 @@ use GDO\Language\Trans;
 use GDO\Session\GDO_Session;
 use GDO\User\GDO_User;
 use GDO\DB\Cache;
-use GDO\File\FileUtil;
-use GDO\Core\GDO_Exception;
 use GDO\Language\Module_Language;
 use GDO\Core\Method;
-use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Method;
-use GDO\UI\GDT_HTML;
-use GDO\UI\GDT_Page;
 use GDO\Core\Method\DirectoryIndex;
 use GDO\Core\Method\FileNotFound;
 use GDO\Core\Method\Fileserver;
@@ -65,8 +60,7 @@ define('GDO_CORE_STABLE', true);
 ### Main ###
 ############
 $_GET = $_POST = null;
-$rqmethod = (string)@$_SERVER['REQUEST_METHOD'];
-$isOptions = $rqmethod === 'OPTIONS';
+$rqmethod = (string) @$_SERVER['REQUEST_METHOD'];
 if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 {
 	$me = NotAllowed::make();
@@ -100,16 +94,16 @@ $app->ajax($ajax);
 ###################
 ### Pick Method ###
 ###################
-if (!isset($_REQUEST['url']))
+if (!isset($_REQUEST['_url']))
 {
-	if (isset($_REQUEST['mo']))
+	if (isset($_REQUEST['_mo']))
 	{
-		$mo = ModuleLoader::instance()->getModule((string)@$_REQUEST['mo']);
-		$me = $mo->getMethod((string)@$_REQUEST['me']);
+		$mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['mo']);
+		$me = $mo->getMethod((string) @$_REQUEST['_me']);
+		unset($_REQUEST['_mo']);
+		unset($_REQUEST['_me']);
 		if ($me instanceof Method)
 		{
-			unset($_REQUEST['mo']);
-			unset($_REQUEST['me']);
 			$me->inputs($_REQUEST);
 			$result = GDT_Method::make()->method($me)->inputs($_REQUEST)->execute();
 		}
@@ -126,7 +120,9 @@ if (!isset($_REQUEST['url']))
 }
 else
 {
-	$url = (string) @$_REQUEST['url'];
+	$url = (string) @$_REQUEST['_url'];
+	unset($_REQUEST['_url']);
+	$_REQUEST['url'] = $url;
 	if (is_dir($url))
 	{
 		$me = DirectoryIndex::make();

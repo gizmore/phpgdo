@@ -2,7 +2,7 @@
 namespace GDO\Core;
 
 /**
- * Version field.
+ * GDT_Version field.
  * 
  * The $var is "Major.Minor.Patch". 
  * The $value is a \GDO\Core\Version

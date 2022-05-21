@@ -48,8 +48,9 @@ return [
 	'perm_cronjob' => 'Cronjob',
 	
 	# Buttons
-	'btn_send' => 'Send',
 	'btn_back' => 'Back',
+	'btn_send' => 'Send',
+	'btn_set' => 'Set',
 
 	
 	

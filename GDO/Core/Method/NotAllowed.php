@@ -5,10 +5,12 @@ use GDO\Core\Module_Core;
 use GDO\UI\MethodPage;
 
 /**
+ * Show a 403 page.
  * Send an email if opted-in.
  * 
  * @author gizmore
  * @version 7.0.1
+ * @since 7.0.1
  */
 final class NotAllowed extends MethodPage
 {

@@ -5,16 +5,17 @@ use GDO\Core\Method;
 use GDO\Core\Module_Core;
 use GDO\Date\Time;
 use GDO\File\FileUtil;
+use GDO\Core\Application;
 
 /**
  * Serve a static file from the webserver.
  * Might be forbidden if it's an asset from the /GDO/ folder.
  * Might be forbidden if it's a dotfile.
  * 
- * 403 and 404 pages traditionally send an email, optionally.
  * 
  * @author gizmore
  * @version 7.0.1
+ * @since 7.0.1
  */
 final class Fileserver extends Method
 {
@@ -22,7 +23,10 @@ final class Fileserver extends Method
 	{
 		$url = (string) $_REQUEST['url'];
 		
-		Module_Core::instance()->checkAssetAllowance($url);
+		if (!Module_Core::instance()->checkAssetAllowed($url))
+		{
+			return NotAllowed::make()->execute();
+		}
 		
 		$last_modified_time = filemtime($url);
 		# @TODO: Cache etag-md5 via modified time
@@ -36,7 +40,7 @@ final class Fileserver extends Method
 			trim((string)@$_SERVER['HTTP_IF_NONE_MATCH']) == $etag)
 		{
 			hdrc('HTTP/1.1 304 Not Modified');
-			timingHeader();
+			Application::timingHeader();
 			die(0);
 		}
 		
@@ -44,8 +48,8 @@ final class Fileserver extends Method
 		$type = FileUtil::mimetype($url);
 		hdr('Content-Type: '.$type);
 		hdr('Content-Size: '.filesize($url));
-		timingHeader();
+		Application::timingHeader();
 		readfile($url);
-		die(0); # no fallthrough!
+		die(0);
 	}
 }

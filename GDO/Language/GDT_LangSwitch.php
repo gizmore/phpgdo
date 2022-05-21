@@ -7,11 +7,11 @@ use GDO\Util\Strings;
 
 /**
  * Displays a language switcher.
- * 
  * Themes have hard times here.
+ * 
  * @author gizmore
- * @version 6.10
- * @since 6.00
+ * @version 7.0.1
+ * @since 6.0.0
  */
 final class GDT_LangSwitch extends GDT_Select
 {
@@ -23,7 +23,7 @@ final class GDT_LangSwitch extends GDT_Select
         $this->choices(Module_Language::instance()->cfgSupported());
     }
     
-    public function renderCell() : string
+    public function renderHTML() : string
 	{
 		return GDT_Template::php('Language', 'cell/langswitch.php',['field'=>$this]);
 	}

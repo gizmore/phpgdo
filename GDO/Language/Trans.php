@@ -22,7 +22,7 @@ use GDO\Core\GDO_Error;
  */
 final class Trans
 {
-	public static bool $FILE_CACHE = GDO_FILECACHE;
+	public static bool $FILE_CACHE = false;
 	public static string $ISO = GDO_LANGUAGE;
 
 	private static bool $HAS_LOADED_FILE_CACHE = false;
@@ -288,6 +288,9 @@ final class Trans
 
 }
 
+#############
+### Setup ###
+#############
 if (!defined('GDO_LANGUAGE'))
 {
 	define('GDO_LANGUAGE', 'en');
@@ -297,3 +300,5 @@ if (!defined('GDO_FILECACHE'))
 {
 	define('GDO_FILECACHE', false);
 }
+
+Trans::$FILE_CACHE = (bool) GDO_FILECACHE;

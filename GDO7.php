@@ -8,7 +8,7 @@ use GDO\Core\Application;
 use GDO\Date\Time;
 use GDO\Util\Regex;
 /**
- * GDO autoloader and global functions.
+ * GDO Autoloader and global functions.
  *
  * @author gizmore
  * @version 7.0.1
@@ -19,7 +19,9 @@ define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-# Init GDOv7 autoloader
+########################
+### GDOv7 Autoloader ###
+########################
 global $GDT_LOADED;
 $GDT_LOADED = 0; # perf
 spl_autoload_register(function(string $name) : void
@@ -29,13 +31,13 @@ spl_autoload_register(function(string $name) : void
 		$name = str_replace('\\', '/', $name) . '.php';
 		require GDO_PATH . $name;
 		global $GDT_LOADED;
-		$GDT_LOADED++; # perf
+		$GDT_LOADED++;
 	}
 });
 
-# #####################
-# ## Global utility ###
-# #####################
+######################
+### Global utility ###
+######################
 require GDO_PATH . 'GDO/Util/Shim.php';
 
 function sitename() : string
@@ -102,7 +104,7 @@ function href(string $module, string $method, string $append = null, bool $lang 
 			}
 			else
 			{
-				$href .= '?v=1';
+				$href .= '?x=1';
 			}
 			if ($hash)
 			{
@@ -112,7 +114,7 @@ function href(string $module, string $method, string $append = null, bool $lang 
 	}
 	else
 	{
-		$href = GDO_WEB_ROOT . "index.php?mo={$module}&me={$method}";
+		$href = GDO_WEB_ROOT . "index.php?_mo={$module}&_me={$method}";
 		if ($lang)
 		{
 			$href .= '&_lang=' . Trans::$ISO;
