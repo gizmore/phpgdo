@@ -47,7 +47,7 @@ abstract class GDT
 	#############
 	### Debug ###
 	#############
-	public static bool $GDT_DEBUG = GDO_GDT_DEBUG;
+	public static bool $GDT_DEBUG = false;
 	public static int  $GDT_COUNT = 0;
 	
 	/**
@@ -432,8 +432,9 @@ abstract class GDT
 	
 }
 
-if (GDT::$GDT_DEBUG)
+if (def('GDT_GDO_DEBUG', false))
 {
+	GDT::$GDT_DEBUG = true;
 	Logger::log('gdt', '--- NEW RUN ---');
 	Logger::log('gdo', '--- NEW RUN ---');
 }

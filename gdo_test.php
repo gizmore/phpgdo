@@ -46,16 +46,13 @@ require 'vendor/autoload.php';
  */
 final class gdo_test extends Application
 {
-	private $cli = true;
-	public function cli(bool $cli) : self { $this->cli = $cli; return $this; }
-	public function isCLI() : bool { return $this->cli; } # override CLI mode to test HTML rendering.
 	public function isUnitTests() : bool { return true; }
 }
 
 Logger::init('gdo_test', GDO_ERROR_LEVEL);
 Debug::init();
 
-new gdo_test();
+gdo_test::instance();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Debug::setMailOnError(GDO_ERROR_EMAIL);
