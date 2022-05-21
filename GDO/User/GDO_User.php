@@ -152,9 +152,13 @@ final class GDO_User extends GDO
 	################
 	/**
 	 * Get the appropiate timezone object for this user.
-	 * @return \DateTimeZone
 	 */
 	public function getTimezone() : string { return $this->gdoVar('user_timezone') > 1 ? $this->getVar('user_timezone') : GDO_Session::get('timezone', '1'); }
+	
+	public function hasTimezone() : bool
+	{
+		return $this->getTimezone() > 1;
+	}
 	
 	public function getTimezoneObject()
 	{

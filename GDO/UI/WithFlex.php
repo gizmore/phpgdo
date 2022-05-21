@@ -5,7 +5,7 @@ namespace GDO\UI;
  * Flex class handling trait for containers.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.3.0
  * 
  * @see GDT_Bar
@@ -59,7 +59,7 @@ trait WithFlex
     public function flexClass() : string
     {
         return $this->flexDirection === self::HORIZONTAL ?
-        	'flex-row' : 'flex-column';
+        	'flx-row' : 'flx-column';
     }
 
 }

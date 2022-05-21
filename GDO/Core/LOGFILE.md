@@ -17,6 +17,5 @@ Version 7.0.1-r1200
 
  - Create a Module to provide different DBMS.
  
- - 
- 
+ - Design a JS code convention for GDOv7
  

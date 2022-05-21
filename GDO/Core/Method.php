@@ -403,7 +403,10 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
-			$response->addField($this->execute());
+			if ($result = $this->execute())
+			{
+				$response->addField($result);
+			}
 			
 			if (Application::isSuccess())
 			{

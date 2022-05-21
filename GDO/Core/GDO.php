@@ -191,29 +191,29 @@ abstract class GDO extends GDT
 // 		return $this->displayName();
 // 	}
 	
-// 	public function renderJSON()
-// 	{
-// 		return $this->toJSON();
-// 	}
+	public function renderJSON()
+	{
+		return $this->toJSON();
+	}
 	
-// 	public function toJSON()
-// 	{
-// 		$values = [];
-// 		foreach ($this->gdoColumnsCache() as $gdt)
-// 		{
-// 			if ($gdt->isSerializable())
-// 			{
-// 				if ($data = $gdt->gdo($this)->getGDOData())
-// 				{
-// 					foreach ($data as $k => $v)
-// 					{
-// 						$values[$k] = $v;
-// 					}
-// 				}
-// 			}
-// 		}
-// 		return $values;
-// 	}
+	public function toJSON()
+	{
+		$values = [];
+		foreach ($this->gdoColumnsCache() as $gdt)
+		{
+			if ($gdt->isSerializable())
+			{
+				if ($data = $gdt->gdo($this)->getGDOData())
+				{
+					foreach ($data as $k => $v)
+					{
+						$values[$k] = $v;
+					}
+				}
+			}
+		}
+		return $values;
+	}
 	
 	############
 	### Vars ###

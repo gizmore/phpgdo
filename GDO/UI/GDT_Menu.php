@@ -1,18 +1,18 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\WithFields;
 use GDO\Core\GDT_Template;
+use GDO\Core\GDT_Fields;
 
 /**
  * A popup menu
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.4.0
  */
-final class GDT_Menu extends GDT
+final class GDT_Menu extends GDT_Fields
 {
 	use WithLabel;
 	use WithFields;

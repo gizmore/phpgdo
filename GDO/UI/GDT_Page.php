@@ -5,6 +5,7 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithFields;
 use GDO\Core\WithInstance;
+use GDO\Core\ModuleLoader;
 
 /**
  * A website page object.
@@ -41,8 +42,16 @@ final class GDT_Page extends GDT
 	##############
 	### Render ###
 	##############
+	/**
+	 * Render this page.
+	 * Include module scripts for html page.
+	 */
 	public function renderHTML() : string
 	{
+		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+		{
+			$module->onIncludeScripts();
+		}
 		return GDT_Template::php('UI', 'page.php', ['page' => $this]);
 	}
 	

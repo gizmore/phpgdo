@@ -1,0 +1,45 @@
+* { margin: 0; padding: 0; box-sizing: border-box; list-style: none; }
+span, img, a, i, b, em { display: inline-block; }
+p { word-break: break-word; }
+*[background-image] { background-size: cover; }
+.cf:after { content: "."; clear: both; display: block; visibility: hidden; height: 0px; }
+.ce { text-align: center; margin: auto; }
+.gdo-exception { white-space: pre-line; font-family: monospace; word-break: break-all; text-align: left; }
+.gdt-tblorder { display: inline-block; }
+img.gdo-country,
+img.gdo-language { width: 32px; border: 1px solid #555; }
+.b { display: block; }
+.ib { display: inline-block; }
+.n { display: none!important; }
+.cf:after { content: "."; clear: both; display: block; visibility: hidden; height: 0px; }
+.ce { text-align: center; margin: auto; }
+.cb { clear: both; }
+.dn { display: none; }
+.gdt-table td.gdt-num.gdt-user { text-align: left; }
+.ri { text-align: right; float: right; }
+.ri:after,.fr:after,.fl:after { content: ""; visibility: hidden; display: block; height: 0; clear: both; }
+.fr { float: right; }
+.fl { float: left; }
+.bw { word-break: break-word; }
+
+/** Basic flex **/
+.flx { display: flex;  }
+.flx-wrap { flex-wrap: wrap; }
+.flx-row { flex-direction: row; width: 100%; }
+.flx-column { flex-direction: column; }
+.flx > * { flex: 1 1 auto; }
+.flx.flx-collapse > * { flex: 0 1 auto; }
+.flx.noflx { display: block; }
+.flx-row > * { align-self: center; }
+
+/** Basic UI components **/
+div.gdt-hr { height: 2px; width: 100%; background: #eee; margin: 8px 0; }
+.gdt-captcha > span > input[type=text] { vertical-align: top; }
+
+/** GDT_Dialog **/
+.gdo-dialog-inner { display: flex; flex-direction: column; }
+.gdo-dialog-fields { flex: 1 1 auto; }
+
+/** Table **/
+div.gdt-table { flex: 1 1 auto; }
+div.gdt-table table thead th { vertical-align: top; }

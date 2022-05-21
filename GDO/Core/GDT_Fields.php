@@ -6,7 +6,7 @@ namespace GDO\Core;
  * 
  * @author gizmore
  */
-final class GDT_Fields extends GDT
+class GDT_Fields extends GDT
 {
 	use WithName;
 	use WithFields;
