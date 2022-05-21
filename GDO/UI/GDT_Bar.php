@@ -1,7 +1,6 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\withFields;
 use GDO\Core\GDT_Template;
 
 class GDT_Bar extends GDT_Container

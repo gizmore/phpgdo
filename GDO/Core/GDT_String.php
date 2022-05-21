@@ -2,7 +2,9 @@
 namespace GDO\Core;
 
 /**
- * A string.
+ * A String.
+ * 
+ * - database backed
  * 
  * - optional length validator
  * - optional pattern validator
@@ -11,7 +13,7 @@ namespace GDO\Core;
  * - Supports CaseI/S
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class GDT_String extends GDT_DBField
@@ -56,7 +58,7 @@ class GDT_String extends GDT_DBField
 	### Min / Max ###
 	#################
 	public int $min = 0;
-	public int $max = 192; # UTF8MB4 length
+	public int $max = 192; # UTF8MB4 max length mysql :(
 
 	public function min(int $min) : self
 	{

@@ -96,7 +96,7 @@ trait WithFields
 	
 	public function getFields() : array
 	{
-		return $this->fields;
+		return isset($this->fields) ? $this->fields : GDT::EMPTY_ARRAY;
 	}
 	
 	public function getField($key) : GDT

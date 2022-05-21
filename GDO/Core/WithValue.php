@@ -119,5 +119,13 @@ trait WithValue
 	{
 		return $this->isRequired() && ($this->initial === null);
 	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderHTML() : string
+	{
+		return html($this->var);
+	}
 
 }

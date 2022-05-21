@@ -5,12 +5,11 @@ namespace GDO\Core;
  * Version field. It's value is a Version.
  * The $var is "Major.Minor.Patch". 
  * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 6.0.0
  * @see Version
  * @see GDT_String
- * 
- * @author gizmore
- * @version 7.0.0
- * @since 6.0.0
  */
 class GDT_Version extends GDT_String
 {
