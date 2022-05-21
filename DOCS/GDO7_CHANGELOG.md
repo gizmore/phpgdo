@@ -33,6 +33,7 @@ GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Write methods once and
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
+ - [FileUtil](../GDO/Util/FileUtil.php) is now settled to be in Core, as [Module_File](https://github.com/gizmore/phpgdo-file) is not core anymore. (thx flederohr)
 
  - New [Module_Gender](../). Nothing fancy like LBQGT, only male and female. User settings, etc.
 
