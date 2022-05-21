@@ -1,8 +1,6 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Core\Method\Version;
-
 /**
  * Version field.
  * 
