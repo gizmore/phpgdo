@@ -8,6 +8,7 @@ use GDO\Form\GDT_Form;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 use GDO\UI\GDT_Label;
 use GDO\Core\GDT;
+use GDO\UI\GDT_Page;
 
 final class UITest extends TestCase
 {
@@ -29,6 +30,15 @@ final class UITest extends TestCase
         $form->addField($btn);
         $html = $form->renderMode(GDT::RENDER_HTML);
         assertStringContainsString('gdt-button', $html, "Test if Button renders without name inside forms.");
+    }
+
+    /**
+     * This method is a fine example of the GDOv7 philosophy.
+     */
+    public function testHTMLPageRendering()
+    {
+    	$content = GDT_Page::instance()->renderHTML();
+    	assertStringContainsString('window.GDO_REVISION', $content, 'Test if page rendering might work.');
     }
     
 }

@@ -7,24 +7,24 @@ use GDO\DB\Cache;
 use GDO\Core\GDO_Error;
 
 /**
- * Very cheap i18n. All data is stored in a single file to let you re-use i18n easily.
- * Look at the bottom for the API.
+ * Trans; a very cheap I18n API.
+ * All data is stored in a single Hashmap to reuse translation data.
  * 
- * @TODO: Trans: Check if ini file parsing (or other techniques) would be faster than php include.
+ * Uses [Filecache](../Core/Cache.php)
+ * 
+ * @TODO: Trans: Check if ini file parsing or other techniques would be faster than php include to populate the hashmap.
+ * @TODO: Trans: In early loading state errors are handled badly.
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 1.0.0
+ * @see Cache
  */
 final class Trans
 {
-    /**
-     * @var string
-     */
-	public static string $ISO = 'en';
-	
 	public static bool $FILE_CACHE = GDO_FILECACHE;
-	
+	public static string $ISO = GDO_LANGUAGE;
+
 	private static bool $HAS_LOADED_FILE_CACHE = false;
 
 	/**
@@ -40,8 +40,7 @@ final class Trans
 	private static array $CACHE = [];
 	
 	/**
-	 * Are all pathes added?
-	 * @var boolean
+	 * Are all pathes added? # @TODO: This can be removed?
 	 */
 	private static bool $INITED = false;
 	
@@ -287,4 +286,14 @@ final class Trans
 		return isset($cache[$key]);
 	}
 
+}
+
+if (!defined('GDO_LANGUAGE'))
+{
+	define('GDO_LANGUAGE', 'en');
+}
+
+if (!defined('GDO_FILECACHE'))
+{
+	define('GDO_FILECACHE', false);
 }

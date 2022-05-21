@@ -16,6 +16,7 @@ Table of contents in alphabetical order.
  - [GDO](GDO7_GDO.md)
  - [GDOWP](GDO7_GDOWP.md)
  - [GDT](GDO7_GDT.md)
+ - [IDEAS](GDO7_IDEAS.md)
  - [INSTALL](GDO7_INSTALLATION.md)
  - [MODULES](GDO7_MODULES.md)
  - [PHILOSPHY](GDO7_PHILOSPHY.md)

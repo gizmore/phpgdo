@@ -160,19 +160,18 @@ trait WithFields
 	 */
 	public function withFields(callable $callback)
 	{
-// 		if ($result = $callback($this))
-// 		{
-// 			return $result;
-// 		}
-		foreach ($this->fields as $gdt)
+		if (isset($this->fields))
 		{
-			if ($result = $callback($gdt))
+			foreach ($this->fields as $gdt)
 			{
-				return $result;
-			}
-			if ($gdt->hasFields())
-			{
-				$gdt->withFields($callback);
+				if ($result = $callback($gdt))
+				{
+					return $result;
+				}
+				if ($gdt->hasFields())
+				{
+					$gdt->withFields($callback);
+				}
 			}
 		}
 	}
