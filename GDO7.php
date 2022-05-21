@@ -7,7 +7,6 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
 use GDO\Date\Time;
 use GDO\Util\Regex;
-
 /**
  * GDO autoloader and global functions.
  *
@@ -15,23 +14,15 @@ use GDO\Util\Regex;
  * @version 7.0.1
  * @since 6.0.0
  */
-
-# performance
-// define('GDO_PERF_START', microtime(true));
-
-# Autoconf path
-define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
-
 # Verbose error handling is default
-// while (ob_get_level()>0) { ob_end_clean(); }
+define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-# Init GDO autoloader
+# Init GDOv7 autoloader
 global $GDT_LOADED;
 $GDT_LOADED = 0; # perf
-spl_autoload_register(
-function (string $name) : void
+spl_autoload_register(function(string $name) : void
 {
 	if (str_starts_with($name, 'GDO\\'))
 	{

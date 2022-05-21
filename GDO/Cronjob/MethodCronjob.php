@@ -44,7 +44,7 @@ abstract class MethodCronjob extends Method
 		return "0 $hour * * *";
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$this->start();
 		$this->run();

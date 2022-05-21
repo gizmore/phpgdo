@@ -22,7 +22,7 @@ final class Epoch extends Method
         ];
     }
     
-    public function execute() : GDT
+    public function execute()
     {
         $format = $this->gdoParameterVar('format');
         switch ($format)

@@ -34,7 +34,7 @@ final class Module_Core extends GDO_Module
 	 * Counts up to be in sync and poison caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.1-r1025';
+	const GDO_REVISION = '7.0.1-r1027';
 	
 	##############
 	### Module ###

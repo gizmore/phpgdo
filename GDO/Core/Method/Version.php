@@ -11,7 +11,7 @@ use GDO\UI\GDT_Box;
  * Print GDO and PHP version number.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class Version extends Method
 {

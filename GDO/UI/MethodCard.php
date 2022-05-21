@@ -40,7 +40,7 @@ abstract class MethodCard extends Method
         return $this->gdoTable()->find($this->getID());
     }
     
-    public function execute() : GDT
+    public function execute()
     {
         $gdo = $this->getObject();
         if (!$gdo)

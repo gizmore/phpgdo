@@ -6,6 +6,8 @@ use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Success;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
+use GDO\UI\WithTitle;
+use GDO\UI\WithDescription;
 
 /**
  * Abstract baseclass for all methods.
@@ -14,12 +16,14 @@ use GDO\Util\Strings;
  * @version 7.0.1
  * @since 3.0.1
  */
-abstract class Method
+abstract class Method #extends GDT
 {
-// 	use WithFields;
+	use WithTitle;
+	use WithFields;
 	use WithModule;
 	use WithInstance;
 	use WithParameters;
+	use WithDescription;
 	
 	################
 	### Override ###
@@ -29,7 +33,7 @@ abstract class Method
 	public function getMethodName() : string { return $this->gdoShortName(); }
 	public function getPermission() : ?string { return null; }
 	public function hasPermission(GDO_User $user) : bool { return true; }
-	public abstract function execute() : GDT;
+	public abstract function execute();
 	
 	# toggles
 	public function isCLI() : bool { return false; }
@@ -41,6 +45,8 @@ abstract class Method
 	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
 	public function isTransactional() : bool { return false; }
 	public function isAlwaysTransactional() : bool { return false; }
+	public function storeLastURL() : bool { return true; }
+	public function storeLastActivity() : bool { return true; }
 	
 	# events
 	public function onInit() : void {}
@@ -238,10 +244,10 @@ abstract class Method
 	 */
 	public function exec()
 	{
-		if ($this->isAjax())
-		{
-			$_REQUEST['_ajax'] = '1';
-		}
+// 		if ($this->isAjax())
+// 		{
+// 			$_REQUEST['_ajax'] = '1';
+// 		}
 		
 		$user = GDO_User::current();
 		
@@ -329,9 +335,9 @@ abstract class Method
 	public function setupSEO()
 	{
 		# SEO
-		Website::setTitle($this->getTitle());
-		Website::addMeta(['keywords', $this->getKeywords(), 'name']);
-		Website::addMeta(['description', $this->getDescription(), 'name']);
+		Website::setTitle($this->getMethodTitle());
+		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
+		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
 		
 		# Store last URL in session
 		$this->storeLastURL();
@@ -339,6 +345,24 @@ abstract class Method
 		# Store last activity in user
 		$this->storeLastActivity();
 	}
+	
+	###
+	public function getMethodTitle()
+	{
+		return 'TITLE';
+	}
+	
+	public function getMethodKeywords()
+	{
+		return 'KEYWORDS';
+	}
+	
+	public function getMethodDescription()
+	{
+		return 'DESCR';
+	}
+	
+	###
 	
 	public function executeWithInit()
 	{
@@ -422,7 +446,6 @@ abstract class Method
 			throw $e;
 		}
 	}
-	
 	
 	#############
 	### Error ###

@@ -8,7 +8,7 @@ final class PHPInfo extends Method
 {
     public function getPermission() : ?string { return 'staff'; }
     
-    public function execute() : GDT
+    public function execute()
 	{
 		phpinfo();
 		die();

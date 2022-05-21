@@ -52,7 +52,7 @@ class Install extends MethodForm
 		$this->configModule = $loader->getModule($moduleName);
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
 		$form = $this->formName();

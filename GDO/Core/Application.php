@@ -11,23 +11,10 @@ use GDO\UI\GDT_Page;
  * @version 7.0.1
  * @since 3.0.0
  */
-class Application
+class Application extends GDT
 {
-	###################
-	### Instanciate ###
-	###################
-	private static Application $INSTANCE;
-	
-	public static function instance() : self
-	{
-		return self::$INSTANCE;
-	}
-	
-	public function __construct()
-	{
-		self::$INSTANCE = $this;
-	}
-	
+	use WithInstance;
+
 	################
 	### App Time ###
 	################
@@ -46,7 +33,7 @@ class Application
 	
 	public static function timingHeader()
 	{
-		hdr(sprintf('X-GDO-TIME: %.04f', (microtime(true) - GDO_PERF_START)));
+		hdr(sprintf('X-GDO-TIME: %.01fms', (microtime(true) - GDO_PERF_START) * 1000.0));
 	}
 	
 	#################
@@ -76,16 +63,42 @@ class Application
 	### Application state ###
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
+	public function isAjax() : bool { return $this->ajax; }
+	public function isHTML() : bool { return $this->mode === GDT::RENDER_HTML; }
+	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
 	public function isCLI() : bool { return false; }
-	public function isAjax() : bool { return !!$this->getAjax(); }
-	public function isJSON() : bool { return $this->isFormat('json'); }
-	public function isHTML() : bool { return $this->isFormat('html'); }
-	public function isWebserver() : bool { return true; }
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
-	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
-	public function isFormat(string $format) : bool { return $this->getFormat() === $format; }
-	public function getFormat() : string { return isset($_REQUEST['_fmt']) ? $_REQUEST['_fmt'] : 'html'; }
+	public function isWebserver() : bool { return true; }
+
+// 	public function isJSON() : bool { return $this->isFormat('json'); }
+// 	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
+// 	public function isFormat(string $format) : bool { return $this->getFormat() === $format; }
+// 	public function getFormat() : string { return isset($_REQUEST['_fmt']) ? $_REQUEST['_fmt'] : 'html'; }
+// 	public function isAjax() : bool { return !!$this->getAjax(); }
+
+	###################
+	### Render Mode ###
+	###################
+	/**
+	 * Detect the rendering output mode / format.
+	 * Try to append ?_fmt=json on any page.
+	 * 
+	 * @param string $fmt
+	 * @return int
+	 */
+	public static function detectRenderMode(string $fmt) : int
+	{
+		switch (strtoupper($fmt))
+		{
+			case 'CLI': return GDT::RENDER_CLI;
+			case 'BWP': return GDT::RENDER_BINARY;
+			case 'PDF': return GDT::RENDER_PDF;
+			case 'JSON': return GDT::RENDER_JSON;
+			case 'XML': return GDT::RENDER_XML;
+			default: return GDT::RENDER_HTML;
+		}
+	}
 	
 	/**
 	 * Call when you create the next command in a loop.
@@ -97,10 +110,32 @@ class Application
 		self::updateTime();
 	}
 	
+	public int $mode = GDT::RENDER_HTML;
+	public function mode(int $mode) : self
+	{
+		$this->mode = $mode;
+		return $this;
+	}
+	
+	public bool $ajax = false;
+	public function ajax(bool $ajax) : self
+	{
+		$this->ajax = $ajax;
+		return $this;
+	}
+	
+	public bool $indexed = false;
+	public function indexed(bool $indexed=true)
+	{
+		$this->indexed = $indexed;
+		return $indexed;
+	}
+	
 	##############
 	### Themes ###
 	##############
 	/**
+	 * # @TODO: There must be a quicker way todo templating.
 	 * @var string[]
 	 */
 	private array $themes;

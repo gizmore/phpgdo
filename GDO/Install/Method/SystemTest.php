@@ -12,7 +12,7 @@ use GDO\File\GDO_File;
  */
 final class SystemTest extends Method
 {
-	public function execute() : GDT
+	public function execute()
 	{
 		$tVars = array(
 			'tests' => array(

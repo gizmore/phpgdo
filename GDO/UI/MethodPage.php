@@ -1,24 +1,29 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
+use GDO\Core\GDT_Template;
 
 /**
  * Default method that simply loads a template.
  * Uses gdoParameters to populate template vars.
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.1
  * @since 6.4.0
  */
 abstract class MethodPage extends Method
 {
-	public function execute() : GDT
+	public function execute()
 	{
 		$name = strtolower($this->gdoShortName());
+		return $this->pageTemplate($name);
+	}
+	
+	protected function pageTemplate($name) : GDT_Template
+	{
 		return $this->templatePHP("page/{$name}.php",
-		  $this->getTemplateVars());
+			$this->getTemplateVars());
 	}
 	
 	protected function getTemplateVars()

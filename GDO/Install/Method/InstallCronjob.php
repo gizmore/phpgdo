@@ -13,7 +13,7 @@ use GDO\UI\GDT_Container;
  */
 final class InstallCronjob extends Method
 {
-	public function execute() : GDT
+	public function execute()
 	{
 		Database::init();
 		$hasdb = GDO_DB_HOST !== null;

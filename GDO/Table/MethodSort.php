@@ -59,7 +59,7 @@ abstract class MethodSort extends Method
 	 * {@inheritDoc}
 	 * @see Method::execute()
 	 */
-	public function execute() : GDT
+	public function execute()
 	{
 	    # Compatibility check
 		$table = $this->gdoSortObjects();

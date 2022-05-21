@@ -53,7 +53,7 @@ class Configure extends MethodForm
 // 	    $this->configModule = ModuleLoader::instance()->getModule($moduleName, true);
 // 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 	    # Response
 		$response = GDT_Response::make();

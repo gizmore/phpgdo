@@ -48,7 +48,7 @@ class PermissionRevoke extends MethodForm
 	    }
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 	    $this->renderPermTabs();
 		return parent::execute();

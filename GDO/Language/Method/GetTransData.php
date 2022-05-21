@@ -17,7 +17,7 @@ use GDO\Core\MethodAjax;
  */
 final class GetTransData extends MethodAjax
 {
-	public function execute() : GDT
+	public function execute()
 	{
 		# Get data
 		$trans = Trans::getCache(Trans::$ISO);

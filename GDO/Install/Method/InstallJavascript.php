@@ -13,7 +13,7 @@ use GDO\Core\ModuleLoader;
  */
 final class InstallJavascript extends Method
 {
-	public function execute() : GDT
+	public function execute()
 	{
 		Database::init();
 		ModuleLoader::instance()->loadModulesA();

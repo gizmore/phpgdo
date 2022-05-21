@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\CSS\Minifier;
+
 /**
  * CSS asset storage.
  * Can be given to CSSMinify for asset minification.
@@ -26,7 +28,23 @@ final class CSS
 	
 	public static function render()
 	{
-		throw new GDO_StubException();
+		# Let module CSS handle it
+		if (GDO_Module::config_var('CSS', 'minify_css', '0'))
+		{
+			return Minifier::renderMinified();
+		}
+		
+		# Render original basics
+		$back = '';
+		foreach (self::$FILES as $path)
+		{
+			$back .= sprintf("\t<link rel=\"stylesheet\" href=\"%s\" /> \n", $path);
+		}
+		if (self::$INLINE)
+		{
+			$back .= sprintf("\t<style><!--\n\t%s\n\t--></style>\n", self::$INLINE);
+		}
+		return $back;
 	}
 
 }

@@ -13,6 +13,5 @@ trait WithParameters
 		return GDT::EMPTY_ARRAY;
 	}
 	
-	public function gdoParameterC
 	
 }

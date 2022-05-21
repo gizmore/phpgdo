@@ -27,7 +27,7 @@ class Users extends MethodQueryTable
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$createLink = GDT_Button::make()->icon('create')->href(href('Admin', 'UserCreate'))->label('link_create_user');
 		return parent::execute()->addField($createLink);

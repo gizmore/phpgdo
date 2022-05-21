@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Core\Method;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDT_String;
 
@@ -13,6 +12,9 @@ use GDO\Core\GDT_String;
  */
 final class Concat extends Method
 {
+	/**
+	 * Method paramteres.
+	 */
 	public function gdoParameters() : array
 	{
 		return [
@@ -22,7 +24,7 @@ final class Concat extends Method
 		];
 	}
 	
-	public function execute(): GDT
+	public function execute()
 	{
 		$a = $this->gdoParameterVar('a');
 		$glue = $this->gdoParameterVar('glue');

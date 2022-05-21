@@ -27,7 +27,7 @@ final class InstallModules extends Method
 	 */
 	private $modules;
 	
-	public function execute() : GDT
+	public function execute()
 	{
 	    Cache::fileFlush();
 		Database::init();

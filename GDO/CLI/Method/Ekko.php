@@ -24,7 +24,7 @@ final class Ekko extends Method
 		];
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$text = $this->gdoParameterVar('text');
 		return GDT_Label::make()->labelRaw($text);

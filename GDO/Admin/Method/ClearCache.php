@@ -36,7 +36,7 @@ final class ClearCache extends Method
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function execute() : GDT
+	public function execute()
 	{
 	    $this->clearCache();
 		return Website::redirectMessage('msg_cache_flushed', null, Website::hrefBack());

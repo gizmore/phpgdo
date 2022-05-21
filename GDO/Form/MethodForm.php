@@ -37,7 +37,7 @@ abstract class MethodForm extends Method
 		return $this->form;
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$form = $this->getForm();
 		$form->actions()->withFields(function(GDT $gdt){

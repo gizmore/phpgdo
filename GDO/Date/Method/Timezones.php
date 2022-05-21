@@ -15,7 +15,7 @@ use GDO\Core\GDT;
  */
 final class Timezones extends MethodAjax
 {
-	public function execute() : GDT
+	public function execute()
 	{
 		$data = GDO_Timezone::table()->allTimezones();
 		return GDT_Array::makeWith($data);

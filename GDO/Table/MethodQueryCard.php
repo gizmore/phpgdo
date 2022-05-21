@@ -29,7 +29,7 @@ abstract class MethodQueryCard extends Method
 		return $this->gdoTable()->find(Common::getRequestString('id'));
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		return $this->renderCard();
 	}

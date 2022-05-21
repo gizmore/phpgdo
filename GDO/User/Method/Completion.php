@@ -20,7 +20,7 @@ class Completion extends MethodAjax
 {
 	public static $MAXCOUNT = 20;
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$q = GDO::escapeS(Common::getRequestString('query'));
 		$condition = sprintf('user_type IN ("guest","member") AND user_name LIKE \'%%%1$s%%\' OR user_real_name LIKE \'%%%1$s%%\' OR user_guest_name LIKE \'%%%1$s%%\'', $q);

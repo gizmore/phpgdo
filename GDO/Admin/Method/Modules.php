@@ -41,7 +41,7 @@ class Modules extends MethodTable
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		$this->modules = ModuleLoader::instance()->loadModules(false, true);
 		return parent::execute();

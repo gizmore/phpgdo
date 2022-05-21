@@ -14,6 +14,14 @@ namespace GDO\Core;
  */
 trait WithFields
 {
+	################
+	### Instance ###
+	################
+	public static function makeWith(GDT...$gdt)
+	{
+		return self::make()->addFields(...$gdt);
+	}
+	
 	##############
 	### Inputs ### (Plural)
 	##############
@@ -140,30 +148,34 @@ trait WithFields
 // 		}
 // 	}
 	
-// 	###########################
-// 	### Iterate recursively ###
-// 	###########################
-// 	/**
-// 	 * Iterate recusively over the fields with a callback.
-// 	 * If the result is truthy, break the loop early.
-// 	 * 
-// 	 * @param callable $callback
-// 	 * @return self
-// 	 */
-// 	public function withFields(callable $callback)
-// 	{
+	###########################
+	### Iterate recursively ###
+	###########################
+	/**
+	 * Iterate recusively over the fields with a callback.
+	 * If the result is truthy, break the loop early.
+	 * 
+	 * @param callable $callback
+	 * @return self
+	 */
+	public function withFields(callable $callback)
+	{
 // 		if ($result = $callback($this))
 // 		{
 // 			return $result;
 // 		}
-// 		foreach ($this->fields as $gdt)
-// 		{
-// 			if ($result = $callback($gdt))
-// 			{
-// 				return $result;
-// 			}
-// 		}
-// 	}
+		foreach ($this->fields as $gdt)
+		{
+			if ($result = $callback($gdt))
+			{
+				return $result;
+			}
+			if ($gdt->hasFields())
+			{
+				$gdt->withFields($callback);
+			}
+		}
+	}
 	
 	##############
 	### Render ### - 

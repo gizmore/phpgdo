@@ -14,6 +14,7 @@ use GDO\UI\GDT_Success;
  * Keeps lists of assets and feeds them to minifiers.
  * Features redirects and alerts.
  * 
+ * @deprecated It is not nice to have a class Website in core.
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.5
@@ -199,9 +200,8 @@ final class Website
 	 */
 	public static function displayMeta()
 	{
-	    $method = Application::instance()->getMethod();
-	    if ($method && $method->isSEOIndexed())
-	    {
+		if (Application::instance()->indexed)
+		{
     	    self::$META[] = ['robots', 'index, follow', 'name'];
 	    }
 	    else

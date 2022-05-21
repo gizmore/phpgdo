@@ -70,7 +70,7 @@ class ViewPermission extends MethodQueryTable
 			uncached();
 	}
     
-	public function execute() : GDT
+	public function execute()
 	{
 	    $this->renderPermTabs('Admin');
 	    return parent::execute();

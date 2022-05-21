@@ -56,7 +56,7 @@ trait WithFlex
      * Render classname for flex classes.
      * @return string
      */
-    public function htmlFlexDirection() : string
+    public function flexClass() : string
     {
         return $this->flexDirection === self::HORIZONTAL ?
         	'flex-row' : 'flex-column';

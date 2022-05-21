@@ -307,13 +307,14 @@ final class Debug
 			$user,
 			$message,
 // 		    print_r($_ENV, true), # security vuln here?
-			print_r($_GET, true),
-		    print_r($_POST, true),
+// 			print_r($_GET, true),
+// 		    print_r($_POST, true),
 		    print_r($_REQUEST, true),
-		    print_r($_COOKIE, true),
+// 		    print_r($_COOKIE, true),
 		];
 		$args = array_map('html', $args);
-		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\n_GET: %s\n\n_POST: %s\n\nREQUEST: %s\n\n_COOKIE: %s\n\n";
+// 		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\n_GET: %s\n\n_POST: %s\n\nREQUEST: %s\n\n_COOKIE: %s\n\n";
+		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\nREQUEST: %s\n\n";
 		return vsprintf($pattern, $args);
 	}
 	

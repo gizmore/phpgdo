@@ -22,7 +22,7 @@ class PermissionAdd extends MethodForm
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function execute() : GDT
+	public function execute()
 	{
 	    $this->renderPermTabs();
 		return parent::execute();

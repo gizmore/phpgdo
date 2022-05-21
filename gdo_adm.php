@@ -39,7 +39,7 @@ use GDO\Core\GDT_Expression;
  * @example ./gdoadm.sh configure perf enabled 1
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  * 
  * @see gdoadm.sh
@@ -118,7 +118,7 @@ final class gdo_adm extends Application
 	public function isHTML() : bool { return false; }
 	public function isJSON() : bool { return false; }
 }
-new gdo_adm(); # Create App
+gdo_adm::instance(); # Create App
 
 # Load config defaults
 if (!defined('GDO_CONFIGURED'))
@@ -135,11 +135,7 @@ Cache::flush();
 Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
-Debug::init();
-Debug::enableErrorHandler();
-Debug::enableExceptionHandler();
-Debug::setDieOnError(GDO_ERROR_DIE);
-Debug::setMailOnError(GDO_ERROR_MAIL);
+Debug::init(false, false);
 ModuleLoader::instance()->loadModules(GDO_DB_ENABLED, true);
 
 define('GDO_CORE_STABLE', 1);

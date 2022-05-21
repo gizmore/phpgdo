@@ -48,7 +48,7 @@ final class GDT_Expression extends GDT
 		return $parser->parse();
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		return $this->method->execute();
 	}

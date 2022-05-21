@@ -14,7 +14,7 @@ use GDO\Core\GDT;
  */
 final class Perf extends Method
 {
-	public function execute() : GDT
+	public function execute()
     {
         return GDT_PerfBar::make();
     }

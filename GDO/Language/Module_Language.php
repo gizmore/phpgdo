@@ -14,7 +14,7 @@ use GDO\UI\GDT_Page;
 use GDO\Net\GDT_Url;
 
 /**
- * Internationalization Module.
+ * Selfmade cheap Internationalization Module.
  * 
  * - Detect language by cookie or http_accept_language
  * 
@@ -27,11 +27,15 @@ use GDO\Net\GDT_Url;
  * @see GDO_Language
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 2.0.0
  */
 final class Module_Language extends GDO_Module
 {
+	##############
+	### Module ###
+	##############
+	
 	public int $priority = 2;
 	
 	public function getClasses() : array
@@ -93,11 +97,11 @@ final class Module_Language extends GDO_Module
 	############
 	public function onInit() : void
 	{
-	    $iso = $this->detectISO();
-	    Trans::setISO($iso);
-	    if (!Application::instance()->isCLI())
+// 	    $iso = $this->detectISO();
+// 	    Trans::setISO($iso);
+	    if (Application::instance()->isWebserver())
 	    {
-	        Website::addMeta(['language', $iso, 'name']);
+	        Website::addMeta(['language', Trans::$ISO, 'name']);
 	    }
 	}
 	
@@ -105,7 +109,7 @@ final class Module_Language extends GDO_Module
 	{
 		if ($this->cfgSwitchLeft())
 		{
-		    $navbar = GDT_Page::instance()->leftNav;
+		    $navbar = GDT_Page::instance()->leftBar();
 		    $navbar->addField(GDT_LangSwitch::make());
 		    $navbar->addField(GDT_Divider::make());
 		}
@@ -131,10 +135,14 @@ final class Module_Language extends GDO_Module
 	#################
 	### Detection ###
 	#################
+	/**
+	 * This is the language detection method you are looking for.
+	 */
 	public function detectISO() : string
 	{
 		if ($iso = (string) @$_REQUEST['_lang'])
 		{
+			unset($_REQUEST['_lang']);
 			return $iso;
 		}
 		if ($iso = GDO_Session::get('gdo-language'))
@@ -152,7 +160,7 @@ final class Module_Language extends GDO_Module
 		return GDO_LANGUAGE;
 	}
 	
-	public function detectAcceptLanguage() : string
+	private function detectAcceptLanguage() : string
 	{
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{

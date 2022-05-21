@@ -63,7 +63,7 @@ final class SwitchLanguage extends Method
 	    }
 	}
 	
-	public function execute() : GDT
+	public function execute()
 	{
 		# Set new ISO language
 		$iso = $this->getLanguage()->getISO();

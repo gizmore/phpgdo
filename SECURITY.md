@@ -18,7 +18,7 @@ New: v7 is under development, But gdo6 will still receive security fixes.
 
 Just write me a mail (gizmore@wechall.net), open an issue, or contact on irc.wechall.net.
 A security problem will be fixed asap.
-There is no real reward, but helping the gdo6 project is a flag on a hacking challenge on wechall.net :)
+There is no real reward, but helping the GDO project is a flag on a hacking challenge on wechall.net :)
 
 
 ## Credits

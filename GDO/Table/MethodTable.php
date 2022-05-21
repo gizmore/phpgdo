@@ -15,7 +15,7 @@ use GDO\User\GDO_User;
  * The basic API is identical for static memory results and queried data.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see ArrayResult
  * @see GDT_Table
@@ -148,7 +148,7 @@ abstract class MethodTable extends Method
     public function createCollection()
     {
         $this->table = GDT_Table::make($this->gdoTableName());
-        $this->table->headerName($this->getHeaderName());
+//         $this->table->headerName($this->getHeaderName());
         return $this->table;
 //         return $this->table->gdtTable($this->gdoTable());
     }
@@ -239,7 +239,7 @@ abstract class MethodTable extends Method
 	###############
 	### Execute ###
 	###############
-	public function execute() : GDT
+	public function execute()
 	{
 		return GDT_Response::makeWith(
 		    $this->renderTable());
@@ -296,7 +296,7 @@ abstract class MethodTable extends Method
 		{
 			$this->table = $this->createCollection();
 			$this->table->setupHeaders($this->isSearched(), $this->isPaginated());
-			$this->table->addHeaders($this->gdoHeaders());
+			$this->table->addHeaders(...$this->gdoHeaders());
 			$this->setupCollection($this->table);
 		}
 	}
