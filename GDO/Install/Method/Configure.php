@@ -5,7 +5,7 @@ use GDO\Form\GDT_Form;
 use GDO\Form\MethodForm;
 use GDO\Form\GDT_Submit;
 use GDO\Install\Config;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Core\GDT_Template;
 use GDO\DB\Database;
 use GDO\Core\GDO_Exception;

@@ -4,7 +4,7 @@ use GDO\Install\Installer;
 use GDO\Core\Logger;
 use GDO\Core\Application;
 use GDO\Session\GDO_Session;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
 use GDO\DB\Cache;

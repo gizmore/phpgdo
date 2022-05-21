@@ -3,7 +3,7 @@ namespace GDO\DB;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT_Hook;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Core\Module_Core;
 use GDO\Core\Application;
 

@@ -12,7 +12,7 @@ use GDO\Net\GDT_IP;
 use GDO\User\Module_User;
 use GDO\User\GDO_UserPermission;
 use GDO\Core\Application;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Language\Trans;
 use GDO\Core\Website;
 use GDO\Date\Time;

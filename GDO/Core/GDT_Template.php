@@ -5,7 +5,7 @@ use GDO\UI\WithLabel;
 use GDO\Util\Strings;
 use GDO\Language\Trans;
 use GDO\User\GDO_User;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 
 /**
  * GDO Template Engine and GDT implementation.

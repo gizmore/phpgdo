@@ -2,7 +2,7 @@
 namespace GDO\Tests;
 
 use GDO\Core\GDO_Module;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use PHPUnit\TextUI\Command;
 
 /**

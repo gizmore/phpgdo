@@ -17,7 +17,7 @@ use GDO\Install\Installer;
 use GDO\Core\GDO_Module;
 use GDO\Install\Method\Security;
 use GDO\Core\GDT_Hook;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\CLI\CLI;
 use GDO\Util\Strings;
 use GDO\Install\Module_Install;

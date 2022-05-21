@@ -8,7 +8,7 @@ use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Core\GDO;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\File\Filewalker;
 use GDO\User\GDO_Permission;
 use GDO\Util\Strings;

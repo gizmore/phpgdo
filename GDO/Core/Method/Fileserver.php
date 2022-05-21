@@ -4,7 +4,7 @@ namespace GDO\Core\Method;
 use GDO\Core\Method;
 use GDO\Core\Module_Core;
 use GDO\Date\Time;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Core\Application;
 
 /**

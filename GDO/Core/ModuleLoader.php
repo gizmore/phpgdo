@@ -2,7 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Cache;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\File\Filewalker;
 use GDO\Language\Trans;
 use GDO\DB\Database;

@@ -1,6 +1,6 @@
 <?php
 namespace GDO\Language;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 
 /**
  * This class contains Language data.

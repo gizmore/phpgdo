@@ -8,7 +8,7 @@ use GDO\User\GDO_UserSetting;
 use GDO\User\GDO_UserSettingBlob;
 use GDO\User\GDO_User;
 use GDO\Tests\Module_Tests;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Util\Strings;
 use GDO\UI\GDT_Link;
 use GDO\Table\GDT_Sort;

@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Language;
 
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\UI\GDT_Error;
 use GDO\DB\Cache;
 use GDO\Core\GDO_Error;

@@ -7,7 +7,7 @@ use GDO\User\GDT_User;
 use GDO\Language\Trans;
 use GDO\User\GDO_Permission;
 use GDO\UI\GDT_Page;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
 use GDO\Net\GDT_Url;

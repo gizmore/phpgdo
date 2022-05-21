@@ -5,7 +5,7 @@ use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
 use GDO\DB\Cache;
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Tests\GDT_MethodTest;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Module_Core;

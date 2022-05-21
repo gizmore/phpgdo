@@ -1,7 +1,7 @@
 <?php
 namespace GDO\UI;
 
-use GDO\File\FileUtil;
+use GDO\Util\FileUtil;
 use GDO\Core\GDT_Select;
 use GDO\Core\GDT_Template;
 use GDO\Util\Strings;
