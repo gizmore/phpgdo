@@ -11,7 +11,7 @@ use GDO\Core\GDT_Object;
  * Abstract method to render a single GDO as a card.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.6.4
  */
 abstract class MethodCard extends Method
@@ -54,7 +54,7 @@ abstract class MethodCard extends Method
     {
         if ($gdo = $this->getObject())
         {
-            return $gdo->displayName();
+            return $gdo->renderName();
         }
         return parent::getTitle();
     }

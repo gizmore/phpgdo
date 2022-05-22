@@ -15,7 +15,7 @@ use GDO\Net\GDT_Url;
  * Stores your choice in your session.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.9.0
  * 
  * @see Module_Language
@@ -35,7 +35,7 @@ final class SwitchLanguage extends Method
 	{
 	    if ($this->getLanguage(false))
 	    {
-	        return t($this->getDescriptionLangKey(), [$this->getLanguage()->displayName()]);
+	        return t($this->getDescriptionLangKey(), [$this->getLanguage()->renderName()]);
 	    }
 	    else
 	    {
@@ -72,7 +72,7 @@ final class SwitchLanguage extends Method
 		Trans::setISO($iso);
 		
 		# Build response
-		$response = GDT_Success::make()->text('msg_language_set', [$this->getLanguage()->displayName()]);
+		$response = GDT_Success::make()->text('msg_language_set', [$this->getLanguage()->renderName()]);
 		
 		# Redirect if 'ref' is set
 		if ($url = $this->gdoParameterVar('ref'))

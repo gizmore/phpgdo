@@ -117,7 +117,7 @@ trait WithObject
 			if ($gdos = $this->toValue($var))
 			{
 				return implode(', ', array_map(function(GDO $gdo) {
-					return $gdo->displayName();
+					return $gdo->renderName();
 				}, $gdos));
 			}
 			return '';
@@ -131,7 +131,7 @@ trait WithObject
 			}
 			else
 			{
-			    return $gdo->displayName();
+			    return $gdo->renderName();
 			}
 		}
 	}

@@ -8,7 +8,7 @@ use GDO\UI\GDT_Menu;
  * Add an array of actions GDT like buttons.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.2.0
  */
 trait WithActions

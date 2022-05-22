@@ -26,7 +26,7 @@ use GDO\Net\GDT_Url;
  * @see GDO_Language
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 2.0.0
  */
 final class Module_Language extends GDO_Module

@@ -17,18 +17,18 @@ use GDO\Table\GDT_Sort;
  * GDO base module class.
  * 
  * @author gizmore
- * @version 7.0.3 This version is the code level
- * @since 1.0.0
+ * @version 7.0.0
+ * @since 2.0.1
  */
 class GDO_Module extends GDO
 {
 	################
 	### Override ###
 	################
-	public int $priority = 50;
-	public string $version = "7.0.1"; # This version is the release / install level.
+	public int   $priority = 50;
+	public string $version = "7.0.0";
 	public string $license = "GDOv7-LICENSE";
-	public string $author = "Christian B. <gizmore@wechall.net>";
+	public string $authors = "Christian B. <gizmore@wechall.net>";
 	
 	public function gdoCached() : bool { return false; }
 	public function memCached() : bool { return false; }
@@ -89,7 +89,7 @@ class GDO_Module extends GDO
 	/**
 	 * Translated module name.
 	 */
-	public function displayName() : string
+	public function renderName() : string
 	{
 		$name = $this->getName();
 		$key = strtolower("module_{$name}");
@@ -486,7 +486,7 @@ class GDO_Module extends GDO
 	    }
 	    if ($throwError)
 	    {
-	        throw new GDO_Error('err_unknown_config', [$this->displayName(), html($key)]);
+	        throw new GDO_Error('err_unknown_config', [$this->renderName(), html($key)]);
 	    }
 	}
 	
@@ -672,7 +672,7 @@ class GDO_Module extends GDO
 	    }
 	    else
 	    {
-	        throw new GDO_Error('err_unknown_user_setting', [$this->displayName(), html($key)]);
+	        throw new GDO_Error('err_unknown_user_setting', [$this->renderName(), html($key)]);
 	    }
 	}
 	

@@ -9,7 +9,7 @@ use GDO\Core\MethodCompletion;
  * Complete a GDT_Language.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.4.0
  */
 final class Completion extends MethodCompletion
@@ -25,12 +25,12 @@ final class Completion extends MethodCompletion
 		foreach ($languages as $iso => $language)
 		{
 			if ( ($q === '') || ($language->getISO() === $q) ||
-				 (mb_stripos($language->displayName(), $q) !== false) ||
+				 (mb_stripos($language->renderName(), $q) !== false) ||
 				 (mb_stripos($language->displayNameIso('en'), $q)!==false))
 			{
 				$response[] = array(
 					'id' => $iso,
-					'text' => $language->displayName(),
+					'text' => $language->renderName(),
 					'display' => $language->renderChoice(),
 				);
 			}

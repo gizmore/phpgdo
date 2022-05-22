@@ -7,7 +7,7 @@ use GDO\Util\Strings;
  * Version number. Major.Minor.Patch.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 7.0.0
  * @see GDO_Module
  */

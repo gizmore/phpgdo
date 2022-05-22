@@ -8,7 +8,7 @@ namespace GDO\Core;
  * It inits the choices with a call to $table->all()!
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.2.0
  */
 class GDT_ObjectSelect extends GDT_Select
@@ -49,7 +49,7 @@ class GDT_ObjectSelect extends GDT_Select
 		return true;
 	}
 	
-	public function errorNotFound()
+	public function errorNotFound() : bool
 	{
 	    return $this->error('err_gdo_not_found', [
 	        $this->table->gdoHumanName(), html($this->getVar())]);
@@ -61,7 +61,7 @@ class GDT_ObjectSelect extends GDT_Select
 	public function renderForm() : string
 	{
 		$this->initChoices();
-		if ($this->completionHref)
+		if (isset($this->completionHref))
 		{
 		    return GDT_Template::php('Core', 'object_completion_form.php', ['field' => $this]);
 		}
@@ -77,11 +77,11 @@ class GDT_ObjectSelect extends GDT_Select
 				$back = '';
 				foreach ($obj as $gdo)
 				{
-					$back .= $gdo->displayName();
+					$back .= $gdo->renderName();
 				}
 				return $back;
 			}
-			return $obj->displayName();
+			return $obj->renderName();
 		}
 		return $obj;
 	}
@@ -187,7 +187,7 @@ class GDT_ObjectSelect extends GDT_Select
 	        {
 	            $selected[] = array(
 	                'id' => $value->getID(),
-	                'text' => $value->displayName(),
+	                'text' => $value->renderName(),
 	                'display' => $value->renderChoice(),
 	            );
 	        }
@@ -198,7 +198,7 @@ class GDT_ObjectSelect extends GDT_Select
 	        {
     	        $selected = array(
     	            'id' => $value->getID(),
-    	            'text' => $value->displayName(),
+    	            'text' => $value->renderName(),
     	            'display' => $value->renderChoice(),
     	        );
 	        }

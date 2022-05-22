@@ -5,8 +5,8 @@ namespace GDO\Core;
  * Add composer support to a module.
  *  
  * @author gizmore
- * @version 7.0.2
- * @since 7.0.2
+ * @version 7.0.0
+ * @since 7.0.0
  */
 trait WithComposer
 {

@@ -51,8 +51,8 @@ final class GDO_Language extends GDO
 	
 	public function getID() : ?string { return $this->getISO(); }
 	public function getISO() { return $this->gdoVar('lang_iso'); }
-	public function displayName() : string { return t('lang_'.$this->getISO()); }
-	public function displayNameISO($iso) { return tiso($iso, 'lang_'.$this->getISO()); }
+	public function renderName() : string { return t('lang_'.$this->getISO()); }
+// 	public function renderName()ISO($iso) { return tiso($iso, 'lang_'.$this->getISO()); }
 	public function renderCell() : string
 	{
 		return GDT_Template::php('Language', 'cell/language.php', ['language'=>$this]);

@@ -5,7 +5,7 @@ namespace GDO\UI;
  * Adds anchor relation to a GDT.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.1.0
  * @see GDT_Link
  * @see GDT_Button

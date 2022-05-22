@@ -52,7 +52,7 @@ class GDT_Username extends GDT_String
 	public function renderCLI() : string
 	{
 		return $this->gdo ? 
-			$this->gdo->displayName() :
+			$this->gdo->renderName() :
 			$this->renderCell();
 	}
 	

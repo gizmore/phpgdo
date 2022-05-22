@@ -8,7 +8,7 @@ use \gizmore\Filewalker as FW;
 /**
  * Wrapper for my own lib :]
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  */
 final class Filewalker
 {

@@ -32,7 +32,7 @@ class GDT_Name extends GDT_String
 	{
 	    if ($this->gdo)
 	    {
-	        return $this->gdo->displayName();
+	        return $this->gdo->renderName();
 	    }
 	    return $this->display();
 	}

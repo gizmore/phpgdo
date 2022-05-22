@@ -7,7 +7,7 @@ use GDO\Core\GDT_ObjectSelect;
  * Language select.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  */
 final class GDT_Language extends GDT_ObjectSelect
 {

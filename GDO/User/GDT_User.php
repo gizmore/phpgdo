@@ -17,7 +17,7 @@ use GDO\Core\GDT_Object;
  * @TODO: rename fallbackCurrentUser()
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.0
  */
 class GDT_User extends GDT_Object

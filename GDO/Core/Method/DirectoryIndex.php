@@ -11,7 +11,7 @@ use GDO\File\GDO_File;
  * Uses Filecache.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.11.3
  */
 final class DirectoryIndex extends MethodTable

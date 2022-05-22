@@ -16,7 +16,7 @@ use GDO\Core\GDO_Error;
  * @TODO: Trans: In early loading state errors are handled badly.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 1.0.0
  * @see Cache
  */

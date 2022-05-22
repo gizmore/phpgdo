@@ -5,7 +5,7 @@ namespace GDO\Core;
  * Add children fields to a GDT.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.0.1
  * @see GDT
  */

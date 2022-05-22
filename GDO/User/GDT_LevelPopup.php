@@ -9,7 +9,7 @@ use GDO\UI\GDT_Button;
  * A tooltip explains if your access is granted or restricted.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.12.1
  */
 final class GDT_LevelPopup extends GDT_Button

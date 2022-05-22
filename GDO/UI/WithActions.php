@@ -5,7 +5,7 @@ namespace GDO\UI;
  * Adds an action menu to a GDT.
  * 
  * @author gizmore
- * @since 7.0.1
+ * @since 7.0.0
  * @version 6.10.1
  */
 trait WithActions

@@ -10,7 +10,7 @@ use GDO\Core\GDT_Template;
  * @TODO document difference between display methods and render methods.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.0
  * @see GDT_Box
  */

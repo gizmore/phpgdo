@@ -42,7 +42,7 @@ use GDO\Form\WithCrud;
  * $_REQUEST[$headerName][s][ID]=[ID] for sorting (planned)
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.0
  * @see GDO
  * @see GDT

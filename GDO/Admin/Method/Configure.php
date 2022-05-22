@@ -26,7 +26,7 @@ use GDO\UI\GDT_Container;
  * Configure a module.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.4.0
  */
 class Configure extends MethodForm
@@ -84,12 +84,12 @@ class Configure extends MethodForm
 	
 	public function getTitle()
 	{
-        return t('ft_admin_configure', [$this->paramModule()->displayName()]);
+        return t('ft_admin_configure', [$this->paramModule()->renderName()]);
 	}
 	
 	public function getDescription()
 	{
-        return t('mdescr_admin_configure', [$this->paramModule()->displayName()]);
+        return t('mdescr_admin_configure', [$this->paramModule()->renderName()]);
 	}
 	
 	public function createForm(GDT_Form $form) : void

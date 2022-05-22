@@ -6,7 +6,7 @@ namespace GDO\Core;
  * Can autocomplete input, like `./gdo.sh mail.send giz <.....>`.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.0.0
  */
 class GDT_Select extends GDT_ComboBox
@@ -283,6 +283,11 @@ class GDT_Select extends GDT_ComboBox
 		return $this;
 	}
 
+	public function hasEmptyLabel() : bool
+	{
+		return isset($this->emptyLabelRaw) || isset($this->emptyLabelKey);
+	}
+	
 	public function emptyInitial(string $labelKey, string $emptyVar='0')
 	{
 		return $this->emptyLabel($labelKey)->initial($emptyVar);

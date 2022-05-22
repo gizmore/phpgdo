@@ -12,7 +12,7 @@ use GDO\Core\GDT_Template;
  * A form has a title, a text, fields, menu actions and an html action/target.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.4
  * @see MethodForm
  * @see WithText

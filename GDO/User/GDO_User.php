@@ -15,7 +15,7 @@ use GDO\Language\Trans;
  * Most user related fields are in other module settings.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 1.0.0
  * @see GDO
  * @see GDT
@@ -270,7 +270,7 @@ final class GDO_User extends GDO
 	##############
 	### Render ###
 	##############
-	public function renderName()
+	public function renderName() : string
 	{
 		return $this->renderUserName();
 	}
@@ -279,13 +279,13 @@ final class GDO_User extends GDO
 	 * 
 	 * @return string
 	 */
-	public function renderUserName()
+	public function renderUserName() : string
 	{
 		if ($name = $this->getName())
 		{
 			return html($name);
 		}
-		return 'gggg';
+		return 'gggguest';
 	}
 
 }

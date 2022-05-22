@@ -16,7 +16,7 @@ class GDO_PermissionException extends GDO_Error
 	
 	public function __construct(Method $method, GDO_Permission $permission)
 	{
-		parent::_construct('err_no_permission', [$method->getName(), $permission->displayName()]);
+		parent::_construct('err_no_permission', [$method->getName(), $permission->renderName()]);
 		$this->method = $method;
 		$this->permission = $permission;
 	}

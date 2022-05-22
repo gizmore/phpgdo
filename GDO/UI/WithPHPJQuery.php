@@ -6,7 +6,7 @@ namespace GDO\UI;
  * Render with htmlAttributes().
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.7.0
  */
 trait WithPHPJQuery

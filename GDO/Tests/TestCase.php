@@ -18,6 +18,7 @@ use GDO\Core\Website;
 use GDO\Date\Time;
 use GDO\Date\GDO_Timezone;
 use PHPUnit\Framework\Assert;
+use GDO\Core\WithModule;
 
 /**
  * A GDO test case knows a few helper functions.
@@ -33,12 +34,14 @@ use PHPUnit\Framework\Assert;
  * Provides MethodTest->execute() helper for convinient testing.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.10.1
  * @see MethodTest
  */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+	use WithModule;
+	
 // 	public static int $TEST_COUNT = 0;
 // 	public static int $TEST_FAILS = 0; # @TODO: implement unit test counter
 	
@@ -62,8 +65,17 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $ip;
     }
     
+    protected function echo($msg) : void
+    {
+    	echo $msg;
+    	echo "\n";
+    	ob_flush();
+    }
+    
     protected function setUp(): void
     {
+    	$this->echo("Running {$this->gdoClassName()}");
+    	
         Application::instance()->reset();
         
         # Increase IP

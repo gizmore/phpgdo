@@ -24,7 +24,7 @@ use function PHPUnit\Framework\assertFalse;
  * Permission and $TEST_USERS generation.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.3.4
  * @see Module_Language
  * @see GDT_MethodTest

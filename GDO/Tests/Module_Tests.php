@@ -10,7 +10,7 @@ use PHPUnit\TextUI\Command;
  * A good start to easily try many code paths.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.10.0
  */
 final class Module_Tests extends GDO_Module

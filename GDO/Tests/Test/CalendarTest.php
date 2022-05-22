@@ -12,7 +12,7 @@ use function PHPUnit\Framework\assertStringNotContainsString;
  * - check millisecond support
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.10.1
  */
 final class CalendarTest extends TestCase

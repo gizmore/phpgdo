@@ -19,12 +19,15 @@ use GDO\Core\Debug;
  * Install helper.
  * 
  * @author gizmore
- * @version 6.11.2
+ * @version 7.0.0
  * @since 6.0.0
  */
 class Installer
 {
-	public static function installModules(array $modules)
+	/**
+	 * @param GDO_Module[] $modules
+	 */
+	public static function installModules(array $modules) : void
 	{
 		/**
 		 * @var $module GDO_Module
@@ -50,7 +53,7 @@ class Installer
 		}
 	}
 	
-	public static function installModule(GDO_Module $module, $forceMigrate=false)
+	public static function installModule(GDO_Module $module, bool $forceMigrate=false) : void
 	{
 		self::installModuleClasses($module, $forceMigrate);
 		
@@ -83,7 +86,7 @@ class Installer
 		ModuleLoader::instance()->flushEnabledModules();
 	}
 	
-	public static function installModuleClasses(GDO_Module $module)
+	public static function installModuleClasses(GDO_Module $module) : void
 	{
 		if ($classes = $module->getClasses())
 		{
@@ -102,15 +105,12 @@ class Installer
 		}
 	}
 	
-	public static function installModuleClass(GDO $gdo)
+	public static function installModuleClass(GDO $gdo) : void
 	{
-// 		if ($gdo->gdoIsTable())
-		{
-			$gdo->createTable();
-		}
+		$gdo->createTable();
 	}
 	
-	public static function dropModule(GDO_Module $module)
+	public static function dropModule(GDO_Module $module) : void
 	{
 		$db = Database::instance();
 		try
@@ -131,7 +131,7 @@ class Installer
 		}
 	}
 
-	public static function dropModuleClasses(GDO_Module $module)
+	public static function dropModuleClasses(GDO_Module $module) : void
 	{
 		if ($classes = $module->getClasses())
 		{
@@ -140,7 +140,7 @@ class Installer
 				if (is_subclass_of($class, 'GDO\\Core\\GDO'))
 				{
 					$gdo = $class::table();
-					/** @var $gdo \GDO\Core\GDO **/
+					/** @var $gdo GDO **/
 					if (!$gdo->gdoAbstract())
 					{
 						$gdo->dropTable();
@@ -150,7 +150,7 @@ class Installer
 		}
 	}
 	
-	public static function upgrade(GDO_Module $module)
+	public static function upgrade(GDO_Module $module) : void
 	{
 		$version = self::increaseVersion($module, false);
 		self::upgradeTo($module, $version);
@@ -160,23 +160,22 @@ class Installer
 	/**
 	 * On an upgrade we execute a possible upgrade file.
 	 * We also recreate the database schema.
-	 * 
-	 * @param GDO_Module $module
-	 * @param string $version
 	 */
-	public static function upgradeTo(GDO_Module $module, $version)
+	public static function upgradeTo(GDO_Module $module, string $version) : void
 	{
 		self::includeUpgradeFile($module, $version);
 		self::recreateDatabaseSchema($module, $version);
 	}
 	
 	/**
-	 * Recreate a database schema / automigration.
+	 * Recreate a database schema.
+	 * I call this "automigration".
 	 * 
 	 * @param GDO_Module $module
 	 * @param string $version
+	 * @since 6.11.5
 	 */
-	public static function recreateDatabaseSchema(GDO_Module $module)
+	public static function recreateDatabaseSchema(GDO_Module $module) : void
 	{
 		if ($classes = $module->getClasses())
 		{
@@ -193,6 +192,11 @@ class Installer
 					{
 						$tablename = $gdo->gdoTableName();
 						$temptable = "zzz_temp_{$tablename}";
+						
+						if ($db->tableExists())
+						{
+							die('HIER');
+						}
 						
 						# create temp and copy as old
 						$db->disableForeignKeyCheck();
@@ -225,6 +229,10 @@ class Installer
 					}
 				}
 			}
+			catch (\Throwable $t)
+			{
+				throw $t;
+			}
 			finally
 			{
 				$db->enableForeignKeyCheck();
@@ -233,12 +241,11 @@ class Installer
 	}
 	
 	/**
-	 * Get intersecting columns of old and new format.
-	 * @param GDO $gdo
-	 * @param string $temptable
-	 * @return array
+	 * Get intersecting columns of old and new table creatoin schema.
+	 * 
+	 * @return string[]
 	 */
-	private static function getColumnNames(GDO $gdo, $temptable)
+	private static function getColumnNames(GDO $gdo, string $temptable) : array
 	{
 		$db = GDO_DB_NAME;
 		
@@ -258,7 +265,7 @@ class Installer
 			array_intersect($old, $new) : [];
 	}
 	
-	public static function includeUpgradeFile(GDO_Module $module, $version)
+	public static function includeUpgradeFile(GDO_Module $module, string $version) : void
 	{
 		$upgradeFile = $module->filePath("upgrade/$version.php");
 		if (FileUtil::isFile($upgradeFile))

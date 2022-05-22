@@ -12,7 +12,7 @@ use function PHPUnit\Framework\assertEquals;
  * Some very basic rendering tests.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.10.4
  */
 final class ResponseTest extends TestCase

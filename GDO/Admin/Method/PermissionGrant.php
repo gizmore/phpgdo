@@ -41,7 +41,7 @@ class PermissionGrant extends MethodForm
 		$user = $form->getFormValue('perm_user_id');
 		$user->changedPermissions();
 		$this->resetForm();
-		return $this->message('msg_perm_granted', [$permission->displayName(), $user->renderUserName()])->addField($this->renderPage());
+		return $this->message('msg_perm_granted', [$permission->renderName(), $user->renderUserName()])->addField($this->renderPage());
 	}
 	
 }

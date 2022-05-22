@@ -14,7 +14,7 @@ use GDO\Core\ModuleLoader;
  * @TODO: Add $sidebar to opt-in for sidebar generation code.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.0
  */
 final class GDT_Page extends GDT

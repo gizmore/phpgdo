@@ -5,7 +5,7 @@ namespace GDO\Core;
  * Object is an integer in the database. Uses WithObject trait for magic.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.4
  * @see WithObject
  */
@@ -69,7 +69,7 @@ class GDT_Object extends GDT_UInt
 	    {
 	        $selected = [
 	            'id' => $gdo->getID(),
-	            'text' => $gdo->displayName(),
+	            'text' => $gdo->renderName(),
 	            'display' => json_quote($gdo->renderChoice()),
 	        ];
 	    }

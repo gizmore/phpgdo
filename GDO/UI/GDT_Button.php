@@ -10,7 +10,7 @@ use GDO\Form\WithFormAttributes;
  * A simple button with only a label.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.1.0
  * @see GDT_Link
  * @see GDT_Submit

@@ -17,7 +17,7 @@ use GDO\Form\GDT_Hidden;
  * Create a GDO config with this form.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.0
  */
 class Configure extends MethodForm

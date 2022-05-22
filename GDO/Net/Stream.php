@@ -148,7 +148,7 @@ final class Stream
 	    }
 	    else
 	    {
-	        echo "Served ".$file->displayName();
+	        echo "Served ".$file->renderName();
 	    }
 	}
 	

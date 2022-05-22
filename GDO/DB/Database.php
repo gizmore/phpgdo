@@ -16,7 +16,7 @@ use GDO\Core\GDO_DBException;
  * @TODO support sqlite? This can be achieved by a few string tricks maybe. No foreign keys? no idea.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.0
  * 
  * @see GDO
@@ -316,6 +316,15 @@ class Database
 	####################
 	### Table create ###
 	####################
+	public function tableExists(string $tableName) : bool
+	{
+		return DBMS::tableExists($tableName);
+		
+		$query = "SELECT EXISTS (SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'music' AND TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Artists');";
+		$result = $this->queryRead($query);
+		return $result;
+	}
+	
 	public function createTableCode(GDO $gdo) : string
 	{
 		$columns = [];

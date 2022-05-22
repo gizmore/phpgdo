@@ -5,13 +5,16 @@ use GDO\Tests\TestCase;
 use GDO\Date\Time;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
+use GDO\Date\GDT_Timezone;
+use GDO\Core\GDT;
+use function PHPUnit\Framework\assertStringContainsString;
 
 /**
  * Test date and time.
  * 
  * @see Einstein.A
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.10.4
  */
 final class DateTest extends TestCase
@@ -85,6 +88,12 @@ final class DateTest extends TestCase
         $dbdate = '2021-11-09 08:00:59.123';
         $result = Time::displayDate($dbdate);
         assertEquals('09.11.2021 09:00', $result);
+    }
+    
+    public function testRenderChoiceForTimezones()
+    {
+    	$html = GDT_Timezone::make()->noCompletion()->renderMode(GDT::RENDER_FORM);
+    	assertStringContainsString('Europe/Berlin', $html, 'Test if GDO_Timezone does renderChoice() correctly.');
     }
     
     public function testHumanDuration()

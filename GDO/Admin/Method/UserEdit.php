@@ -68,7 +68,7 @@ class UserEdit extends MethodForm
 	public function getTitle()
 	{
 	    $user = $this->getUser();
-	    return t('ft_admin_useredit', [$user->displayName()]);
+	    return t('ft_admin_useredit', [$user->renderName()]);
 	}
 	
 	public function createForm(GDT_Form $form) : void

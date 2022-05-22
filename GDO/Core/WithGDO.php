@@ -6,7 +6,7 @@ namespace GDO\Core;
  * This is rarely needed meanwhile, as GDT are filled correctly.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 7.0.0
  * @see GDT
  * @see GDO

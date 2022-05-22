@@ -8,7 +8,7 @@ use GDO\Core\GDT;
  * Has level 1-5
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.7.0
  */
 final class GDT_Headline extends GDT

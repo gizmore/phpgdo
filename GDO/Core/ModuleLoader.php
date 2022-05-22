@@ -14,7 +14,7 @@ use GDO\CLI\CLIUtil;
  * Uses memcached for fast modulecache loading.
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.0
  */
 final class ModuleLoader

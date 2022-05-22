@@ -11,7 +11,7 @@ use GDO\Core\GDT_Index;
  * Timezone mapping entities.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 6.10.7
  */
 final class GDO_Timezone extends GDO
@@ -38,7 +38,7 @@ final class GDO_Timezone extends GDO
 	###############
 	### Display ###
 	###############
-	public function displayName() : string
+	public function renderName() : string
 	{
 		return $this->getName() . ' ' . $this->displayOffset();
 	}

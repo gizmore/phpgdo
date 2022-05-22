@@ -6,7 +6,7 @@ namespace GDO\Core;
  * Has fields and input.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 7.0.0
  */
 class GDT_Fields extends GDT

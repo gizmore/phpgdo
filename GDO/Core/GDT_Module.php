@@ -62,7 +62,7 @@ final class GDT_Module extends GDT_ObjectSelect
                 if ( (($module->isInstalled()) && $this->installed) ||
                      ((!$module->isInstalled()) && $this->uninstalled) )
                 {
-                    $this->choices[$module->getLowerName()] = $module->displayName();
+                    $this->choices[$module->getLowerName()] = $module->renderName();
                 }
             }
         }

@@ -13,7 +13,7 @@ use GDO\Core\GDT_UInt;
  * Permission entities.
  * One of the first GDO that use GDT_Virtual, for usercount.
  * 
- * @version 7.0.2
+ * @version 7.0.0
  * @since 3.1.0
  * @author gizmore
  * @see GDT_Virtual
@@ -61,7 +61,7 @@ final class GDO_Permission extends GDO
 	###############
 	### Display ###
 	###############
-	public function displayName() : string
+	public function renderName() : string
 	{
 	    $name = $this->getName();
 	    $key = 'perm_' . $name;
@@ -70,7 +70,7 @@ final class GDO_Permission extends GDO
 	
 	public function display_perm_edit() { return GDT_EditButton::make()->href($this->hrefEdit()); }
 	public function display_user_count() { return $this->gdoVar('user_count'); }
-	public function renderChoice() : string { return sprintf('%s–%s', $this->getID(), $this->displayName()); }
+	public function renderChoice() : string { return sprintf('%s–%s', $this->getID(), $this->renderName()); }
 	
 	############
 	### HREF ###

@@ -10,7 +10,7 @@ namespace GDO\Core;
  * Validation via GDT_String::$pattern
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.0
  * @see Version
  * @see GDT_String

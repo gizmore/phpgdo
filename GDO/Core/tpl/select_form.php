@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Core\tpl;
 use GDO\Core\GDT_Select;
 /** @var $field GDT_Select **/
 if (isset($field->completionHref))
@@ -12,17 +13,17 @@ if (isset($field->completionHref))
   <select
    <?=$field->htmlID()?>
    <?=$field->htmlAttributes()?>
-<?php if ($field->completionHref) : ?>
+<?php if ($field->hasCompletion()) : ?>
     data-config='<?=$field->displayConfigJSON()?>'
 <?php endif; ?>
    <?=$field->htmlFormName()?>
    <?=$field->htmlMultiple()?>
    <?=$field->htmlDisabled()?>>
-<?php if ($field->emptyLabel) : ?>
+<?php if ($field->hasEmptyLabel()) : ?>
 	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->displayEmptyLabel()?></option>
 <?php endif; ?>
 <?php foreach ($field->choices as $var => $choice) : ?>
-	<option value="<?=html($var)?>"<?=$field->htmlSelected($var);?>><?=$field->displayChoice($choice)?></option>
+	<option value="<?=$var?>"<?=$field->htmlSelected($var);?>><?=$field->displayChoice($choice)?></option>
 <?php endforeach; ?>
   </select>
   <?=$field->htmlError()?>

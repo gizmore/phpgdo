@@ -6,7 +6,6 @@ use GDO\Tests\TestCase;
 use GDO\Admin\Method\Configure;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Admin\Method\Modules;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Method;
 
 /**
@@ -21,9 +20,9 @@ final class ModuleConfigTest extends TestCase
         $method = Modules::make();
         $checky = GDT_MethodTest::make()->method($method);
         $result = $checky->execute();
-        $result = $result->renderMode(GDT::RENDER_JSON);
+        $html = $result->renderMode();
         $this->assert200("Check Admin::Modules for errors");
-        assertStringContainsString('17', $result, 'Test if Module table can be rendered in JSON.');
+        assertStringContainsString('17', $html, 'Test if Module table can be rendered in HTML.');
     }
     
     public function testConfigure()

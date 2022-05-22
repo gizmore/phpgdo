@@ -13,7 +13,7 @@ use GDO\UI\GDT_Page;
  * This module is part of the gdo7 core.
  * 
  * @author gizmore
- * @version 7.0.3
+ * @version 7.0.0
  * @since 5.3.0
  * 
  * @see GDT_PerfBar

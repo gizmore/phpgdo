@@ -33,7 +33,7 @@ use function PHPUnit\Framework\assertLessThan;
  * Trivial methods only have parameters that can be plugged.
  *
  * @author gizmore
- * @version 7.0.3
+ * @version 7.0.0
  * @since 6.10.0
  */
 final class AutomatedTest extends TestCase
@@ -192,7 +192,7 @@ final class AutomatedTest extends TestCase
 
 	// private function testThemeForAllMethods(GDO_Theme $theme)
 	// {
-	// echo "Testing all trivial methods with {$theme->displayName()}\n";
+	// echo "Testing all trivial methods with {$theme->renderName()}\n";
 	// ob_flush();
 
 	// # Switch theme

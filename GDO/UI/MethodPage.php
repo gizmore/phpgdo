@@ -9,7 +9,7 @@ use GDO\Core\GDT_Template;
  * Uses gdoParameters to populate template vars.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.4.0
  */
 abstract class MethodPage extends Method

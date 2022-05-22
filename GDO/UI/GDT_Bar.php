@@ -7,7 +7,7 @@ use GDO\Core\GDT_Template;
  * A bar is a container without padding or margin.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.1.0
  */
 class GDT_Bar extends GDT_Container

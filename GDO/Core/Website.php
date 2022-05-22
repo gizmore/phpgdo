@@ -15,7 +15,7 @@ use GDO\UI\GDT_Success;
  * 
  * @deprecated It is not nice to have a class Website in core.
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.5
  * @see Module_Website
  * @see Minifier

@@ -7,7 +7,7 @@ use GDO\Core\Website;
  * A button to navigate back.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.1.3
  */
 final class GDT_BackButton extends GDT_Button

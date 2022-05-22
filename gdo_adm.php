@@ -39,7 +39,7 @@ use GDO\Core\GDT_Expression;
  * @example ./gdoadm.sh configure perf enabled 1
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.10.0
  * 
  * @see gdoadm.sh
@@ -276,6 +276,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
         }
         $deps = $module->getDependencies();
         $deps[] = $module->getName();
+        $deps[] = 'Core';
 	}
 	elseif ($mode === 2)
 	{
@@ -721,7 +722,7 @@ elseif ($argv[1] === 'migrate')
 	else
 	{
 		Installer::installModule($module, true);
-		GDT_Success::responseWith('msg_gdoadm_migrated', [$module->displayName()]);
+		GDT_Success::responseWith('msg_gdoadm_migrated', [$module->renderName()]);
 	}
 }
 

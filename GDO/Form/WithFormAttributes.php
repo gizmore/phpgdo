@@ -5,7 +5,7 @@ namespace GDO\Form;
  * Add HTML Form helpers to a GDT.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 7.0.0
  * @see GDT_Field
  * @see WithPHPJQuery

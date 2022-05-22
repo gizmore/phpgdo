@@ -8,7 +8,7 @@ use GDO\Core\GDO_Module;
  * Admin section button. Only visible if module has href_admin.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.1
  * @see GDT_Button
  * @see Module_Admin

@@ -17,7 +17,7 @@ use GDO\Util\Strings;
  * @example add $(add 1;2);$(add 3;4) # => 10
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 7.0.0
  * @see Method
  * @see GDT_Method

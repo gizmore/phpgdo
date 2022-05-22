@@ -9,7 +9,7 @@ use GDO\UI\GDT_EditButton;
 /**
  * Overview of permissions.
  * 
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.0
  * @author gizmore
  */

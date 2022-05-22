@@ -17,7 +17,7 @@ use GDO\Mail\Mail;
  * Performance statistics panel.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.1
  */
 final class GDT_PerfBar extends GDT_Panel

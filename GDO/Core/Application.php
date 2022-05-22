@@ -3,13 +3,12 @@ namespace GDO\Core;
 
 use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Page;
-use GDO\Perf\Method\Perf;
 
 /**
  * Application runtime data.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.0
  */
 class Application extends GDT

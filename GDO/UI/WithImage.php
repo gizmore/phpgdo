@@ -5,8 +5,8 @@ namespace GDO\UI;
  * Adds an image attribute to a GDT.
  * 
  * @author gizmore
- * @version 7.0.1
- * @since 7.0.1
+ * @version 7.0.0
+ * @since 7.0.0
  */
 trait WithImage
 {

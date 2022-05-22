@@ -17,7 +17,7 @@ use GDO\Core\GDT_Response;
  * Install selected modules.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 3.0.0
  */
 final class InstallModules extends Method

@@ -26,7 +26,7 @@ use GDO\Core\Application;
  * The other memcached keys work on a per row basis with table_name_id as key.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.0
  */
 class Cache

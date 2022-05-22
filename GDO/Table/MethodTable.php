@@ -15,7 +15,7 @@ use GDO\User\GDO_User;
  * The basic API is identical for static memory results and queried data.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.0
  * @see ArrayResult
  * @see GDT_Table

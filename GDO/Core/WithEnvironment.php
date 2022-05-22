@@ -11,7 +11,7 @@ use GDO\User\GDO_User;
  * Add effective GDO_User attribute.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  */
 trait WithEnvironment
 {

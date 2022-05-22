@@ -5,7 +5,7 @@ namespace GDO\Core;
  * A combobox is a string with additional completion and dropdown.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.0
  * @see GDT_Select
  */

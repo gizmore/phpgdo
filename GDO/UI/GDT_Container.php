@@ -11,7 +11,7 @@ use GDO\Core\WithFields;
  * Has no input.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 5.7.1
  */
 class GDT_Container extends GDT

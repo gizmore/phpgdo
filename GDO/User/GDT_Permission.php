@@ -7,7 +7,7 @@ use GDO\Core\GDT_ObjectSelect;
  * Permission select.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.1.0
  */
 final class GDT_Permission extends GDT_ObjectSelect

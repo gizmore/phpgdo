@@ -9,8 +9,8 @@ use GDO\Core\GDO_StubException;
  * Is not trivial. Means it does not get run in automated test automagically.
  * 
  * @author gizmore
- * @version 7.0.1
- * @since 7.0.1
+ * @version 7.0.0
+ * @since 7.0.0
  * @see Method
  */
 final class SeoProxy extends Method

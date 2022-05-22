@@ -11,7 +11,7 @@ use GDO\Form\GDT_Submit;
  * CLI utility.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.10.2
  * @see Method
  */
@@ -119,7 +119,7 @@ final class CLI
         }, $methods);
         
         return GDT_Response::makeWithHTML(t('cli_methods', [
-            $module->displayName(), implode(', ', $methods)]));
+            $module->renderName(), implode(', ', $methods)]));
     }
     
 //     /**

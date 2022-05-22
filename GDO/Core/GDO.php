@@ -27,7 +27,7 @@ use GDO\User\GDO_User;
  * 
  * @author gizmore@wechall.net
  * @license GDOv7-LICENSE
- * @version 7.0.2
+ * @version 7.0.0
  * @since 3.2.0
  * @see GDT
  * @see Cache
@@ -183,7 +183,7 @@ abstract class GDO extends GDT
 	##############
 	### Render ###
 	##############
-	public function displayName() : string
+	public function renderName() : string
 	{
 		return $this->gdoHumanName() . "#" . $this->getID();
 	}
@@ -196,13 +196,13 @@ abstract class GDO extends GDT
 	
 // 	public function renderCLI()
 // 	{
-// 		return $this->getID() . '-' . $this->displayName();
+// 		return $this->getID() . '-' . $this->renderName();
 // 	}
 	
-// 	public function renderChoice()
-// 	{
-// 		return $this->displayName();
-// 	}
+	public function renderChoice() : string
+	{
+		return $this->renderName();
+	}
 	
 	public function renderJSON()
 	{
@@ -601,7 +601,7 @@ abstract class GDO extends GDT
 		}
 		elseif ($throw)
 		{
-			throw new GDO_Error('err_unknown_gdo_column', [$this->displayName(), html($key)]);
+			throw new GDO_Error('err_unknown_gdo_column', [$this->renderName(), html($key)]);
 		}
 		return null;
 	}
@@ -1655,14 +1655,6 @@ abstract class GDO extends GDT
 	public static function gdoHashcodeS(array $gdoVars) : string
 	{
 		return substr(sha1(GDO_SALT.json_encode($gdoVars)), 0, self::TOKEN_LENGTH);
-	}
-	
-	##############
-	### Render ### GDOs are GDT. They use the same rendering scheme and pipeline.
-	############## 
-	public function renderChoice() : string
-	{
-		return $this->gdoHumanName() . '#' . $this->getID();
 	}
 	
 	###############

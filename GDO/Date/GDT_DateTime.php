@@ -7,7 +7,7 @@ use GDO\Core\GDT_Template;
  * A datetime column has a bigger range of dates compared to a GDT_Timestamp.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.11.2
  */
 class GDT_DateTime extends GDT_Date

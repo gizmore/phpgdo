@@ -8,7 +8,7 @@ $href = GDO_WEB_ROOT . 'GDO/Language/img/' . $language->getID() . '.png';
 ?>
 <img
 class="gdo-language"
-	alt="<?= $language->displayName(); ?>"
-	title="<?= $language->displayName(); ?>"
+	alt="<?= $language->renderName(); ?>"
+	title="<?= $language->renderName(); ?>"
 	src="<?=html($href)?>" />
 	

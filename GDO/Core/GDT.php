@@ -18,7 +18,7 @@ use GDO\CLI\CLI;
  * The current rendering mode is stored in Application.
  * 
  * @author gizmore
- * @version 7.0.3
+ * @version 7.0.0
  * @since 5.0.0
  * @see GDO
  * @see GDT_Field
@@ -301,7 +301,7 @@ abstract class GDT
 	 */
 	public function configJSON() : array
 	{
-		return get_object_vars($this);
+		return get_object_vars($this); # @TODO only show certain values!
 	}
 	
 	/**
@@ -309,7 +309,11 @@ abstract class GDT
 	 */
 	public function displayConfigJSON() : string
 	{
-		return json_quote(json_encode($this->configJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0));
+		$json = $this->configJSON();
+		$json = array_filter($json, function($v) {
+			return $v !== null;
+		});
+		return json_quote(json_encode($json, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0));
 	}
 	
 	##############

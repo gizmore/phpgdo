@@ -9,7 +9,7 @@ use GDO\UI\GDT_Page;
  * in RENDER_HTML mode, we let GDT_Page do it's job.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 5.0.0
  */
 final class GDT_Response extends GDT

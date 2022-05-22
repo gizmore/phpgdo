@@ -10,7 +10,7 @@ use GDO\Core\GDT_Float;
  * File system utilities.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.0.0
  */
 final class FileUtil
@@ -18,14 +18,21 @@ final class FileUtil
     ##############
     ### Basics ###
     ##############
+    /**
+     * Check if a dir exists and is readable.
+     */
     public static function isDir(string $filename) : bool
     {
-    	return is_dir($filename);
+    	return is_dir($filename) && is_readable($filename);
     }
 
+    /**
+     * Check if a file is a file and readable.
+     */
     public static function isFile(string $filename) : bool
     {
-    	return stream_resolve_include_path($filename) !== false;
+    	return is_file($filename) && is_readable($filename);
+#    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
     }
 
 	public static function createDir(string $path) : bool

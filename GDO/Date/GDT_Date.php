@@ -8,7 +8,7 @@ use GDO\Core\GDT_Template;
  * An example is the release date of a book, or a birthdate.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.0
  * @see GDT_Time
  * @see GDT_Timestamp

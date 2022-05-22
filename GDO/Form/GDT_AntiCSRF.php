@@ -18,7 +18,7 @@ use GDO\User\GDO_User;
  * @see MethodForm
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 1.0.0
  */
 class GDT_AntiCSRF extends GDT_Hidden

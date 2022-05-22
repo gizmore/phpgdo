@@ -14,7 +14,7 @@ use GDO\Core\GDT_Method;
  * @TODO: Replace Tests\MethodTest with GDT_Method or GDT_Expression. Copy the test user stuff! Add effective user attribute to the GDT_Method.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.11.2
  */
 final class GDT_MethodTest extends GDT_Method

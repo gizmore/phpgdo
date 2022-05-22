@@ -70,7 +70,7 @@ class Install extends MethodForm
 	{
 	    if ($this->configModule)
 	    {
-	        return t('ft_admin_install', [$this->configModule->displayName()]);
+	        return t('ft_admin_install', [$this->configModule->renderName()]);
 	    }
 	    else
 	    {

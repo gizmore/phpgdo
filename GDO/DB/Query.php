@@ -16,7 +16,7 @@ use GDO\Core\GDO_Error;
  * @example GDO_User::table()->select()->execute()->fetchAll();
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 5.0.0
  * @see GDO
  * @see Cache
@@ -436,7 +436,7 @@ final class Query
 		}
 		else
 		{
-			throw new GDO_Error(t('err_join_object', [html($key), html($this->table->displayName())]));
+			throw new GDO_Error(t('err_join_object', [html($key), html($this->table->renderName())]));
 		}
 		
 		return $this->join($join);

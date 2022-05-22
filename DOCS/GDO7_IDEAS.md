@@ -31,3 +31,5 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
   
  - GDOv7 shoule use xdebug-code-coverage programmatically.
 
+ - /bin/grr - linux binary to replace input with a regex pattern and stream to output. Like awk but only that one thing well :*
+ 

@@ -9,7 +9,7 @@ use GDO\File\GDO_File;
  * HTML Image element.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.0
  * @since 6.10.0
  */
 final class GDT_Image extends GDT

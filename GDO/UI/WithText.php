@@ -9,7 +9,7 @@ namespace GDO\UI;
  * Adds textUnescaped() for skipping escaping.
  * 
  * @author gizmore
- * @version 7.0.3
+ * @version 7.0.0
  * @since 6.2.0
  * @see GDO7 - for global functions
  */

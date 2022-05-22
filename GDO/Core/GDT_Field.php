@@ -14,7 +14,7 @@ use GDO\UI\WithPHPJQuery;
  * The make method sets the name to default or specified parameter.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.0
  * @since 7.0.0
  */
 abstract class GDT_Field extends GDT
