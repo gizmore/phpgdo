@@ -11,7 +11,6 @@ use GDO\Util\FileUtil;
 use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
 use GDO\Net\GDT_Url;
-use phpDocumentor\Reflection\PseudoTypes\True_;
 
 /**
  * The core module holds some generic config as well as the global revision string.

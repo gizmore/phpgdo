@@ -151,7 +151,7 @@ else
 ############
 ### Exec ###
 ############
-$result = GDT_Method::make()->method($me)->inputs($_REQUEST)->execute();
+$result = GDT_Method::make()->method($me)->addInputs($_REQUEST)->execute();
 $content = $result->renderMode($app->mode);
 ##############
 ### Finish ###

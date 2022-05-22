@@ -7,7 +7,7 @@ use GDO\Util\Random;
  * Add autocompletion variables to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.2
  * @since 6.0.1
  */
 trait WithCompletion

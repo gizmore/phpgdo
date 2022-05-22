@@ -55,14 +55,14 @@ final class Time
 	### Timezone ###
 	################
 	/**
-	 * UTC DB ID
+	 * UTC DB ID. UTF-8 is always '1'.
 	 * @see GDO_Timezone
 	 * @var string
 	 */
 	const UTC = '1';
-	public static $UTC;
-	public static $TIMEZONE = self::UTC; # default timezone
-	public static $TIMEZONE_OBJECTS = [];
+	public static $UTC; # UTC Timezone object
+	public static string $TIMEZONE = self::UTC; # default timezone id
+	public static array $TIMEZONE_OBJECTS = [];
 	public static function getTimezoneObject($timezone=null)
 	{
 	    $timezone = $timezone ? $timezone : self::$TIMEZONE;

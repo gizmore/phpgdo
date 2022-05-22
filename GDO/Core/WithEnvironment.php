@@ -2,8 +2,6 @@
 namespace GDO\Core;
 
 use GDO\User\GDO_User;
-use GDO\Date\Time;
-use GDO\Language\Trans;
 
 /**
  * WithEnvironment is for Method execution.
@@ -13,7 +11,7 @@ use GDO\Language\Trans;
  * Add effective GDO_User attribute.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  */
 trait WithEnvironment
 {

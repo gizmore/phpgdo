@@ -84,7 +84,6 @@ final class GDO_User extends GDO
 	
 	/**
 	 * Get guest ghost user.
-	 * @return self
 	 */
 	public static function ghost() : self
 	{
@@ -159,7 +158,19 @@ final class GDO_User extends GDO
 	/**
 	 * Get the appropiate timezone object for this user.
 	 */
-	public function getTimezone() : string { return $this->gdoVar('user_timezone') > 1 ? $this->getVar('user_timezone') : GDO_Session::get('timezone', '1'); }
+	public function getTimezone() : string
+	{
+		$tz = $this->gdoVar('user_timezone');
+		if ($tz > 1)
+		{
+			return $tz;
+		}
+		if (class_exists('GDO\\Session\\GDO_Session'))
+		{
+			return GDO_Session::get('timezone', '1');
+		}
+		return Time::UTC;
+	}
 	
 	public function hasTimezone() : bool
 	{
