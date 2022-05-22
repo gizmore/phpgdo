@@ -1,7 +1,7 @@
 # GDOv7 DBAL
 
 I am very proud of the GDOv7 Database Abstraction Layer. It actually is easier than writing SQL by hand, 
-and i don't have to look up trivial tasks like getting an entitiy back from it, or creating complex join conditions.
+and i don't have to look up trivial tasks like getting an entitiy back from it, or creating join conditions.
 The GDO DBAL consists of the [Module_DB](../GDO/DB) files as well as the [GDO](../GDO/Core/GDO.php) class.
 In summary:
 
@@ -20,6 +20,13 @@ The GDOv7 code is very basic, yet suprisingly stable and clever.
 The performance is also possible because i simply don't care that you may not have reserved words as identifiers.
 You cannot have this in GDOv7, but in exchange you never need to quote or escape a single table or column name. Deal!
  
+## GDOv7 DBAL: IDs
+
+In some DBAL it is convention to have an auto inc as the primary key.
+In GDOv7, there is no convention or restriction on how to key your tables.
+We sometimes have a CHAR(2) for maybe country, or maybe a composite primary key. All is possible and intuitive.
+Maybe look at the implementation of [GDT_AutoInc](../GDO/Core/GDT_AutoInc.php) and [GDT_Char](../GDO/Core/GDT_Char.php).
+
 
 ## GDOv7 DBAL: Migrations
 

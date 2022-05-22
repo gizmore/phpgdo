@@ -1270,7 +1270,7 @@ abstract class GDO extends GDT
 	}
 	
 	/**
-	 * Get a row by auto inc column.
+	 * Get a row by IDs.
 	 * @param string ...$id
 	 * @return self
 	 */

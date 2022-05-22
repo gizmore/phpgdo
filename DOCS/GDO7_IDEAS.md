@@ -7,3 +7,6 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
 
  - Add all my TODO ideas here!
  
+ - New abstract GDO_ModuleComposer which has the right defaults for composer wrapper modules (add autoloader, handle vendor) (not really needed?)
+ 
+ 

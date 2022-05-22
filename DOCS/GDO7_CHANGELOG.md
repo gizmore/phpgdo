@@ -57,6 +57,8 @@ A fresh restart of the GDO project.
 GDOv7.0.0 comes with only *all core* and *some secret/basic* modules, but all of them cleaned up and now unit tested. (on it...)
 
  - [Filewalker](https://github.com/gizmore/php-filewalker) is an own package now, independent from any dependency.
+ 
+ - Support for the bower package manager has been dropped.
 
  - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name and more...
 
