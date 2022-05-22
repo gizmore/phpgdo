@@ -1,6 +1,3 @@
 [submodule "GDO/UI/htmlpurifier"]
 	path = GDO/UI/htmlpurifier
 	url = https://github.com/ezyang/htmlpurifier
-[submodule "php-filewalker"]
-	path = php-filewalker
-	url = https://github.com/gizmore/php-filewalker
