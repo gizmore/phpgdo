@@ -47,8 +47,8 @@ final class GDT_PerfBar extends GDT_Panel
 			'phpClasses' => count(get_declared_classes()),
 			
 			'gdoFiles' => $GDT_LOADED,
-		    'gdoCount' => GDO::$COUNT,
-		    'gdtCount' => GDT::$COUNT,
+		    'gdoCount' => GDO::$GDO_COUNT,
+		    'gdtCount' => GDT::$GDT_COUNT,
 		    'gdoModules' => count(ModuleLoader::instance()->getModules()),
 			'gdoLangFiles' => Trans::numFiles(),
 			'gdoTemplates' => GDT_Template::$CALLS,
@@ -60,9 +60,9 @@ final class GDT_PerfBar extends GDT_Panel
 		);
 	}
 
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
-		return GDT_Template::php('Perf', 'cell/perfbar.php', ['bar' => $this]);
+		return GDT_Template::php('Perf', 'perfbar_html.php', ['bar' => $this]);
 	}
 
 }

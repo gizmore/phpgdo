@@ -449,13 +449,18 @@ final class Time
 	public static function humanDurationRaw($seconds, int $nUnits, array $units, bool $withMillis=false)
 	{
 		$calced = [];
+		if ($withMillis)
+		{
+			$ms = intval($seconds * 1000) % 1000;
+		}
+		$duration = (int) $seconds;
 		foreach ($units as $text => $mod)
 		{
-			if (0 < ($remainder = $seconds % $mod))
+			if (0 < ($remainder = $duration % $mod))
 			{
 				$calced[] = $remainder.$text;
 			}
-			$duration = intval($seconds / $mod, 10);
+			$duration = intval($duration / $mod, 10);
 			if ($duration === 0)
 			{
 				break;
@@ -477,6 +482,15 @@ final class Time
 				unset($calced[$key]);
 			}
 		}
+		
+		if (count($calced) < $nUnits)
+		{
+			if ($withMillis)
+			{
+				$calced[] = sprintf('%.03d', $ms);
+			}
+		}
+		
 		return implode(' ', $calced);
 	}
 	

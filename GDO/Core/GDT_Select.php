@@ -24,13 +24,13 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getVar() : ?string
 	{
-		if (!($var = parent::getVar()))
+		if (null === ($var = parent::getVar()))
 		{
 			return $this->multiple ? '[]' : null;
 		}
 		elseif ($this->multiple)
 		{
-			return is_array($var) ? json_encode($var) : $var;
+			return is_array($var) ? json_encode($var) : $var; # NO visible json, no pretty print.
 		}
 		else
 		{

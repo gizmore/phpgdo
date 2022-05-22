@@ -28,6 +28,11 @@ final class CLI
     ##############
     ### Render ###
     ##############
+    public static function displayCLI(string $html) : string
+    {
+    	return self::htmlToCLI($html);
+    }
+    
     /**
      * Turn <br/> into newlines.
      */

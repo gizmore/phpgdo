@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\DB\Query;
 use GDO\Form\GDT_Validator;
+use GDO\CLI\CLI;
 
 /**
  * The base class for all GDT.
@@ -153,7 +154,7 @@ abstract class GDT
 	
 	# various rendering formats
 	public function renderBinary() : string { return ''; }
-	public function renderCLI() : string { return $this->renderHTML(); }
+	public function renderCLI() : string { return $this->displayCLI($this->renderHTML()); }
 	public function renderJSON() { return $this->renderCLI(); }
 	public function renderXML() : string { return $this->renderHTML(); }
 	# html rendering
@@ -173,6 +174,11 @@ abstract class GDT
 	public function displayVar(string $var=null) : string
 	{
 		return $var ? html($var) : '';
+	}
+	
+	public function displayCLI(string $html) : string
+	{
+		return CLI::displayCLI($html);
 	}
 	
 	/**

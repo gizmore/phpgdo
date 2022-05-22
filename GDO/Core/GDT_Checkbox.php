@@ -20,7 +20,7 @@ class GDT_Checkbox extends GDT_Select
 	protected function __construct()
 	{
 	    parent::__construct();
-		$this->emptyValue = '2';
+		$this->emptyVar = '2';
 		$this->min = 0;
 		$this->max = 1;
 		$this->ascii(); # This enables string search (not binary).
@@ -37,8 +37,8 @@ class GDT_Checkbox extends GDT_Select
 			]);
 			if ($this->undetermined)
 			{
-				$this->emptyInitial(t('please_choose'), $this->emptyValue);
-				$this->choices[$this->emptyValue] = $this->displayEmptyLabel();
+				$this->emptyInitial(t('please_choose'), $this->emptyVar);
+				$this->choices[$this->emptyVar] = $this->displayEmptyLabel();
 			}
 		}
 		return $this;

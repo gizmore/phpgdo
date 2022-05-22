@@ -58,7 +58,7 @@ class GDT_Enum extends GDT_DBField
 	
 	public function toValue(string $var = null)
 	{
-		return $var === $this->emptyValue ? null : $var;
+		return $var === $this->emptyVar ? null : $var;
 	}
 	
 	public function displayValue($var)
@@ -135,10 +135,10 @@ class GDT_Enum extends GDT_DBField
 	#############
 	### Empty ###
 	#############
-	public $emptyValue = '0';
-	public function emptyValue($emptyValue)
+	public $emptyVar = '0';
+	public function emptyVar($emptyVar)
 	{
-		$this->emptyValue = $emptyValue;
+		$this->emptyVar = $emptyVar;
 		return $this->emptyLabel('please_choice');
 	}
 	public $emptyLabel;
@@ -250,13 +250,13 @@ class GDT_Enum extends GDT_DBField
 	        else
 	        {
 	            $selected = array(
-    	            'id' => $this->emptyValue,
+    	            'id' => $this->emptyVar,
 	                'text' => $this->displayEmptyLabel(),
     	            'display' => $this->displayEmptyLabel(),
 	            );
 	        }
     		return array_merge(parent::configJSON(), array(
-    			'emptyValue' => $this->emptyValue,
+    			'emptyVar' => $this->emptyVar,
     			'emptyLabel' => $this->displayEmptyLabel(),
     		    'completionHref' => $this->completionHref,
     		    'display' => $this->renderCell(),
@@ -268,7 +268,7 @@ class GDT_Enum extends GDT_DBField
 	        return array_merge(parent::configJSON(), [
 	            'enumValues' => $this->enumValues,
 	            'enumLabels' => $this->generateEnumLabels(),
-	            'emptyValue' => $this->emptyValue,
+	            'emptyVar' => $this->emptyVar,
 	            'emptyLabel' => $this->displayEmptyLabel(),
 	            'completionHref' => $this->completionHref,
 	            'display' => $this->renderCell(),

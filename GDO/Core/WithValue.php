@@ -100,7 +100,8 @@ trait WithValue
 	{
 		if (!$this->valueConverted)
 		{
-			$this->value = $this->toValue($this->getVar());
+			$var = $this->getVar();
+			$this->value = $this->toValue($var);
 			$this->valueConverted = true;
 		}
 		return $this->value;

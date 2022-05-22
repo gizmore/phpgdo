@@ -35,7 +35,7 @@ final class Module_Core extends GDO_Module
 	 * Counts up to be in sync and poison caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.1-r1337';
+	const GDO_REVISION = '7.0.1-r1338';
 	
 	##############
 	### Module ###
@@ -101,10 +101,7 @@ final class Module_Core extends GDO_Module
 	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
 	public function cfgShowImpressum() : string { return $this->getConfigVar('show_impressum'); }
 	public function cfgShowPrivacy() : string { return $this->getConfigVar('show_privacy'); }
-	public function cfgAssetVersion() : Version
-	{
-		return $this->getConfigValue('asset_revision');
-	}
+	public function cfgAssetVersion() : Version { return $this->getConfigValue('asset_revision'); }
 	public function cfgAllowGuests() : string { return $this->getConfigVar('allow_guests'); }
 	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
 	public function cfgMail403() : string { return $this->getConfigVar('mail_404'); }

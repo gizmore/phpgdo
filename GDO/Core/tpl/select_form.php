@@ -19,7 +19,7 @@ if (isset($field->completionHref))
    <?=$field->htmlMultiple()?>
    <?=$field->htmlDisabled()?>>
 <?php if ($field->emptyLabel) : ?>
-	<option value="<?=$field->emptyValue?>"<?=$field->htmlSelected($field->emptyValue)?>><?=$field->displayEmptyLabel()?></option>
+	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->displayEmptyLabel()?></option>
 <?php endif; ?>
 <?php foreach ($field->choices as $var => $choice) : ?>
 	<option value="<?=html($var)?>"<?=$field->htmlSelected($var);?>><?=$field->displayChoice($choice)?></option>

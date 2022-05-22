@@ -54,9 +54,9 @@ final class GDT_Protocol extends GDT_Select
 		if (!$this->choices)
 		{
 			$choices = array();
-			if ($this->emptyValue)
+			if ($this->emptyVar)
 			{
-				$choices = array($this->emptyValue => $this->displayEmptyLabel());
+				$choices = array($this->emptyVar => $this->displayEmptyLabel());
 			}
 			$choices = array_merge($choices, $this->protocols);
 			return $this->choices($choices);

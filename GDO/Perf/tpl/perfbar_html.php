@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Perf\tpl;
 use GDO\Perf\GDT_PerfBar;
 /** @var $bar GDT_PerfBar **/
 $i = GDT_PerfBar::data();

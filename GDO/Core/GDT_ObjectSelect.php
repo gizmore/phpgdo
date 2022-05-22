@@ -205,7 +205,7 @@ class GDT_ObjectSelect extends GDT_Select
 	        else
 	        {
 	            $selected = array(
-	                'id' => $this->emptyValue,
+	                'id' => $this->emptyVar,
 	                'text' => $this->displayEmptyLabel(),
 	                'display' => $this->displayEmptyLabel(),
 	            );
