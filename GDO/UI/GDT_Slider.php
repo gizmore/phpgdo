@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Form\WithFormAttributes;
 
 /**
  * A numeric slider with min and max values. 
@@ -18,6 +19,7 @@ class GDT_Slider extends GDT
 	##############
 	use WithIcon;
 	use WithLabel;
+	use WithFormAttributes;
 	
 	##############
 	### Render ###
