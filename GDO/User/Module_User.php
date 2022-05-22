@@ -42,11 +42,6 @@ final class Module_User extends GDO_Module
 			GDO_UserSetting::class,
 			GDO_UserSettingBlob::class,
 	    ];
-	    # Session table if DB session handler
-	    if (is_a(GDO_Session::class, GDO::class, true))
-	    {
-	        $classes[] = GDO_Session::class;
-	    }
 	    return $classes;
 	}
 	
