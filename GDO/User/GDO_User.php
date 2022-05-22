@@ -165,7 +165,7 @@ final class GDO_User extends GDO
 		{
 			return $tz;
 		}
-		if (class_exists('GDO\\Session\\GDO_Session'))
+		if (class_exists('GDO\\Session\\GDO_Session', false))
 		{
 			return GDO_Session::get('timezone', '1');
 		}
