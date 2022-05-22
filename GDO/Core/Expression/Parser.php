@@ -9,6 +9,12 @@ use GDO\Util\Strings;
 /**
  * Parse a CLI expression into an expression tree for execution.
  * 
+ * Syntax:
+ * 
+ * @example add 1;4 # => 5
+ * @example concat a;$(wget https://google.de) # => a<!DOCTYPE....
+ * @example add $(add 1;2);$(add 3;4) # => 10
+ * 
  * @author gizmore
  * @version 7.0.1
  * @since 7.0.0
@@ -18,6 +24,9 @@ use GDO\Util\Strings;
  */
 final class Parser
 {
+	const CMD_PREAMBLE = '$';
+	const ARG_SEPARATOR = ';';
+	
 	private string $line;
 	
 	public function __construct(string $line)

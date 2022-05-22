@@ -5,8 +5,6 @@ namespace GDO\Core;
  * Add children fields to a GDT.
  * Add $inputs array to allow serving of all children.
  * 
- * The logic i use for parameter filling
- * 
  * @author gizmore
  * @version 7.0.1
  * @since 6.0.1
@@ -17,7 +15,10 @@ trait WithFields
 	################
 	### Instance ###
 	################
-	public static function makeWith(GDT...$gdt)
+	/**
+	 * Call unnamed make and add fields.
+	 */
+	public static function makeWith(GDT...$gdt) : self
 	{
 		return self::make()->addFields(...$gdt);
 	}
@@ -45,7 +46,7 @@ trait WithFields
 	 */
 	public array $fields;
 	
-	public function addFields(GDT...$gdts)
+	public function addFields(GDT...$gdts) : self
 	{
 		foreach ($gdts as $gdt)
 		{
@@ -58,7 +59,7 @@ trait WithFields
 		return $this;
 	}
 	
-	public function addField(GDT $gdt)
+	public function addField(GDT $gdt) : self
 	{
 		if (!isset($this->fields))
 		{
@@ -77,21 +78,9 @@ trait WithFields
 		return $this;
 	}
 	
-	
-	
-// 	/**
-// 	 * @var GDT[]
-// 	 */
-// 	protected array $namecache = [];
-	
-// 	/**
-// 	 * @var GDT[]
-// 	 */
-// 	protected array $posicache = [];
-	
 	public function hasFields() : bool
 	{
-		return count($this->fields) > 0;
+		return isset($this->fields) ? count($this->fields) > 0 : false;
 	}
 	
 	public function getFields() : array
@@ -104,59 +93,12 @@ trait WithFields
 		return $this->fields[$key];
 	}
 	
-// 	/**
-// 	 * Get the Nth positional field.
-// 	 * -1 for the last one, -2 second last.
-// 	 * May throw an exception!
-// 	 * @return GDT
-// 	 */
-// 	public function getFieldN(int $n=0) : GDT
-// 	{
-// 		return $this->fields[$n];
-// 	}
-	
-// 	public function addFields(GDT...$fields) : self
-// 	{
-// 		foreach ($fields as $gdt)
-// 		{
-// 			$this->addField($gdt);
-// 		}
-// 		return $this;
-// 	}
-	
-// 	public function addField(GDT $gdt) : void
-// 	{
-// 		$this->addFieldB($gdt);
-// 		if ($gdt->hasFields())
-// 		{
-// 			foreach ($gdt->getFields() as $gdt)
-// 			{
-// 				$this->addField($gdt);
-// 			}
-// 		}
-// 	}
-	
-// 	protected function addFieldB(GDT $gdt) : void
-// 	{
-// 		if ($name = $gdt->getName())
-// 		{
-// 			$this->fields[$name] = $gdt;
-// 		}
-// 		else
-// 		{
-// 			$this->fields[] = $gdt;
-// 		}
-// 	}
-	
 	###########################
 	### Iterate recursively ###
 	###########################
 	/**
 	 * Iterate recusively over the fields with a callback.
-	 * If the result is truthy, break the loop early.
-	 * 
-	 * @param callable $callback
-	 * @return self
+	 * If the result is truthy, break the loop early and return the result.
 	 */
 	public function withFields(callable $callback)
 	{
@@ -186,8 +128,6 @@ trait WithFields
 	
 	/**
 	 * WithFields, we simply iterate over them and render current mode.
-	 * 
-	 * @return string
 	 */
 	public function renderFields() : string
 	{
@@ -198,46 +138,15 @@ trait WithFields
 		return $rendered;
 	}
 	
-	public function renderHTML() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderCell() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderForm() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderCLI() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderCard() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderPDF() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderXML() : string
-	{
-		return $this->renderFields();
-	}
-	
-	public function renderBinary() : string
-	{
-		return $this->renderFields();
-	}
-	
+	public function renderHTML() : string { return $this->renderFields(); }
+	public function renderCell() : string { return $this->renderFields(); }
+	public function renderForm() : string { return $this->renderFields(); }
+	public function renderCLI() : string { return $this->renderFields(); }
+	public function renderCard() : string { return $this->renderFields(); }
+	public function renderPDF() : string { return $this->renderFields(); }
+	public function renderXML() : string { return $this->renderFields(); }
+	public function renderBinary() : string { return $this->renderFields(); }
+
 	public function renderJSON()
 	{
 		$json = [];

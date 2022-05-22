@@ -3,6 +3,8 @@ namespace GDO\Util;
 
 require 'php-filewalker/gizmore/Filewalker.php';
 
+use \gizmore\Filewalker as FW;
+
 /**
  * Wrapper for my own lib :]
  * @author gizmore
@@ -10,8 +12,8 @@ require 'php-filewalker/gizmore/Filewalker.php';
  */
 final class Filewalker
 {
-	public static function traverse(string $path, string $pattern=null, callable $callback_file=null, callable $callback_dir=null, int $recursive=self::MAX_RECURSION, $args=null)
+	public static function traverse(string $path, string $pattern=null, callable $callback_file=null, callable $callback_dir=null, int $recursive=FW::MAX_RECURSION, $args=null)
 	{
-		return \gizmore\Filewalker::traverse($path, $pattern, $callback_file, $callback_dir, $recursive, $args);
+		return FW::traverse($path, $pattern, $callback_file, $callback_dir, $recursive, $args);
 	}
 }

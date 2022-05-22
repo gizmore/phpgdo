@@ -367,7 +367,8 @@ final class Website
 	####################
 	### Generic Head ###
 	####################
-	private static $HEAD = '';
+	private static string $HEAD = '';
+	
 	public static function addHead(string $string) : void
 	{
 		self::$HEAD .= $string . "\n";
@@ -382,13 +383,14 @@ final class Website
 	### Title ###
 	#############
 	private static string $TITLE = GDO_SITENAME;
-	public static function setTitle(string $key, array $args=null) : void
+	
+	public static function setTitle(string $title) : void
 	{
-	    self::$TITLE = t($key, $args);
+	    self::$TITLE = $title;
 	    GDT_Page::instance()->titleRaw(self::displayTitle());
 	}
 	
-	public static function displayTitle()
+	public static function displayTitle() : string
 	{
 	    $title = html(self::$TITLE);
 	    if (module_enabled('Core'))

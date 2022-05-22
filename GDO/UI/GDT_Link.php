@@ -4,13 +4,12 @@ namespace GDO\UI;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
 use GDO\Net\URL;
-use GDO\Core\GDO;
 
 /**
  * An anchor for menus or paragraphs.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_Link extends GDT_String
@@ -21,27 +20,7 @@ class GDT_Link extends GDT_String
 	use WithPHPJQuery;
 	use WithAnchorRelation;
 
-	public $editable = false;
-	public $orderable = false;
-	public $filterable = false;
-	public $searchable = false;
-	public $groupable = false;
-	
-	################
-	### GDO href ###
-	################
-// 	public function gdo(GDO $gdo=null)
-// 	{
-// 	    if ($gdo)
-// 	    {
-//     	    $method = "href_{$this->name}";
-//     	    if (method_exists($gdo, $method))
-//     	    {
-//     	        $this->href(call_user_func([$gdo, $method]));
-//     	    }
-// 	    }
-// 	    return parent::gdo($gdo);
-// 	}
+	public bool $caseSensitive = true;
 	
 	################
 	### Relation ###
@@ -60,7 +39,22 @@ class GDT_Link extends GDT_String
 	const REL_SEARCH = 'search';
 	const REL_TAG = 'tag';
 	
-	public bool $caseSensitive = true;
+	################
+	### GDO href ###
+	################
+// 	public function gdo(GDO $gdo=null)
+// 	{
+// 	    if ($gdo)
+// 	    {
+//     	    $method = "href_{$this->name}";
+//     	    if (method_exists($gdo, $method))
+//     	    {
+//     	        $this->href(call_user_func([$gdo, $method]));
+//     	    }
+// 	    }
+// 	    return parent::gdo($gdo);
+// 	}
+	
 	
 	/**
 	 * Output a link / anchor.
@@ -78,9 +72,7 @@ class GDT_Link extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderForm() : string { return $this->renderCell(); }
-	public function renderCard() : string { return $this->renderCell(); }
-	public function renderCell() : string { return GDT_Template::php('UI', 'cell/link.php', ['link' => $this]); }
+	public function renderHTML() : string { return GDT_Template::php('UI', 'cell/link.php', ['link' => $this]); }
 	public function renderJSON() { return trim($this->displayLabel() . " ( $this->href )"); }
 	public function renderFilter($f) : string { return GDT_String::make($this->name)->renderFilter($f); }
 	

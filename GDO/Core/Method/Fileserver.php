@@ -19,6 +19,8 @@ use GDO\Core\Application;
  */
 final class Fileserver extends Method
 {
+	public function isTrivial() : bool { return false; }
+	
 	public function execute()
 	{
 		$url = (string) $_REQUEST['url'];

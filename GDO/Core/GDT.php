@@ -236,6 +236,25 @@ abstract class GDT
 		return get_object_vars($this);
 	}
 	
+	##############
+	### Filter ###
+	##############
+	/**
+	 * Get the input for this GDTs filter var. 
+	 */
+	public function filterVar(string $key=null) : string
+	{
+		return '';
+	}
+	
+	/**
+	 * Check if a GDO is shown for a filter input.
+	 */
+	public function filterGDO(GDO $gdo, string $filterInput) : bool
+	{
+		return true;
+	}
+	
 	#########################
 	### Bridge for traits ###
 	#########################
@@ -412,6 +431,11 @@ abstract class GDT
 	public function plugVar() : string
 	{
 		return '';
+	}
+	
+	public function isTestable() : bool
+	{
+		return true;
 	}
 	
 	##################

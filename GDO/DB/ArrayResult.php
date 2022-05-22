@@ -102,7 +102,7 @@ final class ArrayResult extends Result
 	{
 	    foreach ($filters as $gdt)
 	    {
-	        if ($gdt->filterable)
+	        if ($gdt->isFilterable())
 	        {
 	            $filter = $gdt->filterVar($rq);
 	            if ($filter !== null)

@@ -242,20 +242,21 @@ class GDT_Int extends GDT_DBField
 	    }
 	}
 	
-	public function filterGDO(GDO $gdo, $filtervalue)
+	public function filterGDO(GDO $gdo, string $filtervalue) : bool
 	{
-		$min = $filtervalue['min'];
-		$max = $filtervalue['max'];
-		$var = $this->getVar();
-		if ( ($min !== null) && ($var < $min) )
-		{
-			return false;
-		}
-		if ( ($max !== null) && ($var > $max) )
-		{
-			return false;
-		}
-		return true;
+		return true; # @TODO implement GDT_Int::filterGDO
+// 		$min = $filtervalue['min'];
+// 		$max = $filtervalue['max'];
+// 		$var = $this->getVar();
+// 		if ( ($min !== null) && ($var < $min) )
+// 		{
+// 			return false;
+// 		}
+// 		if ( ($max !== null) && ($var > $max) )
+// 		{
+// 			return false;
+// 		}
+// 		return true;
 	}
 	
 	/**

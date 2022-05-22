@@ -15,7 +15,8 @@ use GDO\Core\GDT;
  * Some very basic rendering tests.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 6.10.4
  */
 final class ResponseTest extends TestCase
 {
@@ -45,7 +46,6 @@ final class ResponseTest extends TestCase
         $r1 = GDT_Response::make();
         $p1 = GDT_Paragraph::make()->textRaw('par1');
         $r1->addField($p1);
-        $r1->addField(null);
         assertEquals(200, Application::$RESPONSE_CODE);
     }
 

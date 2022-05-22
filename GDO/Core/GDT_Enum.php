@@ -169,7 +169,7 @@ class GDT_Enum extends GDT_DBField
 	/**
 	 * Filter value is an array.
 	 */
-	public function filterVar($rq=null)
+	public function filterVar(string $rq=null) : string
 	{
 		if ($filter = parent::filterVar($rq))
 		{

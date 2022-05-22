@@ -363,16 +363,19 @@ final class Query
 	 * @param string $order
 	 * @return self
 	 */
-	public function order(string $order) : self
+	public function order(string $order=null) : self
 	{
-	    if (!isset($this->order))
-	    {
-	        $this->order = [$order];
-	    }
-	    else
-	    {
-	        $this->order[] = $order;
-	    }
+		if ($order)
+		{
+		    if (!isset($this->order))
+		    {
+		        $this->order = [$order];
+		    }
+		    else
+		    {
+		        $this->order[] = $order;
+		    }
+		}
 		return $this;
 	}
 	

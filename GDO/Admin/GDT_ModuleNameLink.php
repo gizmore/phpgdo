@@ -5,14 +5,15 @@ use GDO\UI\GDT_Link;
 
 /**
  * Is searchable, filterable, orderarble because it's the modulename.
+ * 
  * @author gizmore
  */
 final class GDT_ModuleNameLink extends GDT_Link
 {
-    public $orderable = true;
-    public $filterable = true;
-    public $searchable = true;
-    
+	public function isOrderable() : bool { return true; }
+	public function isSearchable() : bool { return true; }
+	public function isFilterable() : bool { return true; }
+	
     public function renderCell() : string
 	{
 		$this->label($this->gdo->getName());

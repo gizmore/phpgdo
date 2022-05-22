@@ -160,7 +160,7 @@ final class Module_Language extends GDO_Module
 		return GDO_LANGUAGE;
 	}
 	
-	private function detectAcceptLanguage() : string
+	public function detectAcceptLanguage() : string
 	{
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{

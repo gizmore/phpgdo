@@ -29,7 +29,7 @@ final class ModuleConfigTest extends TestCase
     public function testConfigure()
     {
         $inputs = ['module' => 'Table'];
-        $method = GDT_Method::make()->method(Configure::make())->runAsCurrent()->inputs($inputs);
+        $method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
         $result = $method->execute();
         $html = $result->renderHTML();
         assertStringContainsString('"20"', $html, 'Test if configured values are prefilled correctly.');

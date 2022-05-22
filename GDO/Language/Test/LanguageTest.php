@@ -7,11 +7,15 @@ use GDO\Language\Trans;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
 use function PHPUnit\Framework\assertNotEquals;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertCount;
 
 /**
- * Configure the Language module for 3 languages.
- * Rudimentary i18n test.
+ * Configure the Language module for 3 test languages.
+ * Rudimentary I18n test.
+ * 
  * @author gizmore
+ * @version 7.0.1
+ * @since 6.3.4
  */
 final class LanguageTest extends TestCase
 {
@@ -20,7 +24,7 @@ final class LanguageTest extends TestCase
         $module = Module_Language::instance();
         $module->saveConfigVar('languages', '["de","en","it"]');
         $languages = $module->cfgSupported();
-        assertGreaterThanOrEqual(3, count($languages), 'Check if 3 languages can be supported via Language config.');
+        assertCount(3, $languages, 'Check if 3 languages can be supported via Language config.');
         
         $de1 = tiso('de', 'btn_send');
         $en1 = tiso('en', 'btn_send');
