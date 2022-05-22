@@ -3,7 +3,7 @@
  * This prints all modules and their providers.
  * The list can be copied by gdo6 authors to Core/ModuleProviders.php
  */
-use GDO\File\Filewalker;
+use GDO\Util\Filewalker;
 use GDO\Util\Regex;
 
 # Use gdo6 core

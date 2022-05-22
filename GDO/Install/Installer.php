@@ -9,7 +9,7 @@ use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Core\GDO;
 use GDO\Util\FileUtil;
-use GDO\File\Filewalker;
+use GDO\Util\Filewalker;
 use GDO\User\GDO_Permission;
 use GDO\Util\Strings;
 use GDO\Core\Application;

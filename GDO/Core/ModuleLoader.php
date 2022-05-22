@@ -1,9 +1,9 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Util\Filewalker;
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
-use GDO\File\Filewalker;
 use GDO\Language\Trans;
 use GDO\DB\Database;
 use GDO\Table\Sort;

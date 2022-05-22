@@ -3,7 +3,7 @@ namespace GDO\Core;
 
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
-use GDO\File\Filewalker;
+use GDO\Util\Filewalker;
 use GDO\Language\Trans;
 use GDO\User\GDO_User;
 
