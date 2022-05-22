@@ -28,6 +28,11 @@ class Module_Admin extends GDO_Module
 	{
 		$this->loadLanguage('lang/admin');
 	}
+	
+	public function getFriendencies() : array
+	{
+		return ['Login', 'Register', 'Recovery'];
+	}
 
 	###############
 	### Navbars ###

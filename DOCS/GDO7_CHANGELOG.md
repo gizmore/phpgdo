@@ -33,6 +33,8 @@ GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Write methods once and
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
+ - [Module_LoginAs](https://github.com/gizmore/gdo6-login-as) has been merged into [Module_Login](https://github.com/gizmore/phpgdo-login).
+
  - [FileUtil](../GDO/Util/FileUtil.php) is now settled to be in Core, as [Module_File](https://github.com/gizmore/phpgdo-file) is not core anymore. (thx flederohr)
 
  - New [Module_Gender](../). Nothing fancy like LBQGT, only male and female. User settings, etc.
@@ -66,7 +68,7 @@ GDOv7.0.0 comes with only *all core* and *some secret/basic* modules, but all of
 
  - [Module_Cronjob](https://github.com/gizmore/phpgdo-cronjob) is *not* a core module anymore.
 
- - [Module_File](https://github.com/gizmore/phpgdo-file) is *not* a core module anymore.
+ - [Module_File](https://github.com/gizmore/phpgdo-file) is *not* a core module anymore. (thx flederohr)
 
  - [Module_CSS](https://github.com/gizmore/phpgdo-css) is *not* a core module anymore.
 

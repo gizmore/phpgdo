@@ -4,22 +4,23 @@ namespace GDO\Net;
 use GDO\Core\GDT_String;
 
 /**
- * IP column and rendering.
+ * IP datatype.
  * Current IP is assigned at the very bottom.
  * 
  * @author gizmore
- * @version 6.11.3
+ * @version 7.0.1
  * @since 6.0.0
  */
 final class GDT_IP extends GDT_String
 {
-    public $searchable = false;
-    
+// 	public function isWritable() : bool { return false; }
+	public function isSearchable() : bool { return false; }
+	
 	###############
 	### IP Util ###
 	###############
-	public static $CURRENT = null; # for connections like websocket too!
-	public static function current() { return self::$CURRENT; }
+	public static string $CURRENT = '::1'; # for connections like websocket too!
+	public static function current() : string { return self::$CURRENT; }
 	
 	/**
 	 * Get the IP netmask for a number of bits.
@@ -32,7 +33,7 @@ final class GDT_IP extends GDT_String
 	    return bindec(str_repeat('1', $bits) . str_repeat('0', 32 - $bits));
 	}
 	
-	public static function isLocal($ip=null)
+	public static function isLocal(string $ip=null) : bool
 	{
 		$ip = $ip ? $ip : self::$CURRENT;
 		return
@@ -47,7 +48,7 @@ final class GDT_IP extends GDT_String
 	###############
 	### Current ###
 	###############
-	public function useCurrent($useCurrent=true)
+	public function useCurrent(bool $useCurrent=true) : self
 	{
 		$initial = $useCurrent ? self::$CURRENT : null;
         return $this->initial($initial);
@@ -61,8 +62,6 @@ final class GDT_IP extends GDT_String
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	public string $pattern = "/^[.:0-9A-Fa-f]{3,45}$/";
-	public bool $writable = false;
-	public bool $editable = false;
 	public $icon = 'url';
 	
 	public function defaultLabel() : self { return $this->label('ip'); }
