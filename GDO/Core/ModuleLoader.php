@@ -5,7 +5,6 @@ use GDO\Util\Filewalker;
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
-use GDO\DB\Database;
 use GDO\Table\Sort;
 use GDO\CLI\CLIUtil;
 
@@ -447,7 +446,7 @@ final class ModuleLoader
 		# Query all module vars
 		try
 		{
-		    if (Database::instance())
+		    if (GDO_DB_ENABLED)
 		    {
     		    $query = GDO_ModuleVar::table()->select('module_name, mv_name, mv_value')->joinObject('mv_module');
         		if ($singleModuleName)
