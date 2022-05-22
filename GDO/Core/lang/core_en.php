@@ -36,7 +36,8 @@ return [
 	'err_gdo_no_gdt' => 'The GDO `%2$s` does not allow the GDT method `%1$s`.',
 	'err_table_gdo' => 'This GDO is not a table object: %s.',
 	'err_method_disabled' => 'This method is currently disabled.',
-
+	'err_method_is_stub' => 'This function is not implemented yet: %s',
+	
 	# Messages
 	
 	# Checkbox
