@@ -6,6 +6,8 @@
 
  - Less is more. there are no getters, just public attributes. Setters have the same name and allow chaining. This pattern is used across the whole project.
  
+ - Aggressive programming, not defensive. Do not check for null values or anything. If there is a tiny problem, a helpful error has to be shown automatically!
+ 
  
 ## GDOv7 Philosphy: Public attribute pattern
 
@@ -31,6 +33,7 @@ A complete list of traits is available here.
  
 ## GDOv7 Philosphy: Smart inheritance
 
+I really rarely had to write some stupid validator for a long time.
 
 ## GDOv7 Philosphy: Coding guidelines
 

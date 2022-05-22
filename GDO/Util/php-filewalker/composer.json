@@ -1,0 +1,19 @@
+{
+    "name": "gizmore/php-filewalker",
+    "description": "Traverse directories and apply callbacks to files and folders. Has pattern matching, maxdepth and two callbacks for both, file and directory.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "gizmore",
+            "email": "gizmore@wechall.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+		"php": ">=7.4"
+	},
+    "autoload": {
+        "psr-4": {"gizmore\\": "gizmore/"}
+    }
+}
