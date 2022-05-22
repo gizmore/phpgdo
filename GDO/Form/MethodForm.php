@@ -46,6 +46,8 @@ abstract class MethodForm extends Method
 				return $gdt->click();
 			}
 		});
+		
+		return $form;
 	}
 	
 }

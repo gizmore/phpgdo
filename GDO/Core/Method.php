@@ -15,6 +15,7 @@ use GDO\UI\WithDescription;
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.1
+ * @see WithParameters
  */
 abstract class Method #extends GDT
 {
@@ -332,6 +333,9 @@ abstract class Method #extends GDT
 		return $response;
 	}
 	
+	###########
+	### SEO ###
+	###########
 	public function setupSEO()
 	{
 		# SEO
@@ -362,8 +366,12 @@ abstract class Method #extends GDT
 		return 'DESCR';
 	}
 	
-	###
-	
+	###############
+	### Execute ###
+	###############
+	/**
+	 * Execute this method with all hooks.
+	 */
 	public function executeWithInit()
 	{
 		$db = Database::instance();
@@ -412,17 +420,18 @@ abstract class Method #extends GDT
 			{
 				$this->afterExecute();
 				GDT_Hook::callHook('AfterExecute', $this, $response);
-				if (!$response->hasError())
+				if (Application::isSuccess())
 				{
 					if ($transactional)
 					{
 						$db->transactionEnd();
+						$transactional = false;
 					}
 				}
 			}
 			
 			# Wrap transaction end
-			if ($response->hasError())
+			if (Application::isError())
 			{
 				if ($transactional)
 				{
