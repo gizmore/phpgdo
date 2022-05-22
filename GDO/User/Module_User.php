@@ -22,8 +22,7 @@ final class Module_User extends GDO_Module
 	public function getDependencies() : array
 	{
 		return [
-			'Crypto', 'Date', 'Language', 'Net',
-			'Session', 'Table', 'UI',
+			'Crypto', 'Date', 'Language', 'Net', 'Table', 'UI',
 		];
 	}
 	
