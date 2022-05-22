@@ -8,10 +8,10 @@ use GDO\Core\GDT_Int;
 use GDO\Core\GDT_Index;
 
 /**
- * Timezone mapping.
+ * Timezone mapping entities.
  * 
  * @author gizmore
- * @version 6.11.0
+ * @version 7.0.2
  * @since 6.10.7
  */
 final class GDO_Timezone extends GDO

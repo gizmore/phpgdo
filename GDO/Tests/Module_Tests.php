@@ -7,15 +7,17 @@ use PHPUnit\TextUI\Command;
 
 /**
  * Module that generates Tests from Methods automatically.
- * A good start to try many code paths.
+ * A good start to easily try many code paths.
  * 
  * @author gizmore
- * @version 6.10
- * @since 6.10
+ * @version 7.0.2
+ * @since 6.10.0
  */
 final class Module_Tests extends GDO_Module
 {
-    public int $priority = 5;
+    public int $priority = 1000; # very last
+
+    public string $version = "7.0.1"; # This version is the release / install level.
     
     public function onInstall() : void
     {
@@ -23,17 +25,17 @@ final class Module_Tests extends GDO_Module
     }
     
     /**
-     * Run a php unit test suite on a module /Test/ folder.
-     * @param GDO_Module $module
+     * Run a php unit test suite on a module's /Test/ folder.
      */
     public static function runTestSuite(GDO_Module $module) : void
     {
-    	$testDir = $module->filePath('Test');
+    	$testDir = $module->filePath('Test/');
     	if (FileUtil::isDir($testDir))
     	{
     		echo "Verarbeite Tests für {$module->getName()}\n";
     		$command = new Command();
-    		$command->run(['phpunit', $testDir], false);
+    		$exit = false;
+    		$command->run(['phpunit', $testDir], $exit);
     		echo "Done with {$module->getName()}\n";
     		echo "----------------------------------------\n";
     	}

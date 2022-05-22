@@ -7,20 +7,16 @@ use GDO\Core\GDT_Template;
 /**
  * Basic text panel.
  * 
- * @see GDT_Box
+ * @TODO document difference between display methods and render methods.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
+ * @see GDT_Box
  */
 class GDT_Panel extends GDT
 {
 	use WithText;
-	
-	public function renderCLI() : string
-	{
-		return $this->renderText() . "\n";
-	}
 	
 	public function renderHTML() : string
 	{

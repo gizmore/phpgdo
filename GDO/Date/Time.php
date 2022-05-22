@@ -8,7 +8,7 @@ use GDO\Core\GDO_Error;
 
 /**
  * Time helper class.
- * Using mysql dates with milliseconds.
+ * Using dates with milliseconds.
  * 
  * For GDT_Timestamp, the value is the microtime(true) timestamp.
  * For GDT_Date and GDT_DateTime, the value is a \DateTime object.
@@ -22,14 +22,13 @@ use GDO\Core\GDO_Error;
  * @TODO: Sometimes functions take a formatstring sometimes a formatname t(df_). Always use formatstring. fix all bugs.
  *
  * @author gizmore
- * @version 6.11.2
- * @since 1.0.0
+ * @version 7.0.0
+ * @since 2.0.0
  * 
  * @see GDT_Week
  * @see GDT_Date
  * @see GDT_DateTime
  * @see GDT_Timestamp
- * @see GDT_CreatedAt
  * @see GDT_Duration
  */
 final class Time
@@ -57,7 +56,6 @@ final class Time
 	/**
 	 * UTC DB ID. UTF-8 is always '1'.
 	 * @see GDO_Timezone
-	 * @var string
 	 */
 	const UTC = '1';
 	public static $UTC; # UTC Timezone object
@@ -320,7 +318,7 @@ final class Time
 	 * @param string $format
 	 * @return string
 	 */
-	public static function displayDateTimeISO($iso, DateTime $datetime=null, $format='short', $default_return='---', $timezone=null)
+	public static function displayDateTimeISO($iso, DateTime $datetime=null, $format='short', $default_return='---', $timezone=null) : string
 	{
 		if (!$datetime)
 		{
@@ -335,19 +333,20 @@ final class Time
 	###########
 	### Age ###
 	###########
-	public static function getDiff($date)
+	/**
+	 * Get date diff in seconds. @TODO make it two args for two dates, default now.
+	 */
+	public static function getDiff($date) : int
 	{
-		$a = new DateTime($date);
 		$b = new DateTime(self::getDate(Application::$MICROTIME));
+		$a = new DateTime($date);
 		return abs($b->getTimestamp() - $a->getTimestamp());
 	}
 	
 	/**
-	 * Get the age of a date.
-	 * @param string $date
-	 * @return int
+	 * Get the age of a date in seconds.
 	 */
-	public static function getAgo($date)
+	public static function getAgo(string $date) : int
 	{
 	    return $date ?
 	       Application::$MICROTIME - self::getTimestamp($date) : 
@@ -408,48 +407,55 @@ final class Time
 	/**
 	 * Return a human readable duration.
 	 * Example: 666 returns 11 minutes 6 seconds.
+	 * 
+	 * @TODO: Time::humanDuration() shall support ms.
+	 * 
 	 * @param $duration int in seconds.
 	 * @param $nUnits int how many units to display max.
 	 * @return string
 	 */
-	public static function humanDuration($duration, $nUnits=2)
+	public static function humanDuration($seconds, int $nUnits=2, bool $withMillis=false)
 	{
-		return self::humanDurationISO(Trans::$ISO, $duration, $nUnits);
+		return self::humanDurationISO(Trans::$ISO, $seconds, $nUnits, $withMillis);
 	}
 	
-	public static function humanDurationEN($duration, $nUnits=2)
+	public static function humanDurationEN($seconds, int $nUnits=2, bool $withMillis=false) : string
 	{
-	    return self::humanDurationISO('en', $duration, $nUnits);
+		return self::humanDurationISO('en', $seconds, $nUnits);
 	}
 	
-	public static function humanDurationISO($iso, $duration, $nUnits=2)
+	public static function humanDurationISO(string $iso, $seconds, int $nUnits=2, bool $withMillis=false) : string
 	{
-		static $cache = array();
+		static $cache = [];
 		if (!isset($cache[$iso]))
 		{
 			$cache[$iso] = array(
+// 				tiso($iso, 'tu_ms') => 1000,
 				tiso($iso, 'tu_s') => 60,
 				tiso($iso, 'tu_m') => 60,
 				tiso($iso, 'tu_h') => 24,
 				tiso($iso, 'tu_d') => 7,
-				tiso($iso, 'tu_w') => 52,
+				tiso($iso, 'tu_w') => 53,
+// 				tiso($iso, 'tu_mo') => 4,
 				tiso($iso, 'tu_y') => 1000000,
 			);
 		}
-		return self::humanDurationRaw($duration, $nUnits, $cache[$iso]);
+		return self::humanDurationRaw($seconds, $nUnits, $cache[$iso], $withMillis);
 	}
 	
-	public static function humanDurationRaw($duration, $nUnits, array $units)
+	/**
+	 * @param int|float $seconds
+	 */
+	public static function humanDurationRaw($seconds, int $nUnits, array $units, bool $withMillis=false)
 	{
-		$duration = (int)$duration;
-		$calced = array();
+		$calced = [];
 		foreach ($units as $text => $mod)
 		{
-			if (0 < ($remainder = $duration % $mod))
+			if (0 < ($remainder = $seconds % $mod))
 			{
 				$calced[] = $remainder.$text;
 			}
-			$duration = intval($duration / $mod);
+			$duration = intval($seconds / $mod, 10);
 			if ($duration === 0)
 			{
 				break;
@@ -474,10 +480,26 @@ final class Time
 		return implode(' ', $calced);
 	}
 	
-	public static function isValidDuration($string, $min, $max)
+	/**
+	 * @param integer|float|null $min
+	 * @param integer|float|null $max
+	 */
+	public static function isValidDuration(string $string, $min=null, $max=null) : bool
 	{
-		$duration = self::humanToSeconds($string);
-		return $duration >= $min && $duration <= $max;
+		$seconds = self::humanToSeconds($string);
+		if (!is_numeric($seconds))
+		{
+			return false;
+		}
+		if ( ($min !== null) && ($seconds < $min) )
+		{
+			return false;
+		}
+		if ( ($max !== null) && ($seconds > $max) )
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	########################
@@ -485,24 +507,26 @@ final class Time
 	########################
 	/**
 	 * Convert a human duration to seconds.
+	 * 
 	 * Input may be like 3d5h8m 7s.
-	 * There is no months, only minutes and weeks etc.
 	 * Also possible is 1 month 3 days or 1year2sec.
 	 * No unit means default unit, which is seconds.
+	 * 
 	 * Supported units are:
-	 * ms, millis, millisecond,
-	 * s, sec, second, seconds,
-	 * m, min, minute, minutes,
-	 * h, hour, hours,
-	 * d, day, days,
-	 * w, week, weeks,
-	 * mo, month, months,
-	 * y, year, years.
+	 * 
+	 *  - ms, millis, millisecond,
+	 *  - s, sec, second, seconds,
+	 *  - m, min, minute, minutes,
+	 *  - h, hour, hours,
+	 *  - d, day, days,
+	 *  - w, week, weeks,
+	 *  - mo, month, months,
+	 *  - y, year, years.
 	 * 
 	 * @param $duration string is the duration in human format.
-	 * @return float duration in seconds
+	 * @return float|int|null - duration in seconds
 	 * */
-	public static function humanToSeconds($duration)
+	public static function humanToSeconds(string $duration)
 	{
 		if (is_int($duration)) { return $duration; }
 		if (!is_string($duration)) { return 0.0; }
@@ -546,9 +570,9 @@ final class Time
 	#############
 	### Parts ###
 	#############
-	public static function getYear($date) { return substr($date, 0 , 4); }
-	public static function getMonth($date) { return substr($date, 5 , 2); }
-	public static function getDay($date) { return substr($date, 8 , 2); }
+	public static function getYear(string $date) { return substr($date, 0 , 4); }
+	public static function getMonth(string $date) { return substr($date, 5 , 2); }
+	public static function getDay(string $date) { return substr($date, 8 , 2); }
 	
 }
 	

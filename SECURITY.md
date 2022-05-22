@@ -1,4 +1,18 @@
-# Security Policy
+# GDOv7 SECURITY.md
+
+Security Policy file of GDOv7.
+
+
+## GDOv7 SECURITY.md: Known vulnerabilities.
+
+Some GDOv7 modules are currently vulnerable to package manager code injection via 3rd party package managers like yarn, composer, and more?
+
+Solution: Make sure that installed packages cannot be upgraded. by pinning a version! - no upgrades :(
+
+Solution: define protected/config.php:
+"GDO_SEAL_PACKAGES" to give the user a choice.
+Default this to true!
+
 
 ## Supported Versions
 

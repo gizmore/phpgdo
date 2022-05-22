@@ -3,7 +3,6 @@ namespace GDO\User;
 
 use GDO\DB\Query;
 use GDO\Core\GDO;
-use GDO\Core\GDT_Int;
 use GDO\Core\GDT_Object;
 
 /**
@@ -18,7 +17,7 @@ use GDO\Core\GDT_Object;
  * @TODO: rename fallbackCurrentUser()
  * 
  * @author gizmore
- * @version 6.11.1
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_User extends GDT_Object
@@ -42,8 +41,8 @@ class GDT_User extends GDT_Object
 	#############
 	### Ghost ###
 	#############
-	private $ghost = false;
-	public function ghost($ghost=true)
+	private bool $ghost = false;
+	public function ghost(bool $ghost=true) : self
 	{
 		$this->ghost = $ghost;
 		return $this;
@@ -52,8 +51,8 @@ class GDT_User extends GDT_Object
 	###############
 	### Current ###
 	###############
-	public $fallbackCurrentUser = false;
-	public function fallbackCurrentUser($fallbackCurrentUser=true)
+	public bool $fallbackCurrentUser = false;
+	public function fallbackCurrentUser(bool $fallbackCurrentUser=true) : self
 	{
 	    $this->fallbackCurrentUser = $fallbackCurrentUser;
 	    return $this;
@@ -62,8 +61,8 @@ class GDT_User extends GDT_Object
 	############
 	### Type ###
 	############
-	public $withType;
-	public function withType($withType)
+	public string $withType;
+	public function withType(string $withType) : self
 	{
 	    $this->withType = $withType;
 	    return $this;
@@ -72,8 +71,8 @@ class GDT_User extends GDT_Object
 	############
 	### Perm ###
 	############
-	public $withPermission;
-	public function withPermission($withPermission)
+	public string $withPermission;
+	public function withPermission(string $withPermission) : self
 	{
 	    $this->withPermission = $withPermission;
 	    return $this;
@@ -84,9 +83,8 @@ class GDT_User extends GDT_Object
 	#############
 	/**
 	 * Get selected user.
-	 * @return GDO_User
 	 */
-	public function getUser() { return $this->getValue(); }
+	public function getUser() : GDO_User { return $this->getValue(); }
 	
 	/**
 	 * @return GDO_User
@@ -107,13 +105,13 @@ class GDT_User extends GDT_Object
 		}
 	}
 	
-	public function displayVar(string $var = null) : string
-	{
-		if ($gdo = $this->toValue($var))
-		{
-			return $gdo->displayNameLabel();
-		}
-	}
+// 	public function displayVar(string $var = null) : string
+// 	{
+// 		if ($gdo = $this->toValue($var))
+// 		{
+// 			return $gdo->renderName();
+// 		}
+// 	}
 	
 	public function findByName($name)
 	{
@@ -138,10 +136,6 @@ class GDT_User extends GDT_Object
 	################
 	### Validate ###
 	################
-	/**
-	 * {@inheritDoc}
-	 * @see GDT_Int::validate()
-	 */
 	public function validate($value) : bool
 	{
 	    /** @var $user GDO_User **/
@@ -190,7 +184,7 @@ class GDT_User extends GDT_Object
 	{
 	    if ($user = $this->getUser())
 	    {
-	        return $user->displayNameLabel();
+	        return $user->renderUserName();
 	    }
 	    return t('unknown');
 	}

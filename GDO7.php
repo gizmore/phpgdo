@@ -26,11 +26,11 @@ global $GDT_LOADED;
 $GDT_LOADED = 0; # perf
 spl_autoload_register(function(string $name) : void
 {
-	if (str_starts_with($name, 'GDO\\'))
-	{
+	if (str_starts_with($name, 'GDO\\')) # 1 line if
+	{ # 2 lines path
 		$name = str_replace('\\', '/', $name) . '.php';
 		require GDO_PATH . $name;
-		global $GDT_LOADED;
+		global $GDT_LOADED; # 2 lines perf
 		$GDT_LOADED++;
 	}
 });
@@ -180,7 +180,7 @@ function hdr(string $header, bool $replace = true)
 	{
 		echo $header . PHP_EOL;
 	}
-	elseif ( !$app->isCLI())
+	elseif (!$app->isCLI())
 	{
 		header($header, $replace);
 	}

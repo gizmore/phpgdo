@@ -3,28 +3,33 @@ namespace GDO\Core;
 
 /**
  * Add GDT parameters.
- * Only named GDT are allowed.
+ * Override gdoParameters() in your methods.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.1
  * @see Method
  */
 trait WithParameters
 {
+	#################
+	### Protected ### - Override these
+	#################
 	/**
 	 * Get method parameters.
-	 * 
 	 * @return GDT[]
 	 */
 	public function gdoParameters() : array # @TODO: make gdoParameters() protected
 	{
-		return GDT::EMPTY_ARRAY;
+		return GDT::EMPTY_GDT_ARRAY;
 	}
 	
+	##################
+	### Parameters ###
+	##################
 	/**
-	 * Compose all parameters.
-	 * 
+	 * Compose all parameters. Not needed yet?
+	 *
 	 * @return GDT[]
 	 */
 	public function gdoComposeParameters() : array
@@ -32,7 +37,78 @@ trait WithParameters
 		return $this->gdoParameters();
 	}
 	
+	public function gdoHasParameter(string $key) : bool
+	{
+		return isset($this->gdoParameterCache()[$key]);
+	}
+	
+	/**
+	 * Get a parameter by key.
+	 * 
+	 * @throws GDO_Error
+	 * @throws GDO_ArgException
+	 */
+	public function gdoParameter(string $key, bool $validate=false, bool $throw=true) : ?GDT
+	{
+		if (!$this->gdoHasParameter($key))
+		{
+			if ($throw)
+			{
+				throw new GDO_Error('err_unknown_parameter', [html($key)]);
+			}
+			return null;
+		}
+
+		$gdt = $this->gdoParameterCache()[$key];
+		
+		if ($validate)
+		{
+			$value = $gdt->getValue();
+			if (!$gdt->validate($value))
+			{
+				if ($throw)
+				{
+					throw new GDO_ArgException($gdt);
+				}
+			}
+			return null;
+		}
+		
+		return $gdt;
+	}
+
+	/**
+	 * Get a parameter's GDT db var string.
+	 */
+	public function gdoParameterVar(string $key, bool $validate=false, string $default=null, bool $throw=true) : ?string
+	{
+		if ($gdt = $this->gdoParameter($key, $validate, $throw))
+		{
+			return $gdt->getVar();
+		}
+		return $default;
+	}
+	
+	public function gdoParameterValue(string $key, bool $validate=false, $default=null, bool $throw=true)
+	{
+		if ($gdt = $this->gdoParameter($key, $validate, $throw))
+		{
+			return $gdt->getValue();
+		}
+		return $default;
+	}
+	
+	#############
+	### Cache ###
+	#############
+	/**
+	 * @var GDT[string]
+	 */
 	public array $parameterCache;
+	
+	/**
+	 * @return GDT[string]
+	 */
 	public function &gdoParameterCache() : array
 	{
 		if (!isset($this->parameterCache))

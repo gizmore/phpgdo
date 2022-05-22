@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Page;
+use GDO\Perf\Method\Perf;
 
 /**
  * Application runtime data.
@@ -30,10 +31,15 @@ class Application extends GDT
 	{
 		self::time(microtime(true));
 	}
-	
+
+	/**
+	 * Perf headers as cheap as possible.
+	 */
 	public static function timingHeader()
 	{
 		hdr(sprintf('X-GDO-TIME: %.01fms', (microtime(true) - GDO_TIME_START) * 1000.0));
+		hdr(sprintf('X-GDO-MEMORY-MAX: %s', memory_get_peak_usage(false)));
+		hdr(sprintf('X-GDO-MEMORY-REAL: %s', memory_get_peak_usage(true)));
 	}
 	
 	#################

@@ -12,6 +12,14 @@ use GDO\Core\Expression\Parser;
  */
 final class GDT_Expression extends GDT
 {
+	###############
+	### Factory ###
+	###############
+	public static function fromLine(string $line) : self
+	{
+		$parser = new Parser($line);
+		return $parser->parse();
+	}
 	
 	public self $parent;
 	public function parent(self $parent) : self
@@ -34,20 +42,14 @@ final class GDT_Expression extends GDT
 		return $this;
 	}
 	
-	public function addInput(string $key, $input)
-	{
-		return $this->method->addField($key, $input);
-	}
+// 	public function addInput(string $key, $input)
+// 	{
+// 		return $this->method->addField($key, $input);
+// 	}
 
-	##################
-	### Expression ###
-	##################
-	public static function fromLine(string $line) : self
-	{
-		$parser = new Parser($line);
-		return $parser->parse();
-	}
-	
+	############
+	### Exec ###
+	############
 	public function execute()
 	{
 		return $this->method->execute();

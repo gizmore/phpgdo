@@ -8,24 +8,36 @@ use GDO\Form\GDT_Validator;
  * The base class for all GDT.
  * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Icon.
  * 
- * A GDT can, better, has to, support the following rendering functions / output formats;
+ * A GDT can, better, has to, support the following rendering mode functions a.k.a output formats;
  * 
- * CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/LIST/FILTER.
+ * RENDERING MODES: CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/LIST/FILTER
+ * 
+ * @TODO: Performance can be increased by avoiding WithFields() and using getAllFields()
+ * 
+ * The current rendering mode is stored in Application.
  * 
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.3
  * @since 5.0.0
  * @see GDO
- * @see GDT_Pre
  * @see GDT_Field
- * @see WithPHPJQuery
- * @see WithFormAttributes
+ * @see Application
  */
 abstract class GDT
 {
 	use WithModule;
 	
-	const EMPTY_ARRAY = [];
+	/**
+	 * @var GDT[]
+	 */
+	const EMPTY_GDT_ARRAY = [];
+	
+	/**
+	 * Really, for WithFields traversal rendering.
+	 * Else fields are rendered twice.
+	 * @var integer
+	 */
+	public static int $NESTING_LEVEL = 0; 
 	
 	###################
 	### Instanciate ###
@@ -43,14 +55,14 @@ abstract class GDT
 	
 	public function blankData() : array
 	{
-		return self::EMPTY_ARRAY;
+		return self::EMPTY_GDT_ARRAY;
 	}
 	
 	#############
 	### Debug ###
 	#############
-	public static bool $GDT_DEBUG = false;
-	public static int  $GDT_COUNT = 0;
+	public static bool $GDT_DEBUG = false; # debug can also be a backtrace for every alloc.
+	public static int  $GDT_COUNT = 0; # total allocs
 	
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
@@ -84,44 +96,58 @@ abstract class GDT
 	}
 	
 	##############
-	### Render ###
+	### Render ### 13 modes so far
 	##############
-	const RENDER_CLI = 0;
-	const RENDER_HTML = 1;
-	const RENDER_FORM = 2;
-	const RENDER_CELL = 3;
-	const RENDER_FILTER = 4;
-	const RENDER_HEADER = 5;
-	const RENDER_CARD = 6;
-	const RENDER_XML = 7;
-	const RENDER_JSON = 8;
-	const RENDER_BINARY = 9;
-	const RENDER_PDF = 10;
-	const RENDER_CHOICE = 11;
-	const RENDER_LIST = 12;
-	
-	public static int $RENDER_MODE = self::RENDER_HTML;
+	# Various output formats
+	const RENDER_NIL = 0; # null renderer
+	const RENDER_BINARY = 1;
+	const RENDER_CLI = 2;
+	const RENDER_PDF = 3;
+	const RENDER_XML = 4;
+	const RENDER_JSON = 5;
+	# HTML format rendering
+	const RENDER_HTML = 6;
+	const RENDER_CHOICE = 7; # @TODO rename to RENDER_OPTION
+	const RENDER_LIST = 8; # <li>
+	const RENDER_FORM = 9;
+	const RENDER_CARD = 10; # many ui frameworks use card?
+	const RENDER_CELL = 11;
+	const RENDER_FILTER = 12; # table head filter
+	const RENDER_HEADER = 13; # table head order @TODO rename to RENDER_ORDER
 	
 	public function render() : string { return $this->renderGDT(); }
 	
-	public function renderGDT() : string
+// 	const RENDER_HASHMAP = [
+// 		[$this, 'renderCLI'],
+// 	];
+	
+	/**
+	 * 
+	 * @return string|array
+	 */
+	public function renderGDT()
 	{
-		switch (self::$RENDER_MODE)
+		# Now comes a trick :)
+		# @TODO We simply call the function im map[$mode]
+// 		self::render$this->callRenderMap
+		switch (Application::instance()->mode)
 		{
+			# outputs
+			case self::RENDER_NIL: return null;
+			case self::RENDER_BINARY: return $this->renderBinary();
 			case self::RENDER_CLI: return $this->renderCLI();
+			case self::RENDER_PDF: return $this->renderPDF();
+			case self::RENDER_JSON: return $this->renderJSON();
+			case self::RENDER_XML: return $this->renderXML();
+			# html
 			case self::RENDER_HTML: return $this->renderHTML();
+			case self::RENDER_CHOICE: return $this->renderChoice();
+			case self::RENDER_LIST: return $this->renderList();
 			case self::RENDER_FORM: return $this->renderForm();
+			case self::RENDER_CARD: return $this->renderCard();
 			case self::RENDER_CELL: return $this->renderHTML();
 			case self::RENDER_FILTER: return $this->renderFilter('');
 			case self::RENDER_HEADER: return $this->renderHeader();
-			case self::RENDER_CARD: return $this->renderCard();
-			case self::RENDER_XML: return $this->renderXML();
-			case self::RENDER_JSON: return $this->renderJSON();
-			case self::RENDER_BINARY: return $this->renderBinary();
-			case self::RENDER_PDF: return $this->renderPDF();
-			case self::RENDER_CHOICE: return $this->renderChoice();
-			case self::RENDER_LIST: return $this->renderChoice();
-			default: return '';
 		}
 	}
 	
@@ -149,12 +175,21 @@ abstract class GDT
 		return $var ? html($var) : '';
 	}
 	
+	/**
+	 * Render this GDT in a specified rendering mode.
+	 * This should be the method to use to render a GDT.
+	 *  
+	 * @param int $mode
+	 * @return string|array - array for json
+	 */
 	public function renderMode(int $mode)
 	{
-		$old = self::$RENDER_MODE;
-		self::$RENDER_MODE = $mode;
+		self::$NESTING_LEVEL = 0;
+		$app = Application::instance();
+		$old = $app->mode;
+		$app->mode($mode);
 		$result = $this->render();
-		self::$RENDER_MODE = $old;
+		$app->mode($old);
 		return $result;
 	}
 	
@@ -339,7 +374,7 @@ abstract class GDT
 	
 	public function getFields() : array
 	{
-		return self::EMPTY_ARRAY;
+		return self::EMPTY_GDT_ARRAY;
 	}
 	
 	public function gdo(GDO $gdo = null) : self
@@ -498,11 +533,11 @@ abstract class GDT
 		}
 		return $default;
 	}
-	
 }
 
 if (def('GDT_GDO_DEBUG', false))
 {
+	# Clear trace log
 	GDT::$GDT_DEBUG = true;
 	Logger::log('gdt', '--- NEW RUN ---');
 	Logger::log('gdo', '--- NEW RUN ---');

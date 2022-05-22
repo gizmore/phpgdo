@@ -26,7 +26,7 @@ if (defined('GDO_CONFIGURED')) return; // double include
 $created = Time::getDate(microtime(true));
 $form->getFields('sitecreated')->var($created);
 
-foreach ($form->getFieldsRec() as $field) :
+foreach ($form->getAllFields() as $field) :
 
 if ($field instanceof GDT_Divider)
 {

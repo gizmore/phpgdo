@@ -16,7 +16,7 @@ use GDO\Core\GDO_Error;
  * @TODO: Trans: In early loading state errors are handled badly.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 1.0.0
  * @see Cache
  */
@@ -64,7 +64,6 @@ final class Trans
 	
 	/**
 	 * Set the current ISO
-	 * @param string $iso
 	 */
 	public static function setISO(string $iso) : void
 	{
@@ -80,9 +79,10 @@ final class Trans
 	
 	/**
 	 * Show number of registered translation data base pathes.
+	 * In case we used the filecache this is set to 1.
 	 * @return int
 	 */
-	public static function numFiles()
+	public static function numFiles() : int
 	{
 	    if (self::$HAS_LOADED_FILE_CACHE)
 	    {
@@ -93,7 +93,6 @@ final class Trans
 
 	/**
 	 * Add a translation file to the language file pathes.
-	 * @param string $path
 	 */
 	public static function addPath(string $path) : void
 	{
@@ -103,9 +102,8 @@ final class Trans
 	/**
 	 * Set inited and clear cache.
 	 * @TODO separate calls. maybe cache should not be cleared quickly? no idea. Make performance tests for language loading on init.
-	 * @param bool $inited
 	 */
-	public static function inited(bool $inited) : void
+	public static function inited(bool $inited = true) : void
 	{
 		self::$INITED = $inited;
 	    self::$CACHE = [];
@@ -113,7 +111,6 @@ final class Trans
 	
 	/**
 	 * Get the cache for an ISO.
-	 * @param string $iso
 	 * @return string[string]
 	 */
 	public static function getCache(string $iso) : array
@@ -123,7 +120,6 @@ final class Trans
 	
 	/**
 	 * Load a translation data into and from cache.
-	 * @param string $iso
 	 * @return string[string]
 	 */
 	public static function &load(string $iso) : array
@@ -137,9 +133,6 @@ final class Trans
 	
 	/**
 	 * Translate into current ISO.
-	 * @param string $key
-	 * @param array $args
-	 * @return string
 	 */
 	public static function t(string $key, array $args=null) : string
 	{
@@ -147,11 +140,7 @@ final class Trans
 	}
 	
 	/**
-	 * Translate into an language ISO.
-	 * @param string $iso
-	 * @param string $key
-	 * @param array $args
-	 * @return string
+	 * Translate key into a language.
 	 */
 	public static function tiso(string $iso, string $key, array $args=null) : string
 	{
@@ -165,7 +154,7 @@ final class Trans
 				if (!($text = @vsprintf($text, $args)))
 				{
 				    self::$MISS++;
-				    self::$MISSING[] = $key;
+				    self::$MISSING[$key] = $key;
 					$text = $cache[$key] . ': ';
 					$text .= json_encode($args);
 				}
@@ -174,7 +163,7 @@ final class Trans
 		else # Fallback key + printargs
 		{
 		    self::$MISS++;
-		    self::$MISSING[] = $key;
+		    self::$MISSING[$key] = $key;
 		    $text = $key;
 			if ($args)
 			{
@@ -269,7 +258,7 @@ final class Trans
 	    if ($withMiss && (!$result))
 	    {
 	        self::$MISS++;
-	        self::$MISSING[] = $key;
+	        self::$MISSING[$key] = $key;
 	    }
 	    return $result;
 	}
@@ -285,7 +274,6 @@ final class Trans
 		$cache = self::load($iso);
 		return isset($cache[$key]);
 	}
-
 }
 
 #############

@@ -114,7 +114,7 @@ abstract class Method #extends GDT
 // 	 */
 // 	public function gdoParameters() : array
 // 	{
-// 		return GDT::EMPTY_ARRAY;
+// 		return GDT::EMPTY_GDT_ARRAY;
 // 	}
 	
 // 	/**

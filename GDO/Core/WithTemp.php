@@ -5,7 +5,7 @@ namespace GDO\Core;
  * Add temp variables to a GDO.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see GDO
  * @see GDT
@@ -15,17 +15,28 @@ trait WithTemp
 {
 	public array $temp;
 	
+	/**
+	 * Reset all temp vars.
+	 */
 	public function tempReset() : self
 	{
 		unset($this->temp);
 		return $this;
 	}
 	
-	public function tempGet(string $key)
+	/**
+	 * Get a temp var.
+	 * @param mixed $default
+	 * @return string
+	 */
+	public function tempGet(string $key, $default=null)
 	{
-		return isset($this->temp) ? @$this->temp[$key] : null;
+		return isset($this->temp) ? @$this->temp[$key] : $default;
 	}
 	
+	/**
+	 * @param mixed $value
+	 */
 	public function tempSet(string $key, $value) : self
 	{
 		if (!isset($this->temp))
@@ -36,7 +47,7 @@ trait WithTemp
 		return $this;
 	}
 	
-	public function tempUnset($key) : self
+	public function tempUnset(string $key) : self
 	{
 		unset($this->temp[$key]);
 		return $this;

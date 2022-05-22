@@ -8,10 +8,12 @@ use function PHPUnit\Framework\assertStringNotContainsString;
 
 /**
  * Date and time tests.
+ * 
  * - check millisecond support
+ * 
  * @author gizmore
- * @version 6.10
- * @since 6.10
+ * @version 7.0.2
+ * @since 6.10.1
  */
 final class CalendarTest extends TestCase
 {

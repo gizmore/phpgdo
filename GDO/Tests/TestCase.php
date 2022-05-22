@@ -72,7 +72,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         # Set gizmore user
         if (Module_User::instance()->isPersisted())
         {
-            $user = count(GDT_MethodTest::$USERS) ? GDT_MethodTest::$USERS[0] : GDO_User::system();
+            $user = count(GDT_MethodTest::$TEST_USERS) ? GDT_MethodTest::$TEST_USERS[0] : GDO_User::system();
             $this->user($user);
             if (!$user->isSystem())
             {
@@ -92,9 +92,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function restoreUserPermissions(GDO_User $user) : void
     {
-        if (count(GDT_MethodTest::$USERS))
+        if (count(GDT_MethodTest::$TEST_USERS))
         {
-        	if ($user->getID() === GDT_MethodTest::$USERS[0]->getID())
+        	if ($user->getID() === GDT_MethodTest::$TEST_USERS[0]->getID())
             {
                 $table = GDO_UserPermission::table();
                 $table->grant($user, 'admin');
@@ -127,11 +127,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
     ###################
     protected function ghost() : GDO_User { return GDO_User::ghost(); }
     protected function system() : GDO_User { return GDO_User::system(); } # 1
-    protected function gizmore() : GDO_User { return GDT_MethodTest::$USERS[0]; } # user_id: 2
-    protected function peter() : GDO_User { return GDT_MethodTest::$USERS[1]; } # 3
-    protected function monica() : GDO_User { return GDT_MethodTest::$USERS[2]; } # 4
-    protected function gaston() : GDO_User { return GDT_MethodTest::$USERS[3]; } # 5
-    protected function sven() : GDO_User { return GDT_MethodTest::$USERS[4]; } # 6
+    protected function gizmore() : GDO_User { return GDT_MethodTest::$TEST_USERS[0]; } # user_id: 2
+    protected function peter() : GDO_User { return GDT_MethodTest::$TEST_USERS[1]; } # 3
+    protected function monica() : GDO_User { return GDT_MethodTest::$TEST_USERS[2]; } # 4
+    protected function gaston() : GDO_User { return GDT_MethodTest::$TEST_USERS[3]; } # 5
+    protected function sven() : GDO_User { return GDT_MethodTest::$TEST_USERS[4]; } # 6
     
     protected function userGhost() : GDO_User { return $this->user(GDO_User::ghost()); } # ID 0
     protected function userSystem() : GDO_User { return $this->user(GDO_User::system()); } # ID 1 

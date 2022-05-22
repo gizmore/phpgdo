@@ -1,9 +1,8 @@
-# GDOv7 Unit Tests
+# phpgdo-tests
 
-Unit test helper module for gdo6.
+Unit test helper module for GDOv7
 Launches quite early some basic test setup.
-Test users are getting created.
-Permissions are tested.
+Test users are getting created as soon as possilbe (Module_Language, priority 2, directly after Module_Core).
 This is a core module.
 
-See [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods) to generate automatically created tests for all methods, if possible.
+It also generates tests automagically for all trivial pluggable methods.

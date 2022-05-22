@@ -3,10 +3,9 @@ namespace GDO\Core;
 
 /**
  * Add children fields to a GDT.
- * Add $inputs array to allow serving of all children.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.1
  * @see GDT
  */
@@ -32,6 +31,12 @@ trait WithFields
 	 */
 	public array $fields;
 	
+	/**
+	 * Flattened fields.
+	 * @var GDT[]
+	 */
+	public array $fieldsFlat;
+	
 	public function addFields(GDT...$gdts) : self
 	{
 		foreach ($gdts as $gdt)
@@ -47,18 +52,39 @@ trait WithFields
 	
 	public function addField(GDT $gdt) : self
 	{
+		# Init
 		if (!isset($this->fields))
 		{
 			$this->fields = [];
+			$this->fieldsFlat = [];
 		}
-		
+
+		# Add the field
 		if ($name = $gdt->getName())
 		{
 			$this->fields[$name] = $gdt;
+// 			$this->fieldsFlat[$name] = $gdt;
 		}
 		else
 		{
 			$this->fields[] = $gdt;
+// 			$this->fieldsFlat[] = $gdt;
+		}
+		
+		# Add children in flatten only
+		if ($gdt->hasFields())
+		{
+			$me = $this;
+			$gdt->withFields(function(GDT $gdt) use ($me) {
+				if ($name = $gdt->getName())
+				{
+					$me->fieldsFlat[$name] = $gdt;
+				}
+				else
+				{
+					$me->fieldsFlat[] = $gdt;
+				}
+			});
 		}
 		
 		return $this;
@@ -71,12 +97,21 @@ trait WithFields
 	
 	public function getFields() : array
 	{
-		return isset($this->fields) ? $this->fields : GDT::EMPTY_ARRAY;
+		return isset($this->fields) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
 	}
 	
 	public function getField($key) : GDT
 	{
 		return $this->fields[$key];
+	}
+	
+	/**
+	 * Get all fields in a flattened array.
+	 * @return GDT[]
+	 */
+	public function getAllFields() : array
+	{
+		return isset($this->fieldsFlat) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
 	}
 	
 	###########################
@@ -86,7 +121,7 @@ trait WithFields
 	 * Iterate recusively over the fields with a callback.
 	 * If the result is truthy, break the loop early and return the result.
 	 */
-	public function withFields($callback)
+	public function withFields($callback, bool $returnEarly=false)
 	{
 		if (isset($this->fields))
 		{
@@ -94,11 +129,14 @@ trait WithFields
 			{
 				if ($result = $callback($gdt))
 				{
-					return $result;
+					if ($returnEarly)
+					{
+						return $result;
+					}
 				}
 				if ($gdt->hasFields())
 				{
-					$gdt->withFields($callback);
+					return $gdt->withFields($callback);
 				}
 			}
 		}
@@ -144,9 +182,13 @@ trait WithFields
 	public function renderFields() : string
 	{
 		$rendered = '';
-		$this->withFields(function(GDT $gdt) use (&$rendered) {
-			$rendered .= $gdt->render();
-		});
+		if (self::$NESTING_LEVEL === 0)
+		{
+			self::$NESTING_LEVEL++;
+			$this->withFields(function(GDT $gdt) use (&$rendered) {
+				$rendered .= $gdt->render();
+			});
+		}
 		return $rendered;
 	}
 	

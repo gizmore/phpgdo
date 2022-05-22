@@ -2,51 +2,41 @@
 namespace GDO\UI;
 
 /**
- * WithText GDT trait.
+ * Adds text attributes.
  * 
- * Adds $text attribute.
  * Adds text($key, $args) for I18n version
- * Adds textRaw($s) for raw version
+ * Adds textRaw($text) for raw version
  * Adds textUnescaped() for skipping escaping.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
- * @see GDO7
+ * @see GDO7 - for global functions
  */
 trait WithText
 {
-	public $textKey;
-	public $textArgs;
+	public string $textRaw;
+	public string $textKey;
+	public ?array $textArgs;
+	public bool $textEscaped = true;
+	
 	public function text(string $key, array $args=null) : self
 	{
-		$this->textRaw = null;
+		unset($this->textRaw);
 	    $this->textKey = $key;
 	    $this->textArgs = $args;
 	    return $this;
 	}
 	
-	public $textRaw;
 	public function textRaw(string $text) : self
 	{
-	    $this->textRaw = $text;
-	    $this->textKey = null;
-	    $this->textArgs = null;
+		$this->textRaw = $text;
+		unset($this->textKey);
+		unset($this->textArgs);
 	    return $this;
 	}
 
-	public $textEscaped = true;
-	public function textEscaped(bool $escaped) : self
-	{
-	    $this->textEscaped = $escaped;
-	    return $this;
-	}
-	public function textUnescaped(bool $unescaped=true) : self
-	{
-		return $this->textEscaped(!$unescaped);
-	}
-	
-	public function noText() : self
+	public function textNone() : self
 	{
 		unset($this->textRaw);
 		unset($this->textKey);
@@ -54,26 +44,40 @@ trait WithText
 		return $this;
 	}
 	
+	public function textEscaped(bool $escaped) : self
+	{
+	    $this->textEscaped = $escaped;
+	    return $this;
+	}
+	
+	public function textUnescaped(bool $unescaped=true) : self
+	{
+		return $this->textEscaped(!$unescaped);
+	}
+	
 	##############
 	### Render ###
 	##############
 	public function hasText() : bool
 	{
-		return $this->textKey || $this->textRaw;
+		return isset($this->textKey) || isset($this->textRaw);
 	}
 	
 	public function renderText() : string
 	{
-		$t = $this->textRaw;
-		if ($this->textKey)
+		if (isset($this->textKey))
 		{
-			$t = t($this->textKey, $this->textArgs);
+			$txt = t($this->textKey, $this->textArgs);
 		}
-		if ($this->textEscaped)
+		elseif (isset($this->textRaw))
 		{
-			$t = html($t);
+			$txt = $this->textRaw;
 		}
-		return $t;
+		else
+		{
+			return '';
+		}
+		return $this->textEscaped ? html($txt) : $txt;
 	}
 	
 }

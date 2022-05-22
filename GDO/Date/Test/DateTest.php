@@ -8,8 +8,10 @@ use function PHPUnit\Framework\assertTrue;
 
 /**
  * Test date and time.
+ * 
  * @see Einstein.A
  * @author gizmore
+ * @version 7.0.2
  * @since 6.10.4
  */
 final class DateTest extends TestCase

@@ -3,7 +3,6 @@ namespace GDO\Language;
 
 use GDO\Core\GDO_Module;
 use GDO\Util\Strings;
-use GDO\Core\Application;
 use GDO\User\GDO_User;
 use GDO\Session\GDO_Session;
 use GDO\Core\Website;
@@ -16,7 +15,7 @@ use GDO\Net\GDT_Url;
 /**
  * Selfmade cheap Internationalization Module.
  * 
- * - Detect language by cookie or http_accept_language
+ * - Detect language by cookie, parameter or http_accept_language
  * 
  * - Provide lang switcher via cookie
  * - Provide language select
@@ -27,7 +26,7 @@ use GDO\Net\GDT_Url;
  * @see GDO_Language
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 2.0.0
  */
 final class Module_Language extends GDO_Module
@@ -35,16 +34,7 @@ final class Module_Language extends GDO_Module
 	##############
 	### Module ###
 	##############
-	
-	public int $priority = 2;
-	
-	public function getClasses() : array
-	{
-		return [
-			GDO_Language::class,
-		];
-	}
-
+	public int $priority = 2; # has to be installed asap.
 	public function onInstall() : void { LanguageData::onInstall(); }
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/language'); }
 
@@ -95,14 +85,12 @@ final class Module_Language extends GDO_Module
 	############
 	### Init ###
 	############
+	/**
+	 * Add meta tag on init.
+	 */
 	public function onInit() : void
 	{
-// 	    $iso = $this->detectISO();
-// 	    Trans::setISO($iso);
-	    if (Application::instance()->isWebserver())
-	    {
-	        Website::addMeta(['language', Trans::$ISO, 'name']);
-	    }
+        Website::addMeta(['language', Trans::$ISO, 'name']);
 	}
 	
 	public function onInitSidebar() : void
@@ -127,7 +115,7 @@ final class Module_Language extends GDO_Module
     		$href = GDT_Url::absolute($href);
     		Javascript::addJS($href);
     
-    		# Add cheap translation engine.
+    		# Add cheap js translation engine.
     		$this->addJS('js/gdo-trans.js');
 	    }
 	}

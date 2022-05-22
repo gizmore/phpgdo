@@ -114,7 +114,7 @@ class UserEdit extends MethodForm
 	{
 		$this->user->delete();
 		GDT_Hook::callWithIPC("UserDeleted", $this->user);
-		return Website::redirectMessage('msg_user_deleted', [$this->user->displayNameLabel()], href('Admin', 'Users'));
+		return Website::redirectMessage('msg_user_deleted', [$this->user->renderUserName()], href('Admin', 'Users'));
 	}
 	
 }

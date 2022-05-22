@@ -70,7 +70,7 @@ class GDT_AntiCSRF extends GDT_Hidden
 // 	    $time = date('YmdHis', $time);
 	    $time = 1337;
 	    $hash = sprintf('%s_%s_%s_%s_%s',
-	        GDO_SALT, $user->displayNameLabel(),
+	        GDO_SALT, $user->renderUserName(),
             $user->getVar('user_email'),
 	        $user->getVar('user_password'), $time);
 	    return substr(sha1($hash), 0, self::KEYLEN);

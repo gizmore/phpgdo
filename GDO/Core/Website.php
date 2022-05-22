@@ -6,7 +6,6 @@ use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
-use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Success;
 
 /**
@@ -111,19 +110,11 @@ final class Website
 	public static function addInlineCSS(string $css)
 	{
 		CSS::addInline($css);
-// 		if (class_exists('GDO\\CSS\\Module_CSS', false))
-// 		{
-// 			\GDO\CSS\Minifier::addInline($css);
-// 		}
 	}
 	
 	public static function addCSS(string $path)
 	{
 		CSS::addFile($path);
-// 		if (class_exists('GDO\\CSS\\Module_CSS', false))
-// 		{
-// 			\GDO\CSS\Minifier::addFile($path);
-// 		}
 	}
 	
 	/**
@@ -315,33 +306,33 @@ final class Website
 	####################
 	### Top Response ###
 	####################
-	public static $TOP_RESPONSE = null;
-	public static function topResponse()
-	{
-	    if (self::$TOP_RESPONSE === null)
-	    {
-	        self::$TOP_RESPONSE = GDT_Container::make('topResponse');
-	        if (!Application::instance()->isInstall())
-	        {
-	            if ($message = GDO_Session::get('redirect_message'))
-	            {
-	                GDO_Session::remove('redirect_message');
-	                self::$TOP_RESPONSE->addField(GDT_Success::make()->textRaw($message));
-	            }
-	            if ($message = GDO_Session::get('redirect_error'))
-	            {
-	                GDO_Session::remove('redirect_error');
-	                self::$TOP_RESPONSE->addField(GDT_Error::make()->textRaw($message));
-	            }
-	        }
-	    }
-	    return self::$TOP_RESPONSE;
-	}
+// 	public static $TOP_RESPONSE = null;
+// 	public static function topResponse()
+// 	{
+// 	    if (self::$TOP_RESPONSE === null)
+// 	    {
+// 	        self::$TOP_RESPONSE = GDT_Container::make('topResponse');
+// 	        if (!Application::instance()->isInstall())
+// 	        {
+// 	            if ($message = GDO_Session::get('redirect_message'))
+// 	            {
+// 	                GDO_Session::remove('redirect_message');
+// 	                self::$TOP_RESPONSE->addField(GDT_Success::make()->textRaw($message));
+// 	            }
+// 	            if ($message = GDO_Session::get('redirect_error'))
+// 	            {
+// 	                GDO_Session::remove('redirect_error');
+// 	                self::$TOP_RESPONSE->addField(GDT_Error::make()->textRaw($message));
+// 	            }
+// 	        }
+// 	    }
+// 	    return self::$TOP_RESPONSE;
+// 	}
 	
-	public static function renderTopResponse()
-	{
-	    return self::topResponse()->render();
-	}
+// 	public static function renderTopResponse()
+// 	{
+// 	    return self::topResponse()->render();
+// 	}
 	
 	#####################
 	### JSON Response ###

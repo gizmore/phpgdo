@@ -91,7 +91,7 @@ trait WithValue
 		}
 		else
 		{
-			$var = $this->var;
+			$var = parent::getVar();
 		}
 		return $var;
 	}

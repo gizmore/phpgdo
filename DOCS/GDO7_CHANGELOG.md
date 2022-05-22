@@ -4,6 +4,15 @@ Please read from bottom to top :)
 
 Please refer to the gdo6 [GDO_HISTORY.md](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md) for earlier versions.
 
+A @version in a source file denotes the API level that is implemented in src.
+
+A version in the module database denotes the 
+
+## 7.0.5 / scheduled 9.Aug.2022
+
+ GDOv7.0.5 will introduce full support for french.
+Just kidding :)
+
 
 ## 7.0.4 / scheduled 21.Jul.2022
 
@@ -30,12 +39,33 @@ GDOv7.0.3 will come with a polished Bootstrap5 theme and feature a new demo site
 
 ## 7.0.2 / scheduled 19.Jun.2022
 
-GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Write methods once and use them everywhere.
+GDOv7.0.2 will have HTTP/WWW support beside CLI and JSON. Write methods once and use them everywhere!
+
+ - GDO_User->displayNameLabel() and displayName() has both been renamed to renderUserName(). How to render link when Profile enabled?
+
+ - [GDT_ACL](../GDO/User/GDT_ACL.php)
+ has been moved to
+ [Module_User](../GDO/User/Module_User.php) ... *finally*
+
+ - [AutomatedTests](../GDO/Tests/Test/AutomatedTests)
+now test all rendering methods on all
+[GDO](GDO7_GDO.md) + [GDT](GDO7_GDT.md) automatically.
+Tests are performed With plugged and unplugged initials.
+
+ - [AutomatedTests](../GDO/Tests/Test/AutomatedTests)
+now test all GDO to be gdoSaveable().
 
 
 ## 7.0.1 / scheduled 05.Jun.2022
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
+
+ - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again.
+
+ - [Module_TestMethods](https://github.com/gizmore/gdo6-test-methods) 
+ has been merged into
+ [Module_Tests](https://github.com/gizmore/phpgdo/tree/main/GDO/Tests).
+ This module features automated test case generation.
 
  - [Module_LoginAs](https://github.com/gizmore/gdo6-login-as) has been merged into [Module_Login](https://github.com/gizmore/phpgdo-login).
 
@@ -54,13 +84,15 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
  - New / first [GDOv7 Mailer module](https://github.com/gizmore/phpgdo-mailer-gdo). A mailer for symfony or better will follow.
  
  - [Module_DOMPDF](https://github.com/gizmore/phpgdo-dompdf) replaces [Module_TCPDPF](https://github.com/gizmore/phpgdo-dompdf) (which never got finished). We are now using a HTML to PDF strategy. New GDT render method renderPDF() which defaults renderHTML(). It's the first module to use composer as 3rd party library provider.
-
+ 
 
 ## 7.0.0 / release 22.May.2022
 
 A fresh restart of the GDO project.
 
-GDOv7.0.0 comes with only *all core* and *some secret/basic* modules, but all of them cleaned up and now unit tested. The goal for this release is 100% test passes for the core.
+GDOv7.0.0 comes with only the core modules, but all of them cleaned up and now unit tested. The goal for this release is 100% test passes for the core.
+
+
 
  - Confusion resolved. RENDER_LIST is for <ul> and RENDER_CHOICE is for <option>.
 

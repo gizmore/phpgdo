@@ -16,14 +16,14 @@ final class VirtualFieldTest extends TestCase
         $mod = Module_Core::instance();
         $gdt = GDT_ModuleVersionFS::make()->gdo($mod);
         $html = $gdt->displayVar($gdt->getVar());
-        assertEquals("7.0.0", $html);
+        assertEquals($mod->version, $html, 'Test GDT_ModuleVersionFS for testing GDT_Virtual implementation.');
     }
     
     public function testCustomField()
     {
         $mod = GDO_Module::blank(['foo' => 'bar']);
-        assertFalse($mod->hasVar('foo'), 'You cannot assign custom fields via blank.');
-        assertTrue($mod->hasColumn('module_name'), 'A GDO has valid GDT fields.');
+        assertFalse($mod->hasVar('foo'), 'You cannot assign GDT_Virtual fields via blank.');
+        assertTrue($mod->hasColumn('module_name'), 'GDT_Virtual has is valid GDO/GDT fields.');
     }
     
 }

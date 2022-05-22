@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Language\Method;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\Website;
 use GDO\Language\GDT_Language;
@@ -16,7 +15,7 @@ use GDO\Net\GDT_Url;
  * Stores your choice in your session.
  * 
  * @author gizmore
- * @version 6.11.3
+ * @version 7.0.1
  * @since 6.9.0
  * 
  * @see Module_Language

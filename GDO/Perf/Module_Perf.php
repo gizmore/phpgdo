@@ -8,11 +8,12 @@ use GDO\UI\GDT_Page;
 
 /**
  * Performance statistics in footer.
+ * 
  * Config perf_bottom_bar to restrict footer to staff or all or none.
  * This module is part of the gdo7 core.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.3
  * @since 5.3.0
  * 
  * @see GDT_PerfBar
@@ -27,10 +28,10 @@ final class Module_Perf extends GDO_Module
     public function getConfig() : array
     {
         return [
-        	GDT_Enum::make('perf_bottom_bar')->enumValues('all', 'staff', 'none')->initial('staff'),
+        	GDT_Enum::make('perf_bottom_bar')->enumValues('all', 'none', 'staff')->initial('staff'),
         ];
     }
-    public function cfgBottomPermission() : string { return $this->getConfigVar('perf_bottom_bar'); }
+    public function cfgBottomPermission() : string { return $this->getConfigValue('perf_bottom_bar'); }
 
     ############
     ### Hook ###
@@ -40,16 +41,20 @@ final class Module_Perf extends GDO_Module
      */
     public function onInitSidebar() : void
 	{
-	    switch ($this->cfgBottomPermission())
-	    {
-	        case 'none': $show = false; break;
-	        case 'staff': $show = GDO_User::current()->hasPermission('staff'); break;
-	        case 'all': $show = true; break;
-	    }
-	    if ($show)
-	    {
-	        GDT_Page::instance()->bottomBar()->addField(GDT_PerfBar::make('perf'));
-	    }
+    	if ($this->shouldShow())
+    	{
+    		GDT_Page::instance()->bottomBar()->addField(GDT_PerfBar::make('perf'));
+    	}
+	}
+	
+	private function shouldShow() : bool
+	{
+		switch ($this->cfgBottomPermission())
+		{
+			case 'all': return true;
+			case 'none': return false;
+			case 'staff': return GDO_User::current()->hasPermission('staff');
+		}
 	}
 
 }

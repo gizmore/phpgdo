@@ -11,6 +11,7 @@ use GDO\Util\FileUtil;
 use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
 use GDO\Net\GDT_Url;
+use GDO\Language\GDO_Language;
 
 /**
  * The core module holds some generic config as well as the global revision string.
@@ -34,7 +35,7 @@ final class Module_Core extends GDO_Module
 	 * Counts up to be in sync and poison caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.1-r1029';
+	const GDO_REVISION = '7.0.1-r1337';
 	
 	##############
 	### Module ###
@@ -55,6 +56,7 @@ final class Module_Core extends GDO_Module
 			GDO_Hook::class,
 			GDO_Module::class,
 			GDO_ModuleVar::class,
+			GDO_Language::class,
 			GDO_Permission::class,
 			GDO_Timezone::class,
 			GDO_User::class,
@@ -99,7 +101,10 @@ final class Module_Core extends GDO_Module
 	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
 	public function cfgShowImpressum() : string { return $this->getConfigVar('show_impressum'); }
 	public function cfgShowPrivacy() : string { return $this->getConfigVar('show_privacy'); }
-	public function cfgAssetVersion() : Version { return $this->getConfigValue('asset_revision'); }
+	public function cfgAssetVersion() : Version
+	{
+		return $this->getConfigValue('asset_revision');
+	}
 	public function cfgAllowGuests() : string { return $this->getConfigVar('allow_guests'); }
 	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
 	public function cfgMail403() : string { return $this->getConfigVar('mail_404'); }

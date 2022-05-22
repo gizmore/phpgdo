@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Language\tpl\cell;
 use GDO\Language\GDO_Language;
 /**
  * @var $language GDO_Language

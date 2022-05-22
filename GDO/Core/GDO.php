@@ -9,8 +9,12 @@ use GDO\Date\Time;
 use GDO\User\GDO_User;
 
 /**
- * A Data exchange object.
- * A GDO is both, a table and an entity. The table entity just holds the caches and GDT. The other entitites have $gdoVars.
+ * A data exchange object?.
+ * 
+ * A GDO is both, a table and an entity.
+ * The table gdo just holds the caches and GDT instances.
+ * The other entitites have $gdoVars. A DB row.
+ * 
  * An array of db vars, which values are backed by a database and caches.
  * DB vars are stored in the $gdoVars array.
  * When a GDT column is used, the $gdoVars are reference-copied into the GDT,
@@ -1654,9 +1658,12 @@ abstract class GDO extends GDT
 	}
 	
 	##############
-	### Render ###
-	##############
-	# GDOs are GDTs. they use the exact same rendering pipeline.
+	### Render ### GDOs are GDT. They use the same rendering scheme and pipeline.
+	############## 
+	public function renderChoice() : string
+	{
+		return $this->gdoHumanName() . '#' . $this->getID();
+	}
 	
 	###############
 	### Sorting ###

@@ -17,6 +17,9 @@ use function PHPUnit\Framework\assertEquals;
  */
 final class ResponseTest extends TestCase
 {
+	/**
+	 * Test nested WithFields.
+	 */
     public function testRendersNestedFields()
     {
         $r1 = GDT_Response::make();
@@ -27,15 +30,16 @@ final class ResponseTest extends TestCase
         $r2->addField($p2);
         $c = GDT_Container::make();
         $p3 = GDT_Paragraph::make()->textRaw('par3');
+        # 1 -> 2 -> 3
         $c->addField($p3);
         $r2->addField($c);
         $r1->addField($r2);
         
         $html = $r1->renderMode(GDT::RENDER_FORM);
         
-        assertEquals(1, substr_count($html, 'par1'), $html, 'Test nested container rendering pass 1');
-        assertEquals(1, substr_count($html, 'par2'), $html, 'Test nested container rendering pass 2');
-        assertEquals(1, substr_count($html, 'par3'), $html, 'Test nested container rendering pass 3');
+        assertEquals(1, substr_count($html, 'par1'), 'Test nested container rendering pass 1');
+        assertEquals(1, substr_count($html, 'par2'), 'Test nested container rendering pass 2');
+        assertEquals(1, substr_count($html, 'par3'), 'Test nested container rendering pass 3');
     }
     
 }

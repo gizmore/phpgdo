@@ -6,7 +6,7 @@ use GDO\UI\GDT_SearchField;
 
 /**
  * Generic autocompletion base code.
- * Override 1 method for full implemented completion of a GDO.
+ * Override 1 method for full implemented completion of a GDT.
  * 
  * @author gizmore
  * @version 7.0.0

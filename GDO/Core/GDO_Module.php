@@ -17,7 +17,7 @@ use GDO\Table\GDT_Sort;
  * GDO base module class.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.3 This version is the code level
  * @since 1.0.0
  */
 class GDO_Module extends GDO
@@ -26,7 +26,7 @@ class GDO_Module extends GDO
 	### Override ###
 	################
 	public int $priority = 50;
-	public string $version = "7.0.0";
+	public string $version = "7.0.1"; # This version is the release / install level.
 	public string $license = "GDOv7-LICENSE";
 	public string $author = "Christian B. <gizmore@wechall.net>";
 	
@@ -44,7 +44,7 @@ class GDO_Module extends GDO
 	 */
 	public function getDependencies() : array
 	{
-		return GDT::EMPTY_ARRAY;
+		return GDT::EMPTY_GDT_ARRAY;
 	}
 	
     /**
@@ -54,7 +54,7 @@ class GDO_Module extends GDO
 	 */
 	public function getFriendencies() : array
 	{
-		return GDT::EMPTY_ARRAY;
+		return GDT::EMPTY_GDT_ARRAY;
 	}
 	
     /**
@@ -64,23 +64,6 @@ class GDO_Module extends GDO
 	 * @return string[]
 	 */
 	public function thirdPartyFolders() : array {}
-	
-// 	/**
-// 	 * Get all module dependencies as moduleName.
-// 	 * @return string[]
-// 	 */
-// 	public function dependencies()
-// 	{
-// 	    $coreDeps = $this->gdoDependencies();
-// 	    if ($deps = $this->getDependencies())
-// 	    {
-// 	        return array_unique(array_merge($coreDeps, $deps));
-// 	    }
-// 	    else
-// 	    {
-// 	        return $coreDeps;
-// 	    }
-// 	}
 	
 	/**
 	 * Provided theme name in module /thm/$themeName/ folder.
@@ -92,13 +75,13 @@ class GDO_Module extends GDO
 	 * GDO classes to install.
 	 * @return string[]
 	 */
-	public function getClasses() : array { return GDT::EMPTY_ARRAY; }
+	public function getClasses() : array { return GDT::EMPTY_GDT_ARRAY; }
 	
 	/**
 	 * Module config GDTs
 	 * @return GDT[]
 	 */
-	public function getConfig() : array { return GDT::EMPTY_ARRAY; }
+	public function getConfig() : array { return GDT::EMPTY_GDT_ARRAY; }
 	
 	############
 	### Info ###
@@ -151,6 +134,7 @@ class GDO_Module extends GDO
 	    		$gdo = 0; # gdo licenses
 	    		foreach ($files as $file)
 	    		{
+	    			# @TODO this is bullocks. how to identify a gdo license?
 	    			if ($this->filePath('LICENSE') === $this->filePath($file))
 	    			{
 	    				$gdo = 1;
@@ -514,7 +498,7 @@ class GDO_Module extends GDO
 	    }
 	}
 	
-	public function getConfigValue($key)
+	public function getConfigValue(string $key)
 	{
 	    if ($gdt = $this->getConfigColumn($key))
 	    {
@@ -838,13 +822,13 @@ class GDO_Module extends GDO
 	 */
 	public static string $_NC = '';
 	
-	public static function minAppend()
+	/**
+	 * Get the ".min" file suffix in case we want minification.
+	 */
+	public function cfgMinAppend() : string
 	{
-		if (self::config_var('Javascript', 'minify_js', 'no') !== 'no')
-		{
-			return '.min';
-		}
-		return '';
+		$mode = self::config_var('Javascript', 'minify_js', 'no');
+		return $mode === 'no' ? '' : '.min';
 	}
 	
 	/**

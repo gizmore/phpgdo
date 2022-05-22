@@ -37,7 +37,7 @@ class Completion extends MethodAjax
 					'user_name' => $user->getName(),
 					'user_country' => $user->getCountryISO()
 				),
-				'text' => $user->displayNameLabel(),
+				'text' => $user->renderUserName(),
 			    'display' => $user->renderChoice(),
 			);
 		}

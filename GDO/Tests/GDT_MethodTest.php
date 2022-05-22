@@ -27,7 +27,7 @@ final class GDT_MethodTest extends GDT_Method
     /**
      * @var GDO_User[]
      */
-    public static array $USERS = []; # store some users here for testing.
+    public static array $TEST_USERS = []; # store some users here for testing.
     
 //     ############
 //     ### Exec ###

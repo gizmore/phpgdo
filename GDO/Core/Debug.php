@@ -290,7 +290,7 @@ final class Debug
 		$user = "~~GHOST~~";
 		if (class_exists('GDO\\User\\GDO_User', false))
 		{
-    		try { $user = GDO_User::current()->displayNameLabel(); } catch (\Throwable $ex) { }
+    		try { $user = GDO_User::current()->renderUserName(); } catch (\Throwable $ex) { }
 		}
 		
 		if ($url = trim(@urldecode($_SERVER['REQUEST_URI']), '/'))

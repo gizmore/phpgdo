@@ -88,7 +88,7 @@ class GDT_Table extends GDT
 	 */
 	public function getHeaderFields() : array
 	{
-		return isset($this->headers) ? $this->headers->getFields() : GDT::EMPTY_ARRAY;
+		return isset($this->headers) ? $this->headers->getFields() : GDT::EMPTY_GDT_ARRAY;
 	}
 
 	/**

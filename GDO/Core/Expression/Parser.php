@@ -8,6 +8,7 @@ use GDO\Util\Strings;
 
 /**
  * Parse a CLI expression into an expression tree for execution.
+ * A grad student probably would have pulled an lexer and AST stuff ;)
  * 
  * Syntax:
  * 
@@ -34,12 +35,16 @@ final class Parser
 		$this->line = $line;
 	}
 
-	public function parse() : GDT_Expression
+	public function parse(string $line=null) : GDT_Expression
 	{
+		$this->line = $line ? $line : $this->line;
 		$current = GDT_Expression::make();
 		return $this->parseB($current, $this->line);
 	}
 	
+	###############
+	### Private ###
+	###############
 	private function parseB(GDT_Expression $current, string $line) : GDT_Expression
 	{
 		$l = $this->line;
@@ -84,7 +89,7 @@ final class Parser
 			
 			switch ($c)
 			{
-				case '$':
+				case self::CMD_PREAMBLE:
 					$line2 = $this->parseLine($l, $i, $len);
 					$new = GDT_Expression::make()->parent($current);
 					$this->addArgExpr($current, $new);
@@ -112,7 +117,7 @@ final class Parser
 					}
 					break;
 					
-				case " ":
+				case self::ARG_SEPARATOR:
 					if ($arg)
 					{
 						$this->addArg($current, $arg);
@@ -143,7 +148,7 @@ final class Parser
 		return $current;
 	}
 	
-	private function addArg(GDT_Expression $expression, string &$arg)
+	private function addArg(GDT_Expression $expression, string &$arg) : void
 	{
 		if (str_starts_with($arg, '--'))
 		{
@@ -160,7 +165,7 @@ final class Parser
 		$expression->method->addInput($key, $input);
 	}
 	
-	private function addArgExpr(GDT_Expression $expression, GDT_Expression $arg)
+	private function addArgExpr(GDT_Expression $expression, GDT_Expression $arg) : void
 	{
 		$expression->method->addInput($key, $arg);
 	}

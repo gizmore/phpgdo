@@ -2,11 +2,16 @@
 namespace GDO\Language\Method;
 
 use GDO\Language\GDO_Language;
-use GDO\Language\GDT_Language;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodCompletion;
 
+/**
+ * Complete a GDT_Language.
+ * 
+ * @author gizmore
+ * @version 7.0.2
+ * @since 6.4.0
+ */
 final class Completion extends MethodCompletion
 {
 	public function execute()
@@ -17,7 +22,6 @@ final class Completion extends MethodCompletion
 		$table = GDO_Language::table();
 		$languages = isset($_REQUEST['all']) ? $table->all() : $table->allSupported();
 		
-		$cell = GDT_Language::make('lang_iso');
 		foreach ($languages as $iso => $language)
 		{
 			if ( ($q === '') || ($language->getISO() === $q) ||
@@ -27,7 +31,7 @@ final class Completion extends MethodCompletion
 				$response[] = array(
 					'id' => $iso,
 					'text' => $language->displayName(),
-					'display' => $cell->gdo($language)->renderChoice($language),
+					'display' => $language->renderChoice(),
 				);
 			}
 		}

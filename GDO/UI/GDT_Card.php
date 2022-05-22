@@ -94,7 +94,7 @@ final class GDT_Card extends GDT
 	    {
 	        $back[] = $this->subtitle->renderCLI();
 	    }
-	    foreach ($this->getFieldsRec() as $gdt)
+	    foreach ($this->getAllFields() as $gdt)
 	    {
 	        $back[] = $gdt->renderCLI();
 	    }
@@ -162,7 +162,7 @@ final class GDT_Card extends GDT
 	    }
 	    else
 	    {
-	        $profileLink = GDT_Label::make()->labelRaw($user->displayNameLabel());
+	        $profileLink = GDT_Label::make()->labelRaw($user->renderUserName());
 	    }
 	    $this->subtitle->addField($profileLink);
 	    $this->subtitle->addField(GDT_DateDisplay::make($date->name)->gdo($this->gdo)->addClass('ri'));
@@ -192,7 +192,7 @@ final class GDT_Card extends GDT
     	    }
     	    else
     	    {
-    	        $username = $user->displayNameLabel();
+    	        $username = $user->renderUserName();
     	    }
     	    
     	    $at = $this->gdo->gdoColumnOf(GDT_EditedAt::class)->renderCell();

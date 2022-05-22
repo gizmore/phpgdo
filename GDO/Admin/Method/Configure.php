@@ -21,20 +21,19 @@ use GDO\UI\GDT_Panel;
 use GDO\Install\Installer;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Container;
-use GDO\Core\GDT;
 
 /**
  * Configure a module.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.4.0
  */
 class Configure extends MethodForm
 {
 	use MethodAdmin;
 	
-// 	private GDO_Module $configModule;
+	private ?GDO_Module $configModule;
 	
 	public function getPermission() : ?string { return 'admin'; }
 	public function showInSitemap() { return false; }
@@ -46,12 +45,17 @@ class Configure extends MethodForm
 	    ];
 	}
 	
-// 	public function onInit() : void
-// 	{
-// 	    # Load
-// 	    $moduleName = strtolower($this->gdoParameterVar('module'));
-// 	    $this->configModule = ModuleLoader::instance()->getModule($moduleName, true);
-// 	}
+	/**
+	 * Get the config module.
+	 */
+	public function paramModule() :GDO_Module
+	{
+		if (!isset($this->configModule))
+		{
+			$this->configModule = $this->gdoParameterValue('module');
+		}
+		return $this->configModule;;
+	}
 	
 	public function execute()
 	{
@@ -59,7 +63,7 @@ class Configure extends MethodForm
 		$response = GDT_Response::make();
 		
 		# Response for install and configure
-		if ($descr = $this->configModule->getModuleDescription())
+		if ($descr = $this->paramModule()->getModuleDescription())
 		{
 			$panelDescr = GDT_Panel::make()->textRaw($descr);
 			$response->addField($panelDescr);
@@ -69,7 +73,7 @@ class Configure extends MethodForm
 		$response->addField(Install::make()->executeWithInit());
 		
 		# Configuration if installed
-		if ($this->configModule->isPersisted())
+		if ($this->paramModule()->isPersisted())
 		{
 			$response->addField(parent::execute()); # configure
 		}
@@ -80,29 +84,21 @@ class Configure extends MethodForm
 	
 	public function getTitle()
 	{
-// 	    if ($this->configModule)
-// 	    {
-	        return t('ft_admin_configure', [$this->configModule->displayName()]);
-// 	    }
+        return t('ft_admin_configure', [$this->paramModule()->displayName()]);
 	}
 	
 	public function getDescription()
 	{
-	    if ($this->configModule)
-	    {
-	        return t('mdescr_admin_configure', [$this->configModule->displayName()]);
-	    }
+        return t('mdescr_admin_configure', [$this->paramModule()->displayName()]);
 	}
 	
 	public function createForm(GDT_Form $form) : void
 	{
-// 		if (!($mod = $this->configModule))
-// 		{
-// 		    return;
-// 		}
-		$mod = $this->gdoParameterB('module');
+		$mod = $this->paramModule();
 		$deps = Installer::getDependencyModules($mod->getName());
-		$deps = array_filter($deps, function(GDO_Module $m) { return $m->getName() !== $mod->getName() AND !$m->isCoreModule(); });
+		$deps = array_filter($deps, function(GDO_Module $m) use ($mod) {
+			return $m->getName() !== $mod->getName() AND !$m->isCoreModule();
+		});
 		$deps = array_map(function(GDO_Module $m) { return $m->getName(); }, $deps);
 		$deps = array_map(function($nam) {
 		    $link = href('Admin', 'Configure', "&module=".urlencode($nam));
@@ -146,7 +142,7 @@ class Configure extends MethodForm
 	
 	public function formValidated(GDT_Form $form)
 	{
-		$mod = $this->configModule;
+		$mod = $this->paramModule();
 		
 		# Update config
 		$info = [];
@@ -154,7 +150,7 @@ class Configure extends MethodForm
 		foreach ($form->getFields() as $gdt)
 		{
 // 			if ($gdt->hasChanged() && $gdt->writable && $gdt->editable)
-			if ($gdt->hasChanged() && $gdt->writable)
+			if ($gdt->hasChanged() && $gdt->isWritable())
 			{
 				$info[] = '<br/>';
 				GDO_ModuleVar::createModuleVar($mod, $gdt);

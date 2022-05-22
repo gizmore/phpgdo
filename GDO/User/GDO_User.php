@@ -15,7 +15,7 @@ use GDO\Language\Trans;
  * Most user related fields are in other module settings.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 1.0.0
  * @see GDO
  * @see GDT
@@ -247,21 +247,45 @@ final class GDO_User extends GDO
 	### Persistent ###
 	##################
 	/**
-	 * @return GDO_User
+	 * Ensure user is persistent.
+	 * This allows LoginAsGuest 
 	 */
 	public function persistent() : self
 	{
-		if ($session = GDO_Session::instance())
+		if (!$this->isPersisted())
 		{
-			if ($this->isGhost())
+			if (class_exists('GDO\\Session\\GDO_Session', false))
 			{
-				$this->setVar('user_type', self::GUEST);
-				$this->insert();
-				$session->setVar('sess_user', $this->getID());
+				if ($session = GDO_Session::instance())
+				{
+					$this->setVar('user_type', self::GUEST);
+					$this->insert();
+					$session->setVar('sess_user', $this->getID());
+				}
 			}
 		}
 		return $this;
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function renderName()
+	{
+		return $this->renderUserName();
+	}
 	
+	/**
+	 * 
+	 * @return string
+	 */
+	public function renderUserName()
+	{
+		if ($name = $this->getName())
+		{
+			return html($name);
+		}
+		return 'gggg';
+	}
+
 }

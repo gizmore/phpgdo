@@ -73,7 +73,7 @@ final class GDT_ListItem extends GDT
 	    }
 	    else
 	    {
-	        $profileLink = GDT_Label::make()->labelRaw($user->displayNameLabel());
+	        $profileLink = GDT_Label::make()->labelRaw($user->renderUserName());
 	    }
 	    $this->subtitle->addField($profileLink);
 	    $this->subtitle->addField(GDT_DateDisplay::make($date->name)->dateformat($dateformat)->gdo($this->gdo)->addClass('ri'));
