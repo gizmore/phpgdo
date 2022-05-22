@@ -18,7 +18,6 @@ final class SystemTest extends Method
 			'tests' => array(
 				$this->testPHPVersion(),
 				FileUtil::createDir(GDO_PATH . 'protected'),
-				FileUtil::createDir(GDO_File::filesDir()),
 				FileUtil::createDir(GDO_PATH . 'temp'),
 			    FileUtil::createDir(GDO_PATH . 'assets'),
 				$this->testYarn(),

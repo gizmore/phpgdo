@@ -49,7 +49,7 @@ final class Security extends MethodForm
 	public function protectFolders()
 	{
 		HTAccess::protectFolder(GDO_PATH.'temp');
-		HTAccess::protectFolder(GDO_File::filesDir());
+// 		HTAccess::protectFolder(GDO_File::filesDir());
 		HTAccess::protectFolder(GDO_PATH.'protected');
 		HTAccess::protectFolder(GDO_PATH.'install');
 	}
