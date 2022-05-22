@@ -52,7 +52,7 @@ trait WithFormAttributes
 	##############
 	public function formVariable() : string
 	{
-		return $this->getName();
+		return $this->hasName() ? $this->getName() : '';
 	}
 
 }
