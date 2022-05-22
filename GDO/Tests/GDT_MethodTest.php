@@ -6,7 +6,6 @@ use GDO\Core\Method;
 use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertEquals;
-use GDO\Form\MethodForm;
 use GDO\Core\GDT_Method;
 
 /**

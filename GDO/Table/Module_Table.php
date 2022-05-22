@@ -6,13 +6,17 @@ use GDO\Core\GDT_UInt;
 use GDO\Core\Application;
 
 /**
- * The table module allows some default settings for table responses.
- * Currently only ItemsPerPage is configurable.
+ * The table module allows some default settings for table responses an
+ * 
+ * - add list for <ul> stuff
+ * - add table for <table> stuff
+ * - 
+ * - configure default items per page
+ * - configure default suggestions per request. 
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.1
  * @since 6.0.3
- * 
  * @see GDT_List
  * @see GDT_Table
  * @see MethodTable

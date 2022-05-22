@@ -2,36 +2,40 @@
 namespace GDO\Core;
 
 /**
- * An html select.
- * 
- * @see GDT_ObjectSelect
+ * An HTML select.
+ * Can autocomplete input, like `./gdo.sh mail.send giz <.....>`.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  */
 class GDT_Select extends GDT_ComboBox
 {
-	const SELECTED = ' selected="selected"';
+	const SELECTED = ' selected="selected"'; # for options
+	
+	###################
+	### Var / Value ###
+	###################
+	public function getSelectedVar() : ?string
+	{
+		$var = $this->getVar();
+		return $var === null ? $this->emptyVar : $var;
+	}
 	
 	public function getVar() : ?string
 	{
-		if (null === ($var = parent::getVar()))
+		if (!($var = parent::getVar()))
 		{
-			$var = $this->multiple ? '[]' : null;
+			return $this->multiple ? '[]' : null;
 		}
 		elseif ($this->multiple)
 		{
-			if (is_array($var))
-			{
-				$var = json_encode($var);
-			}
+			return is_array($var) ? json_encode($var) : $var;
 		}
-		elseif ($var === $this->emptyValue)
+		else
 		{
-			$var = null;
+			return $var;
 		}
-		return $var;
 	}
 	
 	public function getValue()
@@ -56,7 +60,7 @@ class GDT_Select extends GDT_ComboBox
 		        return null;
 		    }
 		}
-		elseif ($value === $this->emptyValue) 
+		elseif ($value === $this->emptyVar) 
 		{
 			return null;
 		}
@@ -84,7 +88,7 @@ class GDT_Select extends GDT_ComboBox
 	        }
 	        return json_decode($var);
 	    }
-	    if ($var === $this->emptyValue)
+	    if ($var === $this->emptyVar)
 	    {
 	        return null;
 	    }
@@ -141,41 +145,41 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getGDOData() : ?array
 	{
-		return [$this->name => ($this->var === $this->emptyValue ? null : $this->var)];
+		return [$this->name => ($this->var === $this->emptyVar ? null : $this->var)];
 	}
 	
 	public function setGDOData(GDO $gdo=null)
 	{
-	    return (!$gdo) || $gdo->isTable() ? $this->var($this->emptyValue) : parent::setGDOData($gdo);
+	    return (!$gdo) || $gdo->gdoIsTable() ? $this->var($this->emptyVar) : parent::setGDOData($gdo);
 	}
 	
-	public function displayValue($var)
-	{
-	    $value = $this->toValue($var);
-	    if ($this->multiple)
-	    {
-	        $value = array_map(function($gdo){ 
-	            return $this->renderChoice($gdo); },
-	            $value);
-	        return implode(', ', $value);
-	    }
-	    return $this->renderChoice($value);
-	}
+// 	public function displayValue($var)
+// 	{
+// 	    $value = $this->toValue($var);
+// 	    if ($this->multiple)
+// 	    {
+// 	        $value = array_map(function($gdo){ 
+// 	            return $this->renderChoice($gdo); },
+// 	            $value);
+// 	        return implode(', ', $value);
+// 	    }
+// 	    return $this->renderChoice($value);
+// 	}
 	
 	################
 	### Validate ###
 	################
-	private function fixEmptyMultiple()
-	{
-	    $f = $this->formVariable();
-		if (isset($_REQUEST[$f]) && $this->multiple)
-		{
-			if (!isset($_REQUEST[$f][$this->name]))
-			{
-				$_REQUEST[$f][$this->name] = [];
-			}
-		}
-	}
+// 	private function fixEmptyMultiple()
+// 	{
+// 	    $f = $this->formVariable();
+// 		if (isset($_REQUEST[$f]) && $this->multiple)
+// 		{
+// 			if (!isset($_REQUEST[$f][$this->name]))
+// 			{
+// 				$_REQUEST[$f][$this->name] = [];
+// 			}
+// 		}
+// 	}
 	
 	public function validate($value) : bool
 	{
@@ -197,7 +201,7 @@ class GDT_Select extends GDT_ComboBox
     		}
 	    }
 		
-		if ( ($this->minSelected !== null) && ($this->minSelected > count($values)) )
+		if ($this->minSelected > count($values))
 		{
 			return $this->error('err_select_min', [$this->minSelected]);
 		}
@@ -212,9 +216,9 @@ class GDT_Select extends GDT_ComboBox
 	
 	protected function validateSingle($value)
 	{
-		if ( ($value === null) || ($value === $this->emptyValue) )
+		if ( ($value === null) || ($value === $this->emptyVar) )
 		{
-		    if ($this->getVar() && ($value !== $this->emptyValue))
+		    if ($this->getVar() && ($value !== $this->emptyVar))
 		    {
 		        return $this->errorInvalidChoice();
 		    }
@@ -250,64 +254,51 @@ class GDT_Select extends GDT_ComboBox
 		return $this->error('err_invalid_choice');
 	}
 	
-	###############
-	### Choices ###
-	###############
-	public $emptyValue = '0'; # @TODO rename emptyValue to emptyVar
-	public function emptyValue($emptyValue='0')
+	#############
+	### Empty ###
+	#############
+	public string $emptyVar = '0';
+	public function emptyVar(string $emptyVar) : self
 	{
-		$this->emptyValue = $emptyValue;
-		return $this->emptyLabel('please_choice');
+		$this->emptyVar = $emptyVar;
+		return $this;
 	}
 	
-	public $emptyLabel;
-	public $emptyLabelArgs;
-	public function emptyLabel($emptyLabel, $args=null)
+	public string $emptyLabelRaw;
+	public string $emptyLabelKey;
+	public ?array $emptyLabelArgs;
+	public function emptyLabel(string $key, $args=null) : self
 	{
-		$this->emptyLabel = $emptyLabel;
+		unset($this->emptyLabelRaw);
+		$this->emptyLabelKey = $key;
 		$this->emptyLabelArgs = $args;
 		return $this;
 	}
 	
-	public function displayEmptyLabel()
+	public function emptyLabelRaw(string $text) : self
 	{
-		return t($this->emptyLabel, $this->emptyLabelArgs);
+		$this->emptyLabelRaw = $text;
+		unset($this->emptyLabelKey);
+		unset($this->emptyLabelArgs);
+		return $this;
 	}
-	
-	public function emptyInitial($emptyLabel, $emptyValue='0')
+
+	public function emptyInitial(string $labelKey, string $emptyVar='0')
 	{
-		$this->emptyValue = $emptyValue;
-		$this->emptyLabel = $emptyLabel;
-		return $this; #->initial($emptyValue);
+		return $this->emptyLabel($labelKey)->initial($emptyVar);
 	}
-	
-	public function htmlSelected($value)
-	{
-		if ($this->multiple)
-		{
-			if ($selected = @json_decode($this->getVar()))
-			{
-				if (in_array($value, $selected, true))
-				{
-					return self::SELECTED;
-				}
-			}
-			return '';
-		}
-		else 
-		{
-			return $this->getVar() === (string)$value ? self::SELECTED : '';
-		}
-	}
-	
+
 	################
 	### Multiple ###
 	################
 	public bool $multiple = false;
-	public function multiple(bool $multiple=true) : self { $this->multiple = $multiple; return $this; }
-	public function htmlMultiple() : string { return $this->multiple ? ' multiple="multiple"' : ''; }
+	public function multiple(bool $multiple=true) : self
+	{
+		$this->multiple = $multiple;
+		return $this;
+	}
 	
-	public ?int $minSelected;
+	public int $minSelected = 0;
 	public ?int $maxSelected;
 	public function minSelected(int $minSelected) : self
 	{
@@ -324,38 +315,90 @@ class GDT_Select extends GDT_ComboBox
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	/**
+	 * Render a chosen value.
+	 * This is probably a string or a GDO.  
+	 * 
+	 * @param GDO|string $choice
+	 */
+	public function displayChoice($choice) : string
 	{
-		return GDT_Template::php('Form', 'cell/select.php', ['field' => $this]);
+		if (is_string($choice))
+		{
+			return html($choice);
+		}
+		else
+		{
+			return $choice->renderChoice();
+		}
+	}
+	
+	public function renderHTML() : string
+	{
+		return GDT_Template::php('Core', 'select_cell.php', ['field' => $this]);
 	}
 	
 	public function renderForm() : string
 	{
-		return GDT_Template::php('Form', 'form/select.php', ['field' => $this]);
+		return GDT_Template::php('Core', 'select_form.php', ['field' => $this]);
 	}
 	
-	public function configJSON() : array
+	public function renderEmptyLabel() : string
 	{
-		return array_merge(parent::configJSON(), [
-			'multiple' => $this->multiple,
-			'selected' => $this->multiple ? $this->getValue() : $this->getSelectedVar(),
-			'minSelected' => $this->minSelected,
-			'maxSelected' => $this->maxSelected,
-		    'emptyValue' => $this->emptyValue,
-		    'emptyLabel' => $this->displayEmptyLabel(),
-		]);
+		if (isset($this->emptyLabelRaw))
+		{
+			return $this->emptyLabelRaw;
+		}
+		elseif (isset($this->emptyLabelKey))
+		{
+			return t($this->emptyLabelKey, $this->emptyLabelArgs);
+		}
+		else
+		{
+			return ' - none - ';
+		}
 	}
 	
-	public function getSelectedVar()
+	public function htmlSelected(string $var) : string
 	{
-		$var = $this->getVar();
-		return $var === null ? $this->emptyValue : $var;
+		if ($this->multiple)
+		{
+			if ($selected = @json_decode($this->getVar()))
+			{
+				if (in_array($var, $selected, true))
+				{
+					return self::SELECTED;
+				}
+			}
+			return '';
+		}
+		else
+		{
+			return $this->getVar() === $var ? self::SELECTED : '';
+		}
 	}
 	
-	public function formName()
+	public function htmlMultiple() : string
 	{
-	    $name = parent::formName();
-	    return $this->multiple ? "{$name}[]" : $name;
+		return $this->multiple ? ' multiple="multiple" size="8"' : '';
 	}
+	
+// 	public function configJSON() : array
+// 	{
+// 		return array_merge(parent::configJSON(), [
+// 			'multiple' => $this->multiple,
+// 			'selected' => $this->multiple ? $this->getValue() : $this->getSelectedVar(),
+// 			'minSelected' => $this->minSelected,
+// 			'maxSelected' => $this->maxSelected,
+// 		    'emptyVar' => $this->emptyVar,
+// 		    'emptyLabel' => $this->displayEmptyLabel(),
+// 		]);
+// 	}
+	
+// 	public function formName()
+// 	{
+// 	    $name = parent::formName();
+// 	    return $this->multiple ? "{$name}[]" : $name;
+// 	}
 	
 }

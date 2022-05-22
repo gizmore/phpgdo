@@ -17,11 +17,13 @@ use GDO\Form\GDT_Hidden;
  * Create a GDO config with this form.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 class Configure extends MethodForm
 {
+	public function isEnabled() : bool { return true; }
+	
 	public function gdoParameters() : array
     {
         return [

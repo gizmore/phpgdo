@@ -25,7 +25,7 @@ use GDO\Core\GDT_UInt;
  * Holds fields for a configuration form.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class Config
@@ -96,6 +96,7 @@ class Config
 		if (!defined('GDO_IPC')) define('GDO_IPC', 'none');
 		if (!defined('GDO_IPC_DEBUG')) define('GDO_IPC_DEBUG', false);
 		if (!defined('GDO_GDT_DEBUG')) define('GDO_GDT_DEBUG', false);
+		if (!defined('GDO_JSON_DEBUG')) define('GDO_JSON_DEBUG', false);
 		# HTTP
 		if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
 		if (!defined('GDO_SERVER')) define('GDO_SERVER', self::detectServerSoftware());
@@ -164,6 +165,7 @@ class Config
 			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', '1' => 'IPC', '0' => 'none'])->initialValue(GDO_IPC),
 			GDT_Checkbox::make('ipc_debug')->initialValue(GDO_IPC_DEBUG),
 			GDT_Checkbox::make('gdt_debug')->initialValue(GDO_GDT_DEBUG),
+			GDT_Checkbox::make('json_debug')->initialValue(GDO_JSON_DEBUG),
 			# HTTP
 			GDT_Divider::make()->label('install_config_section_http'),
 			GDT_String::make('domain')->required()->initialValue(GDO_DOMAIN),

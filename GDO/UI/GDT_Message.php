@@ -272,15 +272,15 @@ class GDT_Message extends GDT_Text
     ##############
     ### Getter ###
     ##############
-    public function getVar() : ?string
-    {
-        $form = $this->formVariable();
-        if ($form)
-        {
-            return $this->getRequestVar($form, $this->msgInput);
-        }
-        return $this->var;
-    }
+//     public function getVar() : ?string
+//     {
+//         $form = $this->formVariable();
+//         if ($form)
+//         {
+//             return $this->getRequestVar($form, $this->msgInput);
+//         }
+//         return $this->var;
+//     }
     public function getVarInput() { return $this->msgInput; }
     public function getVarOutput() { return $this->msgOutput; }
     public function getVarText() { return $this->msgText; }

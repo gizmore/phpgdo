@@ -25,7 +25,7 @@ class PermissionGrant extends MethodForm
 		$gdo = GDO_UserPermission::table();
 		$form->addFields(
 			$gdo->gdoColumn('perm_user_id'),
-			$gdo->gdoColumn('perm_perm_id')->notNull()->emptyInitial(t('choose_permission')),
+			$gdo->gdoColumn('perm_perm_id')->notNull(),
 			GDT_AntiCSRF::make(),
 		);
 		$form->actions()->addField(GDT_Submit::make());

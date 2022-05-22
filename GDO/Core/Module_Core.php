@@ -164,7 +164,7 @@ window.GDO_REVISION = '%s';
 	
 	public function gdoUserJS()
 	{
-		$json = json_encode($this->gdoUserJSON(), JSON_PRETTY_PRINT);
+		$json = json_encode($this->gdoUserJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
 		return "window.GDO_USER = new GDO_User($json);";
 	}
 	

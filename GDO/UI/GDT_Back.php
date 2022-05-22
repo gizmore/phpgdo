@@ -23,7 +23,7 @@ final class GDT_Back extends GDT_Link
 		$this->href(Website::hrefBack());
 	}
 	
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 		return ' gdt-link gdt-back';
 	}

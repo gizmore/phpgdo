@@ -233,7 +233,7 @@ final class Website
 		{
 			hdr('Content-Type: application/json');
 		}
-		return json_encode($json, JSON_PRETTY_PRINT); # pretty json
+		return json_encode($json, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
 	}
 	
 	public static function outputStarted()

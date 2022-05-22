@@ -22,7 +22,7 @@ final class PageMenuItem
 		return new self('…', 'javascript:;', false);
 	}
 	
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 		return $this->selected ? ' page-selected' : '';
 	}

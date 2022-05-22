@@ -2,4 +2,4 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-php gdo_test.php
+php gdo_test.php $@

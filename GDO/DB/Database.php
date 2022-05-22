@@ -257,7 +257,6 @@ class Database
 		{
 		    /** @var $gdo GDO **/
 		    self::$TABLES[$classname] = $gdo = new $classname();
-			$gdo->isTable = true;
 			
 			if ($gdo->gdoAbstract())
 			{
@@ -269,7 +268,7 @@ class Database
 		    # Always init a cache item.
 			$gdo->initCache();
 			
-			$gdo->setInited();
+// 			$gdo->setInited();
 		}
 		return self::$TABLES[$classname];
 	}

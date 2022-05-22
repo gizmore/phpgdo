@@ -1,13 +1,16 @@
-<?php /** @var $field \GDO\UI\GDT_Color **/ ?>
+<?php
+namespace GDO\Core\tpl;
+/** @var $field \GDO\Core\GDT_Object **/ ?>
 <div class="gdt-container<?= $field->classError(); ?>">
-  <?= $field->htmlIcon(); ?>
+  <?=$field->htmlIcon()?>
   <label <?=$field->htmlForID()?>><?= $field->renderLabel(); ?></label>
   <input
-   type="color"
    <?=$field->htmlID()?>
+   type="number"
+   step="1"
    <?=$field->htmlFormName()?>
-   value="<?= html($field->getVar()); ?>"
+   value="<?= $field->display(); ?>"
    <?= $field->htmlRequired(); ?>
-   <?= $field->htmlDisabled(); ?>/>
+   <?= $field->htmlDisabled(); ?> />
   <?= $field->htmlError(); ?>
 </div>

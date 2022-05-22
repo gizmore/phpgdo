@@ -8,10 +8,12 @@ use GDO\Form\GDT_Validator;
  * The base class for all GDT.
  * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Icon.
  * 
- * A GDT can, or has to, support the following rendering functions / output formats; CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/FILTER.
+ * A GDT can, better, has to, support the following rendering functions / output formats;
+ * 
+ * CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/LIST/FILTER.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  * @see GDO
  * @see GDT_Pre
@@ -95,6 +97,8 @@ abstract class GDT
 	const RENDER_JSON = 8;
 	const RENDER_BINARY = 9;
 	const RENDER_PDF = 10;
+	const RENDER_CHOICE = 11;
+	const RENDER_LIST = 12;
 	
 	public static int $RENDER_MODE = self::RENDER_HTML;
 	
@@ -115,23 +119,31 @@ abstract class GDT
 			case self::RENDER_JSON: return $this->renderJSON();
 			case self::RENDER_BINARY: return $this->renderBinary();
 			case self::RENDER_PDF: return $this->renderPDF();
+			case self::RENDER_CHOICE: return $this->renderChoice();
+			case self::RENDER_LIST: return $this->renderChoice();
 			default: return '';
 		}
 	}
 	
-	public function renderCLI() : string { return $this->render(); }
-	public function renderXML() : string { return $this->render(); }
-	public function renderPDF() : string { return $this->renderHTML(); }
+	# various rendering formats
+	public function renderBinary() : string { return ''; }
+	public function renderCLI() : string { return $this->renderHTML(); }
+	public function renderJSON() { return $this->renderCLI(); }
+	public function renderXML() : string { return $this->renderHTML(); }
+	# html rendering
+	public function renderHTML() : string { return ''; }
 	public function renderCard() : string { return $this->renderHTML(); }
 	public function renderCell() : string { return $this->renderHTML(); }
-	public function renderForm() : string { return $this->renderHTML(); }
-	public function renderHTML() : string { return ''; }
-	public function renderJSON() { return $this->renderCLI(); }
-	public function renderBinary() : string {}
 	public function renderChoice() : string { return $this->renderHTML(); }
-	public function renderFilter($f) : string {}
-	public function renderHeader() : string {}
+	public function renderFilter($f) : string { return ''; }
+	public function renderForm() : string { return $this->renderHTML(); }
+	public function renderHeader() : string { return ''; }
+	public function renderList() : string { return $this->renderHTML(); }
+	public function renderPDF() : string { return $this->renderHTML(); }
 	
+	/**
+	 * Display a given var. 
+	 */
 	public function displayVar(string $var=null) : string
 	{
 		return $var ? html($var) : '';
@@ -145,6 +157,7 @@ abstract class GDT
 		self::$RENDER_MODE = $old;
 		return $result;
 	}
+	
 	
 	###################
 	### Permissions ###
@@ -180,6 +193,7 @@ abstract class GDT
 	################
 	/**
 	 * Validation is a great experience in GDOv7.
+	 * 
 	 * @TODO make validate use $var instead of $value. Or maybe make a second func validateVar.
 	 *
 	 * Almost all GDT have a quite decent validator. There is also a GDT to top that; The GDT_Validator.
@@ -215,7 +229,7 @@ abstract class GDT
 	 */
 	public function validate($value) : bool
 	{
-		return true;
+		return true; # all empty GDT does nothing... what can it do? randomly fail?!
 	}
 	
 	public function hasError() : bool
@@ -228,12 +242,28 @@ abstract class GDT
 		return false;
 	}
 	
+	public function classError() : string
+	{
+		return '';
+	}
+	
 	##############
 	### Config ###
 	##############
+	/**
+	 * Get the GDTs configuration as JSON array.
+	 */
 	public function configJSON() : array
 	{
 		return get_object_vars($this);
+	}
+	
+	/**
+	 * Render config JSON as html attribute string.
+	 */
+	public function displayConfigJSON() : string
+	{
+		return json_quote(json_encode($this->configJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0));
 	}
 	
 	##############
@@ -317,12 +347,23 @@ abstract class GDT
 		return $this;
 	}
 
-	public function htmlVar() : string
+	/**
+	 * Render HTML name attribute.
+	 */
+	public function htmlName() : string
 	{
-		return html($this->getVar());
+		return '';
 	}
 	
-	public function htmlName() : string
+	public function htmlClass() : string
+	{
+		return strtolower($this->gdoShortName());
+	}
+	
+/**
+	 * Render HTML name attribute, but in form mode.
+	 */
+	public function htmlFormName() : string
 	{
 		return '';
 	}
@@ -332,6 +373,10 @@ abstract class GDT
 		return '';
 	}
 	
+	/**
+	 * Provided by WithPHPJQuery.
+	 * @return string
+	 */
 	public function htmlAttributes() : string
 	{
 		return '';

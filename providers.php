@@ -1,12 +1,12 @@
 <?php
 /**
  * This prints all modules and their providers.
- * The list can be copied by gdo6 authors to Core/ModuleProviders.php
+ * The list can be copied by authors to Core/ModuleProviders.php
  */
 use GDO\Util\Filewalker;
 use GDO\Util\Regex;
 
-# Use gdo6 core
+# Bootstrap GDOv7
 require "protected/config.php";
 require "GDO7.php";
 

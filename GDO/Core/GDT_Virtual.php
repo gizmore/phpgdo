@@ -85,7 +85,7 @@ class GDT_Virtual extends GDT
     ##############
     ### Render ###
     ##############
-    public function htmlClass() { return $this->proxy()->htmlClass(); }
+    public function htmlClass() : string { return $this->proxy()->htmlClass(); }
 
     public function render() : string { return $this->proxy()->render(); }
     public function renderCell() : string { return $this->proxy()->renderCell(); }

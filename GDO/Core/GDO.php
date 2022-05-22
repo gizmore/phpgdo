@@ -6,7 +6,6 @@ use GDO\DB\Database;
 use GDO\DB\Query;
 use GDO\DB\Result;
 use GDO\Date\Time;
-use GDO\Language\Trans;
 use GDO\User\GDO_User;
 
 /**
@@ -24,19 +23,20 @@ use GDO\User\GDO_User;
  * 
  * @author gizmore@wechall.net
  * @license GDOv7-LICENSE
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.2.0
  * @see GDT
  * @see Cache
  * @see Database
  * @see Query
+ * @see Result
  * @see WithTemp
  * @see WithModule
  */
 abstract class GDO extends GDT
 {
-	use WithModule;
 	use WithTemp;
+	use WithModule;
 	
 	#################
 	### Constants ###
@@ -54,7 +54,10 @@ abstract class GDO extends GDT
 	 * Get the table GDO for this class.
 	 * @return self
 	 */
-	public static function table() : self { return Database::tableS(static::class); }
+	public static function table() : self
+	{
+		return Database::tableS(static::class);
+	}
 
 	#################
 	### Construct ###
@@ -63,7 +66,7 @@ abstract class GDO extends GDT
 	
 	public function __construct()
 	{
-// 		parent::__construct(); # Do not call GDT perf counter
+// 		parent::__construct(); # DO NOT call GDT perf counter!
 		$this->afterLoaded();
 	}
 	
@@ -169,13 +172,19 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	private bool $inited = false;
-	public function isInited() : bool { return $this->inited; }
-	public function setInited(bool $inited=true) : self { $this->inited = $inited; return $this; }
+// 	private bool $inited = false;
+// 	public function isInited() : bool { return $this->inited; }
+// 	public function setInited(bool $inited=true) : self { $this->inited = $inited; return $this; }
 	
 	##############
 	### Render ###
 	##############
+	public function displayName() : string
+	{
+		return $this->gdoHumanName() . "#" . $this->getID();
+	}
+	
+	
 // 	public function display($key)
 // 	{
 // 		return html($this->gdoVars[$key]);
@@ -196,6 +205,9 @@ abstract class GDO extends GDT
 		return $this->toJSON();
 	}
 	
+	/**
+	 * @return GDT[]
+	 */
 	public function toJSON()
 	{
 		$values = [];
@@ -207,7 +219,10 @@ abstract class GDO extends GDT
 				{
 					foreach ($data as $k => $v)
 					{
-						$values[$k] = $v;
+						if ($v !== null)
+						{
+							$values[$k] = $v;
+						}
 					}
 				}
 			}
@@ -221,7 +236,7 @@ abstract class GDO extends GDT
 	/**
 	 * Mark vars as dirty.
 	 * Either true for all, false for none, or an assoc array with field mappings.
-	 * @var boolean|boolean[]
+	 * @var mixed[] $dirty
 	 */
 	private $dirty = false;
 	
@@ -1185,46 +1200,6 @@ abstract class GDO extends GDT
 		return $id;
 	}
 	
-	/**
-	 * Display a translated table name with ID.
-	 * Or the first GDT_Name column.
-	 *
-	 * @see Trans
-	 * @see WithName
-	 * @see GDT_Name
-	 * @return string
-	 */
-	public function displayName() : string
-	{
-		# 1st check if we are the table
-		if ($this->isTable)
-		{
-			return $this->gdoHumanName();
-		}
-		
-		# 2nd attempt GDT_Name column
-		if ($this->table()->isInited())
-		{
-			if ($gdt = $this->gdoColumnOf(GDT_Name::class))
-			{
-				return $this->display($gdt->name);
-			}
-		}
-		
-		# fallback to Name#Id
-		return $this->gdoHumanName() . "#" . $this->getID();
-	}
-	
-// 	public function gdoClassName() : string
-// 	{
-// 		return static::class;
-// 	}
-	
-// 	public static function gdoClassNameS() : string
-// 	{
-// 		return static::class;
-// 	}
-	
 	##############
 	### Get by ###
 	##############
@@ -1522,9 +1497,9 @@ abstract class GDO extends GDT
 		Cache::remove($key);
 	}
 	
-	###########################
-	###  Table manipulation ###
-	###########################
+	##############
+	###  Table ###
+	##############
 	/**
 	 * Get the table GDO for a classname.
 	 * 
@@ -1541,10 +1516,18 @@ abstract class GDO extends GDT
 		return $gdo;
 	}
 	
-	public bool $isTable = false; # true for table GDO
-	public function gdoIsTable() : bool { return $this->isTable; }
 	public function gdoTableName() : string { return $this->table()->cache->tableName; }
 	public function gdoTableIdentifier() : string { return $this->gdoTableName(); }
+	
+	/**
+	 * Check if this gdo row entity is the table GDO.
+	 * This is done via the always generated cache object and should be efficient. The memory cost for the old private $isTable was horrible!
+	 * @return bool
+	 */
+	public function gdoIsTable() : bool
+	{
+		return $this->table()->cache->isTable($this);
+	}
 	
 	public function createTable(bool $reinstall=false) : bool
 	{
@@ -1647,7 +1630,6 @@ abstract class GDO extends GDT
 		call_user_func([$this, $methodName], $this);
 	}
 	
-	
 	################
 	### Hashcode ###
 	################
@@ -1674,6 +1656,7 @@ abstract class GDO extends GDT
 	##############
 	### Render ###
 	##############
+	# GDOs are GDTs. they use the exact same rendering pipeline.
 	
 	###############
 	### Sorting ###

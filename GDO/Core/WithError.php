@@ -2,16 +2,17 @@
 namespace GDO\Core;
 
 /**
- * Adds error annotations to GDT.
+ * Adds error annotations to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 6.1.0
  */
 trait WithError
 {
+	public string $errorRaw;
 	public string $error;
 	public array $errorArgs;
-	public string $errorRaw;
 	
 	public function error(string $key, array $args=null) : bool
 	{
@@ -30,19 +31,30 @@ trait WithError
 	
 	public function hasError() : bool
 	{
-		return $this->error || $this->errorRaw;
+		return isset($this->error) || isset($this->errorRaw);
 	}
 	
-	public function displayError() : string
+	public function renderError() : string
 	{
-		if ($this->errorRaw)
+		if (isset($this->errorRaw))
 		{
 			return $this->errorRaw;
 		}
-		if ($this->error)
+		if (isset($this->error))
 		{
 			return t($this->error, $this->errorArgs);
 		}
+		return '';
+	}
+	
+	/**
+	 * Render error message as html form field error annotation.
+	 */
+	public function htmlError() : string
+	{
+		return $this->hasError() ?
+			('<div class="gdo-form-error">' . $this->renderError() . '</div>') :
+			'';
 	}
 	
 }

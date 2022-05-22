@@ -30,7 +30,7 @@ class GDT_Float extends GDT_Int
 		return "{$this->identifier()} FLOAT{$unsigned}{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
 	}
 		
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 		return sprintf(' gdt-float %s', parent::htmlClass());
 	}

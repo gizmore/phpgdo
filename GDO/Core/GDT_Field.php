@@ -1,10 +1,10 @@
 <?php
 namespace GDO\Core;
 
-use GDO\DB\WithNullable;
 use GDO\Form\WithFormAttributes;
 use GDO\UI\WithIcon;
 use GDO\UI\WithLabel;
+use GDO\UI\WithPHPJQuery;
 
 /**
  * Fields have a name and a value.
@@ -23,7 +23,9 @@ abstract class GDT_Field extends GDT
 	use WithLabel;
 	use WithValue;
 	use WithError;
-	use WithNullable;
+	use WithInput;
+	use WithPlaceholder;
+	use WithPHPJQuery;
 	use WithFormAttributes;
 	
 	################
@@ -60,6 +62,12 @@ abstract class GDT_Field extends GDT
 	{
 		return $this->notNull;
 	}
+	
+	public function classError() : string
+	{
+		return $this->hasError() ? ' has-error' : '';
+	}
+	
 	
 	#######################
 	### Input/Var/Value ###

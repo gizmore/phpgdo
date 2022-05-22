@@ -7,11 +7,14 @@ use GDO\Session\GDO_Session;
 use GDO\Util\FileUtil;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
-use GDO\DB\Cache;
 use GDO\Core\ModuleLoader;
 use GDO\CLI\CLI;
-use GDO\Tests\Test\TestCore;
 use GDO\Tests\Module_Tests;
+use GDO\Date\Time;
+use GDO\Tests\TestCase;
+use GDO\Language\Trans;
+
+define('GDO_TIME_START', microtime(true));
 
 /**
  * Launch all unit tests.
@@ -24,8 +27,8 @@ if (PHP_SAPI !== 'cli')
 }
 
 echo "######################################\n";
-echo "### Welcome to the GDOv7 testsuite ###\n";
-echo "###        Enjoy your flight       ###\n";
+echo "### Welcome to the GDOv7 Testsuite ###\n";
+echo "###       Enjoy your flight!       ###\n";
 echo "######################################\n";
 
 # Rename the config in case an accident happened.
@@ -54,13 +57,8 @@ Debug::init();
 
 gdo_test::instance();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
-
-Debug::setMailOnError(GDO_ERROR_EMAIL);
-Debug::setDieOnError(false);
-Debug::enableErrorHandler();
-Debug::enableExceptionHandler();
-Cache::init();
-Cache::flush();
+// Cache::init();
+// Cache::flush();
 Database::init(null);
 GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
 
@@ -81,31 +79,21 @@ Database::instance()->useDatabase(GDO_DB_NAME);
 FileUtil::removeDir(GDO_PATH . 'files_temp/');
 FileUtil::removeDir(GDO_TEMP_PATH);
 
-# 1. Try the install process
+# 1. Try the install process if mode all.
 if ($argc === 1)
 {
-	echo "Running install all first...\n";
+	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
 	Module_Tests::runTestSuite($install);
 }
 
-echo "Loading modules from filesystem...\n";
-$modules = $loader->loadModules(false, true, true);
-
-if ($argc === 2)
+##############
+### Single ###
+##############
+if ($argc === 2) # Specifiy with module names, separated by comma.
 {
     $count = 0;
     $modules = explode(',', $argv[1]);
-    
-    if ($loader->loadModuleFS('Tests', false))
-    {
-        $modules[] = 'Tests';
-    }
-    else
-    {
-        echo "You don't have module gdo6-tests installed, which is probably required to create test users.\n";
-        flush();
-    }
     
     while ($count != count($modules))
     {
@@ -113,7 +101,7 @@ if ($argc === 2)
         
         foreach ($modules as $moduleName)
         {
-            $module = ModuleLoader::instance()->getModule($moduleName);
+            $module = $loader->loadModuleFS($moduleName, true, true);
             $more = Installer::getDependencyModules($moduleName);
             $more = array_map(function($m){
                 return $m->getName();
@@ -131,24 +119,33 @@ if ($argc === 2)
         return $m1->priority - $m2->priority;
     });
 
+    Trans::inited(true);
+    
     foreach ($modules as $module)
     {
         echo "Installing {$module->getName()}\n";
         Installer::installModule($module);
         Module_Tests::runTestSuite($module);
     }
-    echo "Finished.\n";
-    return;
 }
-
-foreach ($modules as $module)
+else # All!
 {
-    if (!$module->isPersisted())
-    {
-        echo "Installing {$module->getName()}\n";
-        Installer::installModule($module);
-    }
-    Module_Tests::runTestSuite($module);
+	echo "Loading all modules from filesystem...\n";
+	$modules = $loader->loadModules(false, true, true);
+	
+	foreach ($modules as $module)
+	{
+	    if (!$module->isPersisted())
+	    {
+	        echo "Installing {$module->getName()}\n";
+	        Installer::installModule($module);
+	    }
+	    Module_Tests::runTestSuite($module);
+	}
 }
 
-printf("Finished %s asserts successfully.\n", TestCore::$ASSERT_COUNT);
+############
+### PERF ###
+############
+$time = microtime(true) - GDO_TIME_START;
+printf("Finished %s asserts after %s.\n", TestCase::$ASSERT_COUNT, Time::humanDuration($time));

@@ -69,7 +69,7 @@ class GDT_Url extends GDT_String
 	### Render ###
 	##############
 	public function renderCell() : string { return GDT_Template::php('Net', 'cell/url.php', ['field' => $this]); }
-	public function displayValue($value) { return GDT_Link::anchor($value->raw, $this->displayLabel()); }
+	public function displayValue($value) { return GDT_Link::anchor($value->raw, $this->renderLabel()); }
 	
 	###############
 	### Options ###

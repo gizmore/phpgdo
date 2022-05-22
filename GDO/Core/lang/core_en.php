@@ -35,6 +35,7 @@ return [
 	'err_permission_required' => 'You need the %s permission to execute this function.',
 	'err_gdo_no_gdt' => 'The GDO `%2$s` does not allow the GDT method `%1$s`.',
 	'err_table_gdo' => 'This GDO is not a table object: %s.',
+	'err_method_disabled' => 'This method is currently disabled.',
 
 	# Messages
 	

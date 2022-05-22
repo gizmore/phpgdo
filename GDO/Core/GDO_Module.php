@@ -273,7 +273,14 @@ class GDO_Module extends GDO
 	public function getID() : ?string { return $this->gdoVar('module_id'); }
 	public function getName() : ?string { return $this->getModuleName(); }
 	public function getVersion() : Version { return $this->gdoValue('module_version'); }
-	public function isEnabled() : string { return $this->gdoVar('module_enabled'); }
+	public function isEnabled() : bool
+	{
+		if (GDO_DB_ENABLED)
+		{
+			return !!$this->gdoVar('module_enabled');
+		}
+		return true;
+	}
 	public function isInstalled() : bool { return $this->isPersisted(); }
 	
 	###############

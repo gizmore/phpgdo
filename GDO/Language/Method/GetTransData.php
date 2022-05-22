@@ -3,7 +3,6 @@ namespace GDO\Language\Method;
 
 use GDO\Language\Trans;
 use GDO\Core\Application;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodAjax;
 
@@ -28,7 +27,7 @@ final class GetTransData extends MethodAjax
 			return GDT_Array::makeWith($trans);
 		}
 		
-	    $langdata = json_encode($trans, JSON_PRETTY_PRINT);
+		$langdata = json_encode($trans, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
 	    $code = sprintf('window.GDO_TRANS = {}; window.GDO_TRANS.CACHE = %s;', $langdata);
 	    if (!Application::instance()->isUnitTests())
 	    {

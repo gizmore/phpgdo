@@ -9,7 +9,7 @@
    <?=$link->htmlRelation()?>>
      <?=$link->htmlIcon()?>
      <?php if ($link->hasLabel()) : ?>
-       <?=$link->displayLabel()?>
+       <?=$link->renderLabel()?>
      <?php else : ?>
        <?=html($link->href)?>
      <?php endif; ?>

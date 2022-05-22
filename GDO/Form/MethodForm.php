@@ -3,7 +3,6 @@ namespace GDO\Form;
 
 use GDO\Core\GDT;
 use GDO\Core\Method;
-use GDO\Core\GDT_Response;
 
 /**
  * A method with a form.
@@ -17,15 +16,6 @@ abstract class MethodForm extends Method
 	private GDT_Form $form;
 	
 	public abstract function createForm(GDT_Form $form) : void;
-	
-// 	protected function gdoParametersB() : array
-// 	{
-// 		$form = $this->getForm();
-// 		return array_merge(
-// 			$this->gdoParameters(),
-// 			$form->getFieldsRec(),
-// 			$form->actions()->getFieldsRec());
-// 	}
 	
 	public function getForm() : GDT_Form
 	{

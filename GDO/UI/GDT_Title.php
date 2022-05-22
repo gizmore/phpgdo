@@ -37,7 +37,7 @@ class GDT_Title extends GDT_String
 	
 	public function renderCLI() : string
 	{
-	    return $this->displayLabel() . ': ' .
+	    return $this->renderLabel() . ': ' .
 	       $this->renderTitle();
 	}
 	

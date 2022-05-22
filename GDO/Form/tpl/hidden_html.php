@@ -6,5 +6,5 @@ use GDO\Form\GDT_Hidden;
  */
 ?>
 <input type="hidden"
- name="<?=$field->htmlName()?>"
- value="<?=$field->htmlVar()?>" />
+ <?=$field->htmlName()?>
+ <?=$field->htmlValue()?> />

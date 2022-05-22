@@ -8,7 +8,7 @@ namespace GDO\Core;
  * It inits the choices with a call to $table->all()!
  * 
  * @author gizmore
- * @version 6.11.2
+ * @version 7.0.1
  * @since 6.2.0
  */
 class GDT_ObjectSelect extends GDT_Select
@@ -63,7 +63,7 @@ class GDT_ObjectSelect extends GDT_Select
 		$this->initChoices();
 		if ($this->completionHref)
 		{
-		    return GDT_Template::php('DB', 'form/object_completion.php', ['field' => $this]);
+		    return GDT_Template::php('Core', 'object_completion_form.php', ['field' => $this]);
 		}
 		return parent::renderForm();
 	}

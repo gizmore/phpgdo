@@ -19,7 +19,7 @@ class GDT_Panel extends GDT
 	
 	public function renderCLI() : string
 	{
-		return $this->renderText();
+		return $this->renderText() . "\n";
 	}
 	
 	public function renderHTML() : string

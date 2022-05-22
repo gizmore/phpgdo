@@ -18,9 +18,22 @@ trait WithValue
 	################
 	### Required ###
 	################
+	/**
+	 * @deprecated use notNull().
+	 * @param bool $required
+	 * @return self
+	 */
 	public function required(bool $required = true) : self
 	{
 		return $this->notNull($required);
+	}
+	
+	/**
+	 * Render HTML required attribute.
+	 */
+	public function htmlRequired() : string
+	{
+		return $this->notNull ? ' required="required"' : '';
 	}
 	
 	###########################
@@ -120,9 +133,23 @@ trait WithValue
 	##############
 	### Render ###
 	##############
+	/**
+	 * Render the value as dbVar
+	 * @deprecated naming sucks
+	 * @return string
+	 */
 	public function renderHTML() : string
 	{
-		return isset($this->var) ? html($this->getVar()) : '';
+		return isset($this->var) ? html($this->var) : '';
+	}
+
+	/**
+	 * Render html value attribute value="foo".
+	 */
+	public function htmlValue() : string
+	{
+		$var = $this->getVar();
+		return $var ? sprintf(' value="%s"', html($var)) : '';
 	}
 
 }

@@ -12,6 +12,7 @@ use GDO\Util\Regex;
  * 
  * Extract the gdo module name.
  * This is easy for any \GDO\ class.
+ * 
  * @TODO: If a class is not \GDO\ it is a 3rd party lib, and we could try to get the gdo module via the absolute realpath of the class definition via reflection.
  * 
  * Provide human names for classes.
@@ -19,7 +20,7 @@ use GDO\Util\Regex;
  * Offers static and non static versions.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.0
  * @see WithName
  */
@@ -58,7 +59,6 @@ trait WithModule
 	##################
 	/**
 	 * Human readable classname.
-	 * @return string
 	 */
 	public function gdoHumanName() : string
 	{

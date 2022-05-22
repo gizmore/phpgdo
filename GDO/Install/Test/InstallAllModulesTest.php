@@ -12,11 +12,11 @@ use function PHPUnit\Framework\assertGreaterThanOrEqual;
 /**
  * Install all available modules.
  * Wipe everything. reset cache.
- * The real testing begins.
+ * The real testing begins afterwards.
  * 
  * @author gizmore
  */
-final class InstallTest extends TestCase
+final class InstallAllModulesTest extends TestCase
 {
 	public function testInstallAllModules()
 	{
@@ -32,18 +32,21 @@ final class InstallTest extends TestCase
 		assertGreaterThanOrEqual(7, count($installed), 'Test if installer utility works.');
 	}
 	
-	public function testWipeAll()
+	public function testWipeAllModules()
 	{
-		echo "Clearing all caches deeply!\n";
+		echo "Clearing all caches again, deeply!\n";
 		ClearCache::make()->clearCache();
 		
-		$result = Database::instance()->dropDatabase(GDO_DB_NAME);
+		echo "Wiping database!\n";
+		
+		$db = Database::instance();
+		$result = $db->dropDatabase(GDO_DB_NAME);
 		assertTrue(!!$result, 'Test if db can be dropped');
 	
-		$result = Database::instance()->createDatabase(GDO_DB_NAME);
+		$result = $db->createDatabase(GDO_DB_NAME);
 		assertTrue(!!$result, 'Test if db can be re-created');
 		
-		$result = Database::instance()->useDatabase(GDO_DB_NAME);
+		$result = $db->useDatabase(GDO_DB_NAME);
 		assertTrue(!!$result, 'Test if db can be re-used');
 	}
 	

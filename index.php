@@ -10,7 +10,6 @@ use GDO\Session\GDO_Session;
 use GDO\User\GDO_User;
 use GDO\DB\Cache;
 use GDO\Language\Module_Language;
-use GDO\Core\Method;
 use GDO\Core\GDT_Method;
 use GDO\Core\Method\DirectoryIndex;
 use GDO\Core\Method\FileNotFound;
@@ -18,17 +17,20 @@ use GDO\Core\Method\Fileserver;
 use GDO\Core\Method\SeoProxy;
 use GDO\Core\Method\NotAllowed;
 use GDO\Core\GDO_Error;
-############
-### Init ###
-############
-define('GDO_PERF_START', microtime(true));
+# really the first thing we do :) Go Go GDOv7!
+define('GDO_TIME_START', microtime(true)); 
+#######################
+### Bootstrap GDOv7 ###
+#######################
 @include 'protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
 	require 'index_install.php';
-	die(1);
 }
 require 'GDO7.php';
+############
+### Init ###
+############
 $app = Application::make();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
@@ -38,12 +40,9 @@ Trans::$ISO = GDO_LANGUAGE;
 if (!module_enabled('Core'))
 {
 	require 'index_install.php';
-	die(1);
 }
-$noSession = true;
 if (@class_exists('\\GDO\\Session\\GDO_Session', true))
 {
-	unset($noSession);
 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 	$session = GDO_Session::instance();
 }
@@ -55,16 +54,18 @@ if (GDO_LOG_REQUEST)
 	Logger::logRequest();
 }
 $app->handleJSONRequests();
-define('GDO_CORE_STABLE', true);
-############
-### Main ###
-############
-$_GET = $_POST = null;
+define('GDO_CORE_STABLE', true); # all fine? @deprecated
+###########
+### ENV ###
+###########
+$_GET = $_POST = null; # cleanup unused stuff
+# HTTP Method
 $rqmethod = (string) @$_SERVER['REQUEST_METHOD'];
 if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 {
 	$me = NotAllowed::make();
 }
+# Language
 if (isset($_REQUEST['_lang']))
 {
 	Trans::$ISO = @$_REQUEST['_lang'];
@@ -75,6 +76,7 @@ else
 	Trans::$ISO = Module_Language::instance()->detectISO();
 }
 
+# Content Type
 $mode = GDT::RENDER_HTML;
 if (isset($_REQUEST['_fmt']))
 {
@@ -83,6 +85,7 @@ if (isset($_REQUEST['_fmt']))
 }
 $app->mode($mode);
 
+# Ajax
 $ajax = false;
 if (isset($_REQUEST['_ajax']))
 {
@@ -90,7 +93,6 @@ if (isset($_REQUEST['_ajax']))
 	unset($_REQUEST['_ajax']);
 }
 $app->ajax($ajax);
-
 ###################
 ### Pick Method ###
 ###################
@@ -98,7 +100,7 @@ if (!isset($_REQUEST['_url']))
 {
 	if (isset($_REQUEST['_mo']))
 	{
-		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'])))
+		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'], true, false)))
 		{
 			throw new GDO_Error('err_unknown_module', [html($mo->gdoHumanName()), html($_REQUEST['_mo'])]);
 		}
@@ -126,7 +128,9 @@ else
 {
 	$url = (string) @$_REQUEST['_url'];
 	unset($_REQUEST['_url']);
-	$_REQUEST['url'] = $url;
+	
+	$_REQUEST['url'] = $url; # @TODO: Make Fileserver use $url via $me->addInput('url', $url);
+	
 	if (is_dir($url))
 	{
 		$me = DirectoryIndex::make();
@@ -153,5 +157,12 @@ $content = $result->renderMode($app->mode);
 ### Finish ###
 ##############
 Cache::recacheHooks();
-Application::timingHeader();
+if (isset($session))
+{
+	$session->commit();
+}
+Application::timingHeader(); # The last thing we do before any output
+##############
+### Output ###
+##############
 echo $content;

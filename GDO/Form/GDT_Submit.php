@@ -10,7 +10,7 @@ use GDO\Core\WithValue;
  * An input submit button.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.2
  */
 class GDT_Submit extends GDT_Button
@@ -27,6 +27,11 @@ class GDT_Submit extends GDT_Button
 	public function renderHTML() : string
 	{
 		return GDT_Template::php('Form', 'submit_form.php', ['field' => $this]);
+	}
+	
+	public function htmlValue() : string
+	{
+		return sprintf(' value="%s"', $this->renderLabel());
 	}
 	
 }

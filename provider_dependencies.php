@@ -1,9 +1,8 @@
 <?php
 /**
  * This prints all non-core-dependencies for a all modules.
- * The list can be copied by gdo6 authors to Core/ModuleProviders.php
+ * The list can be copied by authors to Core/ModuleProviders.php
  */
-
 use GDO\DB\Database;
 use GDO\Language\Trans;
 use GDO\Session\GDO_Session;
@@ -13,7 +12,6 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
 use GDO\Core\GDO_Module;
 
-# Use gdo6 core
 include "GDO7.php";
 include "protected/config.php";
 
@@ -26,10 +24,6 @@ new Application();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # 1st init as guest
 Debug::init();
-Debug::enableErrorHandler();
-Debug::enableExceptionHandler();
-Debug::setDieOnError(GDO_ERROR_DIE);
-Debug::setMailOnError(GDO_ERROR_MAIL);
 
 $modules = ModuleLoader::instance()->loadModules(false, true, true);
 

@@ -12,19 +12,19 @@ use GDO\User\GDO_User;
  * Can optionally fallback to a static token. @TODO verify crypto.
  * This is useful in fileCached() MethodForm's.
  * 
+ * - Configure $expire 
+ * 
  * @see Cache
  * @see MethodForm
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.1
  * @since 1.0.0
  */
 class GDT_AntiCSRF extends GDT_Hidden
 {
     const KEYLEN = 6;
     const MAX_KEYS = 12;
-    
-    public $cli = false;
     
 	public function defaultName() { return 'xsrf'; }
 
@@ -39,8 +39,8 @@ class GDT_AntiCSRF extends GDT_Hidden
 	##############
 	### Expire ###
 	##############
-	public $csrfExpire = 60 * 30; # 0.5 hours is a sensible default.
-	public function csrfExpire($csrfExpire)
+	public int $csrfExpire = 60 * 30; # 0.5 hours is a sensible default.
+	public function csrfExpire(int $csrfExpire) : self
 	{
 		$this->csrfExpire = $csrfExpire;
 		return $this;

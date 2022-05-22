@@ -3,10 +3,10 @@ namespace GDO\UI;
 
 /**
  * Extend a GDT with an API similiar to jQuery.
- * Render HTML with htmlAttributes().
+ * Render with htmlAttributes().
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.7.0
  */
 trait WithPHPJQuery

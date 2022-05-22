@@ -47,4 +47,12 @@ trait WithFormAttributes
 		return $this->isDisabled() ? ' disabled="disabled"' : '';
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function formVariable() : string
+	{
+		return $this->getName();
+	}
+
 }

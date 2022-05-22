@@ -8,7 +8,7 @@ use GDO\Core\GDT_Template;
  * An example is the release date of a book, or a birthdate.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDT_Time
  * @see GDT_Timestamp
@@ -19,8 +19,8 @@ use GDO\Core\GDT_Template;
 class GDT_Date extends GDT_Timestamp
 {
 	public $icon = 'calendar';
-	public $format = Time::FMT_DAY;
-	public $dateStartView = 'year';
+	public string $format = Time::FMT_DAY;
+	public string $dateStartView = 'year';
 	
 	##########
 	### DB ###
@@ -50,11 +50,6 @@ class GDT_Date extends GDT_Timestamp
 	public function toValue(string $var = null)
 	{
 	    return empty($var) ? null : Time::parseDateTimeDB($var);
-	}
-	
-	public function htmlValue()
-	{
-	    return sprintf(' value="%s"', $this->getVar());
 	}
 	
 	##############

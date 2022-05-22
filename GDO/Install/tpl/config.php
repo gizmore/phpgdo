@@ -31,9 +31,9 @@ foreach ($form->getFieldsRec() as $field) :
 if ($field instanceof GDT_Divider)
 {
 	echo "\n";
-	echo str_repeat('#', mb_strlen($field->displayLabel()) + 8) . "\n";
-	echo "### {$field->displayLabel()} ###\n";
-	echo str_repeat('#', mb_strlen($field->displayLabel()) + 8) . "\n";
+	echo str_repeat('#', mb_strlen($field->renderLabel()) + 8) . "\n";
+	echo "### {$field->renderLabel()} ###\n";
+	echo str_repeat('#', mb_strlen($field->renderLabel()) + 8) . "\n";
 }
 elseif ($field instanceof GDT_Submit)
 {

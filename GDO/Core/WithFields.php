@@ -24,20 +24,6 @@ trait WithFields
 	}
 	
 	##############
-	### Inputs ### (Plural)
-	##############
-	/**
-	 * @var GDT|string[]
-	 */
-	public array $inputs;
-	
-	public function inputs(array $inputs) : self
-	{
-		$this->inputs = $inputs;
-		return $this;
-	}
-	
-	##############
 	### Fields ### More methods available here :)
 	##############
 	/**
@@ -100,7 +86,7 @@ trait WithFields
 	 * Iterate recusively over the fields with a callback.
 	 * If the result is truthy, break the loop early and return the result.
 	 */
-	public function withFields(callable $callback)
+	public function withFields($callback)
 	{
 		if (isset($this->fields))
 		{
@@ -109,6 +95,32 @@ trait WithFields
 				if ($result = $callback($gdt))
 				{
 					return $result;
+				}
+				if ($gdt->hasFields())
+				{
+					$gdt->withFields($callback);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Iterate recusively over the fields until we find the one with the key/name/pos.
+	 * Then call the callback with it and return the result.
+	 * Supports both, named and positional fields.
+	 * 
+	 * @param string|int $key
+	 * @param callable $callback
+	 */
+	public function withField($key, $callback)
+	{
+		if (isset($this->fields))
+		{
+			foreach ($this->fields as $k => $gdt)
+			{
+				if ($k == $key)
+				{
+					return $callback($gdt);
 				}
 				if ($gdt->hasFields())
 				{

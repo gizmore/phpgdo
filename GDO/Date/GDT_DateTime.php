@@ -7,7 +7,7 @@ use GDO\Core\GDT_Template;
  * A datetime column has a bigger range of dates compared to a GDT_Timestamp.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.11.2
  */
 class GDT_DateTime extends GDT_Date
@@ -22,7 +22,7 @@ class GDT_DateTime extends GDT_Date
 		return GDT_Template::php('Date', 'form/datetime.php', ['field'=>$this]);
 	}
 	
-	public function htmlValue()
+	public function htmlValue() : string
 	{
 	    $seconds = $this->getValue();
 	    $isodate = date('Y-m-d H:i:s', $seconds);
@@ -40,10 +40,10 @@ class GDT_DateTime extends GDT_Date
 	    return null;
 	}
 	
-	public function displayValue($var)
-	{
-	    return Time::displayDate($var);
-	}
+// 	public function displayValue($var)
+// 	{
+// 	    return Time::displayDate($var);
+// 	}
 	
 	public function _inputToVar($input)
 	{
@@ -58,7 +58,7 @@ class GDT_DateTime extends GDT_Date
 	    return $var;
 	}
 
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 		return ' gdt-datetime';
 	}

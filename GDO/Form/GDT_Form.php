@@ -6,12 +6,13 @@ use GDO\Core\WithFields;
 use GDO\UI\WithTitle;
 use GDO\UI\WithText;
 use GDO\UI\WithTarget;
+use GDO\Core\GDT_Template;
 
 /**
  * A form has a title, a text, fields, menu actions and an html action/target.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.4
  * @see MethodForm
  * @see WithText
@@ -51,5 +52,12 @@ final class GDT_Form extends GDT
 		return $this;
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function renderHTML() : string
+	{
+		return GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
+	}
 
 }

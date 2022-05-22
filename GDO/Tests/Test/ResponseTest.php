@@ -4,12 +4,9 @@ namespace GDO\Tests\Test;
 use GDO\Core\GDT_Response;
 use GDO\Tests\TestCase;
 use GDO\UI\GDT_Paragraph;
-use function PHPUnit\Framework\assertContains;
-use function PHPUnit\Framework\assertStringContainsString;
 use GDO\UI\GDT_Container;
-use function PHPUnit\Framework\assertEquals;
-use GDO\Core\Application;
 use GDO\Core\GDT;
+use function PHPUnit\Framework\assertEquals;
 
 /**
  * Some very basic rendering tests.
@@ -36,17 +33,9 @@ final class ResponseTest extends TestCase
         
         $html = $r1->renderMode(GDT::RENDER_FORM);
         
-        assertStringContainsString('par1', $html);
-        assertStringContainsString('par2', $html);
-        assertStringContainsString('par3', $html);
+        assertEquals(1, substr_count($html, 'par1'), $html, 'Test nested container rendering pass 1');
+        assertEquals(1, substr_count($html, 'par2'), $html, 'Test nested container rendering pass 2');
+        assertEquals(1, substr_count($html, 'par3'), $html, 'Test nested container rendering pass 3');
     }
     
-    public function testAddingNullResponse()
-    {
-        $r1 = GDT_Response::make();
-        $p1 = GDT_Paragraph::make()->textRaw('par1');
-        $r1->addField($p1);
-        assertEquals(200, Application::$RESPONSE_CODE);
-    }
-
 }

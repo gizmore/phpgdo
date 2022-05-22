@@ -8,19 +8,20 @@ use GDO\User\GDO_User;
 use GDO\Util\Strings;
 use GDO\UI\WithTitle;
 use GDO\UI\WithDescription;
+use GDO\CLI\CLI;
 
 /**
  * Abstract baseclass for all methods.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.1
  * @see WithParameters
  */
 abstract class Method #extends GDT
 {
 	use WithTitle;
-	use WithFields;
+	use WithInput;
 	use WithModule;
 	use WithInstance;
 	use WithParameters;
@@ -58,7 +59,7 @@ abstract class Method #extends GDT
 	### Alias Cache ###
 	###################
 	/**
-	 * @var Method[]
+	 * @var Method[string]
 	 */
 	public static array $CLI_ALIASES = [];
 	
@@ -277,17 +278,9 @@ abstract class Method #extends GDT
 		
 		if ($mt = $this->getUserType())
 		{
+			$mt = explode(',', $mt);
 			$ut = $user->getType();
-// 			if (is_array($mt))
-// 			{
-// 				if (!in_array($ut, $mt))
-// 				{
-// 					return GDT_Error::responseWith(
-// 						'err_user_type', [implode(' / ', $this->getUserType())]);
-// 				}
-// 			}
-// 			else
-			if ($ut !== $mt)
+			if (!in_array($ut, $mt, true))
 			{
 				return GDT_Error::make()->text('err_user_type', [$this->getUserType()]);
 			}
@@ -470,6 +463,10 @@ abstract class Method #extends GDT
 	public function success($key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
 		Application::setResponseCode($code);
+		if (Application::instance()->isCLI())
+		{
+			echo t($key, $args) . "\n";
+		}
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));
@@ -480,6 +477,10 @@ abstract class Method #extends GDT
 	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
 	{
 		Application::setResponseCode($code);
+		if (Application::instance()->isCLI())
+		{
+			echo CLI::red(t($key, $args)) . "\n";
+		}
 		if ($log)
 		{
 			Logger::logError(ten($key, $args));

@@ -24,7 +24,7 @@ use GDO\Form\GDT_Form;
   </div>
 <?php if ($field->hasActions()) : ?>
   <div class="gdt-form-actions">
-    <?php foreach ($field->actions() as $gdt) : ?>
+    <?php foreach ($field->actions()->getFields() as $gdt) : ?>
       <?=$gdt->renderForm()?>
     <?php endforeach; ?>
   </div>

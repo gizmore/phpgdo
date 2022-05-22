@@ -35,7 +35,7 @@ class GDT_ModuleAdminButton extends GDT_Button
 	    if ($href = $this->getModule()->href_administrate_module())
 	    {
 	        $this->href($href);
-    	    return sprintf('<a href="%s">%s</a>', $href, $this->displayLabel());
+    	    return sprintf('<a href="%s">%s</a>', $href, $this->renderLabel());
 	    }
 	}
 	

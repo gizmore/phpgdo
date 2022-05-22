@@ -49,7 +49,7 @@ class GDT_Template extends GDT
 		return $this->noLabel();
 	}
 
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 		return parent::htmlClass() . "-{$this->templateModule}-" .
 		Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
@@ -140,7 +140,7 @@ class GDT_Template extends GDT
 	{
 		if ( !$this->templateModuleHead)
 		{
-			return $this->displayLabel();
+			return $this->renderLabel();
 		}
 		$tVars = [
 			'field' => $this

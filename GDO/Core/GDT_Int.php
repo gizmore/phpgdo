@@ -207,7 +207,7 @@ class GDT_Int extends GDT_DBField
 	##############
 	### Render ###
 	##############
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 	    return sprintf(' gdt-num %s', parent::htmlClass());
 	}

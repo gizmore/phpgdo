@@ -8,6 +8,7 @@ use GDO\Date\GDT_Timezone;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Language\GDT_Language;
+use GDO\Language\Trans;
 
 /**
  * The holy user class.
@@ -70,9 +71,14 @@ final class GDO_User extends GDO
 		return self::$CURRENT;
 	}
 	
-	public static function setCurrent(GDO_User $user)
+	public static function setCurrent(GDO_User $user, bool $switchLocale=false)
 	{
 		self::$CURRENT = $user;
+		if ($switchLocale)
+		{
+			Time::setTimezone($user->getTimezone());
+			Trans::setISO($user->getLangISO());
+		}
 		return $user;
 	}
 	

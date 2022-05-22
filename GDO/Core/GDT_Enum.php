@@ -37,7 +37,7 @@ class GDT_Enum extends GDT_DBField
 	
 	public function renderForm() : string
 	{
-	    if ($this->completionHref)
+		if (isset($this->completionHref))
 	    {
 	        return GDT_Template::php('DB', 'form/object_completion.php', ['field' => $this]);
 	    }
@@ -51,7 +51,7 @@ class GDT_Enum extends GDT_DBField
 	
 	public function renderCLI() : string
 	{
-	    $back = $this->displayLabel();
+	    $back = $this->renderLabel();
 	    $cell = $this->renderCell();
 	    return $back ? "{$back}: {$cell}" : $cell;
 	}

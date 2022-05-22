@@ -1,4 +1,4 @@
-# GDOv7 Changelog and Roadmap
+# GDOv7 Changelog (and Roadmap)
 
 Please read from bottom to top :)
 
@@ -7,9 +7,13 @@ Please refer to the gdo6 [GDO_HISTORY.md](https://github.com/gizmore/gdo6/blob/m
 
 ## 7.0.4 / scheduled 21.Jul.2022
 
-GDOv7.0.4 will be the first version with SQLite or Postgres support. Else, only bugfixes are applied.
+GDOv7.0.4 will be the first version with SQLite or Postgres support.
+Else, only bugfixes are applied.
+The [Module_Docs](https://github.com/gizmore/phpgdo-docs) module is operable and produces usable output.
+There are usaable docs.phpgdo.com and gdo7.phpgdo.com websites.
 
  - New providers for Module_DBMS.
+ 
  [MySQL](https://github.com/gizmore/phpgdo-dbms-mysql), [SQLite](https://github.com/gizmore/phpgdo-dbms-sqlite) and [Postgres](https://github.com/gizmore/phpgdo-dbms-postgres).
  
 
@@ -56,7 +60,13 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
 A fresh restart of the GDO project.
 
-GDOv7.0.0 comes with only *all core* and *some secret/basic* modules, but all of them cleaned up and now unit tested. (on it...)
+GDOv7.0.0 comes with only *all core* and *some secret/basic* modules, but all of them cleaned up and now unit tested. The goal for this release is 100% test passes for the core.
+
+ - Confusion resolved. RENDER_LIST is for <ul> and RENDER_CHOICE is for <option>.
+
+ - New Domain: phpgdo.com :)
+
+ - New protected/config.php variable. GDO_JSON_DEBUG toggles JSON_PRETTY_PRINT globally. Defaults to false.
 
  - [Filewalker](https://github.com/gizmore/php-filewalker) is an own package now, independent from any dependency.
  

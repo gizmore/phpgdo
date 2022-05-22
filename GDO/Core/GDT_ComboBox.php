@@ -4,10 +4,10 @@ namespace GDO\Core;
 /**
  * A combobox is a string with additional completion and dropdown.
  * 
- * @see GDT_Select
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
+ * @see GDT_Select
  */
 class GDT_ComboBox extends GDT_String
 {
@@ -16,7 +16,7 @@ class GDT_ComboBox extends GDT_String
 	/**
 	 * @var string[]
 	 */
-	public $choices = [];
+	public array $choices = [];
 	public function choices(array $choices) : self
 	{
 		$this->choices = $choices;
@@ -29,7 +29,7 @@ class GDT_ComboBox extends GDT_String
 	        'selected' => [
 	            'id' => $this->getVar(),
 	            'text' => $this->getVar(),
-	            'display' => $this->display(),
+	            'display' => $this->renderChoice(),
 	        ],
 	        'completionHref' => $this->completionHref,
 	        'combobox' => 1,
@@ -38,7 +38,7 @@ class GDT_ComboBox extends GDT_String
 	
 	public function renderForm() : string
 	{
-	    return GDT_Template::php('Form', 'form/combobox.php', ['field' => $this]);
+	    return GDT_Template::php('Form', 'combobox_form.php', ['field' => $this]);
 	}
 	
 }

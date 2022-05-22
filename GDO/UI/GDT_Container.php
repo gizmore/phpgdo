@@ -8,9 +8,10 @@ use GDO\Core\WithFields;
  * Simple collection of GDTs.
  * The render functions call the render function on all fields.
  * No template is used yet.
+ * Has no input.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.7.1
  */
 class GDT_Container extends GDT

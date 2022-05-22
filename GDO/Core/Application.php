@@ -33,7 +33,7 @@ class Application extends GDT
 	
 	public static function timingHeader()
 	{
-		hdr(sprintf('X-GDO-TIME: %.01fms', (microtime(true) - GDO_PERF_START) * 1000.0));
+		hdr(sprintf('X-GDO-TIME: %.01fms', (microtime(true) - GDO_TIME_START) * 1000.0));
 	}
 	
 	#################
@@ -66,16 +66,10 @@ class Application extends GDT
 	public function isAjax() : bool { return $this->ajax; }
 	public function isHTML() : bool { return $this->mode === GDT::RENDER_HTML; }
 	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
-	public function isCLI() : bool { return false; }
+	public function isCLI() : bool { return $this->cli; }
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
 	public function isWebserver() : bool { return true; }
-
-// 	public function isJSON() : bool { return $this->isFormat('json'); }
-// 	public function getAjax() : string { return isset($_REQUEST['_ajax']) ? $_REQUEST['_ajax'] : '0'; }
-// 	public function isFormat(string $format) : bool { return $this->getFormat() === $format; }
-// 	public function getFormat() : string { return isset($_REQUEST['_fmt']) ? $_REQUEST['_fmt'] : 'html'; }
-// 	public function isAjax() : bool { return !!$this->getAjax(); }
 
 	###################
 	### Render Mode ###
@@ -131,6 +125,13 @@ class Application extends GDT
 		return $indexed;
 	}
 	
+	public bool $cli = false;
+	public function cli(bool $cli=true)
+	{
+		$this->cli = $cli;
+		return $this;
+	}
+	
 	##############
 	### Themes ###
 	##############
@@ -156,6 +157,11 @@ class Application extends GDT
 		return isset($this->getThemes()[$theme]);
 	}
 	
+	/**
+	 * Init themes from session settin.
+	 * @deprecated do we want this?
+	 * @return self
+	 */
 	public function initThemes() : self
 	{
 		if ( (!$this->isInstall()) && (!$this->isCLI()) )

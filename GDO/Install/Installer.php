@@ -104,7 +104,7 @@ class Installer
 	
 	public static function installModuleClass(GDO $gdo)
 	{
-		if ($gdo->gdoIsTable())
+// 		if ($gdo->gdoIsTable())
 		{
 			$gdo->createTable();
 		}
@@ -333,10 +333,10 @@ class Installer
 	 * @param String $moduleName
 	 * @return GDO_Module[]
 	 */
-	public static function getDependencyModules($moduleName)
+	public static function getDependencyModules(string $moduleName) : array
 	{
 	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
-	    $module = ModuleLoader::instance()->getModule($moduleName);
+	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, false, true);
 	    $deps = $module->getDependencies();
 	    $deps[] = 'Core';
 	    $deps = array_unique($deps);
@@ -347,7 +347,8 @@ class Installer
 	        $cnt = count($deps);
 	        foreach ($deps as $dep)
 	        {
-	            $depmod = ModuleLoader::instance()->getModule($dep);
+// 	            $depmod = ModuleLoader::instance()->getModule($dep, true, false);
+	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, false, true);
 	            
 	            if (!$depmod)
 	            {

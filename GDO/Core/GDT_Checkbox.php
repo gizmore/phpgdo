@@ -133,7 +133,7 @@ class GDT_Checkbox extends GDT_Select
 	    }
 	}
 	
-	public function htmlClass()
+	public function htmlClass() : string
 	{
 		return parent::htmlClass() . " gdt-checkbox-{$this->getVar()}";
 	}

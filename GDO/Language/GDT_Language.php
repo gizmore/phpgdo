@@ -3,6 +3,12 @@ namespace GDO\Language;
 
 use GDO\Core\GDT_ObjectSelect;
 
+/**
+ * Language select.
+ * 
+ * @author gizmore
+ * @version 7.0.2
+ */
 final class GDT_Language extends GDT_ObjectSelect
 {
 	public function defaultLabel() : self { return $this->label('language'); }
@@ -16,25 +22,29 @@ final class GDT_Language extends GDT_ObjectSelect
 		$this->cascadeRestrict();
 	}
 	
-	public $withName = false;
-	public function withName($withName=true) { $this->withName = $withName; return $this; }
+	public bool $withName = false;
+	public function withName(bool $withName=true)
+	{
+		$this->withName = $withName;
+		return $this;
+	}
 
 	###############
 	### Choices ###
 	###############
-	private $all = false;
-	public function all($all=true)
+	private bool $all = false;
+	public function all(bool $all=true) : self
 	{
 		$this->all = $all;
 		return $this;
 	}
 	
-	public function initChoices()
+	public function initChoices() : self
 	{
 		return $this->choices ? $this : $this->choices($this->languageChoices());
 	}
 	
-	private function languageChoices()
+	private function languageChoices() : array
 	{
 		$languages = GDO_Language::table();
 		return $this->all ? $languages->all() : $languages->allSupported();
@@ -43,7 +53,7 @@ final class GDT_Language extends GDT_ObjectSelect
 	##################
 	### Completion ###
 	##################
-	public function withCompletion()
+	public function withCompletion() : self
 	{
 		return $this->completionHref(href('Language', 'Completion'));
 	}

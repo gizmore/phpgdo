@@ -3,10 +3,10 @@
 ## Supported Versions
 
 As no-one really uses this, it does not matter much.
-There is only one branch, the master one, and all gdo6 installations should be up to date, always.
+There is only one branch, the master one, and all installations should be up to date, always.
 Roughly you can say a security issue will patch all versions.
 
-New: v7 is under development, But gdo6 will still receive security fixes.
+New: v7 is under development, But v6 will still receive security fixes.
 
 | Version | Supported          |
 | ------- | ------------------ |

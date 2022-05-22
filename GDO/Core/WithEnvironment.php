@@ -60,12 +60,8 @@ trait WithEnvironment
 	###############
 	protected function changeUser() : self
 	{
-		if (isset($this->runAs))
-		{
-			GDO_User::setCurrent($this->runAs);
-			Time::setTimezone($this->runAs->getTimezone());
-			Trans::setISO($this->runAs->getLangISO());
-		}
+		$user = isset($this->runAs) ? $this->runAs : GDO_User::current();
+		GDO_User::setCurrent($user, true);
 		return $this;
 	}
 	

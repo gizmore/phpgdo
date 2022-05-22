@@ -19,12 +19,13 @@ use GDO\User\GDO_User;
 class GDT_Method extends GDT
 {
 	use WithName;
+	use WithInput;
 	use WithFields;
 	use WithEnvironment;
 	
 	public function execute()
 	{
-		return $this->changeUser()->method->inputs($_REQUEST)->exec();
+		return $this->changeUser()->method->inputs($this->getInputs())->exec();
 	}
 	
 	##################

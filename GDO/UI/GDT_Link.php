@@ -73,7 +73,7 @@ class GDT_Link extends GDT_String
 	### Render ###
 	##############
 	public function renderHTML() : string { return GDT_Template::php('UI', 'cell/link.php', ['link' => $this]); }
-	public function renderJSON() { return trim($this->displayLabel() . " ( $this->href )"); }
+	public function renderJSON() { return trim($this->renderLabel() . " ( $this->href )"); }
 	public function renderFilter($f) : string { return GDT_String::make($this->name)->renderFilter($f); }
 	
 	###################

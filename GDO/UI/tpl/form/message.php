@@ -1,7 +1,7 @@
 <?php /** @var $field \GDO\UI\GDT_Message **/ ?>
 <div class="gdt-container<?=$field->classError()?>">
   <?=$field->htmlIcon()?>
-  <label <?=$field->htmlForID()?>><?=$field->displayLabel()?></label>
+  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
   <div class="wysiwyg">
   <textarea
    <?=$field->htmlID()?>

@@ -90,12 +90,11 @@ class Cache
 		}
 	}
 	
-	#################
-	### GDO Cache ###
-	#################
+	#########################
+	### GDO Process Cache ###
+	#########################
 	/**
 	 * The table object is fine to keep clean?
-	 * @var GDO
 	 */
 	private GDO $table;
 	
@@ -291,6 +290,14 @@ class Cache
 			$this->cache[$key]->setGDOVars($assoc)->setPersisted();
 		}
 		return $this->cache[$key];
+	}
+	
+	/**
+	 * Check if the parameter is the GDO table object.
+	 */
+	public function isTable(GDO $gdo) : bool
+	{
+		return $gdo === $this->table;
 	}
 	
 	##################

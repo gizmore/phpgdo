@@ -81,7 +81,7 @@ class GDT_Timestamp extends GDT_DBField
 	#####################
 	### Starting view ###
 	#####################
-	public $dateStartView = 'month';
+	public string $dateStartView = 'month';
 	public function startWithYear()
 	{
 		$this->dateStartView  = 'year';
@@ -96,10 +96,10 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	### Format ###
 	##############
-	public $format = Time::FMT_SHORT;
-	public function format($key)
+	public string $format = Time::FMT_SHORT;
+	public function format(string $format) : self
 	{
-		$this->format = $key;
+		$this->format = $format;
 		return $this;
 	}
 	
@@ -214,7 +214,7 @@ class GDT_Timestamp extends GDT_DBField
 	public function renderCell() : string { return $this->renderCellSpan(Time::displayDateTime(Time::parseDateTimeDB($this->getVar()), $this->format)); }
 	public function renderForm() : string { return GDT_Template::php('Date', 'form/datetime.php', ['field'=>$this]); }
 	public function renderAge() : string { return Time::displayAge($this->getVar()); }
-	public function renderCLI() : string { return $this->displayLabel() . ': ' . $this->display(); }
+	public function renderCLI() : string { return $this->renderLabel() . ': ' . $this->display(); }
 	public function renderJSON() { return Time::getTimestamp($this->getVar()) * 1000; }
 	public function displayVar(string $var = null) : string
 	{

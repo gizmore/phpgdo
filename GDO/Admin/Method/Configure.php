@@ -159,7 +159,7 @@ class Configure extends MethodForm
 				$info[] = '<br/>';
 				GDO_ModuleVar::createModuleVar($mod, $gdt);
 				$info[] = t('msg_modulevar_changed',
-				    [$gdt->displayLabel(),
+				    [$gdt->renderLabel(),
 				        $gdt->displayVar($gdt->initial),
 				        $gdt->display()]);
 				$moduleVarsChanged = true;

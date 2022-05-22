@@ -7,7 +7,7 @@ use GDO\Core\WithName;
  * Add label fields to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.1
  */
 trait WithLabel
@@ -50,7 +50,7 @@ trait WithLabel
 	##############
 	### Render ###
 	##############
-	public function displayLabel() : string
+	public function renderLabel() : string
 	{
 		if ($this->labelKey)
 		{
@@ -70,4 +70,14 @@ trait WithLabel
 		}
 	}
 	
+	############
+	### HTML ###
+	############
+	/**
+	 * HTML string: for="id" 
+	 */
+	public function htmlForID() : string
+	{
+		return sprintf(' for="%s"', $this->htmlId());
+	}
 }

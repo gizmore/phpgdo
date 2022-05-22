@@ -6,11 +6,9 @@ use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
 use GDO\Form\GDT_Submit;
-use GDO\Util\Strings;
 
 /**
- * CLI utilities.
- * Can turn cmdlines into Method parameters.
+ * CLI utility.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -21,13 +19,44 @@ final class CLI
 {
 	/**
 	 * Get the CLI username for the current user.
-	 * 
-	 * @return string
 	 */
     public static function getUsername() : string
     {
         return get_current_user();
     }
+    
+    ##############
+    ### Render ###
+    ##############
+    /**
+     * Turn <br/> into newlines.
+     */
+    public static function br2nl(string $s, string $nl=PHP_EOL) : string
+    {
+    	return preg_replace('#< *br */? *>#is', $nl, $s);
+    }
+    
+    /**
+     * Turn html into CLI output by stripping tags.
+     * @deprecated only needed for bad code.
+     */
+    public static function htmlToCLI(string $html) : string
+    {
+    	$html = preg_replace('/<a .*href="([^"]+)".*>([^<]+)<\\/a>/ius', "$1 ($2)", $html);
+    	$html = self::br2nl($html);
+    	$html = preg_replace('/<[^>]*>/is', '', $html);
+    	$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
+    	return $html;
+    }
+    
+    /**
+     * Render a string in red.
+     */
+    public function red(string $s) : string
+    {
+    	return "RED({$s})";
+    }
+    
     
 //     /**
 //      * Stop output buffering and start auto flush for CLI mode.
@@ -67,101 +96,6 @@ final class CLI
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
     }
     
-    public static function br2nl(string $s, string $nl=PHP_EOL) : string
-    {
-        return preg_replace('#< *br */? *>#is', $nl, $s);
-    }
-    
-    public static function htmlToCLI(string $html) : string
-    {
-        $html = preg_replace('/<a .*href="([^"]+)".*>([^<]+)<\\/a>/ius', "$1 ($2)", $html);
-        $html = self::br2nl($html);
-        $html = preg_replace('/<[^>]*>/is', '', $html);
-        $html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
-        return $html;
-    }
-    
-//     public static function execute($line)
-//     {
-//         if (!($line = trim($line, "\r\n\t ")))
-//         {
-//             throw new GDO_Error('err_need_input');
-//         }
-            
-//         # Parse 'module.method' part
-//         $mome = trim(Strings::substrTo($line, ' ', $line), '"');
-//         $lin = Strings::substrFrom($line, ' ', '');
-        
-//         $matches = null;
-//         if (preg_match('#^([a-z]+)\\.?([a-z]*)(\\.?)([a-z]*)$#iD', $mome, $matches))
-//         {
-//             $mo = $matches[1];
-//             $me = @$matches[2];
-//             $exec = $lin ? true : (!!@$matches[3]);
-//             $button = @$matches[4] ? $matches[4] : null;
-//         }
-//         else
-//         {
-//             throw new GDO_Error('err_module_method');
-//         }
-        
-//         if (!($module = ModuleLoader::instance()->getModule($mo, true)))
-//         {
-//             throw new GDO_Error('err_module_method');
-//         }
-        
-//         if (!$module->isEnabled())
-//         {
-//             return GDT_Error::responseWith('err_method_disabled');
-//         }
-        
-//         if (!$me)
-//         {
-//             return self::showMethods($module);
-//         }
-        
-//         $method = $module->getMethodByName($me);
-//         if (!$method)
-//         {
-//             throw new GDO_Error('err_module_method');
-//         }
-        
-//         if (!$exec)
-//         {
-//             return self::showHelp($method);
-//         }
-
-//         if (!$button)
-//         {
-//             if ($buttons = $method->getButtons())
-//             {
-//                 $button = array_keys($buttons)[0];
-//             }
-            
-//         }
-        
-//         # Parse everything after
-//         $params = self::parseArgline($lin, $method);
-// //         Logger::log('cli', 'PARAMS: ' . json_encode($params));
-        
-//         if ($button)
-//         {
-//             $params[$button] = $button;
-//         }
-        
-//         $method->requestParameters($params);
-        
-//         # Execute the method
-//         try
-//         {
-//             return $method->exec();
-//         }
-//         catch (GDO_ArgException $ex)
-//         {
-//             return GDT_Response::makeWithHTML($ex->getMessage());
-//         }
-//     }
-    
     private static function showHelp(Method $method)
     {
         return $method->renderCLIHelp();
@@ -183,104 +117,104 @@ final class CLI
             $module->displayName(), implode(', ', $methods)]));
     }
     
-    /**
-     * Turn a line of text into method parameters.
-     * 
-     * @param string $line - input line.
-     * @param Method $method - method for parameter reference.
-     * @param boolean $asValues - convert args to values?
-     * 
-     * @return string[]
-     */
-    public static function parseArgline($line, Method $method, $asValues=false)
-    {
-        $i = 0;
-        $success = true;
-        $args = Strings::args($line);
-        $parameters = [];
+//     /**
+//      * Turn a line of text into method parameters.
+//      * 
+//      * @param string $line - input line.
+//      * @param Method $method - method for parameter reference.
+//      * @param boolean $asValues - convert args to values?
+//      * 
+//      * @return string[]
+//      */
+//     public static function parseArgline($line, Method $method, $asValues=false)
+//     {
+//         $i = 0;
+//         $success = true;
+//         $args = Strings::args($line);
+//         $parameters = [];
         
-        # Clear last request errors
-        foreach ($method->gdoParameterCache() as $gdt)
-        {
-            $gdt->error = null;
-//             $gdt->var($gdt->initial);
-//             $_REQUEST[$gdt->name] = $gdt->var;
-//             $_REQUEST[$gdt->formVariable()][$gdt->name] = $gdt->var;
-//             $_REQUEST[$gdt->name] = $var;
-//             $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
-        }
+//         # Clear last request errors
+//         foreach ($method->gdoParameterCache() as $gdt)
+//         {
+//             $gdt->error = null;
+// //             $gdt->var($gdt->initial);
+// //             $_REQUEST[$gdt->name] = $gdt->var;
+// //             $_REQUEST[$gdt->formVariable()][$gdt->name] = $gdt->var;
+// //             $_REQUEST[$gdt->name] = $var;
+// //             $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
+//         }
         
-        # Parse optionals --parameter=value
-        foreach ($args as $var)
-        {
-            if (str_starts_with($var, '--'))
-            {
-                $key = Strings::substrTo($var, '=', $var);
-                $key = ltrim($key, '-');
-                $var = Strings::substrFrom($var, '=', '');
-                if ($gdt = $method->gdoParameterByLabel($key))
-                {
-                    $value = $gdt->toValue($gdt->inputToVar($var));
-                    if ($gdt->validate($value))
-                    {
-                        $gdt->varval($var, $value);
-                    }
-                    else
-                    {
-                        $success = false;
-                    }
-                    $parameters[$gdt->name] = $var;
-                    $_REQUEST[$gdt->name] = $var;
-                    $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
-                }
-                $i++;
-                continue;
-            }
-            break;
-        }
+//         # Parse optionals --parameter=value
+//         foreach ($args as $var)
+//         {
+//             if (str_starts_with($var, '--'))
+//             {
+//                 $key = Strings::substrTo($var, '=', $var);
+//                 $key = ltrim($key, '-');
+//                 $var = Strings::substrFrom($var, '=', '');
+//                 if ($gdt = $method->gdoParameterByLabel($key))
+//                 {
+//                     $value = $gdt->toValue($gdt->inputToVar($var));
+//                     if ($gdt->validate($value))
+//                     {
+//                         $gdt->varval($var, $value);
+//                     }
+//                     else
+//                     {
+//                         $success = false;
+//                     }
+//                     $parameters[$gdt->name] = $var;
+//                     $_REQUEST[$gdt->name] = $var;
+//                     $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
+//                 }
+//                 $i++;
+//                 continue;
+//             }
+//             break;
+//         }
         
-        # Positional / required params
-        foreach ($method->gdoParameterCache() as $gdt)
-        {
-            if ($gdt->name && $gdt->editable && $gdt->isPositional())
-            {
-                $var = $gdt->inputToVar(@$args[$i]);
-                $value = $gdt->toValue($var);
-                if ($gdt->validate($value))
-                {
-                    $gdt->varval(@$args[$i], $value);
-                }
-                else
-                {
-                    $success = false;
-                }
-                $parameters[$gdt->name] = @$args[$i];
-                $_REQUEST[$gdt->name] = @$args[$i];
-                $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
-                $i++;
-            }
-        }
+//         # Positional / required params
+//         foreach ($method->gdoParameterCache() as $gdt)
+//         {
+//             if ($gdt->name && $gdt->editable && $gdt->isPositional())
+//             {
+//                 $var = $gdt->inputToVar(@$args[$i]);
+//                 $value = $gdt->toValue($var);
+//                 if ($gdt->validate($value))
+//                 {
+//                     $gdt->varval(@$args[$i], $value);
+//                 }
+//                 else
+//                 {
+//                     $success = false;
+//                 }
+//                 $parameters[$gdt->name] = @$args[$i];
+//                 $_REQUEST[$gdt->name] = @$args[$i];
+//                 $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
+//                 $i++;
+//             }
+//         }
         
-        # Convert to values
-        if ($asValues)
-        {
-            $old = $parameters;
-            $parameters = [];
-            foreach ($method->gdoParameterCache() as $gdt)
-            {
-                if (isset($old[$gdt->name]))
-                {
-                    $parameters[$gdt->name] = $gdt->getValue();
-                }
-                else
-                {
-                    $parameters[$gdt->name] = $gdt->getInitialValue();
-                }
-            }
-        }
+//         # Convert to values
+//         if ($asValues)
+//         {
+//             $old = $parameters;
+//             $parameters = [];
+//             foreach ($method->gdoParameterCache() as $gdt)
+//             {
+//                 if (isset($old[$gdt->name]))
+//                 {
+//                     $parameters[$gdt->name] = $gdt->getValue();
+//                 }
+//                 else
+//                 {
+//                     $parameters[$gdt->name] = $gdt->getInitialValue();
+//                 }
+//             }
+//         }
         
-        return $success ? $parameters : [];
-    }
+//         return $success ? $parameters : [];
+//     }
 
     /**
      * Render help line for gdt parameters.
@@ -299,7 +233,7 @@ final class CLI
             }
             if ($gdt->isPositional())
             {
-                $usage1[] = sprintf('<%s>(%s)', $gdt->displayLabel(), $gdt->gdoExampleVars());
+                $usage1[] = sprintf('<%s>(%s)', $gdt->renderLabel(), $gdt->gdoExampleVars());
             }
             else
             {

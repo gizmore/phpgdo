@@ -11,15 +11,15 @@ use GDO\Core\GDT_UInt;
 
 /**
  * Permission entities.
+ * One of the first GDO that use GDT_Virtual, for usercount.
  * 
- * @version 7.0.0
+ * @version 7.0.2
  * @since 3.1.0
  * @author gizmore
+ * @see GDT_Virtual
  */
 final class GDO_Permission extends GDO
 {
-//     public function gdoCached() : bool { return false; }
-    
 	public function gdoColumns() : array
 	{
 		return [

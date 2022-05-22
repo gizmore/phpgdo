@@ -49,7 +49,7 @@ use GDO\Core\GDT_Expression;
  * @see gdo_yarn.sh - to install javascript dependencies
  * @see gdo_post_install.sh - to finish the installation process
  * @see gdo_cronjob.sh - to run the module cronjobs
- * @see bin/gdo - to invoke a gdo6 method via the CLI - also for normal users.
+ * @see bin/gdo - to invoke a gdo6 method via the CLI - for normal usage.
  */
 
 /** @var $argc int **/
@@ -59,9 +59,9 @@ use GDO\Core\GDT_Expression;
  * Show usage of the gdoadm.sh shell command.
  * 
  * @example gdoadm.sh install MailGPG
- * @see gdo.php mail.send gizmore 'Subject' 'Body text'
+ * @example bin/gdo mail.send giz Hi there, you wanker;This is the mail body. Parameters are separated via semicolon.
  */
-function printUsage($code=1)
+function printUsage(int $code=1)
 {
     global $argv;
     $exe = $argv[0];
@@ -100,32 +100,24 @@ if ($argc === 1)
 
 require 'GDO7.php';
 
+# forced?
 if (FileUtil::isFile('protected/config_cli.php'))
 {
     require 'protected/config_cli.php';
 }
-else
+else # try :]
 {
     @include 'protected/config.php';
 }
 
-# App is CLI and an installer
-final class gdo_adm extends Application
-{
-	public function isInstall() : bool { return true; }
-	public function isCLI() : bool { return true; }
-	public function isXML() : bool { return false; }
-	public function isHTML() : bool { return false; }
-	public function isJSON() : bool { return false; }
-}
-gdo_adm::instance(); # Create App
+Application::instance()->cli(true);
 
 # Load config defaults
 if (!defined('GDO_CONFIGURED'))
 {
 	define('GDO_DB_ENABLED', false);
 	define('GDO_WEB_ROOT', '/');
-	\GDO\Install\Config::configure();
+	\GDO\Install\Config::configure(); # autoconfig
 }
 
 new ModuleLoader(GDO_PATH . 'GDO/');
@@ -138,7 +130,7 @@ Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
 ModuleLoader::instance()->loadModules(GDO_DB_ENABLED, true);
 
-define('GDO_CORE_STABLE', 1);
+define('GDO_CORE_STABLE', true);
 
 if ($argv[1] === 'systemtest')
 {
@@ -158,10 +150,12 @@ elseif ($argv[1] === 'configure')
 	}
 	
 	$line = "install.configure \"--filename={$argv[2]}\" --save_config=1";
-	$response = GDT_Expression::fromLine($line)->execute();
+	$expr = GDT_Expression::fromLine($line);
+	$response = $expr->execute();
+	echo $response->renderCLI();
     if (Application::isError())
     {
-        echo json_encode($response->renderJSON(), JSON_PRETTY_PRINT);
+    	echo json_encode($response->renderJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
     }
     else
     {
@@ -249,7 +243,6 @@ elseif ($argv[1] === 'modules')
     {
         printUsage();
     }
-    
 }
 
 elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
@@ -524,7 +517,7 @@ elseif ($argv[1] === 'config')
             die(1);
         }
         $moduleVar = GDO_ModuleVar::createModuleVar($module, $gdt);
-        echo t('msg_changed_config', [$gdt->displayLabel(), $module->getName(), $gdt->initial, $moduleVar->getVarValue()]);
+        echo t('msg_changed_config', [$gdt->renderLabel(), $module->getName(), $gdt->initial, $moduleVar->getVarValue()]);
         echo PHP_EOL;
         Cache::flush();
         GDT_Hook::callHook('ModuleVarsChanged', $module);

@@ -43,7 +43,7 @@ if ($field->headers)
             {
                 if (!$gdt->hidden)
                 {
-                    $orderable[$gdt->name] = $gdt->displayLabel();
+                    $orderable[$gdt->name] = $gdt->renderLabel();
                 }
             }
         }

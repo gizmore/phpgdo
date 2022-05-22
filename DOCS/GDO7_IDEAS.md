@@ -9,4 +9,4 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
  
  - New abstract GDO_ModuleComposer which has the right defaults for composer wrapper modules (add autoloader, handle vendor) (not really needed?)
  
- 
+ - gitwatch: A website that joins multiple github projects into a single project.
