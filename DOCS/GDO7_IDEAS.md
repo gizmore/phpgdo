@@ -9,23 +9,25 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
  
  - New abstract GDO_ModuleComposer which has the right defaults for composer wrapper modules (add autoloader, handle vendor) (not really needed?)
  
- - gitwatch: A website that joins multiple github projects into a single project.
+ - gitwatch: A website that joins multiple github projects into a single project. (ON IT!)
 
  - Add Emojis to markup.
 
  - phpgdo-zen and website
 
-  - a chrome plugin that opens 2 tabs (google + duckduckgo)
+ - a chrome plugin that opens 2 tabs (google + duckduckgo)
   
-  - a RENDER_JS mode to create a js application.
+ - a RENDER_JS mode to create a js application.
   
-  - a RENDER_GTK mode to create a GTK+ desktop application.
+ - a RENDER_GTK mode to create a GTK+ desktop application.
   
-  - a way to automatically ignore .gitignore via: igor.sh - a std linux tool.
+ - a way to automatically ignore .gitignore via: igor.sh - a std linux tool.
   
-  - site for discovering tag based youtube channels and playlists.
+ - site for discovering tag based youtube channels and playlists.
   
-  - write a Module_Net cronjob: alert broken links. optional delete by system.
+ - write a Module_Net cronjob: alert broken links. optional delete by system.
   
-  - write a module that adds changelog tables for gdo: phpgdo-changelog.
+ - write a module that adds changelog tables for gdo: phpgdo-changelog.
   
+ - GDOv7 shoule use xdebug-code-coverage programmatically.
+
