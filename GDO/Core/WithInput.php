@@ -51,6 +51,11 @@ trait WithInput
 	 */
 	public function addInput(?string $key, $input) : self
 	{
+		if (!isset($this->inputs))
+		{
+			$this->inputs = [];
+		}
+		
 		if ($key)
 		{
 			$this->inputs[$key] = $input;

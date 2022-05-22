@@ -31,6 +31,11 @@ class Application extends GDT
 	{
 		self::time(microtime(true));
 	}
+	
+	public static function runtime() : float
+	{
+		return microtime(true) - GDO_TIME_START;
+	}
 
 	/**
 	 * Perf headers as cheap as possible.
@@ -111,9 +116,14 @@ class Application extends GDT
 	}
 	
 	public int $mode = GDT::RENDER_HTML;
-	public function mode(int $mode) : self
+	public int $modeDetected = GDT::RENDER_NIL;
+	public function mode(int $mode, bool $detected=false) : self
 	{
 		$this->mode = $mode;
+		if ($detected)
+		{
+			$this->modeDetected = $mode;
+		}
 		return $this;
 	}
 	

@@ -7,47 +7,23 @@ use GDO\Core\WithFields;
 /**
  * Very simple field that only has custom html content.
  * 
- * @see \GDO\UI\GDT_Panel
  * 
  * @author gizmore
- * 
- * @version 6.10.4
+ * @version 7.0.1
  * @since 6.7.0
  */
-final class GDT_HTML extends GDT
+final class GDT_HTML extends GDT_Container
 {
-	use WithFields;
-	
-	public static function withHTML($html)
-	{
-	    return self::make()->html($html);
-	}
-	
-	############
-	### HTML ###
-	############
-	public $html = '';
-	public function html($html)
-	{
-	    $this->html = $html;
-	    return $this;
-	}
-	
-	##############
-	### Render ###
-	##############
-	public function renderHTML() : string
-	{
-		$html = '';
-	    $this->withFields(function(GDT $gdt) use(&$html) {
-	    	$html .= $gdt->renderCell();
-	    });
-    	return $html;
-	}
-	
-// 	public function render() : string
+// 	##############
+// 	### Render ###
+// 	##############
+// 	public function renderHTML() : string
 // 	{
-// 	    return $this->renderCell();
+// 		$html = '';
+// 	    $this->withFields(function(GDT $gdt) use(&$html) {
+// 	    	$html .= $gdt->renderCell();
+// 	    });
+//     	return $html;
 // 	}
 	
 	public function renderCard() : string
@@ -55,19 +31,4 @@ final class GDT_HTML extends GDT
 	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
 	}
 	
-// 	public function renderCell() : string
-// 	{
-// 	    return $this->renderHTML();
-// 	}
-	
-	public function renderJSON()
-	{
-	    return $this->renderHTML();
-	}
-	
-// 	public function renderCLI() : string
-// 	{
-// 	    return $this->renderHTML();
-// 	}
-
 }

@@ -116,7 +116,10 @@ abstract class GDT
 	const RENDER_FILTER = 12; # table head filter
 	const RENDER_HEADER = 13; # table head order @TODO rename to RENDER_ORDER
 	
-	public function render() : string { return $this->renderGDT(); }
+	public function render()
+	{
+		return $this->renderGDT();
+	}
 	
 // 	const RENDER_HASHMAP = [
 // 		[$this, 'renderCLI'],
@@ -126,7 +129,7 @@ abstract class GDT
 	 * 
 	 * @return string|array
 	 */
-	public function renderGDT()
+	protected function renderGDT()
 	{
 		# Now comes a trick :)
 		# @TODO We simply call the function im map[$mode]
@@ -184,12 +187,14 @@ abstract class GDT
 	/**
 	 * Render this GDT in a specified rendering mode.
 	 * This should be the method to use to render a GDT.
+	 * The default rendering mode is the initial detected mode.
 	 *  
 	 * @param int $mode
 	 * @return string|array - array for json
 	 */
-	public function renderMode(int $mode)
+	public function renderMode(int $mode=-1)
 	{
+		$mode = $mode < 0 ? Application::instance()->modeDetected : $mode;
 		self::$NESTING_LEVEL = 0;
 		$app = Application::instance();
 		$old = $app->mode;

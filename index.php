@@ -83,7 +83,7 @@ if (isset($_REQUEST['_fmt']))
 	$mode = Application::instance()->detectRenderMode((string)@$_REQUEST['_fmt']);
 	unset($_REQUEST['_fmt']);
 }
-$app->mode($mode);
+$app->mode($mode, true); # set detected mode.
 
 # Ajax
 $ajax = false;

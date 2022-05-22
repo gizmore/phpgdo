@@ -171,7 +171,7 @@ trait WithFields
 	##############
 	### Render ### - 
 	##############
-	public function render() : string
+	public function render()
 	{
 		return $this->renderGDT();
 	}
