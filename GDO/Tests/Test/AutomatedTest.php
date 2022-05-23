@@ -21,8 +21,8 @@ use function PHPUnit\Framework\assertLessThan;
  * Auto coverage test.
  * Note that GDO are not treated as GDT here.
  * 
- * Includes all GDT and tries some basic make and nullable and conversion.
- * Includes all GDO and tests basic blank data.
+ * Includes all GDT and tries some basic make and nullable test and basic back and forth conversion.
+ * Includes all GDO and tests basic blank data instanciation.
  * 
  * @TODO Includes all GDT + GDO and test all rendering modes. Test with blank and plugged data.
  * @TODO Includes all GDO and test plugged initial test data + insert() + replace().

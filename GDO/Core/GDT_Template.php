@@ -17,7 +17,7 @@ use GDO\Util\FileUtil;
  * - Templates add WithFields for GDT $templateVars ($tVars). It can render with JSON.
  *
  * @author gizmore
- * @version 6.11.0
+ * @version 7.0.0
  * @since 3.0.0
  */
 class GDT_Template extends GDT

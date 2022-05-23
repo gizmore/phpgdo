@@ -13,12 +13,9 @@ To enable unit testing do as follows.
     composer update
     # Create a protected/config_test.php
     ./gdo_test.sh # runs all tests
-    ./gdo_test.sh <module> # runs test for all module dependencies
+    ./gdo_test.sh <module> # runs test for a single module and all it's module dependencies
 
 
 ## GDOv7 Automated test case generation
 
-To enable automated test generations and automatically test all GDT, GDO,
-Method and utility,
-install [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods),
-Voilá, automagic tests enabled :)
+@TODO Tell about the [AutomatedTest](../GDO/Tests/Test/AutomatedTest.php)

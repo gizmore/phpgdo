@@ -14,7 +14,6 @@ use GDO\User\GDO_UserPermission;
 use GDO\Core\Application;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
-use GDO\Core\Website;
 use GDO\Date\Time;
 use GDO\Date\GDO_Timezone;
 use PHPUnit\Framework\Assert;
@@ -161,14 +160,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return GDO_User::setCurrent($user);
     }
     
-    ###################
-    ### Assert code ###
-    ###################
+    ###############
+    ### Asserts ###
+    ###############
     protected function assert200(string $message) { $this->assertCode(200, $message); }
     protected function assert409(string $message) { $this->assertCode(409, $message); }
     protected function assertCode(int $code, string $message)
     {
-    	$message .= 'OUT: ' . Website::renderTopResponse();
         assertEquals($code, Application::$RESPONSE_CODE, $message);
     }
     

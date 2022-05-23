@@ -34,11 +34,14 @@ final class UITest extends TestCase
 
     /**
      * This method is a fine example of the GDOv7 philosophy.
+     * We render an empty page and check if the most bottom javascript preamble contains the GDO_REVISION as JS code.
+     * If this is there, the empty page has been rendered.
+     * And now i introduce generic rendering tests... all this is obsolete!
      */
     public function testHTMLPageRendering()
     {
     	$content = GDT_Page::instance()->renderHTML();
-    	assertStringContainsString('window.GDO_REVISION', $content, 'Test if page rendering might work.');
+    	assertStringContainsString('window.GDO_REVISION', $content, 'Test if page rendering works.');
     }
     
 }

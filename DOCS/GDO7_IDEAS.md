@@ -36,4 +36,6 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
  - weetube.com - Automagically record playlists via a browser plugin.
 Your playlists are ACL sharable.
 
+ - kassierercard.de - Like PayBack cards, but for the cashier. - Vote the cashiers so they get goods.
+ 
  
