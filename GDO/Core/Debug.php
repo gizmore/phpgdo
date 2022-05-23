@@ -20,7 +20,7 @@ use GDO\Util\Strings;
  */
 final class Debug
 {
-	const CLI_MAX_ARG_LEN = 100;
+	const CLI_MAX_ARG_LEN = 100; # it's intersting that CLI can handle longer output
 	const WWW_MAX_ARG_LEN = 50;
 	
 	public static int $MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;

@@ -56,7 +56,7 @@ final class gdo_test extends Application
 {
 	public function isUnitTests(): bool { return true; }
 }
-gdo_test::instance()->mode(GDT::RENDER_CLI);
+gdo_test::instance()->mode(GDT::RENDER_CLI, true);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Database::init(null);
@@ -168,6 +168,8 @@ else # All!
 # ## PERF ###
 # ###########
 $time = microtime(true) - GDO_TIME_START;
+$perf = GDT_PerfBar::make('performance');
+$perf = $perf->renderMode();
 printf("Finished with %s asserts after %s.\nGDT_PerfBar->render() says:\n%s",
 	TestCase::$ASSERT_COUNT, Time::humanDuration($time),
-	GDT_PerfBar::make('performance')->render());
+	$perf);

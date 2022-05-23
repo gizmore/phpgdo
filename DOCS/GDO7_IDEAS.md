@@ -33,3 +33,7 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
 
  - /bin/grr - linux binary to replace input with a regex pattern and stream to output. Like awk but only that one thing well :*
  
+ - weetube.com - Automagically record playlists via a browser plugin.
+Your playlists are ACL sharable.
+
+ 

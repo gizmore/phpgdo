@@ -115,7 +115,7 @@ class Application extends GDT
 	}
 	
 	public int $mode = GDT::RENDER_HTML;
-	public int $modeDetected = GDT::RENDER_NIL;
+	public int $modeDetected = GDT::RENDER_HTML;
 	public function mode(int $mode, bool $detected=false) : self
 	{
 		$this->mode = $mode;
