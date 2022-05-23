@@ -12,27 +12,27 @@ namespace GDO\UI;
  */
 trait WithTitle
 {
-	public $titleKey;
-	public $titleArgs;
+	public string $titleKey;
+	public ?array $titleArgs;
 	public function title(string $key, array $args=null) : self
 	{
-		$this->titleRaw = null;
+		unset($this->titleRaw);
 	    $this->titleKey = $key;
 	    $this->titleArgs = $args;
 	    return $this;
 	}
 	
-	public $titleRaw;
-	public function titleRaw($title)
+	public string $titleRaw;
+	public function titleRaw(string $title) : self
 	{
 	    $this->titleRaw = $title;
-	    $this->titleKey = null;
-	    $this->titleArgs = null;
+	    unset($this->titleKey);
+	    unset($this->titleArgs);
 	    return $this;
 	}
 
-	public $titleEscaped = true;
-	public function titleEscaped(bool $escaped)
+	public bool $titleEscaped = true;
+	public function titleEscaped(bool $escaped) : self
 	{
 	    $this->titleEscaped = $escaped;
 	    return $this;
@@ -43,21 +43,31 @@ trait WithTitle
 	##############
 	public function hasTitle() : bool
 	{
-		return $this->titleKey || $this->titleRaw;
+		return isset($this->titleKey) || isset($this->titleRaw);
 	}
 	
 	public function renderTitle() : string
 	{
-		if ($this->titleKey)
+		if (isset($this->titleKey))
 		{
 			return t($this->titleKey, $this->titleArgs);
 		}
-		return $this->titleRaw;
+		elseif (isset($this->titleRaw))
+		{
+			return $this->titleRaw;
+		}
+		else
+		{
+			return '';
+		}
 	}
 	
 	public function noTitle() : self
 	{
-		return $this->titleRaw(null);
+		unset($this->titleRaw);
+		unset($this->titleKey);
+		unset($this->titleArgs);
+		return $this;
 	}
 
 }

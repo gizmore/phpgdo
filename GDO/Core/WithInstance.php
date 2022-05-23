@@ -12,7 +12,7 @@ trait WithInstance
 {
 	private static self $INSTANCE;
 	
-	public static function instance()
+	public static function instance() : self
 	{
 		if (!isset(self::$INSTANCE))
 		{

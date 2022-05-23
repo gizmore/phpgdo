@@ -11,27 +11,31 @@ namespace GDO\Core;
 trait WithError
 {
 	public string $errorRaw;
-	public string $error;
-	public array $errorArgs;
+	public string $errorKey;
+	public ?array $errorArgs;
 	
+	/**
+	 * Unlike the chain pattern, this returns false!
+	 */
 	public function error(string $key, array $args=null) : bool
 	{
-		$this->error = $key;
+		unset($this->errorRaw);
+		$this->errorKey = $key;
 		$this->errorArgs = $args;
-		$this->errorRaw = null;
 		return false;
 	}
 	
 	public function errorRaw(string $message) : bool
 	{
-		$this->error = $this->errorArgs = null;
 		$this->errorRaw = $message;
+		unset($this->errorKey);
+		unset($this->errorArgs);
 		return false;
 	}
 	
 	public function hasError() : bool
 	{
-		return isset($this->error) || isset($this->errorRaw);
+		return isset($this->errorKey) || isset($this->errorRaw);
 	}
 	
 	public function renderError() : string
@@ -40,9 +44,9 @@ trait WithError
 		{
 			return $this->errorRaw;
 		}
-		if (isset($this->error))
+		if (isset($this->errorKey))
 		{
-			return t($this->error, $this->errorArgs);
+			return t($this->errorKey, $this->errorArgs);
 		}
 		return '';
 	}

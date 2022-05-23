@@ -41,10 +41,10 @@ class GDT_ObjectSelect extends GDT_Select
             return true;
         }
         
-        if (!$this->getValue())
-        {
-            return $this->errorInvalidChoice();
-        }
+//         if (!$this->getValue())
+//         {
+//             return $this->errorInvalidChoice();
+//         }
         
 		return true;
 	}

@@ -1,12 +1,17 @@
 <?php
 namespace GDO\Core;
 
+/**
+ * Invalid argument exception.
+ * 
+ * @author gizmore
+ */
 final class GDO_ArgException extends GDO_Error
 {
-	private GDT $field;
-	
 	public function __construct(GDT $field, $code=GDO_Exception::DEFAULT_ERROR_CODE) {
-		parent::__construct('err_parameter', [$this->field->getName(), $this->field->renderError()], $code);
+		$f = $field->hasName() ? $field->getName() : $field->gdoHumanName();
+		$e = $field->renderError();
+		parent::__construct('err_parameter', [$f, $e], $code);
 	}
 	
 }

@@ -3,7 +3,6 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Module;
 use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
@@ -22,49 +21,45 @@ use GDO\Util\Common;
  * @TODO Automatic DB migration for GDO. triggered by re-install module.
  * 
  * @author gizmore
- * @version 6.10.7
+ * @version 7.0.0
  * @since 3.0.0
  */
 class Install extends MethodForm
 {
 	use MethodAdmin;
 	
-	public function formName() { return 'form_install'; }
-	public function getPermission() : ?string { return 'admin'; }
+// 	public function formName() { return 'form_install'; }
+// 	public function getPermission() : ?string { return 'admin'; }
 	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	
-	/**
-	 * @var GDO_Module
-	 */
-	private $configModule;
+	private GDO_Module $configModule;
 	
 	public function gdoParameters() : array
 	{
 	    return [
+	    	# Also modules that are not installed are allowed
 	        GDT_Module::make('module')->uninstalled()->notNull(),
 	    ];
 	}
 	
 	public function onInit() : void
 	{
-	    $loader = ModuleLoader::instance();
-		$moduleName = strtolower(Common::getRequestString('module', ''));
-		$this->configModule = $loader->getModule($moduleName);
+		$this->configModule = $this->gdoParameterValue('module');
 	}
 	
-	public function execute()
-	{
-		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
-		$form = $this->formName();
-		foreach ($buttons as $button)
-		{
-			if (isset($_REQUEST[$form][$button]))
-			{
-				return $this->executeButton($button)->addField($this->renderPage());
-			}
-		}
-		return $this->renderPage();
-	}
+// 	public function execute()
+// 	{
+// 		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
+// 		$form = $this->formName();
+// 		foreach ($buttons as $button)
+// 		{
+// 			if (isset($_REQUEST[$form][$button]))
+// 			{
+// 				return $this->executeButton($button)->addField($this->renderPage());
+// 			}
+// 		}
+// 		return $this->renderPage();
+// 	}
 	
 	public function getTitle()
 	{
@@ -79,18 +74,21 @@ class Install extends MethodForm
 	}
 	
 	/**
-	 * The 3 button install form.
+	 * The 4 button install form.
 	 * {@inheritDoc}
 	 * @see \GDO\Form\MethodForm::createForm()
 	 */
 	public function createForm(GDT_Form $form) : void
 	{
-	    $form->action(href('Admin', 'Configure', '&module='.Common::getRequestString('module')));
+		$mod = $this->configModule;
+
+		$form->action(href('Admin', 'Configure', '&module='.$mod->getName()));
 	    
 		$form->actions()->addField(GDT_Submit::make('install')->label('btn_install'));
 
 		if ($this->configModule && $this->configModule->isInstalled())
 		{
+			
 			$tables = $this->configModule->getClasses();
 			$modules = empty($tables) ? t('enum_none') : implode(', ', array_map(function($t){return Strings::rsubstrFrom($t, '\\');}, $tables));
 			$text = t('confirm_wipe_module', [$modules]);

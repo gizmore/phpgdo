@@ -40,6 +40,7 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getValue()
 	{
+// 		$var = $this->getVar();
 		if ($this->var === null)
 		{
 			return $this->multiple ? [] : null;

@@ -9,7 +9,7 @@ There are 3 caches in use.
 
 ## GDOv7 Cache: Clearing all caches.
 
-If you want to clear all caches, use the [ClearCache Method](..GDO/Admin/Method/ClearCache.php)
+If you want to clear all caches, use the [ClearCache Method](../GDO/Admin/Method/ClearCache.php)
 
     ClearCache::make()->clearCache();
 
@@ -21,9 +21,7 @@ In Memcached i store sessions, initialized modules, complete configuration table
 It does not speed up much though.
 
 
-## GDOv7 Cache: 
-
-## GDOv7 Cache: [GDO Process cache]  (../GDO/DB/Cache.phpL100)
+## GDOv7 [Process Cache](../GDO/DB/Cache.php#L100)
 
 All three caches are implemented in the [Cache class](../GDO/DB/Cache.php).
 The GDO process cache is caching GDO column structures and ID => GDO mappings for a GDO.
@@ -33,3 +31,7 @@ The GDO process cache is caching GDO column structures and ID => GDO mappings fo
 
 ## GDOv7 [File Cache](../GDO/DB/Cache.php#L300)
 
+This is a simple key => file store in the filesystem.
+
+Of course this does not make sense for tiny values, but a a good usage is for the i18n database.
+All that 1000 key => value array is php serialized into a cached file with a lifetime.

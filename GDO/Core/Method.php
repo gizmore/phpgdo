@@ -378,9 +378,11 @@ abstract class Method #extends GDT
 				$db->transactionBegin();
 			}
 			
+			# Apply input
+			$this->applyInput();
+			
 			# Init method
 			$this->inited = false;
-			
 			$this->onInit();
 			
 			if (Application::isError())
@@ -449,6 +451,24 @@ abstract class Method #extends GDT
 				$db->transactionRollback();
 			}
 			throw $e;
+		}
+	}
+	
+	###################
+	### Apply Input ###
+	###################
+	private function applyInput()
+	{
+		foreach ($this->getInputs() as $key => $input)
+		{
+			$gdt = $this->gdoParameter($key);
+			$var = $gdt->inputToVar($input);
+			$value = $gdt->toValue($var);
+			if (!$gdt->validate($value))
+			{
+				throw new GDO_ArgException($gdt);
+			}
+			$gdt->value($value);
 		}
 	}
 	

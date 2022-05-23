@@ -144,7 +144,7 @@ class Application extends GDT
 	public function cli(bool $cli=true)
 	{
 		$this->cli = $cli;
-		return $this;
+		return $this->mode(GDT::RENDER_CLI, true);
 	}
 	
 	##############

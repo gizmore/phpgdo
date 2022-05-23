@@ -70,7 +70,7 @@ class Configure extends MethodForm
 		}
 		
 		# Response for install panel
-		$response->addField(Install::make()->executeWithInit());
+		$response->addField(Install::make()->inputs($this->getInputs())->executeWithInit());
 		
 		# Configuration if installed
 		if ($this->paramModule()->isPersisted())
@@ -110,7 +110,7 @@ class Configure extends MethodForm
 		
 		if (count($deps))
 		{
-		    $form->info(t('info_module_deps', [Arrays::implodeHuman($deps)]));
+		    $form->text('info_module_deps', [Arrays::implodeHuman($deps)]);
 		}
 		
 		$form->addField(GDT_Name::make('module_name')->writable(false));
