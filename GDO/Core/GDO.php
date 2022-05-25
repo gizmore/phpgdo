@@ -70,7 +70,7 @@ abstract class GDO extends GDT
 	
 	public function __construct()
 	{
-// 		parent::__construct(); # DO NOT call GDT perf counter!
+		parent::__construct(); # DO NOT call GDT perf counter!
 		$this->afterLoaded();
 	}
 	
@@ -1374,7 +1374,7 @@ abstract class GDO extends GDT
 		}
 	}
 	
-	public $recache = false;
+	public $recache = false; // @TODO move GDO->$recache to the Cache to reduce GDO by one field
 	public function recaching() : self
 	{
 		$this->recache = true;

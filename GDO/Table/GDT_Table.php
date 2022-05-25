@@ -162,9 +162,9 @@ class GDT_Table extends GDT
 			$this->addHeader(GDT_PageNum::make('page')->table($this));
 			$gdtIPP = GDT_IPP::make('ipp')->initial($this->getDefaultIPP());
 			$this->addHeader($gdtIPP);
-			$o = $this->headers->name;
-			$ipp = $gdtIPP->getRequestVar($o, $gdtIPP->var);
-			$this->paginated(true, null, $ipp);
+// 			$o = $this->headers->name;
+// 			$ipp = $gdtIPP->getRequestVar($o, $gdtIPP->var);
+			$this->paginated(true, null, 10); #$this->gdtIPP->get);
 		}
 	}
 
@@ -244,10 +244,9 @@ class GDT_Table extends GDT
 			$this->pagemenu->headers($this->headers);
 			$this->pagemenu->href($href);
 			$this->pagemenu->ipp($ipp);
-			$o = $this->headers->name;
-			$this->pagemenu->page(
-			$this->headers->getField('page')
-				->getRequestVar("$o", '1', 'page'));
+// 			$o = $this->headers->name;
+			$page = 1;
+			$this->pagemenu->page($page);
 			$this->href($href);
 		}
 		return $this->ipp($ipp);

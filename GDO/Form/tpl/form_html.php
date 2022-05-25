@@ -6,28 +6,28 @@ use GDO\Form\GDT_Form;
  */
 ?>
 <div class="gdt-form">
- <div class="gdt-form-inner">
-  <div class="gdt-form-text">
+ <form method="<?=$field->verb?>">
+  <div class="gdt-form-inner">
+   <div class="gdt-form-text">
 <?php if ($field->hasTitle()) : ?>
     <h3><?=$field->renderTitle()?></h3>
 <?php endif; ?>
 <?php if ($field->hasText()) : ?>
     <p><?=$field->renderText()?></p>
 <?php endif; ?>
-  </div>
-  <div class="gdt-form-fields">
-    <form method="<?=$field->verb?>">
+   </div>
+   <div class="gdt-form-fields">
       <?php foreach ($field->getFields() as $gdt) : ?>
         <?=$gdt->renderForm()?>
       <?php endforeach; ?>
-    </form>
-  </div>
+   </div>
 <?php if ($field->hasActions()) : ?>
-  <div class="gdt-form-actions">
+   <div class="gdt-form-actions">
     <?php foreach ($field->actions()->getFields() as $gdt) : ?>
       <?=$gdt->renderForm()?>
     <?php endforeach; ?>
-  </div>
+   </div>
 <?php endif; ?>
- </div>
+  </div>
+ </form>
 </div>

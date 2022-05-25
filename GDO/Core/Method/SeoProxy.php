@@ -3,6 +3,7 @@ namespace GDO\Core\Method;
 
 use GDO\Core\Method;
 use GDO\Core\GDO_StubException;
+use GDO\Net\GDT_Url;
 
 /**
  * Proxy an http request / url to a method via GDOv7 SEO url rules.

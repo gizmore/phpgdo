@@ -457,18 +457,27 @@ abstract class Method #extends GDT
 	###################
 	### Apply Input ###
 	###################
+	public function withAppliedInputs(array $inputs) : self
+	{
+		$this->inputs($inputs);
+		$this->applyInput();
+		return $this;
+	}
+	
 	private function applyInput()
 	{
 		foreach ($this->getInputs() as $key => $input)
 		{
-			$gdt = $this->gdoParameter($key);
-			$var = $gdt->inputToVar($input);
-			$value = $gdt->toValue($var);
-			if (!$gdt->validate($value))
+			if ($gdt = $this->gdoParameter($key, false))
 			{
-				throw new GDO_ArgException($gdt);
+				$gdt->input($input);
+				$var = $gdt->inputToVar($input);
+				$value = $gdt->toValue($var);
+				if ($gdt->validate($value))
+				{
+					$gdt->value($value);
+				}
 			}
-			$gdt->value($value);
 		}
 	}
 	
@@ -505,7 +514,9 @@ abstract class Method #extends GDT
 		{
 			Logger::logError(ten($key, $args));
 		}
-		return GDT_Error::make()->titleRaw($this->getModuleName())->text($key, $args);
+		$response = GDT_Tuple::make();
+		$error = GDT_Error::make()->titleRaw($this->getModule()->gdoHumanName())->text($key, $args);
+		return $response->addField($error);
 	}
 	
 	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT

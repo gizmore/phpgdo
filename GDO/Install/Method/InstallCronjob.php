@@ -21,7 +21,7 @@ final class InstallCronjob extends Method
 		return $this->renderPage();
 	}
 	
-	public function renderPage()
+	public function renderPage() : GDT
 	{
 		$container = GDT_Container::make()->vertical(true);
 		GDT_Hook::callHook('InstallCronjob', $container);

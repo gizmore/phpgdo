@@ -16,6 +16,8 @@ use GDO\Util\Strings;
  * @example concat a;$(wget https://google.de) # => a<!DOCTYPE....
  * @example add $(add 1;2);$(add 3;4) # => 10
  * 
+ * @example mail giz;hi there(howdy;$(concat );   wget --abc ssh://)
+ * 
  * @author gizmore
  * @version 7.0.0
  * @since 7.0.0
@@ -27,6 +29,7 @@ final class Parser
 {
 	const CMD_PREAMBLE = '$';
 	const ARG_SEPARATOR = ';';
+	const ESCAPE_CHARACTER = '\\';
 	
 	private string $line;
 	
@@ -47,45 +50,15 @@ final class Parser
 	###############
 	private function parseB(GDT_Expression $current, string $line) : GDT_Expression
 	{
-		$l = $this->line;
 		$i = 0;
+		$l = $this->line;
 		$len = mb_strlen($l);
 		$method = $this->parseMethod($l, $i, $len);
 		$current->method($method);
-		$quotes = 0;
-		$parant = 0; 
 		$arg = '';
 		for (; $i < $len;)
 		{
 			$c = $l[$i++];
-			
-			if ($quotes)
-			{
-				switch ($c)
-				{
-					case '\\':
-						$c2 = $line[$i++];
-						switch ($c2)
-						{
-							case "n": $arg .= "\n"; break;
-							case "t": $arg .= "\t"; break;
-							case '"': $arg .= $c2; break;
-							default: $arg .= $c . $c2; break;
-						}
-						break;
-						
-					case '"':
-						$quotes = 1 - $quotes;
-						$this->addArg($current, $arg);
-						break;
-						
-					default:
-						$arg .= $c;
-						break;
-						
-				}
-				continue;
-			}
 			
 			switch ($c)
 			{
@@ -95,52 +68,24 @@ final class Parser
 					$this->addArgExpr($current, $new);
 					$this->parseB($new, $line2);
 					break;
-					
-				case '"':
-					$quotes = 1 - $quotes;
+				
+				case self::ESCAPE_CHARACTER:
+					$c2 = $l[$i++];
+					$arg .= $c2;
 					break;
-					
-				case '\\':
-					if ($quotes)
-					{
-						$c2 = $l[$i++];
-						switch ($c2)
-						{
-							case "n": $arg .= "\n"; break;
-							case "t": $arg .= "\t"; break;
-							default: $arg .= $c2; break;
-						}
-					}
-					else
-					{
-						$arg .= '\\';
-					}
-					break;
-					
+
 				case self::ARG_SEPARATOR:
 					if ($arg)
 					{
 						$this->addArg($current, $arg);
 					}
 					break;
-					
+
 				default:
 					$arg .= $c;
 					break;
-					
 			}
 		}
-		
-		if ($quotes)
-		{
-			throw new GDO_ParseError('err_unclosed_quotes', [html($line)]);
-		}
-		
-		if ($parant)
-		{
-			throw new GDO_ParseError('err_unclosed_parantheses', [html($line)]);
-		}
-		
 		if ($arg)
 		{
 			$this->addArg($current, $arg);
@@ -167,7 +112,7 @@ final class Parser
 	
 	private function addArgExpr(GDT_Expression $expression, GDT_Expression $arg) : void
 	{
-		$expression->method->addInput($key, $arg);
+		$expression->method->addInput(null, $arg->method);
 	}
 
 	private function parseMethod(string $line, int &$i, int $len) : Method
@@ -201,72 +146,38 @@ final class Parser
 		return Method::getMethod($parsed);
 	}
 	
+	/**
+	 * Parse an additional line within paranstheses.
+	 */
 	private function parseLine(string $line, int &$i, int $len) : Method
 	{
-		$parant = 0;
-		$quotes = 0;
+		# check if $(
+		$c = $line[$i++];
+		if ($c !== '(')
+		{
+			throw new GDO_ParseError('err_expression_preamble', [html($line)]);
+		}
+		
 		$parsed = '';
-		$started = false;
 		for (;$i < $len;)
 		{
 			$c = $line[$i++];
 			
-			if ($quotes)
-			{
-				switch ($c)
-				{
-					case '\\':
-						$c2 = $line[$i++];
-						switch ($c2)
-						{
-							case "n": $parsed .= "\n"; break;
-							case "t": $parsed .= "\t"; break;
-							case '"': $parsed .= $c2; break;
-							default: $parsed .= $c . $c2; break;
-						}
-						break;
-						
-					case '"':
-						$quotes = 1 - $quotes;
-						break;
-						
-					default:
-						$parsed .= $c;
-						break;
-				}
-				continue;
-			}
-			
 			switch ($c)
 			{
-				case '(':
-					$parant++;
-					$started = true;
+				case self::ESCAPE_CHARACTER:
+					$c2 = $line[$i++];
+					$parsed .= $c2;
 					break;
+				
 				case ')':
-					$parant--;
 					break 2;
-				case '"':
-					$quotes = 1 - $quotes;
+					
+				default:
+					$parsed .= $c;
 					break;
 			}
 		}
-		
-		if (!$started)
-		{
-			throw new GDO_ParseError('err_invalid_cli_nested_line', [html($line)]);
-		}
-
-		if ($parant)
-		{
-			throw new GDO_ParseError('err_unclosed_parantheses', [html($line)]);
-		}
-			
-		if ($quotes)
-		{
-			throw new GDO_ParseError('err_unclosed_quotes', [html($line)]);
-		}
-		
 		return $parsed;
 	}
 	

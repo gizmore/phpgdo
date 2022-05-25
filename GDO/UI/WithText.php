@@ -33,7 +33,7 @@ trait WithText
 		$this->textRaw = $text;
 		unset($this->textKey);
 		unset($this->textArgs);
-	    return $this;
+	    return $this->textUnescaped();
 	}
 
 	public function textNone() : self

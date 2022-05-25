@@ -18,6 +18,16 @@ namespace GDO\Core;
  */
 class GDT_String extends GDT_DBField
 {
+	/**
+	 * Get the HTML <input> type.
+	 * GDT_String template is re-used.
+	 * @return string
+	 */
+	public function getInputType() : string
+	{
+		return 'text';
+	}
+	
 	#######################
 	### CaseSensitivity ###
 	#######################
@@ -114,6 +124,15 @@ class GDT_String extends GDT_DBField
 		return true;
 	}
 	
+	public function htmlPattern() : string
+	{
+		if (isset($this->pattern))
+		{
+			return sprintf(' pattern="%s"', $this->pattern);
+		}
+		return '';
+	}
+	
 	protected function errorPattern() : bool
 	{
 		return $this->error('err_pattern_mismatch', [$this->pattern]);
@@ -124,8 +143,11 @@ class GDT_String extends GDT_DBField
 	################
 	public function validate($value) : bool
 	{
-		return
-			parent::validate($value) &&
+		if (!parent::validate($value))
+		{
+			return false;
+		}
+		return $value === null ? true :  
 			$this->validatePattern($value) &&
 			$this->validateLength($value);
 	}
@@ -182,6 +204,14 @@ class GDT_String extends GDT_DBField
 			case self::BINARY:
 				return strcmp($va, $vb);
 		}
+	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderForm() : string
+	{
+		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
 	}
 
 }

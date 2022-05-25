@@ -12,6 +12,7 @@ use GDO\Core\GDO_Exception;
 use GDO\Core\Website;
 use GDO\File\GDT_Path;
 use GDO\Form\GDT_Hidden;
+use GDO\UI\GDT_Redirect;
 
 /**
  * Create a GDO config with this form.
@@ -58,7 +59,7 @@ class Configure extends MethodForm
 		$content = GDT_Template::php('Install', 'config.php', ['form' => $form]);
 		FileUtil::createDir(dirname($this->configPath()));
 		file_put_contents($this->configPath(), $content);
-		return Website::redirectMessage('msg_config_written', [html($this->cfgConfigName())], Config::hrefStep(3));
+		return GDT_Redirect::make()->redirectTime(10)->back()->redirectMessage('msg_config_written', [html($this->cfgConfigName())], Config::hrefStep(3));
 	}
 	
 	public function onTestConfig()

@@ -7,6 +7,14 @@ use function PHPUnit\Framework\assertStringContainsString;
 
 final class TestCLI extends TestCase
 {
+	public function testMostBasicExpressions()
+	{
+		$exp = GDT_Expression::fromLine("cli.concat a;b");
+		$gdt = $exp->execute();
+		$res = $gdt->renderCLI();
+		assertEquals('ab', $res, 'Test if \'concat a;b\' works');
+	}
+	
 	public function testEcho()
 	{
 		$expression = GDT_Expression::fromLine("core.ekko 123");

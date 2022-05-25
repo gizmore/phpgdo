@@ -23,6 +23,9 @@ final class GDT_Response extends GDT
 		{
 			case GDT::RENDER_HTML:
 				return $this->renderPage();
+			case GDT::RENDER_JSON:
+				hdr('Content-Type: application/json');
+				return json_encode($this->renderJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
 			default:
 				return parent::render();
 		}
@@ -34,7 +37,7 @@ final class GDT_Response extends GDT
 	 */
 	public function renderPage()
 	{
-		$content = parent::renderHTML();
+		$content = $this->renderHTML();
 		$page = GDT_Page::instance();
 		return $page->html($content)->render();
 	}

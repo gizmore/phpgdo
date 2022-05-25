@@ -214,7 +214,7 @@ class GDT_Int extends GDT_DBField
 	
 	public function renderForm() : string
 	{
-		return GDT_Template::php('DB', 'form/integer.php', ['field'=>$this]);
+		return GDT_Template::php('Core', 'integer_form.php', ['field'=>$this]);
 	}
 	
 	public function renderCell() : string
@@ -283,18 +283,4 @@ class GDT_Int extends GDT_DBField
 	    return strpos($haystack, $searchTerm) !== false;
 	}
 	
-	##############
-	### Config ###
-	##############
-	public function configJSON() : array
-	{
-		return array_merge(parent::configJSON(), [
-			'min' => $this->min,
-			'max' => $this->max,
-			'unsigned' => $this->unsigned,
-			'bytes' => $this->bytes,
-			'step' => $this->step,
-		]);
-	}
-
 }

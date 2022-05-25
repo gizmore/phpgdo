@@ -5,9 +5,7 @@ use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
 use GDO\Core\MethodAjax;
-use GDO\Core\Module_Core;
 use GDO\Core\GDT_Array;
-use GDO\Core\GDT;
 
 /**
  * Auto completion for GDT_User.
@@ -18,7 +16,7 @@ use GDO\Core\GDT;
  */
 class Completion extends MethodAjax
 {
-	public static $MAXCOUNT = 20;
+	public static int $MAXCOUNT = 20;
 	
 	public function execute()
 	{

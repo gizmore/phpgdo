@@ -20,7 +20,7 @@ final class InstallJavascript extends Method
 		return $this->renderPage();
 	}
 	
-	public function renderPage()
+	public function renderPage() : GDT
 	{
 		return $this->templatePHP('page/installjavascript.php');
 	}

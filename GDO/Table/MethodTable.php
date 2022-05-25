@@ -3,7 +3,6 @@ namespace GDO\Table;
 
 use GDO\Core\Method;
 use GDO\DB\ArrayResult;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Fields;
 use GDO\Core\GDO;
@@ -217,11 +216,12 @@ abstract class MethodTable extends Method
 	
 	public function getIPP()
 	{
-	    $o = $this->table->headers->name;
-	    $defaultIPP = $this->getDefaultIPP();
-	    return $this->isPaginated() ?
-	       $this->table->getHeaderField('ipp')->getRequestVar($o, $defaultIPP) :
-	       $defaultIPP;
+		return 10;
+// 	    $o = $this->table->headers->name;
+// 	    $defaultIPP = $this->getDefaultIPP();
+// 	    return $this->isPaginated() ?
+// 	       $this->table->getHeaderField('ipp')->getRequestVar($o, $defaultIPP) :
+// 	       $defaultIPP;
 	}
 	
 	public function getPage()

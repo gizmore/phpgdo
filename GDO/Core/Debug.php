@@ -4,6 +4,7 @@ namespace GDO\Core;
 use GDO\Mail\Mail;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
+use GDO\UI\GDT_Page;
 
 /**
  * Debug backtrace and error handler.
@@ -194,7 +195,7 @@ final class Debug
 	public static function exception_handler($ex) : void
 	{
 	    echo self::debugException($ex);
-	    die(1);
+// 	    die(1);
 	}
 	
 	public static function debugException(\Throwable $ex, bool $render=true) : string
@@ -243,6 +244,10 @@ final class Debug
 		if ($app->isCLI() || $app->isUnitTests())
 		{
 		    return "$message\n";
+		}
+		if (defined('GDO_CORE_STABLE'))
+		{
+			return GDT_Page::instance()->html($message)->renderHTML();
 		}
 	    return $message;
 	}
@@ -320,8 +325,8 @@ final class Debug
 	
 	private static function getMoMe() : string
 	{
-		$mo = isset($_REQUEST['mo']) ? (string)$_REQUEST['mo'] : '-none';
-		$me = isset($_REQUEST['me']) ? (string)$_REQUEST['me'] : 'none-';
+		$mo = isset($_REQUEST['_mo']) ? (string)$_REQUEST['_mo'] : '-none';
+		$me = isset($_REQUEST['_me']) ? (string)$_REQUEST['_me'] : 'none-';
 		return "{$mo}/{$me}";
 	}
 	

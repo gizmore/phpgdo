@@ -1,15 +1,8 @@
 <?php
 namespace install;
 chdir('../');
-require 'GDO7.php';
-
-# Configure by config file or autoconf
-@include 'protected/config.php';
-
-####
 use GDO\Core\Application;
 use GDO\UI\GDT_Error;
-use GDO\UI\GDT_Page;
 use GDO\Util\Common;
 use GDO\Language\Trans;
 use GDO\Util\Math;
@@ -18,54 +11,43 @@ use GDO\Core\Debug;
 use GDO\Core\Logger;
 use GDO\User\GDO_User;
 use GDO\Install\Config;
-use GDO\Core\Website;
-
-Config::configure();
-
-Debug::enableErrorHandler();
-Debug::enableExceptionHandler();
-Debug::setDieOnError(true);
-Debug::setMailOnError(false);
-
-Logger::init();
-
-Trans::$ISO = GDO_LANGUAGE;
-
+use GDO\Core\GDT_Response;
+@include 'protected/config.php';
+require 'GDO7.php';
 final class wizard extends Application
 {
-    public function isInstall() { return true; }
-    public function getThemes() { return ['install', 'default']; }
+	private $wizardThemes = ['install', 'default'];
+    public function isInstall() : bool
+    {
+    	return true;
+    }
+    public function &getThemes() : array
+    {
+    	return $this->wizardThemes;
+    }
 }
-new wizard();
-
-# Current user is ghost
+wizard::instance();
+Config::configure();
+Logger::init('install');
+Debug::init(0, false);
 GDO_User::setCurrent(GDO_User::ghost());
-
-GDT_Page::make();
-
-# Load only two basic modules from FS for installation process.
-ModuleLoader::instance()->loadModuleFS('Core');
-ModuleLoader::instance()->loadModuleFS('Install');
+$loader = ModuleLoader::instance();
+$loader->loadModuleFS('Core');
+$install = $loader->loadModuleFS('Install');
+Trans::$ISO = GDO_LANGUAGE;
 Trans::inited(true);
-
 define('GDO_CORE_STABLE', 1);
 try
 {
     # Execute Step
     $steps = Config::steps();
-    $step = Math::clamp(Common::getGetInt('step'), 1, count($steps));
-    $method = method('Install', $steps[$step-1]);
-    $response = $method->execute();
+    $step = Math::clampInt(Common::getGetInt('step'), 1, count($steps));
+    $method = $install->getMethod($steps[$step-1]);
+    $result = $method->withAppliedInputs($_REQUEST)->execute();
 }
 catch (\Throwable $ex)
 {
-    $response = GDT_Error::responseException($ex);
+    $result = GDT_Error::make()->exception($ex);
 }
-
-# Render Page
-$top = '';
-if (Website::$TOP_RESPONSE)
-{
-    $top = Website::$TOP_RESPONSE->render();
-}
-echo GDT_Page::make()->html($top . $response->render())->render();
+$response = GDT_Response::make()->addField($result);
+echo $response->render();

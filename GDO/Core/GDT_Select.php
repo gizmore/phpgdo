@@ -191,6 +191,11 @@ class GDT_Select extends GDT_ComboBox
 	
 	private function validateMultiple($values)
 	{
+		if ($values === null)
+		{
+			return $this->validateNull($values);
+		}
+		
 	    if ($values)
 	    {
     		foreach ($values as $value)

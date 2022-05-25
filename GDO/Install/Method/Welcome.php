@@ -1,8 +1,7 @@
 <?php
 namespace GDO\Install\Method;
 
-use GDO\Core\GDT;
-use GDO\Core\Method;
+use GDO\UI\MethodPage;
 
 /**
  * Installer welcome page.
@@ -11,11 +10,7 @@ use GDO\Core\Method;
  * @version 7.0.0
  * @since 6.0.1
  */
-class Welcome extends Method
+class Welcome extends MethodPage
 {
-	public function execute()
-	{
-		return $this->templatePHP('page/welcome.php');
-	}
 	
 }

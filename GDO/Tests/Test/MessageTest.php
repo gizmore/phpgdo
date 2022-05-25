@@ -9,11 +9,11 @@ use function PHPUnit\Framework\assertEquals;
 
 final class MessageTest extends TestCase
 {
-    public function testRendering()
+    public function testMessageRendering()
     {
     	$string = '<p><a>Test</a></p>';
-        $message = GDT_Message::make()->var($string);
-        $html = $message->renderCell();
+        $message = GDT_Message::make('msg')->var($string);
+        $html = $message->renderHTML();
         assertEquals($string, $html, 'Test if default renderer does not mess with user input.');
     }
     

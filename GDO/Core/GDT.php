@@ -64,6 +64,8 @@ abstract class GDT
 	#############
 	public static bool $GDT_DEBUG = false; # debug can also be a backtrace for every alloc.
 	public static int  $GDT_COUNT = 0; # total allocs
+	public static int  $GDT_KILLS = 0; # total deallocs
+	public static int  $GDT_PEAKS = 0; # max sim. alive
 	
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
@@ -71,6 +73,11 @@ abstract class GDT
 	protected function __construct()
 	{
 		$this->afterLoaded();
+	}
+	
+	public function __destruct()
+	{
+		self::$GDT_KILLS++;
 	}
 	
 	public function __wakeup()
@@ -81,6 +88,11 @@ abstract class GDT
 	private function afterLoaded()
 	{
 		self::$GDT_COUNT++;
+		$alive = self::$GDT_COUNT - self::$GDT_KILLS;
+		if ($alive > self::$GDT_PEAKS)
+		{
+			self::$GDT_PEAKS = $alive;
+		}
 		if (self::$GDT_DEBUG)
 		{
 			$this->logDebug();
@@ -278,6 +290,21 @@ abstract class GDT
 		return true; # all empty GDT does nothing... what can it do? randomly fail?!
 	}
 	
+	/**
+	 * Chain this GDT, but only if validated.
+	 * @return self
+	 */
+	public function validated() : self
+	{
+		$var = $this->getVar();
+		$value = $this->toValue($var);
+		if (!$this->validate($value))
+		{
+			throw new GDO_ArgException($this);
+		}
+		return $this;
+	}
+	
 	public function hasError() : bool
 	{
 		return false;
@@ -415,6 +442,10 @@ abstract class GDT
 	 */
 	public function htmlFormName() : string
 	{
+		if ($name = $this->getName())
+		{
+			return sprintf(' name="%s"', $name);
+		}
 		return '';
 	}
 	

@@ -5,9 +5,10 @@ Performance shall be O(N)!
 
 ## GDOv7 Performance: Headers
 
-Watch out for the X-GDO-TIME header.
+Watch out for the X-GDO-TIME and X-GDO-MEM headers.
 A page should be around 25.0ms.
 
+There is a metric called "func", which is number of functions called. [Module_Perf](../GDO/Perf/) is a core module that does report this metric beside others.
 
 ## GDOv7 Performance: Module_Perf
 

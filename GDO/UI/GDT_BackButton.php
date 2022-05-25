@@ -1,8 +1,6 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\Website;
-
 /**
  * A button to navigate back.
  * 
@@ -17,7 +15,7 @@ final class GDT_BackButton extends GDT_Button
 		parent::__construct();
 		$this->icon('back');
 		$this->label('btn_back');
-		$this->href(Website::hrefBack());
+		$this->href(GDT_Redirect::hrefBack());
 	}
 	
 }

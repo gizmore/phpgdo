@@ -3,6 +3,7 @@ namespace GDO\Install\Method;
 
 use GDO\Form\GDT_Form;
 use GDO\Form\MethodForm;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Form\GDT_Submit;
 
@@ -12,7 +13,7 @@ use GDO\Form\GDT_Submit;
  */
 final class CopyHTAccess extends MethodForm
 {
-    public function renderPage()
+    public function renderPage() : GDT
     {
         return GDT_Template::responsePHP('Install', 'page/copyhtaccess.php', ['form' => $this->getForm()]);
     }

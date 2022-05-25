@@ -9,6 +9,7 @@ use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
+use GDO\Language\GDO_Language;
 
 /**
  * The holy user class.
@@ -30,12 +31,12 @@ final class GDO_User extends GDO
 	#############
 	# Instances
 	private static ?self $SYSTEM = null;
-	private static ?self $CURRENT = null;
+	private static self $CURRENT;
 	
 	public function clearCache() : self
 	{
-		self::$SYSTEM = null;
-		self::$CURRENT = null;
+// 		self::$SYSTEM = null;
+// 		self::$CURRENT = $;
 		$this->tempReset();
 		return parent::clearCache();
 	}
@@ -45,7 +46,7 @@ final class GDO_User extends GDO
 	###############
 	public function isSystem() : bool
 	{
-		return $this->getID() === '1';
+		return $this->isType(GDT_UserType::SYSTEM);
 	}
 	
 	public static function system() : self
@@ -64,10 +65,6 @@ final class GDO_User extends GDO
 	 */
 	public static function current() : self
 	{
-		if (!isset(self::$CURRENT))
-		{
-			self::$CURRENT = self::ghost();
-		}
 		return self::$CURRENT;
 	}
 	
@@ -289,3 +286,5 @@ final class GDO_User extends GDO
 	}
 
 }
+
+GDO_User::setCurrent(GDO_User::ghost());

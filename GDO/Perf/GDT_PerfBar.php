@@ -55,7 +55,8 @@ final class GDT_PerfBar extends GDT_Panel
 			
 			'gdoFiles' => $GDT_LOADED,
 		    'gdoCount' => GDO::$GDO_COUNT,
-		    'gdtCount' => GDT::$GDT_COUNT,
+			'gdtCount' => GDT::$GDT_COUNT,
+			'gdtPeakCount' => GDT::$GDT_PEAKS,
 			'funcCount' => xdebug_get_function_count(),
 		    'gdoModules' => count(ModuleLoader::instance()->getEnabledModules()),
 			'gdoLangFiles' => Trans::numFiles(),

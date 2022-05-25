@@ -44,13 +44,30 @@ trait WithParameters
 	
 	/**
 	 * Get a parameter by key.
-	 * 
-	 * @throws GDO_Error
-	 * @throws GDO_ArgException
 	 */
-	public function gdoParameter(string $key, bool $validate=false, bool $throw=true) : ?GDT
+	public function gdoParameter(string $key, bool $throw=true) : ?GDT
 	{
-		if (!$this->gdoHasParameter($key))
+		$cache = $this->gdoParameterCache();
+		if (!($gdt = @$cache[$key]))
+		{
+			if (is_numeric($key))
+			{
+				$pos = -1;
+				foreach ($cache as $_gdt)
+				{
+					if ($_gdt->isPositional())
+					{
+						$pos++;
+						if ($pos == $key)
+						{
+							return $_gdt;
+						}
+					}
+				}
+				
+			}
+		}
+		if (!$gdt)
 		{
 			if ($throw)
 			{
@@ -58,22 +75,6 @@ trait WithParameters
 			}
 			return null;
 		}
-
-		$gdt = $this->gdoParameterCache()[$key];
-		
-		if ($validate)
-		{
-			$value = $gdt->getValue();
-			if (!$gdt->validate($value))
-			{
-				if ($throw)
-				{
-					throw new GDO_ArgException($gdt);
-				}
-			}
-			return null;
-		}
-		
 		return $gdt;
 	}
 
@@ -107,6 +108,7 @@ trait WithParameters
 	public array $parameterCache;
 	
 	/**
+	 * b
 	 * @return GDT[string]
 	 */
 	public function &gdoParameterCache() : array
@@ -116,7 +118,10 @@ trait WithParameters
 			$this->parameterCache = [];
 			foreach ($this->gdoComposeParameters() as $gdt)
 			{
-				$this->parameterCache[$gdt->name] = $gdt;
+				if ($name = $gdt->getName())
+				{
+					$this->parameterCache[$name] = $gdt;
+				}
 			}
 		}
 		return $this->parameterCache;

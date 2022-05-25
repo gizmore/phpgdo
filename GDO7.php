@@ -39,6 +39,7 @@ spl_autoload_register(function(string $name) : void
 ### Global utility ###
 ######################
 require GDO_PATH . 'GDO/Util/Shim.php';
+new ModuleLoader(GDO_PATH . 'GDO/');
 
 function sitename() : string
 {

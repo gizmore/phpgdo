@@ -63,12 +63,12 @@ trait WithFields
 		if ($name = $gdt->getName())
 		{
 			$this->fields[$name] = $gdt;
-// 			$this->fieldsFlat[$name] = $gdt;
+			$this->fieldsFlat[$name] = $gdt;
 		}
 		else
 		{
 			$this->fields[] = $gdt;
-// 			$this->fieldsFlat[] = $gdt;
+			$this->fieldsFlat[] = $gdt;
 		}
 		
 		# Add children in flatten only
@@ -100,9 +100,20 @@ trait WithFields
 		return isset($this->fields) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
 	}
 	
-	public function getField($key) : GDT
+	public function getField($key, bool $throw=true) : ?GDT
 	{
-		return $this->fields[$key];
+		if (isset($this->fieldsFlat[$key]))
+		{
+			return $this->fieldsFlat[$key];
+		}
+		elseif ($throw)
+		{
+			throw new GDO_Error('err_unknown_field', [html($key)]);
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -182,16 +193,19 @@ trait WithFields
 	public function renderFields() : string
 	{
 		$rendered = '';
-		if (self::$NESTING_LEVEL === 0)
-		{
-			self::$NESTING_LEVEL++;
-			$this->withFields(function(GDT $gdt) use (&$rendered) {
+// 		if (self::$NESTING_LEVEL === 0)
+// 		{
+// 			self::$NESTING_LEVEL++;
+			foreach ($this->getAllFields() as $gdt)
+			{
 				$rendered .= $gdt->render();
-			});
-		}
+			}
+// 		}
 		return $rendered;
 	}
 	
+// 	public function renderChoice() : string { return $this->renderFields(); }
+// 	public function renderList() : string { return $this->renderFields(); }
 	public function renderHTML() : string { return $this->renderFields(); }
 	public function renderCell() : string { return $this->renderFields(); }
 	public function renderForm() : string { return $this->renderFields(); }

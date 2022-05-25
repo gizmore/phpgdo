@@ -13,6 +13,7 @@ use GDO\User\GDO_Permission;
 use GDO\Core\ModuleLoader;
 use GDO\Crypto\BCrypt;
 use GDO\Session\GDO_Session;
+use GDO\Core\GDT;
 
 /**
  * Install an admin account.
@@ -40,7 +41,7 @@ class InstallAdmins extends MethodForm
 		$form->actions()->addField(GDT_Submit::make());
 	}
 	
-	public function renderPage()
+	public function renderPage() : GDT
 	{
 		return GDT_Template::responsePHP('Install', 'page/installadmins.php', ['form' => $this->getForm()]);
 	}

@@ -8,7 +8,7 @@ use GDO\Core\Website;use GDO\Language\Trans;
 <!DOCTYPE html>
 <html lang="<?=Trans::$ISO?>">
 <head>
-  <link rel="stylesheet" href="../install/gdo6-install.css" />
+  <link rel="stylesheet" href="../install/gdo-install.css" />
 </head>
 <body>
   <header>
@@ -17,14 +17,14 @@ use GDO\Core\Website;use GDO\Language\Trans;
   </header>
   <div class="gdo-body">
 	<div class="gdo-main">
-	  <?=Website::topResponse()->render()?>
+	  <?=$page->topResponse()->render()?>
 	  <?=$page->html?>
 	</div>
   </div>
   <footer>
-	&copy;2017-2022 <?=GDT_Email::make()->var('Christian <gizmore@wechall.net>')->render()?>
-	<?=GDT_Divider::make()->renderCell()?>
-	<?=GDT_PerfBar::make()->renderCell()?>
+	&copy;2022-2023 <?=GDT_Email::make()->var('Christian <gizmore@wechall.net>')->render()?>
+	<?=GDT_Divider::make()->render()?>
+	<?=GDT_PerfBar::make()->render()?>
   </footer>
 </body>
 </html>

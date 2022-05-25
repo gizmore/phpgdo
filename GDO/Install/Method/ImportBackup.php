@@ -6,6 +6,7 @@ use GDO\File\GDT_File;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
+use GDO\Core\GDT;
 
 /**
  * Import a backup.
@@ -17,7 +18,7 @@ use GDO\Form\MethodForm;
  */
 final class ImportBackup extends MethodForm
 {
-	public function renderPage()
+	public function renderPage() : GDT
 	{
 		return GDT_Template::responsePHP('Install', 'page/importbackup.php', ['form' => $this->getForm()]);
 	}

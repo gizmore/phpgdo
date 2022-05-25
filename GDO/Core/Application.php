@@ -35,6 +35,14 @@ class Application extends GDT
 	{
 		return microtime(true) - GDO_TIME_START;
 	}
+	
+	/**
+	 * Call this at least.
+	 */
+	public static function init()
+	{
+		return self::instance();
+	}
 
 	/**
 	 * Perf headers as cheap as possible.

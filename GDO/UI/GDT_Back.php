@@ -20,7 +20,7 @@ final class GDT_Back extends GDT_Link
 		parent::__construct();
 		$this->name('back');
 		$this->icon('back');
-		$this->href(Website::hrefBack());
+		$this->href(GDT_Redirect::hrefBack());
 	}
 	
 	public function htmlClass() : string

@@ -16,7 +16,7 @@ trait WithName
 {
 	use WithModule;
 	
-	public ?string $name = null;
+	public string $name;
 	
 	public function hasName() : bool
 	{
@@ -25,7 +25,7 @@ trait WithName
 	
 	public function getName() : ?string
 	{
-		return $this->name;
+		return isset($this->name) ? $this->name : null;
 	}
 	
 	public function getDefaultName() : ?string
@@ -35,7 +35,14 @@ trait WithName
 	
 	public function name(string $name = null) : self
 	{
-		$this->name = $name;
+		if ($name)
+		{
+			$this->name = $name;
+		}
+		else
+		{
+			unset($this->name);
+		}
 		return $this;
 	}
 	

@@ -1,8 +1,8 @@
 <?php
 namespace GDO\Form;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
+use GDO\Core\GDT;
 
 /**
  * A method with a form.
@@ -17,6 +17,15 @@ abstract class MethodForm extends Method
 	
 	public abstract function createForm(GDT_Form $form) : void;
 	
+	public function gdoComposeParameters() : array
+	{
+		$form = $this->getForm();
+		return array_merge(
+			$this->gdoParameters(),
+			$form->getAllFields(),
+			$form->actions()->getAllFields());
+	}
+	
 	public function getForm() : GDT_Form
 	{
 		if (!isset($this->form))
@@ -30,14 +39,29 @@ abstract class MethodForm extends Method
 	public function execute()
 	{
 		$form = $this->getForm();
-		$form->actions()->withFields(function(GDT $gdt){
+		foreach ($form->actions()->getAllFields() as $gdt)
+		{
 			if ($gdt->hasInput())
 			{
-				return $gdt->click();
+				if ($form->validate(null))
+				{
+					if ($gdt->onclick)
+					{
+						return $gdt->click();
+					}
+					else
+					{
+						return $this->formValidated($form);
+					}
+				}
 			}
-		});
-		
-		return $form;
+		}
+		return $this->renderPage();
+	}
+	
+	public function renderPage() : GDT
+	{
+		return $this->getForm();
 	}
 	
 }

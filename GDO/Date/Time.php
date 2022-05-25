@@ -19,6 +19,8 @@ use GDO\Core\GDO_Error;
  *  - $date: A string, date($format_via_trans)
  *  - $datetime: A PHP @\DateTime object.
  *  
+ * PHP Timezone will be set to UTC.
+ *  
  * @TODO: Sometimes functions take a formatstring sometimes a formatname t(df_). Always use formatstring. fix all bugs.
  *
  * @author gizmore
@@ -592,3 +594,4 @@ final class Time
 	
 Time::$UTC = new \DateTimeZone('UTC');
 Time::$TIMEZONE_OBJECTS[Time::UTC] = Time::$UTC;
+date_default_timezone_set('UTC');

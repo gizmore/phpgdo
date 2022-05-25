@@ -29,6 +29,9 @@ class GDT_Submit extends GDT_Button
 		return GDT_Template::php('Form', 'submit_form.php', ['field' => $this]);
 	}
 	
+	/**
+	 * The HTML value of a submit is the button label.
+	 */
 	public function htmlValue() : string
 	{
 		return sprintf(' value="%s"', $this->renderLabel());

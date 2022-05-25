@@ -13,21 +13,13 @@ namespace GDO\Core;
  */
 class GDT_Decimal extends GDT_Int
 {
-	###########
-	### GDT ###
-	###########
+	##########
+	### DB ###
+	##########
 	public function gdoColumnDefine() : string
 	{
 		$digits = sprintf("%d,%d", $this->digitsBefore + $this->digitsAfter, $this->digitsAfter);
 		return "{$this->identifier()} DECIMAL($digits){$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-	
-	public function configJSON() : array
-	{
-		return array_merge(parent::configJSON(), [
-			'digitsBefore' => $this->digitsBefore,
-			'digitsAfter' => $this->digitsAfter,
-		]);
 	}
 	
 	##############
@@ -65,7 +57,7 @@ class GDT_Decimal extends GDT_Int
 	
 	public function renderForm() : string
 	{
-		return GDT_Template::php('DB', 'form/decimal.php', ['field'=>$this]);
+		return GDT_Template::php('Core', 'decimal_form.php', ['field'=>$this]);
 	}
 
 	#############

@@ -141,6 +141,7 @@ if ($argv[1] === 'systemtest')
 	echo SystemTest::make()->execute()->renderCLI();
 	echo PHP_EOL;
 }
+
 elseif ($argv[1] === 'configure')
 {
     # @TODO gdoadm.php: write a repl configurator.
@@ -149,15 +150,11 @@ elseif ($argv[1] === 'configure')
 		$argv[2] = 'protected/config.php'; # default config filename
 	}
 	
-	$line = "install.configure \"--filename={$argv[2]}\" --save_config=1";
+	$line = "install.configure \"--filename={$argv[2]}\" --save_config";
 	$expr = GDT_Expression::fromLine($line);
 	$response = $expr->execute();
-	echo $response->renderCLI();
-    if (Application::isError())
-    {
-    	echo json_encode($response->renderJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
-    }
-    else
+	echo $response->render();
+    if (Application::isSuccess())
     {
         Security::make()->protectFolders();
     	echo "You should now edit this file by hand.\n";

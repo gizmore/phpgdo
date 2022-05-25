@@ -21,7 +21,7 @@ final class GDT_Page extends GDT
 {
 	use WithHTML;
 	use WithTitle;
-	use WithFields;
+// 	use WithFields;
 	use WithInstance;
 	use WithDescription;
 	

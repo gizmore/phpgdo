@@ -110,4 +110,16 @@ final class DateTest extends TestCase
     	assertEquals($tx, $t, "Test if human duration converts to seconds.");
     }
     
+    public function testIfTimezoneIsSetToUTC()
+    {
+    	$fmt = 'Y-m-d H:i:s.u';
+    	$now = date($fmt);
+    	date_default_timezone_set('UTC');
+    	assertEquals($now, date($fmt), 'Test if timezone is set to UTC');
+    }
+    
+    public function testIfUserTimezoneIsRespected()
+    {
+    }
+
 }

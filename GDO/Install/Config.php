@@ -34,7 +34,7 @@ class Config
 	### Method Steps ###
 	####################
 	public static function hrefStep(int $step) : string { return $_SERVER['SCRIPT_NAME'] . '?step=' . $step; }
-	public static function linkStep(int $step) : string { return self::linkStepGDT($step)->renderCell(); }
+	public static function linkStep(int $step) : string { return self::linkStepGDT($step)->render(); }
 	public static function linkStepGDT(int $step) : GDT_Link { return GDT_Link::make("step$step")->href(self::hrefStep($step))->label("install_title_$step"); }
 	public static function steps() : array
 	{

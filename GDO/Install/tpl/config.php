@@ -24,7 +24,7 @@ if (defined('GDO_CONFIGURED')) return; // double include
 <?php
 // $tz = $form->getField('timezone')->var;
 $created = Time::getDate(microtime(true));
-$form->getFields('sitecreated')->var($created);
+$form->getField('sitecreated')->var($created);
 
 foreach ($form->getAllFields() as $field) :
 

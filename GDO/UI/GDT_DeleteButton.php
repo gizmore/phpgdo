@@ -1,7 +1,8 @@
 <?php
-namespace GDO\Form;
+namespace GDO\UI;
 
 use GDO\Core\GDT_Template;
+use GDO\Form\GDT_Submit;
 
 /**
  * A delete button confirms before the action is executed.

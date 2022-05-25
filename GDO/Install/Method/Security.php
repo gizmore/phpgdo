@@ -24,7 +24,7 @@ final class Security extends MethodForm
 		return parent::execute();
 	}
 	
-	public function renderPage()
+	public function renderPage() : GDT
 	{
 		return $this->templatePHP('page/security.php', ['form'=>$this->getForm()]);
 	}

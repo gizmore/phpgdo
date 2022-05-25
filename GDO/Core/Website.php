@@ -7,6 +7,7 @@ use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Success;
+use GDO\UI\GDT_Redirect;
 
 /**
  * General Website utility and storage for header and javascript elements.
@@ -25,11 +26,11 @@ use GDO\UI\GDT_Success;
  */
 final class Website
 {
-	/**
-	 * Redirection URL
-	 * @var string
-	 */
-	public static ?string $REDIRECTED = null;
+// 	/**
+// 	 * Redirection URL
+// 	 * @var string
+// 	 */
+// 	public static ?string $REDIRECTED = null;
 
 	/**
 	 * HTML page LINK elements.
@@ -42,70 +43,42 @@ final class Website
 	 * @param number $time
 	 * @return \GDO\Core\GDT_Response
 	 */
-	public static function redirectBack($time=0, $default=null)
-	{
-	    return self::redirect(self::hrefBack($default), $time);
-	}
+// 	public static function redirectBack($time=0, $default=null)
+// 	{
+// 	    return self::redirect(self::hrefBack($default), $time);
+// 	}
 	
-	/**
-	 * Try to get a referrer URL for hrefBack.
-	 * @param string $default
-	 * @return string
-	 */
-	public static function hrefBack($default=null)
-	{
-	    if (Application::instance()->isCLI())
-	    {
-	        return $default ? $default : hrefDefault();
-	    }
-	    
-	    $sess = GDO_Session::instance();
-	    
-	    if ( (!$sess) || (!($url = $sess->getLastURL())) )
-	    {
-	        $url = isset($_SERVER['HTTP_REFERER']) ?
-	           $_SERVER['HTTP_REFERER'] :
-	           ($default ? $default : hrefDefault());
-	    }
-	    
-	    return $url;
-	}
-	
-	public static function redirect($url, $time=0)
-	{
-		$app = Application::instance();
-	    if ($app->isCLI())
-	    {
-	        return;
-	    }
-	    switch ($app->getFormat())
-		{
-			case Application::HTML:
-				if ($app->isAjax())
-				{
-					return GDT_Response::makeWith(GDT_HTML::withHTML(self::ajaxRedirect($url, $time)));
-				}
-				elseif (!self::$REDIRECTED)
-				{
-					if ($time > 0)
-					{
-					    hdr("Refresh:$time; url=$url");
-					}
-					else
-					{
-						hdr('Location: ' . $url);
-					}
-					self::$REDIRECTED = $url;
-				}
-		}
-		self::topResponse()->addField(GDT_Success::with('msg_redirect', [GDT_Link::anchor($url), $time]));
-	}
+// 	public static function redirect(string $url, int $time=0) : GDT
+// 	{
+// 		$app = Application::instance();
+// 	    switch ($app->getFormat())
+// 		{
+// 			case Application::HTML:
+// 				if ($app->isAjax())
+// 				{
+// 					return GDT_Response::makeWith(GDT_HTML::withHTML(self::ajaxRedirect($url, $time)));
+// 				}
+// 				elseif (!self::$REDIRECTED)
+// 				{
+// 					if ($time > 0)
+// 					{
+// 					    hdr("Refresh:$time; url=$url");
+// 					}
+// 					else
+// 					{
+// 						hdr('Location: ' . $url);
+// 					}
+// 					self::$REDIRECTED = $url;
+// 				}
+// 		}
+// 		GDT_Page::instance()->topResponse()->addField(GDT_Success::with('msg_redirect', [GDT_Link::anchor($url), $time]));
+// 	}
 
-	private static function ajaxRedirect($url, $time)
-	{
-		# Don't do this at home kids!
-		return sprintf('<script>setTimeout(function(){ window.location.href="%s" }, %d);</script>', $url, $time*1000);
-	}
+// 	private static function ajaxRedirect($url, $time)
+// 	{
+// 		# Don't do this at home kids!
+// 		return sprintf('<script>setTimeout(function(){ window.location.href="%s" }, %d);</script>', $url, $time*1000);
+// 	}
 	
 	public static function addInlineCSS(string $css)
 	{
@@ -151,13 +124,6 @@ final class Website
 		}
 		
 		$back .= CSS::render();
-		
-// 		if (Module_CSS::instance()->cfgMinify())
-// 		{
-// 		    return $back . "\n" . Minifier::renderMinified();
-// 		}
-
-// 		$back .= Minifier::renderOriginal();
 		
 		return $back;
 	}
@@ -218,90 +184,90 @@ final class Website
 	 * @param mixed $json
 	 * @param boolean $die
 	 */
-	public static function renderJSON($json)
-	{
-	    if (!Application::instance()->isCLI())
-		{
-			hdr('Content-Type: application/json');
-		}
-		return json_encode($json, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
-	}
+// 	public static function renderJSON($json) : string
+// 	{
+// 	    if (!Application::instance()->isCLI())
+// 		{
+// 			hdr('Content-Type: application/json');
+// 		}
+// 		return json_encode($json, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
+// 	}
 	
-	public static function outputStarted()
-	{
-		return headers_sent() || ob_get_contents();
-	}
+// 	public static function outputStarted() : bool
+// 	{
+// 		return headers_sent() || ob_get_contents();
+// 	}
 	
 	#############
 	### Error ###
 	#############
-	public static function error($key, array $args=null, $code=409)
-	{
-	    self::topResponse()->addField(GDT_Error::with($key, $args, $code));
-	}
+// 	public static function error($key, array $args=null, $code=409)
+// 	{
+// 	    self::topResponse()->addField(GDT_Error::with($key, $args, $code));
+// 	}
 	
-	/**
-	 * Redirect and show a message at the new page.
-	 * @param string $key
-	 * @param array $args
-	 * @param string $url
-	 * @param number $time
-	 * @return \GDO\Core\GDT_Response
-	 */
-	public static function redirectMessage($key, array $args=null, $url=null, $time=0)
-	{
-	    return self::redirectMessageRaw(t($key, $args), $url, $time);
-	}
+// 	/**
+// 	 * Redirect and show a message at the new page.
+// 	 * @param string $key
+// 	 * @param array $args
+// 	 * @param string $url
+// 	 * @param number $time
+// 	 * @return \GDO\Core\GDT_Response
+// 	 */
+// 	public static function redirectMessage($key, array $args=null, $url=null, $time=0)
+// 	{
+// 	    return self::redirectMessageRaw(t($key, $args), $url, $time);
+// 	}
 	
-	public static function redirectMessageRaw($message, $url=null, $time=0)
+	public static function redirectMessageRaw(string $message, string $url=null, int $time=0) : GDT
 	{
 	    $app = Application::instance();
 	 
-	    self::topResponse()->addField(GDT_Success::make()->textRaw($message));
+	    GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
 	  
-	    if ($app->isCLI() || $app->isUnitTests())
-	    {
-	        if ($app->isUnitTests())
-	        {
-	            echo "Redirect => $url\n";
-	        }
-	        echo "{$message}\n";
-	        return;
-	    }
+// 	    if ($app->isCLI() || $app->isUnitTests())
+// 	    {
+// 	        if ($app->isUnitTests())
+// 	        {
+// 	            echo "Redirect => $url\n";
+// 	        }
+// 	        echo "{$message}\n";
+// 	        return;
+// 	    }
 	    
 	    $url = $url === null ? self::hrefBack() : $url;
 	    
-	    if (!$app->isInstall())
-	    {
+// 	    if (!$app->isInstall())
+// 	    {
 	        GDO_Session::set('redirect_message', $message);
 	        return self::redirect($url, $time);
-	    }
+// 	    }
 	}
 	
-	public static function redirectError($key, array $args=null, $url=null, $time=0, $code=409)
-	{
-		return self::redirectErrorRaw(t($key, $args), $url, $time, $code);
-	}
+// 	public static function redirectError($key, array $args=null, $url=null, $time=0, $code=409)
+// 	{
+// 		return self::redirectErrorRaw(t($key, $args), $url, $time, $code);
+// 	}
 	
-	public static function redirectErrorRaw($message, $url=null, $time=0, $code=409)
-	{
-	    $app = Application::instance();
+// 	public static function redirectErrorRaw($message, $url=null, $time=0, $code=409)
+// 	{
+// 	    $app = Application::instance();
 
-	    self::topResponse()->addField(GDT_Error::make()->textRaw($message, $code));
+// 	    self::topResponse()->addField(GDT_Error::make()->textRaw($message, $code));
 	    
-	    if ($app->isCLI())
-	    {
-	        echo "{$message}\n";
-	        return;
-	    }
+// 	    if ($app->isCLI())
+// 	    {
+// 	        echo "{$message}\n";
+// 	        return;
+// 	    }
 	    
-	    $url = $url === null ? self::hrefBack() : $url;
-	    if (!$app->isInstall())
-	    {
-	        GDO_Session::set('redirect_error', $message);
-	        return self::redirect($url, $time);
-	    }
-	}
+// 	    $url = $url === null ? self::hrefBack() : $url;
+// 	    if (!$app->isInstall())
+// 	    {
+// 	        GDO_Session::set('redirect_error', $message);
+// 	        return self::redirect($url, $time);
+// 	    }
+// 	}
 	
 	####################
 	### Top Response ###
@@ -334,26 +300,26 @@ final class Website
 // 	    return self::topResponse()->render();
 // 	}
 	
-	#####################
-	### JSON Response ###
-	#####################
-	public static $JSON_RESPONSE;
-	public static function jsonResponse()
-	{
-	    if (!self::$JSON_RESPONSE)
-	    {
-	        self::$JSON_RESPONSE = GDT_Response::make();
-	    }
-	    return self::$JSON_RESPONSE;
-	}
+// 	#####################
+// 	### JSON Response ###
+// 	#####################
+// 	public static $JSON_RESPONSE;
+// 	public static function jsonResponse()
+// 	{
+// 	    if (!self::$JSON_RESPONSE)
+// 	    {
+// 	        self::$JSON_RESPONSE = GDT_Response::make();
+// 	    }
+// 	    return self::$JSON_RESPONSE;
+// 	}
 	
-	public static function renderJSONResponse()
-	{
-	    if (self::$JSON_RESPONSE)
-	    {
-	        return self::$JSON_RESPONSE->renderJSON();
-	    }
-	}
+// 	public static function renderJSONResponse()
+// 	{
+// 	    if (self::$JSON_RESPONSE)
+// 	    {
+// 	        return self::$JSON_RESPONSE->renderJSON();
+// 	    }
+// 	}
 	
 	####################
 	### Generic Head ###

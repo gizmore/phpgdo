@@ -28,6 +28,18 @@ abstract class GDT_Field extends GDT
 	use WithPHPJQuery;
 	use WithFormAttributes;
 	
+	##################
+	### Name Label ###
+	##################
+	public function defaultLabel() : self
+	{
+		if ($name = $this->getName())
+		{
+			return $this->label($name);
+		}
+		return $this;
+	}
+	
 	################
 	### Creation ###
 	################
