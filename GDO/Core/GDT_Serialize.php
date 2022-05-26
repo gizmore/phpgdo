@@ -17,7 +17,7 @@ class GDT_Serialize extends GDT_Text
 
 	public int $max = 65535;
 	public int $encoding = self::BINARY;
-	public bool $writable = false;
+	public bool $writeable = false;
 	public bool $caseSensitive = true;
 	
 	public function toVar($value) : ?string { return empty($value) ? null : self::serialize($value); }

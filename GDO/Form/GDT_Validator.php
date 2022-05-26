@@ -15,7 +15,7 @@ use GDO\Core\GDT;
  */
 class GDT_Validator extends GDT
 {
-	public function isWritable() : bool { return true; } # so it gets evaluated in the validation process.
+	public function isWriteable() : bool { return true; } # so it gets evaluated in the validation process.
 	
 	/**
 	 * Dummy signature

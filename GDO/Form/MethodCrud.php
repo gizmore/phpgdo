@@ -3,6 +3,7 @@ namespace GDO\Form;
 
 use GDO\Core\GDO;
 use GDO\Core\GDO_PermissionException;
+use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDO_User;
 use GDO\Captcha\GDT_Captcha;
 use GDO\Core\GDT_Object;
@@ -181,7 +182,7 @@ abstract class MethodCrud extends MethodForm
 	{
 		if ($gdt->editable)
 		{
-	        $gdt->writable = $this->crudMode !== self::READ;
+	        $gdt->writeable = $this->crudMode !== self::READ;
 			if (!$gdt->virtual)
 			{
 			    $form->addField($gdt);

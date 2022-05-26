@@ -2,12 +2,11 @@
 namespace GDO\Language\Method;
 
 use GDO\Core\Method;
-use GDO\Core\Website;
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
 use GDO\Session\GDO_Session;
-use GDO\UI\GDT_Success;
 use GDO\Net\GDT_Url;
+use GDO\UI\GDT_Redirect;
 
 /**
  * Switch language to user's choice.
@@ -23,11 +22,16 @@ use GDO\Net\GDT_Url;
  */
 final class SwitchLanguage extends Method
 {
+	public function saveLastUrl() : bool
+	{
+		return false;
+	}
+	
 	public function gdoParameters() : array
 	{
 		return [
-			GDT_Language::make('_lang')->notNull(),
-			GDT_Url::make('ref')->allowExternal(false)->allowLocal(),
+			GDT_Language::make('lang')->notNull(),
+			GDT_Url::make('_ref')->allowExternal(false)->allowLocal(),
 		];
 	}
 	
@@ -50,7 +54,7 @@ final class SwitchLanguage extends Method
 	{
 	    try
 	    {
-	        return $this->gdoParameterValue('_lang');
+	        return $this->gdoParameterValue('lang');
 	    }
 	    catch (\Throwable $ex)
 	    {
@@ -61,7 +65,10 @@ final class SwitchLanguage extends Method
 	        return null;
 	    }
 	}
-	
+
+	/**
+	 * Switch the language and redirect back.
+	 */
 	public function execute()
 	{
 		# Set new ISO language
@@ -70,18 +77,9 @@ final class SwitchLanguage extends Method
 		$_REQUEST['_lang'] = $iso;
 		GDO_Session::set('gdo-language', $iso);
 		Trans::setISO($iso);
-		
-		# Build response
-		$response = GDT_Success::make()->text('msg_language_set', [$this->getLanguage()->renderName()]);
-		
-		# Redirect if 'ref' is set
-		if ($url = $this->gdoParameterVar('ref'))
-		{
-			$url = preg_replace("/_lang=[a-z]{2}/", "_lang=".$iso , $url);
-			$response->addField(Website::redirect($url));
-		}
-
-		return $response;
+		return GDT_Redirect::make()->
+			back($this->gdoParameterVar('_ref'))->
+			redirectMessage('msg_language_set', [$this->getLanguage()->renderName()]);
 	}
 	
 }

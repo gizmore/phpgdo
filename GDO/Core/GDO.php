@@ -66,7 +66,9 @@ abstract class GDO extends GDT
 	#################
 	### Construct ###
 	#################
-	public static int $GDO_COUNT = 0;
+	public static int $GDO_COUNT = 0; # total allocs
+	public static int $GDO_KILLS = 0; # total deallocs
+	public static int $GDO_PEAKS = 0; # max sim. alive
 	
 	public function __construct()
 	{
@@ -76,13 +78,23 @@ abstract class GDO extends GDT
 	
 	public function __wakeup()
 	{
+		$this->recache = false;
 		$this->afterLoaded();
+	}
+	
+	public function __destruct()
+	{
+		self::$GDO_KILLS++;
 	}
 	
 	private function afterLoaded() : void
 	{
 		self::$GDO_COUNT++;
-		$this->recache = false;
+		$alive = self::$GDT_COUNT - self::$GDT_KILLS;
+		if ($alive > self::$GDT_PEAKS)
+		{
+			self::$GDT_PEAKS = $alive;
+		}
 		if (GDO_GDT_DEBUG)
 		{
 			self::logDebug();
@@ -540,7 +552,9 @@ abstract class GDO extends GDT
 		
 		if (empty($names))
 		{
-			$names = array_map(function(GDT $gdt){ return $gdt->name; }, $this->gdoColumnsCache());
+			$names = array_map(function(GDT $gdt){
+				return $gdt->getName();
+			}, $this->gdoColumnsCache());
 		}
 		
 		if ($cache)
@@ -1202,8 +1216,11 @@ abstract class GDO extends GDT
 		$id = '';
 		foreach ($this->gdoPrimaryKeyColumnNames() as $name)
 		{
-			$id2 = $this->gdoVar($name);
-			$id = $id ? "{$id}:{$id2}" : $id2;
+			if ($name)
+			{
+				$id2 = $this->gdoVar($name);
+				$id = $id ? "{$id}:{$id2}" : $id2;
+			}
 		}
 		if ($id)
 		{

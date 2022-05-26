@@ -75,6 +75,7 @@ trait WithInput
 	
 	/**
 	 * Add a single input.
+	 * 
 	 * @param string $key
 	 * @param Method|string $input
 	 * @return self
@@ -85,7 +86,6 @@ trait WithInput
 		{
 			$this->inputs = [];
 		}
-		
 		if ($key)
 		{
 			$this->inputs[$key] = $input;

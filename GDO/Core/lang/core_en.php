@@ -35,12 +35,13 @@ return [
 	'err_permission_required' => 'You need the %s permission to execute this function.',
 	'err_gdo_no_gdt' => 'The GDO `%2$s` does not allow the GDT method `%1$s`.',
 	'err_table_gdo' => 'This GDO is not a table object: %s.',
-	'err_method_disabled' => 'This method is currently disabled.',
+	'err_method_disabled' => 'The method %2$s in module %1$s is currently disabled.',
 	'err_method_is_stub' => 'This function is not implemented yet: %s',
 	'err_username_taken' => 'This username is already taken.',
 	'err_form_invalid' => 'Your formular is invalid or incomplete. %s errors have been found.',
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
-
+	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
+	
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 
@@ -58,12 +59,24 @@ return [
 	'btn_send' => 'Send',
 	'btn_set' => 'Set',
 	
+	# Float
+	'thousands_seperator' => ',',
+	
 	# UserType
 	'guest' => 'Guest',
 	'member' => 'Member',
 
 	# GDTs
+	'file_size' => 'Filesize',
 	'message' => 'Message',
+	'password' => 'Password',
+	'url' => 'URL',
 	
+	# Fineprint
+	'privacy' => 'Privacy',
+	'impressum' => 'Impressum',
+	
+	# Directory Index
+	'ft_dir_index' => '%s (%s files and folders)',
 	
 ];

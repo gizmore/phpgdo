@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithFields;
+use GDO\Form\WithActions;
 
 /**
  * A dialog.

@@ -8,17 +8,17 @@ $languages = Module_Language::instance()->cfgSupported();
 ?>
 <div class="gdo-lang-switch">
  <form method="get">
-  <input type="hidden" name="mo" value="Language" />
-  <input type="hidden" name="me" value="SwitchLanguage" />
-  <input type="hidden" name="ref" value="<?=html(urldecode($_SERVER['REQUEST_URI']))?>" />
-  <label><?php echo t('lbl_langswitch'); ?></label>
-  <select name="_lang">
+  <input type="hidden" name="_mo" value="Language" />
+  <input type="hidden" name="_me" value="SwitchLanguage" />
+  <input type="hidden" name="_ref" value="<?=html(urldecode($_SERVER['REQUEST_URI']))?>" />
+  <label><?=t('lbl_langswitch')?></label>
+  <select name="lang">
 <?php
 foreach ($languages as $language)
 {
 	$language instanceof GDO_Language;
 	$sel = Trans::$ISO === $language->getISO() ? ' selected="selected"' : '';
-	printf("<option value=\"%s\"%s>%s</option>", $language->getISO(), $sel, $language->renderName());
+	printf("<option value=\"%s\"%s>%s</option>", $language->getISO(), $sel, $language->renderChoice());
 }
 ?>  
   </select>

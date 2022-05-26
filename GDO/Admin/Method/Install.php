@@ -10,10 +10,8 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Install\Installer;
-use GDO\Core\ModuleLoader;
 use GDO\UI\GDT_Button;
 use GDO\Util\Strings;
-use GDO\Util\Common;
 
 /**
  * Install a module. Wipe a module. Enable and disable a module.
@@ -42,24 +40,27 @@ class Install extends MethodForm
 	    ];
 	}
 	
-	public function onInit() : void
+	public function configModule() : GDO_Module
 	{
-		$this->configModule = $this->gdoParameterValue('module');
+		if (!isset($this->configModule))
+		{
+			$this->configModule = module($this->getInput('module'), false, true, true);
+		}
+		return $this->configModule;
 	}
 	
-// 	public function execute()
-// 	{
-// 		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
-// 		$form = $this->formName();
-// 		foreach ($buttons as $button)
-// 		{
-// 			if (isset($_REQUEST[$form][$button]))
-// 			{
-// 				return $this->executeButton($button)->addField($this->renderPage());
-// 			}
-// 		}
-// 		return $this->renderPage();
-// 	}
+	public function execute()
+	{
+		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
+		foreach ($buttons as $button)
+		{
+			if ($this->hasInput($button))
+			{
+				return $this->executeButton($button)->addField($this->renderPage());
+			}
+		}
+		return $this->renderPage();
+	}
 	
 	public function getTitle()
 	{
@@ -80,7 +81,7 @@ class Install extends MethodForm
 	 */
 	public function createForm(GDT_Form $form) : void
 	{
-		$mod = $this->configModule;
+		$mod = $this->configModule();
 
 		$form->action(href('Admin', 'Configure', '&module='.$mod->getName()));
 	    

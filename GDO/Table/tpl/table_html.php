@@ -64,10 +64,10 @@ $result = $field->getResult();
 	</tr>
 	<?php endwhile; ?>
 	<?php endif; ?>
-	
+
 	</tbody>
-<?php if ($field->footer) : ?>
-	<tfoot><?=$field->footer?></tfoot>
+<?php if (isset($field->footer)) : ?>
+	<tfoot><?=$field->footer->render()?></tfoot>
 <?php endif; ?>
   </table>
   <input type="submit" class="n" />

@@ -116,7 +116,7 @@ class GDT_Float extends GDT_Int
 	    return t('decimal_point');
 	}
 	
-	public static function displayS(string $var, int $decimals=4, string $dot=null, string $comma=null) : string
+	public static function displayS(string $var=null, int $decimals=4, string $dot=null, string $comma=null) : string
 	{
 		if ($var !== null)
 		{

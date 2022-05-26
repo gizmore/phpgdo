@@ -6,6 +6,7 @@ use GDO\Core\Module_Core;
 use GDO\Date\Time;
 use GDO\Util\FileUtil;
 use GDO\Core\Application;
+use GDO\Net\GDT_Url;
 
 /**
  * Serve a static file from the webserver.
@@ -21,9 +22,16 @@ final class Fileserver extends Method
 {
 	public function isTrivial() : bool { return false; }
 	
+	public function gdoParameters() : array
+	{
+		return [
+			GDT_Url::make('url')->allowExternal(false),
+		];
+	}
+	
 	public function execute()
 	{
-		$url = (string) $_REQUEST['url'];
+		$url = $this->gdoParameterVar('url');
 		
 		if (!Module_Core::instance()->checkAssetAllowed($url))
 		{

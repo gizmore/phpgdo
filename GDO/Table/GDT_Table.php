@@ -12,7 +12,7 @@ use GDO\Core\GDT_Template;
 use GDO\UI\GDT_SearchField;
 use GDO\UI\WithHREF;
 use GDO\UI\WithTitle;
-use GDO\UI\WithActions;
+use GDO\Form\WithActions;
 use GDO\Core\WithFields;
 use GDO\Core\GDO_Exception;
 use GDO\Form\WithCrud;

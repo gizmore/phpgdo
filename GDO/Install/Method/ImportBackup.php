@@ -2,11 +2,11 @@
 namespace GDO\Install\Method;
 
 use GDO\Core\GDT_Template;
-use GDO\File\GDT_File;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Core\GDT;
+use GDO\Core\GDT_String;
 
 /**
  * Import a backup.
@@ -26,7 +26,7 @@ final class ImportBackup extends MethodForm
 	public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields(
-			GDT_File::make('backup_file'),
+			GDT_String::make('backup_file'),
 		);
 		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onImportBackup']));
 	}

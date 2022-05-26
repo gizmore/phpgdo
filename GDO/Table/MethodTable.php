@@ -3,7 +3,6 @@ namespace GDO\Table;
 
 use GDO\Core\Method;
 use GDO\DB\ArrayResult;
-use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Fields;
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
@@ -247,7 +246,7 @@ abstract class MethodTable extends Method
 	
 	public function getSearchTerm()
 	{
-	    $table = $this->table;
+// 	    $table = $this->table;
 	    return null;
 // 	    return $table->getHeaderField('search')->getRequestVar($table->headers->getName());
 	}
@@ -257,8 +256,7 @@ abstract class MethodTable extends Method
 	###############
 	public function execute()
 	{
-		return GDT_Response::makeWith(
-		    $this->renderTable());
+		return $this->renderTable();
 	}
 	
 	public function getTableTitleLangKey()

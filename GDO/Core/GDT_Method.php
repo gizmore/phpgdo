@@ -25,6 +25,7 @@ class GDT_Method extends GDT
 	
 	public function execute()
 	{
+		Application::instance()->reset();
 		return $this->changeUser()->method->inputs($this->getInputs())->exec();
 	}
 	

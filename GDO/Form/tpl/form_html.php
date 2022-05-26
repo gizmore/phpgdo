@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Form\tpl;
 use GDO\Form\GDT_Form;
-use GDO\UI\GDT_Error;
+use GDO\Core\GDT;
 /**
  * @var GDT_Form $field
  */
@@ -21,15 +21,17 @@ use GDO\UI\GDT_Error;
 <?php endif; ?>
    </div>
    <div class="gdt-form-fields">
-      <?php foreach ($field->getFields() as $gdt) : ?>
-        <?=$gdt->renderForm()?>
-      <?php endforeach; ?>
+<?php 
+$out = '';
+$field->withFields(function(GDT $gdt) use (&$out) {
+	$out .= $gdt->renderForm();
+});
+echo $out;
+?>
    </div>
 <?php if ($field->hasActions()) : ?>
    <div class="gdt-form-actions">
-    <?php foreach ($field->actions()->getFields() as $gdt) : ?>
-      <?=$gdt->renderForm()?>
-    <?php endforeach; ?>
+     <?=$field->actions()->renderForm()?>
    </div>
 <?php endif; ?>
   </div>

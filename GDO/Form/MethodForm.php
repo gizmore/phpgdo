@@ -46,6 +46,11 @@ abstract class MethodForm extends Method
 		if (!isset($this->form))
 		{
 			$this->form = GDT_Form::make('form');
+			if (isset($this->inputs))
+			{
+				$this->form->inputs($this->inputs);
+				$this->form->actions()->inputs($this->inputs);
+			}
 			$this->createForm($this->form);
 		}
 		return $this->form;
@@ -54,11 +59,6 @@ abstract class MethodForm extends Method
 	public function execute()
 	{
 		$form = $this->getForm();
-		if (isset($this->inputs))
-		{
-			$form->inputs($this->inputs);
-			$form->actions()->inputs($this->inputs);
-		}
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			if ($gdt->hasInput())

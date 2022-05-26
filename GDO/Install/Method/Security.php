@@ -8,7 +8,6 @@ use GDO\Form\GDT_Form;
 use GDO\Form\MethodForm;
 use GDO\Form\GDT_Submit;
 use GDO\Util\HTAccess;
-use GDO\File\GDO_File;
 
 /**
  * HTAccess-Protect certain folders.

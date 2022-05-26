@@ -6,6 +6,7 @@ use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
 use GDO\Form\GDT_Submit;
+use GDO\UI\Color;
 
 /**
  * CLI utility.
@@ -17,12 +18,29 @@ use GDO\Form\GDT_Submit;
  */
 final class CLI
 {
-	/**
-	 * Get the CLI username for the current user.
-	 */
+    public static function isCLI() : bool
+    {
+    	return php_sapi_name() === 'cli';
+    }
+    
+    public static function isInteractive() : bool
+    {
+    	return stream_isatty(STDIN);
+    }
+    
+    /**
+     * Get the CLI username for the current user.
+     */
     public static function getUsername() : string
     {
-        return get_current_user();
+    	return get_current_user();
+    }
+    
+    public static function getSingleCommandLine() : string
+    {
+    	global $argv;
+    	array_shift($argv);
+    	return implode(' ', $argv);
     }
     
     ##############
@@ -54,12 +72,17 @@ final class CLI
     	return $html;
     }
     
-    /**
-     * Render a string in red.
-     */
-    public function red(string $s) : string
+    public static function red(string $s) : string { return Color::red($s); }
+    public static function green(string $s) : string { return Color::green($s); }
+    public static function bold(string $s) : string { return self::typemode($s, '1'); }
+    public static function dim(string $s) : string { return self::typemode($s, '2'); }
+    public static function italic(string $s) : string { return self::typemode($s, '3'); }
+    public static function underlined(string $s) : string { return self::typemode($s, '4'); }
+    public static function blinking(string $s) : string { return self::typemode($s, '5'); }
+    public static function invisible(string $s) : string { return self::typemode($s, '6'); }
+    private static function typemode(string $s, string $mode) : string
     {
-    	return "RED({$s})";
+    	return sprintf("\033[%sm%s\033[0m", $mode, $s);
     }
     
     

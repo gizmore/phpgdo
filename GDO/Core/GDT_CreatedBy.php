@@ -16,7 +16,7 @@ use GDO\User\GDO_User;
  */
 final class GDT_CreatedBy extends GDT_User
 {
-	public function isWritable() : bool { return false; }
+	public bool $writeable = false;
 	
 	public function defaultLabel() : self { return $this->label('created_by'); }
 	

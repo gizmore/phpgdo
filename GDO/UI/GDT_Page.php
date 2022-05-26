@@ -3,7 +3,6 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
-use GDO\Core\WithFields;
 use GDO\Core\WithInstance;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
@@ -22,7 +21,6 @@ final class GDT_Page extends GDT
 {
 	use WithHTML;
 	use WithTitle;
-// 	use WithFields;
 	use WithInstance;
 	use WithDescription;
 	

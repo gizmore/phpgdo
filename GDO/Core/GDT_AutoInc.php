@@ -20,7 +20,7 @@ final class GDT_AutoInc extends GDT_UInt
 	### Base ###
 	############
 	public bool $notNull = true;
-	public bool $writable = false;
+	public bool $writeable = false;
 
 	public function defaultLabel() : self { return $this->label('id'); }
 	

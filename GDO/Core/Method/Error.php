@@ -6,8 +6,15 @@ use GDO\Core\GDT_String;
 use GDO\Core\GDT;
 use GDO\UI\GDT_Error;
 
+/**
+ * Render an arbitrary error. 
+ * @author gizmore
+ * @version 7.0.0
+ */
 final class Error extends MethodPage
 {
+	public function isTrivial() : bool { return false; } # Auto-Test's for 200 code, so not trivial to test.
+	
 	public function gdoParameters() : array
 	{
 		return [
@@ -17,7 +24,7 @@ final class Error extends MethodPage
 	
 	public function execute() : GDT
 	{
-		return GDT_Error::make()->textRaw($this->gdoParameterValue('error'));
+		return GDT_Error::make()->textEscaped()->textRaw($this->gdoParameterValue('error'));
 	}
 	
 }

@@ -44,8 +44,21 @@ trait WithParameters
 	
 	/**
 	 * Get a parameter by key.
+	 * If key is an int, get positional parameter N.
 	 */
-	public function gdoParameter(string $key, bool $throw=true) : ?GDT
+	public function gdoParameter(string $key, bool $validate=true, bool $throw=true) : ?GDT
+	{
+		if ($gdt = $this->_gdoParameterB($key, $throw))
+		{
+			if ($validate)
+			{
+				return $gdt->validated();
+			}
+		}
+		return $gdt;
+	}
+	
+	private function _gdoParameterB(string $key, bool $throw=true) : ?GDT
 	{
 		$cache = $this->gdoParameterCache();
 		if (!($gdt = @$cache[$key]))
@@ -71,7 +84,7 @@ trait WithParameters
 		{
 			if ($throw)
 			{
-				throw new GDO_Error('err_unknown_parameter', [html($key)]);
+				throw new GDO_Error('err_unknown_parameter', [html($key), $this->gdoHumanName()]);
 			}
 			return null;
 		}
@@ -81,22 +94,22 @@ trait WithParameters
 	/**
 	 * Get a parameter's GDT db var string.
 	 */
-	public function gdoParameterVar(string $key, bool $validate=false, string $default=null, bool $throw=true) : ?string
+	public function gdoParameterVar(string $key, bool $validate=false, bool $throw=true) : ?string
 	{
 		if ($gdt = $this->gdoParameter($key, $validate, $throw))
 		{
 			return $gdt->getVar();
 		}
-		return $default;
+		return null;
 	}
 	
-	public function gdoParameterValue(string $key, bool $validate=false, $default=null, bool $throw=true)
+	public function gdoParameterValue(string $key, bool $validate=false, bool $throw=true)
 	{
 		if ($gdt = $this->gdoParameter($key, $validate, $throw))
 		{
 			return $gdt->getValue();
 		}
-		return $default;
+		return null;
 	}
 	
 	#############

@@ -14,7 +14,7 @@ use GDO\User\GDO_User;
 final class GDT_EditedBy extends GDT_User
 {
 	public bool $hidden = true;
-	public bool $writable = false;
+	public bool $writeable = false;
 	
 	public function defaultLabel() : self { return $this->label('edited_by'); }
 	

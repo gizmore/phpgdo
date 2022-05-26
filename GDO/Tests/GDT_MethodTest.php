@@ -7,6 +7,7 @@ use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Core\GDT_Method;
+use GDO\UI\Color;
 
 /**
  * Helper Class to test GDOv7 methods.
@@ -58,72 +59,22 @@ final class GDT_MethodTest extends GDT_Method
     ################################
     ### Automatic Method Testing ###
     ################################
-    /**
-     * Try to plug default values for a method and test it.
-     * 
-     * @TODO: Keep defaultMethod() in MethodTest?
-     * 
-     * @param string $moduleName
-     * @param string $methodName
-     * @param array $parameters
-     * @return self
-     */
-    public function defaultMethod(Method $method)
-    {
-    	$inputs = [];
-    	$method = GDT_Method::make()->method($method)->runAs();
-    	$method->inputs($inputs);
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-//         $getParameters = $parameters;
-        
-//         # Plug default params
-//         foreach ($method->gdoParameterCache() as $name => $gdt)
-//         {
-//             if ($gdt->notNull && $gdt->getVar() === null)
-//             {
-//                 if (!isset($getParameters[$name]))
-//                 {
-//                     if ($plugVar = $this->plugParam($gdt, $method))
-//                     {
-//                         $getParameters[$name] = $plugVar;
-//                     }
-//                 }
-//             }
-//         }
-        
-//         if ($method instanceof MethodForm)
-//         {
-//             foreach ($method->getForm()->getFieldsRec() as $name => $gdt)
-//             {
-//                 if ($gdt->notNull && $gdt->getVar() === null)
-//                 {
-//                     if (!isset($parameters[$name]))
-//                     {
-//                         if ($plugVar = $this->plugParam($gdt, $method))
-//                         {
-//                             $parameters[$name] = $plugVar;
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-        
-//         # Exec
-//         $gdt_method = self::make()->method($method)->runAs();
-        
-        
-//         $gdt_method->execute()
-//             parameters($parameters)->
-//             getParameters($getParameters)->
-//             execute($button);
-    }
+//     /**
+//      * Try to plug default values for a method and test it.
+//      * 
+//      * @TODO: Keep defaultMethod() in MethodTest?
+//      * 
+//      * @param string $moduleName
+//      * @param string $methodName
+//      * @param array $parameters
+//      * @return self
+//      */
+//     public function defaultMethod(Method $method)
+//     {
+// //     	$inputs = [];
+//     	$method = GDT_Method::make()->method($method)->runAs();
+// //     	$method->inputs($inputs);
+//     }
     
     /**
      * Try to guess default params for a GDT.
@@ -142,9 +93,12 @@ final class GDT_MethodTest extends GDT_Method
         }
         else
         {
-            echo "FAILED to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
+            echo Color::red("FAILED")." to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
             ob_flush();
         }
+        
+        $this->addInput($gdt->getName(), $plugvar);
+        
         return $plugvar;
     }
 

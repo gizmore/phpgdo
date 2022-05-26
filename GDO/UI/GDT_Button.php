@@ -32,7 +32,7 @@ class GDT_Button extends GDT
 	{
 	    if ($this->checkEnabled)
 	    {
-    	    $this->writable(call_user_func($this->checkEnabled, $this));
+    	    $this->writeable(call_user_func($this->checkEnabled, $this));
 	    }
 	    $args = ['field' => $this, 'href' => $this->gdoHREF()];
 		return GDT_Template::php('UI', 'button_html.php', $args);

@@ -10,7 +10,7 @@ namespace GDO\Core;
  */
 trait WithInstance
 {
-	private static self $INSTANCE;
+	public static self $INSTANCE;
 	
 	public static function instance() : self
 	{

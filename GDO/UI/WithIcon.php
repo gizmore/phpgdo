@@ -24,19 +24,16 @@ trait WithIcon
 	###########################
 	### Icon-Markup Factory ###
 	###########################
-	public static function iconS($icon, $iconText=null, $size=null, $color=null)
+	public static function iconS($icon, $iconText=null, $size=null, $color=null) : string
 	{
 		$style = self::iconStyle($size, $color);
 		return call_user_func(GDT_Icon::$iconProvider, $icon, $iconText, $style);
 	}
 	
-	public static function rawIconS($icon, $iconText=null, $size=null, $color=null)
+	public static function rawIconS($icon, $iconText=null, $size=null, $color=null) : string
 	{
-		if ($icon)
-		{
-			$style = self::iconStyle($size, $color);
-			return sprintf('<i class="gdo-icon" title="%s"%s>%s</i>', html($iconText), $style, $icon);
-		}
+		$style = self::iconStyle($size, $color);
+		return sprintf('<i class="gdo-icon" title="%s"%s>%s</i>', html($iconText), $style, $icon);
 	}
 	
 	private static function iconStyle($size, $color)
@@ -77,7 +74,7 @@ trait WithIcon
 	##############
 	### Render ###
 	##############
-	public function htmlIcon()
+	public function htmlIcon() : string
 	{
 	    $text = $this->iconText ? html(t($this->iconText, $this->iconTextArgs)) : '';
 		return $this->icon ?

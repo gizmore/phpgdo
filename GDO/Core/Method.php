@@ -69,6 +69,14 @@ abstract class Method #extends GDT
 		self::$CLI_ALIASES[$alias] = $className;
 	}
 	
+	############
+	### HREF ###
+	############
+	public function href(string $append='')
+	{
+		return $this->getModule()->href($this->getMethodName(), $append);
+	}
+	
 	/**
 	 * Get a method by cli convention. Aliases first, then module DOT method.
 	 * 
@@ -106,139 +114,6 @@ abstract class Method #extends GDT
 	{
 		return new static();
 	}
-	
-	##################
-	### Parameters ###
-	##################
-// 	/**
-// 	 * @return GDT[]
-// 	 */
-// 	public function gdoParameters() : array
-// 	{
-// 		return GDT::EMPTY_GDT_ARRAY;
-// 	}
-	
-// 	/**
-// 	 * @return GDT[]
-// 	 */
-// 	protected function gdoParametersB() : array
-// 	{
-// 		return $this->gdoParameters();
-// 	}
-	
-// 	/**
-// 	 * Get a parameter GDT before the cache is generated.
-// 	 * @return GDT|NULL
-// 	 */
-// 	protected function gdoParameterB(string $name) : ?GDT
-// 	{
-// 		foreach ($this->gdoParameters() as $gdt)
-// 		{
-// 			if ($gdt->getName() === $name)
-// 			{
-// 				return $gdt;
-// 			}
-// 		}
-// 		return null;
-// 	}
-	
-	
-// 	/**
-// 	 * @var GDT[]
-// 	 */
-// 	private array $parameterCache;
-	
-// 	/**
-// 	 * @return GDT[]
-// 	 */
-// 	public function &gdoParameterCache() : array
-// 	{
-// 		if (!isset($this->parameterCache))
-// 		{
-// 			$this->parameterCache = [];
-			
-// 			foreach ($this->gdoParametersB() as $gdt)
-// 			{
-				
-// 				if ($gdt->hasName())
-// 				{
-// 					$this->parameterCache[$gdt->name] = $gdt;
-// 				}
-// // 				else
-// // 				{
-// // 					$this->parameterCache[] = $gdt;
-// // 				}
-// 			}
-// 		}
-// 		return $this->parameterCache;
-// 	}
-	
-// 	public function gdoParameter(string $name) : GDT
-// 	{
-// 		return $this->gdoParameterCache()[$name];
-// 	}
-	
-// 	public function gdoParameterVar(string $name) : string
-// 	{
-// 		return $this->gdoParameter($name)->var;
-// 	}
-	
-// 	public function gdoParameterValue(string $name) : string
-// 	{
-// 		return $this->gdoParameter($name)->getValue();
-// 	}
-	
-// 	public function parameters(array $inputs, bool $throw=true) : self
-// 	{
-// 		$i = 0;
-// 		/**
-// 		 * @var GDT[] $positional
-// 		 */
-// 		$positional = [];
-// 		/**
-// 		 * @var GDT[] $namedional
-// 		 */
-// 		$namedional = [];
-		
-// 		foreach ($this->gdoParameterCache() as $gdt)
-// 		{
-// 			if ($gdt->isPositional())
-// 			{
-// 				$positional[] = $gdt;
-// 				if ($gdt->hasName())
-// 				{
-// 					$namedional[$gdt->getName()] = $gdt;
-// 				}
-// 			}
-// 			elseif ($gdt->hasName())
-// 			{
-// 				$namedional[$gdt->getName()] = $gdt;
-// 			}
-// 			elseif ($throw)
-// 			{
-// 				throw new GDO_Error('err_gdt_should_have_a_name', [$gdt->gdoShortName()]);
-// 			}
-// 		}
-
-// 		foreach ($inputs as $key => $input)
-// 		{
-// 			if (is_numeric($key))
-// 			{
-// 				$positional[$i++]->input($input);
-// 			}
-// 			elseif (isset($namedional[$key]))
-// 			{
-// 				$namedional[$key]->input($input);
-// 			}
-// 			elseif ($throw)
-// 			{
-// 				throw new GDO_Error('err_gdt_should_have_a_name', [html($key)]);
-// 			}
-// 		}
-		
-// 		return $this;
-// 	}
-	
 	############
 	### Exec ###
 	############
@@ -256,7 +131,7 @@ abstract class Method #extends GDT
 		
 		if (!($this->isEnabled()))
 		{
-			return GDT_Error::make()->text('err_method_disabled');
+			return GDT_Error::make()->text('err_method_disabled', [$this->getModuleName(), $this->getMethodName()]);
 		}
 		
 		if ( (!$this->isGuestAllowed()) && (!$user->isMember()) )
@@ -469,7 +344,7 @@ abstract class Method #extends GDT
 	{
 		foreach ($this->getInputs() as $key => $input)
 		{
-			if ($gdt = $this->gdoParameter($key, false))
+			if ($gdt = $this->gdoParameter($key, false, false))
 			{
 				if (is_array($input))
 				{

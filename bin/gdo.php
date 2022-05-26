@@ -1,7 +1,7 @@
 <?php
 namespace bin;
 
-use GDO\CLI\CLIUtil;
+use GDO\CLI\CLI;
 use GDO\Core\Debug;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Logger;
@@ -36,13 +36,13 @@ Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
 define('GDO_CORE_STABLE', 1);
 # Shell
-if (!CLIUtil::isCLI())
+if (!CLI::isCLI())
 {
 	echo "This GDOv7 binary does only run in the commandline!\n";
 }
-elseif (CLIUtil::isInteractive())
+elseif (CLI::isInteractive())
 {
-	$line = CLIUtil::getSingleCommandLine();
+	$line = CLI::getSingleCommandLine();
 	$expression = GDT_Expression::fromLine($line);
 	$result = $expression->execute();
 	echo $result->renderCLI();

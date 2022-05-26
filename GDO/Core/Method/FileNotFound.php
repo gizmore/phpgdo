@@ -1,11 +1,19 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Net\GDT_Url;
 use GDO\UI\MethodPage;
 use GDO\Core\Module_Core;
 
 final class FileNotFound extends MethodPage
 {
+	public function gdoParameters() : array
+	{
+		return [
+			GDT_Url::make('url')->allowExternal(false),
+		];
+	}
+	
 	public function beforeExecute() : void
 	{
 		if (Module_Core::instance()->cfgMail404())

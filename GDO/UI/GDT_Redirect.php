@@ -36,7 +36,7 @@ final class GDT_Redirect extends GDT
 	 * @param string $default
 	 * @return string
 	 */
-	public static function hrefBack($default=null)
+	public static function hrefBack($default=null) : string
 	{
 		if (Application::instance()->isCLI())
 		{

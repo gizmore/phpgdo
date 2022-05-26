@@ -8,6 +8,8 @@ use GDO\Core\Application;
 use GDO\Date\Time;
 use GDO\Util\Regex;
 use GDO\Core\GDO_Module;
+use GDO\Core\GDO_Error;
+use GDO\Core\Method;
 /**
  * GDO Autoloader and global functions.
  *
@@ -208,7 +210,25 @@ function module_enabled(string $moduleName) : bool
 	return false;
 }
 
-function method(string $moduleName, string $methodName) : GDO_Module
+function module(string $moduleName, bool $enabled=true, bool $fileSystem=false, bool $throw=true) : ?GDO_Module
+{
+	if ($module = ModuleLoader::instance()->getModule($moduleName, $fileSystem, $throw))
+	{
+		if ($enabled)
+		{
+			return $module->isEnabled() ? $module : null;
+		}
+		return $module;
+	}
+	if ($throw)
+	{
+		throw new GDO_Error('err_module', [html($moduleName)]);
+	}
+	
+	return null;
+}
+
+function method(string $moduleName, string $methodName) : Method
 {
 	$func = ["GDO\\{$moduleName}\\Method\\$methodName", 'make'];
 	return call_user_func($func);

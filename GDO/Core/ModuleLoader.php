@@ -6,7 +6,7 @@ use GDO\DB\Cache;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
 use GDO\Table\Sort;
-use GDO\CLI\CLIUtil;
+use GDO\CLI\CLI;
 
 /**
  * Module loader.
@@ -211,7 +211,7 @@ final class ModuleLoader
 				if (!$module->isInited())
 				{
 					$module->onInit();
-					if (CLIUtil::isCLI())
+					if (CLI::isCLI())
 					{
 						$module->onInitCLI();
 					}

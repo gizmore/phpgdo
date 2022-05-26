@@ -224,7 +224,7 @@ abstract class GDT
 	###################
 	public function isHidden() : bool { return false; }
 	public function isReadable() : bool { return false; }
-	public function isWritable() : bool { return false; }
+	public function isWriteable() : bool { return false; }
 	public function isSerializable() : bool { return false; }
 	
 	################
@@ -298,22 +298,22 @@ abstract class GDT
 	
 	public function validateInput(?string $input) : bool
 	{
-		return true;
-	}
-	
-	/**
-	 * Chain this GDT, but only if validated.
-	 * @return self
-	 */
-	public function validated() : self
-	{
-		$var = $this->getVar();
+		$var = $this->inputToVar($input);
 		$value = $this->toValue($var);
 		if (!$this->validate($value))
 		{
 			throw new GDO_ArgException($this);
 		}
 		return $this;
+	}
+	
+	/**
+	 * Chain this GDT, but only if validated.
+	 * @return self
+	 */
+	public function validated() : ?self
+	{
+		return $this->validateInput($this->getVar()) ? $this : null;
 	}
 	
 	public function hasError() : bool

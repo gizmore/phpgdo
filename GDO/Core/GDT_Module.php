@@ -15,6 +15,8 @@ namespace GDO\Core;
  */
 final class GDT_Module extends GDT_ObjectSelect
 {
+	public function getDefaultName() : ?string { return 'module'; }
+	
     protected function __construct()
     {
         parent::__construct();

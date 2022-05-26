@@ -16,7 +16,7 @@ use GDO\Date\Time;
 class GDT_CreatedAt extends GDT_Timestamp
 {
 	public bool $notNull = true;
-	public bool $writable = false;
+	public bool $writeable = false;
 	
 	public function defaultLabel() : self { return $this->label('created_at'); }
 

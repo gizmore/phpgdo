@@ -15,10 +15,11 @@ use GDO\Date\Time;
  */
 final class GDT_EditedAt extends GDT_Timestamp
 {
+	public bool $writeable = false;
+	
 	public function defaultLabel() : self { return $this->label('edited_at'); }
 
 	public function isHidden() : bool { return true; }
-	public function isWritable() : bool { return false; }
 	public function isOrderDefaultAsc() : bool { return false; }
 	
 	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void

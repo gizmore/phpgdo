@@ -23,6 +23,11 @@ trait WithActions
 		}
 		return $this->actions;
 	}
+	
+	public function getActions()
+	{
+		return isset($this->actions) ? $this->actions : null;
+	}
 
 	public function hasActions() : bool
 	{

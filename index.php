@@ -128,11 +128,16 @@ if (!isset($_REQUEST['_url']))
 }
 else
 {
+	# Wrap url
 	$url = (string) @$_REQUEST['_url'];
-	unset($_REQUEST['_url']);
-	
 	$_REQUEST['url'] = $url; # @TODO: Make Fileserver use $url via $me->addInput('url', $url);
-	
+
+	# Cleanup
+	unset($_REQUEST['_av']);
+	unset($_REQUEST['_url']);
+	unset($_REQUEST['_v']);
+
+	# Choose method
 	if (is_dir($url))
 	{
 		$me = DirectoryIndex::make();
@@ -154,7 +159,7 @@ else
 ### Exec ###
 ############
 $result = GDT_Method::make()->method($me)->addInputs($_REQUEST)->execute();
-$content = $result->renderMode($app->mode);
+$content = $result->renderMode();
 ##############
 ### Finish ###
 ##############

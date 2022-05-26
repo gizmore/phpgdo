@@ -251,4 +251,21 @@ class TestCase extends \PHPUnit\Framework\TestCase
         Time::setTimezone($tz->getID());
     }
     
+    ##############
+    ### Output ###
+    ##############
+    protected function error($message, ...$args)
+    {
+    	fwrite(STDERR, vsprintf($message, $args));
+    	fwrite(STDERR, "\n");
+    	ob_flush();
+    }
+    
+    protected function message($message, ...$args)
+    {
+    	echo vsprintf($message, $args);
+    	echo "\n";
+    	ob_flush();
+    }
+    
 }

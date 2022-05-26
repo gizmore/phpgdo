@@ -134,6 +134,7 @@ trait WithFields
 	 */
 	public function withFields($callback, bool $returnEarly=false)
 	{
+		GDT_Response::$NESTING_LEVEL++;
 		if (isset($this->fields))
 		{
 			foreach ($this->fields as $gdt)
@@ -145,10 +146,10 @@ trait WithFields
 						return $result;
 					}
 				}
-				if ($gdt->hasFields())
-				{
-					return $gdt->withFields($callback);
-				}
+// 				if ($gdt->hasFields())
+// 				{
+// 					return $gdt->withFields($callback);
+// 				}
 			}
 		}
 	}
@@ -193,18 +194,9 @@ trait WithFields
 	public function renderFields() : string
 	{
 		$rendered = '';
-// 		if (self::$NESTING_LEVEL === 0)
-// 		{
-// 			self::$NESTING_LEVEL++;
-			foreach ($this->getAllFields() as $gdt)
-			{
-				if (isset($this->gdo))
-				{
-					$gdt->gdo($this->gdo);
-				}
-				$rendered .= $gdt->render();
-			}
-// 		}
+		$this->withFields(function(GDT $gdt) use (&$rendered) {
+			$rendered .= $gdt->render();
+		});
 		return $rendered;
 	}
 	

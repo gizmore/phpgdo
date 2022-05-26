@@ -22,7 +22,7 @@ trait WithFormAttributes
 	
 	public bool $writeable = true;
 	public function writeable(bool $writeable) : self { $this->writeable = $writeable; return $this; }
-	public function isWritable() : bool { return $this->writeable; }
+	public function isWriteable() : bool { return $this->writeable; }
 	
 	public bool $focusable = true;
 	public function focusable(bool $focusable) : self { $this->focusable = $focusable; return $this; }

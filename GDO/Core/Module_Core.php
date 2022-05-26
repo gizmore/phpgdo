@@ -35,7 +35,7 @@ final class Module_Core extends GDO_Module
 	 * Counts up to be in sync and poison caches for updates.
 	 * Increase this value to poison all caches.
 	 */
-	const GDO_REVISION = '7.0.1-r1339';
+	const GDO_REVISION = '7.0.0-r1340';
 	
 	##############
 	### Module ###
@@ -84,15 +84,15 @@ final class Module_Core extends GDO_Module
 	{
 		return [
 			GDT_User::make('system_user')->writeable(false)->initial('1'), # System user / id should be 1.
-			GDT_Checkbox::make('show_impressum')->initial('0'), # show impressum in footer.
-			GDT_Checkbox::make('show_privacy')->initial('0'), # show privacy link in footer.
+			GDT_Checkbox::make('show_impressum')->initial('1'), # show impressum in footer.
+			GDT_Checkbox::make('show_privacy')->initial('1'), # show privacy link in footer.
 			GDT_Checkbox::make('allow_guests')->initial('1'), # generally allow guests.
 			GDT_Version::make('asset_revision')->initial($this->version), # append this version to asset include urls?v=.
 			GDT_Checkbox::make('siteshort_title_append')->initial('1'),
 			GDT_Checkbox::make('mail_403')->initial('1'), # mail 403 error mails?
 			GDT_Checkbox::make('mail_404')->initial('1'), # mail 404 error mails?
 			GDT_Checkbox::make('load_sidebars')->initial('1'),
-			GDT_Checkbox::make('directory_indexing')->initial('0'),
+			GDT_Checkbox::make('directory_indexing')->initial('1'),
 			GDT_Checkbox::make('module_assets')->initial('1'),
 		];
 	}
@@ -118,11 +118,11 @@ final class Module_Core extends GDO_Module
 		$page = GDT_Page::instance();
 		if ($this->cfgShowImpressum())
 		{
-			$page->leftBar()->addField(GDT_Link::make('link_impressum')->href(href('Core', 'Impressum')));
+			$page->bottomBar()->addField(GDT_Link::make('impressum')->href(href('Core', 'Impressum')));
 		}
 		if ($this->cfgShowPrivacy())
 		{
-			$page->leftBar()->addField(GDT_Link::make('link_privacy')->href(href('Core', 'Privacy')));
+			$page->bottomBar()->addField(GDT_Link::make('privacy')->href(href('Core', 'Privacy')));
 		}
 	}
 	

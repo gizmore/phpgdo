@@ -5,9 +5,10 @@ use GDO\Core\GDT_Template;
  * Slider for range input with 2 handles.
  * In web1.0 themes, 2 inputs are used instead.
  * This GDT does not create a database column and is intended to be used in forms only.
+ * 
  * @author gizmore
- * @version 6.05
- * @since 6.00
+ * @version 7.0.0
+ * @since 6.3.0
  * @see GDT_Slider
  */
 final class GDT_RangeSlider extends GDT_Slider
@@ -40,22 +41,23 @@ final class GDT_RangeSlider extends GDT_Slider
 	public function initialLow() { return $this->var ? json_decode($this->var)[0] : null; }
 	public function initialHigh() { return $this->var ? json_decode($this->var)[1] : null; }
 	public function initialValue($value) : self { $this->initial = $this->var = $this->toVar($value); return parent::initialValue($value); }
-	public function getValue()
-	{
-		if ($lo = $this->getRequestVar($this->formVariable(), $this->initial))
-		{
-			# 1 field json mode
-			if ($lo[0] === '[')
-			{
-				return json_decode($lo);
-			}
-			# 2 field 1.0 mode
-			elseif ($hi = $this->getRequestVar($this->formVariable(), null, $this->highName))
-			{				
-				return [$lo, $hi];
-			}
-		}
-	}
+// 	public function getValue()
+// 	{
+// 		$this->getVar();
+// 		if ($lo = $this->getRequestVar($this->formVariable(), $this->initial))
+// 		{
+// 			# 1 field json mode
+// 			if ($lo[0] === '[')
+// 			{
+// 				return json_decode($lo);
+// 			}
+// 			# 2 field 1.0 mode
+// 			elseif ($hi = $this->getRequestVar($this->formVariable(), null, $this->highName))
+// 			{				
+// 				return [$lo, $hi];
+// 			}
+// 		}
+// 	}
 	
 	################
 	### Validate ###

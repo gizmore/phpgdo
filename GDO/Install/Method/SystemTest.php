@@ -1,10 +1,8 @@
 <?php
 namespace GDO\Install\Method;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Util\FileUtil;
-use GDO\File\GDO_File;
 
 /**
  * Do some tests and output in page.

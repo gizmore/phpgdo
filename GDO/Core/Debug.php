@@ -4,7 +4,8 @@ namespace GDO\Core;
 use GDO\Mail\Mail;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
-use GDO\UI\GDT_Page;
+use GDO\CLI\CLI;
+use GDO\UI\Color;
 
 /**
  * Debug backtrace and error handler.
@@ -167,7 +168,7 @@ final class Debug
 		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 		
 		$messageHTML = sprintf('<p>%s(EH %s):&nbsp;%s&nbsp;in&nbsp;<b style=\"font-size:16px;\">%s</b>&nbsp;line&nbsp;<b style=\"font-size:16px;\">%s</b></p>', $errnostr, $errno, $errstr, $errfile, $errline);
-		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', $errnostr, $errno, $errstr, $errfile, $errline);
+		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, $errstr, $errfile, $errline);
 		$message = $is_html ? $messageHTML : $messageCLI;
 		
 		// Send error to admin
@@ -347,8 +348,8 @@ final class Debug
 	
 	public static function backtraceException(\Throwable $ex, bool $html = true, string $message = '') : string
 	{
-		$message = sprintf("PHP %s: '%s' in %s line %s",
-			get_class($ex), $ex->getMessage(),
+		$message = sprintf("%s: '%s' in %s line %s",
+			Color::red(get_class($ex)), $ex->getMessage(),
 			self::shortpath($ex->getFile()), $ex->getLine());
 		return self::backtraceMessage($message, $html, $ex->getTrace(), $ex->getLine(), $ex->getFile());
 	}

@@ -26,7 +26,7 @@ class GDT_Icon extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string { return $this->htmlIcon(); }
+	public function renderCell() : string { return (string) $this->htmlIcon(); }
 	public function renderCLI() : string { return $this->icon; }
 	public function renderJSON() {}
 	

@@ -32,16 +32,20 @@ class GDT_Name extends GDT_String
 	##############
 	public function renderCell() : string
 	{
-	    if ($this->gdo)
+		if (isset($this->gdo))
 	    {
 	        return $this->gdo->renderName();
 	    }
-	    return $this->display();
+	    if ($var = $this->getVar())
+	    {
+		    return html($var);
+	    }
+	    return '';
 	}
 	
 	public function renderCLI() : string
 	{
-	    return $this->renderCell();
+	    return $this->renderCell() . "\n";
 	}
 	
 	public function renderJSON()

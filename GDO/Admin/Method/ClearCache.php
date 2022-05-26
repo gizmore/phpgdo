@@ -12,6 +12,7 @@ use GDO\Core\Module_Core;
 use GDO\Core\Website;
 use GDO\DB\Database;
 use GDO\Core\Application;
+use GDO\UI\GDT_Redirect;
 
 /**
  * Clears all client and server caches.
@@ -38,7 +39,7 @@ final class ClearCache extends Method
 	public function execute()
 	{
 	    $this->clearCache();
-		return Website::redirectMessage('msg_cache_flushed', null, Website::hrefBack());
+	    return GDT_Redirect::make()->redirectMessage('msg_cache_flushed')->back();
 	}
 	
 	public function clearCache()

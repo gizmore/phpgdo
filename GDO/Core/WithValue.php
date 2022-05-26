@@ -152,5 +152,10 @@ trait WithValue
 		$var = $this->getVar();
 		return $var ? sprintf(' value="%s"', html($var)) : '';
 	}
+	
+	public function renderHeader() : string
+	{
+		return $this->renderLabel();
+	}
 
 }

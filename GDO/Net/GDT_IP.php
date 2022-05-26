@@ -13,7 +13,6 @@ use GDO\Core\GDT_String;
  */
 final class GDT_IP extends GDT_String
 {
-// 	public function isWritable() : bool { return false; }
 	public function isSearchable() : bool { return false; }
 	
 	###############

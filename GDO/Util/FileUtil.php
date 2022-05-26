@@ -37,7 +37,7 @@ final class FileUtil
 
 	public static function createDir(string $path) : bool
 	{
-		if (self::isDir($path) && is_writable($path))
+		if (self::isDir($path) && is_writeable($path))
 		{
 			return true;
 		}

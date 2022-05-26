@@ -36,4 +36,9 @@ abstract class MethodPage extends Method
 		return $tVars;
 	}
 
+	public function getMethodTitle()
+	{
+		return t(strtolower($this->gdoShortName()));
+	}
+	
 }

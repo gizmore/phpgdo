@@ -3,6 +3,7 @@ namespace GDO\Tests\Test;
 
 use GDO\Tests\GDT_MethodTest;
 use GDO\Tests\TestCase;
+use GDO\CLI\CLI;
 use GDO\Core\GDO;
 use GDO\Core\ModuleLoader;
 use GDO\Install\Installer;
@@ -16,6 +17,7 @@ use function PHPUnit\Framework\assertLessThanOrEqual;
 use GDO\Language\Trans;
 use GDO\Core\Application;
 use function PHPUnit\Framework\assertLessThan;
+use GDO\Core\Logger;
 
 /**
  * Auto coverage test.
@@ -118,15 +120,13 @@ final class AutomatedTest extends TestCase
 				}
 			}
 		}
-		echo "{$count} different GDT tested.\n";
-		ob_flush();	
+		$this->message('%d different GDT tested.', $count);
 	}
 
 	public function testAllGDOConstructors()
 	{
 		$count = 0;
-		echo "Testing blank() handling on all GDO\n";
-		ob_flush();
+		$this->message('Testing blank() handling on all GDO\n');
 		foreach (get_declared_classes() as $klass)
 		{
 			$k = new \ReflectionClass($klass);
@@ -243,9 +243,12 @@ final class AutomatedTest extends TestCase
 
 				$fields = $method->gdoParameterCache();
 
-				$parameters = [];
-				$getParameters = [];
+// 				$parameters = [];
 				$trivial = true;
+				
+				$mt = GDT_MethodTest::make();
+				
+				$fields = $method->gdoParameters();
 
 				foreach ($fields as $name => $gdt)
 				{
@@ -260,10 +263,9 @@ final class AutomatedTest extends TestCase
 					# But maybe now
 					if (!$trivial)
 					{
-						if ($var = GDT_MethodTest::make()->plugParam(
+						if ($var = $mt->plugParam(
 							$gdt, $method))
 						{
-							$getParameters[$name] = $_REQUEST[$name] = $_GET[$name] = $var;
 							$trivial = true;
 						}
 						else
@@ -279,7 +281,7 @@ final class AutomatedTest extends TestCase
 					$skippedAuto++;
 					continue;
 				}
-
+				
 				# Now check form
 				/** @var $method MethodForm **/
 				if ($method instanceof MethodForm)
@@ -301,12 +303,8 @@ final class AutomatedTest extends TestCase
 						# try to plug and be trivial again
 						if ( !$trivial)
 						{
-							$var = GDT_MethodTest::make()->plugParam($gdt, $method);
-							if ($var)
+							if ($var = $mt->plugParam($gdt, $method)) 
 							{
-// 								$frm = $form->name;
-// 								$_REQUEST[$frm][$name] = $_POST[$frm][$name] = $var;
-								$parameters[$name] = $var;
 								$trivial = true;
 							}
 						}
@@ -328,27 +326,23 @@ final class AutomatedTest extends TestCase
 					{
 						$n++;
 						// echo "$n.) Running trivial method {$methodName}\n"; ob_flush();
-						GDT_MethodTest::make()->runAs($this->gizmore())
-							->method($method)
-							->addInputs($getParameters)
-							->addInputs($parameters)
+						$mt->runAs($this->gizmore())
+							->method($method->withAppliedInputs($mt->getInputs()))
 							->execute();
 						$tested++;
-						if (Application::$RESPONSE_CODE < 400)
-						{
-							$passed++;
-						}
 						assertLessThan(400,
 							Application::$RESPONSE_CODE,
 							"Test if trivial method \\GDO\\{$moduleName}\\Metod\\{$methodName} has a success error code.");
-						echo "$n.) {$methodName} success\n";
-						ob_flush();
+						$passed++;
+						$this->message('%4d.) %s: %s', $n, CLI::green('SUCCESS'), $mt->method->gdoClassName());
 					}
 					catch (\Throwable $ex)
 					{
+						Logger::logException($ex);
 						$failed++;
-						echo "$n.) {$methodName} failed!\n";
-						ob_flush();
+						$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $mt->method->gdoClassName());
+						$this->error('Error: ', $ex->getMessage());
+						
 					}
 				} # trivial call
 			} # is Method
