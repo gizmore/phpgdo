@@ -17,7 +17,7 @@ final class GDT_Error extends GDT_MessageBox
 {
 	public function exception(\Throwable $t) : self
 	{
-		$is_html = Application::instance()->isHTML();
+		$is_html = Application::$INSTANCE->isHTML();
 		$this->titleRaw("Exception!");
 		$this->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
 		return $this;

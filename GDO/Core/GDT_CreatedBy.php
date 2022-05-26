@@ -37,7 +37,7 @@ final class GDT_CreatedBy extends GDT_User
 	        return [$this->name => $this->var];
 	    }
 	    $user = GDO_User::current();
-	    if (Application::instance()->isInstall() || (!$user->isPersisted()))
+	    if (Application::$INSTANCE->isInstall() || (!$user->isPersisted()))
 	    {
 	        $user = GDO_User::system();
 	    }

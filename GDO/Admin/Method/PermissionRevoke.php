@@ -49,7 +49,7 @@ class PermissionRevoke extends MethodForm
 	
 	public function execute()
 	{
-	    $this->renderPermTabs();
+	    $this->renderPermissionBar();
 		return parent::execute();
 	}
 	

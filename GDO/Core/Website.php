@@ -50,7 +50,7 @@ final class Website
 	
 // 	public static function redirect(string $url, int $time=0) : GDT
 // 	{
-// 		$app = Application::instance();
+// 		$app = Application::$INSTANCE;
 // 	    switch ($app->getFormat())
 // 		{
 // 			case Application::HTML:
@@ -157,7 +157,7 @@ final class Website
 	 */
 	public static function displayMeta()
 	{
-		if (Application::instance()->indexed)
+		if (Application::$INSTANCE->indexed)
 		{
     	    self::$META[] = ['robots', 'index, follow', 'name'];
 	    }
@@ -186,7 +186,7 @@ final class Website
 	 */
 // 	public static function renderJSON($json) : string
 // 	{
-// 	    if (!Application::instance()->isCLI())
+// 	    if (!Application::$INSTANCE->isCLI())
 // 		{
 // 			hdr('Content-Type: application/json');
 // 		}
@@ -221,7 +221,7 @@ final class Website
 	
 	public static function redirectMessageRaw(string $message, string $url=null, int $time=0) : GDT
 	{
-	    $app = Application::instance();
+	    $app = Application::$INSTANCE;
 	 
 	    GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
 	  
@@ -251,7 +251,7 @@ final class Website
 	
 // 	public static function redirectErrorRaw($message, $url=null, $time=0, $code=409)
 // 	{
-// 	    $app = Application::instance();
+// 	    $app = Application::$INSTANCE;
 
 // 	    self::topResponse()->addField(GDT_Error::make()->textRaw($message, $code));
 	    
@@ -278,7 +278,7 @@ final class Website
 // 	    if (self::$TOP_RESPONSE === null)
 // 	    {
 // 	        self::$TOP_RESPONSE = GDT_Container::make('topResponse');
-// 	        if (!Application::instance()->isInstall())
+// 	        if (!Application::$INSTANCE->isInstall())
 // 	        {
 // 	            if ($message = GDO_Session::get('redirect_message'))
 // 	            {

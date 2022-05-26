@@ -65,7 +65,7 @@ trait WithObject
 		if ($var !== null)
 		{
 		    $noCompletion =
-		        Application::instance()->isCLI() ||
+		        Application::$INSTANCE->isCLI() ||
 		        @$_REQUEST['nocompletion_'.$this->name];
 		    
 			# Without javascript, convert the name input
@@ -314,7 +314,7 @@ trait WithObject
 	 * @see GDT_Int::filterQuery()
 	 * @see GDT_String::filterQuery()
 	 */
-	public function filterQuery(Query $query, $rq=null)
+	public function filterQuery(Query $query, $rq=null) : self
 	{
 		if ($field = $this->filterField)
 		{

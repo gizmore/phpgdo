@@ -130,7 +130,7 @@ class GDT_AntiCSRF extends GDT_Hidden
 	        $value = $headers['X-CSRF-TOKEN'];
 	    }
 	    
-	    $app = Application::instance();
+	    $app = Application::$INSTANCE;
 	    if ($app->isCLI() || $app->isUnitTests())
 	    {
 	        return true;

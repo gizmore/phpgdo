@@ -124,7 +124,7 @@ class Cache
 	
 	public static function recacheHooks()
 	{
-		if (GDO_IPC && Application::instance()->isWebServer())
+		if (GDO_IPC && Application::$INSTANCE->isWebServer())
 		{
             foreach (self::$RECACHING as $gdo)
             {
@@ -438,4 +438,4 @@ if (!defined('GDO_FILECACHE'))
     define('GDO_FILECACHE', 1);
 }
 
-define('GDO_TEMP_PATH', GDO_PATH . Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/');
+define('GDO_TEMP_PATH', GDO_PATH . Application::$INSTANCE->isUnitTests() ? 'temp_test/' : 'temp/');

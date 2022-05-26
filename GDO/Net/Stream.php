@@ -58,7 +58,7 @@ final class Stream
 			hdr('Content-Disposition: attachment; filename="'.htmlspecialchars($file->getName()).'"');
 		}
 		self::file($file, $variant);
-		if (!Application::instance()->isUnitTests())
+		if (!Application::$INSTANCE->isUnitTests())
 		{
 		    die();
 		}
@@ -71,7 +71,7 @@ final class Stream
 	 */
 	public static function serveWithRange(GDO_File $file, $variant='')
 	{
-	    $die = !Application::instance()->isUnitTests();
+	    $die = !Application::$INSTANCE->isUnitTests();
 	    $size = $length = $file->getSize();
 	    $start = 0;
 	    $end = $size - 1;
@@ -161,7 +161,7 @@ final class Stream
 	    hdr('Pragma: public');
 	    hdr('Content-Length: ' . strlen($content));
 	    hdr('Content-Size: '. strlen($content));
-	    if (!Application::instance()->isUnitTests())
+	    if (!Application::$INSTANCE->isUnitTests())
 	    {
 	        echo $content;
 	    }

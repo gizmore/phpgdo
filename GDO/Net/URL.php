@@ -21,7 +21,7 @@ final class URL
     ##############
 	public static function localScheme()
 	{
-	    if (Application::instance()->isCLI())
+	    if (Application::$INSTANCE->isCLI())
 	    {
 	        return GDO_PROTOCOL;
 	    }

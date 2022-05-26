@@ -14,7 +14,6 @@ use GDO\Core\GDT_String;
 class GDT_SearchField extends GDT_String
 {
 	public $icon = 'search';
-	public $_inputType = 'search';
 	
 	public int $min = 3;
 	public int $max = 128;
@@ -23,6 +22,7 @@ class GDT_SearchField extends GDT_String
     
     public function defaultName() { return 'search'; }
 	public function defaultLabel() : self { return $this->label('search'); }
+	public function getInputType() : string { return 'search'; }
 	
     public function isSerializable() : bool { return false; }
     public function isOrderable() : bool { return false; }
@@ -32,6 +32,11 @@ class GDT_SearchField extends GDT_String
 	public function gdoExampleVars()
 	{
 	    return t('search_term');
+	}
+	
+	public function plugVar() : string
+	{
+		return 'ess';
 	}
 
 }

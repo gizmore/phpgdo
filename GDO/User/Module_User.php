@@ -1,9 +1,7 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\GDO;
 use GDO\Core\GDO_Module;
-use GDO\Session\GDO_Session;
 
 /**
  * GDO_User related types and plugins.

@@ -203,7 +203,7 @@ final class ModuleLoader
 	public function initModulesB() : void
 	{
 		# Init modules
-		$app = Application::instance();
+		$app = Application::$INSTANCE;
 		if (!$app->isInstall())
 		{
 			foreach ($this->getEnabledModules() as $module)
@@ -277,7 +277,7 @@ final class ModuleLoader
 		# Loaded one?
 		if ($loaded)
 		{
-// 		    if ( (!Application::instance()->isInstall()) ||
+// 		    if ( (!Application::$INSTANCE->isInstall()) ||
 // 		         ($this->loadedDB) )
 // 		    {
     			$this->initModuleVars();
@@ -342,7 +342,7 @@ final class ModuleLoader
 		}
 		catch (\GDO\Core\GDO_DBException $e)
 		{
-		    if (Application::instance()->isCLI())
+		    if (Application::$INSTANCE->isCLI())
 		    {
     		    echo "The table gdo_module does not exist yet.\n";
 				echo "You can ignore this error if you are using the CLI installer.\n";
@@ -487,7 +487,7 @@ final class ModuleLoader
 		}
 		catch (\GDO\Core\GDO_DBException $e)
 		{
-			$app = Application::instance();
+			$app = Application::$INSTANCE;
 		    if ($app->isCLI()) # && (!$app->isInstall()))
 		    {
 		        echo "No database available yet...\n";

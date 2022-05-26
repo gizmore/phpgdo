@@ -2,7 +2,7 @@
 namespace GDO\CLI\Method;
 
 use GDO\Core\Method;
-use GDO\UI\GDT_Message;
+use GDO\Core\GDT_String;
 
 /**
  * Reply the input back.
@@ -17,7 +17,7 @@ final class Ekko extends Method
 	public function gdoParameters() : array
 	{
 		return [
-			GDT_Message::make('text'),
+			GDT_String::make('text')->notNull(),
 		];
 	}
 	

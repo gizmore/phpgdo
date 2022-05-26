@@ -28,7 +28,14 @@ final class GDT_Language extends GDT_ObjectSelect
 		$this->withName = $withName;
 		return $this;
 	}
-
+	
+	public bool $withFlag = true;
+	public function withFlag(bool $withFlag=true)
+	{
+		$this->withFlag = $withFlag;
+		return $this;
+	}
+	
 	###############
 	### Choices ###
 	###############

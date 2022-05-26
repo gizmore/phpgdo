@@ -323,7 +323,7 @@ class GDT_Table extends GDT
 			$rq = $this->headers->name;
 			foreach ($this->getHeaderFields() as $gdt)
 			{
-				if ($gdt->filterable)
+				if ($gdt->isFilterable())
 				{
 					$gdt->filterQuery($query, $rq);
 				}

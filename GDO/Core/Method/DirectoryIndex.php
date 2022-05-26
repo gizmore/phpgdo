@@ -7,6 +7,7 @@ use GDO\Table\MethodTable;
 use GDO\Util\FileUtil;
 use GDO\Core\GDO_DirectoryIndex;
 use GDO\Net\GDT_Url;
+use GDO\Core\GDT_Path;
 
 /**
  * Render a directory from the servers filesystem.
@@ -17,15 +18,24 @@ use GDO\Net\GDT_Url;
  */
 final class DirectoryIndex extends MethodTable
 {
+	public function isTrivial() { return false; }
+	
 	public function isOrdered() { return false; }
 	public function isFiltered() { return false; }
 	public function isSearched() { return false; }
 	public function isPaginated() { return false; }
 	
+	public function plugVars() : array
+	{
+		return [
+			'url' => 'GDO',
+		];
+	}
+	
 	public function gdoParameters() : array
 	{
 		return [
-			GDT_Url::make('url'),
+			GDT_Url::make('url')->notNull(),
 		];
 	}
 	
@@ -54,6 +64,11 @@ final class DirectoryIndex extends MethodTable
 		return t('ft_dir_index', [html($this->getUrl()), $count]);
 	}
 	
+	public function getMethodTitle() : string
+	{
+		return $this->getTableTitle();
+	}
+	
 	public function getUrl() : string
 	{
 		return $this->gdoParameterVar('url', true);
@@ -63,15 +78,15 @@ final class DirectoryIndex extends MethodTable
 	{
 		$url = $this->getUrl();
 		$data = [];
-		$url = "./{$url}";
-		$files = scandir($url);
+		$path = GDO_PATH . $url;
+		$files = scandir($path);
 		foreach ($files as $file)
 		{
 			if ($file === '.')
 			{
 				continue;
 			}
-			$path = $url . '/' . $file;
+			$path = "{$url}/{$file}";
 			$data[] = $this->entry($path, $file);
 		}
 		return new ArrayResult($data, $this->gdoTable());

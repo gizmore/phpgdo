@@ -1,12 +1,13 @@
 <?php
 namespace GDO\Language\Method;
 
-use GDO\Core\Method;
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
 use GDO\Session\GDO_Session;
 use GDO\Net\GDT_Url;
 use GDO\UI\GDT_Redirect;
+use GDO\Core\MethodAjax;
+use GDO\Language\GDO_Language;
 
 /**
  * Switch language to user's choice.
@@ -20,7 +21,7 @@ use GDO\UI\GDT_Redirect;
  * @see Module_Language
  * @see GDO_Session
  */
-final class SwitchLanguage extends Method
+final class SwitchLanguage extends MethodAjax
 {
 	public function saveLastUrl() : bool
 	{
@@ -50,11 +51,11 @@ final class SwitchLanguage extends Method
 	/**
 	 * @return \GDO\Language\GDO_Language
 	 */
-	protected function getLanguage($throw=true)
+	protected function getLanguage(bool $throw=true) : ?GDO_Language
 	{
 	    try
 	    {
-	        return $this->gdoParameterValue('lang');
+	        return $this->gdoParameterValue('lang', true);
 	    }
 	    catch (\Throwable $ex)
 	    {
@@ -74,7 +75,7 @@ final class SwitchLanguage extends Method
 		# Set new ISO language
 		$iso = $this->getLanguage()->getISO();
 		$_SERVER['REQUEST_URI'] = preg_replace("/_lang=[a-z]{2}/", "_lang=".$iso , urldecode($_SERVER['REQUEST_URI']));
-		$_REQUEST['_lang'] = $iso;
+// 		$_REQUEST['_lang'] = $iso;
 		GDO_Session::set('gdo-language', $iso);
 		Trans::setISO($iso);
 		return GDT_Redirect::make()->

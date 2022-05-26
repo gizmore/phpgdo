@@ -16,8 +16,8 @@ class PermissionGrant extends MethodForm
 	
 	public function beforeExecute() : void
 	{
-	    $this->renderNavBar();
-	    $this->renderPermTabs();
+	    $this->renderAdminBar();
+	    $this->renderPermissionBar();
 	}
 	
 	public function createForm(GDT_Form $form) : void

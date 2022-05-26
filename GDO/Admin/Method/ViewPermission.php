@@ -2,7 +2,6 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
-use GDO\Core\GDT;
 use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
 use GDO\Table\GDT_Count;
@@ -16,7 +15,7 @@ use GDO\User\GDT_Permission;
 
 /**
  * View all users with a permission.
- * @version 6.10.2
+ * @version 7.0.0
  * @since 3.0.2
  * @author gizmore
  */
@@ -47,7 +46,7 @@ class ViewPermission extends MethodQueryTable
 	
 	public function onInit() : void
 	{
-		parent::onInit();
+// 		parent::onInit();
 		$this->permission = $this->gdoParameterValue('permission');
 	}
 	
@@ -70,10 +69,10 @@ class ViewPermission extends MethodQueryTable
 			uncached();
 	}
     
-	public function execute()
-	{
-	    $this->renderPermTabs('Admin');
-	    return parent::execute();
-	}
+// 	public function execute()
+// 	{
+// 	    $this->renderPermTabs('Admin');
+// 	    return parent::execute();
+// 	}
 	
 }

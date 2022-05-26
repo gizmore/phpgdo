@@ -133,7 +133,7 @@ class Config
 		if (!defined('GDO_SESS_DOMAIN')) define('GDO_SESS_DOMAIN', GDO_DOMAIN);
 		if (!defined('GDO_SESS_TIME')) define('GDO_SESS_TIME', Time::ONE_DAY*2);
 		if (!defined('GDO_SESS_JS')) define('GDO_SESS_JS', false);
-		if (!defined('GDO_SESS_HTTPS')) define('GDO_SESS_HTTPS', Application::instance()->isTLS());
+		if (!defined('GDO_SESS_HTTPS')) define('GDO_SESS_HTTPS', Application::$INSTANCE->isTLS());
 		if (!defined('GDO_SESS_SAMESITE')) define('GDO_SESS_SAMESITE', 'Lax');
 		if (!defined('GDO_SESS_LOCK')) define('GDO_SESS_LOCK', GDO_DB_ENABLED);
 		

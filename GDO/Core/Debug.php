@@ -163,7 +163,7 @@ final class Debug
 				break;
 		}
 		
-		$app = Application::instance();
+		$app = Application::$INSTANCE;
 		$is_html = $app->isHTML();
 		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 		
@@ -201,7 +201,7 @@ final class Debug
 	
 	public static function debugException(\Throwable $ex, bool $render=true) : string
 	{
-	    $app = Application::instance();
+	    $app = Application::$INSTANCE;
 	    $is_html = $app->isHTML() && (!$app->isUnitTests());
 	    $firstLine = sprintf("%s in %s Line %s",
 	    	$ex->getMessage(), $ex->getFile(), $ex->getLine());
@@ -233,7 +233,7 @@ final class Debug
 	
 	private static function renderError(string $message) : string
 	{
-		$app = Application::instance();
+		$app = Application::$INSTANCE;
 		if (!$app)
 		{
 		    return html($message);
@@ -399,7 +399,7 @@ final class Debug
 			$arg = json_encode($arg);
 		}
 		
-		$app = Application::instance();
+		$app = Application::$INSTANCE;
 		$is_html = $app ? $app->isHTML() : (php_sapi_name() !== 'cli');
 		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 // 		$is_html = $app ? $app->isHTML() && (!$app->isUnitTests()) : true;
@@ -478,8 +478,8 @@ final class Debug
 		}
 		
 		$copy = [];
-		$cli = Application::instance()->isCLI();
-		$ajax = Application::instance()->isAjax();
+		$cli = Application::$INSTANCE->isCLI();
+		$ajax = Application::$INSTANCE->isAjax();
 		foreach ($implode as $imp)
 		{
 			list ($func, $file, $line) = $imp;

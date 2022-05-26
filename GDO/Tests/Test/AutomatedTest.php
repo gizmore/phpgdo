@@ -204,7 +204,7 @@ final class AutomatedTest extends TestCase
 	// }
 	private function doAllMethods()
 	{
-		$n = 1;
+		$n = 0;
 		$tested = 0;
 		$passed = 0;
 		$failed = 0;
@@ -241,21 +241,19 @@ final class AutomatedTest extends TestCase
 					continue;
 				}
 
-				$fields = $method->gdoParameterCache();
-
-// 				$parameters = [];
 				$trivial = true;
 				
-				$mt = GDT_MethodTest::make();
+				$mt = GDT_MethodTest::make()->method($method);
+				
+				$mt->inputs($method->plugVars());
 				
 				$fields = $method->gdoParameters();
 
-				foreach ($fields as $name => $gdt)
+				foreach ($fields as $gdt)
 				{
 					# Ouch looks not trivial
 					if (($gdt->isRequired()) &&
-						($gdt->getInitial() !== null) &&
-						($gdt->toValue($gdt->getInitial()) === null))
+						($gdt->getValue() === null) )
 					{
 						$trivial = false;
 					}
@@ -263,8 +261,7 @@ final class AutomatedTest extends TestCase
 					# But maybe now
 					if (!$trivial)
 					{
-						if ($var = $mt->plugParam(
-							$gdt, $method))
+						if ($mt->plugParam($gdt, $method))
 						{
 							$trivial = true;
 						}
@@ -286,16 +283,16 @@ final class AutomatedTest extends TestCase
 				/** @var $method MethodForm **/
 				if ($method instanceof MethodForm)
 				{
+					
+					$method->addInputs($mt->getInputs());
 					$form = $method->getForm();
 					$fields = $form->getAllFields();
 
-					foreach ($fields as $name => $gdt)
+					foreach ($fields as $gdt)
 					{
 						# needs to be plugged
 						if (($gdt->isRequired()) &&
-							($gdt->getInitial() !== null) &&
-							($gdt->toValue($gdt->getInitial()) ===
-							null))
+							($gdt->getValue() === null))
 						{
 							$trivial = false;
 						}
@@ -303,7 +300,7 @@ final class AutomatedTest extends TestCase
 						# try to plug and be trivial again
 						if ( !$trivial)
 						{
-							if ($var = $mt->plugParam($gdt, $method)) 
+							if ($mt->plugParam($gdt, $method)) 
 							{
 								$trivial = true;
 							}
@@ -341,22 +338,24 @@ final class AutomatedTest extends TestCase
 						Logger::logException($ex);
 						$failed++;
 						$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
-						$this->error('Error: ', $ex->getMessage());
-						
+						$this->error('Error: %s', CLI::bold($ex->getMessage()));
+// 						$this->fail($ex->getMessage());
 					}
 				} # trivial call
 			} # is Method
 		} # foreach classes
-		echo "Tested $tested trivial methods.\n$skippedAuto have been skipped because they were unpluggable.\n$skippedManual have been manually skipped via config.\n";
-		echo "From $tested trivial methods, $failed failed!\n";
-		ob_flush();
+		
+		$this->message(CLI::bold("Done with automated method tests."));
+		$this->message("Tested %s trivial methods.\n%s have been %s because they were unpluggable.\n%s have been manually skipped via config.",
+			CLI::bold($tested), CLI::bold($skippedAuto), CLI::bold("SKIPPED"), CLI::bold($skippedManual));
+		$this->message('From %s trivial methods, %s', $tested, CLI::bold("$failed failed"));
 	}
 	
 	public function testLanguageFilesForCompletion()
 	{
 		if (Trans::$MISS)
 		{
-			echo "The following lang keys are missing:\n\n";
+			$this->message(CLI::bold("The following lang keys are missing:"));
 			foreach (Trans::$MISSING as $key)
 			{
 				echo " - $key\n";

@@ -40,7 +40,7 @@ class Installer
 			}
 			catch (\Throwable $e)
 			{
-				$app = Application::instance();
+				$app = Application::$INSTANCE;
 				if ($app->isCLI())
 				{
 					echo Debug::backtraceException($e, false, "Cannot install {$module->getName()}");

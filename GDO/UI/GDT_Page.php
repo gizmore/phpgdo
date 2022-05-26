@@ -49,7 +49,7 @@ final class GDT_Page extends GDT
 	 */
 	public function renderHTML() : string
 	{
-		if (!Application::instance()->isInstall())
+		if (!Application::$INSTANCE->isInstall())
 		{
 			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
 			{

@@ -47,6 +47,13 @@ class Configure extends MethodForm
 	    ];
 	}
 	
+	public function plugVars() : array
+	{
+		return [
+			'module' => 'Core',
+		];
+	}
+	
 	/**
 	 * Get the config module.
 	 */

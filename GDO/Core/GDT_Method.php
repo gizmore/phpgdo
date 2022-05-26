@@ -25,7 +25,7 @@ class GDT_Method extends GDT
 	
 	public function execute()
 	{
-		Application::instance()->reset();
+		Application::$INSTANCE->reset();
 		return $this->changeUser()->method->inputs($this->getInputs())->exec();
 	}
 	
@@ -54,7 +54,7 @@ class GDT_Method extends GDT
 			}
 		}
 		
-		$fmt = Application::instance()->getFormat();
+		$fmt = Application::$INSTANCE->getFormat();
 		return sprintf('method_%s_%s_%s_%s.%s',
 			$this->getModuleName(), $this->getMethodName(),
 			Trans::$ISO, $p, $fmt);

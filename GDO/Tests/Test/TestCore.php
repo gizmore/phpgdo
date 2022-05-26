@@ -24,12 +24,16 @@ final class TestCore extends TestCase
 	
 	public function testNestedExpression()
 	{
-		$result = GDT_Expression::fromLine()->execute();
-		$result = $result->renderCLI();
-		
 		$command = 'core.concat $(core.concat "--glue=, " b,c),a';
 		$result = $this->cli($command);
 		assertStringContainsString('b ca', $result, 'Check if complex concat works');
+	}
+	
+	public function testDirectoryIndex()
+	{
+		$result = GDT_Expression::fromLine("core.directoryindex /GDO/")->execute();
+		$result = $result->renderCLI();
+		assertStringContainsString('GDO', $result, 'Check if directory index works');
 	}
 	
 }

@@ -266,7 +266,7 @@ class GDT_Timestamp extends GDT_DBField
 		return GDT_Template::php('Date', 'filter/timestamp.php', ['field' => $this, 'f' => $f]);
 	}
 	
-	public function filterQuery(Query $query, $rq=null)
+	public function filterQuery(Query $query, $rq=null) : self
 	{
 		$filter = $this->filterVar($rq);
 		if ($filter != '')

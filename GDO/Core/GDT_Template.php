@@ -113,7 +113,7 @@ class GDT_Template extends GDT
 		
 // 		# HTML renders directly.
 // 		# JSON/CLI/XML render only the fields.
-// 		if (!Application::instance()->isHTML())
+// 		if (!Application::$INSTANCE->isHTML())
 // 		{
 // 			GDT_Response::make()->addFields($tVars);
 // 		}
@@ -297,7 +297,7 @@ class GDT_Template extends GDT
 		$path13 = Strings::rsubstrFrom($path, '.', '');
 
 		# Try themes first
-		foreach (Application::instance()->getThemes() as $theme)
+		foreach (Application::$INSTANCE->getThemes() as $theme)
 		{
 			if (isset(self::$THEMES[$theme]))
 			{

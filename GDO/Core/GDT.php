@@ -128,17 +128,13 @@ abstract class GDT
 	const RENDER_FILTER = 13; # table head filter
 	const RENDER_ORDER = 14; # table head order @TODO rename to RENDER_ORDER
 	
-	public function render()
-	{
-		return $this->renderGDT();
-	}
-	
-// 	const RENDER_HASHMAP = [
-// 		[$this, 'renderCLI'],
-// 	];
+// 	public static array $RENDER_HASHMAP = [
+// 			[$this, 'renderNIL'],
+// 			[$this, 'renderCLI'],
+// 		];
 	
 	/**
-	 * 
+	 * Call the applications mode rendering method. 
 	 * @return string|array
 	 */
 	protected function renderGDT()
@@ -146,7 +142,7 @@ abstract class GDT
 		# Now comes a trick :)
 		# @TODO We simply call the function im map[$mode]
 // 		self::render$this->callRenderMap
-		switch (Application::instance()->mode)
+		switch (Application::$INSTANCE->mode)
 		{
 			# outputs
 			case self::RENDER_NIL: return null;
@@ -168,22 +164,25 @@ abstract class GDT
 		}
 	}
 	
-	# various rendering formats
+	# various output/rendering formats
+	public function render() { return $this->renderGDT(); }
+	public function renderNIL() : string { return ''; }
 	public function renderBinary() : string { return ''; }
 	public function renderCLI() : string { return $this->displayCLI($this->renderHTML()); }
+	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderJSON() { return $this->renderCLI(); }
 	public function renderXML() : string { return $this->renderHTML(); }
 	# html rendering
 	public function renderHTML() : string { return ''; }
-	public function renderCard() : string { return $this->renderHTML(); }
-	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderChoice() : string { return $this->renderHTML(); }
-	public function renderFilter($f) : string { return ''; }
-	public function renderForm() : string { return $this->renderHTML(); }
-	public function renderHeader() : string { return ''; }
-	public function renderOrder() : string { return ''; }
 	public function renderList() : string { return $this->renderHTML(); }
-	public function renderPDF() : string { return $this->renderHTML(); }
+	public function renderForm() : string { return $this->renderHTML(); }
+	public function renderCard() : string { return $this->renderHTML(); }
+	# html table rendering
+	public function renderCell() : string { return $this->renderHTML(); }
+	public function renderHeader() : string { return ''; }
+	public function renderFilter($f) : string { return ''; }
+	public function renderOrder() : string { return ''; }
 	
 	/**
 	 * Display a given var. 
@@ -208,9 +207,9 @@ abstract class GDT
 	 */
 	public function renderMode(int $mode=-1)
 	{
-		$mode = $mode < 0 ? Application::instance()->modeDetected : $mode;
+		$mode = $mode < 0 ? Application::$INSTANCE->modeDetected : $mode;
 		self::$NESTING_LEVEL = 0;
-		$app = Application::instance();
+		$app = Application::$INSTANCE;
 		$old = $app->mode;
 		$app->mode($mode);
 		$result = $this->render();
@@ -376,6 +375,23 @@ abstract class GDT
 	public function filterGDO(GDO $gdo, string $filterInput) : bool
 	{
 		return true;
+	}
+	
+	public function filterQuery(Query $query, $rq='') : self
+	{
+		if ($var = $this->filterVar($this->name))
+		{
+			$var = GDO::escapeSearchS($var);
+			$condition = "{$this->getName()} LIKE '%{$var}%'";
+			return $this->filterQueryCondition($query, $condition);
+		}
+		return $this;
+	}
+	
+	public function filterQueryCondition(Query $query, string $condition) : self
+	{
+		$query->where($condition);
+		return $this;
 	}
 	
 	#########################

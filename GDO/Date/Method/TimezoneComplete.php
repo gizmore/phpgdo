@@ -1,8 +1,7 @@
 <?php
 namespace GDO\Date\Method;
 
-use GDO\Core\GDT;
-use GDO\Core\GDT_Array;
+use GDO\Core\GDT_JSON;
 use GDO\Core\MethodCompletion;
 use GDO\Date\GDO_Timezone;
 use GDO\UI\GDT_SearchField;
@@ -45,7 +44,7 @@ final class TimezoneComplete extends MethodCompletion
             }
         }
         
-        return GDT_Array::makeWith($json);
+        return GDT_JSON::make()->value($json);
     }
     
 }

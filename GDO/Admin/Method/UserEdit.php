@@ -9,14 +9,10 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\User\GDO_User;
-use GDO\Core\Website;
 use GDO\Crypto\BCrypt;
-use GDO\UI\GDT_Bar;
-use GDO\UI\GDT_Link;
 use GDO\UI\GDT_DeleteButton;
-use GDO\UI\GDT_Page;
 use GDO\User\GDT_User;
-use GDO\Util\Common;
+use GDO\UI\GDT_Redirect;
 
 /**
  * Edit a user.
@@ -44,24 +40,21 @@ class UserEdit extends MethodForm
 	    ];
 	}
 	
-	public function onInit() : void
+	public function getUser() : GDO_User
 	{
-	    $this->user = $this->getUser();
-	}
-	
-	public function getUser()
-	{
-	    return GDO_User::table()->getById(Common::getRequestString('user'));
+		if (!isset($this->user))
+		{
+			$this->user = GDO_User::findById($this->getInput('user'));
+		}
+		return $this->user;
 	}
 	
 	public function beforeExecute() : void
 	{
-	    if (Application::instance()->isHTML())
+	    if (Application::$INSTANCE->isHTML())
 	    {
-    	    $this->renderNavBar();
-    	    $barPermissions = GDT_Bar::make()->horizontal();
-    	    $barPermissions->addField(GDT_Link::make('link_edit_permissions')->href(href('Admin', 'PermissionGrant', '&_form[perm_user_id]='.$this->user->getID())));
-    	    GDT_Page::instance()->topTabs->addField($barPermissions);
+    	    $this->renderAdminBar();
+    	    $this->renderPermissionBar();
 	    }
 	}
 	
@@ -75,21 +68,25 @@ class UserEdit extends MethodForm
 	{
 		# Add all columns
 	    $table = GDO_User::table();
+	    $user = $this->getUser();
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
-			$form->addField($table->gdoColumnCopy($gdt->name));
+			if ($gdt->isWriteable() && ($name = $gdt->getName()))
+			{
+				$form->addField($user->gdoColumn($name));
+			}
 		}
 		
 		# Add buttons
 		$form->actions()->addField(GDT_Submit::make());
-		$form->actions()->addField(GDT_DeleteButton::make());
+		$form->actions()->addField(GDT_DeleteButton::make()->onclick([$this, 'onDeleteUser()', $this->getUser()]));
 		$form->addField(GDT_AntiCSRF::make());
 		
 		# Fill form values with user data
-		$form->withGDOValuesFrom($this->getUser());
+// 		$this->withAppliedInputs($this->getUser()->getGDOVars());
 		
 		# Patch columns a bit
-		$form->getField('user_name')->pattern(null);
+		$form->getField('user_name')->noPattern(null);
 		$form->getField('user_password')->notNull(false)->gdo(null)->initial('');
 		$form->getField('user_id')->writeable(false);
 	}
@@ -110,11 +107,11 @@ class UserEdit extends MethodForm
 		return parent::formValidated($form)->addField($this->renderPage());
 	}
 	
-	public function onSubmit_btn_delete(GDT_Form $form)
+	public function onDeleteUser(GDO_User $user)
 	{
-		$this->user->delete();
+		$user->delete();
 		GDT_Hook::callWithIPC("UserDeleted", $this->user);
-		return Website::redirectMessage('msg_user_deleted', [$this->user->renderUserName()], href('Admin', 'Users'));
+		return GDT_Redirect::make()->redirectMessage('msg_user_deleted', [$this->user->renderUserName()])->href('Admin', 'Users');
 	}
 	
 }

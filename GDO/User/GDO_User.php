@@ -9,6 +9,9 @@ use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
+use GDO\Core\GDT_DeletedAt;
+use GDO\Core\GDT_DeletedBy;
+use GDO\Core\GDT_EditedAt;
 
 /**
  * The holy user class.
@@ -124,6 +127,9 @@ final class GDO_User extends GDO
 			GDT_Language::make('user_language')->notNull()->initial(GDO_LANGUAGE),
 			GDT_Timezone::make('user_timezone')->notNull()->initial('1')->cascadeRestrict(),
 			GDT_Level::make('user_level'),
+			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
+			GDT_DeletedAt::make('user_deleted'),
+			GDT_DeletedBy::make('user_deletor'),
 			GDT_PasswordHash::make('user_password'),
 		];
 	}

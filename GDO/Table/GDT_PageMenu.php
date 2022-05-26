@@ -87,7 +87,7 @@ class GDT_PageMenu extends GDT
 		return max(array(intval((($numItems-1) / $ipp)+1), 1));
 	}
 	
-	public function filterQuery(Query $query, $rq=null)
+	public function filterQuery(Query $query, $rq=null) : self
 	{
 		$query->limit($this->ipp, $this->getFrom());
 		return $this;
@@ -132,7 +132,7 @@ class GDT_PageMenu extends GDT
 	##############
 	public function renderCell() : string
 	{
-		switch (Application::instance()->getFormat())
+		switch (Application::$INSTANCE->getFormat())
 		{
 		    case 'cli': return t('pagemenu_cli', [$this->page, $this->getPageCount()]);
 			case 'json': return $this->renderJSON();

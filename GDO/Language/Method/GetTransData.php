@@ -22,14 +22,14 @@ final class GetTransData extends MethodAjax
 		$trans = Trans::getCache(Trans::$ISO);
 		
 		# 
-		if (Application::instance()->isJSON())
+		if (Application::$INSTANCE->isJSON())
 		{
 			return GDT_Array::makeWith($trans);
 		}
 		
 		$langdata = json_encode($trans, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
 	    $code = sprintf('window.GDO_TRANS = {}; window.GDO_TRANS.CACHE = %s;', $langdata);
-	    if (!Application::instance()->isUnitTests())
+	    if (!Application::$INSTANCE->isUnitTests())
 	    {
 	        hdr('Content-Type: text/javascript');
 	        die($code);

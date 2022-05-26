@@ -105,9 +105,16 @@ class GDT_String extends GDT_DBField
 	### Pattern ###
 	###############
 	public string $pattern;
-	public function pattern(string $pattern) : self
+	public function pattern(string $pattern=null) : self
 	{
-		$this->pattern = $pattern;
+		if (!$pattern)
+		{
+			unset($this->pattern);
+		}
+		else
+		{
+			$this->pattern = $pattern;
+		}
 		return $this;
 	}
 	
@@ -133,7 +140,6 @@ class GDT_String extends GDT_DBField
 		}
 		return '';
 	}
-	
 	
 	protected function errorPattern() : bool
 	{
@@ -223,9 +229,19 @@ class GDT_String extends GDT_DBField
 		return $out;
 	}
 	
+	public function renderCell() : string
+	{
+		return html($this->getVar());
+	}
+	
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
+	}
+	
+	public function plugVar() : string
+	{
+		return '<b><i>Test '.$this->getName().'</i></b>';
 	}
 
 }

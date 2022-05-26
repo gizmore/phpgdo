@@ -230,7 +230,7 @@ class GDT_Int extends GDT_DBField
 		return GDT_Template::php('DB', 'filter/int.php', ['field' => $this, 'f' => $f]);
 	}
 	
-	public function filterQuery(Query $query, $rq=null)
+	public function filterQuery(Query $query, $rq=null) : self
 	{
 	    $filter = $this->filterVar($rq);
 	    if ($filter != '')
@@ -240,6 +240,7 @@ class GDT_Int extends GDT_DBField
 	            $this->filterQueryCondition($query, $condition);
 	        }
 	    }
+	    return $this;
 	}
 	
 	public function filterGDO(GDO $gdo, string $filtervalue) : bool

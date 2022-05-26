@@ -42,7 +42,7 @@ final class Module_Table extends GDO_Module
 	public function cfgItemsPerPageHTTP() : int { return $this->getConfigValue('ipp_http'); }
 	public function cfgItemsPerPage() : int
 	{
-	    return Application::instance()->isCLI() ?
+	    return Application::$INSTANCE->isCLI() ?
 	       $this->cfgItemsPerPageCLI() :
 	       $this->cfgItemsPerPageHTTP();
 	}

@@ -48,7 +48,7 @@ final class Javascript
 		$minify = $minify === 'concat';
 		
 		$back = '';
-// 	    if (Application::instance()->allowJavascript())
+// 	    if (Application::$INSTANCE->allowJavascript())
 // 	    {
 	        $back .= self::displayJavascriptPreInline();
 	        $javascripts = $minify ? MinifyJS::minified(self::$_JAVASCRIPTS) : self::$_JAVASCRIPTS;

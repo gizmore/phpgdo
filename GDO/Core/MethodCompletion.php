@@ -27,7 +27,11 @@ abstract class MethodCompletion extends MethodAjax
     #############
 	public function getSearchTerm() : string
 	{
-		return $this->gdoParameterVar('query');
+		if ($var = $this->gdoParameterVar('query'))
+		{
+			return $var;
+		}
+		return '';
 	}
 	
 	public function getMaxSuggestions() : int

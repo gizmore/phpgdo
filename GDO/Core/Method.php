@@ -333,6 +333,15 @@ abstract class Method #extends GDT
 	###################
 	### Apply Input ###
 	###################
+	/**
+	 * Get plug variables.
+	 * @return string[string]
+	 */
+	public function plugVars() : array
+	{
+		return GDT::EMPTY_GDT_ARRAY;
+	}
+	
 	public function withAppliedInputs(array $inputs) : self
 	{
 		$this->inputs($inputs);
@@ -372,7 +381,7 @@ abstract class Method #extends GDT
 	public function success($key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
 		Application::setResponseCode($code);
-		if (Application::instance()->isCLI())
+		if (Application::$INSTANCE->isCLI())
 		{
 			echo t($key, $args) . "\n";
 		}
@@ -386,7 +395,7 @@ abstract class Method #extends GDT
 	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
 	{
 		Application::setResponseCode($code);
-		if (Application::instance()->isCLI())
+		if (Application::$INSTANCE->isCLI())
 		{
 			echo CLI::red(t($key, $args)) . "\n";
 		}

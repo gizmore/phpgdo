@@ -45,8 +45,8 @@ class Permissions extends MethodQueryTable
 	
 	public function beforeExecute() : void
 	{
-	    $this->renderNavBar();
-	    $this->renderPermTabs();
+	    $this->renderAdminBar();
+	    $this->renderPermissionBar();
 	}
 	
 }

@@ -100,7 +100,7 @@ class GDT_Virtual extends GDT
         return $this->proxy()->displayTableOrder($table);
     }
     
-    public function filterQuery(Query $query, $rq=null)
+    public function filterQuery(Query $query, $rq=null) : self
     {
         return $this->proxy()->filterQuery($query, $rq);
     }

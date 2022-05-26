@@ -3,7 +3,6 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Table\MethodQueryTable;
-use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\UI\GDT_Button;
 use GDO\User\GDO_User;
@@ -14,7 +13,7 @@ use GDO\User\GDO_User;
  * @author gizmore
  * @see GDO_User
  * @see GDT_Table
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.0.2
  */
 class Users extends MethodQueryTable

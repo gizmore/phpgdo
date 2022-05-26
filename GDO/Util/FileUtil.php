@@ -238,8 +238,9 @@ final class FileUtil
             case '.js': return 'text/javascript';
             case 'css': return 'text/css';
             case 'php': return 'text/x-php';
+            case '.md': return 'text/markdown';
+            default: return mime_content_type($path);
         }
-	    return mime_content_type($path);
 	}
 	
 	##############

@@ -26,12 +26,6 @@ abstract class MethodForm extends Method
 			$this->renderPage());
 	}
 	
-// 	publiC FUNCTION INPUTS(ARRAY $INPUTS) : SELF
-// 	{
-// 		$THIS->FORM->INPUTS($INPUTS);
-// 		RETURN $THIS;
-// 	}
-	
 	public function gdoComposeParameters() : array
 	{
 		$form = $this->getForm();

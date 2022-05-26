@@ -19,7 +19,7 @@ final class GDT_Response extends GDT
 	
 	public function render() : string
 	{
-		switch (Application::instance()->mode)
+		switch (Application::$INSTANCE->mode)
 		{
 			case GDT::RENDER_HTML:
 				return $this->renderPage();

@@ -9,7 +9,6 @@ use GDO\Util\FileUtil;
 use GDO\Tests\GDT_MethodTest;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Module_Core;
-use GDO\Core\Website;
 use GDO\DB\Database;
 use GDO\Core\Application;
 use GDO\UI\GDT_Redirect;
@@ -31,6 +30,8 @@ use GDO\UI\GDT_Redirect;
 final class ClearCache extends Method
 {
 	use MethodAdmin;
+	
+	public function isTrivial() { return false; } # Clearing the cache during tests randomly is not a good idea.
 	
 	public function saveLastUrl() { return false; }
 	
@@ -56,7 +57,7 @@ final class ClearCache extends Method
 	    # Flush GDO cache
 	    Database::instance()->clearCache();
 	    # Reset application state
-	    Application::instance()->reset();
+	    Application::$INSTANCE->reset();
 	    # Remove minified JS
 	    FileUtil::removeDir(GDO_PATH . 'assets/');
 	    # Clear module loader cache

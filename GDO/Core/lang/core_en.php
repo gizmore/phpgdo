@@ -49,6 +49,9 @@ return [
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
 	
+	# Enum
+	'enum_none' => '-None-',
+	
 	# Permissions
 	'perm_admin' => 'Admin',
 	'perm_staff' => 'Staff',
@@ -60,6 +63,7 @@ return [
 	'btn_set' => 'Set',
 	
 	# Float
+	'decimal_point' => '.',
 	'thousands_seperator' => ',',
 	
 	# UserType
@@ -71,12 +75,23 @@ return [
 	'message' => 'Message',
 	'password' => 'Password',
 	'url' => 'URL',
+	'filesize' => 'Size',
+	'file_type' => 'Type',
+	'module_path' => 'Path',
 	
 	# Fineprint
 	'privacy' => 'Privacy',
 	'impressum' => 'Impressum',
 	
+	# Util
+	'and' => ' and ',
+	
+	# Welcome
+	'welcome' => 'Welcome',
+	
 	# Directory Index
 	'ft_dir_index' => '%s (%s files and folders)',
+	'ft_filenotfound' => 'Not Found!',
+	'ft_notallowed' => 'Forbidden!',
 	
 ];

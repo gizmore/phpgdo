@@ -4,8 +4,8 @@ namespace GDO\User\Method;
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
-use GDO\Core\MethodAjax;
-use GDO\Core\GDT_Array;
+use GDO\Core\GDT_JSON;
+use GDO\Core\MethodCompletion;
 
 /**
  * Auto completion for GDT_User.
@@ -14,14 +14,15 @@ use GDO\Core\GDT_Array;
  * @version 6.10.3
  * @since 5.0.0
  */
-class Completion extends MethodAjax
+class Completion extends MethodCompletion
 {
 	public static int $MAXCOUNT = 20;
 	
 	public function execute()
 	{
-		$q = GDO::escapeS(Common::getRequestString('query'));
-		$condition = sprintf('user_type IN ("guest","member") AND user_name LIKE \'%%%1$s%%\' OR user_real_name LIKE \'%%%1$s%%\' OR user_guest_name LIKE \'%%%1$s%%\'', $q);
+		$q = $this->getSearchTerm();
+		$q = GDO::escapeSearchS($q);
+		$condition = sprintf('user_type IN ("guest","member") AND user_name LIKE \'%%%1$s%%\' OR user_guest_name LIKE \'%%%1$s%%\'', $q);
 		$query = GDO_User::table()->select()->where($condition)->limit(self::$MAXCOUNT)->uncached();
 		$result = $query->exec();
 		$response = [];
@@ -40,6 +41,6 @@ class Completion extends MethodAjax
 			);
 		}
 	
-		return GDT_Array::make()->data($response);
+		return GDT_JSON::make()->value($response);
 	}
 }

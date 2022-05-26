@@ -31,7 +31,7 @@ require 'GDO7.php';
 ############
 ### Init ###
 ############
-$app = Application::make();
+$app = Application::instance();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
 Database::init();
@@ -80,7 +80,7 @@ else
 $mode = GDT::RENDER_HTML;
 if (isset($_REQUEST['_fmt']))
 {
-	$mode = Application::instance()->detectRenderMode((string)@$_REQUEST['_fmt']);
+	$mode = Application::$INSTANCE->detectRenderMode((string)@$_REQUEST['_fmt']);
 	unset($_REQUEST['_fmt']);
 }
 $app->mode($mode, true); # set detected mode.

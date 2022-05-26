@@ -2,9 +2,8 @@
 namespace GDO\Date\Method;
 
 use GDO\Core\MethodAjax;
-use GDO\Core\GDT_Array;
+use GDO\Core\GDT_JSON;
 use GDO\Date\GDO_Timezone;
-use GDO\Core\GDT;
 
 /**
  * Get all timezones and offsets via ajax.
@@ -18,7 +17,7 @@ final class Timezones extends MethodAjax
 	public function execute()
 	{
 		$data = GDO_Timezone::table()->allTimezones();
-		return GDT_Array::makeWith($data);
+		return GDT_JSON::make()->value($data);
 	}
 
 }

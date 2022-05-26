@@ -20,7 +20,7 @@ final class GDO_DirectoryIndex extends GDO
             GDT_Url::make('file_name'),
             GDT_Icon::make('file_icon'),
             GDT_String::make('file_type'),
-            GDT_UInt::make('file_size'),
+            GDT_Filesize::make('file_size'),
         ];
     }
     

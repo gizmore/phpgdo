@@ -145,7 +145,7 @@ function json_quote($s)
 
 function html(string $html) : string
 {
-	$app = Application::instance();
+	$app = Application::$INSTANCE;
 	$is_html = $app->isHTML();
 	$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 	
@@ -179,7 +179,7 @@ function hdrc(string $header, bool $replace = true)
 
 function hdr(string $header, bool $replace = true)
 {
-	$app = Application::instance();
+	$app = Application::$INSTANCE;
 	if ($app->isUnitTests())
 	{
 		echo $header . PHP_EOL;

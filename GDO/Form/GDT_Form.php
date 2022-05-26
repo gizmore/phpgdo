@@ -82,6 +82,11 @@ final class GDT_Form extends GDT
 		return GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
 	}
 	
+	public function htmlVerb() : string
+	{
+		return sprintf(' method="%s"', $this->verb);
+	}
+	
 	################
 	### Validate ###
 	################

@@ -76,7 +76,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
     	$this->message("Running %s", CLI::bold($this->gdoClassName()));
     	
-        Application::instance()->reset();
+        Application::$INSTANCE->reset();
         
         # Increase IP
         GDT_IP::$CURRENT = $this->nextIP();
@@ -228,7 +228,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     
     public function cli(string $command, bool $permissions=true) : string
     {
-    	$app = Application::instance();
+    	$app = Application::$INSTANCE;
     	$app->reset();
     	$app->cli(true);
 //     	$_POST = ['a' => '1'];

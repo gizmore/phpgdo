@@ -2,7 +2,6 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
-use GDO\Core\GDT;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -24,7 +23,7 @@ class PermissionAdd extends MethodForm
 	
 	public function execute()
 	{
-	    $this->renderPermTabs();
+	    $this->renderPermissionBar();
 		return parent::execute();
 	}
 	

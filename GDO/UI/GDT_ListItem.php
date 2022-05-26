@@ -109,7 +109,7 @@ final class GDT_ListItem extends GDT
 	
 // 	public function render() : string
 // 	{
-// 	    switch (Application::instance()->getFormat())
+// 	    switch (Application::$INSTANCE->getFormat())
 // 	    {
 // 	        case 'json': 
 // 	            GDT_List::$CURRENT->data[] = $this->renderJSON();

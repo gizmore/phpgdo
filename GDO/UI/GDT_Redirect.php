@@ -38,7 +38,7 @@ final class GDT_Redirect extends GDT
 	 */
 	public static function hrefBack($default=null) : string
 	{
-		if (Application::instance()->isCLI())
+		if (Application::$INSTANCE->isCLI())
 		{
 			return $default ? $default : hrefDefault();
 		}
@@ -128,7 +128,7 @@ final class GDT_Redirect extends GDT
 	public function renderHTML() : string
 	{
 		$ajax = '';
-		if (Application::instance()->isAjax())
+		if (Application::$INSTANCE->isAjax())
 		{
 			$ajax = $this->renderAjaxRedirect();
 		}

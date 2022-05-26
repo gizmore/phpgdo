@@ -151,7 +151,7 @@ class GDT_User extends GDT_Object
 	        return true; # Null check passed already
 	    }
 	    
-	    if ($this->withType)
+	    if (isset($this->withType))
 	    {
 	        if ($user->getType() !== $this->withType)
 	        {
@@ -160,7 +160,7 @@ class GDT_User extends GDT_Object
 	        }
 	    }
 	    
-	    if ($this->withPermission)
+	    if (isset($this->withPermission))
 	    {
 	        if (!$user->hasPermission($this->withPermission))
 	        {
@@ -204,7 +204,7 @@ class GDT_User extends GDT_Object
 		return $this;
 	}
 	
-	public function filterQuery(Query $query, $rq=null)
+	public function filterQuery(Query $query, $rq=null) : self
 	{
 		if (!$this->noFilter)
 		{
@@ -216,6 +216,7 @@ class GDT_User extends GDT_Object
 				    "user_name $filter OR user_guest_name $filter OR user_real_name $filter");
 			}
 		}
+		return $this;
 	}
 	
 }

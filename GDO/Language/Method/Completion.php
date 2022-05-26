@@ -4,6 +4,7 @@ namespace GDO\Language\Method;
 use GDO\Language\GDO_Language;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodCompletion;
+use GDO\Core\GDT_JSON;
 
 /**
  * Complete a GDT_Language.
@@ -26,7 +27,7 @@ final class Completion extends MethodCompletion
 		{
 			if ( ($q === '') || ($language->getISO() === $q) ||
 				 (mb_stripos($language->renderName(), $q) !== false) ||
-				 (mb_stripos($language->displayNameIso('en'), $q)!==false))
+				 (mb_stripos($language->renderNameIso('en'), $q)!==false))
 			{
 				$response[] = array(
 					'id' => $iso,
@@ -36,7 +37,7 @@ final class Completion extends MethodCompletion
 			}
 		}
 		
-		return GDT_Array::makeWith($response);
+		return GDT_JSON::make()->value($response);
 	}
 	
 }

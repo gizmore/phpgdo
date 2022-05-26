@@ -128,7 +128,7 @@ final class Color
 	
 	public static function colored(string $s, string $colorHTML, string $colorCLI)
 	{
-		$app = Application::instance();
+		$app = Application::$INSTANCE;
 		switch ($app->mode)
 		{
 			case GDT::RENDER_CLI:

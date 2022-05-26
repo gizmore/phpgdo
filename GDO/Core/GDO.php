@@ -200,7 +200,6 @@ abstract class GDO extends GDT
 		return $this->gdoHumanName() . "#" . $this->getID();
 	}
 	
-	
 // 	public function display($key)
 // 	{
 // 		return html($this->gdoVars[$key]);

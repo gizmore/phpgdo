@@ -2,6 +2,8 @@
 namespace GDO\Admin;
 
 use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Bar;
+use GDO\UI\GDT_Link;
 
 /**
  * Add the admin bar to page top.
@@ -17,7 +19,21 @@ trait MethodAdmin
 	
 	public function beforeExecute() : void
 	{
+		$this->renderAdminBar();
+	}
+	
+	protected function renderAdminBar() : void
+	{
 		GDT_Page::instance()->topBar()->addField(GDT_AdminBar::make());
+	}
+	
+	protected function renderPermissionBar() : void
+	{
+		GDT_Page::instance()->topBar()->addField(
+			GDT_Bar::make()->addFields(
+				GDT_Link::make()->href('Admin', 'Permissions')->label('permissions'),
+				GDT_Link::make()->href('Admin', 'PermissionAdd')->label('permissions'),
+				));
 	}
 
 }

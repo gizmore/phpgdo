@@ -310,7 +310,7 @@ class GDO_Module extends GDO
 	 */
 	public function tempPath($path='')
 	{
-	    $base = Application::instance()->isUnitTests() ?
+	    $base = Application::$INSTANCE->isUnitTests() ?
 	       'temp_test' : 'temp';
 	    $path = GDO_PATH . "{$base}/" . $this->getName() .'/' . $path;
 	    $dir = Strings::rsubstrTo($path, "/");
@@ -338,7 +338,7 @@ class GDO_Module extends GDO
 	 */
 	public function templatePHP(string $path, array $tVars=null) : GDT_Template
 	{
-		switch (Application::instance()->getFormat())
+		switch (Application::$INSTANCE->getFormat())
 		{
 			case 'json': return $tVars; # @TODO here is the spot to enable json for genereic templates.
 			case 'html':
@@ -348,9 +348,9 @@ class GDO_Module extends GDO
 	
 	public function responsePHP(string $file, array $tVars=null) : GDT
 	{
-		switch (Application::instance()->getFormat())
+		switch (Application::$INSTANCE->getFormat())
 		{
-			case 'json': return GDT_Array::makeWith(...$tVars);
+			case 'json': return GDT_JSON::make()->value(...$tVars);
 			case 'html':
 			default: return $this->templatePHP($file, $tVars);
 		}

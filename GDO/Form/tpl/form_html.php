@@ -10,7 +10,7 @@ use GDO\Core\GDT;
 <?php if ($field->hasError()) : ?>
   <?=$field->renderError()?>
 <?php endif;?>
- <form method="<?=$field->verb?>">
+ <form<?=$field->htmlVerb()?><?=$field->htmlAction()?>>
   <div class="gdt-form-inner">
    <div class="gdt-form-text">
 <?php if ($field->hasTitle()) : ?>
