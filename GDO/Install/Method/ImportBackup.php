@@ -20,7 +20,7 @@ final class ImportBackup extends MethodForm
 {
 	public function renderPage() : GDT
 	{
-		return GDT_Template::responsePHP('Install', 'page/importbackup.php', ['form' => $this->getForm()]);
+		return GDT_Template::templatePHP('Install', 'page/importbackup.php', ['form' => $this->getForm()]);
 	}
 	
 	public function createForm(GDT_Form $form) : void
@@ -36,7 +36,8 @@ final class ImportBackup extends MethodForm
 		$form = $this->getForm();
 		if (module_enabled('Backup'))
 		{
-			return \GDO\Backup\Method\ImportBackup::make()->importBackup($form->getFormValue('backup_file'));
+			$backup = method('Backup', 'ImportBackup');
+			return $backup->importBackup($form->getFormValue('backup_file'));
 		}
 		
 		return parent::formValidated($form)->addField($this->renderPage());

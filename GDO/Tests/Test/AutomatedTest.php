@@ -104,7 +104,7 @@ final class AutomatedTest extends TestCase
 				$gdt = call_user_func([
 					$klass,
 					'make'
-				]);
+				], 'testfield');
 				
 				if ($gdt->isTestable())
 				{

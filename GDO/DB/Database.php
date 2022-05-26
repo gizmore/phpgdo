@@ -425,12 +425,12 @@ class Database
 	###################
 	### Transaction ###
 	###################
-	public function transactionBegin() : mysqli_result
+	public function transactionBegin()
 	{
 		return mysqli_begin_transaction($this->getLink());
 	}
 	
-	public function transactionEnd() : mysqli_result
+	public function transactionEnd()
 	{
 	    # Perf
 		$this->commits++;

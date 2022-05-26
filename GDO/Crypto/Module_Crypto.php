@@ -3,12 +3,15 @@ namespace GDO\Crypto;
 
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_UInt;
+use GDO\Core\GDT_Checkbox;
 
 /**
  * Cryptographic functionality.
  * 
  * @author gizmore
  * @version 7.0.0
+ * @see GDT_Password
+ * @see GDT_PasswordHash
  */
 final class Module_Crypto extends GDO_Module
 {
@@ -26,8 +29,10 @@ final class Module_Crypto extends GDO_Module
 	{
 		return [
 			GDT_UInt::make('bcrypt_cost')->min(1)->max(32)->initial('11'),
+			GDT_Checkbox::make('password_strong')->initial('0'), // @TODO implement forcing strong passwords. GDO currently only needs 4 chars.
 		];
 	}
 	public function cfgBCryptCost() : int { return $this->getConfigValue('bcrypt_cost'); }
+	public function cfgPasswordStrong() : bool { return $this->getConfigValue('password_strong'); }
 	
 }

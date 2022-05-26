@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\UI\Color;
+
 /**
  * Boolean tri-state Checkbox; NULL, 1 and 0
  * Implemented as select to reflect undetermined status. Also HTML does not send unchecked boxes over HTTP.
@@ -118,7 +120,7 @@ class GDT_Checkbox extends GDT_Select
 	##############
 	### Render ###
 	##############
-	public function displayValue($var)
+	public function displayVar(string $var=null) : string
 	{
 	    if ($var === null)
 	    {
@@ -126,8 +128,8 @@ class GDT_Checkbox extends GDT_Select
 	    }
 	    switch ($var)
 	    {
-	        case '0': return t('enum_no');
-	        case '1': return t('enum_yes');
+	        case '0': return Color::red(t('enum_no'));
+	        case '1': return Color::green(t('enum_yes'));
 	        case '2': return t('enum_undetermined_yes_no');
 	        default: return $this->errorInvalidVar($var);
 	    }
@@ -145,9 +147,9 @@ class GDT_Checkbox extends GDT_Select
 		return parent::renderForm();
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
-	    return $this->displayValue($this->getVar());
+	    return $this->displayVar($this->getVar());
 	}
 	
 // 	public function renderJSON()

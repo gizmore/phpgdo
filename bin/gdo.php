@@ -10,6 +10,7 @@ use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Language\Trans;
 use GDO\Core\Application;
+use GDO\Core\GDT;
 
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
@@ -24,24 +25,16 @@ require GDO_BIN_PATH . '../GDO7.php';
 class gdo extends Application
 {
 	public function isCLI() : bool { return true; }
-	
 }
-new gdo();
+gdo::instance()->mode(GDT::RENDER_CLI, true);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # init without username
-Debug::init();
-Debug::enableErrorHandler();
-Debug::enableExceptionHandler();
-Debug::setDieOnError(GDO_ERROR_DIE);
-Debug::setMailOnError(GDO_ERROR_MAIL);
-$loader->loadModules(GDO_DB_ENABLED, !GDO_DB_ENABLED);
-
+Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
+$loader->loadModulesCache();
 define('GDO_CORE_STABLE', 1);
-
-
 # Shell
 if (!CLIUtil::isCLI())
 {

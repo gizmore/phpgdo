@@ -22,6 +22,7 @@ use GDO\Util\FileUtil;
  */
 class GDT_Template extends GDT
 {
+	use WithGDO;
 	use WithLabel;
 	use WithFields;
 

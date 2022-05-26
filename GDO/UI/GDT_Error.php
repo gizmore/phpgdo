@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\Debug;
 use GDO\Core\Application;
+use GDO\Core\GDO_Exception;
 
 /**
  * An error is a message box with a special css class.
@@ -20,6 +21,13 @@ final class GDT_Error extends GDT_MessageBox
 		$this->titleRaw("Exception!");
 		$this->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
 		return $this;
+	}
+	
+	public function renderHTML() : string
+	{
+		hdrc('HTTP/1.1 ' . GDO_Exception::DEFAULT_ERROR_CODE  .' GDO Error');
+		hdr('X-GDO-ERROR: ' . $this->renderText());
+		return parent::renderHTML();
 	}
 	
 }

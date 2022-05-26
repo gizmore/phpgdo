@@ -8,8 +8,7 @@ if (isset($field->completionHref))
 }
 ?>
 <div class="gdt-container <?=$field->classError()?>">
-  <?=$field->htmlIcon()?>
-  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
+  <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <select
    <?=$field->htmlID()?>
    <?=$field->htmlAttributes()?>

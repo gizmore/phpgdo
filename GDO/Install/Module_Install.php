@@ -26,8 +26,6 @@ final class Module_Install extends GDO_Module
 	public function onInit() : void
 	{
 		ClearCache::make()->clearCache();
-// 		Cache::flush();
-// 		Cache::fileFlush();
 	}
 	
 }

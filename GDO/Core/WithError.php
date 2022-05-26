@@ -33,6 +33,14 @@ trait WithError
 		return false;
 	}
 	
+	public function noError() : self
+	{
+		unset($this->errorRaw);
+		unset($this->errorKey);
+		unset($this->errorArgs);
+		return $this;
+	}
+	
 	public function hasError() : bool
 	{
 		return isset($this->errorKey) || isset($this->errorRaw);

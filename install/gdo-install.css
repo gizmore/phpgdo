@@ -87,6 +87,11 @@ input[type=submit]:hover { cursor: pointer; }
 input, textarea { padding: 4px; }
 select { padding: 7px 3px; }
 
+div.gdt-form-fields { display: table; }
+div.gdt-form-fields > * { display: table-row; }
+div.gdt-form-fields > * > * { display: table-cell; }
+div.gdt-form-fields div.gdt-divider > *{ column-span: all; }
+
 /** Table **/
 .gdt-tblorder { display: inline-block; }
 .gdt-tblorder a.sel { color: gold; }
@@ -237,3 +242,7 @@ td.gdt-template-Install-modulename span,
 .gdt-template-Install-modulelicense { white-space: nowrap; }
 body > div.gdo-body { padding: 0; }
 .gdt-module-license { font-style: italic; }
+
+
+body { background: rgb(240,240,255); }
+body { background: radial-gradient(circle, rgba(240,240,255,1) 0%, rgba(203,203,255,1) 46%, rgba(123,130,255,1) 100%); }

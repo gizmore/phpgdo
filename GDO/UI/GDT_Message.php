@@ -12,8 +12,6 @@ use GDO\Core\GDT_Text;
  * The content is html, filtered through a whitelist with html-purifier.
  * A gdo6-tinymce / ckeditor is available. Planned is markdown(done) and bbcode(planned).
  * 
- * @TODO: write a Markdown module. Hook into DECODE() to turn input markdown into output html.
- * 
  * @see \GDO\TinyMCE\Module_TinyMCE
  * @see \GDO\CKEditor\Module_CKEditor
  * @see \GDO\Markdown\Module_Markdown
@@ -119,7 +117,7 @@ class GDT_Message extends GDT_Text
     ################
     ### Validate ###
     ################
-    public static function getPurifier()
+    public static function getPurifier() : \HTMLPurifier
     {
         static $purifier;
         if (!isset($purifier))
@@ -243,7 +241,7 @@ class GDT_Message extends GDT_Text
      * {@inheritDoc}
      * @see \GDO\Core\GDT::setGDOData()
      */
-    public function setGDOData(GDO $gdo)
+    public function setGDOData(GDO $gdo) : self
     {
         $name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
         $this->msgInput = $gdo->getVar("{$name}_input");
@@ -256,8 +254,6 @@ class GDT_Message extends GDT_Text
     /**
      * getGDOData() is called when the gdo wants to update it's gdoVars.
      * This happens when formData() is plugged into saveVars() upon update and creation.
-     * {@inheritDoc}
-     * @see \GDO\Core\GDT::getGDOData()
      */
     public function getGDOData() : ?array
     {
@@ -272,24 +268,16 @@ class GDT_Message extends GDT_Text
     ##############
     ### Getter ###
     ##############
-//     public function getVar() : ?string
-//     {
-//         $form = $this->formVariable();
-//         if ($form)
-//         {
-//             return $this->getRequestVar($form, $this->msgInput);
-//         }
-//         return $this->var;
-//     }
-    public function getVarInput() { return $this->msgInput; }
-    public function getVarOutput() { return $this->msgOutput; }
-    public function getVarText() { return $this->msgText; }
+    public function getVar() : string { return $this->getVarInput(); }
+    public function getVarInput() : string { return $this->msgInput; }
+    public function getVarOutput() : string { return $this->msgOutput; }
+    public function getVarText() : string { return $this->msgText; }
     
     ##############
 	### Render ###
 	##############
-    public function renderCLI() : string { return $this->getVarText(); }
-    public function renderCell() : string { return $this->getVarOutput(); }
+    public function renderCLI() : string { return $this->getVarText() . "\n"; }
+    public function renderHTML() : string { return $this->getVarOutput(); }
     public function renderCard() : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
     public function renderForm() : string { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
     public function renderChoice() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }

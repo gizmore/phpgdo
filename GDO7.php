@@ -7,6 +7,7 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
 use GDO\Date\Time;
 use GDO\Util\Regex;
+use GDO\Core\GDO_Module;
 /**
  * GDO Autoloader and global functions.
  *
@@ -205,6 +206,12 @@ function module_enabled(string $moduleName) : bool
 		return true;
 	}
 	return false;
+}
+
+function method(string $moduleName, string $methodName) : GDO_Module
+{
+	$func = ["GDO\\{$moduleName}\\Method\\$methodName", 'make'];
+	return call_user_func($func);
 }
 
 # ######################

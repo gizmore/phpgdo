@@ -1,5 +1,6 @@
 <?php
-return array(
+namespace GDO\Install\lang;
+return [
 # Welcome
 'install_title_1' => 'Willkommen',
 'install_text_1' => 'Willkommen zu GDOv7. Bitte fahren Sie hier fort: %s',
@@ -84,13 +85,11 @@ Sie können dann hier fortfahren: %s',
 Als root:<br/>
 <br/>
 aptitude install nodejs nodejs-dev npm # Install javascript<br/>
-npm install -g bower # Install bower<br/>
 npm install -g yarn # Install yarn<br/>
 <br/>
 As gdo6/www user:<br/>
 <br/>
 cd www/gdo6<br/>
-./gdo_bower.sh # Install module js dependencies<br/>
 ./gdo_yarn.sh # Install module js dependencies<br/>
 <br/>
 Note: Currently bower and yarn are both in use. Bower will be dropped.<br/>
@@ -122,4 +121,4 @@ Note: Currently bower and yarn are both in use. Bower will be dropped.<br/>
 'admin_mail' => 'Administrator Email',
 'error_mail' => 'Fehler Email',
 'msg_install_security' => 'Ihre gdo6 Installation ist nun als Webserver abgesichert.',
-);
+];

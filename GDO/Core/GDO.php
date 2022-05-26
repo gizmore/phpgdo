@@ -209,6 +209,11 @@ abstract class GDO extends GDT
 		return $this->toJSON();
 	}
 	
+	public function renderCLI() : string
+	{
+		return $this->renderName();
+	}
+	
 	/**
 	 * @return GDT[]
 	 */
@@ -769,7 +774,7 @@ abstract class GDO extends GDT
 		{
 			return $gdt->getVar() !== null;
 		}
-		return $this->isPersisted();
+		return !$this->isPersisted();
 	}
 	
 	/**
@@ -1200,7 +1205,10 @@ abstract class GDO extends GDT
 			$id2 = $this->gdoVar($name);
 			$id = $id ? "{$id}:{$id2}" : $id2;
 		}
-		$this->id = $id;
+		if ($id)
+		{
+			$this->id = $id;
+		}
 		return $id;
 	}
 	

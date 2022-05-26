@@ -16,6 +16,8 @@ use GDO\UI\WithActions;
 use GDO\Core\WithFields;
 use GDO\Core\GDO_Exception;
 use GDO\Form\WithCrud;
+use GDO\Core\WithGDO;
+use GDO\Form\WithAction;
 
 /**
  * A filterable, searchable, orderable, paginatable, sortable collection of GDT[] in headers.
@@ -53,9 +55,11 @@ use GDO\Form\WithCrud;
  */
 class GDT_Table extends GDT
 {
+	use WithGDO;
 	use WithHREF;
 	use WithTitle;
 	use WithHeaders;
+	use WithAction;
 	use WithActions;
 	use WithFields;
 	use WithCrud;
@@ -88,14 +92,14 @@ class GDT_Table extends GDT
 	 */
 	public function getHeaderFields() : array
 	{
-		return isset($this->headers) ? $this->headers->getFields() : GDT::EMPTY_GDT_ARRAY;
+		return isset($this->headers) ? $this->headers->getAllFields() : GDT::EMPTY_GDT_ARRAY;
 	}
 
 	/**
 	 * @param string $name
 	 * @return \GDO\Core\GDT
 	 */
-	public function getHeaderField($name)
+	public function getHeaderField(string $name) : GDT
 	{
 		return $this->headers->getField($name);
 	}
@@ -103,20 +107,20 @@ class GDT_Table extends GDT
 	# ###############
 	# ## Endpoint ###
 	# ###############
-	public $action;
+// 	public $action;
 
-	public function action($action = null)
-	{
-		$this->action = $action;
-		return $this;
-	}
+// 	public function action($action = null)
+// 	{
+// 		$this->action = $action;
+// 		return $this;
+// 	}
 
 	# #############
 	# ## Footer ###
 	# #############
-	public $footer;
+	public GDT $footer;
 
-	public function footer($footer)
+	public function footer(GDT $footer)
 	{
 		$this->footer = $footer;
 		return $this;
@@ -125,9 +129,9 @@ class GDT_Table extends GDT
 	# #################
 	# ## Hide empty ###
 	# #################
-	public $hideEmpty = false;
+	public bool $hideEmpty = false;
 
-	public function hideEmpty($hideEmpty = true)
+	public function hideEmpty(bool $hideEmpty = true)
 	{
 		$this->hideEmpty = $hideEmpty;
 		return $this;
@@ -136,9 +140,9 @@ class GDT_Table extends GDT
 	# #################
 	# ## Fetch Into ###
 	# #################
-	public $fetchInto = true;
+	public bool $fetchInto = false;
 
-	public function fetchInto($fetchInto)
+	public function fetchInto(bool $fetchInto)
 	{
 		$this->fetchInto = $fetchInto;
 		return $this;
@@ -147,7 +151,7 @@ class GDT_Table extends GDT
 	# ######################
 	# ## Default headers ###
 	# ######################
-	public function setupHeaders($searched = false, $paginated = false)
+	public function setupHeaders(bool $searched = false, bool $paginated = false)
 	{
 		$this->makeHeaders();
 		
@@ -268,6 +272,7 @@ class GDT_Table extends GDT
 
 	public function result(Result $result)
 	{
+		$this->gdo($result->table);
 		if ( !$this->fetchAs)
 		{
 			$this->fetchAs = $result->table;
@@ -514,13 +519,13 @@ class GDT_Table extends GDT
 	# #############
 	# ## Render ###
 	# #############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		if (($this->hideEmpty) && ($this->getResult()->numRows() === 0))
 		{
 			return '';
 		}
-		return GDT_Template::php('Table', 'cell/table.php',
+		return GDT_Template::php('Table', 'table_html.php',
 		[
 			'field' => $this,
 			'form' => false

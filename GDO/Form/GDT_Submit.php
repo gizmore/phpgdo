@@ -5,6 +5,7 @@ use GDO\Core\GDT_Template;
 use GDO\Core\WithName;
 use GDO\UI\GDT_Button;
 use GDO\Core\WithValue;
+use GDO\Core\WithInput;
 
 /**
  * An input submit button.
@@ -16,6 +17,7 @@ use GDO\Core\WithValue;
 class GDT_Submit extends GDT_Button
 {
 	use WithName;
+	use WithInput;
 	use WithValue;
 	use WithClickHandler;
 	

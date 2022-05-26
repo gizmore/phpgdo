@@ -9,7 +9,6 @@ use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
-use GDO\Language\GDO_Language;
 
 /**
  * The holy user class.
@@ -32,13 +31,22 @@ final class GDO_User extends GDO
 	# Instances
 	private static ?self $SYSTEM = null;
 	private static self $CURRENT;
-	
 	public function clearCache() : self
 	{
-// 		self::$SYSTEM = null;
-// 		self::$CURRENT = $;
+		$currId = self::$CURRENT->getID();
+		self::$SYSTEM = null;
+		self::$CURRENT = self::ghost();
 		$this->tempReset();
-		return parent::clearCache();
+		parent::clearCache();
+		if ($currId)
+		{
+			self::$CURRENT = self::getById($currId);
+		}
+		else
+		{
+			self::$CURRENT = self::ghost();
+		}
+		return $this;
 	}
 	
 	###############
@@ -92,6 +100,17 @@ final class GDO_User extends GDO
 		return self::getBy('user_name', $name);
 	}
 	
+	/**
+	 * Get a user by login, for auth mechanisms
+	 * 
+	 * @todo getByLogin shall use a hook for mail module to login via email.
+	 * @return self
+	 */
+	public static function getByLogin(string $name) : ?self 
+	{
+		return self::getByName($name);
+	}
+	
 	###########
 	### GDO ###
 	###########
@@ -100,7 +119,7 @@ final class GDO_User extends GDO
 		return [
 			GDT_AutoInc::make('user_id'),
 			GDT_UserType::make('user_type'),
-			GDT_Username::make('user_name'),
+			GDT_Username::make('user_name')->unique(),
 			GDT_Username::make('user_guest_name')->unique(),
 			GDT_Language::make('user_language')->notNull()->initial(GDO_LANGUAGE),
 			GDT_Timezone::make('user_timezone')->notNull()->initial('1')->cascadeRestrict(),
@@ -282,7 +301,11 @@ final class GDO_User extends GDO
 		{
 			return html($name);
 		}
-		return 'gggguest';
+		if ($name = $this->getGuestName())
+		{
+			return '~' . html($name) . '~';
+		}
+		return t('guest');
 	}
 
 }

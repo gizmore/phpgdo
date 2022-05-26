@@ -128,10 +128,12 @@ class GDT_String extends GDT_DBField
 	{
 		if (isset($this->pattern))
 		{
-			return sprintf(' pattern="%s"', $this->pattern);
+			$pattern = trim(rtrim($this->pattern, 'iuDs'), $this->pattern[0].'^$');
+			return sprintf(' pattern="%s"', $pattern);
 		}
 		return '';
 	}
+	
 	
 	protected function errorPattern() : bool
 	{
@@ -209,6 +211,18 @@ class GDT_String extends GDT_DBField
 	##############
 	### Render ###
 	##############
+	public function renderHTML() : string
+	{
+		$out = '<div>';
+		if ($this->hasLabel())
+		{
+			$out .= $this->renderLabel() . ': ';
+		}
+		$out .= $this->getVar();
+		$out .= '</div>';
+		return $out;
+	}
+	
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);

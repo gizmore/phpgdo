@@ -100,7 +100,7 @@ trait WithFields
 		return isset($this->fields) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
 	}
 	
-	public function getField($key, bool $throw=true) : ?GDT
+	public function getField(string $key, bool $throw=true) : ?GDT
 	{
 		if (isset($this->fieldsFlat[$key]))
 		{
@@ -198,6 +198,10 @@ trait WithFields
 // 			self::$NESTING_LEVEL++;
 			foreach ($this->getAllFields() as $gdt)
 			{
+				if (isset($this->gdo))
+				{
+					$gdt->gdo($this->gdo);
+				}
 				$rendered .= $gdt->render();
 			}
 // 		}

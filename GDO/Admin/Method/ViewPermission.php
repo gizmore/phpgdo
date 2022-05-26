@@ -8,11 +8,11 @@ use GDO\Core\GDT_CreatedBy;
 use GDO\Table\GDT_Count;
 use GDO\Table\GDT_Table;
 use GDO\Table\MethodQueryTable;
+use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDT_User;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_Permission;
-use GDO\Form\GDT_DeleteButton;
 
 /**
  * View all users with a permission.

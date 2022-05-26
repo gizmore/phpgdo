@@ -8,59 +8,51 @@ use GDO\Core\GDT;
  * A validator can be applied to a field and specify a method.
  * The method gets the form, the field, and the field's value to call error on the field.
  * 
- * @see GDT_Form
- * 
  * @author gizmore
  * @version 7.0.0
  * @since 5.0.0
+ * @see GDT_Form
  */
 class GDT_Validator extends GDT
 {
 	public function isWritable() : bool { return true; } # so it gets evaluated in the validation process.
 	
+	/**
+	 * Dummy signature
+	 */
+	public function validator_func_dummy(GDT_Form $form, GDT $field, $value) {}
+
+	public function hasInputs() : bool
+	{
+		return true; # this triggers validation code
+	}
+	
 	###########
 	### GDT ###
 	###########
-	public $validator;
-	public string $validateField;
+	public GDT_Form $validatorForm;
+	public GDT $validatorField;
+	public array $validator;
 	
-	public function validator(string $fieldName, callable $validator) : self
+	public function validator(GDT_Form $form, GDT $field, callable $validator) : self
 	{
-		$this->validateField = $fieldName;
+		$this->validatorForm = $form;
+		$this->validatorField = $field;
 		$this->validator = $validator;
 		return $this;
 	}
 	
-	public function validatorField()
+	public function validateInput(?string $input) : bool
 	{
-		return GDT_Form::$VALIDATING_INSTANCE->fields[$this->validateField];
+		$field = $this->validatorField;
+		$value = $field->getValue();
+		return $this->validate($value);
 	}
 	
 	public function validate($value) : bool
 	{
-		$form = GDT_Form::$VALIDATING_INSTANCE;
-		$field = $this->validatorField();
-		if (!call_user_func($this->validator, $form, $field, $field->getValue()))
-		{
-			GDT_Form::$VALIDATING_SUCCESS = false;
-		}
-		return true;
+		$field = $this->validatorField;
+		return call_user_func($this->validator, $this->validatorForm, $field, $value);
 	}
 	
-	##############
-	### Render ###
-	##############
-	public function renderCell() : string { return ''; }
-	public function renderJSON() {}
-	public function renderCLI() : string { return ''; }
-	public function renderXML() : string { return ''; }
-	
-	/**
-	 * Dummy signature
-	 */
-	public function validator_func_dummy(GDT_Form $form, GDT $field, $value)
-	{
-		
-	}
-
 }

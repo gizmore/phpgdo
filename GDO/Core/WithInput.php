@@ -20,6 +20,14 @@ trait WithInput
 	public array $inputs;
 	
 	/**
+	 * Generally input capable?
+	 */
+	public function hasInputs() : bool
+	{
+		return true;
+	}
+	
+	/**
 	 * Set all inputs to the fixed inputs parameter.
 	 * @param GDT|string[] $inputs
 	 */
@@ -43,6 +51,28 @@ trait WithInput
 		return $this;
 	}
 	
+	public function getInput(string $key) : ?string
+	{
+		if (!isset($this->inputs))
+		{
+			return null;
+		}
+		if (!isset($this->inputs[$key]))
+		{
+			return null;
+		}
+		
+		$input = $this->inputs[$key];
+		
+		if (is_array($input))
+		{
+			return json_encode($input);
+		}
+		
+		return $input;
+	}
+	
+	
 	/**
 	 * Add a single input.
 	 * @param string $key
@@ -65,6 +95,19 @@ trait WithInput
 			$this->inputs[] = $input;
 		}
 		return $this;
+	}
+	
+	public function hasInput(string $key=null) : bool
+	{
+		if (isset($this->input))
+		{
+			return true;
+		}
+		if ($key === null)
+		{
+			return isset($this->inputs);
+		}
+		return isset($this->inputs[$key]);
 	}
 	
 }

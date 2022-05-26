@@ -1,6 +1,9 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\Application;
+use GDO\Core\GDT;
+
 /**
  * Color utility and conversion object.
  * 
@@ -110,4 +113,32 @@ final class Color
 	private function max3($a, $b, $c) { return ($a>$b)?(($a>$c)?$a:$c):(($b>$c)?$b:$c); }
 	private function hueShift($h, $s) { $h += $s; while ($h>=360.0) $h-=360.0; while ($h<0.0) $h+=360.0; return $h; }
 
+	###########
+	### CLI ###
+	###########
+	public static function green(string $s) : string
+	{
+		return self::colored($s, 'green', "\033[32m");
+	}
+
+	public static function red(string $s) : string
+	{
+		return self::colored($s, 'red', "\033[31m");
+	}
+	
+	public static function colored(string $s, string $colorHTML, string $colorCLI)
+	{
+		$app = Application::instance();
+		switch ($app->mode)
+		{
+			case GDT::RENDER_CLI:
+				return "{$colorCLI}{$s} \033[0m";
+			case GDT::RENDER_HTML:
+				return sprintf('<span style="color: %s;">%s</span>', $colorHTML, html($s));
+			default:
+				return $s;
+		}
+		
+	}
+	
 }

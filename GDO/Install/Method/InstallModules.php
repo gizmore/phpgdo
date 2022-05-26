@@ -2,7 +2,6 @@
 namespace GDO\Install\Method;
 
 use GDO\DB\Database;
-use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\UI\GDT_Success;
@@ -11,7 +10,8 @@ use GDO\Core\GDO_Module;
 use GDO\Install\Installer;
 use GDO\Install\Config;
 use GDO\DB\Cache;
-use GDO\Core\GDT_Response;
+use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Paragraph;
 
 /**
  * Install selected modules.
@@ -32,10 +32,10 @@ final class InstallModules extends Method
 	    Cache::fileFlush();
 		Database::init();
 		$loader = ModuleLoader::instance();
-		$loader->loadModules(false, true, true);
+		$loader->loadModules(true, true, true);
 		$this->modules = $loader->getInstallableModules();
 		
-		if (isset($_REQUEST['btn_install']))
+		if ($this->hasInput('btn_install'))
 		{
 			return $this->onInstall(Common::getRequestArray('module'));
 		}
@@ -65,17 +65,19 @@ final class InstallModules extends Method
 		return $mods;
 	}
 	
+	private function getCoreModules()
+	{
+		$mods = Installer::getDependencyModules('Core');
+		return $mods;
+	}
+	
 	private function getCoreModuleNames()
 	{
-		$mods = [];
-		foreach ($this->modules as $module)
-		{
-			if ($module->isCoreModule())
-			{
-				$mods[] = $module->getName();
-			}
-		}
-		return $mods;
+		$mods = $this->getCoreModules();
+		$names = array_map(function(GDO_Module $module) {
+			return $module->getName();
+		}, $mods);
+		return $names;
 	}
 	
 	private function getSiteModuleNames()
@@ -102,20 +104,19 @@ final class InstallModules extends Method
 	
 	public function onInstall(array $toInstall)
 	{
-		$response = GDT_Response::make();
 		try
 		{
-			foreach ($this->modules as $module)
+			$loader = ModuleLoader::instance();
+			foreach (array_keys($toInstall) as $moduleName)
 			{
-				$name = $module->getName();
-				if (isset($toInstall[$name]))
-				{
-					Database::instance()->transactionBegin();
-					$response->addHTML("Installing $name...");
-					Installer::installModule($module);
-					$response->addHTML("Done!<br/>\n");
-					Database::instance()->transactionEnd();
-				}
+				$module = $loader->getModule($moduleName, true);
+					if (!$module->isInstalled())
+					{
+ 						Database::instance()->transactionBegin();
+						GDT_Page::instance()->topResponse()->addField(GDT_Paragraph::make()->textRaw("Installing $moduleName..."));
+						Installer::installModule($module);
+						Database::instance()->transactionEnd();
+					}
 			}
 			
 			foreach ($this->modules as $module)
@@ -136,7 +137,9 @@ final class InstallModules extends Method
 			Cache::flush();
 		}
 		
-		return $response->addField(GDT_Success::make()->text('install_modules_completed', [Config::linkStep(5)]));
+		return GDT_Success::make()->text('install_modules_completed', [Config::linkStep(5)]);
 	}
+	
+
 	
 }

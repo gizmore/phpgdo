@@ -19,6 +19,8 @@ final class Module_Tests extends GDO_Module
 
     public string $version = "7.0.1"; # This version is the release / install level.
     
+    public function isInstallable() : bool { return false; }
+    
     public function onInstall() : void
     {
         FileUtil::createDir($this->tempPath());

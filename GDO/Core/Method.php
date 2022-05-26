@@ -9,6 +9,7 @@ use GDO\Util\Strings;
 use GDO\UI\WithTitle;
 use GDO\UI\WithDescription;
 use GDO\CLI\CLI;
+use GDO\UI\GDT_Page;
 
 /**
  * Abstract baseclass for all methods.
@@ -470,6 +471,10 @@ abstract class Method #extends GDT
 		{
 			if ($gdt = $this->gdoParameter($key, false))
 			{
+				if (is_array($input))
+				{
+					$input = json_encode($input);
+				}
 				$gdt->input($input);
 				$var = $gdt->inputToVar($input);
 				$value = $gdt->toValue($var);
@@ -514,9 +519,11 @@ abstract class Method #extends GDT
 		{
 			Logger::logError(ten($key, $args));
 		}
-		$response = GDT_Tuple::make();
 		$error = GDT_Error::make()->titleRaw($this->getModule()->gdoHumanName())->text($key, $args);
-		return $response->addField($error);
+		$top = GDT_Page::instance()->topResponse();
+		$top->addField($error);
+		$response = GDT_Tuple::make();
+		return $response;
 	}
 	
 	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT

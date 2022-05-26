@@ -4,6 +4,7 @@ namespace GDO\Core;
 /**
  * An HTML select.
  * Can autocomplete input, like `./gdo.sh mail.send giz <.....>`.
+ * Validates min/max selected.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -83,15 +84,15 @@ class GDT_Select extends GDT_ComboBox
 	    }
 	    if ($this->multiple)
 	    {
-	        if (is_array($var))
-	        {
-	            return $var;
-	        }
-	        return json_decode($var);
+// 	        if (is_array($var))
+// 	        {
+// 	            return $var;
+// 	        }
+	        return json_decode($var, true);
 	    }
 	    if ($var === $this->emptyVar)
 	    {
-	        return null;
+	    	return $this->emptyVar;
 	    }
 	    if (isset($this->choices[$var]))
 	    {
@@ -100,8 +101,6 @@ class GDT_Select extends GDT_ComboBox
 	    else
 	    {
 	        $value = $this->toClosestChoiceValue($var);
-	        $var = $this->toVar($value);
-	        $this->var($var);
 	        return $value;
 	    }
 	}
@@ -207,12 +206,12 @@ class GDT_Select extends GDT_ComboBox
     		}
 	    }
 		
-		if ($this->minSelected > count($values))
+		if ( (isset($this->minSelected)) && (count($values) < $this->minSelected) )
 		{
-			return $this->error('err_select_min', [$this->minSelected]);
+			return $this->error('err_select_min', [$this->maxSelected]);
 		}
 		
-		if ( ($this->maxSelected !== null) && ($this->maxSelected < count($values)) )
+		if ( (isset($this->maxSelected)) && (count($values) > $this->maxSelected) )
 		{
 			return $this->error('err_select_max', [$this->maxSelected]);
 		}
@@ -228,7 +227,7 @@ class GDT_Select extends GDT_ComboBox
 		    {
 		        return $this->errorInvalidChoice();
 		    }
-			return $this->notNull ? $this->errorNotNull() : true;
+			return $this->notNull ? $this->errorNull() : true;
 		}
 		
 		if (is_object($value))
@@ -392,6 +391,16 @@ class GDT_Select extends GDT_ComboBox
 	public function htmlMultiple() : string
 	{
 		return $this->multiple ? ' multiple="multiple" size="8"' : '';
+	}
+	
+	public function htmlFormName() : string
+	{
+		if ($name = $this->getName())
+		{
+			$mul = $this->multiple ? '[]' : '';
+			return sprintf(' name="%s%s"', $name, $mul);
+		}
+		return '';
 	}
 	
 // 	public function configJSON() : array

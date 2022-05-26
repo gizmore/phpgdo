@@ -9,7 +9,7 @@ use GDO\Core\GDT_String;
  * 
  * @see GDT_User
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.0
  * @since 5.0.0
  */
 class GDT_Username extends GDT_String
@@ -17,20 +17,20 @@ class GDT_Username extends GDT_String
 	const LENGTH = 32;
 	
 	public int $min = 2;
-	public int $max = 32;
+	public int $max = self::LENGTH;
 	
 	public $icon = 'face';
 	
 	# Allow - _ LETTERS DIGITS
-	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,31}$/iuD";
+	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,".(self::LENGTH-1)."}$/iuD";
 
 	public function defaultLabel() : self { return $this->label('username'); }
 	
 	##############
 	### Exists ###
 	##############
-	public $exists;
-	public function exists($exists=true)
+	public bool $exists;
+	public function exists(bool $exists=true) : self
 	{
 		$this->exists = $exists;
 		return $this;
@@ -39,21 +39,11 @@ class GDT_Username extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
-	{
-	    return $this->display();
-	}
-	
-	public function renderJSON()
-	{
-	    return $this->renderCLI();
-	}
-	
 	public function renderCLI() : string
 	{
 		return $this->gdo ? 
 			$this->gdo->renderName() :
-			$this->renderCell();
+			$this->renderHTML();
 	}
 	
 	################
@@ -67,9 +57,9 @@ class GDT_Username extends GDT_String
 		}
 		
 		# Check existance
-		if ($this->exists === true)
+		if (isset($this->exists) && ($this->exists === true))
 		{
-			if ($user = GDO_User::getByLogin($value))
+			if ($user = GDO_User::getByName($value))
 			{
 				$this->gdo = $user;
 			}
@@ -78,9 +68,9 @@ class GDT_Username extends GDT_String
 				return $this->error('err_user');
 			}
 		}
-		elseif ($this->exists === false)
+		elseif (isset($this->exists) && ($this->exists === false))
 		{
-		    if ($user = GDO_User::getByLogin($value))
+		    if ($user = GDO_User::getByName($value))
 		    {
 		        return $this->error('err_username_taken');
 		    }

@@ -24,7 +24,7 @@ final class UserTest extends TestCase
     public function testGuestCreation()
     {
         $user = GDO_User::blank([
-            'user_guest_name' => 'Wolfgang',
+            'user_name' => 'Wolfgang',
             'user_type' => 'guest',
         ])->insert();
         assertFalse($user->isMember(), 'Test if guests are non members.');

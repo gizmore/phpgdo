@@ -2,7 +2,6 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
-use GDO\Form\GDT_Validator;
 use GDO\CLI\CLI;
 
 /**
@@ -125,8 +124,9 @@ abstract class GDT
 	const RENDER_FORM = 9;
 	const RENDER_CARD = 10; # many ui frameworks use card?
 	const RENDER_CELL = 11;
-	const RENDER_FILTER = 12; # table head filter
-	const RENDER_HEADER = 13; # table head order @TODO rename to RENDER_ORDER
+	const RENDER_HEADER = 12; # table head
+	const RENDER_FILTER = 13; # table head filter
+	const RENDER_ORDER = 14; # table head order @TODO rename to RENDER_ORDER
 	
 	public function render()
 	{
@@ -162,8 +162,9 @@ abstract class GDT
 			case self::RENDER_FORM: return $this->renderForm();
 			case self::RENDER_CARD: return $this->renderCard();
 			case self::RENDER_CELL: return $this->renderHTML();
-			case self::RENDER_FILTER: return $this->renderFilter('');
 			case self::RENDER_HEADER: return $this->renderHeader();
+			case self::RENDER_FILTER: return $this->renderFilter('');
+			case self::RENDER_ORDER: return $this->renderOrder();
 		}
 	}
 	
@@ -180,6 +181,7 @@ abstract class GDT
 	public function renderFilter($f) : string { return ''; }
 	public function renderForm() : string { return $this->renderHTML(); }
 	public function renderHeader() : string { return ''; }
+	public function renderOrder() : string { return ''; }
 	public function renderList() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
 	
@@ -277,7 +279,6 @@ abstract class GDT
 	 *
 	 * @see GDT_Int for the integer validator.
 	 * @see GDT_String for the string validator.
-	 * @see GDT_Validator which is needed rarely. An example is the IP check in Register.
 	 * @see GDT_Select
 	 * @see GDT_ComboBox
 	 * @see GDT_Enum
@@ -288,6 +289,16 @@ abstract class GDT
 	public function validate($value) : bool
 	{
 		return true; # all empty GDT does nothing... what can it do? randomly fail?!
+	}
+	
+	public function hasInputs() : bool
+	{
+		return false;
+	}
+	
+	public function validateInput(?string $input) : bool
+	{
+		return true;
 	}
 	
 	/**
@@ -319,6 +330,11 @@ abstract class GDT
 	{
 		return '';
 	}
+	
+// 	public function renderError() : string
+// 	{
+// 		re
+// 	}
 	
 	##############
 	### Config ###
@@ -384,7 +400,7 @@ abstract class GDT
 		return $this;
 	}
 	
-	public function hasInput() : bool
+	public function hasInput(string $key=null) : bool
 	{
 		return false;
 	}
@@ -394,7 +410,7 @@ abstract class GDT
 		return null;
 	}
 	
-	public function getInput()
+	public function getInput(string $key) : ?string
 	{
 		return null;
 	}
@@ -437,7 +453,7 @@ abstract class GDT
 		return strtolower($this->gdoShortName());
 	}
 	
-/**
+	/**
 	 * Render HTML name attribute, but in form mode.
 	 */
 	public function htmlFormName() : string
@@ -463,7 +479,7 @@ abstract class GDT
 		return '';
 	}
 	
-	public function input($input = null) : self
+	public function input(string $input = null) : self
 	{
 		return $this;
 	}
@@ -483,6 +499,9 @@ abstract class GDT
 		return $this;
 	}
 	
+	/**
+	 * @return string[]
+	 */
 	public function getGDOData() : ?array
 	{
 		return null;
@@ -568,16 +587,15 @@ abstract class GDT
 	### DEPRECATED ### backwards compat :(
 	##################
 	/**
-	 * @deprecated SLOW AND FUCK AND NEW
-	 * @return string
+	 * @deprecated I don't like this method anymore. it is all input now.
 	 */
-	public function getRequestVar($name, $default=null, $bla=null)
+	public function getRequestVar(string $name=null, $default=null, $bla=null) : string
 	{
-		if ($input = $this->getInput())
+		if ($input = $this->getInput($name))
 		{
 			return $this->inputToVar($input);
 		}
-		return $default;
+		return $this->getVar();
 	}
 }
 

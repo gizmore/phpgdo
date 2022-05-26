@@ -36,7 +36,7 @@ class GDT_ObjectSelect extends GDT_Select
                 {
                     return $this->errorNotFound();
                 }
-                return $this->errorNotNull();
+                return $this->errorNull();
             }
             return true;
         }

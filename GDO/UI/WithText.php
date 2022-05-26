@@ -18,7 +18,7 @@ trait WithText
 	public string $textRaw;
 	public string $textKey;
 	public ?array $textArgs;
-	public bool $textEscaped = true;
+	public bool $textEscaped = false;
 	
 	public function text(string $key, array $args=null) : self
 	{

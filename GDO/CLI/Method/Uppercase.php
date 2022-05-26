@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Core\Method;
+namespace GDO\CLI\Method;
 
 use GDO\Form\GDT_Form;
 use GDO\Form\MethodForm;

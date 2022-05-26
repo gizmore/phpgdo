@@ -65,6 +65,13 @@ abstract class GDT_Field extends GDT
 	################
 	### Validate ###
 	################
+	public function validateInput(?string $input) : bool
+	{
+		$var = $this->inputToVar($input);
+		$value = $this->toValue($var);
+		return $this->validate($value);
+	}
+	
 	public function validate($value) : bool
 	{
 		return $this->validateNull($value);
@@ -96,6 +103,10 @@ abstract class GDT_Field extends GDT
 	
 	public function getVar() : ?string
 	{
+		if (isset($this->input))
+		{
+			return $this->inputToVar($this->input);
+		}
 		return $this->var;
 	}
 	

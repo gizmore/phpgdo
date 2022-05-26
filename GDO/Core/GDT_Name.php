@@ -11,6 +11,8 @@ namespace GDO\Core;
  */
 class GDT_Name extends GDT_String
 {
+	use WithGDO;
+	
 	public function plugVar() : string { return 'Name_' . self::$COUNT; }
 	
 	public function defaultLabel() : self { return $this->label('name'); }

@@ -172,7 +172,7 @@ trait WithObject
 		}
 		elseif ($this->notNull) # empty input and not null
 		{
-			return $this->errorNotNull();
+			return $this->errorNull();
 		}
 		else # null
 		{

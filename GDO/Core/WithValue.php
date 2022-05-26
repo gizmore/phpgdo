@@ -51,16 +51,16 @@ trait WithValue
 		return $this->var($initial);
 	}
 
-	public function input($input = null) : self
+	public function input(string $input = null) : self
 	{
 		$this->input = $input;
 		return $this;
 	}
 
-	public function hasInput() : bool
-	{
-		return !empty($this->input);
-	}
+// 	public function hasInput(string $key=null) : bool
+// 	{
+// 		return !empty($this->input);
+// 	}
 	
 	public function var(string $var = null) : self
 	{

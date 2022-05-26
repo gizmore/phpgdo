@@ -8,11 +8,9 @@ use GDO\Install\Config;
 use GDO\Util\FileUtil;
 use GDO\Core\GDT_Template;
 use GDO\DB\Database;
-use GDO\Core\GDO_Exception;
-use GDO\Core\Website;
-use GDO\File\GDT_Path;
 use GDO\Form\GDT_Hidden;
 use GDO\UI\GDT_Redirect;
+use GDO\Core\GDT_String;
 
 /**
  * Create a GDO config with this form.
@@ -28,7 +26,7 @@ class Configure extends MethodForm
 	public function gdoParameters() : array
     {
         return [
-            GDT_Path::make('filename')->initial('config.php'),
+            GDT_String::make('filename')->initial('config.php'),
             GDT_Hidden::make('step')->initial('3'),
           ];
     }
@@ -66,12 +64,12 @@ class Configure extends MethodForm
 	{
 		if (GDO_DB_ENABLED)
 	    {
-    		$db = new Database(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, GDO_DB_NAME, false);
     		try
     		{
+	    		$db = new Database(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, GDO_DB_NAME, false);
     			$db->getLink();
     		}
-    		catch (GDO_Exception $ex)
+    		catch (\Throwable $ex)
     		{
     			return $this->error('err_db_connect')->addField($this->renderPage());
     		}

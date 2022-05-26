@@ -6,10 +6,9 @@ use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Template;
 use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Hidden;
-use GDO\UI\GDT_Cell;
 use GDO\UI\GDT_Panel;
-use GDO\Install\GDT_ModuleFeature;
 use GDO\Install\Config;
+use GDO\Core\GDT_Text;
 
 echo GDT_Panel::make()->text('install_modules_info_text')->render();
 
@@ -20,10 +19,10 @@ $table = GDT_Table::make()->result(new ArrayResult($modules, GDO_Module::table()
 $table->addHeader(GDT_Template::make()->template('Install', 'cell/installcbx.php')->templateHead('Install', 'cell/installcbx_head.php'));
 $table->addHeader(GDO_Module::table()->gdoColumn('module_name'));
 $table->addHeader(GDT_Template::make('module_license')->label('license')->template('Install', 'cell/modulelicense.php'));
-$table->addField(GDT_Template::make('module_name')->template('Install', 'cell/modulename.php'));
+$table->addField(GDT_Template::make('module_name')->template('Install', 'modulename_html.php'));
 $table->addHeader(GDO_Module::table()->gdoColumn('module_priority'));
-$table->addHeader(GDT_ModuleFeature::make('module_features'));
-$table->addHeader(GDT_Cell::make('module_description')->method('displayModuleDescription'));
+// $table->addHeader(GDT_ModuleFeature::make('module_features'));
+// $table->addHeader(GDT_Text::make('module_description')->method('displayModuleDescription'));
 // $table->fetchAs();
 $table->fetchInto(false);
 $install = GDT_Submit::make('btn_install');
@@ -31,8 +30,8 @@ $skip = Config::linkStepGDT('5');
 $hiddenStep = GDT_Hidden::make('step')->var('4');
 $table->actions()->addFields($install, $skip, $hiddenStep);
 $table->ordered(true);
-$table->multisort($table->getResult(), 'module_name', true);
-echo $table->render();
+$table->multisort($table->getResult(), 'module_name');
+echo $table->gdo(GDO_Module::table())->renderHTML();
 ?>
 <script type="text/javascript">
 var modules = <?=json_encode($moduleNames)?>;
@@ -124,11 +123,11 @@ function enableInstalled() {
 	console.log(modules);
 	for (var i in modules) {
 		var module = modules[i];
-		console.log(module);
 	}
 	
 }
 
 enableInstalled();
+enableCoreModules();
 
 </script>

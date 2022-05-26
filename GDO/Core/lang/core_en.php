@@ -37,9 +37,13 @@ return [
 	'err_table_gdo' => 'This GDO is not a table object: %s.',
 	'err_method_disabled' => 'This method is currently disabled.',
 	'err_method_is_stub' => 'This function is not implemented yet: %s',
-	
+	'err_username_taken' => 'This username is already taken.',
+	'err_form_invalid' => 'Your formular is invalid or incomplete. %s errors have been found.',
+	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
+
 	# Messages
-	
+	'msg_form_validated' => 'Your form has been sent successfully.',
+
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
@@ -53,8 +57,13 @@ return [
 	'btn_back' => 'Back',
 	'btn_send' => 'Send',
 	'btn_set' => 'Set',
-
 	
+	# UserType
+	'guest' => 'Guest',
+	'member' => 'Member',
+
+	# GDTs
+	'message' => 'Message',
 	
 	
 ];

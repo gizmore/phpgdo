@@ -14,4 +14,15 @@ final class GDT_Tuple extends GDT
 {
 	use WithFields;
 	
+// 	public function renderHTML()
+// 	{
+// 		$html = '';
+// 		foreach ($this->getAllFields() as $gdt)
+// 		{
+			
+// 			$html .= $gdt->renderHTML();
+// 		}
+// 		return $html;
+// 	}
+	
 }

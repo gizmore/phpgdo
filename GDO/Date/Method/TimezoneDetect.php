@@ -23,9 +23,10 @@ final class TimezoneDetect extends MethodForm
 	
 	public function createForm(GDT_Form $form) : void
 	{
+		$tz = GDT_String::make('timezone')->notNull();
 		$form->addFields(
-			GDT_String::make('timezone')->notNull(),
-			GDT_Validator::make('validTimezone')->validator('timezone', [$this, 'validateTimezoneName']),
+			$tz,
+			GDT_Validator::make('validTimezone')->validator($form, $tz, [$this, 'validateTimezoneName']),
 		);
 		$form->actions()->addField(GDT_Submit::make()->label('btn_set'));
 	}

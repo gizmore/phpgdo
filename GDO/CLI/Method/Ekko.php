@@ -2,7 +2,7 @@
 namespace GDO\CLI\Method;
 
 use GDO\Core\Method;
-use GDO\Core\GDT_Message;
+use GDO\UI\GDT_Message;
 
 /**
  * Reply the input back.

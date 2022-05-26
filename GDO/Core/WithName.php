@@ -46,6 +46,21 @@ trait WithName
 		return $this;
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function htmlName() : string
+	{
+		if ($name = $this->getName())
+		{
+			return sprintf(' name="%s"', $name);
+		}
+		return '';
+	}
+	
+	###############
+	### Factory ###
+	###############
 	public static function make(string $name = null) : self
 	{
 		return self::makeNamed($name)->defaultLabel();

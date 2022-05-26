@@ -245,10 +245,10 @@ final class Debug
 		{
 		    return "$message\n";
 		}
-		if (defined('GDO_CORE_STABLE'))
-		{
-			return GDT_Page::instance()->html($message)->renderHTML();
-		}
+// 		if (defined('GDO_CORE_STABLE'))
+// 		{
+// 			return GDT_Page::instance()->html($message)->renderHTML();
+// 		}
 	    return $message;
 	}
 	

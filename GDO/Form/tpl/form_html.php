@@ -1,11 +1,15 @@
 <?php
 namespace GDO\Form\tpl;
 use GDO\Form\GDT_Form;
+use GDO\UI\GDT_Error;
 /**
  * @var GDT_Form $field
  */
 ?>
 <div class="gdt-form">
+<?php if ($field->hasError()) : ?>
+  <?=$field->renderError()?>
+<?php endif;?>
  <form method="<?=$field->verb?>">
   <div class="gdt-form-inner">
    <div class="gdt-form-text">

@@ -132,7 +132,7 @@ final class FileUtil
 					}
 				}
 			}
-			return rmdir($dir);
+			return @rmdir($dir);
 		}
 		return true;
 	}

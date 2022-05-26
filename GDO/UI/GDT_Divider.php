@@ -16,7 +16,12 @@ class GDT_Divider extends GDT
 	
 	public function renderHTML() : string
 	{
-	    return '<div class="gdt-divider">'.$this->renderLabel().'</div>';
+	    return '<div class="gdt-divider"><h5>'.$this->renderLabel().'</h5></div>';
+	}
+	
+	public function renderCell() : string
+	{
+		return '<div class="gdt-divider" colspan=99>'.$this->renderLabel().'</div>';
 	}
 	
 }

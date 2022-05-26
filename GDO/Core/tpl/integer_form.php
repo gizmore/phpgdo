@@ -4,8 +4,7 @@ use GDO\Core\GDT_Int;
 /** @var $field GDT_Int **/
 ?>
 <div class="gdt-container<?=$field->classError()?>">
-  <?=$field->htmlIcon()?>
-  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
+  <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <input
    <?=$field->htmlID()?>
    type="number"

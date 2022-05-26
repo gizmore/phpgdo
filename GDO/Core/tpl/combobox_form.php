@@ -3,8 +3,7 @@ namespace GDO\Core\tpl;
 /** @var $field \GDO\Core\GDT_ComboBox **/
 ?>
 <div class="gdt-container gdo-completion<?= $field->classError(); ?>">
-  <?= $field->htmlIcon(); ?>
-  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
+  <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <input
    class="gdo-autocomplete-input"
    data-config='<?=$field->displayConfigJSON()?>'

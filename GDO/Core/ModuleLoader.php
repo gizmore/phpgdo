@@ -57,27 +57,32 @@ final class ModuleLoader
 	/**
 	 * @var GDO_Module[]
 	 */
-	public static ?array $ENABLED_MODULES = null;
+	private array $enabledModules;
 	
 	/**
 	 * Get all enabled and loaded modules.
 	 * @return GDO_Module[]
 	 */
-	public function getEnabledModules() : array
+	public function &getEnabledModules() : array
 	{
-	    if (self::$ENABLED_MODULES === null)
+	    if (!isset($this->enabledModules))
 	    {
 	        $enabled = array_filter($this->modules, function(GDO_Module $module) {
     			return $module->isEnabled();
     		});
-	        self::$ENABLED_MODULES = &$enabled;
+	       	$this->enabledModules = $enabled;
 	    }
-	    return self::$ENABLED_MODULES;
+	    return $this->enabledModules;
+	}
+	
+	public function addEnabledModule(GDO_Module $module) : void
+	{
+		$this->enabledModules[] = $module;
 	}
 	
 	public function flushEnabledModules() : void
 	{
-		self::$ENABLED_MODULES = null;
+		unset($this->enabledModules);
 	}
 	
 	/**
@@ -89,6 +94,12 @@ final class ModuleLoader
 		return array_filter($this->modules, function(GDO_Module $module){
 			return $module->isInstallable();
 		});
+	}
+	
+	public function setModule(GDO_Module $module)
+	{
+		$name = strtolower($module->getName());
+		$this->modules[$name] = $module;
 	}
 	
 	public function getModule(string $moduleName, bool $fs = false, bool $throw = true) : ?GDO_Module
@@ -291,7 +302,7 @@ final class ModuleLoader
 		$this->loadedDB = false;
 		$this->loadedFS = false;
 		$this->modules = [];
-		self::$ENABLED_MODULES = null;
+		unset($this->enabledModules);
 		return true;
 	}
 	
@@ -320,6 +331,11 @@ final class ModuleLoader
 					{
 						echo "A module file or folder is missing in filesystem: GDO/{$moduleName}(\n";
 					}
+				}
+				else
+				{
+					$module = $this->modules[$moduleName];
+					$module->setPersisted(true);
 				}
 			}
 			return $this->modules;

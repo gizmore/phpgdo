@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Crypto;
 
-use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
 
 /**
@@ -16,6 +15,11 @@ class GDT_Password extends GDT_String
     public function isSerializable() : bool { return true; }
     public function isSearchable() : bool { return false; }
     public function isOrderable() : bool { return false; }
+    
+    public function getInputType() : string
+    {
+    	return 'password';
+    }
     
     protected function __construct()
 	{
@@ -41,16 +45,16 @@ class GDT_Password extends GDT_String
 		return [$this->name => $pass ? $pass->__toString() : null];
 	}
 	
-	public function renderForm() : string
-	{
-		return GDT_Template::php('User', 'form/password.php', ['field'=>$this]);
-	}
+// 	public function renderForm() : string
+// 	{
+// 		return GDT_Template::php('XC', 'form/password.php', ['field'=>$this]);
+// 	}
 	
 	public function validate($value) : bool
 	{
 		if ($value === null || (!$value->hash))
 		{
-			return $this->notNull ? $this->errorNotNull() : true;
+			return $this->notNull ? $this->errorNull() : true;
 		}
 		elseif (mb_strlen($value) < 4)
 		{

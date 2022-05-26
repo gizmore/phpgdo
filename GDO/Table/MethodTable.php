@@ -23,8 +23,23 @@ use GDO\User\GDO_User;
  */
 abstract class MethodTable extends Method
 {
+	public function gdoComposeParameters() : array
+	{
+		return array_merge(
+			$this->gdoParameters(),
+			$this->gdoFeatures());
+// 			$this->gdoHeaders()->getAllFields());
+	}
 	
-	
+	private function gdoFeatures() : array
+	{
+		$features = [];
+		if ($this->isPaginated())
+		{
+			$features[] = GDT_IPP::make();
+		}
+		return $features;
+	}
 	
 // 	public function gdoParametersB() : array
 // 	{
@@ -233,7 +248,8 @@ abstract class MethodTable extends Method
 	public function getSearchTerm()
 	{
 	    $table = $this->table;
-	    return $table->getHeaderField('search')->getRequestVar($table->headers->name);
+	    return null;
+// 	    return $table->getHeaderField('search')->getRequestVar($table->headers->getName());
 	}
 	
 	###############
@@ -331,7 +347,7 @@ abstract class MethodTable extends Method
 	    # Exec features
 	    if ($this->isFiltered())
 	    {
-	        $result = $result->filterResult($result->getFullData(), $this->gdoTable(), $table->getHeaderFields(), $table->headers->name);
+	        $result = $result->filterResult($result->getFullData(), $this->gdoTable(), $table->getHeaderFields(), $table->headers->getName());
 	    }
 	    if ($this->isSearched())
 	    {

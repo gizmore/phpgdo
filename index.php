@@ -16,7 +16,7 @@ use GDO\Core\Method\FileNotFound;
 use GDO\Core\Method\Fileserver;
 use GDO\Core\Method\SeoProxy;
 use GDO\Core\Method\NotAllowed;
-use GDO\Core\GDO_Error;
+use GDO\Core\Method\Error;
 # really the first thing we do :) Go Go GDOv7!
 define('GDO_TIME_START', microtime(true)); 
 #######################
@@ -102,14 +102,16 @@ if (!isset($_REQUEST['_url']))
 	{
 		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'], true, false)))
 		{
-			throw new GDO_Error('err_unknown_module', [html($mo->gdoHumanName()), html($_REQUEST['_mo'])]);
+			$me = Error::make();
+			$_REQUEST['error'] = t('err_unknown_module', [html($mo->gdoHumanName()), html($_REQUEST['_mo'])]);
 		}
 		unset($_REQUEST['_mo']);
 		if (isset($_REQUEST['_me']))
 		{
 			if (!($me = $mo->getMethod((string) @$_REQUEST['_me'])))
 			{
-				throw new GDO_Error('err_unknown_method', [html($mo->gdoShortName()), html($_REQUEST['_me'])]);
+				$me = Error::make();
+				$_REQUEST['error'] = t('err_unknown_method', [html($mo->gdoShortName()), html($_REQUEST['_me'])]);
 			}
 			unset($_REQUEST['_me']);
 		}

@@ -6,4 +6,4 @@ use GDO\Core\GDO_Module;
 $module = $field->gdo;
 $class = 'gdt-module-license'
 ?>
-<span class="<?=$class?>"><?=$module->module_license?></span>
+<span class="<?=$class?>"><?=$module->license?></span>

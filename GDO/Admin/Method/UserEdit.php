@@ -13,7 +13,7 @@ use GDO\Core\Website;
 use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_Bar;
 use GDO\UI\GDT_Link;
-use GDO\Form\GDT_DeleteButton;
+use GDO\UI\GDT_DeleteButton;
 use GDO\UI\GDT_Page;
 use GDO\User\GDT_User;
 use GDO\Util\Common;

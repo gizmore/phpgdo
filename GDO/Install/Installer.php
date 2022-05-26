@@ -57,12 +57,15 @@ class Installer
 	{
 		self::installModuleClasses($module, $forceMigrate);
 		
+// 		$module->gdoColumn('module_name');
+		
 		if (!$module->isPersisted())
 		{
 			$version = $module->version;
 // 			GDO_Module::table()->deleteWhere('module_name = '.$module->quoted('module_name'));
-			$module->setVars(['module_enabled'=>'1', 'module_version'=>$version, 'module_priority' => $module->priority]);
+			$module->setVars(['module_name' => $module->getName(), 'module_enabled'=>'1', 'module_version'=>$version, 'module_priority' => $module->priority]);
 			$module->insert();
+			ModuleLoader::instance()->setModule($module);
 		}
 		
 		$upgraded = false;
@@ -72,7 +75,7 @@ class Installer
 			$upgraded = true;
 		}
 		
-		if ($forceMigrate && (!$upgraded))
+		if ($forceMigrate || $upgraded)
 		{
 			self::recreateDatabaseSchema($module);
 		}
@@ -81,9 +84,11 @@ class Installer
 
 		$module->onInstall();
 		
-		Cache::flush();
-		Cache::fileFlush();
-		ModuleLoader::instance()->flushEnabledModules();
+		ModuleLoader::instance()->addEnabledModule($module);
+		
+// 		Cache::flush();
+// 		Cache::fileFlush();
+// 		ModuleLoader::instance()->flushEnabledModules();
 	}
 	
 	public static function installModuleClasses(GDO_Module $module) : void
@@ -345,8 +350,9 @@ class Installer
 	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, false, true);
 	    $deps = $module->getDependencies();
+	    $deps[] = $module->getName();
 	    $deps[] = 'Core';
-	    $deps = array_unique($deps);
+// 	    $deps = array_unique($deps);
 	    $cnt = 0;
 	    $allResolved = true; # All required modules provided?
 	    while ($cnt !== count($deps))
@@ -391,11 +397,11 @@ class Installer
 	        }
 	    }
 
-	    $deps[] = $module->getName();
-	    
-	    return array_map(function($dep) { 
-	        return ModuleLoader::instance()->getModule($dep);
-	    }, $deps);
+	    $back = array_unique($deps);
+	    $back = (array_map(function(string $dep) { 
+	        return ModuleLoader::instance()->getModule($dep, true, false);
+	    }, $deps));
+	    return $back;
 	}
 	
 }

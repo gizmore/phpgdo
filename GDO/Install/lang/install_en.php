@@ -1,5 +1,6 @@
 <?php
-return array(
+namespace GDO\Install\lang;
+return [
 # Welcome
 'install_title_1' => 'Welcome',
 'install_text_1' => 'Welcome to GDOv7, Please continue here: %s',
@@ -77,20 +78,18 @@ You can then continue with %s.',
 
 'install_title_7' => 'Install Javascript',
 'install_content_7' => '
-<p>You should now install node,npm,bower,yarn and other javascript components.</p>
+<p>You should now install node, npm, yarn and other javascript components.</p>
 <p>Alternatively you have to upload these dependencies individually.</p>
 <p>Run the following commands on your debian machine:<p>
 <code>
 As Root:<br/>
 <br/>
 aptitude install nodejs nodejs-dev npm # Install javascript<br/>
-npm install -g bower # Install bower<br/>
 npm install -g yarn # Install yarn<br/>
 <br/>
 As gdo6 user:<br/>
 <br/>
 cd www/gdo6<br/>
-./gdo_bower.sh # Install module js dependencies<br/>
 ./gdo_yarn.sh # Install module js dependencies<br/>
 <br/>
 Note: Currently bower and yarn are both in use. Bower will be dropped.<br/>
@@ -122,4 +121,4 @@ Note: Currently bower and yarn are both in use. Bower will be dropped.<br/>
 'admin_mail' => 'Administrator Email',
 'error_mail' => 'Error Email',
 'msg_install_security' => 'Your gdo6 installation is now secured for the world wide web.',
-);
+];

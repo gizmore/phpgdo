@@ -6,7 +6,6 @@ if (isset($field->completionHref))
     $field->addClass('gdo-autocomplete');
 }
 ?>
-  <?=$field->htmlIcon()?>
   <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
   <select
    <?=$field->htmlID()?>
