@@ -4,6 +4,7 @@ namespace GDO\Tests;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
+use GDO\CLI\CLI;
 use GDO\Core\GDT_Expression;
 use GDO\User\GDO_User;
 use GDO\Session\GDO_Session;
@@ -64,16 +65,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $ip;
     }
     
-    protected function echo($msg) : void
-    {
-    	echo $msg;
-    	echo "\n";
-    	ob_flush();
-    }
+//     protected function echo($msg) : void
+//     {
+//     	echo $msg;
+//     	echo "\n";
+//     	ob_flush();
+//     }
     
     protected function setUp(): void
     {
-    	$this->echo("Running {$this->gdoClassName()}");
+    	$this->message("Running %s", CLI::bold($this->gdoClassName()));
     	
         Application::instance()->reset();
         
@@ -266,6 +267,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
     	echo vsprintf($message, $args);
     	echo "\n";
     	ob_flush();
+    }
+    
+    protected function boldmome(Method $method)
+    {
+    	return CLI::bold(self::mome($method));
+    }
+    
+    protected function mome(Method $method)
+    {
+    	return sprintf('%s/%s', $method->getModuleName(), $method->getMethodName());
     }
     
 }

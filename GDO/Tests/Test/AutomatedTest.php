@@ -334,13 +334,13 @@ final class AutomatedTest extends TestCase
 							Application::$RESPONSE_CODE,
 							"Test if trivial method \\GDO\\{$moduleName}\\Metod\\{$methodName} has a success error code.");
 						$passed++;
-						$this->message('%4d.) %s: %s', $n, CLI::green('SUCCESS'), $mt->method->gdoClassName());
+						$this->message('%4d.) %s: %s', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method));
 					}
 					catch (\Throwable $ex)
 					{
 						Logger::logException($ex);
 						$failed++;
-						$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $mt->method->gdoClassName());
+						$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
 						$this->error('Error: ', $ex->getMessage());
 						
 					}
@@ -351,7 +351,7 @@ final class AutomatedTest extends TestCase
 		echo "From $tested trivial methods, $failed failed!\n";
 		ob_flush();
 	}
-
+	
 	public function testLanguageFilesForCompletion()
 	{
 		if (Trans::$MISS)
