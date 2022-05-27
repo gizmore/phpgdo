@@ -22,23 +22,35 @@ use GDO\User\GDO_User;
  */
 abstract class MethodTable extends Method
 {
-	public function gdoComposeParameters() : array
+	public function &gdoParameterCache() : array
 	{
-		return array_merge(
-			$this->gdoParameters(),
-			$this->gdoFeatures());
-// 			$this->gdoHeaders()->getAllFields());
+		if (!isset($this->parameterCache))
+		{
+			$this->addComposeParameters($this->gdoParameters());
+// 			$form = $this->getForm();
+// 			$this->addComposeParameters($form->getAllFields());
+// 			$this->addComposeParameters($form->actions()->getAllFields());
+		}
+		return $this->parameterCache;
 	}
 	
-	private function gdoFeatures() : array
-	{
-		$features = [];
-		if ($this->isPaginated())
-		{
-			$features[] = GDT_IPP::make();
-		}
-		return $features;
-	}
+// 	public function gdoComposeParameters() : array
+// 	{
+// 		return array_merge(
+// 			$this->gdoParameters(),
+// 			$this->gdoFeatures());
+// // 			$this->gdoHeaders()->getAllFields());
+// 	}
+	
+// 	private function gdoFeatures() : array
+// 	{
+// 		$features = [];
+// 		if ($this->isPaginated())
+// 		{
+// 			$features[] = GDT_IPP::make();
+// 		}
+// 		return $features;
+// 	}
 	
 // 	public function gdoParametersB() : array
 // 	{

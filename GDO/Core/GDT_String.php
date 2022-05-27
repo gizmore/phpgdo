@@ -105,16 +105,15 @@ class GDT_String extends GDT_DBField
 	### Pattern ###
 	###############
 	public string $pattern;
-	public function pattern(string $pattern=null) : self
+	public function pattern(string $pattern) : self
 	{
-		if (!$pattern)
-		{
-			unset($this->pattern);
-		}
-		else
-		{
-			$this->pattern = $pattern;
-		}
+		$this->pattern = $pattern;
+		return $this;
+	}
+	
+	public function noPattern() : self
+	{
+		unset($this->pattern);
 		return $this;
 	}
 	

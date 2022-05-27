@@ -28,6 +28,11 @@ abstract class Method #extends GDT
 	use WithParameters;
 	use WithDescription;
 	
+	public function getName() : ?string
+	{
+		return $this->gdoClassName();
+	}
+	
 	################
 	### Override ###
 	################

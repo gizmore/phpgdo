@@ -276,6 +276,7 @@ class GDT_Timestamp extends GDT_DBField
 				$this->filterQueryCondition($query, $condition);
 			}
 		}
+		return $this;
 	}
 	
 	##############

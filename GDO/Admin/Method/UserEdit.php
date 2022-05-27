@@ -40,13 +40,9 @@ class UserEdit extends MethodForm
 	    ];
 	}
 	
-	public function getUser() : GDO_User
+	public function getUser() : ?GDO_User
 	{
-		if (!isset($this->user))
-		{
-			$this->user = GDO_User::findById($this->getInput('user'));
-		}
-		return $this->user;
+		return $this->gdoParameterValue('user');
 	}
 	
 	public function beforeExecute() : void
@@ -71,7 +67,7 @@ class UserEdit extends MethodForm
 	    $user = $this->getUser();
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
-			if ($gdt->isWriteable() && ($name = $gdt->getName()))
+			if ($name = $gdt->getName())
 			{
 				$form->addField($user->gdoColumn($name));
 			}

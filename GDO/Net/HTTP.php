@@ -256,8 +256,8 @@ final class HTTP
 	 */
 	public static function noCache()
 	{
-		header('Cache-Control: no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0');
-		header('Pragma: no-cache');
-		header('Expires: 0');
+		hdr('Cache-Control: no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0');
+		hdr('Pragma: no-cache');
+		hdr('Expires: 0');
 	}
 }

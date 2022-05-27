@@ -27,15 +27,15 @@ trait WithParameters
 	##################
 	### Parameters ###
 	##################
-	/**
-	 * Compose all parameters. Not needed yet?
-	 *
-	 * @return GDT[]
-	 */
-	public function gdoComposeParameters() : array
-	{
-		return $this->gdoParameters();
-	}
+// 	/**
+// 	 * Compose all parameters. Not needed yet?
+// 	 *
+// 	 * @return GDT[]
+// 	 */
+// 	public function gdoComposeParameters() : array
+// 	{
+// 		return $this->gdoParameters();
+// 	}
 	
 	public function gdoHasParameter(string $key) : bool
 	{
@@ -121,7 +121,6 @@ trait WithParameters
 	public array $parameterCache;
 	
 	/**
-	 * b
 	 * @return GDT[string]
 	 */
 	public function &gdoParameterCache() : array
@@ -129,15 +128,23 @@ trait WithParameters
 		if (!isset($this->parameterCache))
 		{
 			$this->parameterCache = [];
-			foreach ($this->gdoComposeParameters() as $gdt)
-			{
-				if ($name = $gdt->getName())
-				{
-					$this->parameterCache[$name] = $gdt;
-				}
-			}
+			$this->addComposeParameters($this->gdoParameters());
 		}
 		return $this->parameterCache;
+	}
+	
+	/**
+	 * @param GDT[] $params
+	 */
+	protected function addComposeParameters(array $params) : void
+	{
+		foreach ($params as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				$this->parameterCache[$name] = $gdt->input($this->getInput($gdt->getName()));
+			}
+		}
 	}
 	
 }

@@ -22,7 +22,7 @@ use GDO\Language\Trans;
 	</div>
   </div>
   <footer>
-	&copy;2022-2023 <?=GDT_Email::make()->var('Christian <gizmore@wechall.net>')->render()?>
+	&copy;2022-2023 <a href="mailto: gizmore@wechall.net">gizmore@wechall.net</a> 
 	<?=GDT_Divider::make()->render()?>
 	<?=GDT_PerfBar::make()->render()?>
   </footer>

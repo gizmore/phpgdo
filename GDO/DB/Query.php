@@ -43,18 +43,18 @@ final class Query
 	public GDO $fetchTable;
 	
 	# query parts
-	private string $columns;
-	private string $where;
-	private string $join;
-	private string $group;
-	private string $having;
-	private string $from;
-	private string $type;
-	private string $set;
-	public  array  $order;
-	public  array  $values;
-	private string $limit;
-	private string $raw;
+	private ?string $columns;
+	private ?string $where;
+	private ?string $join;
+	private ?string $group;
+	private ?string $having;
+	private ?string $from;
+	private ?string $type;
+	private ?string $set;
+	public  ?array  $order;
+	public  ?array  $values;
+	private ?string $limit;
+	private ?string $raw;
 	private bool $write = false; # Is it a write query?
 	private bool $cached = true;
 	public  bool $buffered = true;
@@ -111,7 +111,7 @@ final class Query
 	public function copy() : self
 	{
 		$clone = new self($this->table);
-		if ($this->raw)
+		if (isset($this->raw))
 		{
 		    $clone->raw = $this->raw;
 		}
@@ -122,7 +122,7 @@ final class Query
     		$clone->columns = $this->columns;
     		$clone->from = $this->from;
     		$clone->where = $this->where;
-    		$clone->join = $this->join;
+   			$clone->join = $this->join;
     		$clone->joinedObjects = $this->joinedObjects;
     		$clone->group = $this->group;
     		$clone->having = $this->having;

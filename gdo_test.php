@@ -139,7 +139,7 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 	# Install all selected modules, so all permissions are populate.
 	foreach ($modules as $module)
 	{
-		echo "Installing {$module->getName()}\n";
+		printf("Installing %s\n", CLI::bold($module->getName()));
 		Installer::installModule($module);
 	}
 	foreach ($modules as $module)
@@ -153,7 +153,7 @@ else # All!
 	$modules = $loader->loadModules(false, true, true);
 	foreach ($modules as $module)
 	{
-		echo "Installing {$module->getName()}\n";
+		printf("Installing %s\n", CLI::bold($module->getName()));
 		Installer::installModule($module);
 	}
 

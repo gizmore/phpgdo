@@ -320,7 +320,7 @@ class GDT_Table extends GDT
 	{
 		if ($this->filtered)
 		{
-			$rq = $this->headers->name;
+			$rq = '';
 			foreach ($this->getHeaderFields() as $gdt)
 			{
 				if ($gdt->isFilterable())
@@ -332,14 +332,14 @@ class GDT_Table extends GDT
 
 		if ($this->searched)
 		{
-			$s = $this->headers->name;
-			if (isset($_REQUEST[$s]['search']))
-			{
-				if ($searchTerm = trim($_REQUEST[$s]['search'], "\r\n\t "))
-				{
-					$this->bigSearchQuery($query, $searchTerm);
-				}
-			}
+// 			$s = $this->headers->name;
+// 			if (isset($_REQUEST[$s]['search']))
+// 			{
+// 				if ($searchTerm = trim($_REQUEST[$s]['search'], "\r\n\t "))
+// 				{
+// 					$this->bigSearchQuery($query, $searchTerm);
+// 				}
+// 			}
 		}
 
 		return $this->getOrderedQuery($query);
@@ -347,9 +347,10 @@ class GDT_Table extends GDT
 
 	private function getOrderedQuery(Query $query)
 	{
-		$headers = $this->headers;
-		$o = $headers ? $headers->name : 'o';
-
+// 		$headers = $this->headers;
+// 		$o = $headers ? $headers->name : 'o';
+		$o = 'o';
+		
 		$hasCustomOrder = false;
 
 		if ($this->ordered)
@@ -373,7 +374,7 @@ class GDT_Table extends GDT
 						$o = '1';
 						foreach ($cols as $name => $asc)
 						{
-							if ($field = $headers->getField($name))
+							if ($field = $this->headers->getField($name))
 							{
 								if ($field->orderable)
 								{
@@ -404,7 +405,7 @@ class GDT_Table extends GDT
 		{
 			if ($this->orderDefault)
 			{
-				$query->order($this->orderDefault, $this->orderDefaultAsc);
+				$query->order($this->orderDefault);
 			}
 		}
 

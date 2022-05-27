@@ -120,7 +120,7 @@ if (!defined('GDO_CONFIGURED'))
 	\GDO\Install\Config::configure(); # autoconfig
 }
 
-new ModuleLoader(GDO_PATH . 'GDO/');
+// new ModuleLoader(GDO_PATH . 'GDO/');
 CLI::setServerVars();
 Database::init();
 Cache::flush();
@@ -147,13 +147,13 @@ elseif ($argv[1] === 'configure')
     # @TODO gdoadm.php: write a repl configurator.
 	if ($argc === 2)
 	{
-		$argv[2] = 'protected/config.php'; # default config filename
+		$argv[2] = 'config.php'; # default config filename
 	}
 	
-	$line = "install.configure \"--filename={$argv[2]}\" --save_config";
+	$line = "install.configure \"--filename={$argv[2]}\";--save_config";
 	$expr = GDT_Expression::fromLine($line);
 	$response = $expr->execute();
-	echo $response->render();
+	echo $response->renderCLI();
     if (Application::isSuccess())
     {
         Security::make()->protectFolders();

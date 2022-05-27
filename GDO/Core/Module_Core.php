@@ -30,12 +30,7 @@ use GDO\Language\GDO_Language;
  */
 final class Module_Core extends GDO_Module
 {
-	/**
-	 * GDO Revision String.
-	 * Counts up to be in sync and poison caches for updates.
-	 * Increase this value to poison all caches.
-	 */
-	const GDO_REVISION = '7.0.0-r1340';
+	const GDO_REVISION = '7.0.0-r1342';
 	
 	##############
 	### Module ###

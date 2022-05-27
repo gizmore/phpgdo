@@ -98,6 +98,8 @@ A fresh restart of the GDO project.
 
 GDOv7.0.0 comes with *only* the core modules, but all of them cleaned up and *now* unit tested. The goal for this release is a 100% test pass for the new shiny core.
 
+ - New GDT [GDT_Redirect](../GDO/UI/GDT_Redirect.php). This makes [../GDO/Core/Website] only responsible for website page metadata.
+
  - GDO_User->displayNameLabel() and displayName() has both been renamed to renderUserName().
  
  - GDO->displayName() has been renamed to GDO->renderName().

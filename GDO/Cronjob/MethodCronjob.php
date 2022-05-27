@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Cronjob;
 
-use GDO\Core\GDT;
 use GDO\Core\Logger;
 use GDO\Core\Method;
 

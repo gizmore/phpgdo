@@ -45,12 +45,16 @@ final class Security extends MethodForm
 	    return $this->messageRedirect('msg_install_security', null, hrefDefault());
 	}
 	
+	/**
+	 * Protect folders via htacces.
+	 * @TODO Is this obsolete since GDO cares of all requests?
+	 */
 	public function protectFolders()
 	{
 		HTAccess::protectFolder(GDO_PATH.'temp');
-// 		HTAccess::protectFolder(GDO_File::filesDir());
-		HTAccess::protectFolder(GDO_PATH.'protected');
+		HTAccess::protectFolder(GDO_PATH.'files');
 		HTAccess::protectFolder(GDO_PATH.'install');
+		HTAccess::protectFolder(GDO_PATH.'protected');
 	}
 	
 	public function protectDotfiles()

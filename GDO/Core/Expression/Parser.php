@@ -51,7 +51,7 @@ final class Parser
 	private function parseB(GDT_Expression $current, string $line) : GDT_Expression
 	{
 		$i = 0;
-		$l = $this->line;
+		$l = $line;
 		$len = mb_strlen($l);
 		$method = $this->parseMethod($l, $i, $len);
 		$current->method($method);

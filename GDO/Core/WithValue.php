@@ -115,7 +115,11 @@ trait WithValue
 	 */
 	public function gdo(GDO $gdo = null) : self
 	{
-		return $this->var($gdo->gdoVar($this->name));
+		if ($gdo)
+		{
+			return $this->var($gdo->gdoVar($this->name));
+		}
+		return $this->var(null);
 	}
 	
 	##################

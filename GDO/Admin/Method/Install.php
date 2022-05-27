@@ -4,7 +4,6 @@ namespace GDO\Admin\Method;
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Module;
-use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -12,6 +11,7 @@ use GDO\Form\MethodForm;
 use GDO\Install\Installer;
 use GDO\UI\GDT_Button;
 use GDO\Util\Strings;
+use GDO\Core\GDT_Tuple;
 
 /**
  * Install a module. Wipe a module. Enable and disable a module.
@@ -56,7 +56,9 @@ class Install extends MethodForm
 		{
 			if ($this->hasInput($button))
 			{
-				return $this->executeButton($button)->addField($this->renderPage());
+				return GDT_Tuple::makeWith(
+					$this->executeButton($button),
+					$this->renderPage());
 			}
 		}
 		return $this->renderPage();
@@ -119,14 +121,14 @@ class Install extends MethodForm
 	public function executeButton($button)
 	{
 		$form = $this->getForm();
-		if (!$form->validateForm())
+		if (!$form->validate(null))
 		{
 			return parent::formInvalid($form);
 		}
 		$response = call_user_func([$this, "execute_$button"]);
-		Cache::flush();
-		Cache::fileFlush();
-		$this->resetForm();
+// 		Cache::flush();
+// 		Cache::fileFlush();
+// 		$this->resetForm();
 		return $response;
 	}
 	

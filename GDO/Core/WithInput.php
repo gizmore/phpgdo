@@ -14,6 +14,8 @@ namespace GDO\Core;
  */
 trait WithInput
 {
+// 	public string $input;
+	
 	/**
 	 * @var GDT|string[]
 	 */
@@ -33,8 +35,7 @@ trait WithInput
 	 */
 	public function inputs(array $inputs) : self
 	{
-		$this->inputs = $inputs;
-		return $this;
+		return $this->addInputs($inputs);
 	}
 	
 	public function getInputs() : array
@@ -51,8 +52,12 @@ trait WithInput
 		return $this;
 	}
 	
-	public function getInput(string $key) : ?string
+	public function getInput(string $key=null) : ?string
 	{
+		if ($key === $this->getName())
+		{
+			return isset($this->input) ? $this->input : null;
+		}
 		if (!isset($this->inputs))
 		{
 			return null;
@@ -82,6 +87,14 @@ trait WithInput
 	 */
 	public function addInput(?string $key, $input) : self
 	{
+		# Add input to the field
+		$this->input = $input;
+// 		if ($gdt = $this->getField($key, false))
+// 		{
+// 			$gdt->input($input);
+// 		}
+		
+		# Add inputs to this
 		if (!isset($this->inputs))
 		{
 			$this->inputs = [];

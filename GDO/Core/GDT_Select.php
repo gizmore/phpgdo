@@ -325,23 +325,28 @@ class GDT_Select extends GDT_ComboBox
 	##############
 	### Render ###
 	##############
-	/**
-	 * Render a chosen value.
-	 * This is probably a string or a GDO.  
-	 * 
-	 * @param GDO|string $choice
-	 */
-	public function displayChoice($choice) : string
+	public function renderCLI() : string
 	{
-		if (is_string($choice))
-		{
-			return html($choice);
-		}
-		else
-		{
-			return $choice->renderChoice();
-		}
+		return $this->gdoHumanName() . ': ' . $this->displayVar($this->getVar());
 	}
+	
+// 	/**
+// 	 * Render a chosen value.
+// 	 * This is probably a string or a GDO.  
+// 	 * 
+// 	 * @param GDO|string $choice
+// 	 */
+// 	public function displayChoice($choice) : string
+// 	{
+// 		if (is_string($choice))
+// 		{
+// 			return html($choice);
+// 		}
+// 		else
+// 		{
+// 			return $choice->renderChoice();
+// 		}
+// 	}
 	
 	public function renderHTML() : string
 	{

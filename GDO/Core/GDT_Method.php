@@ -23,10 +23,16 @@ class GDT_Method extends GDT
 	use WithFields;
 	use WithEnvironment;
 	
+	/**
+	 * Exexute this method.
+	 */
 	public function execute()
 	{
 		Application::$INSTANCE->reset();
-		return $this->changeUser()->method->inputs($this->getInputs())->exec();
+		$this->changeUser();
+		$this->method->inputs($this->getInputs());
+		$this->method->exec();
+		return $this;
 	}
 	
 	##################

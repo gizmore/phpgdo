@@ -51,7 +51,10 @@ trait WithObject
 	public function getVar() : ?string
 	{
 // 	    $var = $this->getRequestVar($this->formVariable(), $this->var);
-	    $var = $this->var;
+		if (!($var = $this->getInput($this->name)))
+		{
+		    $var = $this->var;
+		}
 	    return empty($var) ? null : $var;
 	}
 

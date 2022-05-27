@@ -26,13 +26,31 @@ abstract class MethodForm extends Method
 			$this->renderPage());
 	}
 	
-	public function gdoComposeParameters() : array
+// 	public function gdoComposeParameters() : array
+// 	{
+		
+		
+// 		$form = $this->getForm();
+// 		return array_merge(
+// 			$this->gdoParameters(),
+// 			$form->getAllFields(),
+// 			$form->actions()->getAllFields());
+// 	}
+	
+	public function &gdoParameterCache() : array
 	{
-		$form = $this->getForm();
-		return array_merge(
-			$this->gdoParameters(),
-			$form->getAllFields(),
-			$form->actions()->getAllFields());
+		if (!isset($this->parameterCache))
+		{
+			$this->addComposeParameters($this->gdoParameters());
+			if (isset($this->inputs))
+			{
+				$this->addInputs($this->inputs);
+			}
+			$form = $this->getForm();
+			$this->addComposeParameters($form->getAllFields());
+			$this->addComposeParameters($form->actions()->getAllFields());
+		}
+		return $this->parameterCache;
 	}
 	
 	public function getForm() : GDT_Form

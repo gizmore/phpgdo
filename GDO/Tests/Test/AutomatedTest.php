@@ -18,6 +18,7 @@ use GDO\Language\Trans;
 use GDO\Core\Application;
 use function PHPUnit\Framework\assertLessThan;
 use GDO\Core\Logger;
+use GDO\Core\Debug;
 
 /**
  * Auto coverage test.
@@ -285,6 +286,8 @@ final class AutomatedTest extends TestCase
 				{
 					
 					$method->addInputs($mt->getInputs());
+					$method->gdoParameterCache();
+					$method->addInputs($mt->getInputs());
 					$form = $method->getForm();
 					$fields = $form->getAllFields();
 
@@ -339,6 +342,8 @@ final class AutomatedTest extends TestCase
 						$failed++;
 						$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
 						$this->error('Error: %s', CLI::bold($ex->getMessage()));
+						$dbgout = Debug::debugException($ex);
+						echo $dbgout;
 // 						$this->fail($ex->getMessage());
 					}
 				} # trivial call

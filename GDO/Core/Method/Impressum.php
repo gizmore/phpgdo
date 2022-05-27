@@ -12,4 +12,9 @@ use GDO\UI\MethodPage;
  */
 final class Impressum extends MethodPage
 {
+	public function getMethodTitle() : string
+	{
+		return t('impressum');
+	}
+	
 }
