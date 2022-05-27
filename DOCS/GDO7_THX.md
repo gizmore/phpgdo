@@ -2,6 +2,8 @@
 
 I want to thank a lot of people sometimes :)
 
+ - TuB, [C64ClubBerlin](https://c64clubberlin.de/)
+
 
 ## GDOv7 Credits
 
