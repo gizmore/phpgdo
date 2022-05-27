@@ -43,18 +43,18 @@ final class Query
 	public GDO $fetchTable;
 	
 	# query parts
-	private ?string $columns;
-	private ?string $where;
-	private ?string $join;
-	private ?string $group;
-	private ?string $having;
-	private ?string $from;
-	private ?string $type;
-	private ?string $set;
-	public  ?array  $order;
-	public  ?array  $values;
-	private ?string $limit;
-	private ?string $raw;
+	private ?string $columns = null;
+	private ?string $where = null;
+	private ?string $join = null;
+	private ?string $group = null;
+	private ?string $having = null;
+	private ?string $from = null;
+	private ?string $type = null;
+	private ?string $set = null;
+	public  ?array  $order = null;
+	public  ?array  $values = null;
+	private ?string $limit = null;
+	private ?string $raw = null;
 	private bool $write = false; # Is it a write query?
 	private bool $cached = true;
 	public  bool $buffered = true;

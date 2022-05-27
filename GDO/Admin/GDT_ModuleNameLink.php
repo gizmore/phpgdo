@@ -2,6 +2,7 @@
 namespace GDO\Admin;
 
 use GDO\UI\GDT_Link;
+use GDO\Core\WithGDO;
 
 /**
  * Is searchable, filterable, orderarble because it's the modulename.
@@ -10,6 +11,8 @@ use GDO\UI\GDT_Link;
  */
 final class GDT_ModuleNameLink extends GDT_Link
 {
+	use WithGDO;
+	
 	public function isOrderable() : bool { return true; }
 	public function isSearchable() : bool { return true; }
 	public function isFilterable() : bool { return true; }

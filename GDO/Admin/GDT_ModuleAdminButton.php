@@ -3,6 +3,7 @@ namespace GDO\Admin;
 
 use GDO\UI\GDT_Button;
 use GDO\Core\GDO_Module;
+use GDO\Core\WithGDO;
 
 /**
  * Admin section button. Only visible if module has href_admin.
@@ -15,6 +16,8 @@ use GDO\Core\GDO_Module;
  */
 class GDT_ModuleAdminButton extends GDT_Button
 {
+	use WithGDO;
+	
 	public function getModule() : GDO_Module
 	{
 		return $this->gdo;
@@ -25,7 +28,7 @@ class GDT_ModuleAdminButton extends GDT_Button
 	    if ($href = $this->getModule()->href_administrate_module())
 		{
 		    $this->href($href);
-			return parent::renderCell();
+			return parent::renderHTML();
 		}
 		return '';
 	}

@@ -603,7 +603,10 @@ abstract class GDO extends GDT
 	 * Get the GDOs name identifier column, if any.
 	 * @return GDT_Name
 	 */
-	public function gdoNameColumn() : GDT { return $this->gdoColumnOf(GDT_Name::class); }
+	public function gdoNameColumn() : ?GDT_Name
+	{
+		return $this->gdoColumnOf(GDT_Name::class);
+	}
 	
 	/**
 	 * Get the GDT column for a key.

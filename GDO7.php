@@ -143,8 +143,16 @@ function json_quote($s)
 	return str_replace("'", "&#39;", $s);
 }
 
-function html(string $html) : string
+/**
+ * HTML escaping.
+ * @see \htmlspecialchars()
+ */
+function html(string $html=null) : string
 {
+	if ($html === null)
+	{
+		return '';
+	}
 	$app = Application::$INSTANCE;
 	$is_html = $app->isHTML();
 	$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;

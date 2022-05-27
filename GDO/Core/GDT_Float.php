@@ -122,7 +122,7 @@ class GDT_Float extends GDT_Int
 		{
 		    $dot = $dot !== null ? $dot : self::decimalPoint();
 		    $comma = $comma != null ? $comma : self::thousandSeperator();
-		    $display = number_format($var, $decimals, $dot, $comma);
+		    $display = number_format(floatval($var), $decimals, $dot, $comma);
 		    return $display;
 		}
 		return '';

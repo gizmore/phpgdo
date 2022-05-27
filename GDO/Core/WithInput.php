@@ -56,7 +56,7 @@ trait WithInput
 	{
 		if ($key === $this->getName())
 		{
-			return isset($this->input) ? $this->input : null;
+			return isset($this->input) ? $this->input : $this->var;
 		}
 		if (!isset($this->inputs))
 		{

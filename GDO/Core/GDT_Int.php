@@ -227,7 +227,12 @@ class GDT_Int extends GDT_DBField
 	##############
 	public function renderFilter($f) : string
 	{
-		return GDT_Template::php('DB', 'filter/int.php', ['field' => $this, 'f' => $f]);
+		return GDT_Template::php('Core', 'integer_filter.php', ['field' => $this, 'f' => $f]);
+	}
+	
+	public function filterVar(string $key=null)
+	{
+		return [];
 	}
 	
 	public function filterQuery(Query $query, $rq=null) : self
@@ -243,7 +248,7 @@ class GDT_Int extends GDT_DBField
 	    return $this;
 	}
 	
-	public function filterGDO(GDO $gdo, string $filtervalue) : bool
+	public function filterGDO(GDO $gdo, $filtervalue) : bool
 	{
 		return true; # @TODO implement GDT_Int::filterGDO
 // 		$min = $filtervalue['min'];

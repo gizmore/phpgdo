@@ -3,8 +3,8 @@ namespace GDO\Table;
 
 use GDO\DB\Query;
 use GDO\Core\GDT_Hook;
-use GDO\Form\GDT_DeleteButton;
 use GDO\User\GDO_User;
+use GDO\UI\GDT_DeleteButton;
 use GDO\UI\GDT_EditButton;
 use GDO\Core\GDO_Exception;
 

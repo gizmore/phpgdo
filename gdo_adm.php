@@ -147,10 +147,11 @@ elseif ($argv[1] === 'configure')
     # @TODO gdoadm.php: write a repl configurator.
 	if ($argc === 2)
 	{
+		$argc = 3;
 		$argv[2] = 'config.php'; # default config filename
 	}
 	
-	$line = "install.configure \"--filename={$argv[2]}\";--save_config";
+	$line = "install.configure --filename={$argv[2]};--save_config";
 	$expr = GDT_Expression::fromLine($line);
 	$response = $expr->execute();
 	echo $response->renderCLI();
@@ -244,6 +245,8 @@ elseif ($argv[1] === 'modules')
 
 elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 {
+	$deps = [];
+	
     if ($argv[1] === 'install')
     {
         $mode = 1;
@@ -265,15 +268,20 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 	
 	if ($mode === 1)
 	{
-        $module = ModuleLoader::instance()->loadModuleFS($argv[2]);
-        if (!$module)
-        {
-            echo "Unknown module. Try {$argv[0]} modules.\n";
-            die(1);
-        }
-        $deps = $module->getDependencies();
-        $deps[] = $module->getName();
         $deps[] = 'Core';
+		$moduleNames = explode(',', $argv[2]);
+		foreach ($moduleNames as $moduleName)
+		{
+	        $module = ModuleLoader::instance()->loadModuleFS($moduleName);
+	        $deps[] = $module->getName();
+	        if (!$module)
+	        {
+	            echo "Unknown module. Try {$argv[0]} modules.\n";
+	            die(1);
+	        }
+	        $deps = array_merge($deps, $module->getDependencies());
+		}
+		$deps = array_unique($deps);
 	}
 	elseif ($mode === 2)
 	{

@@ -26,7 +26,7 @@ final class GDT_EditedAt extends GDT_Timestamp
 	{
 		$now = Time::getDate();
 		$query->set($this->identifier() . "=" . quote($now));
-		$this->gdo->setVar($this->name, $now);
+		$gdo->setVar($this->name, $now);
 	}
 
 	public function htmlClass() : string

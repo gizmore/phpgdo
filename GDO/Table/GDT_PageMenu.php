@@ -96,9 +96,9 @@ class GDT_PageMenu extends GDT
 	/**
 	 * @return int
 	 */
-	public function getPage()
+	public function getPage() : int
 	{
-		return (int) Math::clamp($this->page, 1, $this->getPageCount());
+		return Math::clampInt($this->page, 1, $this->getPageCount());
 	}
 	
 	public function getFrom()

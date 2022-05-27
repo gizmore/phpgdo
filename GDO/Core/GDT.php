@@ -197,6 +197,18 @@ abstract class GDT
 		return CLI::displayCLI($html);
 	}
 	
+	public function displayChoice($choice) : string
+	{
+		if (is_string($choice))
+		{
+			return $choice;
+		}
+		else
+		{
+			return $choice->renderChoice();
+		}
+	}
+	
 	/**
 	 * Render this GDT in a specified rendering mode.
 	 * This should be the method to use to render a GDT.
@@ -364,7 +376,7 @@ abstract class GDT
 	/**
 	 * Get the input for this GDTs filter var. 
 	 */
-	public function filterVar(string $key=null) : string
+	public function filterVar(string $key=null)
 	{
 		return '';
 	}
@@ -372,7 +384,7 @@ abstract class GDT
 	/**
 	 * Check if a GDO is shown for a filter input.
 	 */
-	public function filterGDO(GDO $gdo, string $filterInput) : bool
+	public function filterGDO(GDO $gdo, $filterInput) : bool
 	{
 		return true;
 	}

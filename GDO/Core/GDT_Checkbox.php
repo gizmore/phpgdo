@@ -160,7 +160,7 @@ class GDT_Checkbox extends GDT_Select
 	public function renderFilter($f) : string
 	{
 	    $vars = ['field' => $this, 'f'=> $f];
-		return GDT_Template::php('DB', 'filter/checkbox.php', $vars);
+		return GDT_Template::php('Core', 'checkbox_filter.php', $vars);
 	}
 
 	####################
