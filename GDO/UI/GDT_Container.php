@@ -23,6 +23,22 @@ class GDT_Container extends GDT
 	use WithFields;
 	use WithPHPJQuery;
 	
+	public function renderCLI() : string
+	{
+		$newline = $this->flexDirection === self::HORIZONTAL ? ' ' : "\n";
+		$rendered = '';
+		if (isset($this->fields))
+		{
+			foreach ($this->fields as $field)
+			{
+				$rendered .= $field->render();
+				$rendered .= $newline;
+			}
+		}
+		return $rendered;
+	}
+	
+	
 // 	private function setupHTML()
 // 	{
 // 	    $this->addClass('gdt-container');

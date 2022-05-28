@@ -29,6 +29,11 @@ class Module_Admin extends GDO_Module
 		$this->loadLanguage('lang/admin');
 	}
 	
+	public function getDependencies(): array
+	{
+		return ['Table'];
+	}
+	
 	public function getFriendencies() : array
 	{
 		return ['Login', 'Register', 'Recovery'];

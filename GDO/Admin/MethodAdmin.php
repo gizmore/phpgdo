@@ -24,12 +24,12 @@ trait MethodAdmin
 	
 	protected function renderAdminBar() : void
 	{
-		GDT_Page::instance()->topBar()->addField(GDT_AdminBar::make());
+		GDT_Page::instance()->topResponse()->addField(GDT_AdminBar::make());
 	}
 	
 	protected function renderPermissionBar() : void
 	{
-		GDT_Page::instance()->topBar()->addField(
+		GDT_Page::instance()->topResponse()->addField(
 			GDT_Bar::make()->addFields(
 				GDT_Link::make()->href('Admin', 'Permissions')->label('permissions'),
 				GDT_Link::make()->href('Admin', 'PermissionAdd')->label('permissions'),

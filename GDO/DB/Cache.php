@@ -234,7 +234,7 @@ class Cache
 	    # Mark for recache
 		if ($back->gdoCached())
 		{
-		    if (!$back->recache)
+		    if (isset($back->recache))
     	    {
     	        self::$RECACHING[] = $back->recaching();
     	    }
@@ -248,7 +248,7 @@ class Cache
 	public function uncache(GDO $object)
 	{
 	    # Mark for recache
-	    if ((!$object->recache) && $object->gdoCached())
+	    if ( (!isset($object->recache)) && ($object->gdoCached()) )
 	    {
 	        self::$RECACHING[] = $object->recaching();
 	    }

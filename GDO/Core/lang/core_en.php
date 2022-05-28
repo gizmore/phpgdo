@@ -41,7 +41,7 @@ return [
 	'err_form_invalid' => 'Your formular is invalid or incomplete. %s errors have been found.',
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
 	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
-	
+	'err_user_type' => 'Your user is not of type %s.',
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 
@@ -60,6 +60,7 @@ return [
 	# Buttons
 	'btn_back' => 'Back',
 	'btn_send' => 'Send',
+	'btn_save' => 'Save',
 	'btn_set' => 'Set',
 	
 	# Float
@@ -91,6 +92,10 @@ return [
 	
 	# Welcome
 	'welcome' => 'Welcome',
+	
+	# Version
+	'php_version' => 'PHP Version',
+	'gdo_version' => 'GDO Version',
 	
 	# Directory Index
 	'ft_dir_index' => '%s (%s files and folders)',

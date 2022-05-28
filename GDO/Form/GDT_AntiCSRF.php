@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Form;
 
-use GDO\Core\GDT_Template;
 use GDO\Session\GDO_Session;
 use GDO\Util\Random;
 use GDO\Core\Application;

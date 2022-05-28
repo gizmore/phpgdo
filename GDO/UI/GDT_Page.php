@@ -6,6 +6,7 @@ use GDO\Core\GDT_Template;
 use GDO\Core\WithInstance;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
+use GDO\Session\GDO_Session;
 
 /**
  * A website page object.
@@ -32,7 +33,7 @@ final class GDT_Page extends GDT
 	 */
 	public function reset() : self
 	{
-		unset($this->topBox);
+		unset($this->topResponse);
 		unset($this->topBar);
 		unset($this->leftBar);
 		unset($this->rightBar);
@@ -63,15 +64,33 @@ final class GDT_Page extends GDT
 	############
 	### Bars ###
 	############
-	public GDT_Box $topBox;
+	public GDT_Box $topResponse;
 	
 	public function topResponse() : GDT_Box
 	{
-		if (!isset($this->topBox))
+		if (!isset($this->topResponse))
 		{
-			$this->topBox = GDT_Box::make()->horizontal();
+			$this->topResponse = GDT_Box::make()->vertical();
+			if (class_exists('GDO\\Session\\GDO_Session', false))
+			{
+				$this->restoreSessionRedirectResponse();
+			}
 		}
-		return $this->topBox;
+		return $this->topResponse;
+	}
+	
+	private function restoreSessionRedirectResponse()
+	{
+		if ($error = GDO_Session::get('redirect_error'))
+		{
+			$this->topResponse->addField(GDT_Error::make()->textRaw($error));
+			GDO_Session::remove('redirect_error');
+		}
+		if ($message = GDO_Session::get('redirect_message'))
+		{
+			$this->topResponse->addField(GDT_Success::make()->textRaw($message));
+			GDO_Session::remove('redirect_message');
+		}
 	}
 	
 	public GDT_Bar $topBar;

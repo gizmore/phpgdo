@@ -289,4 +289,10 @@ class GDT_Int extends GDT_DBField
 	    return strpos($haystack, $searchTerm) !== false;
 	}
 	
+	public function searchCondition($searchTerm) : string
+	{
+		$searchTerm = (int)$searchTerm;
+		return "{$this->name} = {$searchTerm}";
+	}
+	
 }

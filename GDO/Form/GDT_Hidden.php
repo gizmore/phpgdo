@@ -13,7 +13,7 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Hidden extends GDT_String
 {
-	public function renderHTML() : string
+	public function renderForm() : string
 	{
 		return GDT_Template::php('Form', 'hidden_html.php', ['field' => $this]);
 	}

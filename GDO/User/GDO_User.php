@@ -137,6 +137,7 @@ final class GDO_User extends GDO
 	##############
 	### Getter ###
 	##############
+	public function getName() : ?string { return $this->gdoVar('user_name'); }
 	public function getType() : string { return $this->gdoVar('user_type'); }
 	public function getLangISO() : string { return $this->gdoVar('user_language'); }
 	public function getUserName() : ?string { return $this->gdoVar('user_name'); }

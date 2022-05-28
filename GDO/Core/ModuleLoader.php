@@ -376,7 +376,10 @@ final class ModuleLoader
 	{
 		if (FileUtil::isFile("$path/Module_$entry.php"))
 		{
-			$this->loadModuleFS($entry, true, $init);
+			if (!str_starts_with($entry, 'phpgdo-'))
+			{
+				$this->loadModuleFS($entry, true, $init);
+			}
 		}
 	}
 	

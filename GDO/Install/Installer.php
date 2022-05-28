@@ -198,9 +198,9 @@ class Installer
 						$tablename = $gdo->gdoTableName();
 						$temptable = "zzz_temp_{$tablename}";
 						
-						if ($db->tableExists())
+						if ($db->tableExists($temptable))
 						{
-							die('HIER');
+							$db->dropTable($gdo);
 						}
 						
 						# create temp and copy as old

@@ -113,6 +113,10 @@ final class GDT_Redirect extends GDT
 		{
 			Logger::logMessage($message);
 		}
+		if (class_exists('GDO\\Session\\GDO_Session', false))
+		{
+			GDO_Session::set('redirect_message', $message);
+		}
 		$this->redirectMessage = $message;
 		return $this;
 	}

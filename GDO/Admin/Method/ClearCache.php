@@ -7,7 +7,6 @@ use GDO\Core\Method;
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
 use GDO\Tests\GDT_MethodTest;
-use GDO\Core\ModuleLoader;
 use GDO\Core\Module_Core;
 use GDO\DB\Database;
 use GDO\Core\Application;
@@ -60,12 +59,13 @@ final class ClearCache extends Method
 	    Application::$INSTANCE->reset();
 	    # Remove minified JS
 	    FileUtil::removeDir(GDO_PATH . 'assets/');
-	    # Clear module loader cache
-	    ModuleLoader::instance()->reset();
 	    # More caches
 	    GDT_MethodTest::$TEST_USERS = [];
 	    # Call hook
 	    GDT_Hook::callWithIPC('ClearCache');
+	    # Clear module loader cache??????
+// 	    ModuleLoader::instance()->reset();
+		
 	}
 
 }

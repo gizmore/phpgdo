@@ -61,7 +61,7 @@ final class Module_Core extends GDO_Module
 	
 	public function getDependencies() : array
 	{
-		return ['User'];
+		return ['Language', 'Date', 'UI', 'User'];
 	}
 	
 	public function onInstall() : void

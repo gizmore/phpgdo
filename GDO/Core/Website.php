@@ -1,13 +1,9 @@
 <?php
 namespace GDO\Core;
 
-use GDO\UI\GDT_Link;
 use GDO\Session\GDO_Session;
-use GDO\UI\GDT_Error;
-use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Success;
-use GDO\UI\GDT_Redirect;
 
 /**
  * General Website utility and storage for header and javascript elements.

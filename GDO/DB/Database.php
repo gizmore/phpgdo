@@ -318,11 +318,10 @@ class Database
 	####################
 	public function tableExists(string $tableName) : bool
 	{
-		return DBMS::tableExists($tableName);
-		
+// 		return DBMS::tableExists($tableName);
 		$query = "SELECT EXISTS (SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'music' AND TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Artists');";
 		$result = $this->queryRead($query);
-		return $result;
+		return !!$result;
 	}
 	
 	public function createTableCode(GDO $gdo) : string

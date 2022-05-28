@@ -41,7 +41,7 @@ trait WithFields
 	{
 		foreach ($gdts as $gdt)
 		{
-			$this->addField($gdt);
+			$this->addFieldB($gdt);
 			if ($gdt->hasFields())
 			{
 				$addFields = $gdt->getFields();
@@ -56,7 +56,7 @@ trait WithFields
 		return $this->addFieldB($gdt);		
 	}
 	
-	public function addFieldB(GDT $gdt) : self
+	protected function addFieldB(GDT $gdt) : self
 	{
 		# Init
 		if (!isset($this->fields))
@@ -200,14 +200,18 @@ trait WithFields
 	public function renderFields() : string
 	{
 		$rendered = '';
-		$this->withFields(function(GDT $gdt) use (&$rendered) {
-			$rendered .= $gdt->render();
-		});
+		if (isset($this->fields))
+		{
+			foreach ($this->fields as $field)
+			{
+				$rendered .= $field->render();
+			}
+		}
 		return $rendered;
 	}
 	
-// 	public function renderChoice() : string { return $this->renderFields(); }
-// 	public function renderList() : string { return $this->renderFields(); }
+	public function renderChoice() : string { return $this->renderFields(); }
+	public function renderList() : string { return $this->renderFields(); }
 	public function renderHTML() : string { return $this->renderFields(); }
 	public function renderCell() : string { return $this->renderFields(); }
 	public function renderForm() : string { return $this->renderFields(); }
