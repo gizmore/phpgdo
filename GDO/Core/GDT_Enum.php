@@ -20,6 +20,11 @@ class GDT_Enum extends GDT_Select
 		$this->enumValues = $this->choices;
 		return $this;
 	}
+	
+	public function toValue(string $var=null)
+	{
+		return (string)($var);
+	}
 
 	################
 	### DB Field ###

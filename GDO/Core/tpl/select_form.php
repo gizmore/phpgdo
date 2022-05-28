@@ -22,7 +22,7 @@ if (isset($field->completionHref))
 	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->renderEmptyLabel()?></option>
 <?php endif; ?>
 <?php foreach ($field->choices as $var => $choice) : ?>
-	<option value="<?=$var?>"<?=$field->htmlSelected($var);?>><?=$field->displayChoice($choice)?></option>
+	<option value="<?=html($var)?>"<?=$field->htmlSelected($var);?>><?=$field->displayChoice($choice)?></option>
 <?php endforeach; ?>
   </select>
   <?=$field->htmlError()?>

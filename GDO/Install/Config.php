@@ -162,7 +162,7 @@ class Config
 			GDT_Select::make('themes')->multiple()->choices(array_combine($themes, $themes))->required()->initialValue(array('default')),
 			GDT_String::make('module')->required()->initialValue(GDO_MODULE),
 			GDT_String::make('method')->required()->initialValue(GDO_METHOD),
-			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', '1' => 'IPC', '0' => 'none'])->initialValue(GDO_IPC),
+			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC),
 			GDT_Checkbox::make('ipc_debug')->initialValue(GDO_IPC_DEBUG),
 			GDT_Checkbox::make('gdt_debug')->initialValue(GDO_GDT_DEBUG),
 			GDT_Checkbox::make('json_debug')->initialValue(GDO_JSON_DEBUG),
@@ -174,7 +174,7 @@ class Config
 			GDT_String::make('web_root')->required()->initialValue(GDO_WEB_ROOT),
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
-			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initialValue(GDO_CHMOD),
+			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initial('0'.base_convert(GDO_CHMOD, 10, 8)),
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
 			GDT_Checkbox::make('log_request')->initialValue(GDO_LOG_REQUEST),

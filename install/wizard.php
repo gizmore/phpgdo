@@ -43,8 +43,7 @@ try
     $steps = Config::steps();
     $step = Math::clampInt(Common::getGetInt('step'), 1, count($steps));
     $method = $install->getMethod($steps[$step-1]);
-    $method->addInputs($_REQUEST);
-    $result = $method->execute();
+    $result = $method->withAppliedInputs($_REQUEST)->execute();
 }
 catch (\Throwable $ex)
 {

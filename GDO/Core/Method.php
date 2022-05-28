@@ -365,12 +365,6 @@ abstract class Method #extends GDT
 					$input = json_encode($input);
 				}
 				$gdt->input($input);
-// 				$var = $gdt->inputToVar($input);
-// 				$value = $gdt->toValue($var);
-// 				if ($gdt->validate($value))
-// 				{
-// 					$gdt->value($value);
-// 				}
 			}
 		}
 	}
