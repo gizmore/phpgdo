@@ -26,6 +26,7 @@ use GDO\Install\Method\SystemTest;
 use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_Error;
 use GDO\Core\GDT_Expression;
+use GDO\Language\Module_Language;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -263,8 +264,9 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
             printUsage();
         }
     }
-			
-	$git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
+
+    ModuleLoader::instance()->loadModules();
+    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	
 	if ($mode === 1)
 	{
