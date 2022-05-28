@@ -101,7 +101,7 @@ trait WithParameters
 	/**
 	 * Get a parameter's GDT db var string.
 	 */
-	public function gdoParameterVar(string $key, bool $validate=false, bool $throw=true) : ?string
+	public function gdoParameterVar(string $key, bool $validate=true, bool $throw=true) : ?string
 	{
 		if ($gdt = $this->gdoParameter($key, $validate, $throw))
 		{
@@ -110,7 +110,7 @@ trait WithParameters
 		return null;
 	}
 	
-	public function gdoParameterValue(string $key, bool $validate=false, bool $throw=true)
+	public function gdoParameterValue(string $key, bool $validate=true, bool $throw=true)
 	{
 		if ($gdt = $this->gdoParameter($key, $validate, $throw))
 		{

@@ -8,6 +8,8 @@ use function PHPUnit\Framework\assertTrue;
 use GDO\Date\GDT_Timezone;
 use GDO\Core\GDT;
 use function PHPUnit\Framework\assertStringContainsString;
+use GDO\Date\GDO_Timezone;
+use function PHPUnit\Framework\assertNotEquals;
 
 /**
  * Test date and time.
@@ -117,9 +119,15 @@ final class DateTest extends TestCase
     	date_default_timezone_set('UTC');
     	assertEquals($now, date($fmt), 'Test if timezone is set to UTC');
     }
-    
+
     public function testIfUserTimezoneIsRespected()
     {
+    	$tz = GDO_Timezone::getByName('Europe/Berlin');
+    	$this->userGizmore()->setVar('user_timezone', $tz->getID());
+    	Time::setTimezone($tz->getID());
+    	$date = Time::getDate();
+    	$dateUser = Time::displayDate(null, Time::FMT_DB);
+    	assertNotEquals($date, $dateUser, 'Test if clock is off UTC for user gizmore');
     }
 
 }

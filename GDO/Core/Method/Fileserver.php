@@ -31,7 +31,7 @@ final class Fileserver extends Method
 	
 	public function execute()
 	{
-		$url = $this->gdoParameterVar('url');
+		$url = $this->gdoParameterVar('url', false);
 		
 		if (!Module_Core::instance()->checkAssetAllowed($url))
 		{

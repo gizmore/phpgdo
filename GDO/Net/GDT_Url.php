@@ -74,19 +74,19 @@ class GDT_Url extends GDT_String
 	###############
 	### Options ###
 	###############
-	public function allowLocal($allowLocal=true)
+	public function allowLocal(bool $allowLocal=true) : self
 	{
 		$this->allowLocal = $allowLocal;
 		return $this;
 	}
 	
-	public function allowExternal($allowExternal=true)
+	public function allowExternal(bool $allowExternal=true) : self
 	{
 		$this->allowExternal = $allowExternal;
 		return $this;
 	}
 	
-	public function reachable($reachable=true)
+	public function reachable(bool $reachable=true) : self
 	{
 		$this->reachable = $reachable;
 		return $this;

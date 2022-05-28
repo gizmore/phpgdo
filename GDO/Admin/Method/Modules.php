@@ -12,6 +12,7 @@ use GDO\Table\GDT_Sort;
 use GDO\Admin\GDT_ModuleNameLink;
 use GDO\Admin\GDT_ModuleAdminButton;
 use GDO\Core\GDT_Version;
+use GDO\Core\GDT_UInt;
 
 /**
  * Overview of all modules in FS and DB.
@@ -58,8 +59,8 @@ class Modules extends MethodTable
 	public function gdoHeaders()
 	{
 		return [
-			GDT_Sort::make('module_sort'),
-// 			GDT_Int::make('module_priority')->unsigned()->label('priority'),
+// 			GDT_Sort::make('module_sort'),
+			GDT_UInt::make('module_priority')->unsigned()->label('priority'),
 			GDT_Checkbox::make('module_enabled')->label('enabled'),
 			GDT_Version::make('module_version')->label('version_db'),
 			GDT_ModuleVersionFS::make('module_version_fs')->label('version_fs'),

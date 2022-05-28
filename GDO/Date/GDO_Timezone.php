@@ -16,6 +16,18 @@ use GDO\Core\GDT_Index;
  */
 final class GDO_Timezone extends GDO
 {
+	###############
+	### Factory ###
+	###############
+	/**
+	 * Get a timezone by name.
+	 * @example Europe/Berlin
+	 */
+	public static function getByName($name) : self
+	{
+		return self::getByName($name);
+	}
+	
 	###########
 	### GDO ###
 	###########

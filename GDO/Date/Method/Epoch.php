@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Date\Method;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDT_EnumNoI18n;
 use GDO\Core\Application;

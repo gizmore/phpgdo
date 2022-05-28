@@ -65,7 +65,7 @@ trait WithError
 	public function htmlError() : string
 	{
 		return $this->hasError() ?
-			('<div class="gdo-form-error">' . $this->renderError() . '</div>') :
+			('<div class="gdt-form-error">' . $this->renderError() . '</div>') :
 			'';
 	}
 	

@@ -51,6 +51,7 @@ final class Time
 	const FMT_LONG = 'long';
 	const FMT_DAY = 'day'; # @TODO: Date format FMT_DAY is same as FMT_SHORT.
 	const FMT_MS = 'ms';
+	const FMT_DB = 'db';
 	
 	################
 	### Timezone ###

@@ -70,7 +70,7 @@ if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 # Language
 if (isset($_REQUEST['_lang']))
 {
-	Trans::$ISO = @$_REQUEST['_lang'];
+	Trans::setISO((string) @$_REQUEST['_lang']);
 	unset($_REQUEST['_lang']);
 }
 else

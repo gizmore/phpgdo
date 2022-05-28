@@ -42,6 +42,7 @@ return [
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
 	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
 	'err_user_type' => 'Your user is not of type %s.',
+	'err_external_url_not_allowed' => 'This url may not point to an external resource: %s',
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 

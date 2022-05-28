@@ -74,12 +74,13 @@ final class SwitchLanguage extends MethodAjax
 	{
 		# Set new ISO language
 		$iso = $this->getLanguage()->getISO();
-		$_SERVER['REQUEST_URI'] = preg_replace("/_lang=[a-z]{2}/", "_lang=".$iso , urldecode($_SERVER['REQUEST_URI']));
+		$ref = $this->gdoParameterVar('_ref');
+		$ref = preg_replace("/_lang=[a-z]{2}/", "_lang=".$iso , $ref);
 // 		$_REQUEST['_lang'] = $iso;
-		GDO_Session::set('gdo-language', $iso);
+// 		GDO_Session::set('gdo-language', $iso);
 		Trans::setISO($iso);
 		return GDT_Redirect::make()->
-			back($this->gdoParameterVar('_ref'))->
+			href($ref)->
 			redirectMessage('msg_language_set', [$this->getLanguage()->renderName()]);
 	}
 	
