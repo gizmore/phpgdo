@@ -45,7 +45,11 @@ else
 	$value = $field->getValue();
 	if (is_string($value))
 	{
-		if ($name === 'error_level')
+		if ($name === 'chmod')
+		{
+			echo $value;
+		}
+		elseif ($name === 'error_level')
 		{
 		    $value = "0x".Numeric::baseConvert($value, 10, 16);
 		}
