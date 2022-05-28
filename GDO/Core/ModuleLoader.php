@@ -297,13 +297,13 @@ final class ModuleLoader
 	 * Force module reloading.
 	 * @return true
 	 */
-	public function reset() : bool
+	public function reset() : self
 	{
 		$this->loadedDB = false;
 		$this->loadedFS = false;
 		$this->modules = [];
 		unset($this->enabledModules);
-		return true;
+		return $this;
 	}
 	
 	private function loadModulesDB()
