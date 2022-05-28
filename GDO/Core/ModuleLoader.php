@@ -396,26 +396,33 @@ final class ModuleLoader
 		if (!isset($this->modules[$lowerName]))
 		{
 			$className = "GDO\\$name\\Module_$name";
-			if (@class_exists($className, true))
+			try
 			{
-				$moduleData = GDO_Module::table()->getBlankData(['module_name' => $name]);
-				if ($module = self::instanciate($moduleData, true))
+				if (@class_exists($className, true))
 				{
-					$this->modules[$lowerName] = $module;
-				    $module->onLoadLanguage();
-				    if ($theme = $module->getTheme())
-				    {
-				        GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
-				    }
+					$moduleData = GDO_Module::table()->getBlankData(['module_name' => $name]);
+					if ($module = self::instanciate($moduleData, true))
+					{
+						$this->modules[$lowerName] = $module;
+					    $module->onLoadLanguage();
+					    if ($theme = $module->getTheme())
+					    {
+					        GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
+					    }
+					}
+				}
+				elseif ($throw)
+				{
+					throw new GDO_Error('err_module', [html($name)]);
+				}
+				else
+				{
+				    return null;
 				}
 			}
-			elseif ($throw)
+			catch (\Throwable $t)
 			{
-				throw new GDO_Error('err_module', [html($name)]);
-			}
-			else
-			{
-			    return null;
+				return null;
 			}
 		}
 		if ($init)
