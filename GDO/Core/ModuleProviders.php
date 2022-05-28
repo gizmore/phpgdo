@@ -28,7 +28,7 @@ final class ModuleProviders
 	{
 		$git = self::GIT_PROVIDER;
 		$which = (int) $which;
-		$providers = self::$PROVIDERS[$moduleName];
+		$providers = self::getProviders($moduleName);
 		if (is_array($providers))
 		{
 			if (($which < 1) || ($which > count($providers)))
