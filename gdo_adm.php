@@ -344,7 +344,9 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
         }
     }
 	
-	if (!$allResolved)
+    $deps = array_unique($deps);
+    
+    if (!$allResolved)
 	{
 		echo "Some required modules are not provided by your current GDO/ folder.\n";
 		echo "Please clone the modules like stated above.\n";
