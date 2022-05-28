@@ -174,7 +174,7 @@ class Config
 			GDT_String::make('web_root')->required()->initialValue(GDO_WEB_ROOT),
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
-			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777"->initialValue(GDO_CHMOD),
+			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initialValue(GDO_CHMOD),
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
 			GDT_Checkbox::make('log_request')->initialValue(GDO_LOG_REQUEST),
