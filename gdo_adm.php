@@ -676,11 +676,11 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     	{
     		if ($argv[1] === 'provide_all')
     		{
-    			system("./gdoadm.sh install_all");
+    			system("php gdoadm.php install_all");
     		}
     		else
     		{
-	    		system("./gdoadm.sh install {$argv[2]}");
+	    		system("php gdoadm.php install {$argv[2]}");
     		}
     	}
     }
