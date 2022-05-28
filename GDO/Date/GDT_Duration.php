@@ -8,27 +8,34 @@ use GDO\Core\GDT_String;
  * Duration field int in seconds.
  * 
  * @author gizmore
- * @version 6.11.0
+ * @version 7.0.0
  * @since 6.0.0
  */
 class GDT_Duration extends GDT_String
 {
 	public function defaultLabel() : self { return $this->label('duration'); }
 	
-	public string $pattern = '/^(?:[0-9 ]+[smhdwy]? *)+$/iD';
-
+	public string $pattern = '/^(?:[0-9 ]+[smohdwy]? *)+$/iD';
+	public int $max = 16;
+	
 	protected function __construct()
 	{
 	    parent::__construct();
 		$this->icon('time');
 		$this->ascii();
-		$this->max(16);
 	}
 	
-	public $minDuration = 0;
-	public function minDuration($minDuration)
+	public int $minDuration = 0;
+	public function min(int $minDuration) : self
 	{
 		$this->minDuration = $minDuration;
+		return $this;
+	}
+	
+	public int $maxDuration;
+	public function max(int $maxDuration) : self
+	{
+		$this->maxDuration = $maxDuration;
 		return $this;
 	}
 	
@@ -62,6 +69,10 @@ class GDT_Duration extends GDT_String
 		if ($value < $this->minDuration)
 		{
 			return $this->error('err_min_duration', [$this->minDuration]);
+		}
+		if (isset($this->maxDuration) && ($value > $this->maxDuration))
+		{
+			return $this->error('err_max_duration', [$this->minDuration]);
 		}
 		return true;
 	}

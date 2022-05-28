@@ -15,7 +15,10 @@ use GDO\UI\GDT_Link;
  */
 trait MethodAdmin
 {
-	public function getPermission() : ?string { return 'admin'; }
+	public function getPermission() : ?string
+	{
+		return 'admin';
+	}
 	
 	public function beforeExecute() : void
 	{

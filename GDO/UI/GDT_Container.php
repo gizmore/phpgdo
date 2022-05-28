@@ -38,19 +38,18 @@ class GDT_Container extends GDT
 		return $rendered;
 	}
 	
-	
-// 	private function setupHTML()
-// 	{
-// 	    $this->addClass('gdt-container');
-// 	    if ($this->flex)
-// 	    {
-// 	        $this->addClass('flx flx-'.$this->htmlDirection());
-// 	        if ($this->flexCollapse)
-// 	        {
-// 	            $this->addClass('flx-collapse');
-// 	        }
-// 	    }
-// 	}
+	private function setupHTML()
+	{
+	    $this->addClass('gdt-container');
+	    if ($this->flex)
+	    {
+	    	$this->addClass('flx '.$this->flexClass());
+	        if ($this->flexCollapse)
+	        {
+	            $this->addClass('flx-collapse');
+	        }
+	    }
+	}
 	
 // 	public function renderCell() : string
 // 	{
@@ -72,20 +71,20 @@ class GDT_Container extends GDT
 // 	    return $this->renderCLIFields();
 // 	}
 	
-// 	public function renderForm() : string
-// 	{
-// 	    if ($this->fields)
-// 	    {
-// 	        $this->setupHTML();
-// 	        $back = '<div '.$this->htmlID().' '.$this->htmlAttributes().'>';
-//     	    foreach ($this->fields as $gdt)
-//     	    {
-//     	        $back .= $gdt->renderForm();
-//     	    }
-//     	    $back .= '</div>';
-//     	    return $back;
-// 	    }
-// 	}
+	public function renderForm() : string
+	{
+	    if ($this->fields)
+	    {
+	        $this->setupHTML();
+	        $back = '<div '.$this->htmlID().' '.$this->htmlAttributes().'>';
+    	    foreach ($this->fields as $gdt)
+    	    {
+    	        $back .= $gdt->renderForm();
+    	    }
+    	    $back .= '</div>';
+    	    return $back;
+	    }
+	}
 	
 // 	public function renderCard() : string
 // 	{

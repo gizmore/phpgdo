@@ -72,7 +72,7 @@ abstract class GDO extends GDT
 	
 	public function __construct()
 	{
-		parent::__construct(); # DO NOT call GDT perf counter!
+// 		parent::__construct(); # DO NOT! call GDT perf counter!
 		$this->afterLoaded();
 	}
 	

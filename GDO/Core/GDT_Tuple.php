@@ -14,6 +14,12 @@ final class GDT_Tuple extends GDT
 {
 	use WithFields;
 	
+	protected function addFieldB(GDT $gdt) : self
+	{
+		$this->addFieldA($gdt);
+		return $this;
+	}
+	
 // 	public function renderHTML()
 // 	{
 // 		$html = '';

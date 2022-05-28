@@ -31,7 +31,7 @@ trait WithTitle
 	    return $this;
 	}
 
-	public bool $titleEscaped = true;
+	public bool $titleEscaped = false;
 	public function titleEscaped(bool $escaped) : self
 	{
 	    $this->titleEscaped = $escaped;

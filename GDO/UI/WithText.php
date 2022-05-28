@@ -44,7 +44,7 @@ trait WithText
 		return $this;
 	}
 	
-	public function textEscaped(bool $escaped) : self
+	public function textEscaped(bool $escaped=true) : self
 	{
 	    $this->textEscaped = $escaped;
 	    return $this;

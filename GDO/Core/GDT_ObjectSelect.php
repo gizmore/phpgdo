@@ -38,7 +38,7 @@ class GDT_ObjectSelect extends GDT_Select
                 }
                 return $this->errorNull();
             }
-            return true;
+//             return true;
         }
         
 //         if (!$this->getValue())

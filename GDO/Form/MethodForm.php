@@ -26,16 +26,10 @@ abstract class MethodForm extends Method
 			$this->renderPage());
 	}
 	
-// 	public function gdoComposeParameters() : array
-// 	{
-		
-		
-// 		$form = $this->getForm();
-// 		return array_merge(
-// 			$this->gdoParameters(),
-// 			$form->getAllFields(),
-// 			$form->actions()->getAllFields());
-// 	}
+	public function resetForm() : void
+	{
+		unset($this->form);
+	}
 	
 	public function &gdoParameterCache() : array
 	{
@@ -71,6 +65,7 @@ abstract class MethodForm extends Method
 	public function execute()
 	{
 		$form = $this->getForm();
+		$this->form->titleRaw($this->getMethodTitle());
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			if ($gdt->hasInput())

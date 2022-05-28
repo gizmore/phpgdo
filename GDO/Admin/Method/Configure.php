@@ -105,7 +105,7 @@ class Configure extends MethodForm
 		return $response;
 	}
 
-	public function getMethodTitle()
+	public function getMethodTitle() : string
 	{
 		return t('ft_admin_configure',
 			[
@@ -113,11 +113,11 @@ class Configure extends MethodForm
 			]);
 	}
 
-	public function getDescription()
+	public function getMethodDescription() : string
 	{
 		return t('mdescr_admin_configure',
 			[
-				$this->paramModule()->renderName()
+				$this->configModule()->renderName()
 			]);
 	}
 
@@ -162,13 +162,13 @@ class Configure extends MethodForm
 		}
 
 		$form->addField(
-			GDT_Name::make('module_name')->writeable(false));
+			GDT_Name::make('module_name')->initial($mod->getName())->writeable(false));
 		$form->addField(
 			GDT_String::make('module_path')->writeable(false)
 				->initial($mod->filePath()));
 		$c = GDT_Container::make('versions')->horizontal(false);
 		$c->addField(
-			GDT_Version::make('module_version')->writeable(
+			GDT_Version::make('module_version')->gdo($mod)->writeable(
 				false));
 		$c->addField(
 			GDT_Version::make('version_available')->writeable(
@@ -193,6 +193,7 @@ class Configure extends MethodForm
 				$form->addField($gdt); # ->var($mod->getConfigVar($gdt->name)));
 			}
 		}
+		
 		$form->actions()->addField(
 			GDT_Submit::make()->label('btn_save'));
 		$form->addField(GDT_AntiCSRF::make());
@@ -201,7 +202,7 @@ class Configure extends MethodForm
 
 	public function formValidated(GDT_Form $form)
 	{
-		$mod = $this->paramModule();
+		$mod = $this->configModule();
 
 		# Update config
 		$info = [];
@@ -209,7 +210,7 @@ class Configure extends MethodForm
 		foreach ($form->getFields() as $gdt)
 		{
 			// if ($gdt->hasChanged() && $gdt->writeable && $gdt->editable)
-			if ($gdt->hasChanged() && $gdt->isWriteable())
+			if ($gdt->isWriteable() && $gdt->hasChanged())
 			{
 				$info[] = '<br/>';
 				GDO_ModuleVar::createModuleVar($mod, $gdt);
@@ -217,7 +218,7 @@ class Configure extends MethodForm
 					[
 						$gdt->renderLabel(),
 						$gdt->displayVar($gdt->initial),
-						$gdt->display()
+						$gdt->displayVar($gdt->getVar()),
 					]);
 				$moduleVarsChanged = true;
 			}

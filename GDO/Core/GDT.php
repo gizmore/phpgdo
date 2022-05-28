@@ -453,6 +453,11 @@ abstract class GDT
 		return null;
 	}
 	
+	public function hasChanged() : bool
+	{
+		return false;
+	}
+	
 	public function hasFields() : bool
 	{
 		return false;

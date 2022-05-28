@@ -22,11 +22,10 @@ use GDO\Core\GDT;
    </div>
    <div class="gdt-form-fields">
 <?php 
-$out = '';
-$field->withFields(function(GDT $gdt) use (&$out) {
-	$out .= $gdt->renderForm();
-});
-echo $out;
+foreach ($field->getFields() as $gdt)
+{
+	echo $gdt->renderForm();
+}
 ?>
    </div>
 <?php if ($field->hasActions()) : ?>

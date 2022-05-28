@@ -44,11 +44,11 @@ class GDT_Object extends GDT_UInt
 	{
 		if ($this->completionHref)
 		{
-			return GDT_Template::php('DB', 'object_completion_form.php', ['field'=>$this]);
+			return GDT_Template::php('Core', 'object_completion_form.php', ['field'=>$this]);
 		}
 		else
 		{
-			return GDT_Template::php('DB', 'object_form.php', ['field'=>$this]);
+			return GDT_Template::php('Core', 'object_form.php', ['field'=>$this]);
 		}
 	}
 	

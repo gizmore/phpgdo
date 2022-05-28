@@ -52,7 +52,14 @@ trait WithParameters
 		{
 			if ($validate)
 			{
-				return $gdt->validated();
+				if (!$gdt->validated())
+				{
+					if ($throw)
+					{
+						throw new GDO_Error('err_parameter', [html($key), $gdt->renderError()]);
+					}
+					return null;
+				}
 			}
 		}
 		return $gdt;

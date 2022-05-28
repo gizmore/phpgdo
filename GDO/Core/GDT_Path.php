@@ -27,8 +27,8 @@ final class GDT_Path extends GDT_String
 	### Existance ###
 	#################
 	public $existing = false;
-	public function existingDir() { $this->existing = 'is_dir'; return $this->icon('folder'); }
-	public function existingFile() { $this->existing = 'is_file'; return $this->icon('file'); }
+	public function existingDir() : self { $this->existing = 'is_dir'; return $this->icon('folder'); }
+	public function existingFile() : self { $this->existing = 'is_file'; return $this->icon('file'); }
 
 	################
 	### Validate ###
@@ -48,7 +48,7 @@ final class GDT_Path extends GDT_String
 		return true;
 	}
 	
-	public function validatePath($filename)
+	public function validatePath(string $filename) : bool
 	{
 		if ($this->existing)
 		{
@@ -60,6 +60,9 @@ final class GDT_Path extends GDT_String
 		return true;
 	}
 	
+	/**
+	 * The GDOv7-LICENSE file should exist. Good default plug.
+	 */
 	public function plugVar() : string
 	{
 		return GDO_PATH . 'LICENSE';

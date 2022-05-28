@@ -4,7 +4,6 @@ namespace GDO\Core;
 use GDO\Mail\Mail;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
-use GDO\CLI\CLI;
 use GDO\UI\Color;
 
 /**

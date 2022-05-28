@@ -41,12 +41,7 @@ trait WithFields
 	{
 		foreach ($gdts as $gdt)
 		{
-			$this->addFieldB($gdt);
-			if ($gdt->hasFields())
-			{
-				$addFields = $gdt->getFields();
-				$this->addFields(...array_values($addFields));
-			}
+			$this->addField($gdt);
 		}
 		return $this;
 	}
@@ -56,7 +51,7 @@ trait WithFields
 		return $this->addFieldB($gdt);		
 	}
 	
-	protected function addFieldB(GDT $gdt) : self
+	protected function addFieldA(GDT $gdt) : void
 	{
 		# Init
 		if (!isset($this->fields))
@@ -64,7 +59,7 @@ trait WithFields
 			$this->fields = [];
 			$this->fieldsFlat = [];
 		}
-
+		
 		# Add the field
 		if ($name = $gdt->getName())
 		{
@@ -76,6 +71,11 @@ trait WithFields
 			$this->fields[] = $gdt;
 			$this->fieldsFlat[] = $gdt;
 		}
+	}
+	
+	protected function addFieldB(GDT $gdt) : self
+	{
+		$this->addFieldA($gdt);
 		
 		# Add children in flatten only
 		if ($gdt->hasFields())
@@ -198,6 +198,14 @@ trait WithFields
 	 * WithFields, we simply iterate over them and render current mode.
 	 */
 	public function renderFields() : string
+	{
+		return $this->renderFieldsB();
+	}
+	
+	/**
+	 * WithFields, we simply iterate over them and render current mode.
+	 */
+	public function renderFieldsB() : string
 	{
 		$rendered = '';
 		if (isset($this->fields))

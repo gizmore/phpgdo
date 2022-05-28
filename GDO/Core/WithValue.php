@@ -106,6 +106,11 @@ trait WithValue
 		}
 		return $this->value;
 	}
+	
+	public function hasChanged() : bool
+	{
+		return $this->initial !== $this->getVar();
+	}
 
 	/**
 	 * Setup this GDT from a GDO.

@@ -3,7 +3,6 @@ namespace GDO\User\Method;
 
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
-use GDO\Util\Common;
 use GDO\Core\GDT_JSON;
 use GDO\Core\MethodCompletion;
 

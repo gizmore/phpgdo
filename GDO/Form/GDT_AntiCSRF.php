@@ -4,6 +4,7 @@ namespace GDO\Form;
 use GDO\Session\GDO_Session;
 use GDO\Util\Random;
 use GDO\Core\Application;
+use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;
 
 /**
@@ -25,7 +26,7 @@ class GDT_AntiCSRF extends GDT_Hidden
     const KEYLEN = 6;
     const MAX_KEYS = 12;
     
-	public function defaultName() { return 'xsrf'; }
+	public function getDefaultName() : string { return 'xsrf'; }
 
 	###########
 	### GDT ###
@@ -48,9 +49,9 @@ class GDT_AntiCSRF extends GDT_Hidden
 	#############
 	### Fixed ###
 	#############
-	public $fixed = false;
-	public function complex() { return $this->fixed(false); }
-	public function fixed($fixed=true)
+	public bool $fixed = false;
+	public function complex() : self { return $this->fixed(false); }
+	public function fixed(bool $fixed=true) : self
 	{
 	    $this->fixed = $fixed;
 	    return $this;
@@ -86,13 +87,16 @@ class GDT_AntiCSRF extends GDT_Hidden
 	    }
 	    
 	    $token = '';
-		if (GDO_Session::instance())
-		{
-		    $token = Random::randomKey(self::KEYLEN);
-		    $csrf = $this->loadCSRFTokens();
-		    $csrf[$token] = Application::$TIME;
-		    $this->saveCSRFTokens($csrf);
-		}
+	    if (module_enabled('Session'))
+	    {
+			if (GDO_Session::instance())
+			{
+			    $token = Random::randomKey(self::KEYLEN);
+			    $csrf = $this->loadCSRFTokens();
+			    $csrf[$token] = Application::$TIME;
+			    $this->saveCSRFTokens($csrf);
+			}
+	    }
 		return $token;
 	}
 	
@@ -136,9 +140,10 @@ class GDT_AntiCSRF extends GDT_Hidden
 	    }
 	    
 	    # No session, no token
-	    if (!GDO_Session::instance())
+	    if (!class_exists('GDO\\Session\\GDO_Session', false))
 		{
-			return $this->error('err_session_required');
+			return true;
+// 			return $this->error('err_session_required');
 		}
 		
 		if ($this->fixed)
@@ -179,10 +184,10 @@ class GDT_AntiCSRF extends GDT_Hidden
 	##############
 	### Render ###
 	##############
-// 	public function renderForm() : string
-// 	{
-// 		return GDT_Template::php('Form', 'form/csrf.php', ['field'=>$this]);
-// 	}
+	public function renderForm() : string
+	{
+		return GDT_Template::php('Form', 'xsrf_html.php', ['field'=>$this]);
+	}
 	
 // 	public function jsonFormValue()
 // 	{

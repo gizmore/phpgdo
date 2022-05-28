@@ -13,6 +13,8 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Hidden extends GDT_String
 {
+	public bool $writeable = false;
+	
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Form', 'hidden_html.php', ['field' => $this]);

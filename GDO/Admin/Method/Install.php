@@ -68,7 +68,7 @@ class Install extends MethodForm
 		return $this->renderPage();
 	}
 	
-	public function getTitle()
+	public function getMethodTitle()
 	{
 	    if ($this->configModule)
 	    {
@@ -95,7 +95,6 @@ class Install extends MethodForm
 
 		if ($this->configModule && $this->configModule->isInstalled())
 		{
-			
 			$tables = $this->configModule->getClasses();
 			$modules = empty($tables) ? t('enum_none') : implode(', ', array_map(function($t){return Strings::rsubstrFrom($t, '\\');}, $tables));
 			$text = t('confirm_wipe_module', [$modules]);
@@ -115,6 +114,10 @@ class Install extends MethodForm
 			    $form->actions()->addField(GDT_Button::make('href_admin')->href($adminHREF));
 			}
 		}
+		else
+		{
+			$form->titleRaw($this->getMethodTitle());
+		}
 		
 		$form->addField(GDT_AntiCSRF::make());
 	}
@@ -132,7 +135,7 @@ class Install extends MethodForm
 		$response = call_user_func([$this, "execute_$button"]);
 // 		Cache::flush();
 // 		Cache::fileFlush();
-// 		$this->resetForm();
+		$this->resetForm();
 		return $response;
 	}
 	

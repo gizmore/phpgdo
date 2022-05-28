@@ -97,10 +97,6 @@ final class GDT_Form extends GDT
 		{
 			if ($gdt->hasInputs())
 			{
-// 				if ($gdt->name === 'language')
-// 				{
-// 					xdebug_break();
-// 				}
 				$input = $gdt->getInput($key);
 				if (!$gdt->validateInput($input))
 				{

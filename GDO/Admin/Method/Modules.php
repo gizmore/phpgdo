@@ -7,11 +7,11 @@ use GDO\Core\GDO_Module;
 use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
 use GDO\Core\GDT_Checkbox;
-use GDO\Core\GDT_Decimal;
 use GDO\Core\ModuleLoader;
 use GDO\Table\GDT_Sort;
 use GDO\Admin\GDT_ModuleNameLink;
 use GDO\Admin\GDT_ModuleAdminButton;
+use GDO\Core\GDT_Version;
 
 /**
  * Overview of all modules in FS and DB.
@@ -61,7 +61,7 @@ class Modules extends MethodTable
 			GDT_Sort::make('module_sort'),
 // 			GDT_Int::make('module_priority')->unsigned()->label('priority'),
 			GDT_Checkbox::make('module_enabled')->label('enabled'),
-			GDT_Decimal::make('module_version')->digits(1, 2)->label('version_db'),
+			GDT_Version::make('module_version')->label('version_db'),
 			GDT_ModuleVersionFS::make('module_version_fs')->label('version_fs'),
 			GDT_ModuleNameLink::make('module_name')->label('name'),
 			GDT_ModuleAdminButton::make('administrate_module')->label('btn_admin'),

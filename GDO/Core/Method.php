@@ -365,12 +365,12 @@ abstract class Method #extends GDT
 					$input = json_encode($input);
 				}
 				$gdt->input($input);
-				$var = $gdt->inputToVar($input);
-				$value = $gdt->toValue($var);
-				if ($gdt->validate($value))
-				{
-					$gdt->value($value);
-				}
+// 				$var = $gdt->inputToVar($input);
+// 				$value = $gdt->toValue($var);
+// 				if ($gdt->validate($value))
+// 				{
+// 					$gdt->value($value);
+// 				}
 			}
 		}
 	}
@@ -394,7 +394,11 @@ abstract class Method #extends GDT
 		{
 			Logger::logMessage(ten($key, $args));
 		}
-		return GDT_Success::make()->titleRaw($this->getModuleName())->text($key, $args);
+		$success = GDT_Success::make()->titleRaw($this->getModuleName())->text($key, $args);
+		$top = GDT_Page::instance()->topResponse();
+		$top->addField($success);
+		$result = GDT_Tuple::make();
+		return $result;
 	}
 	
 	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT

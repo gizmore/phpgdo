@@ -15,7 +15,7 @@ trait WithActions
 {
 	private GDT_Menu $actions;
 	
-	public function actions() : GDT_Fields
+	public function actions() : GDT_Menu
 	{
 		if (!isset($this->actions))
 		{
