@@ -246,6 +246,12 @@ elseif ($argv[1] === 'modules')
 
 elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 {
+	if (!GDO_DB_ENABLED)
+	{
+		echo "You do not have GDO_DB_ENABLED. I cannot install anything.\n";
+		die(1);
+	}
+	
 	$deps = [];
 	
     if ($argv[1] === 'install')
