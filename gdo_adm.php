@@ -660,7 +660,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
             $r = $r ? $r : 'y';
             if ( ($r[0]==='y') || ($r[0]==='Y') )
             {
-            	system("./gdoadm.sh install {$argv[2]}");
+            	system("php gdo_adm.php install {$argv[2]}");
             }
         }
     }
