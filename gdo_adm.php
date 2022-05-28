@@ -309,7 +309,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
         $cnt = count($deps);
         foreach ($deps as $dep)
         {
-            $depmod = ModuleLoader::instance()->getModule($dep);
+            $depmod = ModuleLoader::instance()->getModule($dep, true);
 			
 			if (!$depmod)
 			{
