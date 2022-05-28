@@ -180,14 +180,14 @@ class GDT_AntiCSRF extends GDT_Hidden
 	##############
 	### Render ###
 	##############
-	public function renderForm() : string
-	{
-		return GDT_Template::php('Form', 'form/csrf.php', ['field'=>$this]);
-	}
+// 	public function renderForm() : string
+// 	{
+// 		return GDT_Template::php('Form', 'form/csrf.php', ['field'=>$this]);
+// 	}
 	
-	public function jsonFormValue()
-	{
-		return $this->csrfToken();
-	}
+// 	public function jsonFormValue()
+// 	{
+// 		return $this->csrfToken();
+// 	}
 	
 }

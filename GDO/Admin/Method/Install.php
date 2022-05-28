@@ -44,7 +44,7 @@ class Install extends MethodForm
 	{
 		if (!isset($this->configModule))
 		{
-			$this->configModule = module($this->getInput('module'), false, true, true);
+			$this->configModule = $this->gdoParameterValue('module', true);
 		}
 		return $this->configModule;
 	}
@@ -52,14 +52,18 @@ class Install extends MethodForm
 	public function execute()
 	{
 		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
-		foreach ($buttons as $button)
+		foreach ($buttons as $btn)
 		{
-			if ($this->hasInput($button))
+			if ($button = $this->gdoParameter($btn, false, false))
 			{
-				return GDT_Tuple::makeWith(
-					$this->executeButton($button),
-					$this->renderPage());
+				if ($button->hasInput())
+				{
+					return GDT_Tuple::makeWith(
+						$this->executeButton($btn),
+						$this->renderPage());
+				}
 			}
+			
 		}
 		return $this->renderPage();
 	}
@@ -120,11 +124,11 @@ class Install extends MethodForm
 	###############
 	public function executeButton($button)
 	{
-		$form = $this->getForm();
-		if (!$form->validate(null))
-		{
-			return parent::formInvalid($form);
-		}
+// 		$form = $this->getForm();
+// 		if (!$form->validate(null))
+// 		{
+// 			return parent::formInvalid($form);
+// 		}
 		$response = call_user_func([$this, "execute_$button"]);
 // 		Cache::flush();
 // 		Cache::fileFlush();

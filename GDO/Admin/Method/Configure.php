@@ -43,7 +43,7 @@ class Configure extends MethodForm
 	public function gdoParameters() : array
 	{
 	    return [
-	        GDT_Module::make('module')->notNull(),
+	        GDT_Module::make('module')->uninstalled()->notNull(),
 	    ];
 	}
 	
@@ -61,7 +61,7 @@ class Configure extends MethodForm
 	{
 		if (!isset($this->configModule))
 		{
-			$this->configModule = module($this->getInput('module'));
+			$this->configModule = $this->gdoParameterValue('module', true);
 		}
 		return $this->configModule;;
 	}

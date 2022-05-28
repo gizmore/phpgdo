@@ -44,13 +44,19 @@ trait WithFields
 			$this->addField($gdt);
 			if ($gdt->hasFields())
 			{
-				$this->addFields(...$gdt->getFields());
+				$addFields = $gdt->getFields();
+				$this->addFields(...array_values($addFields));
 			}
 		}
 		return $this;
 	}
-	
+
 	public function addField(GDT $gdt) : self
+	{
+		return $this->addFieldB($gdt);		
+	}
+	
+	public function addFieldB(GDT $gdt) : self
 	{
 		# Init
 		if (!isset($this->fields))

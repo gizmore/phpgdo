@@ -41,12 +41,22 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getValue()
 	{
-// 		$var = $this->getVar();
-		if ($this->var === null)
+		if ($this->valueConverted)
 		{
-			return $this->multiple ? [] : null;
+			return $this->value;
 		}
-		return parent::getValue();
+		$var = $this->getVar();
+		if ($var === null)
+		{
+			$value = $this->multiple ? [] : null;
+		}
+		else
+		{
+			$value = $this->toValue($var);
+		}
+		$this->valueConverted = true;
+		$this->value = $value;
+		return $value;
 	}
 
 	public function toVar($value) : ?string

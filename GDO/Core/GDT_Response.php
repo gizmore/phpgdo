@@ -6,7 +6,8 @@ use GDO\UI\GDT_Page;
 
 /**
  * A response renders a GDT result.
- * in RENDER_HTML mode, we let GDT_Page do it's job.
+ * If RENDER_HTML mode, we let GDT_Page do it's job.
+ * If you add a response to a response, it will just steal it's fields. (unwrap)
  * 
  * @author gizmore
  * @version 7.0.0
@@ -29,6 +30,15 @@ final class GDT_Response extends GDT
 			default:
 				return parent::render();
 		}
+	}
+	
+	public function addField(GDT $gdt)
+	{
+		if ($gdt instanceof GDT_Response)
+		{
+			return $this->addFields(...$gdt->getFields());
+		}
+		return $this->addFieldB($gdt);
 	}
 	
 	/**

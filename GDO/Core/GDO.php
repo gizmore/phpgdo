@@ -1415,17 +1415,14 @@ abstract class GDO extends GDT
 			self::table()->cache->recache($this);
 		}
 	}
-	
-// 	/**
-// 	 * @deprecated Untested and why does it exist?
-// 	 */
-// 	public function uncache() : void
-// 	{
-// 		if ($this->table()->cache)
-// 		{
-// 			$this->table()->cache->uncache($this);
-// 		}
-// 	}
+
+	public function uncache() : void
+	{
+		if ($this->table()->cache)
+		{
+			$this->table()->cache->uncache($this);
+		}
+	}
 	
 	public function clearCache() : self
 	{

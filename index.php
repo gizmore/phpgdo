@@ -18,7 +18,6 @@ use GDO\Core\Method\SeoProxy;
 use GDO\Core\Method\NotAllowed;
 use GDO\Core\Method\Error;
 use GDO\Core\GDT_Response;
-use GDO\Core\GDO_Error;
 use GDO\UI\GDT_Error;
 # really the first thing we do :) Go Go GDOv7!
 define('GDO_TIME_START', microtime(true)); 
