@@ -14,16 +14,14 @@ use GDO\Core\GDO_Module;
 
 include "GDO7.php";
 include "protected/config.php";
-
+Application::instance();
+Debug::init();
 Database::init();
-new ModuleLoader(GDO_PATH . 'GDO/');
-GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
-new Application();
+Logger::init('system_provider_dependencies', GDO_ERROR_LEVEL); # 1st init as guest
+// GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
 
 # Bootstrap
 Trans::$ISO = GDO_LANGUAGE;
-Logger::init(null, GDO_ERROR_LEVEL); # 1st init as guest
-Debug::init();
 
 $modules = ModuleLoader::instance()->loadModules(false, true, true);
 

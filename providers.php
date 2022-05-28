@@ -18,12 +18,12 @@ $mode = @$argv[1];
 if ($mode)
 {
 	echo "'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],\n";
-	echo "'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite],\n";
+	echo "'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],\n";
 	echo "'Mailer' => ['phpgdo-mailer-gdo', 'phpgdo-mailer-symfony'],\n";
 	echo "'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],\n";
 }
 
-Filewalker::traverse("GDO", null, false,
+Filewalker::traverse("GDO", null, null,
 function ($entry, $fullpath)
 {
 	if (is_dir('GDO/' . $entry . "/.git"))
@@ -31,7 +31,7 @@ function ($entry, $fullpath)
 		global $mode;
 		$c = file_get_contents('GDO/' . $entry . "/.git/config");
 		$c = Regex::firstMatch('#/gizmore/([-_a-z0-9]+)#miD', $c);
-		if (str_starts_with($entry, 'phpgdo-'))
+		if (!str_starts_with($entry, 'phpgdo-'))
 		{
 			if (!$mode)
 			{
