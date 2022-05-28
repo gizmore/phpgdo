@@ -3,6 +3,7 @@ namespace GDO\Admin;
 
 use GDO\UI\GDT_Link;
 use GDO\Core\WithGDO;
+use GDO\Core\GDO_Module;
 
 /**
  * Is searchable, filterable, orderarble because it's the modulename.
@@ -17,17 +18,22 @@ final class GDT_ModuleNameLink extends GDT_Link
 	public function isSearchable() : bool { return true; }
 	public function isFilterable() : bool { return true; }
 	
+	public function getModuleLinked() : GDO_Module
+	{
+		return $this->gdo;
+	}
+	
     public function renderCell() : string
 	{
-		$this->label($this->gdo->getName());
+		$this->labelRaw($this->getModuleLinked()->gdoHumanName());
 		$this->href(href('Admin', 'Configure', "&module=".$this->gdo->getName()));
 		return parent::renderCell();
 	}
 	
-	public function renderJSON()
-	{
-	    $this->href(href('Admin', 'Configure', "&module=".$this->gdo->getName()));
-	    return sprintf('<a href="%s">%s</a>', $this->href, $this->gdo->getName());
-	}
+// 	public function renderJSON()
+// 	{
+// // 	    $this->href(href('Admin', 'Configure', "&module=".$this->gdo->getName()));
+// 	    return sprintf('<a href="%s">%s</a>', $this->href, $this->gdo->getName());
+// 	}
 	
 }

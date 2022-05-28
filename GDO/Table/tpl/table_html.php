@@ -31,7 +31,6 @@ $result = $field->getResult();
 			<?php endif; ?>
 		  </label>
 		  <?php if ($field->filtered) : ?>
-			<?# $gdt->renderFilter($field->headers->name); ?>
 			<?= $gdt->renderFilter(''); ?>
 		  <?php endif; ?>
 		</th>

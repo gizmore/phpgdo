@@ -26,10 +26,16 @@ trait WithGDO
 		if ($gdo)
 		{
 			$this->gdo = $gdo;
+			if ($name = $this->getName())
+			{
+				$var = $gdo->gdoVar($name);
+				return $this->var($var);
+			}
 		}
 		else
 		{
 			unset($this->gdo);
+// 			$this->reset();
 		}
 		return $this;
 	}

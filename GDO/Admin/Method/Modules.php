@@ -43,6 +43,7 @@ class Modules extends MethodTable
 	public function execute()
 	{
 		$this->modules = ModuleLoader::instance()->loadModules(false, true);
+		unset($this->modules['install']);
 		return parent::execute();
 	}
 	

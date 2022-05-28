@@ -1,4 +1,7 @@
-<?php /** @var $link \GDO\UI\GDT_Link **/ ?>
+<?php
+namespace GDO\UI\tpl;
+/** @var $link \GDO\UI\GDT_Link **/
+?>
 <span class="<?=$link->htmlClass()?>">
   <a
    <?=$link->htmlDisabled()?>

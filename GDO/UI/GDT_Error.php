@@ -15,6 +15,11 @@ use GDO\Core\GDO_Exception;
  */
 final class GDT_Error extends GDT_MessageBox
 {
+	public static function fromException(\Throwable $t) : self
+	{
+		return self::make()->exception($t);
+	}
+	
 	public function exception(\Throwable $t) : self
 	{
 		$is_html = Application::$INSTANCE->isHTML();
@@ -26,7 +31,7 @@ final class GDT_Error extends GDT_MessageBox
 	public function renderHTML() : string
 	{
 		hdrc('HTTP/1.1 ' . GDO_Exception::DEFAULT_ERROR_CODE  .' GDO Error');
-		hdr('X-GDO-ERROR: ' . $this->renderText());
+// 		hdr('X-GDO-ERROR: ' . $this->renderText());
 		return parent::renderHTML();
 	}
 	

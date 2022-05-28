@@ -78,6 +78,9 @@ return [
 	'filesize' => 'Size',
 	'file_type' => 'Type',
 	'module_path' => 'Path',
+	'sorting' => 'Sorting',
+	'enabled' => 'Enabled',
+	'name' => 'Name',
 	
 	# Fineprint
 	'privacy' => 'Privacy',
