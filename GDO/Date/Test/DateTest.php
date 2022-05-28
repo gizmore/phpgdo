@@ -123,7 +123,7 @@ final class DateTest extends TestCase
     public function testIfUserTimezoneIsRespected()
     {
     	$tz = GDO_Timezone::getByName('Europe/Berlin');
-    	$this->userGizmore()->setVar('user_timezone', $tz->getID());
+//     	$this->userGizmore()->setVar('user_timezone', $tz->getID());
     	Time::setTimezone($tz->getID());
     	$date = Time::getDate();
     	$dateUser = Time::displayDate(null, Time::FMT_DB);
