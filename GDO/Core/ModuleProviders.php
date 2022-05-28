@@ -45,7 +45,7 @@ final class ModuleProviders
 	{
 		foreach (array_keys(self::$DEPENDENCIES) as $modname)
 		{
-			if ($modname === $moduleName)
+			if (strcasecmp($moduleName, $modname) === 0)
 			{
 				return $modname;
 			}
