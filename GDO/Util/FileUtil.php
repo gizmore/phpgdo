@@ -5,6 +5,7 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use GDO\Core\GDT_Float;
+use GDO\Core\GDO_Error;
 
 /**
  * File system utilities.
@@ -37,8 +38,13 @@ final class FileUtil
 
 	public static function createDir(string $path) : bool
 	{
-		if (self::isDir($path) && is_writeable($path))
+		if (self::isDir($path))
 		{
+			if (!is_writeable($path))
+			{
+				throw new GDO_Error('err_cannot_write', [html($path)]);
+				return false;
+			}
 			return true;
 		}
 		return mkdir($path, GDO_CHMOD, true);
