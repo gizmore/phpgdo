@@ -640,6 +640,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
                 {
                     $url = str_replace('https://', 'ssh://git@', $url);
                 }
+                $module = ModuleProviders::getCleanModuleName($module);
                 $cmd = "cd GDO && git clone --recursive {$url} {$module}";
                 echo $cmd . "\n";
                 $output = [];

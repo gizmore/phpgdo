@@ -41,6 +41,17 @@ final class ModuleProviders
 		return $git . $providers;
 	}
 	
+	public static function getCleanModuleName(string $moduleName) : string
+	{
+		foreach (array_keys(self::$DEPENDENCIES) as $modname)
+		{
+			if ($modname === $moduleName)
+			{
+				return $modname;
+			}
+		}
+	}
+	
 	public static function getDependencies(string $moduleName) : ?array
 	{
 		foreach (self::$DEPENDENCIES as $modname => $depNames)
