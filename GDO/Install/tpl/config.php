@@ -47,7 +47,7 @@ else
 	{
 		if ($name === 'chmod')
 		{
-			echo $value;
+			$value = $value; # do nothing
 		}
 		elseif ($name === 'error_level')
 		{
