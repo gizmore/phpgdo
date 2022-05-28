@@ -557,9 +557,16 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     		}
     	}
     }
-    else
+    else # Single
     {
-    	$deps = ['Core', $argv[2]];
+    	$deps = ModuleProviders::getDependencies($argv[2]);
+    	if ($deps === null)
+    	{
+    		echo "Unknown module: {$argv[2]}\n";
+    		die (-1);
+    	}
+    	$deps[] = 'Core';
+    	$deps[] = $argv[2];
     	while ($cd != count($deps))
     	{
     		$cd = count($deps);
@@ -571,17 +578,9 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     			}
     			else
     			{
-    				$moreDeps = @ModuleProviders::$DEPENDENCIES[$dep];
+    				$moreDeps = ModuleProviders::getDependencies($dep);
     			}
-    			
-    			if ($moreDeps)
-    			{
-    				$deps = array_unique(array_merge($deps, $moreDeps));
-    			}
-    			else
-    			{
-    				echo "Unknown module: $dep\n";
-    			}
+   				$deps = array_unique(array_merge($deps, $moreDeps));
     		}
     	}
     }
@@ -595,7 +594,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     $missing = [];
     foreach ($deps as $dep)
     {
-        if (!$loader->getModule($dep, false, false))
+        if (!$loader->getModule($dep, true, false))
         {
             $missing[] = $dep;
         }

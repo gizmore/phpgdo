@@ -40,7 +40,20 @@ final class ModuleProviders
 		}
 		return $git . $providers;
 	}
-
+	
+	public static function getDependencies(string $moduleName) : ?array
+	{
+		foreach (self::$DEPENDENCIES as $modname => $depNames)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $depNames;
+			}
+		}
+		return null;
+	}
+	
+	
 	public static $PROVIDERS = [
 		'Captcha' => [
 			'phpgdo-captcha',
@@ -136,6 +149,6 @@ final class ModuleProviders
 			'Core'
 		],
 	];
-
+	
 }
     
