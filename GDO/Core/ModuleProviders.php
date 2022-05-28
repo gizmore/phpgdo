@@ -53,6 +53,17 @@ final class ModuleProviders
 		return null;
 	}
 	
+	public static function getProviders(string $moduleName)
+	{
+		foreach (self::$PROVIDERS as $modname => $providers)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $providers;
+			}
+		}
+		return null;
+	}
 	
 	public static $PROVIDERS = [
 		'Captcha' => [

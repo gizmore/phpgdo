@@ -612,7 +612,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
             echo "Cloning " . count($missing) . " modules...\n";
             foreach ($missing as $module)
             {
-                $providers = ModuleProviders::$PROVIDERS[$module];
+                $providers = ModuleProviders::getProviders($module);
                 $n = 1;
                 if (is_array($providers))
                 {
