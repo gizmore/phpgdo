@@ -25,7 +25,7 @@ final class GDO_Timezone extends GDO
 	 */
 	public static function getByName($name) : self
 	{
-		return self::getByName($name);
+		return self::getBy('tz_name', $name);
 	}
 	
 	###########
