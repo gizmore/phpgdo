@@ -565,7 +565,7 @@ elseif ( ($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] =
     		$cd = count($deps);
     		foreach ($deps as $dep)
     		{
-    			if ($module = $loader->getModule($dep))
+    			if ($module = $loader->getModule($dep, true))
     			{
     				$moreDeps = $module->getDependencies();
     			}
