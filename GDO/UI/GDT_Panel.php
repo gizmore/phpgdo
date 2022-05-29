@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Core\WithParent;
 
 /**
  * Basic text panel.
@@ -17,6 +18,7 @@ use GDO\Core\GDT_Template;
 class GDT_Panel extends GDT
 {
 	use WithText;
+	use WithPHPJQuery;
 	
 	public function renderHTML() : string
 	{

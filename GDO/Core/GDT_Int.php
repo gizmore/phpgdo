@@ -237,8 +237,7 @@ class GDT_Int extends GDT_DBField
 	
 	public function filterQuery(Query $query, $rq=null) : self
 	{
-	    $filter = $this->filterVar($rq);
-	    if ($filter != '')
+	    if ($filter = $this->filterVar($rq))
 	    {
 	        if ($condition = $this->searchQuery($query, $filter, true))
 	        {

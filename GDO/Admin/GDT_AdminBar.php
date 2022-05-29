@@ -13,7 +13,9 @@ final class GDT_AdminBar extends GDT_Bar
 			GDT_Link::make()->label('btn_clearcache')->href(
 				href('Admin', 'ClearCache')),
 			GDT_Link::make()->label('btn_modules')->href(
-				href('Admin', 'Modules')));
+				href('Admin', 'Modules')),
+		GDT_Link::make()->label('users')->href(
+			href('Admin', 'Users')));
 	}
 
 }
