@@ -349,7 +349,7 @@ abstract class Method #extends GDT
 	
 	public function withAppliedInputs(array $inputs) : self
 	{
-		$this->inputs($inputs);
+		$this->addInputs($inputs);
 		$this->applyInput();
 		return $this;
 	}

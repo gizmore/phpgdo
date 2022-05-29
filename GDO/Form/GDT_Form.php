@@ -39,16 +39,8 @@ final class GDT_Form extends GDT
 	##############
 	public function inputs(array $inputs) : self
 	{
-		if (!isset($this->inputs))
-		{
-			$this->inputs = $inputs;
-			$this->actions()->inputs($inputs);
-		}
-		else
-		{
-			$this->addInputs($inputs);
-			$this->actions()->addInputs($inputs);
-		}
+		$this->addInputs($inputs);
+		$this->actions()->addInputs($inputs);
 		return $this;
 	}
 	

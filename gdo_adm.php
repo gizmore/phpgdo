@@ -26,7 +26,6 @@ use GDO\Install\Method\SystemTest;
 use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_Error;
 use GDO\Core\GDT_Expression;
-use GDO\Language\Module_Language;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -432,11 +431,10 @@ elseif ($argv[1] === 'wipe')
     $module = ModuleLoader::instance()->loadModuleFS($argv[2]);
     
     $response = Install::make()->
-        requestParameters(['module' => $module->getName()])->
-            formParameters(['uninstall' => '1'])->
+        withAppliedInputs(['module' => $module->getName(), 'uninstall' => '1'])->
             executeWithInit();
     
-    if ($response->isError())
+    if (Application::isError())
     {
         echo $response->renderCLI();
     }
