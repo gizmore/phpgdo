@@ -28,14 +28,17 @@ final class GDT_Level extends GDT_UInt
 	
 	public function renderCell() : string
 	{
-	    if ( ($user = $this->gdo) &&
-	         (!$user->isTable()) &&
-	         ($user instanceof GDO_User)
-	       ) 
-	    {
-            return $user->getLevel();
-	    }
-	    return $this->var;
+		if (isset($this->gdo))
+		{
+			if (!$this->gdo->isTable())
+			{
+				if ($this->gdo instanceof GDO_User)
+				{
+					return $this->gdo->getLevel();
+				}
+			}
+		}
+	    return $this->getVar();
 	}
 	
 }

@@ -150,6 +150,7 @@ class GDT_PageMenu extends GDT
 			];
 			return GDT_Template::php('Table', 'cell/pagemenu.php', $tVars);
 		}
+		return '';
 	}
 	
 	public function renderJSON()

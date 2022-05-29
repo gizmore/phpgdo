@@ -53,11 +53,11 @@ class GDT_Button extends GDT
 	#############
 	public function gdoHREF()
 	{
-	    if ($this->href)
+		if (isset($this->href))
 	    {
 	        return $this->href;
 	    }
-	    if ($this->gdo)
+	    if (isset($this->gdo))
 	    {
 	    	$method_name = 'href_' . $this->name;
 	    	if (method_exists($this->gdo, $method_name))

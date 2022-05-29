@@ -83,6 +83,10 @@ return [
 	'sorting' => 'Sorting',
 	'enabled' => 'Enabled',
 	'name' => 'Name',
+	'user_type' => 'User Type',
+	'user_guest_name' => 'Guest Name',
+	'level' => 'Level',
+	'ipp' => 'IPP',
 	
 	# Fineprint
 	'privacy' => 'Privacy',

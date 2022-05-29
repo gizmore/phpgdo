@@ -20,6 +20,10 @@ trait WithHREF
 
 	public function htmlHREF() : string
 	{
+		if (!isset($this->href))
+		{
+			return '';
+		}
 		return sprintf(' href="%s"', html($this->href));
 	}
 
