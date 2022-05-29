@@ -271,7 +271,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
     }
 
     
-    ModuleLoader::instance()->reset()->loadModules();
+    ModuleLoader::instance()->reset()->loadModules(true, true, true);
     $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	
 	if ($mode === 1)
@@ -293,7 +293,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all') )
 	}
 	elseif ($mode === 2)
 	{
-	    $modules = ModuleLoader::instance()->loadModules(false, true, true);
+	    $modules = ModuleLoader::instance()->loadModules(true, true, true);
 	    $modules = array_filter($modules, function(GDO_Module $module) {
 	        return $module->isInstallable();
 	    });
