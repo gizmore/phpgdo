@@ -81,11 +81,11 @@ final class ModuleProviders
 			'phpgdo-captcha',
 			'phpgdo-recaptcha2'
 		],
-		'DBMS' => [
-			'phpgdo-mysql',
-			'phpgdo-postgres',
-			'phpgdo-sqlite'
-		],
+// 		'DBMS' => [
+// 			'phpgdo-mysql',
+// 			'phpgdo-postgres',
+// 			'phpgdo-sqlite'
+// 		],
 		'Mailer' => [
 			'phpgdo-mailer-gdo',
 			'phpgdo-mailer-symfony'
