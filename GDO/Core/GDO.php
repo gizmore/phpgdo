@@ -320,7 +320,7 @@ abstract class GDO extends GDT
 	 * @param boolean $markDirty
 	 * @return self
 	 */
-	public function setVar(string $key, string $var, bool $markDirty=true) : self
+	public function setVar(string $key, string $var=null, bool $markDirty=true) : self
 	{
 		# @TODO: Better use temp? @see Vote/Up
 		if (!$this->hasColumn($key))
