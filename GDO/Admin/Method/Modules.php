@@ -8,7 +8,6 @@ use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
 use GDO\Core\GDT_Checkbox;
 use GDO\Core\ModuleLoader;
-use GDO\Table\GDT_Sort;
 use GDO\Admin\GDT_ModuleNameLink;
 use GDO\Admin\GDT_ModuleAdminButton;
 use GDO\Core\GDT_Version;

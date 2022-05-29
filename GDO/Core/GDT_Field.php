@@ -19,6 +19,7 @@ use GDO\UI\WithPHPJQuery;
  */
 abstract class GDT_Field extends GDT
 {
+// 	use WithGDO;
 	use WithIcon;
 	use WithLabel;
 	use WithValue;

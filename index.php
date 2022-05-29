@@ -37,7 +37,7 @@ $app = Application::instance();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
 Database::init();
-ModuleLoader::init(GDO_DB_ENABLED);
+ModuleLoader::init(GDO_DB_ENABLED?true:false);
 Trans::$ISO = GDO_LANGUAGE;
 if (!module_enabled('Core'))
 {

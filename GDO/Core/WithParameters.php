@@ -125,7 +125,7 @@ trait WithParameters
 	/**
 	 * @var GDT[string]
 	 */
-	public array $parameterCache;
+	public ?array $parameterCache = null;
 	
 	/**
 	 * @return GDT[string]

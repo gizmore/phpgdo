@@ -6,6 +6,7 @@ use GDO\DB\ArrayResult;
 use GDO\Core\GDT_Fields;
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
+use GDO\UI\GDT_SearchField;
 
 /**
  * A method that displays a table from memory via ArrayResult.
@@ -26,10 +27,9 @@ abstract class MethodTable extends Method
 	{
 		if (!isset($this->parameterCache))
 		{
+			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
-// 			$form = $this->getForm();
-// 			$this->addComposeParameters($form->getAllFields());
-// 			$this->addComposeParameters($form->actions()->getAllFields());
+			$this->addComposeParameters($this->gdoTableFeatures());
 		}
 		return $this->parameterCache;
 	}
@@ -42,15 +42,21 @@ abstract class MethodTable extends Method
 // // 			$this->gdoHeaders()->getAllFields());
 // 	}
 	
-// 	private function gdoFeatures() : array
-// 	{
-// 		$features = [];
-// 		if ($this->isPaginated())
-// 		{
-// 			$features[] = GDT_IPP::make();
-// 		}
-// 		return $features;
-// 	}
+	private function gdoTableFeatures() : array
+	{
+		$features = [];
+		if ($this->isPaginated())
+		{
+			$features[] = GDT_IPP::make('ipp');
+			$features[] = GDT_PageNum::make('page');
+		}
+		if ($this->isSearched())
+		{
+			$features[] = GDT_SearchField::make('search');
+		}
+		
+		return $features;
+	}
 	
 // 	public function gdoParametersB() : array
 // 	{
@@ -242,9 +248,9 @@ abstract class MethodTable extends Method
 	
 	public function getIPP()
 	{
-		return 10;
+		// 	    $defaultIPP = $this->getDefaultIPP();
+		return $this->gdoParameterValue('ipp');
 // 	    $o = $this->table->headers->name;
-// 	    $defaultIPP = $this->getDefaultIPP();
 // 	    return $this->isPaginated() ?
 // 	       $this->table->getHeaderField('ipp')->getRequestVar($o, $defaultIPP) :
 // 	       $defaultIPP;
@@ -258,9 +264,7 @@ abstract class MethodTable extends Method
 	
 	public function getSearchTerm()
 	{
-// 	    $table = $this->table;
-	    return null;
-// 	    return $table->getHeaderField('search')->getRequestVar($table->headers->getName());
+	    return $this->gdoParameterValue('search');
 	}
 	
 	###############
@@ -296,7 +300,10 @@ abstract class MethodTable extends Method
 	    $table->filtered($this->isFiltered());
 	    $table->searched($this->isSearched());
 	    $table->sorted($this->isSorted());
-	    $table->paginated($this->isPaginated(), null, $this->getIPP());
+	    if ($this->isPaginated())
+	    {
+	    	$table->paginated($this->isPaginated(), null, $this->getIPP());
+	    }
 	    
 	    # 4 editor permissions
 	    $user = GDO_User::current();
@@ -312,7 +319,7 @@ abstract class MethodTable extends Method
 	public static function make() : self
 	{
 		$obj = parent::make();
-		$obj->onInitTable();
+// 		$obj->onInitTable();
 		return $obj;
 	}
 	
@@ -329,7 +336,8 @@ abstract class MethodTable extends Method
 	
 	public function initTable()
 	{
-// 		$this->onInit();
+		$this->onInitTable();
+		$this->onInit();
 		$table = $this->table;
 		$this->table->result = null;
 	    $this->createTable($table);

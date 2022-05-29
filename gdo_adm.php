@@ -129,7 +129,7 @@ Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
-ModuleLoader::instance()->loadModules(GDO_DB_ENABLED, true);
+ModuleLoader::instance()->loadModules(GDO_DB_ENABLED?true:false, true);
 
 define('GDO_CORE_STABLE', true);
 
