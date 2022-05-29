@@ -25,7 +25,7 @@ class GDO_Module extends GDO
 	################
 	### Override ###
 	################
-	public int   $priority = 50;
+	public int $priority = 50;
 	public string $version = "7.0.0";
 	public string $license = "GDOv7-LICENSE";
 	public string $authors = "Christian B. <gizmore@wechall.net>";
