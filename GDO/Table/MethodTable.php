@@ -23,6 +23,8 @@ use GDO\UI\GDT_SearchField;
  */
 abstract class MethodTable extends Method
 {
+	public GDT_Table $table;
+	
 	public function &gdoParameterCache() : array
 	{
 		if (!isset($this->parameterCache))
@@ -34,80 +36,29 @@ abstract class MethodTable extends Method
 		return $this->parameterCache;
 	}
 	
-// 	public function gdoComposeParameters() : array
-// 	{
-// 		return array_merge(
-// 			$this->gdoParameters(),
-// 			$this->gdoFeatures());
-// // 			$this->gdoHeaders()->getAllFields());
-// 	}
-	
 	private function gdoTableFeatures() : array
 	{
 		$features = [];
+		$table = $this->getTable();
 		if ($this->isPaginated())
 		{
-			$features[] = GDT_IPP::make('ipp');
-			$features[] = GDT_PageNum::make('page');
+			$features[] = $table->paginated(true, $this->getDefaultIPP())->pagemenu->getIPPField();
+			$features[] = $table->pagemenu->getPageNumField();
 		}
 		if ($this->isSearched())
 		{
-			$features[] = GDT_SearchField::make('search');
+			$features[] = GDT_SearchField::make('search')->gdo($this->gdoTable());
 		}
-		
+		if ($this->isOrdered())
+		{
+			$features[] = $table->ordered(true, $this->getDefaultOrder())->order;
+		}
+		if ($this->isFiltered())
+		{
+		}
 		return $features;
 	}
 	
-// 	public function gdoParametersB() : array
-// 	{
-// 		$p = $this->gdoParameters();
-// 		$this->table->headers->withFields(function(GDT $gdt) use (&$p) {
-// 			$p[] = $gdt;
-// 		});
-// 		return $p;
-// 	}
-	
-// 	/**
-// 	 * Build and/or get the GET parameter cache.
-// 	 * @return GDT[]
-// 	 */
-// 	public function &gdoParameterCache() : array
-// 	{
-// 		if ($this->paramCache === null)
-// 		{
-// 			$this->init();
-// 			$this->paramCache = [];
-// 			if ($params = $this->gdoParameters())
-// 			{
-// 				foreach ($params as $gdt)
-// 				{
-// 					$this->paramCache[$gdt->name] = $gdt;
-// 				}
-// 			}
-// 			if ($params = $this->table->headers->getFieldsRec())
-// 			{
-// 				foreach ($params as $gdt)
-// 				{
-// 					if ($gdt->name)
-// 					{
-// 						$this->paramCache[$gdt->name] = $gdt;
-// 					}
-// 				}
-// 			}
-// 		}
-// 		return $this->paramCache;
-// 	}
-	
-//     public function gdoParameterVar($key)
-//     {
-//         $gdt = $this->gdoParameter($key);
-//         if ($this->table->headers->hasField($key))
-//         {
-//             return $gdt->getRequestVar($this->table->headers->name, $gdt->var);
-//         }
-//         return parent::gdoParameterVar($key);
-//     }
-    
     ################
     ### Abstract ###
     ################
@@ -116,7 +67,7 @@ abstract class MethodTable extends Method
      * @return GDO
      */
     public abstract function gdoTable();
-    public function gdoTableName() { return 'table'; }
+//     public function gdoTableName() { return 'table'; }
     public function gdoFetchAs() { return $this->gdoTable(); }
     
     /**
@@ -158,19 +109,14 @@ abstract class MethodTable extends Method
      * You need to adjust this when showing multiple tables or methods in a single page.
      * @return string
      */
-    public function getHeaderName() { return 'o'; }
+//     public function getHeaderName() { return 'o'; }
     
     /**
      * Override this.
      * Called upon creation of the GDT_Table.
      * @param GDT_Table $table
      */
-    public function createTable(GDT_Table $table) {}
-    
-    /**
-     * @var GDT_Table
-     */
-    public $table;
+    public function onCreateTable(GDT_Table $table) : void {}
     
     /**
      * Creates the collection GDT.
@@ -178,7 +124,8 @@ abstract class MethodTable extends Method
      */
     public function createCollection()
     {
-        $this->table = GDT_Table::make($this->gdoTableName());
+        $this->table = GDT_Table::make();
+        $this->onCreateTable($this->table);
 //         $this->table->headerName($this->getHeaderName());
         return $this->table;
 //         return $this->table->gdtTable($this->gdoTable());
@@ -224,7 +171,7 @@ abstract class MethodTable extends Method
 	 * @see GDT_Sort
 	 * @see MethodSort
 	 */
-	public function isSorted() { return true; } # Uses js/ajax and GDO needs to have GDT_Sort column.
+	public function isSorted() { return false; } # Uses js/ajax and GDO needs to have GDT_Sort column.
 	
 	############
 	### CRUD ###
@@ -248,23 +195,22 @@ abstract class MethodTable extends Method
 	
 	public function getIPP()
 	{
-		// 	    $defaultIPP = $this->getDefaultIPP();
 		return $this->gdoParameterValue('ipp');
-// 	    $o = $this->table->headers->name;
-// 	    return $this->isPaginated() ?
-// 	       $this->table->getHeaderField('ipp')->getRequestVar($o, $defaultIPP) :
-// 	       $defaultIPP;
 	}
 	
 	public function getPage()
 	{
-	    $o = $this->table->headers->name;
-	    return $this->table->getHeaderField('page')->getRequestVar($o, '1');
+		return $this->gdoParameterValue('page');
 	}
 	
 	public function getSearchTerm()
 	{
-	    return $this->gdoParameterValue('search');
+		return $this->gdoParameterValue('search');
+	}
+	
+	public function getOrderTerm()
+	{
+		return $this->gdoParameterValue('order');
 	}
 	
 	###############
@@ -273,6 +219,11 @@ abstract class MethodTable extends Method
 	public function execute()
 	{
 		return $this->renderTable();
+	}
+	
+	public function getMethodTitle()
+	{
+		return $this->getTableTitle();
 	}
 	
 	public function getTableTitleLangKey()
@@ -323,24 +274,26 @@ abstract class MethodTable extends Method
 		return $obj;
 	}
 	
-	public function onInitTable() : void
+	public function getTable() : GDT_Table
 	{
-		if (!$this->table)
+		if (!isset($this->table))
 		{
 			$this->table = $this->createCollection();
-			$this->table->setupHeaders($this->isSearched(), $this->isPaginated());
+// 			$this->table->setupHeaders($this->isSearched(), $this->isPaginated());
 			$this->table->addHeaders(...$this->gdoHeaders());
-			$this->setupCollection($this->table);
+// 			$this->setupCollection($this->table);
 		}
+		return $this->table;
 	}
 	
 	public function initTable()
 	{
-		$this->onInitTable();
-		$this->onInit();
-		$table = $this->table;
+// 		$this->onInitTable();
+// 		$this->onInit();
+		$table = $this->getTable();
+		$this->setupCollection($this->table);
 		$this->table->result = null;
-	    $this->createTable($table);
+// 	    $this->createTable($table);
 	    $this->calculateTable($table);
 	    $result = $table->getResult();
 	    if ($fetchAs = $this->fetchAs())

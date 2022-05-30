@@ -118,4 +118,21 @@ final class GDT_Form extends GDT
 		return $count;
 	}
 
+	/**
+	 * Get all columns as gdo var.
+	 * @return array
+	 */
+	public function getFormVars() : array
+	{
+		$back = [];
+		foreach ($this->getAllFields() as $gdt)
+		{
+			if ($data = $gdt->getGDOData())
+			{
+				$back = array_merge($back, $data);
+			}
+		}
+		return $back;
+	}
+	
 }

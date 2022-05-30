@@ -38,21 +38,21 @@ final class GDT_PageNum extends GDT_UInt
     #############
     ### Query ###
     #############
-    public function filterQuery(Query $query, $rq=null) : self
-    {
-    	$ipp = $this->table->getPageMenu()->ipp;
-    	$page = $this->table->getPageMenu()->getPage();
-    	$query->limit($ipp, ($page - 1) * $ipp);
-//     	$filter = $this->filterVar($rq);
-//     	if ($filter != '')
-//     	{
-//     		if ($condition = $this->searchQuery($query, $filter, true))
-//     		{
-//     			$this->filterQueryCondition($query, $condition);
-//     		}
-//     	}
-    	return $this;
-    }
+//     public function filterQuery(Query $query, $rq=null) : self
+//     {
+//     	$ipp = $this->table->getPageMenu()->ipp;
+//     	$page = $this->table->getPageMenu()->getPage();
+//     	$query->limit($ipp, ($page - 1) * $ipp);
+// //     	$filter = $this->filterVar($rq);
+// //     	if ($filter != '')
+// //     	{
+// //     		if ($condition = $this->searchQuery($query, $filter, true))
+// //     		{
+// //     			$this->filterQueryCondition($query, $condition);
+// //     		}
+// //     	}
+//     	return $this;
+//     }
     
 
     ###############

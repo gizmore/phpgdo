@@ -16,11 +16,21 @@ final class GDT_IPP extends GDT_UInt
 	#############
 	### Field ###
 	#############
+	public function getDefaultName() : string
+	{
+		return 'ipp';
+	}
+	
     public function defaultLabel() : self
     {
     	return $this->label('ipp');
     }
 
+    public function getDefaultIPP() : int
+    {
+    	return Module_Table::instance()->cfgItemsPerPage();
+    }
+    
     ################
     ### Features ###
     ################
@@ -36,7 +46,7 @@ final class GDT_IPP extends GDT_UInt
     protected function __construct()
     {
         parent::__construct();
-        $this->initial(Module_Table::instance()->cfgItemsPerPage());
+        $this->initial($this->getDefaultIPP());
         $this->min = 1;
         $this->max = 1000;
         $this->bytes = 2;

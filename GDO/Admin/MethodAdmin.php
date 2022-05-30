@@ -34,8 +34,8 @@ trait MethodAdmin
 	{
 		GDT_Page::instance()->topResponse()->addField(
 			GDT_Bar::make()->addFields(
-				GDT_Link::make()->href('Admin', 'Permissions')->label('permissions'),
-				GDT_Link::make()->href('Admin', 'PermissionAdd')->label('permissions'),
+				GDT_Link::make()->href(href('Admin', 'Permissions'))->label('permissions'),
+				GDT_Link::make()->href(href('Admin', 'PermissionAdd'))->label('add_permissions'),
 				));
 	}
 

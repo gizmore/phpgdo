@@ -33,7 +33,7 @@ class GDT_AntiCSRF extends GDT_Hidden
 	###########
 	public function getGDOData() : ?array
 	{
-	    # Override GDT_Hidden with null data.
+	    return null;
 	}
 	
 	##############

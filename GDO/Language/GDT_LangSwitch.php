@@ -15,7 +15,7 @@ use GDO\Util\Strings;
  */
 final class GDT_LangSwitch extends GDT_Select
 {
-    public function defaultName() { return '_lang'; }
+    public function getDefaultName() : string { return '_lang'; }
     
     protected function __construct()
     {

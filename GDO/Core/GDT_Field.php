@@ -119,4 +119,12 @@ abstract class GDT_Field extends GDT
 	public function isFilterable() : bool { return true; }
 	public function isSerializable() : bool { return true; }
 	
+// 	##############
+// 	### Render ###
+// 	##############
+// 	public function renderOrder() : string
+// 	{
+// 		return GDT_Template::php('Core', '_order_header.php', ['field' => $this]);
+// 	}
+
 }

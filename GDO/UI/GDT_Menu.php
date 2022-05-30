@@ -19,7 +19,7 @@ final class GDT_Menu extends GDT_Bar
 	use WithInput;
 	use WithFields;
 	
-	public function defaultName() { return 'menu'; }
+	public function getDefaultName() : string { return 'menu'; }
 	
 // 	public function renderCell() : string
 // 	{

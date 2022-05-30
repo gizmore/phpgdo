@@ -25,9 +25,10 @@ $result = $field->getResult();
 	  <?php if (!$gdt->isHidden()) : ?>
 		<th class="<?=$gdt->htmlClass()?>">
 		  <label>
-			<?= $gdt->renderHeader(); ?>
-			<?php if ($field->ordered) : ?>
-			<?= $gdt->renderOrder(); ?>
+			<?php if ($field->isOrderable()) : ?>
+			<?= $gdt->renderOrder($field); ?>
+			<?php else : ?>
+			<?=$gdt->renderLabel()?>
 			<?php endif; ?>
 		  </label>
 		  <?php if ($field->filtered) : ?>

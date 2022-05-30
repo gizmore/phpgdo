@@ -23,28 +23,43 @@ class GDT_PageMenu extends GDT
 	use WithHREF;
 	use WithLabel;
 	
-	public $orderable = false;
-	public $searchable = false;
-	public $filterable = false;
-	
-	public $numItems = 0;
-	public function items($numItems)
+	public int $numItems = 0;
+	public function numItems(int $numItems) : self
 	{
 		$this->numItems = $numItems;
 		return $this;
 	}
 	
-	public $ipp = 10;
-	public function ipp($ipp)
+	public GDT_IPP $ipp;
+	public function getIPPField() : GDT_IPP
 	{
-	    $this->ipp = $ipp;
+		if (!isset($this->ipp))
+		{
+			$this->ipp = GDT_IPP::make();
+		}
+		return $this->ipp;
+	}
+	
+	public function ipp(int $ipp) : self
+	{
 	    return $this;
 	}
 	
-	public $page = 1;
-	public function page($page)
+	
+	public GDT_PageNum $pageNum;
+	
+	public function getPageNumField() : GDT_PageNum
 	{
-		$this->page = $page;
+		if (!isset($this->pageNum))
+		{
+			$this->pageNum = GDT_PageNum::make();
+		}
+		return $this->pageNum;
+	}
+	
+	public function page(int $page) : self
+	{
+		$this->getPageNumField()->value($page);
 		return $this;
 	}
 	
@@ -79,7 +94,7 @@ class GDT_PageMenu extends GDT
 	
 	public function getPageCount()
 	{
-		return self::getPageCountS($this->numItems, $this->ipp);
+		return self::getPageCountS($this->numItems, $this->getIPPField()->getVar());
 	}
 	
 	public static function getPageCountS($numItems, $ipp)
@@ -89,7 +104,7 @@ class GDT_PageMenu extends GDT
 	
 	public function filterQuery(Query $query, $rq=null) : self
 	{
-		$query->limit($this->ipp, $this->getFrom());
+		$query->limit($this->ipp->getVar(), $this->getFrom());
 		return $this;
 	}
 	
@@ -98,12 +113,12 @@ class GDT_PageMenu extends GDT
 	 */
 	public function getPage() : int
 	{
-		return Math::clampInt($this->page, 1, $this->getPageCount());
+		return Math::clampInt($this->pageNum->getVar(), 1, $this->getPageCount());
 	}
 	
 	public function getFrom()
 	{
-		return self::getFromS($this->getPage(), $this->ipp);
+		return self::getFromS($this->getPage(), $this->ipp->getVar());
 	}
 	
 	public static function getFromS($page, $ipp)
@@ -209,16 +224,19 @@ class GDT_PageMenu extends GDT
 	
 	private function replaceHREF($page)
 	{
-	    $o = $this->headers->name;
-	    $this->href = preg_replace("#[&?]{$o}\\[{$this->name}\\]=\\d+#", '', $this->href);
-	    if (!strpos($this->href, '?'))
-	    {
-	        return $this->href . '?'.$o.'[' . $this->name . ']='. $page;
-	    }
-	    else
-	    {
-	        return $this->href . '&'.$o.'[' . $this->name . ']='. $page;
-	    }
+		$name = $this->getPageNumField()->name;
+		if (strpos($this->href, $name) === false)
+		{
+			$this->href .= strpos($this->href, '?') ? '&' : '?';
+			$this->href .= $name;
+			$this->href .= '=';
+			$this->href .= $page;
+		}
+		else
+		{
+			$this->href = preg_replace("/{$name}=\d+/iD", "{$name}={$page}", $this->href);
+		}
+		return $this->href;
 	}
 	
 	/**

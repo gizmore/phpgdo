@@ -40,7 +40,7 @@ class PermissionAdd extends MethodForm
 
 	public function formValidated(GDT_Form $form)
 	{
-		$perm = GDO_Permission::blank($form->getFormData())->insert();
+		$perm = GDO_Permission::blank($form->getFormVars())->insert();
 		return $this->message('msg_perm_added', [$perm->renderName()]);
 	}
 }

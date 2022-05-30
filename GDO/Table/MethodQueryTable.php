@@ -2,7 +2,6 @@
 namespace GDO\Table;
 
 use GDO\DB\Query;
-use GDO\Core\GDT_Hook;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_DeleteButton;
 use GDO\UI\GDT_EditButton;
@@ -89,7 +88,7 @@ abstract class MethodQueryTable extends MethodTable
 	protected function calculateTable(GDT_Table $table)
 	{
 	    $query = $this->getQuery();
-	    GDT_Hook::callHook("MethodQueryTable_{$this->getModuleName()}_{$this->getMethodName()}", $query);
+// 	    GDT_Hook::callHook("MethodQueryTable_{$this->getModuleName()}_{$this->getMethodName()}", $query);
 	    $table->query($query);
         if ($this->isPaginated())
 	    {

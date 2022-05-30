@@ -235,7 +235,7 @@ trait WithFields
 		$this->withFields(function(GDT $gdt) use (&$json) {
 			if ($gdt->hasName())
 			{
-				$json[$gdt->getName()] = $gdt->render();
+				$json[$gdt->getName()] = $gdt->renderJSON();
 			}
 		});
 		return $json;

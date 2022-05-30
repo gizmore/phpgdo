@@ -6,10 +6,10 @@ use GDO\Form\MethodForm;
 use GDO\Date\GDT_Timezone;
 use GDO\Form\GDT_Submit;
 use GDO\User\GDO_User;
-use GDO\Core\Website;
 use GDO\Core\GDT_Response;
 use GDO\Session\GDO_Session;
 use GDO\Date\GDO_Timezone;
+use GDO\UI\GDT_Redirect;
 
 /**
  * Change a user's timezone.
@@ -34,10 +34,16 @@ final class Timezone extends MethodForm
         $form->actions()->addField(
             GDT_Submit::make()->label('btn_set'));
     }
+    
+    public function getTimezone() : GDO_Timezone
+    {
+    	return $this->gdoParameterValue('timezone');
+    }
 
     public function formValidated(GDT_Form $form)
     {
-        $this->setTimezone($form->getFormValue('timezone'), false);
+    	$tz = $this->getTimezone();
+        $this->setTimezone($this->getTimezone(), false);
     }
     
     public function setTimezone(GDO_Timezone $timezone, $redirect=true)
@@ -65,14 +71,14 @@ final class Timezone extends MethodForm
             }
             if ($redirect)
             {
-                Website::redirectMessage('msg_timezone_changed', [$new]);
+            	return GDT_Redirect::make()->redirectMessage('msg_timezone_changed', [$new]);
             }
         }
         else
         {
             if ($redirect)
             {
-                Website::redirectError('err_nothing_happened');
+            	return GDT_Redirect::make()->redirectMessage('err_nothing_happened');
             }
         }
         

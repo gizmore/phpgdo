@@ -428,9 +428,9 @@ final class Query
 			($gdt instanceof GDT_ObjectSelect) )
 		{
 			$table = $gdt->table;
-			$ftbl = $tableAlias ? $tableAlias : $table->gdoTableIdentifier();
 			$atbl = $this->table->gdoTableIdentifier();
-			$tableAlias = $tableAlias ? " AS {$tableAlias}" : '';
+			$ftbl = $tableAlias ? $tableAlias : ($table->gdoTableIdentifier().'_t');
+			$tableAlias = " AS {$ftbl}";
 			
 			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->identifier()}=$atbl.{$gdt->identifier()}";
 		}

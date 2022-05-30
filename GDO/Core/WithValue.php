@@ -54,6 +54,7 @@ trait WithValue
 	public function input(string $input = null) : self
 	{
 		$this->input = $input;
+		$this->valueConverted = false;
 		return $this;
 	}
 

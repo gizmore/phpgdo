@@ -20,7 +20,7 @@ class GDT_SearchField extends GDT_String
 	
 	public bool $hidden = true;
     
-    public function defaultName() { return 'search'; }
+    public function getDefaultName() : string { return 'search'; }
 	public function defaultLabel() : self { return $this->label('search'); }
 	public function getInputType() : string { return 'search'; }
 	

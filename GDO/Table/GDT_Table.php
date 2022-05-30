@@ -1,15 +1,12 @@
 <?php
 namespace GDO\Table;
 
-use GDO\Util\Classes;
-use GDO\Util\Common;
 use GDO\DB\ArrayResult;
 use GDO\Core\GDO;
 use GDO\DB\Query;
 use GDO\DB\Result;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
-use GDO\UI\GDT_SearchField;
 use GDO\UI\WithHREF;
 use GDO\UI\WithTitle;
 use GDO\Form\WithActions;
@@ -64,7 +61,7 @@ class GDT_Table extends GDT
 	use WithFields;
 	use WithCrud;
 
-	public function defaultName()
+	public function getDefaultName() : string
 	{
 		return 'table';
 	}
@@ -77,12 +74,6 @@ class GDT_Table extends GDT
 		parent::__construct();
 		$this->action = @urldecode(@$_SERVER['REQUEST_URI']);
 	}
-
-// 	public function gdo(GDO $gdo = null)
-// 	{
-// 		$this->gdtTable = $gdo->table();
-// 		return parent::gdo($gdo);
-// 	}
 
 	# ####################
 	# ## Header fields ###
@@ -103,17 +94,6 @@ class GDT_Table extends GDT
 	{
 		return $this->headers->getField($name);
 	}
-
-	# ###############
-	# ## Endpoint ###
-	# ###############
-// 	public $action;
-
-// 	public function action($action = null)
-// 	{
-// 		$this->action = $action;
-// 		return $this;
-// 	}
 
 	# #############
 	# ## Footer ###
@@ -146,35 +126,6 @@ class GDT_Table extends GDT
 	{
 		$this->fetchInto = $fetchInto;
 		return $this;
-	}
-
-	# ######################
-	# ## Default headers ###
-	# ######################
-	public function setupHeaders(bool $searched = false, bool $paginated = false)
-	{
-		$this->makeHeaders();
-		
-		# @TODO what about ordered and sorted and filtered?
-		if ($searched)
-		{
-			$this->addHeader(GDT_SearchField::make('search'));
-		}
-
-		if ($paginated)
-		{
-			$this->addHeader(GDT_PageNum::make('page')->table($this));
-			$gdtIPP = GDT_IPP::make('ipp')->initial($this->getDefaultIPP());
-			$this->addHeader($gdtIPP);
-// 			$o = $this->headers->name;
-// 			$ipp = $gdtIPP->getRequestVar($o, $gdtIPP->var);
-			$this->paginated(true, null, 10); #$this->gdtIPP->get);
-		}
-	}
-
-	public function getDefaultIPP() : int
-	{
-		return Module_Table::instance()->cfgItemsPerPage();
 	}
 
 	# #####################
@@ -215,14 +166,27 @@ class GDT_Table extends GDT
 	# ###############
 	# ## Ordering ###
 	# ###############
-	public $ordered;
-
-	public $orderDefault;
-
-	public function ordered($ordered = true, $defaultOrder = null)
+	public GDT_Order $order;
+	
+	public function getOrderField() : GDT_Order
 	{
-		$this->ordered = $ordered;
-		$this->orderDefault = $defaultOrder;
+		if (!isset($this->order))
+		{
+			$this->order = GDT_Order::make();
+		}
+		return $this->order;
+	}
+
+	public function ordered(bool $ordered = true, string $defaultOrder = null)
+	{
+		if ($ordered)
+		{
+			$this->order = $this->getOrderField()->initial($defaultOrder);
+		}
+		else 
+		{
+			unset($this->order);
+		}
 		return $this;
 	}
 
@@ -230,8 +194,8 @@ class GDT_Table extends GDT
 	# ## Pagination ###
 	# #################
 	/** @var $pagemnu GDT_PageMenu **/
-	public $pagemenu;
-
+	public GDT_PageMenu $pagemenu;
+	
 	public function paginateDefault($href = null)
 	{
 		return $this->paginated(true, $href,
@@ -240,11 +204,11 @@ class GDT_Table extends GDT
 
 	public function paginated($paginated = true, $href = null, $ipp = 0)
 	{
-		$ipp = $ipp <= 1 ? Module_Table::instance()->cfgItemsPerPage() : (int) $ipp;
+		$ipp = $ipp < 1 ? Module_Table::instance()->cfgItemsPerPage() : (int) $ipp;
 		if ($paginated)
 		{
 			$href = $href === null ? $this->action : $href;
-			$this->pagemenu = GDT_PageMenu::make('page');
+			$this->pagemenu = $this->getPageMenu();
 			$this->pagemenu->headers($this->headers);
 			$this->pagemenu->href($href);
 			$this->pagemenu->ipp($ipp);
@@ -259,11 +223,11 @@ class GDT_Table extends GDT
 	# ###################
 	# ## ItemsPerPage ###
 	# ###################
-	private $ipp = 10;
-
-	public function ipp($ipp)
+	public GDT_IPP $ipp;
+	
+	public function ipp(int $ipp) : self
 	{
-		$this->ipp = $ipp;
+		$this->getPageMenu()->getIPPField()->value($ipp);
 		return $this;
 	}
 
@@ -349,65 +313,66 @@ class GDT_Table extends GDT
 	{
 // 		$headers = $this->headers;
 // 		$o = $headers ? $headers->name : 'o';
-		$o = 'o';
+// 		$o = 'o';
 		
-		$hasCustomOrder = false;
+// 		$hasCustomOrder = false;
 
-		if ($this->ordered)
+		if ($this->order)
 		{
-			# Convert single to multiple fake
-			if (isset($_REQUEST[$o]['order_by']))
-			{
-				unset($_REQUEST[$o]['o']);
-				$by = $_REQUEST[$o]['order_by'];
-				$_REQUEST[$o]['o'][$by] = $_REQUEST[$o]['order_dir'] === 'ASC';
-				// unset($_REQUEST[$o]['order_by']);
-				// unset($_REQUEST[$o]['order_dir']);
-			}
+// 			# Convert single to multiple fake
+// 			if (isset($_REQUEST[$o]['order_by']))
+// 			{
+// 				unset($_REQUEST[$o]['o']);
+// 				$by = $_REQUEST[$o]['order_by'];
+// 				$_REQUEST[$o]['o'][$by] = $_REQUEST[$o]['order_dir'] === 'ASC';
+// 				// unset($_REQUEST[$o]['order_by']);
+// 				// unset($_REQUEST[$o]['order_dir']);
+// 			}
+			$this->order->filterQuery($query);
 
-			if ($this->headers)
-			{
-				if ($cols = Common::getRequestArray($o))
-				{
-					if ($cols = @$cols['o'])
-					{
-						$o = '1';
-						foreach ($cols as $name => $asc)
-						{
-							if ($field = $this->headers->getField($name))
-							{
-								if ($field->orderable)
-								{
-									$asc = $asc ? ' ASC' : ' DESC';
-// 									$query->order($field->orderFieldName() .$asc);
+// 			if ($this->headers)
+// 			{
+// 				if ($cols = Common::getRequestArray($o))
+// 				{
+// 					if ($cols = @$cols['o'])
+// 					{
+// 						$o = '1';
+// 						foreach ($cols as $name => $asc)
+// 						{
+// 							if ($field = $this->headers->getField($name))
+// 							{
+// 								if ($field->orderable)
+// 								{
+// 									$asc = $asc ? ' ASC' : ' DESC';
+// // 									$query->order($field->orderFieldName() .$asc);
 									
-									if ((Classes::class_uses_trait($field,
-									'GDO\\DB\\WithObject')) &&
-									($field->orderFieldName() !== $field->name))
-									{
-// 										$query->joinObject($field->name, 'JOIN');
-										$query->order($field->name . '_t.'  . $field->orderFieldName() .$asc);
-									}
-									else
-									{
-										$query->order($field->orderFieldName() . $asc);
-									}
-									$hasCustomOrder = true;
-								}
-							}
-						}
-					}
-				}
-			}
+// 									if ((Classes::class_uses_trait($field,
+// 									'GDO\\DB\\WithObject')) &&
+// 									($field->orderFieldName() !== $field->name))
+// 									{
+// // 										$query->joinObject($field->name, 'JOIN');
+// 										$query->order($field->name . '_t.'  . $field->orderFieldName() .$asc);
+// 									}
+// 									else
+// 									{
+// 										$query->order($field->orderFieldName() . $asc);
+// 									}
+// 									$hasCustomOrder = true;
+// 								}
+// 							}
+// 						}
+// 					}
+// 				}
+// 			}
 		}
 
-		if ( !$hasCustomOrder)
-		{
-			if ($this->orderDefault)
-			{
-				$query->order($this->orderDefault);
-			}
-		}
+// 		if ( !$hasCustomOrder)
+// 		{
+// 			if ($this->orderDefault)
+// 			{
+// 				$query->order($this->orderDefault);
+// 			}
+// 		}
 
 		return $query;
 	}
@@ -496,14 +461,15 @@ class GDT_Table extends GDT
 	 */
 	public function getPageMenu()
 	{
-		if ($this->pagemenu)
+		if (!isset($this->pagemenu))
 		{
-			if ($this->query)
+			$this->pagemenu = GDT_PageMenu::make();
+		}
+		if ($this->query)
+		{
+			if ($this->countItems === null)
 			{
-				if ($this->countItems === null)
-				{
-					$this->pagemenu->items($this->countItems());
-				}
+				$this->pagemenu->numItems($this->countItems());
 			}
 		}
 		return $this->pagemenu;

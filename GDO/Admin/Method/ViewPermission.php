@@ -64,7 +64,9 @@ class ViewPermission extends MethodQueryTable
 	public function getQuery()
 	{
 		return $this->gdoTable()->
-			select('perm_user_id_t.*, gdo_userpermission.*')->
+			select('perm_user_id_t.*, perm_perm_id_t.*')->
+			joinObject('perm_user_id')->
+			joinObject('perm_perm_id')->
 			where('perm_perm_id='.$this->permission->getID())->
 			uncached();
 	}

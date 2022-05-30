@@ -19,9 +19,10 @@ use GDO\UI\WithLabel;
  */
 class GDT_Virtual extends GDT
 {
+	use WithGDO;
 	use WithName;
 	use WithLabel;
-	use WithValue;
+// 	use WithValue;
 	
     public function isVirtual() : bool { return true; }
     public function isSerializable() : bool { return true; }
@@ -65,7 +66,7 @@ class GDT_Virtual extends GDT
      */
     private function proxy()
     {
-        return $this->gdtType->gdo($this->gdo)->label($this->label, $this->labelArgs);
+        return $this->gdtType->gdo($this->gdo)->label($this->labelKey, $this->labelArgs);
     }
     
     public function gdtType(GDT $gdt) : self

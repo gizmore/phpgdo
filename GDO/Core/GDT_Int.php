@@ -222,6 +222,11 @@ class GDT_Int extends GDT_DBField
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
 	
+// 	public function renderOrder() : string
+// 	{
+// 		return GDT_Template::php('Core', '_order_header.php', ['field' => $this]);
+// 	}
+	
 	##############
 	### Filter ###
 	##############

@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDO_Error;
+use GDO\Table\GDT_Table;
 
 /**
  * This GDT does something for/with a proxy GDT.
@@ -28,7 +29,7 @@ trait WithProxy
 		return $this;
 	}
 	
-	public function defaultName() : string { return 'proxy'; }
+	public function getDefaultName() : string { return 'proxy'; }
 
 	public static function makeAs(string $name=null, GDT $proxy) : self
 	{
@@ -62,7 +63,7 @@ trait WithProxy
 	public function renderCell() : string { return $this->proxy->renderHTML(); }
 	public function renderHeader() : string { return $this->proxy->renderHeader(); }
 	public function renderFilter($f) : string { return $this->proxy->renderFilter($f); }
-	public function renderOrder() : string { return $this->proxy->renderOrder(); }
+	public function renderOrder(GDT_Table $table) : string { return $this->proxy->renderOrder($table); }
 
 	public function getName() : ?string
 	{
