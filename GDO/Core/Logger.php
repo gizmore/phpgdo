@@ -126,7 +126,14 @@ final class Logger
 	########################
 	### Default logfiles ###
 	########################
-	public static function logCron($message) { self::rawLog('cron', $message, 0); echo $message.PHP_EOL; }
+	public static function logCron($message)
+	{
+		self::rawLog('cron', $message, 0);
+		if (!Application::$INSTANCE->isUnitTests())
+		{
+			echo $message.PHP_EOL;
+		}
+	}
 	public static function logWebsocket($message) { self::rawLog('websocket', $message, 0); echo $message.PHP_EOL; }
 	public static function logDebug($message) { self::rawLog('debug', $message, self::DEBUG); }
 	public static function logError($message) { self::log('error', $message, self::GDO_ERROR); }

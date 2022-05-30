@@ -28,7 +28,11 @@ class GDT_Object extends GDT_UInt
 		{
 			return $obj->renderCell();
 		}
-		return $this->getVar();
+		if ($var = $this->getVar())
+		{
+			return $var;
+		}
+		return '';
 	}
 	
 	public function renderChoice() : string

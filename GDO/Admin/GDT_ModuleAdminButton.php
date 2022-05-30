@@ -20,7 +20,7 @@ class GDT_ModuleAdminButton extends GDT_Button
 	
 	public function getConfigModule() : ?GDO_Module
 	{
-		return @$this->gdo;
+		return isset($this->gdo) ? $this->gdo : null;
 	}
 	
 	public function renderHTML() : string

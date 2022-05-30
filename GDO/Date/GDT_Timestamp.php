@@ -211,7 +211,12 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string { return $this->renderCellSpan(Time::displayDateTime(Time::parseDateTimeDB($this->getVar()), $this->format)); }
+	public function renderCell() : string
+	{
+		return Time::displayDateTime(
+			Time::parseDateTimeDB($this->getVar()),
+			$this->format);
+	}
 	public function renderForm() : string { return GDT_Template::php('Date', 'form/datetime.php', ['field'=>$this]); }
 	public function renderAge() : string { return Time::displayAge($this->getVar()); }
 	public function renderCLI() : string { return $this->renderLabel() . ': ' . $this->getVar(); }

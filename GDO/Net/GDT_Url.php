@@ -6,6 +6,7 @@ use GDO\Util\Arrays;
 use GDO\Core\GDT_Template;
 use GDO\UI\WithTitle;
 use GDO\UI\GDT_Link;
+use GDO\Core\GDT;
 
 /**
  * URL field.
@@ -41,6 +42,12 @@ class GDT_Url extends GDT_String
 	public static function protocol() { return isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== 'off') ? 'https' : 'http'; }
 	public static function absolute($url) { return sprintf('%s://%s%s', self::protocol(), self::hostWithPort(), $url); }
 	public static function relative($url) { return GDO_WEB_ROOT . $url; }
+
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->icon('url');
+	}
 	
 	public function defaultLabel() : self { return $this->label('url'); }
 	
@@ -49,11 +56,8 @@ class GDT_Url extends GDT_String
 	public bool $allowInternal = false;
 	public bool $allowExternal = false;
 	public array $schemes = ['http', 'https'];
-	
 	public int $min = 0;
 	public int $max = 768; # Max length for a unique constraint on older mysql systems
-	
-	public $icon = 'url';
 	
 	public function toValue(string $var = null)
 	{
@@ -104,11 +108,11 @@ class GDT_Url extends GDT_String
 	    return $this;
 	}
 	
-	public function noFollow($noFollow=true)
-	{
-	    $this->noFollow = $noFollow;
-	    return $this;
-	}
+// 	public function noFollow() : self
+// 	{
+// 	    $this->noFollow = $noFollow;
+// 	    return $this;
+// 	}
 
 	################
 	### Validate ###

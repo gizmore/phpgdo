@@ -67,18 +67,18 @@ final class GDT_Hook extends GDT
 	##############
 	### Render ###
 	##############
-	public function render() : string
-	{
-		$response = GDT_Response::newWith();
-		$args = $this->eventArgs ? array_merge([$response], $this->eventArgs) : [$response];
-		$res2 = self::call($this->event, $this->ipc, $args);
-		return $response->addField($res2);
-	}
+// 	public function render() : string
+// 	{
+// 		$response = GDT_Response::newWith();
+// 		$args = $this->eventArgs ? array_merge([$response], $this->eventArgs) : [$response];
+// 		$res2 = self::call($this->event, $this->ipc, $args);
+// 		return $response->addField($res2);
+// 	}
 	
-	public function renderCell() : string
-	{
-	    return $this->render()->renderHTML();
-	}
+// 	public function renderCell() : string
+// 	{
+// 	    return $this->render()->renderHTML();
+// 	}
 	
 	##############
 	### Engine ###

@@ -133,16 +133,19 @@ final class Trans
 	
 	/**
 	 * Translate into current ISO.
+	 * @return string|string[]
 	 */
-	public static function t(string $key, array $args=null) : string
+	public static function t(string $key, array $args=null)
 	{
 		return self::tiso(self::$ISO, $key, $args);
 	}
 	
 	/**
 	 * Translate key into a language.
+	 * 
+	 * @return string|string[]
 	 */
-	public static function tiso(string $iso, string $key, array $args=null) : string
+	public static function tiso(string $iso, string $key, array $args=null)
 	{
 		$cache = self::load($iso);
 

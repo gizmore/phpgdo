@@ -54,7 +54,7 @@ abstract class MethodCronjob extends Method
 	### Log ###
 	###########
 	public function start() { Logger::logCron('[START] '.get_called_class()); }
-	public function end() { Logger::logCron('[DONE] '.get_called_class().PHP_EOL); }
+	public function end() { Logger::logCron('[DONE] '.get_called_class()); }
 
 	public function log($msg) { Logger::logCron('[+] '.$msg); }
 	public function logError($msg) { Logger::logCron('[ERROR] '.$msg); return false; }

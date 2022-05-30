@@ -18,8 +18,8 @@ class GDT_JSON extends GDT_Text
 
 	public function getDefaultName() : string { return 'data'; }
     
-	public static function encode($data) : string { return json_encode($data, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); }
-	public static function decode(string $string) : array { return json_decode($string, true); }
+	public static function encode($data) : ?string { return @json_encode($data, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); }
+	public static function decode(string $string) : ?array { return @json_decode($string, true); }
 	
 	public function toVar($value) : ?string { return $value === null ? null : self::encode($value); }
 	public function toValue(string $var = null) { return $var === null ? null : self::decode($var); }

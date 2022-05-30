@@ -52,7 +52,7 @@ class GDT_Duration extends GDT_String
 	
 	public function renderCell() : string
 	{
-		return $this->renderCellSpan($this->getVar());
+		return html($this->getVar());
 	}
 	
 	public function renderForm() : string

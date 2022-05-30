@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
 use GDO\Net\URL;
+use GDO\Net\GDT_Url;
 
 /**
  * An anchor for menus or paragraphs.
@@ -12,11 +13,12 @@ use GDO\Net\URL;
  * @version 7.0.0
  * @since 6.0.0
  */
-class GDT_Link extends GDT_String
+class GDT_Link extends GDT_Url
 {
 	use WithIcon;
-	use WithLabel;
 	use WithHREF;
+	use WithLabel;
+	use WithTarget;
 	use WithPHPJQuery;
 	use WithAnchorRelation;
 
@@ -74,16 +76,29 @@ class GDT_Link extends GDT_String
 	##############
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderHTML() : string { return GDT_Template::php('UI', 'link_html.php', ['link' => $this]); }
-	public function renderJSON() { return $this->renderLabel() . ': ' . " ( {$this->href} )"; }
+	public function renderJSON()
+	{
+		$out = '';
+		if ($l = $this->renderLabel())
+		{
+			$out .= $l;
+			$out .= ': ';
+		}
+		if (isset($this->href))
+		{
+			$out .= "( {$this->href} )";
+		}
+		return $out;
+	}
 	public function renderFilter($f) : string { return GDT_String::make($this->name)->renderFilter($f); }
 	
-	###################
-	### Link target ###
-	###################
-	public $target;
-	public function target($target) { $this->target = $target; return $this; }
-	public function targetBlank() { return $this->target('_blank'); }
-	public function htmlTarget() { return $this->target === null ? '' : " target=\"{$this->target}\""; }
+// 	###################
+// 	### Link target ###
+// 	###################
+// 	public $target;
+// 	public function target($target) { $this->target = $target; return $this; }
+// 	public function targetBlank() { return $this->target('_blank'); }
+// 	public function htmlTarget() { return $this->target === null ? '' : " target=\"{$this->target}\""; }
 
 	###########
 	### URL ###

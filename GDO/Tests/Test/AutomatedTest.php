@@ -280,7 +280,7 @@ final class AutomatedTest extends TestCase
 			assertLessThan(400,
 				Application::$RESPONSE_CODE,
 				"Test if trivial method {$this->mome($method)} has a success error code.");
-			assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
+			assertInstanceOf(GDT::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
 			assertTrue($this->renderResult($result), "Test if method response renders all outputs without crash.");
 			$this->automatedPassed++;
 			$this->message('%4d.) %s: %s (%s)', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method), implode(',', $plugVars));
@@ -296,7 +296,7 @@ final class AutomatedTest extends TestCase
 		}
 	}
 	
-	private function renderResult(GDT_Response $response) : bool
+	private function renderResult(GDT $response) : bool
 	{
 		$response->renderMode(GDT::RENDER_BINARY);
 		$response->renderMode(GDT::RENDER_CLI);

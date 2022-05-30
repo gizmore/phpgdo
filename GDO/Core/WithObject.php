@@ -181,6 +181,10 @@ trait WithObject
 			    return $gdo->renderName();
 			}
 		}
+		else
+		{
+			return '';
+		}
 	}
 	
 	public function getGDOData() : ?array
@@ -238,7 +242,7 @@ trait WithObject
 	    $first = $this->table->select()->first()->exec()->fetchObject();
 	    if (!$first)
 	    {
-	        return null;
+	        return '';
 	    }
 	    $first = $first->getID();
         if (@$this->multiple)

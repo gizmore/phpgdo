@@ -126,6 +126,11 @@ class GDT_Select extends GDT_ComboBox
 		return $this->choices;
 	}
 	
+	public function initChoices()
+	{
+		return $this->choices($this->getChoices());
+	}
+	
 	protected function toClosestChoiceValue($var)
 	{
 	    $candidatesZero = [];

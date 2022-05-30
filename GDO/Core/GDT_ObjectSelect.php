@@ -17,7 +17,7 @@ class GDT_ObjectSelect extends GDT_Select
 	
 	public function getChoices()
 	{
-		return $this->table ? $this->table->allCached() : [];
+		return isset($this->table) ? $this->table->allCached() : [];
 	}
 	
 	public function initChoices()
@@ -83,7 +83,7 @@ class GDT_ObjectSelect extends GDT_Select
 			}
 			return $obj->renderName();
 		}
-		return $obj;
+		return '';
 	}
 	
 	public function renderJSON()

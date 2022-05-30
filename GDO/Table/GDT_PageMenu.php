@@ -4,7 +4,6 @@ namespace GDO\Table;
 use GDO\DB\Query;
 use GDO\Core\GDT;
 use GDO\Util\Math;
-use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\UI\WithHREF;
 use GDO\UI\WithLabel;
@@ -113,7 +112,10 @@ class GDT_PageMenu extends GDT
 	 */
 	public function getPage() : int
 	{
-		return Math::clampInt($this->pageNum->getVar(), 1, $this->getPageCount());
+		$page = (int)$this->getPageNumField()->getValue();
+		$min = 1;
+		$max = $this->getPageCount();
+		return Math::clampInt($page, $min, $max);
 	}
 	
 	public function getFrom()
@@ -145,14 +147,20 @@ class GDT_PageMenu extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderCLI() : string
 	{
-		switch (Application::$INSTANCE->getFormat())
-		{
-		    case 'cli': return t('pagemenu_cli', [$this->page, $this->getPageCount()]);
-			case 'json': return $this->renderJSON();
-			case 'html': default: return $this->renderHTML();
-		}
+		return t('pagemenu_cli', [$this->getPage(), $this->getPageCount()]);
+	}
+	
+	public function renderJSON()
+	{
+		return [
+			'href' => isset($this->href) ? $this->href : null,
+			'items' => isset($this->numItems) ? $this->numItems : null,
+			'ipp' => isset($this->ipp) ? $this->ipp : null,
+			'page' => isset($this->pageNum) ? $this->getPage() : null,
+			'pages' => (int)$this->getPageCount(),
+		];
 	}
 	
 	public function renderHTML() : string
@@ -166,17 +174,6 @@ class GDT_PageMenu extends GDT
 			return GDT_Template::php('Table', 'cell/pagemenu.php', $tVars);
 		}
 		return '';
-	}
-	
-	public function renderJSON()
-	{
-	    return [
-	        'href' => $this->href,
-	        'items' => (int)$this->numItems,
-	        'ipp' => (int)$this->ipp,
-	        'page' => (int)$this->getPage(),
-	        'pages' => (int)$this->getPageCount(),
-	    ];
 	}
 	
 	public function configJSON() : array

@@ -11,11 +11,18 @@ To enable unit testing do as follows.
 
     cd phpgdo
     composer update
-    # Create a protected/config_test.php
+    # Create a protected/config_test.php - This can be a copy of your config.php, but it should have an own database.
     ./gdo_test.sh # runs all tests
-    ./gdo_test.sh <module> # runs test for a single module and all it's module dependencies
+    ./gdo_test.sh <module> # runs test for a single module and all it's dependencies.
 
 
 ## GDOv7 Automated test case generation
 
-@TODO Tell about the [AutomatedTest](../GDO/Tests/Test/AutomatedTest.php)
+The GDOv7 Type System allows to automatically test a lot of methods and their paramters.
+
+There is a Test that fuzzes all Methods:
+[AutomatedTest](../GDO/Tests/Test/AutomatedTest.php)
+
+There is a Test that fuzzes all rendering of all GDT+GDO:
+[AutomatedRenderingTest](../GDO/Tests/Test/AutomatedRenderingTest.php)
+

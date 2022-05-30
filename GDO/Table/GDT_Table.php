@@ -445,14 +445,12 @@ class GDT_Table extends GDT
 		return $this->countItems;
 	}
 
-	/**
-	 * Query the final result.
-	 *
-	 * @return \GDO\DB\Result
-	 */
-	public function queryResult()
+	public function queryResult() : Result
 	{
-		return $this->query->exec();
+		if (isset($this->query))
+		{
+			return $this->query->exec();
+		}
 	}
 
 	/**
@@ -596,7 +594,7 @@ class GDT_Table extends GDT
 		if ($p && $p->getPageCount() > 1)
 		{
 			$items = [];
-			while ($gdo = $this->result->fetchObject())
+			while ($gdo = $this->getResult()->fetchObject())
 			{
 				$items[] = $gdo->renderCLI();
 			}
@@ -611,7 +609,7 @@ class GDT_Table extends GDT
 		else
 		{
 			$items = [];
-			while ($gdo = $this->result->fetchObject())
+			while ($gdo = $this->getResult()->fetchObject())
 			{
 				$items[] = $gdo->renderCLI();
 			}

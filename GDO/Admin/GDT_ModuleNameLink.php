@@ -14,6 +14,7 @@ final class GDT_ModuleNameLink extends GDT_Link
 {
 	use WithGDO;
 	
+	public function isTestable() : bool { return false; }
 	public function isOrderable() : bool { return true; }
 	public function isSearchable() : bool { return true; }
 	public function isFilterable() : bool { return true; }
