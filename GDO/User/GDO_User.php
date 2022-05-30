@@ -124,7 +124,7 @@ final class GDO_User extends GDO
 			GDT_UserType::make('user_type'),
 			GDT_Username::make('user_name')->unique(),
 			GDT_Username::make('user_guest_name')->unique(),
-			GDT_Language::make('user_language')->notNull()->initial(GDO_LANGUAGE),
+			GDT_Language::make('user_language')->notNull()->initial(GDO_LANGUAGE)->cascadeRestrict(),
 			GDT_Timezone::make('user_timezone')->notNull()->initial('1')->cascadeRestrict(),
 			GDT_Level::make('user_level'),
 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
