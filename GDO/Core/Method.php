@@ -24,7 +24,7 @@ abstract class Method #extends GDT
 	use WithTitle;
 	use WithInput;
 	use WithModule;
-	use WithInstance;
+// 	use WithInstance;
 	use WithParameters;
 	use WithDescription;
 	

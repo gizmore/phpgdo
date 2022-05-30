@@ -156,18 +156,17 @@ function html(string $html=null) : string
 	$app = Application::$INSTANCE;
 	$is_html = $app->isHTML();
 	$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
-	
 	return $is_html ? str_replace(
 	[
-		'&',
+// 		'&',
 		'"',
-		"'",
+// 		"'",
 		'<',
-		'>'
+// 		'>'
 	], [
-		'&amp;',
+// 		'&amp;',
 		'&quot;',
-		'&#39;',
+// 		'&#39;',
 		'&lt;',
 		'&gt;'
 	], $html) : $html;

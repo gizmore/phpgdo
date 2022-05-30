@@ -7,7 +7,6 @@ use GDO\Table\MethodTable;
 use GDO\Util\FileUtil;
 use GDO\Core\GDO_DirectoryIndex;
 use GDO\Net\GDT_Url;
-use GDO\Core\GDT_Path;
 
 /**
  * Render a directory from the servers filesystem.

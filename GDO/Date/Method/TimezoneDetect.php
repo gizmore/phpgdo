@@ -7,6 +7,7 @@ use GDO\Form\GDT_Form;
 use GDO\Date\GDO_Timezone;
 use GDO\Form\MethodForm;
 use GDO\Form\GDT_Submit;
+use GDO\Date\GDT_Timezone;
 
 /**
  * Detect timezone by name.
@@ -23,7 +24,7 @@ final class TimezoneDetect extends MethodForm
 	
 	public function createForm(GDT_Form $form) : void
 	{
-		$tz = GDT_String::make('timezone')->notNull();
+		$tz = GDT_Timezone::make('timezone')->notNull();
 		$form->addFields(
 			$tz,
 			GDT_Validator::make('validTimezone')->validator($form, $tz, [$this, 'validateTimezoneName']),

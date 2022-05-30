@@ -158,7 +158,7 @@ class GDT_ObjectSelect extends GDT_Select
 	
 	public function getValueSingle(string $id)
 	{
-		return $this->table->find($id, false);
+		return $this->selectToValue($id);
 	}
 	
 	public function getValueMulti(string $var)

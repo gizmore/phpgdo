@@ -85,40 +85,47 @@ class GDT_Select extends GDT_ComboBox
 			return $var;
 		}
 	}
-
+	
 	public function toValue(string $var = null)
 	{
-	    if ($var === null)
-	    {
-	        return null;
-	    }
-	    if ($this->multiple)
-	    {
-// 	        if (is_array($var))
-// 	        {
-// 	            return $var;
-// 	        }
-	        return json_decode($var, true);
-	    }
-	    if ($var === $this->emptyVar)
-	    {
-	    	return $this->emptyVar;
-	    }
-	    if (isset($this->choices[$var]))
-	    {
-	        return $this->choices[$var];
-	    }
-	    else
-	    {
-	        $value = $this->toClosestChoiceValue($var);
-	        return $value;
-	    }
+		return $this->selectToValue($var);
 	}
 	
-	private function toClosestChoiceValue($var)
+	public function selectToValue(string $var = null)
+	{
+		if ($var === null)
+		{
+			return null;
+		}
+		if ($this->multiple)
+		{
+			// 	        if (is_array($var))
+			// 	        {
+			// 	            return $var;
+			// 	        }
+			return json_decode($var, true);
+		}
+		if ($var === $this->emptyVar)
+		{
+			return $this->emptyVar;
+		}
+		$this->initChoices();
+		if (isset($this->choices[$var]))
+		{
+			return $this->choices[$var];
+		}
+		else
+		{
+			$value = $this->toClosestChoiceValue($var);
+			return $value;
+		}
+	}
+	
+	protected function toClosestChoiceValue($var)
 	{
 	    $candidatesZero = [];
 	    $candidatesMiddle = [];
+	    $this->initChoices();
 	    foreach ($this->choices as $vaar => $value)
 	    {
 	        $pos = stripos($vaar, $var);

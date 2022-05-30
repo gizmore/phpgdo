@@ -369,7 +369,10 @@ abstract class GDT
 	 */
 	public function configJSON() : array
 	{
-		return get_object_vars($this); # @TODO only show certain values!
+		return [
+			
+		];
+// 		return get_object_vars($this); # @TODO only show certain values!
 	}
 	
 	/**

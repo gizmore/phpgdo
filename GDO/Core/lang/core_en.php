@@ -92,6 +92,7 @@ return [
 	'keywords' => 'Keywords',
 	'description' => 'Description',
 	'title' => 'Title',
+	'cfg_hook_sidebar' => 'Hook in Sidebar?',
 	
 	# Fineprint
 	'privacy' => 'Privacy',

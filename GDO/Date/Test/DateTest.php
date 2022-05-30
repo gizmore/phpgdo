@@ -95,7 +95,7 @@ final class DateTest extends TestCase
     public function testRenderChoiceForTimezones()
     {
     	$html = GDT_Timezone::make()->noCompletion()->renderMode(GDT::RENDER_FORM);
-    	assertStringContainsString('Europe/Berlin', $html, 'Test if GDO_Timezone does renderChoice() correctly.');
+    	assertStringContainsString('UTC', $html, 'Test if GDO_Timezone does renderChoice() correctly.');
     }
     
     public function testHumanDuration()

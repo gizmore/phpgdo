@@ -74,10 +74,12 @@ trait WithObject
 			if ($noCompletion)
 			{
 			 	unset($_REQUEST['nocompletion_'.$this->name]);
-			 	if ($user = $this->findByName($var))
+			 	
+			 	if ( ($gdo = $this->getByName($var)) ||
+			 		 ($gdo = $this->table->getById($var)) )
 			 	{
-			 		$_REQUEST[$this->formVariable()][$this->name] = $user->getID();
-			 		return $user;
+			 		$_REQUEST[$this->formVariable()][$this->name] = $gdo->getID();
+			 		return $gdo;
 			 	}
 			}
 			# @TODO: GDO->findOnlyCachedBy[IDs]()
@@ -86,6 +88,41 @@ trait WithObject
 				return $user;
 			}
 		}
+	}
+
+	/**
+	 * @return GDO[]
+	 */
+	private function getGDOsByName(string $var) : array
+	{
+		if ($gdt = $this->table->gdoColumnOf(GDT_Name::class))
+		{
+			$v = GDO::escapeSearchS($var);
+			$gdos = $this->table->select()->where("{$gdt->getName()} LIKE '%{$v}%'")->exec()->fetchAllObjects();
+			return $gdos;
+		}
+		return [];
+	}
+	
+	private function getByName(string $var) : ?GDO
+	{
+		$gdos = $this->getGDOsByName($var);
+		if (count($gdos) === 0)
+		{
+			return null;
+		}
+		if (count($gdos) === 1)
+		{
+			return $gdos[0];
+		}
+		foreach ($gdos as $gdo)
+		{
+			if ($gdo->getName() === $var)
+			{
+				return $gdo;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -112,6 +149,14 @@ trait WithObject
 	##############
 	### Render ###
 	##############
+	public function htmlValue() : string
+	{
+		if ($value = $this->getValue())
+		{
+			return $value ? sprintf(' value="%s"', html($value->renderChoice())) : '';
+		}
+	}
+	
 	public function displayVar(string $var = null) : string
 	{
 		if (isset($this->multiple) && $this->multiple)
@@ -260,15 +305,15 @@ trait WithObject
 		return $this->notNull();
 	}
 	
-	########################
-	### Custom ON clause ###
-	########################
-	public $fkOn;
-	public function fkOn($on)
-	{
-		$this->fkOn = $on;
-		return $this;
-	}
+// 	########################
+// 	### Custom ON clause ###
+// 	########################
+// 	public $fkOn;
+// 	public function fkOn($on)
+// 	{
+// 		$this->fkOn = $on;
+// 		return $this;
+// 	}
 
 	################
 	### Database ###
@@ -296,7 +341,8 @@ trait WithObject
 		$define = str_replace(' PRIMARY KEY', '', $define);
 		$define = str_replace(' AUTO_INCREMENT', '', $define);
 		$define = preg_replace('#,FOREIGN KEY .* ON UPDATE (?:CASCADE|RESTRICT|SET NULL)#', '', $define);
-		$on = $this->fkOn ? $this->fkOn : $primaryKey->identifier();
+// 		$on = $this->fkOn ? $this->fkOn : $primaryKey->identifier();
+		$on = $primaryKey->identifier();
 		return "$define{$this->gdoNullDefine()}".
 			",FOREIGN KEY ({$this->identifier()}) REFERENCES $tableName($on) ON DELETE {$this->cascade} ON UPDATE {$this->cascade}";
 	}

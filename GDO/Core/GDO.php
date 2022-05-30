@@ -84,16 +84,16 @@ abstract class GDO extends GDT
 	
 	public function __destruct()
 	{
-		self::$GDO_KILLS++;
+		self::$GDO_KILLS--;
 	}
 	
 	private function afterLoaded() : void
 	{
 		self::$GDO_COUNT++;
 		$alive = self::$GDT_COUNT - self::$GDT_KILLS;
-		if ($alive > self::$GDT_PEAKS)
+		if ($alive > self::$GDO_PEAKS)
 		{
-			self::$GDT_PEAKS = $alive;
+			self::$GDO_PEAKS = $alive;
 		}
 		if (GDO_GDT_DEBUG)
 		{

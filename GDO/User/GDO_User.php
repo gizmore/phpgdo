@@ -12,6 +12,7 @@ use GDO\Language\Trans;
 use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_EditedAt;
+use GDO\DB\Query;
 
 /**
  * The holy user class.
@@ -67,6 +68,35 @@ final class GDO_User extends GDO
 			self::$SYSTEM = self::findById('1');
 		}
 		return self::$SYSTEM;
+	}
+	
+	/**
+	 * @return GDO_User[]
+	 */
+	public static function admins() : array
+	{
+		return self::withPermission('admin');
+	}
+	
+	/**
+	 * @return GDO_User[]
+	 */
+	public static function withPermission(string $permission) : array
+	{
+		return self::withPermissionQuery($permission)->exec()->fetchAllObjects();
+	}
+	
+	/**
+	 * Get all users with a permisison.
+	 * @return self[]
+	 */
+	public static function withPermissionQuery(string $permission) : Query
+	{
+		return GDO_UserPermission::table()->
+			select('gdo_user.*')->
+			joinObject('perm_perm_id')->
+			joinObject('perm_user_id')->
+			fetchTable(self::table())->where('perm_name=' . quote($permission));
 	}
 	
 	/**
