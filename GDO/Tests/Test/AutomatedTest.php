@@ -8,7 +8,6 @@ use GDO\Core\GDO;
 use GDO\Core\ModuleLoader;
 use GDO\Install\Installer;
 use GDO\Util\Filewalker;
-use GDO\Form\MethodForm;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertEquals;
@@ -19,6 +18,8 @@ use GDO\Core\Application;
 use function PHPUnit\Framework\assertLessThan;
 use GDO\Core\Logger;
 use GDO\Core\Debug;
+use GDO\Core\Method;
+use GDO\Util\Permutations;
 
 /**
  * Auto coverage test.
@@ -203,15 +204,16 @@ final class AutomatedTest extends TestCase
 	// # Do methods
 	// $this->doAllMethods();
 	// }
+	
+	private $automatedTested = 0;
+	private $automatedPassed = 0;
+	private $automatedFailed = 0;
+	private $automatedCalled = 0; # Num plug variants called
+	private $automatedSkippedAuto = 0;
+	private $automatedSkippedHard = 0;
+	
 	private function doAllMethods()
 	{
-		$n = 0;
-		$tested = 0;
-		$passed = 0;
-		$failed = 0;
-		$skippedAuto = 0;
-		$skippedManual = 0;
-
 		foreach (get_declared_classes() as $klass)
 		{
 			$parents = class_parents($klass);
@@ -230,130 +232,143 @@ final class AutomatedTest extends TestCase
 					$klass,
 					'make'
 				]);
-				$moduleName = $method->getModuleName();
-				$methodName = $method->getMethodName();
-//				echo "?.) Checking method {$methodName} to be trivial...\n"; ob_flush();
 
 				# Skip special marked
 				if ( !$method->isTrivial())
 				{
-//					echo "{$methodName} is skipped because it is explicitly marked as not trivial.\n"; ob_flush();
-					$skippedManual++;
-					continue;
-				}
-
-				$trivial = true;
-				
-				$mt = GDT_MethodTest::make()->method($method);
-				
-				$mt->inputs($method->plugVars());
-				
-				$fields = $method->gdoParameters();
-
-				foreach ($fields as $gdt)
-				{
-					# Ouch looks not trivial
-					if (($gdt->isRequired()) &&
-						($gdt->getValue() === null) )
-					{
-						$trivial = false;
-					}
-
-					# But maybe now
-					if (!$trivial)
-					{
-						if ($mt->plugParam($gdt, $method))
-						{
-							$trivial = true;
-						}
-						else
-						{
-							break;
-						}
-					}
-				}
-
-				if ( !$trivial)
-				{
-					// echo "Skipping {$methodName} because it has weird get parameters.\n"; ob_flush();
-					$skippedAuto++;
+					$this->automatedSkippedHard++;
 					continue;
 				}
 				
-				# Now check form
-				/** @var $method MethodForm **/
-				if ($method instanceof MethodForm)
+				if ($this->isPluggableMethod($method))
 				{
-					
-					$method->addInputs($mt->getInputs());
-					$method->gdoParameterCache();
-					$method->addInputs($mt->getInputs());
-					$form = $method->getForm();
-					$fields = $form->getAllFields();
+					$this->tryTrivialMethod($method);
+				}
 
-					foreach ($fields as $gdt)
-					{
-						# needs to be plugged
-						if (($gdt->isRequired()) &&
-							($gdt->getValue() === null))
-						{
-							$trivial = false;
-						}
-
-						# try to plug and be trivial again
-						if ( !$trivial)
-						{
-							if ($mt->plugParam($gdt, $method)) 
-							{
-								$trivial = true;
-							}
-						}
-
-						# Or is it?
-						if ( !$trivial)
-						{
-//							echo "Skipping {$methodName} because it has weird form parameters.\n"; ob_flush();
-							$skippedAuto++;
-							break;
-						}
-					} # foreach form fields
-				} # is MethodForm
-
-				# Execute trivial method
-				if ($trivial)
-				{
-					try
-					{
-						$n++;
-						// echo "$n.) Running trivial method {$methodName}\n"; ob_flush();
-						$mt->runAs($this->gizmore())
-							->method($method->withAppliedInputs($mt->getInputs()))
-							->execute();
-						$tested++;
-						assertLessThan(400,
-							Application::$RESPONSE_CODE,
-							"Test if trivial method \\GDO\\{$moduleName}\\Metod\\{$methodName} has a success error code.");
-						$passed++;
-						$this->message('%4d.) %s: %s', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method));
-					}
-					catch (\Throwable $ex)
-					{
-						Logger::logException($ex);
-						$failed++;
-						$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
-						$this->error('Error: %s', CLI::bold($ex->getMessage()));
-						$dbgout = Debug::debugException($ex);
-						echo $dbgout;
-// 						$this->fail($ex->getMessage());
-					}
-				} # trivial call
+				
 			} # is Method
 		} # foreach classes
 		
 		$this->message(CLI::bold("Done with automated method tests."));
 		$this->message("Tested %s trivial methods.\n%s have been %s because they were unpluggable.\n%s have been manually skipped via config.",
-			CLI::bold($tested), CLI::bold($skippedAuto), CLI::bold("SKIPPED"), CLI::bold($skippedManual));
-		$this->message('From %s trivial methods, %s', $tested, CLI::bold("$failed failed"));
+			CLI::bold($this->automatedTested), CLI::bold($this->automatedFailed), CLI::bold("SKIPPED"), CLI::bold($this->automatedSkippedAuto));
+		$this->message('From %s trivial called methods, %s', $this->automatedCalled, CLI::bold("{$this->automatedFailed} failed"));
+	}
+	
+	private function tryTrivialMethod(Method $method)
+	{
+		$this->automatedTested++;
+		$permutations = new Permutations($this->plugVariants);
+		foreach ($permutations->generate() as $plugVars)
+		{
+			$this->tryTrivialMethodVariant($method, $plugVars);
+		}
+	}
+	
+	private function tryTrivialMethodVariant(Method $method, array $plugVars)
+	{
+		try
+		{
+			$n = $this->automatedTested;
+			$this->automatedCalled++;
+			$mt = GDT_MethodTest::make()->inputs($plugVars);
+			$mt->runAs($this->gizmore())
+				->method($method)
+				->execute();
+				assertLessThan(400,
+					Application::$RESPONSE_CODE,
+					"Test if trivial method {$this->mome($method)} has a success error code.");
+				$this->automatedPassed++;
+				$this->message('%4d.) %s: %s (%s)', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method), implode(',', $plugVars));
+		}
+		catch (\Throwable $ex)
+		{
+			Logger::logException($ex);
+			$this->automatedFailed++;
+			$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
+			$this->error('Error: %s', CLI::bold($ex->getMessage()));
+			$dbgout = Debug::debugException($ex);
+			echo $dbgout;
+		}
+	}
+	
+	private array $plugVariants;
+	
+	private function addPlugVariants(string $name, array $plugs)
+	{
+		if (!isset($this->plugVariants[$name]))
+		{
+			$this->plugVariants[$name] = [];
+		}
+		foreach ($plugs as $plug)
+		{
+			if (!in_array($plug, $this->plugVariants[$name], true))
+			{
+				$this->plugVariants[$name][] = $plug;
+			}
+		}
+	}
+	
+	private function firstPlugPermutation()
+	{
+		$permutations = new Permutations($this->plugVariants);
+		foreach ($permutations->generate() as $p)
+		{
+			return $p;
+		}
+	}
+	
+	private function isPluggableMethod(Method $method)
+	{
+		$this->plugVariants = [];
+		foreach ($method->plugVars() as $name => $plug)
+		{
+			$this->addPlugVariants($name, [$plug]);
+		}
+		$trivial = true;
+		$fields = $method->gdoParameters();
+		if (!$this->isPluggableParameters($method, $fields))
+		{
+			$trivial = false;
+		}
+		$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
+		if (!$this->isPluggableParameters($method, $fields))
+		{
+			$trivial = false;
+		}
+		if (!$trivial)
+		{
+			$this->automatedSkippedAuto++;
+		}
+		return $trivial;
+	}
+	
+	private function isPluggableParameters(Method $method, array $fields) : bool
+	{
+		$trivial = true;
+		foreach ($fields as $gdt)
+		{
+			# Ouch looks not trivial
+			if (($gdt->isRequired()) &&
+				($gdt->getValue() === null) )
+			{
+				$trivial = false;
+			}
+			# But maybe now
+			if (!$trivial)
+			{
+				if ($plugs = $gdt->plugVars())
+				{
+					$this->addPlugVariants($gdt->getName(), $plugs);
+					$trivial = true;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		return $trivial;
 	}
 	
 	public function testLanguageFilesForCompletion()

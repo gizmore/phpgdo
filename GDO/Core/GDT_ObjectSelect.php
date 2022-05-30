@@ -131,6 +131,11 @@ class GDT_ObjectSelect extends GDT_Select
 		return $this->multiple ? $this->multipleToVar($value) : $value->getID();
 	}
 	
+	public function plugVar() : string
+	{
+		return $this->table->select()->first()->exec()->fetchObject()->getID();
+	}
+	
 	/**
 	 * @param GDO[] $value
 	 * @return string

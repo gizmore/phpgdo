@@ -12,6 +12,7 @@ use GDO\User\GDT_User;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_Permission;
+use GDO\User\GDO_Permission;
 
 /**
  * View all users with a permission.
@@ -24,7 +25,7 @@ class ViewPermission extends MethodQueryTable
 {
 	use MethodAdmin;
 	
-	private $permission;
+	private GDO_Permission $permission;
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
@@ -45,9 +46,13 @@ class ViewPermission extends MethodQueryTable
 	    ];
 	}
 	
-	public function onInit() : void
+	public function getConfigPermission() : GDO_Permission
 	{
-		$this->permission = $this->gdoParameterValue('permission');
+		if (!isset($this->permission))
+		{
+			$this->permission = $this->gdoParameterValue('permission');
+		}
+		return $this->permission;
 	}
 	
 	public function gdoHeaders()
@@ -67,7 +72,7 @@ class ViewPermission extends MethodQueryTable
 			select('perm_user_id_t.*, perm_perm_id_t.*')->
 			joinObject('perm_user_id')->
 			joinObject('perm_perm_id')->
-			where('perm_perm_id='.$this->permission->getID())->
+			where('perm_perm_id='.$this->getConfigPermission()->getID())->
 			uncached();
 	}
 	

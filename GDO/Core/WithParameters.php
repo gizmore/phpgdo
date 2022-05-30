@@ -153,6 +153,7 @@ trait WithParameters
 			if ($name = $gdt->getName())
 			{
 				$this->parameterCache[$name] = $gdt;
+				$gdt->input($this->getInput($name));
 			}
 		}
 	}

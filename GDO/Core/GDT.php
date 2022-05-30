@@ -633,6 +633,19 @@ abstract class GDT
 		return '';
 	}
 	
+	/**
+	 * Get multiple variants of a plug var.
+	 * @return array
+	 */
+	public function plugVars() : array
+	{
+		if ($plug = $this->plugVar())
+		{
+			return [$plug];
+		}
+		return [];
+	}
+	
 	public function isTestable() : bool
 	{
 		return true;

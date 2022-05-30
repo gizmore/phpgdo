@@ -89,6 +89,9 @@ return [
 	'user_guest_name' => 'Guest Name',
 	'level' => 'Level',
 	'ipp' => 'IPP',
+	'keywords' => 'Keywords',
+	'description' => 'Description',
+	'title' => 'Title',
 	
 	# Fineprint
 	'privacy' => 'Privacy',

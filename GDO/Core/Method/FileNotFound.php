@@ -10,7 +10,7 @@ final class FileNotFound extends MethodPage
 	public function gdoParameters() : array
 	{
 		return [
-			GDT_Url::make('url')->allowExternal(false),
+			GDT_Url::make('url')->notNull()->allowInternal(),
 		];
 	}
 	

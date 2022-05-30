@@ -35,6 +35,7 @@ abstract class MethodTable extends Method
 		{
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
+			$this->withAppliedInputs($this->getInputs());
 			$this->addComposeParameters($this->gdoTableFeatures());
 		}
 		return $this->parameterCache;
@@ -241,7 +242,7 @@ abstract class MethodTable extends Method
 		return $valid;
 	}
 	
-	public function getMethodTitle()
+	public function getMethodTitle() : string
 	{
 		return $this->getTableTitle();
 	}

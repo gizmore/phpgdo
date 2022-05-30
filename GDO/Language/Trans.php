@@ -153,8 +153,7 @@ final class Trans
 			{
 				if (!($text = @vsprintf($text, $args)))
 				{
-				    self::$MISS++;
-				    self::$MISSING[$key] = $key;
+					self::missing($key);
 					$text = $cache[$key] . ': ';
 					$text .= json_encode($args);
 				}
@@ -162,8 +161,7 @@ final class Trans
 		}
 		else # Fallback key + printargs
 		{
-		    self::$MISS++;
-		    self::$MISSING[$key] = $key;
+			self::missing($key);
 		    $text = $key;
 			if ($args)
 			{
@@ -172,6 +170,12 @@ final class Trans
 			}
 		}
 		return $text;
+	}
+	
+	private static function missing(string $key) : void
+	{
+		self::$MISS++;
+		self::$MISSING[$key] = $key;
 	}
 
 	private static function getCacheKey(string $iso) : string
@@ -257,8 +261,7 @@ final class Trans
 	    $result = self::hasKeyIso(self::$ISO, $key);
 	    if ($withMiss && (!$result))
 	    {
-	        self::$MISS++;
-	        self::$MISSING[$key] = $key;
+	    	self::missing($key);
 	    }
 	    return $result;
 	}

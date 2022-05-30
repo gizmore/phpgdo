@@ -12,7 +12,7 @@ use GDO\UI\MethodPage;
  */
 final class Privacy extends MethodPage {
     
-    public function getMethodTitle()
+    public function getMethodTitle() : string
     {
         return t('privacy');
     }

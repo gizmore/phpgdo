@@ -50,14 +50,13 @@ trait WithObject
 	###################
 	public function getVar()
 	{
-// 	    $var = $this->getRequestVar($this->formVariable(), $this->var);
 		if (!($var = $this->getInput($this->name)))
 		{
 		    $var = $this->var;
 		}
 	    return empty($var) ? null : $var;
 	}
-
+	
 	public function toVar($value) : ?string
 	{
 		return $value !== null ? $value->getID() : null;

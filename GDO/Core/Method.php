@@ -127,11 +127,6 @@ abstract class Method #extends GDT
 	 */
 	public function exec()
 	{
-// 		if ($this->isAjax())
-// 		{
-// 			$_REQUEST['_ajax'] = '1';
-// 		}
-		
 		$user = GDO_User::current();
 		
 		if (!($this->isEnabled()))
@@ -224,20 +219,22 @@ abstract class Method #extends GDT
 		$this->storeLastActivity();
 	}
 	
-	###
-	public function getMethodTitle()
+	###########
+	### SEO ###
+	###########
+	public function getMethodTitle() : string
 	{
-		return 'TITLE';
+		return t('title');
 	}
 	
-	public function getMethodKeywords()
+	public function getMethodKeywords() : string
 	{
-		return 'KEYWORDS';
+		return t('keywords');
 	}
 	
-	public function getMethodDescription()
+	public function getMethodDescription() : string
 	{
-		return 'DESCR';
+		return t('description');
 	}
 	
 	###############

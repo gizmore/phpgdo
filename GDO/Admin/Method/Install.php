@@ -68,7 +68,7 @@ class Install extends MethodForm
 		return $this->renderPage();
 	}
 	
-	public function getMethodTitle()
+	public function getMethodTitle() : string
 	{
 	    if ($this->configModule)
 	    {

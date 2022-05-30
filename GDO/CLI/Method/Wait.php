@@ -29,7 +29,6 @@ final class Wait extends MethodCLI
 
 	public function execute()
 	{
-		$form = $this->getForm();
 		usleep($this->gdoParameterValue('duration', true) * 1000000);
 		return GDT_Success::make();
 	}

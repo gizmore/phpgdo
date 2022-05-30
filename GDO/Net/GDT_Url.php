@@ -44,11 +44,11 @@ class GDT_Url extends GDT_String
 	
 	public function defaultLabel() : self { return $this->label('url'); }
 	
-	public bool $reachable = false;
-	public bool $allowLocal = true;
-	public bool $allowExternal = true;
-	public array $schemes = ['http', 'https'];
 	public bool $noFollow = false;
+	public bool $reachable = false;
+	public bool $allowInternal = false;
+	public bool $allowExternal = false;
+	public array $schemes = ['http', 'https'];
 	
 	public int $min = 0;
 	public int $max = 768; # Max length for a unique constraint on older mysql systems
@@ -74,9 +74,9 @@ class GDT_Url extends GDT_String
 	###############
 	### Options ###
 	###############
-	public function allowLocal(bool $allowLocal=true) : self
+	public function allowInternal(bool $allowInternal=true) : self
 	{
-		$this->allowLocal = $allowLocal;
+		$this->allowInternal = $allowInternal;
 		return $this;
 	}
 	
@@ -131,7 +131,7 @@ class GDT_Url extends GDT_String
 		}
 
 		# Check local
-		if (!$this->allowLocal)
+		if (!$this->allowInternal)
 		{
 		    # Check relative url
 		    if ($value[0] === '/')

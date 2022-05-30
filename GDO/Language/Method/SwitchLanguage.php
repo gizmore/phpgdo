@@ -3,12 +3,11 @@ namespace GDO\Language\Method;
 
 use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
-use GDO\Session\GDO_Session;
-use GDO\Net\GDT_Url;
 use GDO\UI\GDT_Redirect;
 use GDO\Core\MethodAjax;
 use GDO\Language\GDO_Language;
 use GDO\User\GDO_User;
+use GDO\Net\GDT_Url;
 
 /**
  * Switch language to user's choice.
@@ -33,7 +32,7 @@ final class SwitchLanguage extends MethodAjax
 	{
 		return [
 			GDT_Language::make('lang')->notNull(),
-			GDT_Url::make('_ref')->allowExternal(false)->allowLocal(),
+			GDT_Url::make('_ref')->allowInternal(),
 		];
 	}
 	
@@ -54,18 +53,7 @@ final class SwitchLanguage extends MethodAjax
 	 */
 	protected function getLanguage(bool $throw=true) : ?GDO_Language
 	{
-	    try
-	    {
-	        return $this->gdoParameterValue('lang', true);
-	    }
-	    catch (\Throwable $ex)
-	    {
-	        if ($throw)
-	        {
-	            throw $ex;
-	        }
-	        return null;
-	    }
+        return $this->gdoParameterValue('lang', true, $throw);
 	}
 
 	/**

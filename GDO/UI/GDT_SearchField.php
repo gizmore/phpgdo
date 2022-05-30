@@ -34,9 +34,9 @@ class GDT_SearchField extends GDT_String
 	    return t('search_term');
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return 'giz';
+		return ['giz', 'ess', 'xxx'];
 	}
 
 }
