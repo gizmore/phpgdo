@@ -2,7 +2,7 @@
 namespace GDO\Tests\Test;
 
 use GDO\Tests\TestCase;
-use GDO\Core\GDO_StubException;
+use GDO\Language\GDO_Language;
 
 /**
  * Test foreign keys and related functionality.
@@ -13,17 +13,7 @@ final class CascadeTest extends TestCase
 {
 	public function testCascadeRestrict()
 	{
-		throw new GDO_StubException(static::class);
-	}
-	
-	public function testCascadeUpdate()
-	{
-		throw new GDO_StubException(static::class);
-	}
-	
-	public function testCascadeCascade()
-	{
-		throw new GDO_StubException(static::class);
+		GDO_Language::getById('en')->delete();
 	}
 	
 }

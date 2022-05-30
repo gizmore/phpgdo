@@ -15,6 +15,7 @@ use GDO\User\GDT_Permission;
 
 /**
  * View all users with a permission.
+ * 
  * @version 7.0.0
  * @since 3.0.2
  * @author gizmore
@@ -46,7 +47,6 @@ class ViewPermission extends MethodQueryTable
 	
 	public function onInit() : void
 	{
-// 		parent::onInit();
 		$this->permission = $this->gdoParameterValue('permission');
 	}
 	
@@ -70,11 +70,5 @@ class ViewPermission extends MethodQueryTable
 			where('perm_perm_id='.$this->permission->getID())->
 			uncached();
 	}
-    
-// 	public function execute()
-// 	{
-// 	    $this->renderPermTabs('Admin');
-// 	    return parent::execute();
-// 	}
 	
 }

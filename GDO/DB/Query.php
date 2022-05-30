@@ -429,7 +429,7 @@ final class Query
 		{
 			$table = $gdt->table;
 			$atbl = $this->table->gdoTableIdentifier();
-			$ftbl = $tableAlias ? $tableAlias : ($table->gdoTableIdentifier().'_t');
+			$ftbl = $tableAlias ? $tableAlias : "{$key}_t";
 			$tableAlias = " AS {$ftbl}";
 			
 			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->identifier()}=$atbl.{$gdt->identifier()}";
