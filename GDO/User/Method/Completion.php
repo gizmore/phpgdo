@@ -33,7 +33,7 @@ class Completion extends MethodCompletion
 				'id' => $user->getID(),
 				'json' => array(
 					'user_name' => $user->getName(),
-					'user_country' => $user->getCountryISO()
+					'user_language' => $user->getLangISO(),
 				),
 				'text' => $user->renderUserName(),
 			    'display' => $user->renderChoice(),

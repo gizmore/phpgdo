@@ -27,7 +27,7 @@ use GDO\Util\Strings;
  */
 final class Parser
 {
-	const CMD_PREAMBLE = '$';
+	const CMD_PREAMBLE = '(';
 	const ARG_SEPARATOR = ',';
 	const ESCAPE_CHARACTER = '\\';
 	
@@ -63,10 +63,13 @@ final class Parser
 			switch ($c)
 			{
 				case self::CMD_PREAMBLE:
-					$line2 = $this->parseLine($l, $i, $len);
-					$new = GDT_Expression::make()->parent($current);
-					$this->addArgExpr($current, $new);
-					$this->parseB($new, $line2);
+					if (!$arg)
+					{
+						$line2 = $this->parseLine($l, $i, $len);
+						$new = GDT_Expression::make()->parent($current);
+						$this->parseB($new, $line2);
+						$this->addArgExpr($current, $new);
+					}
 					break;
 				
 				case self::ESCAPE_CHARACTER:
@@ -156,14 +159,14 @@ final class Parser
 	/**
 	 * Parse an additional line within parantheses.
 	 */
-	private function parseLine(string $line, int &$i, int $len) : Method
+	private function parseLine(string $line, int &$i, int $len) : string
 	{
 		# check if $(
-		$c = $line[$i++];
-		if ($c !== '(')
-		{
-			throw new GDO_ParseError('err_expression_preamble', [html($line)]);
-		}
+// 		$c = $line[$i++];
+// 		if ($c !== '(')
+// 		{
+// 			throw new GDO_ParseError('err_expression_preamble', [html($line)]);
+// 		}
 		
 		$parsed = '';
 		for (;$i < $len;)

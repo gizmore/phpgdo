@@ -354,17 +354,13 @@ abstract class Method #extends GDT
 		return $this;
 	}
 	
-	private function applyInput()
+	protected function applyInput()
 	{
 		foreach ($this->getInputs() as $key => $input)
 		{
 			if ($gdt = $this->gdoParameter($key, false, false))
 			{
-// 				if (is_array($input))
-// 				{
-// 					$input = json_encode($input);
-// 				}
-				$gdt->input($input);
+				$gdt->input = $input;
 			}
 		}
 	}

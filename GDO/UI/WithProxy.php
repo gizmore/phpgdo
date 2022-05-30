@@ -73,7 +73,7 @@ trait WithProxy
 	###########################
 	### Input / Var / Value ###
 	###########################
-	public function getVar() : ?string
+	public function getVar()
 	{
 		return $this->proxy->getVar();
 	}

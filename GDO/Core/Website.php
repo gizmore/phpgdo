@@ -1,9 +1,7 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Page;
-use GDO\UI\GDT_Success;
 
 /**
  * General Website utility and storage for header and javascript elements.
@@ -215,30 +213,30 @@ final class Website
 // 	    return self::redirectMessageRaw(t($key, $args), $url, $time);
 // 	}
 	
-	public static function redirectMessageRaw(string $message, string $url=null, int $time=0) : GDT
-	{
-	    $app = Application::$INSTANCE;
+// 	public static function redirectMessageRaw(string $message, string $url=null, int $time=0) : GDT
+// 	{
+// 	    $app = Application::$INSTANCE;
 	 
-	    GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
+// 	    GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
 	  
-// 	    if ($app->isCLI() || $app->isUnitTests())
-// 	    {
-// 	        if ($app->isUnitTests())
-// 	        {
-// 	            echo "Redirect => $url\n";
-// 	        }
-// 	        echo "{$message}\n";
-// 	        return;
-// 	    }
+// // 	    if ($app->isCLI() || $app->isUnitTests())
+// // 	    {
+// // 	        if ($app->isUnitTests())
+// // 	        {
+// // 	            echo "Redirect => $url\n";
+// // 	        }
+// // 	        echo "{$message}\n";
+// // 	        return;
+// // 	    }
 	    
-	    $url = $url === null ? self::hrefBack() : $url;
+// 	    $url = $url === null ? self::hrefBack() : $url;
 	    
-// 	    if (!$app->isInstall())
-// 	    {
-	        GDO_Session::set('redirect_message', $message);
-	        return self::redirect($url, $time);
-// 	    }
-	}
+// // 	    if (!$app->isInstall())
+// // 	    {
+// 	        GDO_Session::set('redirect_message', $message);
+// 	        return self::redirect($url, $time);
+// // 	    }
+// 	}
 	
 // 	public static function redirectError($key, array $args=null, $url=null, $time=0, $code=409)
 // 	{

@@ -7,6 +7,7 @@ use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
 use GDO\Form\GDT_Submit;
 use GDO\UI\Color;
+use GDO\User\GDO_User;
 
 /**
  * CLI utility.
@@ -34,6 +35,20 @@ final class CLI
     public static function getUsername() : string
     {
     	return get_current_user();
+    }
+    
+    public static function setupUser() : GDO_User
+    {
+    	$username = self::getUsername();
+    	if (!($user = GDO_User::getByName($username)))
+    	{
+    		$user = GDO_User::blank([
+    			'user_name' => $username,
+    			'user_type' => 'member',
+    		])->insert();
+    	}
+    	GDO_User::setCurrent($user, true);
+    	return $user;
     }
     
     public static function getSingleCommandLine() : string

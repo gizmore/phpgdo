@@ -30,8 +30,8 @@ class GDT_Method extends GDT
 	{
 		Application::$INSTANCE->reset();
 		$this->changeUser();
-		$this->method->addInputs($this->getInputs());
-		$response = $this->method->exec();
+// 		$this->method->addInputs($this->getInputs());
+		$response = $this->method->withAppliedInputs($this->getInputs())->exec();
 		return $response;
 	}
 	

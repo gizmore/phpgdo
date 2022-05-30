@@ -1,7 +1,10 @@
+<?php
+namespace GDO\Core\tpl\page;
+?>
 Contact: mailto:<?=GDO_ADMIN_EMAIL.PHP_EOL?>
 Contact: mailto:errors@wechall.net
 Contact: mailto:gizmore@wechall.net
-Expires: 2022-01-01T00:00:00.000Z
+Expires: 2024-01-01T00:00:00.000Z
 Encryption: https://gdo6.gizmore.org/core/security/gpg/key
 Acknowledgments: https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_CONTRIBUTOR_WHITEHATS.md
 Preferred-Languages: en,de

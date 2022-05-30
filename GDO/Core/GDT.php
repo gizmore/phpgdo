@@ -320,7 +320,7 @@ abstract class GDT
 		return false;
 	}
 	
-	public function validateInput(?string $input) : bool
+	public function validateInput($input) : bool
 	{
 		$var = $this->inputToVar($input);
 		$value = $this->toValue($var);
@@ -337,7 +337,8 @@ abstract class GDT
 	 */
 	public function validated() : ?self
 	{
-		return $this->validateInput($this->getVar()) ? $this : null;
+		$var = $this->getVar();
+		return $this->validateInput($var) ? $this : null;
 	}
 	
 	public function hasError() : bool
@@ -456,7 +457,7 @@ abstract class GDT
 		return null;
 	}
 	
-	public function getVar() : ?string
+	public function getVar()
 	{
 		return null;
 	}
@@ -525,7 +526,7 @@ abstract class GDT
 		return '';
 	}
 	
-	public function input(string $input = null) : self
+	public function input($input = null) : self
 	{
 		return $this;
 	}
@@ -591,14 +592,22 @@ abstract class GDT
 	##################
 	### Conversion ###
 	##################
-	public function inputToVar(string $input=null) : ?string
+	public function inputToVar($input=null) : ?string
 	{
 		if ($input === null)
 		{
 			return null;
 		}
-		$input = trim($input);
-		return $input === '' ? null : $input;
+		if (is_string($input))
+		{
+			$input = trim($input);
+			return $input === '' ? null : $input;
+		}
+		if ($input instanceof GDT_Method)
+		{
+			return $input->execute()->render();
+		}
+		return json_encode($input);
 	}
 	
 	public function toVar($value) : ?string

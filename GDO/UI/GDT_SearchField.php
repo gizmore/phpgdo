@@ -36,7 +36,7 @@ class GDT_SearchField extends GDT_String
 	
 	public function plugVar() : string
 	{
-		return 'ess';
+		return 'giz';
 	}
 
 }

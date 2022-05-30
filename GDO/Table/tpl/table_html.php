@@ -1,4 +1,6 @@
-<?php use GDO\Form\GDT_Form;
+<?php
+namespace GDO\Table\tpl;
+use GDO\Form\GDT_Form;
 /** @var $field \GDO\Table\GDT_Table **/
 /** @var $form GDT_Form **/
 $headers = $field->getHeaderFields();
@@ -12,7 +14,7 @@ $result = $field->getResult();
 <form method="get" action="<?=html($field->action)?>" class="b">
 <? #GDT_Form::hiddenMoMe()?>
 <?php endif; ?>
-<div class="gdt-table" <?=$field->htmlID()?>">
+<div class="gdt-table" <?=$field->htmlID()?>>
   <?php if ($field->hasTitle()) : ?>
   <div class="gdo-table-caption">
     <h3><?=$field->renderTitle()?></h3>

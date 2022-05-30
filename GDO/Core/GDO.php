@@ -301,7 +301,7 @@ abstract class GDO extends GDT
 	/**
 	 * Break these GDT functions as they confuse you now.
 	 */
-	public function getVar() : ?string
+	public function getVar()
 	{
 		throw new GDO_Error('err_gdo_no_gdt', ['getVar', $this->gdoHumanName()]);
 	}

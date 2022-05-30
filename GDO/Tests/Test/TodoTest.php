@@ -13,7 +13,7 @@ final class TodoTest extends TestCase
 {
 	public function testTodo()
 	{
-		
+		assert(true);
 	}
 	
 }

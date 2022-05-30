@@ -1,3 +1,6 @@
+<?php
+namespace GDO\Core\tpl\page;
+?>
 <h1>Impressum</h1>
 <pre>
 This is the default GDO6 impressum.

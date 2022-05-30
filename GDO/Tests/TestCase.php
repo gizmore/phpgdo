@@ -233,7 +233,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     	$app->cli(true);
 //     	$_POST = ['a' => '1'];
        	$expression = GDT_Expression::fromLine($command);
-    	$response = $permissions ? $expression->exec() : $expression->execute();
+    	$response = $expression->execute();
     	$result = $response->renderCLI();
     	return $result;
     }

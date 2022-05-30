@@ -99,6 +99,7 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 	$modules = explode(',', $argv[1]);
 	
 	# Add Tests and Perf as dependency when unit testing.
+	$modules[] = 'CLI';
 	$modules[] = 'Perf';
 	$modules[] = 'Tests';
 

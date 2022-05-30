@@ -3,6 +3,7 @@ namespace GDO\Table;
 
 use GDO\Core\Method;
 use GDO\DB\ArrayResult;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Fields;
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
@@ -25,6 +26,9 @@ abstract class MethodTable extends Method
 {
 	public GDT_Table $table;
 	
+	/**
+	 * @return GDT[string]
+	 */
 	public function &gdoParameterCache() : array
 	{
 		if (!isset($this->parameterCache))
@@ -44,6 +48,7 @@ abstract class MethodTable extends Method
 		{
 			$features[] = $table->paginated(true, $this->getDefaultIPP())->pagemenu->getIPPField();
 			$features[] = $table->pagemenu->getPageNumField();
+			$table->pagemenu->getPageNumField()->table($table);
 		}
 		if ($this->isSearched())
 		{
@@ -51,7 +56,9 @@ abstract class MethodTable extends Method
 		}
 		if ($this->isOrdered())
 		{
-			$features[] = $table->ordered(true, $this->getDefaultOrder())->order;
+			$order = $table->ordered(true, $this->getDefaultOrder())->order;
+			$features[] = $order;
+			$order->gdo($this->gdoTable());
 		}
 		if ($this->isFiltered())
 		{
@@ -221,6 +228,19 @@ abstract class MethodTable extends Method
 		return $this->renderTable();
 	}
 	
+	public function validate() : bool
+	{
+		$valid = true;
+		foreach ($this->gdoParameterCache() as $gdt)
+		{
+			if (!$gdt->validateInput($this->getInput($gdt->getName())))
+			{
+				$valid = false;
+			}
+		}
+		return $valid;
+	}
+	
 	public function getMethodTitle()
 	{
 		return $this->getTableTitle();
@@ -293,6 +313,8 @@ abstract class MethodTable extends Method
 		$table = $this->getTable();
 		$this->setupCollection($this->table);
 		$this->table->result = null;
+		$this->beforeCalculateTable($table);
+		$this->validate();
 // 	    $this->createTable($table);
 	    $this->calculateTable($table);
 	    $result = $table->getResult();
@@ -308,6 +330,15 @@ abstract class MethodTable extends Method
 	public function renderTable()
 	{
 	    return $this->initTable();
+	}
+	
+	protected function beforeCalculateTable(GDT_Table $table)
+	{
+		if ($this->isPaginated())
+		{
+			$result = $this->getResult();
+			$this->table->pagemenu->items(count($result->getData()));
+		}
 	}
 	
 	protected function calculateTable(GDT_Table $table)
@@ -330,7 +361,6 @@ abstract class MethodTable extends Method
 	    }
 	    if ($this->isPaginated())
 	    {
-	        $this->table->pagemenu->items(count($result->getData()));
 	        $result = $this->table->pagemenu->paginateResult($result, $this->getPage(), $this->getIPP());
 	    }
 	    $table->result($result);

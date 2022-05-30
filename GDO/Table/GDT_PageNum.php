@@ -2,7 +2,6 @@
 namespace GDO\Table;
 
 use GDO\Core\GDT_UInt;
-use GDO\DB\Query;
 
 /**
  * Page num to select.

@@ -48,7 +48,7 @@ trait WithObject
 	###################
 	### Var / Value ###
 	###################
-	public function getVar() : ?string
+	public function getVar()
 	{
 // 	    $var = $this->getRequestVar($this->formVariable(), $this->var);
 		if (!($var = $this->getInput($this->name)))

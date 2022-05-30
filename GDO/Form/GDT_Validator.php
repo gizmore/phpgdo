@@ -42,7 +42,7 @@ class GDT_Validator extends GDT
 		return $this;
 	}
 	
-	public function validateInput(?string $input) : bool
+	public function validateInput($input) : bool
 	{
 		$field = $this->validatorField;
 		$value = $field->getValue();

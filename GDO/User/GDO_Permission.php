@@ -25,7 +25,7 @@ final class GDO_Permission extends GDO
 		return [
 			GDT_AutoInc::make('perm_id'),
 			GDT_Name::make('perm_name')->unique(),
-		    GDT_Level::make('perm_level')->label('perm_level')->bytes(2),
+		    GDT_Level::make('perm_level'),
 		    GDT_Virtual::make('perm_usercount')->gdtType(GDT_UInt::make())->label('user_count')->
 		        subquery("SELECT COUNT(*) FROM gdo_userpermission WHERE perm_perm_id = perm_id"),
 		];

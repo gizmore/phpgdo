@@ -48,7 +48,7 @@ class GDT_Timestamp extends GDT_DBField
 		return $value === null ? null : Time::displayTimestamp($value, 'db', null, Time::UTC);
 	}
 	
-	public function getVar() : ?string
+	public function getVar()
 	{
 		if ($var = parent::getVar())
 		{

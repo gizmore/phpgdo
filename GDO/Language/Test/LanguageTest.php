@@ -38,14 +38,14 @@ final class LanguageTest extends TestCase
         $languages = $module->cfgSupported();
         assertCount(3, $languages, 'Check if 3 languages can be supported via Language config.');
         
-        $de1 = tiso('de', 'btn_send');
-        $en1 = tiso('en', 'btn_send');
+        $de1 = tiso('de', 'btn_modules');
+        $en1 = tiso('en', 'btn_modules');
         assertNotEquals($de1, $en1, 'english should differ from german');
         
         Trans::setISO('de');
-        $de2 = t('btn_send');
+        $de2 = t('btn_modules');
         Trans::setISO('en');
-        $en2 = t('btn_send');
+        $en2 = t('btn_modules');
         assertNotEquals($de1, $en1, 'german should differ from english');
         assertEquals($de1, $de2, 'german should be identical');
         assertEquals($en1, $en2, 'english should be identical');

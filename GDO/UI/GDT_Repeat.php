@@ -2,6 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_Method;
 
 /**
  * A parameter repeater.
@@ -26,6 +27,22 @@ final class GDT_Repeat extends GDT
 	{
 		return $this->getName() . '[]';
 	}
+
+	public function getVar()
+	{
+		$vars = [];
+		$p = $this->proxy;
+		foreach ($this->input as $k => $input)
+		{
+			$var = $p->inputToVar($input);
+			if ($input instanceof GDT_Method)
+			{
+				$this->input[$k] = $var;
+			}
+			$vars[] = $var;
+		}
+		return $vars;
+	}
 	
 	public function getValue()
 	{
@@ -41,7 +58,7 @@ final class GDT_Repeat extends GDT
 	}
 
 	public $input = [];
-	public function input(string $input = null) : self
+	public function input($input = null) : self
 	{
 		$this->input[] = $input;
 		return $this;

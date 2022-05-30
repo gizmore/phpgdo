@@ -117,7 +117,7 @@ class GDT_ObjectSelect extends GDT_Select
 	#############
 	### Value ###
 	#############
-	public function getVar() : ?string
+	public function getVar()
 	{
 		return parent::getVar(); # required to overwrite trait.
 	}

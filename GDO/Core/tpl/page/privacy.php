@@ -1,3 +1,6 @@
+<?php
+namespace GDO\Core\tpl\page;
+?>
 <h1>Privacy</h1>
 <pre>
 This is the default GDO6 privacy implication page.

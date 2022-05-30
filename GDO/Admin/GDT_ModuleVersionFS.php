@@ -26,7 +26,7 @@ final class GDT_ModuleVersionFS extends GDT_Version
 		return $va === $vb ? 0 : ($va < $vb ? -1 : 1);
 	}
 	
-	public function getVar() : ?string
+	public function getVar()
 	{
 	    $m = $this->getModule();
 	    return $m ? $m->version : '0';

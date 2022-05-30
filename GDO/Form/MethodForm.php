@@ -35,10 +35,12 @@ abstract class MethodForm extends Method
 	{
 		if (!isset($this->parameterCache))
 		{
+			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
 			if (isset($this->inputs))
 			{
 				$this->addInputs($this->inputs);
+				$this->applyInput();
 			}
 			$form = $this->getForm();
 			$this->addComposeParameters($form->getAllFields());
@@ -96,9 +98,9 @@ abstract class MethodForm extends Method
 		return $this->getForm();
 	}
 	
-	public function withAppliedInputs(array $inputs) : self
-	{
-		return parent::withAppliedInputs($inputs);
-	}
+// 	public function withAppliedInputs(array $inputs) : self
+// 	{
+// 		return parent::withAppliedInputs($inputs);
+// 	}
 
 }

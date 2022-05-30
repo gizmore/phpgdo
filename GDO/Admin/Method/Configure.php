@@ -54,13 +54,6 @@ class Configure extends MethodForm
 		];
 	}
 
-// 	public function plugVars(): array
-// 	{
-// 		return [
-// 			'module' => 'Core', # auto value for unit tests.
-// 		];
-// 	}
-
 	/**
 	 * Get the config module.
 	 */
@@ -68,8 +61,7 @@ class Configure extends MethodForm
 	{
 		if ( !isset($this->configModule))
 		{
-			$this->configModule = $this->gdoParameterValue(
-				'module', true);
+			$this->configModule = $this->gdoParameterValue('module');
 		}
 		return $this->configModule;
 	}

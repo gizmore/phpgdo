@@ -60,9 +60,11 @@ return [
 	
 	# Buttons
 	'btn_back' => 'Back',
-	'btn_send' => 'Send',
+	'btn_edit' => 'Edit',
 	'btn_save' => 'Save',
+	'btn_send' => 'Send',
 	'btn_set' => 'Set',
+	'submit' => 'Submit',
 	
 	# Float
 	'decimal_point' => '.',
@@ -107,4 +109,14 @@ return [
 	'ft_filenotfound' => 'Not Found!',
 	'ft_notallowed' => 'Forbidden!',
 	
+	# Table
+	'cfg_spr' => 'Suggestions per Request',
+	'cfg_ipp_cli' => 'Items per page (CLI)',
+	'cfg_ipp_http' => 'Items per page (HTML)',
+	
+	# User
+	'users' => 'Users',
+	'permissions' => 'Permissions',
+	
+	'msg_sort_success' => 'Successfully sorted?!',
 ];

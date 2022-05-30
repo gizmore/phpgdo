@@ -94,6 +94,10 @@ final class GDT_Redirect extends GDT
 		{
 			GDO_Session::set('redirect_error', $message);
 		}
+		if (Application::$INSTANCE->isCLI())
+		{
+			echo "$message\n";
+		}
 		$this->redirectError = $message;
 		return $this;
 	}
@@ -116,6 +120,10 @@ final class GDT_Redirect extends GDT
 		if (class_exists('GDO\\Session\\GDO_Session', false))
 		{
 			GDO_Session::set('redirect_message', $message);
+		}
+		if (Application::$INSTANCE->isCLI())
+		{
+			echo "$message\n";
 		}
 		$this->redirectMessage = $message;
 		return $this;

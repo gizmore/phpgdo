@@ -4,6 +4,7 @@ namespace GDO\CLI\Test;
 use GDO\Tests\TestCase;
 use GDO\Core\GDT_Expression;
 use function PHPUnit\Framework\assertStringContainsString;
+use function PHPUnit\Framework\assertEquals;
 
 final class TestCLI extends TestCase
 {
@@ -26,6 +27,12 @@ final class TestCLI extends TestCase
 		$response = $expression->execute();
 		$content = $response->renderCLI();
 		assertStringContainsString("123", $content, 'Test if echo command alias works.');
+	}
+	
+	public function testNestedConcat()
+	{
+		$result = $this->cli("concat --glue=,, ,a,b,(concat c,d),e");
+		assertEquals("a, b, c, d, e", $result, 'Test if nested concat with a weird glue works.');
 	}
 	
 }

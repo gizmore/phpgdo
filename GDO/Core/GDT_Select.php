@@ -23,7 +23,7 @@ class GDT_Select extends GDT_ComboBox
 		return $var === null ? $this->emptyVar : $var;
 	}
 	
-	public function getVar() : ?string
+	public function getVar()
 	{
 		if (null === ($var = parent::getVar()))
 		{
