@@ -63,7 +63,7 @@ class GDT_Template extends GDT
 
 	public function renderJSON()
 	{
-		return $this->renderJSONFields();
+		return null;
 	}
 	
 	public function renderCell() : string

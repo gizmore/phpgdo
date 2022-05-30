@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Form;
 
-use GDO\Core\GDT_Fields;
 use GDO\UI\GDT_Menu;
 
 /**

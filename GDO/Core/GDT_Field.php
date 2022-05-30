@@ -66,13 +66,17 @@ abstract class GDT_Field extends GDT
 	################
 	### Validate ###
 	################
-	public function validateInput($input) : bool
+	public function validateInput($input, bool $throw=true) : bool
 	{
 		$var = $this->inputToVar($input);
 		$value = $this->toValue($var);
 		if (!$this->validate($value))
 		{
-			throw new GDO_ArgException($this);
+			if ($throw)
+			{
+				throw new GDO_ArgException($this);
+			}
+			return false;
 		}
 		return true;
 	}

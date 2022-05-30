@@ -12,6 +12,7 @@ use GDO\Util\FileUtil;
 use GDO\Util\Strings;
 use GDO\UI\GDT_Link;
 use GDO\Table\GDT_Sort;
+use GDO\UI\GDT_Divider;
 
 /**
  * GDO base module class.
@@ -63,7 +64,14 @@ class GDO_Module extends GDO
 	 * @see Module_Tests
 	 * @return string[]
 	 */
-	public function thirdPartyFolders() : array {}
+	public function thirdPartyFolders() : array {
+		return [
+			'bower_components/',
+			'node_modules/',
+			'vendor/',
+			'3p/',
+		];
+	}
 	
 	/**
 	 * Provided theme name in module /thm/$themeName/ folder.
@@ -647,11 +655,14 @@ class GDO_Module extends GDO
 	/**
 	 * @var GDT[]
 	 */
-	private $userConfigCache = null;
+	private $userConfigCache;
 	
-	public function &getSettingsCache()
+	/**
+	 * @return GDT[]
+	 */
+	public function &getSettingsCache() : array
 	{
-	    if ($this->userConfigCache === null)
+		if (!isset($this->userConfigCache))
 	    {
 	        $this->buildSettingsCache();
 	    }
@@ -683,6 +694,7 @@ class GDO_Module extends GDO
     	    $this->userConfigCache = [];
     	    if ($config = $this->getUserConfig())
     	    {
+    	    	$config['div_settings_config'] = GDT_Divider::make('div_settings_config');
     	        foreach ($config as $gdt)
     	        {
     	            $gdt->editable(false);
@@ -691,6 +703,7 @@ class GDO_Module extends GDO
     	    }
     	    if ($config = $this->getUserSettings())
     	    {
+	    	    $config['div_settings_settings'] = GDT_Divider::make('div_settings_settings');
     	        foreach ($config as $gdt)
     	        {
     	            $this->userConfigCache[$gdt->name] = $gdt;
@@ -698,7 +711,8 @@ class GDO_Module extends GDO
     	    }
     	    if ($config = $this->getUserSettingBlobs())
     	    {
-    	        foreach ($config as $gdt)
+    	    	$config['div_settings_blob'] = GDT_Divider::make('div_settings_blob');
+    	    	foreach ($config as $gdt)
     	        {
     	            $this->userConfigCache[$gdt->name] = $gdt;
     	        }
@@ -783,9 +797,14 @@ class GDO_Module extends GDO
 	 * @param boolean $withPermission
 	 * @return Method[]
 	 */
-	public function getMethods($withPermission=true)
+	public function getMethods($withPermission=true) : array
 	{
-	    $methods = scandir($this->filePath('Method'));
+		$path =  $this->filePath('Method');
+		if (!FileUtil::isDir($path))
+		{
+			return [];
+		}
+	    $methods = scandir($path);
 	    $methods = array_map(function($file) {
 	        return substr($file, 0, -4);
 	    }, $methods);

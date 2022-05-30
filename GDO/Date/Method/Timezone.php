@@ -18,10 +18,11 @@ use GDO\UI\GDT_Redirect;
  */
 final class Timezone extends MethodForm
 {
+	public function saveLastUrl() : bool { return false; }
     public function isTransactional() : bool { return false; }
     public function isUserRequired() : bool { return false; }
     
-    public function formName() { return 'tzform'; }
+    public function getFormName() : string { return 'tzform'; }
     
     public function createForm(GDT_Form $form) : void
     {
@@ -43,7 +44,8 @@ final class Timezone extends MethodForm
     public function formValidated(GDT_Form $form)
     {
     	$tz = $this->getTimezone();
-        $this->setTimezone($this->getTimezone(), false);
+        $this->setTimezone($tz, false);
+        return parent::formValidated($form);
     }
     
     public function setTimezone(GDO_Timezone $timezone, $redirect=true)

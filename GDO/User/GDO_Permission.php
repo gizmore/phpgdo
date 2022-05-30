@@ -65,7 +65,11 @@ final class GDO_Permission extends GDO
 	{
 	    $name = $this->getName();
 	    $key = 'perm_' . $name;
-	    return Trans::hasKey($key) ? t($key) : $name;
+	    if (Trans::hasKey($key))
+	    {
+	    	return t($key);
+	    }
+	    return $name ? $name : t('unknown_permission');
 	}
 	
 	public function display_perm_edit() { return GDT_EditButton::make()->href($this->hrefEdit()); }

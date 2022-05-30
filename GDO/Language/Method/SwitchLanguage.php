@@ -36,15 +36,15 @@ final class SwitchLanguage extends MethodAjax
 		];
 	}
 	
-	public function getDescription()
+	public function getMethodDescription() : string
 	{
 	    if ($this->getLanguage(false))
 	    {
-	        return t($this->getDescriptionLangKey(), [$this->getLanguage()->renderName()]);
+	        return t('md_switch_language', [$this->getLanguage()->renderName()]);
 	    }
 	    else
 	    {
-	        return t($this->getDescriptionLangKey().'2');
+	    	return t('md_switch_language2');
 	    }
 	}
 	

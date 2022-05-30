@@ -36,7 +36,7 @@ final class GDT_Response extends GDT
 	{
 		if ($gdt instanceof GDT_Response)
 		{
-			return $this->addFields(...$gdt->getFields());
+			return $this->addFields(...array_values($gdt->getFields()));
 		}
 		return $this->addFieldB($gdt);
 	}

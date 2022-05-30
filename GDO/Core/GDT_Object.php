@@ -38,11 +38,12 @@ class GDT_Object extends GDT_UInt
 		 {
 			 return $obj->renderChoice();
 		 }
+		 return '';
 	 }
 	
 	 public function renderForm() : string
 	{
-		if ($this->completionHref)
+		if (isset($this->completionHref))
 		{
 			return GDT_Template::php('Core', 'object_completion_form.php', ['field'=>$this]);
 		}
@@ -77,8 +78,8 @@ class GDT_Object extends GDT_UInt
 	    {
 	        $selected = [
 	            'id' => null,
-	            'text' => $this->placeholder,
-	            'display' => $this->placeholder,
+	            'text' => $this->renderPlaceholder(),
+	            'display' => $this->renderPlaceholder(),
 	        ];
 	    }
 	    return array_merge(parent::configJSON(), [

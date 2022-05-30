@@ -7,20 +7,24 @@ if (isset($field->completionHref))
     $field->addClass('gdo-autocomplete');
 }
 ?>
-  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
+  <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <select
    <?=$field->htmlID()?>
    <?=$field->htmlAttributes()?>
+<?php if ($field->hasCompletion()) : ?>
+    data-config='<?=$field->displayConfigJSON()?>'
+<?php endif; ?>
+   <?=$field->htmlFormName()?>
    <?=$field->htmlMultiple()?>
    <?=$field->htmlDisabled()?>>
-<?php if (isset($field->emptyLabel)) : ?>
-	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->displayEmptyLabel()?></option>
+<?php if ($field->hasEmptyLabel()) : ?>
+	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->renderEmptyLabel()?></option>
 <?php endif; ?>
-<?php if (!isset($field->completionHref)) : ?>
-<?php foreach ($field->choices as $var => $choice) : ?>
-	<option value="<?=html($var)?>"<?=$field->htmlSelected($var)?>><?=$field->displayChoice($choice)?></option>
-<?php endforeach; ?>
-<?php else : ?>
+<?php if ($field->hasCompletion()) : ?>
 	<option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$field->displayChoice($field->getValue())?></option>
+<?php else : ?>
+<?php foreach ($field->getChoices() as $var => $choice) : ?>
+	<option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$field->displayChoice($var, $choice)?></option>
+<?php endforeach; ?>
 <?php endif; ?>
   </select>

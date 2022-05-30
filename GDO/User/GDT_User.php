@@ -84,7 +84,10 @@ class GDT_User extends GDT_Object
 	/**
 	 * Get selected user.
 	 */
-	public function getUser() : GDO_User { return $this->getValue(); }
+	public function getUser() : ?GDO_User
+	{
+		return $this->getValue();
+	}
 	
 	/**
 	 * @return GDO_User

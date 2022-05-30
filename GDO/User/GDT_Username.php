@@ -2,6 +2,7 @@
 namespace GDO\User;
 
 use GDO\Core\GDT_String;
+use GDO\Core\WithGDO;
 
 /**
  * Username field without completion.
@@ -14,6 +15,8 @@ use GDO\Core\GDT_String;
  */
 class GDT_Username extends GDT_String
 {
+	use WithGDO;
+	
 	const LENGTH = 32;
 	
 	public int $min = 2;
@@ -41,7 +44,7 @@ class GDT_Username extends GDT_String
 	##############
 	public function renderCLI() : string
 	{
-		return $this->gdo ? 
+		return isset($this->gdo) ? 
 			$this->gdo->renderName() :
 			$this->renderHTML();
 	}

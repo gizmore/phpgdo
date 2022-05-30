@@ -1127,7 +1127,8 @@ abstract class GDO extends GDT
 	################
 	public static function make(string $name=null) : GDT
 	{
-		throw new GDO_Error('err_gdo_no_gdt', ['make', self::gdoHumanNameS()]);
+		return self::blank();
+// 		throw new GDO_Error('err_gdo_no_gdt', ['make', get_class($this)]);
 	}
 	
 	/**

@@ -20,6 +20,8 @@ use GDO\Core\Logger;
 use GDO\Core\Debug;
 use GDO\Core\Method;
 use GDO\Util\Permutations;
+use GDO\Core\GDT_Response;
+use GDO\Core\GDT;
 
 /**
  * Auto coverage test.
@@ -272,14 +274,16 @@ final class AutomatedTest extends TestCase
 			$n = $this->automatedTested;
 			$this->automatedCalled++;
 			$mt = GDT_MethodTest::make()->inputs($plugVars);
-			$mt->runAs($this->gizmore())
+			$result = $mt->runAs($this->gizmore())
 				->method($method)
 				->execute();
-				assertLessThan(400,
-					Application::$RESPONSE_CODE,
-					"Test if trivial method {$this->mome($method)} has a success error code.");
-				$this->automatedPassed++;
-				$this->message('%4d.) %s: %s (%s)', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method), implode(',', $plugVars));
+			assertLessThan(400,
+				Application::$RESPONSE_CODE,
+				"Test if trivial method {$this->mome($method)} has a success error code.");
+			assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
+			assertTrue($this->renderResult($result), "Test if method response renders all outputs without crash.");
+			$this->automatedPassed++;
+			$this->message('%4d.) %s: %s (%s)', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method), implode(',', $plugVars));
 		}
 		catch (\Throwable $ex)
 		{
@@ -290,6 +294,17 @@ final class AutomatedTest extends TestCase
 			$dbgout = Debug::debugException($ex);
 			echo $dbgout;
 		}
+	}
+	
+	private function renderResult(GDT_Response $response) : bool
+	{
+		$response->renderMode(GDT::RENDER_BINARY);
+		$response->renderMode(GDT::RENDER_CLI);
+		$response->renderMode(GDT::RENDER_PDF);
+		$response->renderMode(GDT::RENDER_XML);
+		$response->renderMode(GDT::RENDER_JSON);
+		$response->renderMode(GDT::RENDER_HTML);
+		return true;
 	}
 	
 	private array $plugVariants;

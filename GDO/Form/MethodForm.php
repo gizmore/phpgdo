@@ -19,6 +19,11 @@ abstract class MethodForm extends Method
 	
 	public abstract function createForm(GDT_Form $form) : void;
 
+	public function getFormName() : string
+	{
+		return 'form';
+	}
+	
 	public function formValidated(GDT_Form $form)
 	{
 		return GDT_Tuple::makeWith(
@@ -53,7 +58,7 @@ abstract class MethodForm extends Method
 	{
 		if (!isset($this->form))
 		{
-			$this->form = GDT_Form::make('form');
+			$this->form = GDT_Form::make($this->getFormName());
 			if (isset($this->inputs))
 			{
 				$this->form->inputs($this->inputs);

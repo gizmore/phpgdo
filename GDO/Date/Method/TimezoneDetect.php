@@ -34,7 +34,7 @@ final class TimezoneDetect extends MethodForm
 	
 	public function validateTimezoneName(GDT_Form $form, GDT_String $string, $value)
 	{
-		if (!($this->tz = GDO_Timezone::getBy('tz_name', $value)))
+		if (!($this->tz = GDO_Timezone::getBy('tz_name', $value->getName())))
 		{
 			return $string->error('err_unknown_timezone');
 		}

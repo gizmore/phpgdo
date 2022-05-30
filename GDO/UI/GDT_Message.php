@@ -277,7 +277,7 @@ class GDT_Message extends GDT_Text
 	### Render ###
 	##############
     public function renderCLI() : string { return $this->getVarText() . "\n"; }
-    public function renderHTML() : string { return $this->getVarOutput(); }
+    public function renderHTML() : string { return (string) $this->getVarOutput(); }
     public function renderCard() : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
     public function renderForm() : string { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
     public function renderChoice() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }

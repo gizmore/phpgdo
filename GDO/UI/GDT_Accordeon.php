@@ -5,28 +5,36 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 
 /**
- * A panel that collapses onclick.
+ * A panel that collapses monclick.
+ * Add 
  * 
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.10.0
  */
-final class GDT_Accordeon extends GDT_Panel
+final class GDT_Accordeon extends GDT_Container
 {
-	public function renderCell() : string
+	use WithTitle;
+	
+	public function addSection(string $title, GDT $section) : self
+	{
+		$this->titles[] = $title;
+		$this->sections[] = $section;
+		return $this;
+	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderHTML() : string
     {
-        return GDT_Template::php('UI', 'cell/accordeon.php', ['field' => $this]);
-    }
-
-    public function renderCard() : string
-    {
-        return '<label></label>' . $this->renderCell();
+        return GDT_Template::php('UI', 'accordeon_html.php', ['field' => $this]);
     }
     
     ##############
     ### Opened ###
     ##############
-    public $opened = false;
+    public bool $opened = false;
     public function opened($opened=true)
     {
         $this->opened = $opened;
@@ -38,16 +46,4 @@ final class GDT_Accordeon extends GDT_Panel
     	return $this->opened(!$closed);
     }
     
-    /**
-     * @var GDT[]
-     */
-    public $sections = [];
-    public $titles = [];
-    public function addSection($title, GDT $gdt)
-    {
-        $this->titles[] = $title;
-        $this->sections[] = $gdt;
-        return $this;
-    }
-
 }

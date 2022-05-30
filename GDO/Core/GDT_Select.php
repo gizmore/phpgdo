@@ -121,6 +121,11 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 	
+	public function getChoices() {
+		$this->initChoices();
+		return $this->choices;
+	}
+	
 	protected function toClosestChoiceValue($var)
 	{
 	    $candidatesZero = [];
@@ -129,6 +134,10 @@ class GDT_Select extends GDT_ComboBox
 	    foreach ($this->choices as $vaar => $value)
 	    {
 	        $pos = stripos($vaar, $var);
+	        if ($pos === false)
+	        {
+	        	$pos = stripos($value->getName(), $var);
+	        }
 	        if ($pos === 0)
 	        {
 	            $candidatesZero[] = $value;
@@ -423,6 +432,23 @@ class GDT_Select extends GDT_ComboBox
 			return sprintf(' name="%s%s"', $name, $mul);
 		}
 		return '';
+	}
+	
+	public function htmlChoiceVar($var, $value) : string
+	{
+		if ($value === null)
+		{
+			return '';
+		}
+		if (is_string($value))
+		{
+			$var = html($var);
+		}
+		else
+		{
+			$var = $value->getName();
+		}
+		return sprintf(' value="%s"', $var);
 	}
 	
 // 	public function configJSON() : array

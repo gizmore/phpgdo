@@ -3,8 +3,11 @@ namespace GDO\Util;
 
 /**
  * Permutation generator.
+ * Works for mixed[mixed]?
+ * If you have empty values, you have one permutation with an empty array.
  * 
  * @author gizmore
+ * @version 7.0.0
  */
 final class Permutations
 {
@@ -22,7 +25,7 @@ final class Permutations
 	
 	private array $lastPermutation;
 	
-	public function generate()
+	public function generate() : \Generator
 	{
 		yield $this->lastPermutation();
 		
@@ -49,7 +52,8 @@ final class Permutations
 		$back = [];
 		foreach ($this->lastPermutation as $k => $v)
 		{
-			$back[$k] = $this->values[$k][$v];
+			$values = $this->values[$k];
+			$back[$k] = empty($values) ? null : $values[$v];
 		}
 		return $back;
 	}

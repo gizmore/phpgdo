@@ -1,6 +1,6 @@
 <?php
 /** @var \GDO\UI\GDT_Panel $field **/ ?>
-<div class="gdo-panel">
+<div class="gdt-panel">
 <?php if ($field->hasTitle()) : ?>
   <h3><?=$field->renderTitle()?></h3>
 <?php endif; ?>

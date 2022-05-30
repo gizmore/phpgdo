@@ -8,6 +8,7 @@ return [
 	'err_db' => "SQL Error %s: %s\nQuery: %s",
 	'err_db_connect' => 'The database connection could not be established: %s.',
 	'err_db_no_link' => 'The database connection could not be established.',
+	'err_csrf' => 'Your form token is invalid. Your probably have cookie and/or session problems. Try to delete your cookies for this site.',
 	'err_gdo_not_found' => 'The Data for %s with ID: %s could not be found.',
 	'err_module' => 'Module `%s` is currently not installed.',
 	'err_img_not_found' => 'Image not found.',

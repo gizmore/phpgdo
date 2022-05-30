@@ -27,7 +27,7 @@ trait WithFields
 	##############
 	/**
 	 * Real tree.
-	 * @var GDT[]
+	 * @var GDT[string]
 	 */
 	public array $fields;
 	

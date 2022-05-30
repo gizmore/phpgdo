@@ -8,26 +8,6 @@ if (isset($field->completionHref))
 }
 ?>
 <div class="gdt-container <?=$field->classError()?>">
-  <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
-  <select
-   <?=$field->htmlID()?>
-   <?=$field->htmlAttributes()?>
-<?php if ($field->hasCompletion()) : ?>
-    data-config='<?=$field->displayConfigJSON()?>'
-<?php endif; ?>
-   <?=$field->htmlFormName()?>
-   <?=$field->htmlMultiple()?>
-   <?=$field->htmlDisabled()?>>
-<?php if ($field->hasEmptyLabel()) : ?>
-	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->renderEmptyLabel()?></option>
-<?php endif; ?>
-<?php if ($field->hasCompletion()) : ?>
-<?php foreach ($field->choices as $var => $choice) : ?>
-	<option value="<?=html($var)?>"<?=$field->htmlSelected($var);?>><?=$field->displayChoice($choice)?></option>
-<?php endforeach; ?>
-<?php else : ?>
-	<option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$field->displayChoice($field->getValue())?></option>
-<?php endif; ?>
-  </select>
+  <?php require 'select_cell.php'; ?>
   <?=$field->htmlError()?>
 </div>

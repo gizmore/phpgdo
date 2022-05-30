@@ -135,6 +135,11 @@ class GDT_Checkbox extends GDT_Select
 	    }
 	}
 	
+	public function displayChoice($var, $choice) : string
+	{
+		return $this->displayVar($var);
+	}
+	
 	public function htmlClass() : string
 	{
 		return parent::htmlClass() . " gdt-checkbox-{$this->getVar()}";
@@ -167,6 +172,11 @@ class GDT_Checkbox extends GDT_Select
 	    $vars = ['field' => $this, 'f'=> $f];
 		return GDT_Template::php('Core', 'checkbox_filter.php', $vars);
 	}
+	
+// 	public function htmlChoiceVar($choice) : string
+// 	{
+// 		return $this->toVar($choice);
+// 	}
 
 	####################
 	### Dynamic Icon ###

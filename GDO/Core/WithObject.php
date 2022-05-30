@@ -174,7 +174,7 @@ trait WithObject
 		{
 			if ($gdt = $gdo->gdoNameColumn())
 			{
-				return html($gdt->display());
+				return html($gdt->getVar());
 			}
 			else
 			{

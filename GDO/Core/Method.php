@@ -224,17 +224,17 @@ abstract class Method #extends GDT
 	###########
 	public function getMethodTitle() : string
 	{
-		return t('title');
+		return '';
 	}
 	
 	public function getMethodKeywords() : string
 	{
-		return t('keywords');
+		return '';
 	}
 	
 	public function getMethodDescription() : string
 	{
-		return t('description');
+		return '';
 	}
 	
 	###############

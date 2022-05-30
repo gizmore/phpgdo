@@ -1,12 +1,11 @@
 <?php
 namespace GDO\Form\tpl;
 use GDO\Form\GDT_Form;
-use GDO\Core\GDT;
 /**
  * @var GDT_Form $field
  */
 ?>
-<div class="gdt-form">
+<div class="gdt-form" <?=$field->htmlID()?>>
 <?php if ($field->hasError()) : ?>
   <?=$field->renderError()?>
 <?php endif;?>

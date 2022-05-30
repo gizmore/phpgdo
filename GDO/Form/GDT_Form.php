@@ -9,6 +9,7 @@ use GDO\UI\WithTarget;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithError;
 use GDO\Core\WithInput;
+use GDO\Core\WithName;
 
 /**
  * A form has a title, a text, fields, menu actions and an html action/target.
@@ -25,6 +26,7 @@ use GDO\Core\WithInput;
  */
 final class GDT_Form extends GDT
 {
+	use WithName; # Id
 	use WithText; # form info
 	use WithInput; # need input
 	use WithTitle; # form title
@@ -44,11 +46,22 @@ final class GDT_Form extends GDT
 		return $this;
 	}
 	
+	public function plugVars() : array
+	{
+		$back = [];
+		foreach ($this->actions()->getAllFields() as $gdt)
+		{
+			$name = $gdt->getName();
+			$back[$name] = '1';
+		}
+		return array_values($back);
+	}
+	
 	############
 	### Verb ###
 	############
-	const GET = 'GET';
-	const POST = 'POST';
+	const GET = 'get';
+	const POST = 'post';
 	public string $verb = self::POST;
 	public function verb(string $verb) : self
 	{
@@ -79,6 +92,15 @@ final class GDT_Form extends GDT
 		return sprintf(' method="%s"', $this->verb);
 	}
 	
+	public function htmlID() : string
+	{
+		if ($name = $this->getName())
+		{
+			return sprintf(' id="form_%s"', $name);
+		}
+		return '';
+	}
+	
 	################
 	### Validate ###
 	################
@@ -90,7 +112,7 @@ final class GDT_Form extends GDT
 			if ($gdt->hasInputs())
 			{
 				$input = $gdt->getInput($key);
-				if (!$gdt->validateInput($input))
+				if (!$gdt->validateInput($input, false))
 				{
 					$valid = false;
 				}

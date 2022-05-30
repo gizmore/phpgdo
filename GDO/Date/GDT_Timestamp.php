@@ -214,7 +214,7 @@ class GDT_Timestamp extends GDT_DBField
 	public function renderCell() : string { return $this->renderCellSpan(Time::displayDateTime(Time::parseDateTimeDB($this->getVar()), $this->format)); }
 	public function renderForm() : string { return GDT_Template::php('Date', 'form/datetime.php', ['field'=>$this]); }
 	public function renderAge() : string { return Time::displayAge($this->getVar()); }
-	public function renderCLI() : string { return $this->renderLabel() . ': ' . $this->display(); }
+	public function renderCLI() : string { return $this->renderLabel() . ': ' . $this->getVar(); }
 	public function renderJSON() { return Time::getTimestamp($this->getVar()) * 1000; }
 	public function displayVar(string $var = null) : string
 	{

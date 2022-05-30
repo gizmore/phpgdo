@@ -16,9 +16,14 @@ class GDT_Enum extends GDT_Select
 	public array $enumValues;
 	public function enumValues(string...$enumValues) : self
 	{
-		$this->choices(array_combine($enumValues, $enumValues));
-		$this->enumValues = $this->choices;
+		$this->enumValues = $enumValues;
+		$this->initChoices();
 		return $this;
+	}
+	
+	public function initChoices()
+	{
+		return $this->choices(array_combine($this->enumValues, $this->enumValues));
 	}
 	
 	public function toValue(string $var=null)

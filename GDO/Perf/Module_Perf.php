@@ -28,10 +28,10 @@ final class Module_Perf extends GDO_Module
     public function getConfig() : array
     {
         return [
-        	GDT_Enum::make('perf_bottom_bar')->enumValues('all', 'none', 'staff')->initial('staff'),
+        	GDT_Enum::make('hook_sidebar')->enumValues('all', 'none', 'staff')->initial('staff'),
         ];
     }
-    public function cfgBottomPermission() : string { return $this->getConfigValue('perf_bottom_bar'); }
+    public function cfgBottomPermission() : string { return $this->getConfigValue('hook_sidebar'); }
 
     ############
     ### Hook ###

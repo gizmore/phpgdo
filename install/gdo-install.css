@@ -159,10 +159,10 @@ div.gdt-form-fields div.gdt-divider > *{ column-span: all; }
 
 /** Message **/
 .gdo-error-box,
-.gdo-error.gdo-panel,
+.gdo-error.gdt-panel,
 .gdo-exception { background: #f44; padding: 12px; border: 1px dotted #111; border-radius: 4px; margin: 4px 8px; }
 .gdo-message-box,
-.gdo-success.gdo-panel { background: #cfc; padding: 12px; border: 1px dotted #111; border-radius: 4px; margin: 4px 8px; }
+.gdo-success.gdt-panel { background: #cfc; padding: 12px; border: 1px dotted #111; border-radius: 4px; margin: 4px 8px; }
 .gdo-error .gdo-exception { border: none; margin: 0; padding: 0; }
 .gdt-message { word-break: break-word; }
 
@@ -172,8 +172,8 @@ footer#gdo-footer, footer#gdo-footer .gdo-bar { min-height: 32px; }
 header#gdo-header, header#gdo-header .gdo-bar { min-height: 64px; z-index: 2; }
 
 /** Panel **/
-.gdo-panel { border: 1px solid #444; padding: 6px 14px; margin: 2px; }
-.gdo-panel > p { margin-bottom: 0px; }
+.gdt-panel { border: 1px solid #444; padding: 6px 14px; margin: 2px; }
+.gdt-panel > p { margin-bottom: 0px; }
 
 /** Accordeon **/
 .gdt-accordeon.opened .collapse-bar { display: none; }

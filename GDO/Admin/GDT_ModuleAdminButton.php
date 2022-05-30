@@ -18,28 +18,31 @@ class GDT_ModuleAdminButton extends GDT_Button
 {
 	use WithGDO;
 	
-	public function getModule() : GDO_Module
+	public function getConfigModule() : ?GDO_Module
 	{
-		return $this->gdo;
+		return @$this->gdo;
 	}
 	
 	public function renderHTML() : string
 	{
-	    if ($href = $this->getModule()->href_administrate_module())
+		if ($module = $this->getConfigModule())
 		{
-		    $this->href($href);
-			return parent::renderHTML();
+		    if ($href = $module->href_administrate_module())
+			{
+			    $this->href($href);
+				return parent::renderHTML();
+			}
 		}
 		return '';
 	}
 	
-	public function renderJSON()
-	{
-	    if ($href = $this->getModule()->href_administrate_module())
-	    {
-	        $this->href($href);
-    	    return sprintf('<a href="%s">%s</a>', $href, $this->renderLabel());
-	    }
-	}
+// 	public function renderJSON()
+// 	{
+// 	    if ($href = $this->getModule()->href_administrate_module())
+// 	    {
+// 	        $this->href($href);
+//     	    return sprintf('<a href="%s">%s</a>', $href, $this->renderLabel());
+// 	    }
+// 	}
 	
 }
