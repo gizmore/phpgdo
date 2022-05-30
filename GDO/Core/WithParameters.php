@@ -78,13 +78,16 @@ trait WithParameters
 					if ($_gdt->isPositional())
 					{
 						$pos++;
-						if ($pos == $key)
+						if ($key == $pos)
 						{
 							return $_gdt;
 						}
 					}
 				}
-				
+				if ($_gdt->isPositional())
+				{
+					return $_gdt;
+				}
 			}
 		}
 		if (!$gdt)

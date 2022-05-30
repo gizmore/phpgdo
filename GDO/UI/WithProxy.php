@@ -73,6 +73,16 @@ trait WithProxy
 	###########################
 	### Input / Var / Value ###
 	###########################
+	public function getVar() : ?string
+	{
+		return $this->proxy->getVar();
+	}
+	
+	public function getValue()
+	{
+		return $this->proxy->getValue();
+	}
+	
 	public function toVar($value) : ?string
 	{
 		return $this->proxy->toVar();
@@ -81,5 +91,8 @@ trait WithProxy
 	{
 		return $this->proxy->toValue($var);
 	}
-	
+	public function isPositional() : bool
+	{
+		return $this->proxy->isPositional();
+	}
 }

@@ -7,6 +7,7 @@ use GDO\Admin\Method\Configure;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Admin\Method\Modules;
 use GDO\Core\GDT_Method;
+use GDO\Core\GDT;
 
 /**
  * Test method form for module admin configuration.
@@ -30,7 +31,7 @@ final class ModuleConfigTest extends TestCase
         $inputs = ['module' => 'Table'];
         $method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
         $result = $method->execute();
-        $html = $result->renderHTML();
+        $html = $result->renderMode(GDT::RENDER_HTML);
         assertStringContainsString('"20"', $html, 'Test if configured values are prefilled correctly.');
     }
     

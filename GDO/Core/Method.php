@@ -360,10 +360,10 @@ abstract class Method #extends GDT
 		{
 			if ($gdt = $this->gdoParameter($key, false, false))
 			{
-				if (is_array($input))
-				{
-					$input = json_encode($input);
-				}
+// 				if (is_array($input))
+// 				{
+// 					$input = json_encode($input);
+// 				}
 				$gdt->input($input);
 			}
 		}

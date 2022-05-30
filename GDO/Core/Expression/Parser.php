@@ -28,7 +28,7 @@ use GDO\Util\Strings;
 final class Parser
 {
 	const CMD_PREAMBLE = '$';
-	const ARG_SEPARATOR = ';';
+	const ARG_SEPARATOR = ',';
 	const ESCAPE_CHARACTER = '\\';
 	
 	private string $line;
@@ -75,9 +75,16 @@ final class Parser
 					break;
 
 				case self::ARG_SEPARATOR:
+					$c2 = $l[$i];
+					if ($c2 === self::ARG_SEPARATOR)
+					{
+						$arg .= $l[$i++];
+						break;
+					}
 					if ($arg)
 					{
 						$this->addArg($current, $arg);
+						$arg = '';
 					}
 					break;
 
@@ -147,7 +154,7 @@ final class Parser
 	}
 	
 	/**
-	 * Parse an additional line within paranstheses.
+	 * Parse an additional line within parantheses.
 	 */
 	private function parseLine(string $line, int &$i, int $len) : Method
 	{
