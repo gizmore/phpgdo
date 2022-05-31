@@ -747,18 +747,16 @@ abstract class GDO extends GDT
 	################
 	### Validate ###
 	################
-	public function isValid()
+	public function isValid() : bool
 	{
 		$invalid = 0;
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			$gdt = $this->gdoColumn($gdt->name); # assign me as gdo to gdt
-			$invalid += $gdt->validate($gdt->getValue()) ? 0 : 1;
-			//             $error = $gdt->error;
-			//             if ($error)
-				//             {
-				//                 echo $gdt->name;
-				//             }
+			if ($name = $gdt->getName())
+			{
+				$gdt = $this->gdoColumn($name);
+				$invalid += $gdt->validate($gdt->getValue()) ? 0 : 1;
+			}
 		}
 		return $invalid === 0;
 	}
@@ -780,7 +778,7 @@ abstract class GDO extends GDT
 	 * Check if we are deleted.
 	 * @return boolean
 	 */
-	public function isDeleted()
+	public function isDeleted() : bool
 	{
 		if ($gdt = $this->gdoColumnOf(GDT_DeletedAt::class))
 		{
@@ -826,10 +824,10 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Delete multiple rows, but still one by one to trigger all events correctly.
-	 * @param string $condition
+	 * 
 	 * @return int number of deleted rows
 	 */
-	public function deleteWhere($condition, $withHooks=true)
+	public function deleteWhere(string $condition, bool $withHooks=true) : int
 	{
 		$deleted = 0;
 		if ($withHooks)
@@ -853,7 +851,7 @@ abstract class GDO extends GDT
 		return $deleted;
 	}
 	
-	private function deleteB($withHooks=true)
+	private function deleteB(bool $withHooks=true) : self
 	{
 		if ($this->persisted)
 		{

@@ -73,9 +73,9 @@ final class GDT_Module extends GDT_ObjectSelect
     #################
     ### Var/Value ###
     #################
-    public function plugVar() : string
+    public function plugVars() : array
     {
-        return 'Core';
+    	return ['Core', 'Table', 'Admin'];
     }
     
     public function getValueSingle(string $moduleName) : ?GDO_Module

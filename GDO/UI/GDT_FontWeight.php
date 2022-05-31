@@ -11,7 +11,7 @@ use GDO\Core\GDT_EnumNoI18n;
  */
 class GDT_FontWeight extends GDT_EnumNoI18n
 {
-    public $icon = 'font';
+    public string $icon = 'font';
     
 	public function defaultLabel() : self { return $this->label('font_weight'); }
 	

@@ -262,6 +262,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
     	ob_flush();
     }
     
+    protected function messageBold($message, ...$args)
+    {
+    	return $this->message(CLI::bold($message), ...$args);
+    }
+    
     protected function message($message, ...$args)
     {
     	echo vsprintf($message, $args);

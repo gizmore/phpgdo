@@ -22,7 +22,7 @@ class GDT_Username extends GDT_String
 	public int $min = 2;
 	public int $max = self::LENGTH;
 	
-	public $icon = 'face';
+	public string $icon = 'face';
 	
 	# Allow - _ LETTERS DIGITS
 	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,".(self::LENGTH-1)."}$/iuD";

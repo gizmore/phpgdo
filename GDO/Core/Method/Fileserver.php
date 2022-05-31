@@ -32,12 +32,11 @@ final class Fileserver extends Method
 	public function execute()
 	{
 		$url = $this->gdoParameterVar('url', false);
-		
+		$url = ltrim($url, '/');
 		if (!Module_Core::instance()->checkAssetAllowed($url))
 		{
 			return NotAllowed::make()->execute();
 		}
-		
 		$last_modified_time = filemtime($url);
 		# @TODO: Cache etag-md5 via modified time
 		$etag = md5_file($url);

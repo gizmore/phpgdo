@@ -61,7 +61,7 @@ final class GDT_IP extends GDT_String
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	public string $pattern = "/^[.:0-9A-Fa-f]{3,45}$/";
-	public $icon = 'url';
+	public string $icon = 'url';
 	
 	public function defaultLabel() : self { return $this->label('ip'); }
 

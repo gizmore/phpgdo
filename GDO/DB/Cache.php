@@ -133,9 +133,14 @@ class Cache
 		}
 	}
 
-	public function getDummy()
+	public function getDummy() : GDO
 	{
 	    return isset($this->dummy) ? $this->dummy : $this->newDummy();
+	}
+	
+	public function getNewDummy(array $blankVars=null) : GDO
+	{
+		return call_user_func([$this->klass, 'blank'], $blankVars);
 	}
 	
 	private function newDummy()

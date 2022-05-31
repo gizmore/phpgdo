@@ -104,12 +104,15 @@ final class AutomatedRenderingTest extends TestCase
 		$this->message('Tested %d fields (%d GDO / %d GDT)',
 			$this->fieldsTested, $this->fieldsGDOTested, $this->fieldsGDTTested);
 		$this->message('%s have succeeded. %s were abstract. %s. %s ',
-			$this->fieldsSuccess, $this->fieldsAbstract, CLI::bold("{$this->fieldsFailed} failed", CLI::bold("{$this->fieldsNonTestable} were not testable.")));
+			$this->fieldsSuccess, $this->fieldsAbstract, CLI::bold("{$this->fieldsFailed} failed"), CLI::bold("{$this->fieldsNonTestable} were not testable."));
 	}
 	
 	###############
 	### Private ###
 	###############
+	/**
+	 * @var string[string][]
+	 */
 	private array $plugVariants;
 	
 	private function addPlugVars(string $name, array $plugs)
@@ -129,10 +132,11 @@ final class AutomatedRenderingTest extends TestCase
 	
 	private function fieldTestGDT(GDT $gdt) : bool
 	{
+		$this->renderAll($gdt); # unplugged
+
 		$name = $gdt->getName();
 		$name = $name ? $name : "gdt_{$this->fieldsTested}";
 		$this->plugVariants = [];
-		$this->renderAll($gdt); # unplugged
 		$plugs = $gdt->plugVars();
 		$this->addPlugVars($name, $plugs);
 		$permutations = new Permutations($this->plugVariants);
@@ -150,9 +154,31 @@ final class AutomatedRenderingTest extends TestCase
 	
 	private function fieldTestGDO(GDO $gdo) : bool
 	{
-		$success = true;
-		return $success;
-// 		$this->renderAll($gdo);
+		$this->renderAllUnplugged($gdo);
+		foreach ($gdo->gdoColumnsCache() as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				$gdt->gdo($gdo);
+				$this->addPlugVars($name, $gdt->plugVars());
+			}
+		}
+		$permutations = new Permutations($this->plugVariants);
+		foreach ($permutations->generate() as $inputs)
+		{
+			$new = $gdo->table()->cache->getNewDummy();
+			foreach ($inputs as $key => $var)
+			{
+				$new->setVar($key, $var);
+			}
+			$this->renderAll($new); # plugged with a permutation
+		}
+		return true;
+	}
+
+	private function renderAllUnplugged(GDT $gdt) : bool
+	{
+		return $this->renderAll($gdt); # unplugged
 	}
 	
 	private function renderAll(GDT $gdt) : bool

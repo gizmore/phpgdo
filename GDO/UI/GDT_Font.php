@@ -15,7 +15,7 @@ use GDO\Util\Strings;
  */
 class GDT_Font extends GDT_Select
 {
-    public $icon = 'font';
+    public string $icon = 'font';
     
 	public function defaultLabel() : self { return $this->label('font'); }
 	

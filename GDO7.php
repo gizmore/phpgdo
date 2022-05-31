@@ -189,7 +189,7 @@ function hdr(string $header, bool $replace = true)
 	$app = Application::$INSTANCE;
 	if ($app->isUnitTests())
 	{
-		echo $header . PHP_EOL;
+// 		echo $header . PHP_EOL;
 	}
 	elseif (!$app->isCLI())
 	{
@@ -247,51 +247,36 @@ function method(string $moduleName, string $methodName) : Method
 
 /**
  * Global translate function to translate into current language ISO.
- *
- * @param string $key
- * @param array $args
- * @return string
+ * @return string|string[string]
  */
-function t(string $key, array $args = null) : string
+function t(string $key, array $args = null)
 {
 	return Trans::t($key, $args);
 }
 
 /**
  * Global translate function to translate into english.
- *
- * @see t()
- * @param string $key
- * @param array $args
- * @return string
+ * @return string|string[string]
  */
-function ten(string $key, array $args = null) : string
+function ten(string $key, array $args = null)
 {
 	return Trans::tiso('en', $key, $args);
 }
 
 /**
  * Global translate function to translate into an ISO language code.
- *
- * @param string $iso
- * @param string $key
- * @param array $args
- * @return string
+ * @return string|string[string]
  */
-function tiso(string $iso, string $key, array $args = null) : string
+function tiso(string $iso, string $key, array $args = null)
 {
 	return Trans::tiso($iso, $key, $args);
 }
 
 /**
  * Global translate function to translate into a user's language.
- *
- * @param GDO_User $user
- * @param string $key
- * @param array $args
- * @return string
+ * @return string|string[string]
  */
-function tusr(GDO_User $user, string $key, array $args = null) : string
+function tusr(GDO_User $user, string $key, array $args = null)
 {
 	return Trans::tiso($user->getLangISO(), $key, $args);
 }

@@ -16,7 +16,7 @@ namespace GDO\UI;
  * @see GDT_IconUTF8 - for the minimal icon provider.
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.0
  * @since 6.1.0
  */
 trait WithIcon
@@ -36,7 +36,7 @@ trait WithIcon
 		return sprintf('<i class="gdo-icon" title="%s"%s>%s</i>', html($iconText), $style, $icon);
 	}
 	
-	private static function iconStyle($size, $color)
+	private static function iconStyle($size, $color) : string
 	{
 		$size = $size === null ? '' : "font-size:{$size}px;";
 		$color = $color === null ? '' : "color:$color;";
@@ -46,40 +46,90 @@ trait WithIcon
 	############
 	### Icon ###
 	############
-	public $icon;
-	public function icon($icon) { $this->icon = $icon; return $this; }
-	
-	public $iconText;
-	public $iconTextArgs;
-	public function iconText($text, $textArgs) { $this->iconText = $text; $this->iconTextArgs = $textArgs; return $this; }
-	
-	public $rawIcon;
-	public function rawIcon($rawIcon) { $this->rawIcon = $rawIcon; return $this; }
-
-	public $iconSize;
-	public function iconSize($size) { $this->iconSize = $size; return $this; }
-
-	public $iconColor;
-	public function iconColor($color) { $this->iconColor = $color; return $this; }
-	
-	public function tooltip($text, $textArgs=null)
+	public string $icon;
+	public function icon(string $icon=null) : self
 	{
-	    if (!$this->icon)
+		if ($icon)
+		{
+			$this->icon = $icon;
+		}
+		else
+		{
+			unset($this->icon);
+		}
+		return $this;
+	}
+	
+	public string $iconTextRaw;
+	public string $iconTextKey;
+	public ?array $iconTextArgs;
+	public function iconText(string $textKey, array $textArgs=null) : self
+	{
+		unset($this->iconTextRaw);
+		$this->iconTextKey = $textKey;
+		$this->iconTextArgs = $textArgs;
+		return $this;
+	}
+	
+	public string $rawIcon;
+	public function rawIcon(string $rawIcon) : self
+	{
+		$this->rawIcon = $rawIcon;
+		return $this;
+	}
+
+// 	public int $iconSize = GDT_Icon::DEFAULT_SIZE;
+	public ?int $iconSize = null;
+	public function iconSize(int $size) : self
+	{
+		$this->iconSize = $size;
+		return $this;
+	}
+
+	public ?string $iconColor = null;
+	public function iconColor(string $color)
+	{
+		$this->iconColor = $color;
+		return $this;
+	}
+	
+	public function tooltip(string $textKey, array $textArgs=null) : self
+	{
+		if (!isset($this->icon))
 	    {
-	        $this->icon = 'help';
+	        $this->icon('help');
 	    }
-	    return $this->iconText($text, $textArgs);
+	    return $this->iconText($textKey, $textArgs);
 	}
 	
 	##############
 	### Render ###
 	##############
+	public function renderIconText() : string
+	{
+		if (isset($this->iconText))
+		{
+			return t($this->iconText, $this->iconTextArgs);
+		}
+		if (isset($this->iconTextRaw))
+		{
+			return $this->iconTextRaw;
+		}
+		return '';
+	}
+	
 	public function htmlIcon() : string
 	{
-	    $text = $this->iconText ? html(t($this->iconText, $this->iconTextArgs)) : '';
-		return $this->icon ?
-			self::iconS($this->icon, $text, $this->iconSize, $this->iconColor) :
-			self::rawIconS($this->rawIcon, $text, $this->iconSize, $this->iconColor);
+	    $text = $this->renderIconText();
+		if (isset($this->icon))
+		{
+			return self::iconS($this->icon, $text, $this->iconSize, $this->iconColor);
+		}
+		if (isset($this->rawIcon))
+		{
+			return self::rawIconS($this->rawIcon, $text, $this->iconSize, $this->iconColor);
+		}
+		return '';
 	}
 	
 }

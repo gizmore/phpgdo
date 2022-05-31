@@ -23,7 +23,7 @@ class GDT_Title extends GDT_String
 	
 	public int $min = 2;
 	public int $max = 128;
-	public $icon = 'title';
+	public string $icon = 'title';
 	public bool $notNull = true;
 	public int $encoding = self::UTF8;
 	public bool $caseSensitive = false;

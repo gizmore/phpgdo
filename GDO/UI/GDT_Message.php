@@ -22,7 +22,7 @@ use GDO\Core\GDT_Text;
  */
 class GDT_Message extends GDT_Text
 {
-    public $icon = 'message';
+    public string $icon = 'message';
     
     private ?string $msgInput = null;  # Raw user input
     private ?string $msgOutput = null; # Decoded input to output 

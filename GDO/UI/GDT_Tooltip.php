@@ -12,7 +12,7 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Tooltip extends GDT_Icon
 {
-	public $icon = 'help';
+	public string $icon = 'help';
 
 	public function renderCell() : string
 	{

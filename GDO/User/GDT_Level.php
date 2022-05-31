@@ -19,7 +19,7 @@ final class GDT_Level extends GDT_UInt
 {
 	public function defaultLabel() : self { return $this->label('level'); }
 	
-	public $icon = 'level';
+	public string $icon = 'level';
 	public ?string $var = '0';
 	public ?string $initial = '0';
 	public bool $notNull = true;

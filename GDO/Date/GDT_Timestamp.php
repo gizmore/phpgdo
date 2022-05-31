@@ -30,7 +30,7 @@ class GDT_Timestamp extends GDT_DBField
 	use WithOrder;
 	use WithTimezone;
 	
-	public $icon = 'time';
+	public string $icon = 'time';
 
 	#############
 	### Value ###

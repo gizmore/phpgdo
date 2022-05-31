@@ -6,7 +6,6 @@ use GDO\Util\Arrays;
 use GDO\Core\GDT_Template;
 use GDO\UI\WithTitle;
 use GDO\UI\GDT_Link;
-use GDO\Core\GDT;
 
 /**
  * URL field.

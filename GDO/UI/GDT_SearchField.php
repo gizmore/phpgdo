@@ -13,7 +13,7 @@ use GDO\Core\GDT_String;
  */
 class GDT_SearchField extends GDT_String
 {
-	public $icon = 'search';
+	public string $icon = 'search';
 	
 	public int $min = 3;
 	public int $max = 128;

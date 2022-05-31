@@ -73,7 +73,7 @@ class GDT_Container extends GDT
 	
 	public function renderForm() : string
 	{
-	    if ($this->fields)
+		if (isset($this->fields))
 	    {
 	        $this->setupHTML();
 	        $back = '<div '.$this->htmlID().' '.$this->htmlAttributes().'>';
@@ -84,6 +84,7 @@ class GDT_Container extends GDT
     	    $back .= '</div>';
     	    return $back;
 	    }
+	    return '';
 	}
 	
 // 	public function renderCard() : string

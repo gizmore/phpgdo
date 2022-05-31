@@ -18,7 +18,7 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Date extends GDT_Timestamp
 {
-	public $icon = 'calendar';
+	public string $icon = 'calendar';
 	public string $format = Time::FMT_DAY;
 	public string $dateStartView = 'year';
 	

@@ -232,29 +232,57 @@ trait WithObject
 	}
 	
 	/**
-	 * In unit tests return first row.
-	 * Two rows on multiple, if possible.
-	 * 
 	 * @return GDO
 	 */
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-	    $first = $this->table->select()->first()->exec()->fetchObject();
-	    if (!$first)
-	    {
-	        return '';
-	    }
-	    $first = $first->getID();
-        if (@$this->multiple)
-        {
-        	$data = [$first];
-        	if ($second = $this->table->select()->limit(1, 1)->exec()->fetchObject())
-        	{
-        		$data[] = $second->getID();
-        	}
-        	return json_encode($data);
-        }
-        return $first;
+		if (isset($this->table))
+		{
+			if (@$this->multiple)
+			{
+				return $this->plugVarsMultiple();
+			}
+			else
+			{
+				return $this->plugVarsSingle();
+			}
+		}
+		return [];
+	}
+	
+	private function plugVarsSingle() : array
+	{
+		$back = [];
+		if ($first = $this->table->select()->first()->exec()->fetchObject())
+		{
+			$back[] = $first->getID();
+		}
+		if ($second = $this->table->select()->limit(1, 1)->exec()->fetchObject())
+		{
+			$back[] = $second->getID();
+		}
+		return $back;
+	}
+	
+	private function plugVarsMultiple() : array
+	{
+		$two = $this->plugVarsSingle();
+		$first = isset($two[0]) ? $two[0] : null;
+		$second = isset($two[1]) ? $two[1] : null;
+		$plugs = [];
+		if ($first)
+		{
+			$plugs[] = json_encode($first);
+		}
+		if ($second)
+		{
+			$plugs[] = json_encode($second);
+		}
+		if ($first && $second)
+		{
+			$plugs[] = json_encode([$first, $second]);
+		}
+		return $plugs;
 	}
 	
 	###############

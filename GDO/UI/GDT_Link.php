@@ -5,6 +5,7 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
 use GDO\Net\URL;
 use GDO\Net\GDT_Url;
+use GDO\Core\GDT;
 
 /**
  * An anchor for menus or paragraphs.
@@ -23,6 +24,12 @@ class GDT_Link extends GDT_Url
 	use WithAnchorRelation;
 
 	public bool $caseSensitive = true;
+	
+	protected function __construct()
+	{
+		parent::__construct();
+		unset($this->icon);
+	}
 	
 	################
 	### Relation ###

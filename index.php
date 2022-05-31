@@ -132,7 +132,8 @@ else
 {
 	# Wrap url
 	$url = (string) @$_REQUEST['_url'];
-	$_REQUEST['url'] = $url; # @TODO: Make Fileserver use $url via $me->addInput('url', $url);
+	$url = ltrim($url, '/');
+	$_REQUEST['url'] = $url;
 
 	# Cleanup
 	unset($_REQUEST['_av']);

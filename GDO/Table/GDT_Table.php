@@ -69,6 +69,8 @@ class GDT_Table extends GDT
 	# ##########
 	# ## GDT ###
 	# ##########
+	public function isTestable() : bool { return false; }
+	
 	protected function __construct()
 	{
 		parent::__construct();
@@ -445,12 +447,13 @@ class GDT_Table extends GDT
 		return $this->countItems;
 	}
 
-	public function queryResult() : Result
+	public function queryResult() : ?Result
 	{
 		if (isset($this->query))
 		{
 			return $this->query->exec();
 		}
+		return null;
 	}
 
 	/**
