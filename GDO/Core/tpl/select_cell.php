@@ -24,7 +24,7 @@ if (isset($field->completionHref))
 	<option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$field->displayChoice($field->getValue())?></option>
 <?php else : ?>
 <?php foreach ($field->getChoices() as $var => $choice) : ?>
-	<option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$field->displayChoice($var, $choice)?></option>
+	<option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$field->displayChoice($choice)?></option>
 <?php endforeach; ?>
 <?php endif; ?>
   </select>

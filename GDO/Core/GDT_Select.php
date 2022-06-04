@@ -328,6 +328,19 @@ class GDT_Select extends GDT_ComboBox
 	{
 		return $this->emptyLabel($labelKey)->initial($emptyVar);
 	}
+	
+	public function displayEmptyLabel() : string
+	{
+		if (isset($this->emptyLabelRaw))
+		{
+			return $this->emptyLabelRaw;
+		}
+		if (isset($this->emptyLabelKey))
+		{
+			return t($this->emptyLabelKey, $this->emptyLabelArgs);
+		}
+		return '';
+	}
 
 	################
 	### Multiple ###
@@ -340,7 +353,7 @@ class GDT_Select extends GDT_ComboBox
 	}
 	
 	public int $minSelected = 0;
-	public ?int $maxSelected;
+	public ?int $maxSelected = null;
 	public function minSelected(int $minSelected) : self
 	{
 		$this->minSelected = $minSelected;
@@ -456,17 +469,22 @@ class GDT_Select extends GDT_ComboBox
 		return sprintf(' value="%s"', $var);
 	}
 	
-// 	public function configJSON() : array
-// 	{
-// 		return array_merge(parent::configJSON(), [
-// 			'multiple' => $this->multiple,
-// 			'selected' => $this->multiple ? $this->getValue() : $this->getSelectedVar(),
-// 			'minSelected' => $this->minSelected,
-// 			'maxSelected' => $this->maxSelected,
-// 		    'emptyVar' => $this->emptyVar,
-// 		    'emptyLabel' => $this->displayEmptyLabel(),
-// 		]);
-// 	}
+	public function configJSON() : array
+	{
+		return array_merge(parent::configJSON(), [
+			'multiple' => $this->multiple,
+			'selected' => $this->multiple ? $this->getValue() : $this->getSelectedVar(),
+			'minSelected' => $this->minSelected,
+			'maxSelected' => $this->maxSelected,
+		    'emptyVar' => $this->emptyVar,
+		    'emptyLabel' => $this->displayEmptyLabel(),
+		]);
+	}
+	
+	public function renderChoice() : string
+	{
+		return $this->getVar();
+	}
 	
 // 	public function formName()
 // 	{

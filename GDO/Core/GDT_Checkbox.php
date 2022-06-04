@@ -135,9 +135,9 @@ class GDT_Checkbox extends GDT_Select
 	    }
 	}
 	
-	public function displayChoice($var, $choice) : string
+	public function displayChoice($choice) : string
 	{
-		return $this->displayVar($var);
+		return $choice;
 	}
 	
 	public function htmlClass() : string

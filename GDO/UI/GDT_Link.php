@@ -5,7 +5,6 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
 use GDO\Net\URL;
 use GDO\Net\GDT_Url;
-use GDO\Core\GDT;
 
 /**
  * An anchor for menus or paragraphs.

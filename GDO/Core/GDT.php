@@ -210,7 +210,7 @@ abstract class GDT
 		return CLI::displayCLI($html);
 	}
 	
-	public function displayChoice($var, $choice) : string
+	public function displayChoice($choice) : string
 	{
 		if (is_string($choice))
 		{
