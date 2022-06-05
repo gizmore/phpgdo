@@ -48,7 +48,7 @@ class GDT_Url extends GDT_String
 		$this->icon('url');
 	}
 	
-	public function defaultLabel() : self { return $this->label('url'); }
+// 	public function defaultLabel() : self { return $this->label('url'); }
 	
 	public bool $noFollow = false;
 	public bool $reachable = false;

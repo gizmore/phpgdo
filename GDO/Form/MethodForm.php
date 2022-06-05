@@ -103,9 +103,4 @@ abstract class MethodForm extends Method
 		return $this->getForm();
 	}
 	
-// 	public function withAppliedInputs(array $inputs) : self
-// 	{
-// 		return parent::withAppliedInputs($inputs);
-// 	}
-
 }

@@ -483,7 +483,11 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function renderChoice() : string
 	{
-		return $this->getVar();
+		if ($var = $this->getVar())
+		{
+			return $var;
+		}
+		return '';
 	}
 	
 // 	public function formName()

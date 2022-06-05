@@ -16,12 +16,15 @@ final class GDT_Accordeon extends GDT_Container
 {
 	use WithTitle;
 	
-	public function addSection(string $title, GDT $section) : self
-	{
-		$this->titles[] = $title;
-		$this->sections[] = $section;
-		return $this;
-	}
+// 	public array $titles = [];
+// 	public array $sections = [];
+	
+// 	public function addSection(string $title, GDT $section) : self
+// 	{
+// 		$this->titles[] = $title;
+// 		$this->sections[] = $section;
+// 		return $this;
+// 	}
 	
 	##############
 	### Render ###

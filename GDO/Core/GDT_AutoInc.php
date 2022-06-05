@@ -50,4 +50,9 @@ final class GDT_AutoInc extends GDT_UInt
 	    return [$this->name => null];
 	}
 	
+	public function plugVars() : array
+	{
+		return [null];
+	}
+	
 }

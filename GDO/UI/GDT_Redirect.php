@@ -140,13 +140,13 @@ final class GDT_Redirect extends GDT
 	public function renderHTML() : string
 	{
 		$ajax = '';
+		$url = isset($this->href) ? $this->href : $this->hrefBack();
 		if (Application::$INSTANCE->isAjax())
 		{
 			$ajax = $this->renderAjaxRedirect();
 		}
 		else
 		{
-			$url = $this->href;
 			$time = $this->redirectTime;
 			if ($time > 0)
 			{
@@ -157,7 +157,7 @@ final class GDT_Redirect extends GDT
 				hdr('Location: ' . $url);
 			}
 		}
-		return t('gdt_redirect_to', [html($this->href)]) . $ajax;
+		return t('gdt_redirect_to', [html($url)]) . $ajax;
 	}
 	
 	private function renderAjaxRedirect()

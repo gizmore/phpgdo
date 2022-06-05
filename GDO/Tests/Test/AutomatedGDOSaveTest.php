@@ -121,7 +121,7 @@ final class AutomatedGDOSaveTest extends TestCase
 	
 	private function saveTestGDO(GDO $gdo)
 	{
-		$this->saveTestGDOUnplugged($gdo);
+// 		$this->saveTestGDOUnplugged($gdo);
 		
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $name => $gdt)

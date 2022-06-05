@@ -10,6 +10,7 @@ use GDO\UI\WithTitle;
 use GDO\UI\WithDescription;
 use GDO\CLI\CLI;
 use GDO\UI\GDT_Page;
+use GDO\Language\Trans;
 
 /**
  * Abstract baseclass for all methods.
@@ -224,7 +225,9 @@ abstract class Method #extends GDT
 	###########
 	public function getMethodTitle() : string
 	{
-		return '';
+		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return Trans::hasKey($key) ? t($key) : $this->getMethodName();
 	}
 	
 	public function getMethodKeywords() : string

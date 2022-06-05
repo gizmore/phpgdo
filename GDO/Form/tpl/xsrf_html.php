@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Form\tpl;
 use GDO\Form\GDT_AntiCSRF;
 /** @var $field GDT_AntiCSRF **/
 ?>

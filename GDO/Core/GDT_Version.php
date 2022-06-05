@@ -36,4 +36,9 @@ class GDT_Version extends GDT_String
 		return $var ? new Version($var) : null;
 	}
 	
+	public function plugVars() : array
+	{
+		return ["7.0.0"];
+	}
+	
 }
