@@ -124,7 +124,10 @@ trait WithValue
 		if ($gdo)
 		{
 // 			$this->gdo = $gdo;
-			return $this->var($gdo->gdoVar($this->name));
+			if ($name = $this->getName())
+			{
+				return $this->var($gdo->gdoVar($name));
+			}
 		}
 		return $this->var(null);
 	}

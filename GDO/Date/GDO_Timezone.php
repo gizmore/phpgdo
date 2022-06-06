@@ -57,7 +57,11 @@ final class GDO_Timezone extends GDO
 	
 	public function renderChoice() : string
 	{
-		return $this->getName();
+		if ($name = $this->getName())
+		{
+			return $name;
+		}
+		return '';
 	}
 	
 	public function displayOffset()

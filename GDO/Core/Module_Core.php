@@ -30,7 +30,7 @@ use GDO\Language\GDO_Language;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.0-r1343';
+	const GDO_REVISION = '7.0.0-r1345';
 	
 	##############
 	### Module ###

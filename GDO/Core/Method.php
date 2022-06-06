@@ -237,7 +237,9 @@ abstract class Method #extends GDT
 	
 	public function getMethodDescription() : string
 	{
-		return '';
+		$key = sprintf('md_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return Trans::hasKey($key) ? t($key) : '';
 	}
 	
 	###############

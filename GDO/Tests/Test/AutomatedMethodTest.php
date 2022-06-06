@@ -121,7 +121,7 @@ final class AutomatedMethodTest extends TestCase
 			$result = $mt->runAs($this->gizmore())
 			->method($method)
 			->execute();
-			assertLessThan(400,
+			assertLessThan(500,
 				Application::$RESPONSE_CODE,
 				"Test if trivial method {$this->mome($method)} has a success error code.");
 				assertInstanceOf(GDT::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT.");

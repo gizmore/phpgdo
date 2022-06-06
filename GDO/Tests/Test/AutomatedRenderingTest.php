@@ -132,7 +132,7 @@ final class AutomatedRenderingTest extends TestCase
 	
 	private function fieldTestGDT(GDT $gdt) : bool
 	{
-		$this->renderAll($gdt); # unplugged
+// 		$this->renderAll($gdt); # unplugged
 
 		$name = $gdt->getName();
 		$name = $name ? $name : "gdt_{$this->fieldsTested}";
@@ -154,7 +154,7 @@ final class AutomatedRenderingTest extends TestCase
 	
 	private function fieldTestGDO(GDO $gdo) : bool
 	{
-		$this->renderAllUnplugged($gdo);
+// 		$this->renderAllUnplugged($gdo);
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
 			if ($name = $gdt->getName())

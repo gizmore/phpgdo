@@ -101,6 +101,7 @@ trait WithInput
 		{
 			$this->inputs[] = $input;
 		}
+		$this->valueConverted = false;
 		return $this;
 	}
 	

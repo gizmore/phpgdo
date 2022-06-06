@@ -340,8 +340,6 @@ class GDO_Module extends GDO
 	}
 	
 	/**
-	 * @param string $file
-	 * @param array $tVars
 	 * @return GDT_Template
 	 */
 	public function templatePHP(string $path, array $tVars=null) : GDT_Template
@@ -363,24 +361,6 @@ class GDO_Module extends GDO
 			default: return $this->templatePHP($file, $tVars);
 		}
 	}
-	
-// 	public function error(string $key, array $args=null, int $code=GDO_Exception::DEFAULT_ERROR_CODE, bool $log=true) : GDT_Error
-// 	{
-// 		if ($log)
-// 		{
-// 			Logger::logError(t($key, $args));
-// 		}
-// 		return GDT_Error::make()->text($key, $args);
-// 	}
-	
-// 	public function message(string $key, array $args=null, bool $log=true) : GDT_Message
-// 	{
-// 		if ($log)
-// 		{
-// 			Logger::logMessage(ten($key, $args));
-// 		}
-// 		return GDT_Success::make()->text($key, $args);
-// 	}
 	
 	############
 	### Init ###
