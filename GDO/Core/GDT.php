@@ -197,6 +197,15 @@ abstract class GDT
 		}
 	}
 	
+	public function renderVar() : string
+	{
+		if ($var = $this->getVar())
+		{
+			return html($var);
+		}
+		return '';
+	}
+	
 	/**
 	 * Display a given var. 
 	 */
@@ -602,6 +611,11 @@ abstract class GDT
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
 		return 0;
+	}
+	
+	public function writeable(bool $writeable) : self
+	{
+		return $this;
 	}
 	
 	##################

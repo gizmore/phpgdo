@@ -38,4 +38,5 @@ Your playlists are ACL sharable.
 
  - kassierercard.de - Like PayBack cards, but for the cashier. - Vote the cashiers so they get goods.
  
+ - get.help.from.gizmore.org - Questions are broadcasted to staff members. Staff replies via various channels. Users keep track via a ticket. Use Helpdesk?
  

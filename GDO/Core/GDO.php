@@ -1015,23 +1015,27 @@ abstract class GDO extends GDT
 			}
 		}
 		
+		if (!$worthy)
+		{
+			return $this;
+		}
+		
 		# Call hooks even when not needed. Because its needed on GDT_Files
 		if ($withHooks)
 		{
 			$this->beforeUpdate($query); # Can do trickery here... not needed?
 		}
 		
-		if ($worthy)
+		$query->exec();
+		
+		foreach ($vars as $key => $var)
 		{
-			$query->exec();
-			foreach ($vars as $key => $var)
-			{
-				$this->gdoVars[$key] = $var;
-			}
-			if ($withHooks)
-			{
-				$this->recache();
-			}
+			$this->gdoVars[$key] = $var;
+		}
+	
+		if ($withHooks)
+		{
+			$this->recache();
 		}
 		
 		# Call hooks even when not needed. Because its needed on GDT_Files

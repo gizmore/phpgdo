@@ -678,7 +678,7 @@ class GDO_Module extends GDO
     	    	$config['div_settings_config'] = GDT_Divider::make('div_settings_config');
     	        foreach ($config as $gdt)
     	        {
-    	            $gdt->editable(false);
+    	            $gdt->writeable(false);
     	            $this->userConfigCache[$gdt->name] = $gdt;
     	        }
     	    }
