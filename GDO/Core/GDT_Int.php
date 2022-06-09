@@ -287,11 +287,11 @@ class GDT_Int extends GDT_DBField
 	    return $this->searchCondition($searchTerm);
 	}
 	
-	public function searchGDO($searchTerm)
-	{
-	    $haystack = (string) $this->getVar();
-	    return strpos($haystack, $searchTerm) !== false;
-	}
+// 	public function searchGDO($searchTerm)
+// 	{
+// 	    $haystack = (string) $this->getVar();
+// 	    return strpos($haystack, $searchTerm) !== false;
+// 	}
 	
 	public function searchCondition($searchTerm) : string
 	{

@@ -22,6 +22,16 @@ final class TimezoneDetect extends MethodForm
 	public function isUserRequired() : bool{ return false; }
 	public function isTransactional() : bool { return false; }
 	
+	public function getMethodTitle() : string
+	{
+		return t('ft_date_timezone');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return t('md_date_timezone', [sitename()]);
+	}
+	
 	public function createForm(GDT_Form $form) : void
 	{
 		$tz = GDT_Timezone::make('timezone')->notNull();

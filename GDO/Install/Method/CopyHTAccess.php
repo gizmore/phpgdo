@@ -6,6 +6,7 @@ use GDO\Form\MethodForm;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Form\GDT_Submit;
+use GDO\Util\FileUtil;
 
 /**
  * Optionally copy the main htaccess file.
@@ -13,7 +14,17 @@ use GDO\Form\GDT_Submit;
  */
 final class CopyHTAccess extends MethodForm
 {
-    public function renderPage() : GDT
+	public function getMethodTitle() : string
+	{
+		return t('install_title_9');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return $this->getMethodTitle();
+	}
+	
+	public function renderPage() : GDT
     {
         return GDT_Template::templatePHP('Install', 'page/copyhtaccess.php', ['form' => $this->getForm()]);
     }
@@ -25,7 +36,12 @@ final class CopyHTAccess extends MethodForm
     
     public function formValidated(GDT_Form $form)
     {
-        copy(GDO_PATH . '.htaccess.example', GDO_PATH . '.htaccess');
+    	$dest = GDO_PATH . '.htaccess';
+    	if (!FileUtil::isFile($dest))
+    	{
+    		$src = GDO_PATH . '.htaccess.example';
+	        copy($src, $dest);
+    	}
         return parent::formValidated($form)->addField($this->renderPage());
     }
     

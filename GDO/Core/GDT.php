@@ -423,6 +423,18 @@ abstract class GDT
 		return $this;
 	}
 	
+	##############
+	### Search ###
+	##############
+	public function searchGDO(string $searchTerm) : bool
+	{
+		if ($haystack = (string) $this->getVar())
+		{
+			return stripos($haystack, $searchTerm) !== false;
+		}
+		return false;
+	}
+	
 	#########################
 	### Bridge for traits ###
 	#########################

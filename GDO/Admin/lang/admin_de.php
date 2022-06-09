@@ -44,21 +44,21 @@ return [
 'link_edit_permissions' => 'Berechtigungen bearbeiten',
 'link_grant_perm' => 'Berechtigung zuweisen',
 'link_revoke_perm' => 'Berechtigung zurückweisen',
-'ft_admin_permissionadd' => 'Berechtigung hinzufügen',
+'mt_admin_permissionadd' => 'Berechtigung hinzufügen',
 'user_count' => 'Mitglieder',
 'perm_revoke' => 'Berechtigung zurückweisen',
 'msg_perm_added' => 'Eine neue Berechtigung wurde zugewiesen %s',
 ################################################################
-'ft_admin_permissionrevoke' => 'Berechtigung zurückweisen',
+'mt_admin_permissionrevoke' => 'Berechtigung zurückweisen',
 ################################################################
-'ft_admin_permissiongrant' => 'Berechtigung gewähren',
+'mt_admin_permissiongrant' => 'Berechtigung gewähren',
 'choose_permission' => 'Berechtigung auswählen',
 'msg_perm_granted' => 'Sie haben die Berechtigung %s dem Nutzer %s zugewiesen.',
 ################################################################
 'msg_cache_flushed' => 'Alle Caches wurden gelöscht. Z.B. rm -rf temp/minify, Cache::flush().',
 ################################################################
 'link_create_user' => 'Neuen Nutzer anlegen',
-'ft_admin_usercreate' => 'Neuen Nutzer anlegen',
+'mt_admin_usercreate' => 'Neuen Nutzer anlegen',
 ################################################################
 'mdescr_admin_modules' => 'Module verwalten',
 'admin_user_created' => 'Der Benutzer wurde erfolgreich angelegt.',

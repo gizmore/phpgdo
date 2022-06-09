@@ -3,7 +3,6 @@ namespace GDO\Core\Expression;
 
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
-use GDO\Core\GDO_ParseError;
 use GDO\Util\Strings;
 
 /**
@@ -161,13 +160,6 @@ final class Parser
 	 */
 	private function parseLine(string $line, int &$i, int $len) : string
 	{
-		# check if $(
-// 		$c = $line[$i++];
-// 		if ($c !== '(')
-// 		{
-// 			throw new GDO_ParseError('err_expression_preamble', [html($line)]);
-// 		}
-		
 		$parsed = '';
 		for (;$i < $len;)
 		{

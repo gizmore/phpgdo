@@ -26,4 +26,8 @@ return [
 	'mdescr_user_admin' => 'Administrare  utente',
 
 	'user_subtitle' => 'Membro da %s. Livello utente: %s.',
+
+	'mt_user_cleanupguests' => 'Pulisci gli ospiti',
+	'md_user_cleanupguests' => 'Cron job per ripulire gli utenti ospiti orfani.',
+	
 ];

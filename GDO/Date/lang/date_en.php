@@ -26,12 +26,17 @@ return [
     
     # Timezone
     'ft_date_timezone' => 'Set your timezone',
+	'md_date_timezone' => 'Set your timezone on %s.',
     'msg_timezone_changed' => 'Your timezone has been changed to %s.',
     'cfg_tz_probe_js' => 'Probe timezone via Javascript?',
     'cfg_tz_sidebar_select' => 'Show timezone select in sidebar?',
+	
+	# Timezones
+	'mt_timezones' => 'All Timezones',
+	'md_timezones' => 'Get all timezones and offsets via ajax.',
     
     # Epoch
-    'mtitle_date_epoch' => 'Print the unix timestamp',
+    'mt_date_epoch' => 'Print the unix timestamp',
     'msg_time_unix' => 'Unix timestamp: %s',
     'msg_time_java' => 'Java timestamp: %s',
     'msg_time_micro' => 'Microtimestamp: %s',

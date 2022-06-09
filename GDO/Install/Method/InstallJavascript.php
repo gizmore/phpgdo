@@ -13,6 +13,16 @@ use GDO\Core\ModuleLoader;
  */
 final class InstallJavascript extends Method
 {
+	public function getMethodTitle() : string
+	{
+		return t('install_title_7');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return $this->getMethodTitle();
+	}
+	
 	public function execute()
 	{
 		Database::init();

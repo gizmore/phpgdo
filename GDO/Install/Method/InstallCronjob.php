@@ -13,6 +13,16 @@ use GDO\UI\GDT_Container;
  */
 final class InstallCronjob extends Method
 {
+	public function getMethodTitle() : string
+	{
+		return t('install_title_5');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return $this->getMethodTitle();
+	}
+	
 	public function execute()
 	{
 		Database::init();

@@ -78,7 +78,7 @@ trait WithObject
 			 	if ( ($gdo = $this->getByName($var)) ||
 			 		 ($gdo = $this->table->getById($var)) )
 			 	{
-			 		$_REQUEST[$this->formVariable()][$this->name] = $gdo->getID();
+// 			 		$_REQUEST[$this->formVariable()][$this->name] = $gdo->getID();
 			 		return $gdo;
 			 	}
 			}

@@ -84,7 +84,7 @@ abstract class GDO extends GDT
 	
 	public function __destruct()
 	{
-		self::$GDO_KILLS--;
+		self::$GDO_KILLS++;
 	}
 	
 	private function afterLoaded() : void
@@ -427,6 +427,7 @@ abstract class GDO extends GDT
 			foreach ($this->gdoColumnsCache() as $gdt)
 			{
 				if ($data = $gdt->gdo($this)->getGDOData())
+// 				if ($data = $gdt->getGDOData())
 				{
 					foreach ($data as $k => $v)
 					{

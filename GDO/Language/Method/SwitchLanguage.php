@@ -23,17 +23,17 @@ use GDO\Net\GDT_Url;
  */
 final class SwitchLanguage extends MethodAjax
 {
-	public function saveLastUrl() : bool
-	{
-		return false;
-	}
-	
 	public function gdoParameters() : array
 	{
 		return [
 			GDT_Language::make('lang')->notNull(),
 			GDT_Url::make('_ref')->allowInternal(),
 		];
+	}
+	
+	public function getMethodTitle() : string
+	{
+		return t('lbl_langswitch');
 	}
 	
 	public function getMethodDescription() : string

@@ -5,6 +5,7 @@ use GDO\Tests\TestCase;
 use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Core\Method;
 use GDO\CLI\CLI;
+use GDO\Core\Debug;
 
 /**
  * Test if all methods have a title and description.
@@ -52,16 +53,17 @@ final class SEOTest extends TestCase
 				{
 					$this->methodSEOTest($method);
 					$this->message("%s: %s",
-						CLI::green("SUCCESS"),
+						CLI::green(CLI::bold("SUCCESS")),
 						$method->gdoClassName());
 				}
 				catch (\Throwable $t)
 				{
 					$this->methodsFailed++;
 					$this->error("%s: %s: %s",
-						CLI::red("FAILURE"),
+						CLI::red(CLI::bold("FAILURE")),
 						$method->gdoClassName(),
 						$t->getMessage());
+					Debug::exception_handler($t);
 				}
 			}
 		}
@@ -69,6 +71,35 @@ final class SEOTest extends TestCase
 	
 	private function methodSEOTest(Method $method)
 	{
+		$plugged = [];
+		
+		foreach ($method->gdoParameters() as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				if ($plugs = $gdt->plugVars())
+				{
+					$plugged[$name] = $plugs[0];
+				}
+			}
+		}
+
+		$method->inputs($plugged);
+		$method->onInit();
+
+		foreach ($method->gdoParameterCache() as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				if ($plugs = $gdt->plugVars())
+				{
+					$plugged[$name] = $plugs[0];
+				}
+			}
+		}
+		$method->inputs($plugged);
+
+		
 		assertNotEmpty($method->getMethodTitle(), "Test if {$method->gdoClassName()} has a method title.");
 		assertNotEmpty($method->getMethodDescription(), "Test if {$method->gdoClassName()} has a method description.");
 	}

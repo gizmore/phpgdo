@@ -127,16 +127,18 @@ final class AutomatedMethodTest extends TestCase
 				assertInstanceOf(GDT::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT.");
 				assertTrue($this->renderResult($result), "Test if method response renders all outputs without crash.");
 				$this->automatedPassed++;
-				$this->message('%4d.) %s: %s (%s)', $n, CLI::green('SUCCESS'), $this->boldmome($mt->method), implode(',', $plugVars));
+				$this->message('%4d.) %s: %s (%s)',
+					$n, CLI::bold(CLI::green('SUCCESS')),
+					$this->boldmome($mt->method),
+					implode(',', $plugVars));
 		}
 		catch (\Throwable $ex)
 		{
 			Logger::logException($ex);
+			Debug::exception_handler($ex);
 			$this->automatedFailed++;
 			$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
 			$this->error('Error: %s', CLI::bold($ex->getMessage()));
-			$dbgout = Debug::debugException($ex);
-			echo $dbgout;
 		}
 	}
 	
@@ -186,6 +188,29 @@ final class AutomatedMethodTest extends TestCase
 		}
 		$trivial = true;
 		$fields = $method->gdoParameters();
+		foreach ($fields as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				if ($plugs = $gdt->plugVars())
+				{
+					$this->addPlugVariants($name, $plugs);
+				}
+			}
+		}
+		
+		$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
+		foreach ($fields as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				if ($plugs = $gdt->plugVars())
+				{
+					$this->addPlugVariants($name, $plugs);
+				}
+			}
+		}
+		
 		if (!$this->isPluggableParameters($method, $fields))
 		{
 			$trivial = false;

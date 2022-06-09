@@ -10,6 +10,16 @@ use GDO\Util\FileUtil;
  */
 final class SystemTest extends Method
 {
+	public function getMethodTitle() : string
+	{
+		return t('install_title_2');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return t('install_title_2');
+	}
+	
 	public function execute()
 	{
 		$tVars = array(

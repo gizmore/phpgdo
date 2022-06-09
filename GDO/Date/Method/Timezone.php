@@ -24,6 +24,16 @@ final class Timezone extends MethodForm
     
     public function getFormName() : string { return 'tzform'; }
     
+    public function getMethodTitle() : string
+    {
+    	return t('ft_date_timezone');
+    }
+
+    public function getMethodDescription() : string
+    {
+    	return t('md_date_timezone', [sitename()]);
+    }
+    
     public function createForm(GDT_Form $form) : void
     {
         $tz = GDO_User::current()->getTimezone();

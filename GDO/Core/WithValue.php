@@ -99,7 +99,7 @@ trait WithValue
 	
 	public function getValue()
 	{
-		if (!$this->valueConverted)
+// 		if (!$this->valueConverted)
 		{
 			$var = $this->getVar();
 			$this->value = $this->toValue($var);

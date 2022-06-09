@@ -79,7 +79,7 @@ class GDT_Duration extends GDT_String
 	
 	public function plugVar() : string
 	{
-		return '2m 30s';
+		return '2s';
 	}
 
 }

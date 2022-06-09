@@ -227,19 +227,29 @@ abstract class Method #extends GDT
 	{
 		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
 		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : $this->getMethodName();
-	}
-	
-	public function getMethodKeywords() : string
-	{
-		return '';
+		return Trans::hasKey($key) ? t($key) : '';
 	}
 	
 	public function getMethodDescription() : string
 	{
 		$key = sprintf('md_%s_%s', $this->getModuleName(), $this->getMethodName());
 		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : '';
+		return Trans::hasKey($key) ? t($key) : $this->getMethodTitle();
+	}
+	
+	public function getMethodKeywords() : string
+	{
+		$keywords = [];
+		if (Trans::hasKey('site_keywords'))
+		{
+			$keywords[] = t('site_keywords');
+		}
+		$key = sprintf('mk_%s_%s', $this->getModuleName(), $this->getMethodName());
+		if (Trans::hasKey($key))
+		{
+			$keywords[] = t($key);
+		}
+		return implode(', ', $keywords);
 	}
 	
 	###############

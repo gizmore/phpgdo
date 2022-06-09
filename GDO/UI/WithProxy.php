@@ -2,7 +2,6 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT;
-use GDO\Core\GDO_Error;
 use GDO\Table\GDT_Table;
 
 /**
@@ -17,8 +16,6 @@ use GDO\Table\GDT_Table;
  */
 trait WithProxy
 {
-// 	use WithGDO;
-	
 	/**
 	 * @var GDT
 	 */
@@ -87,12 +84,15 @@ trait WithProxy
 	{
 		return $this->proxy->toVar();
 	}
+	
 	public function toValue(string $var=null)
 	{
 		return $this->proxy->toValue($var);
 	}
+	
 	public function isPositional() : bool
 	{
 		return $this->proxy->isPositional();
 	}
+	
 }

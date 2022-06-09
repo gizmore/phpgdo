@@ -122,7 +122,7 @@ class GDT_Select extends GDT_ComboBox
 	}
 	
 	public function getChoices() {
-		$this->initChoices();
+// 		$this->initChoices();
 		return $this->choices;
 	}
 	
@@ -495,5 +495,20 @@ class GDT_Select extends GDT_ComboBox
 // 	    $name = parent::formName();
 // 	    return $this->multiple ? "{$name}[]" : $name;
 // 	}
+
+	public function plugVars() : array
+	{
+		$this->initChoices();
+		$result = [];
+		foreach ($this->choices as $choice)
+		{
+			$result[] = $choice;
+			if (count($result) >= 2)
+			{
+				break;
+			}
+		}
+		return $result;
+	}
 	
 }

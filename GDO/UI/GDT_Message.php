@@ -235,6 +235,11 @@ class GDT_Message extends GDT_Text
         ];
     }
     
+    public function gdo(GDO $gdo = null) : self
+    {
+    	return $this->var($gdo->gdoVar("{$this->name}_input"));
+    }
+    
     /**
      * Set GDO Data is called when the GDO sets up the GDT.
      * We copy the 3 text columns and revert a special naming hack in module news; 'iso][en][colum_name' could be it's name.

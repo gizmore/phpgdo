@@ -14,6 +14,11 @@ final class Module_Net extends GDO_Module
 {
 	public int $priority = 10;
 	
+	public function onLoadLanguage() : void
+	{
+		$this->loadLanguage('lang/net');
+	}
+	
 	public function getClasses() : array
 	{
 		return [

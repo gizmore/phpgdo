@@ -47,7 +47,7 @@ final class AutomatedRenderingTest extends TestCase
 			$parents = class_parents($klass);
 			if (in_array('GDO\\Core\\GDT', $parents, true))
 			{
-				$n = ++$this->fieldsTested;
+				$this->fieldsTested++;
 				/** @var $gdt \GDO\Core\GDT **/
 				$k = new \ReflectionClass($klass);
 				if ($k->isAbstract())
@@ -58,7 +58,7 @@ final class AutomatedRenderingTest extends TestCase
 				$gdt = call_user_func([
 					$klass,
 					'make'
-				], 'gdt_'.$n);
+				], 'testfield');
 				if (!$gdt->isTestable())
 				{
 					$this->fieldsNonTestable++;
@@ -135,7 +135,7 @@ final class AutomatedRenderingTest extends TestCase
 // 		$this->renderAll($gdt); # unplugged
 
 		$name = $gdt->getName();
-		$name = $name ? $name : "gdt_{$this->fieldsTested}";
+		$name = $name ? $name : "testfield";
 		$this->plugVariants = [];
 		$plugs = $gdt->plugVars();
 		$this->addPlugVars($name, $plugs);

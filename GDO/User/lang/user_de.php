@@ -26,4 +26,7 @@ return [
 	'mdescr_user_admin' => 'Nutzer administrieren',
 	
 	'user_subtitle' => 'Mitglied seit %s. Level: %s',
+
+	'mt_user_cleanupguests' => 'Gäste säubern',
+	'md_user_cleanupguests' => 'Cronjob um verwaiste Gastnutzer aufzuräumen.',
 ];

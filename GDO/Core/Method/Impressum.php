@@ -17,4 +17,9 @@ final class Impressum extends MethodPage
 		return t('impressum');
 	}
 	
+	public function getMethodDescription() : string
+	{
+		return t('md_impressum', [sitename()]);
+	}
+	
 }

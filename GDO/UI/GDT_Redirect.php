@@ -86,6 +86,8 @@ final class GDT_Redirect extends GDT
 	
 	public function redirectErrorRaw(string $message, bool $log=true) : self
 	{
+		GDT_Page::instance()->topResponse()->addField(GDT_Error::make()->textRaw($message));
+
 		if ($log)
 		{
 			Logger::logError($message);
@@ -113,6 +115,8 @@ final class GDT_Redirect extends GDT
 	
 	public function redirectMessageRaw(string $message, bool $log=true) : self
 	{
+		GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
+		
 		if ($log)
 		{
 			Logger::logMessage($message);

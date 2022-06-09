@@ -39,4 +39,12 @@ class GDT_Submit extends GDT_Button
 		return sprintf(' value="%s"', $this->renderLabel());
 	}
 	
+	public function plugVars() : array
+	{
+		return [
+			null, # Test method unclicked.
+			'1', # Test method clicked.
+		];
+	}
+	
 }

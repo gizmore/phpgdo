@@ -5,6 +5,7 @@ use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Object;
+use GDO\Core\MethodAjax;
 
 /**
  * Generic ajax adapter that swaps two items using their GDT_Sort column.
@@ -13,7 +14,7 @@ use GDO\Core\GDT_Object;
  * @version 6.10.1
  * @since 5.0.0
  */
-abstract class MethodSort extends Method
+abstract class MethodSort extends MethodAjax
 {
 	/**
 	 * The GDO table to be sortable.

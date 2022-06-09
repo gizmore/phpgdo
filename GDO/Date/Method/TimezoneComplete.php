@@ -17,6 +17,16 @@ final class TimezoneComplete extends MethodCompletion
 {
 	public function isUserRequired() : bool { return false; }
 	
+	public function getMethodTitle() : string
+	{
+		return t('gdo_timezone');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return t('gdo_timezone');
+	}
+	
 	public function gdoParameters() : array
 	{
 		return [
@@ -43,7 +53,6 @@ final class TimezoneComplete extends MethodCompletion
                 ];
             }
         }
-        
         return GDT_JSON::make()->value($json);
     }
     

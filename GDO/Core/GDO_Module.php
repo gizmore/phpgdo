@@ -583,7 +583,7 @@ class GDO_Module extends GDO
 	    return $this->userSettingValue(GDO_User::current(), $key);
 	}
 	
-	public function userSettingVar(GDO_User $user, $key)
+	public function userSettingVar(GDO_User $user, string $key) : ?string
 	{
 	    return $this->userSetting($user, $key)->var;
 	}
@@ -657,7 +657,8 @@ class GDO_Module extends GDO
 
 	private function getSetting($key)
 	{
-	    if (isset($this->userConfigCache[$key]))
+		$this->buildSettingsCache();
+		if (isset($this->userConfigCache[$key]))
 	    {
     	    return $this->userConfigCache[$key];
 	    }

@@ -98,8 +98,9 @@ $app->ajax($ajax);
 ###################
 ### Pick Method ###
 ###################
-if (!isset($_REQUEST['_url']))
+if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
+	unset($_REQUEST['_url']);
 	if (isset($_REQUEST['_mo']))
 	{
 		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'], true, false)))
@@ -132,8 +133,9 @@ else
 {
 	# Wrap url
 	$url = (string) @$_REQUEST['_url'];
-	$url = ltrim($url, '/');
+	$url = $url ? "/{$url}" : '/index.html';
 	$_REQUEST['url'] = $url;
+	$url2 = ltrim($url, '/');
 
 	# Cleanup
 	unset($_REQUEST['_av']);
@@ -141,11 +143,11 @@ else
 	unset($_REQUEST['_v']);
 
 	# Choose method
-	if (is_dir($url))
+	if (is_dir($url2))
 	{
 		$me = DirectoryIndex::make();
 	}
-	elseif (is_file($url))
+	elseif (is_file($url2))
 	{
 		$me = Fileserver::make();
 	}

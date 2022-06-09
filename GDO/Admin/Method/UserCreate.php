@@ -16,7 +16,7 @@ use GDO\User\GDT_Username;
  * Only specify user_name, the rest can be done via UserEdit.
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.0
  * @since 3.1.2
  */
 final class UserCreate extends MethodForm

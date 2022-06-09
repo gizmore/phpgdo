@@ -42,9 +42,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 {
 	use WithModule;
 	
-// 	public static int $TEST_COUNT = 0;
-// 	public static int $TEST_FAILS = 0; # @TODO: implement unit test counter
-	
+	public static int $LAST_COUNT = 0;
 	public static int $ASSERT_COUNT = 0;
 // 	public static int $ASSERT_FAILS = 0; # @TODO: calculate assert fails.
 	
@@ -64,13 +62,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $ip = sprintf('127.0.%d.%d', $this->ipc, $this->ipd);
         return $ip;
     }
-    
-//     protected function echo($msg) : void
-//     {
-//     	echo $msg;
-//     	echo "\n";
-//     	ob_flush();
-//     }
     
     protected function setUp(): void
     {
@@ -95,7 +86,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
     
     protected function tearDown() : void
     {
-    	self::$ASSERT_COUNT += Assert::getCount();
+    	$new = Assert::getCount();
+    	$add = $new - self::$LAST_COUNT;
+    	self::$ASSERT_COUNT += $add;
+//     	self::$LAST_COUNT = self::$ASSERT_COUNT;
     }
     
     /**
@@ -113,6 +107,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 $table->grant($user, 'staff');
                 $table->grant($user, 'cronjob');
                 $user->changedPermissions();
+                $user->saveVar('user_deleted', null);
+                $user->saveVar('user_deletor', null);
             }
         }
     }

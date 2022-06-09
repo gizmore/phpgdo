@@ -18,7 +18,7 @@ final class Get extends MethodForm
 	public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields(
-			GDT_Url::make('url')->required()->reachable(),
+			GDT_Url::make('url')->required()->reachable()->allowExternal(),
 			GDT_AntiCSRF::make(),
 		);
 		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onExecute']));

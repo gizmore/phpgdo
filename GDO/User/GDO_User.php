@@ -81,6 +81,14 @@ final class GDO_User extends GDO
 	/**
 	 * @return GDO_User[]
 	 */
+	public static function staff() : array
+	{
+		return self::withPermission('staff');
+	}
+	
+	/**
+	 * @return GDO_User[]
+	 */
 	public static function withPermission(string $permission) : array
 	{
 		return self::withPermissionQuery($permission)->exec()->fetchAllObjects();
@@ -93,7 +101,7 @@ final class GDO_User extends GDO
 	public static function withPermissionQuery(string $permission) : Query
 	{
 		return GDO_UserPermission::table()->
-			select('gdo_user.*')->
+			select('perm_user_id_t.*')->
 			joinObject('perm_perm_id')->
 			joinObject('perm_user_id')->
 			fetchTable(self::table())->where('perm_name=' . quote($permission));
@@ -147,6 +155,8 @@ final class GDO_User extends GDO
 	###########
 	### GDO ###
 	###########
+	public function isTestable() : bool { return false; }
+	
 	public function gdoColumns() : array
 	{
 		return [

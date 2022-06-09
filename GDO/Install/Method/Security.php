@@ -8,6 +8,7 @@ use GDO\Form\GDT_Form;
 use GDO\Form\MethodForm;
 use GDO\Form\GDT_Submit;
 use GDO\Util\HTAccess;
+use GDO\UI\GDT_Redirect;
 
 /**
  * HTAccess-Protect certain folders.
@@ -16,6 +17,16 @@ use GDO\Util\HTAccess;
  */
 final class Security extends MethodForm
 {
+	public function getMethodTitle() : string
+	{
+		return t('install_title_10');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return t('ft_install_security');
+	}
+	
 	public function execute()
 	{
 		Database::init();
@@ -42,7 +53,7 @@ final class Security extends MethodForm
 	{
 	    $this->protectFolders();
 	    $this->protectDotfiles();
-	    return $this->messageRedirect('msg_install_security', null, hrefDefault());
+	    return GDT_Redirect::make()->redirectMessage('msg_install_security')->href(hrefDefault());
 	}
 	
 	/**

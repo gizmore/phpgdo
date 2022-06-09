@@ -25,6 +25,16 @@ use GDO\Crypto\GDT_PasswordHash;
  */
 class InstallAdmins extends MethodForm
 {
+	public function getMethodTitle() : string
+	{
+		return t('install_title_6');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return $this->getMethodTitle();
+	}
+	
 	public function createForm(GDT_Form $form) : void
 	{
 		Debug::init();

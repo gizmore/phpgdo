@@ -44,21 +44,21 @@ return [
 'link_edit_permissions' =>'Cambia autorizzazione',
 'link_grant_perm' =>'Assegna autorizzazione',
 'link_revoke_permissions' =>'Autorizzazione respinta',
-'ft_admin_permissionadd' => 'Aggiungi autorizzazione',
+'mt_admin_permissionadd' => 'Aggiungi autorizzazione',
 'user_count' =>'Membri',
 'perm_revoke' =>'Assegna autorizzazione',
 'msg_perm_added' =>'É stata assegnata una nuova autorizzazione %s',
 ################################################################
-'ft_admin_permissionrevoke' =>'Autorizzazione respinta',
+'mt_admin_permissionrevoke' =>'Autorizzazione respinta',
 ################################################################
-'ft_admin_permissiongrant' =>'Autorizzazione concessa',
+'mt_admin_permissiongrant' =>'Autorizzazione concessa',
 'choose_permission' =>'Selezionare autorizzazione',
 'msg_perm_granted' =>'Avete concesso l´autorizzazione %s al utente %s.',
 ################################################################
 'msg_cache_flushed' =>'Tutti Caches sono cancellati. Ad esempio rm -rf temp/minify, Cache::flush().',
 ################################################################
 'link_create_user' =>'Crea nuovo utente',
-'ft_admin_usercreate' =>'Crea nuovo utente',
+'mt_admin_usercreate' =>'Crea nuovo utente',
 ################################################################
 'mdescr_admin_modules' => 'Amministrare i moduli',
 'admin_user_created' => 'L\'utente è stato creato con successo.',

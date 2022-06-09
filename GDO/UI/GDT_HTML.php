@@ -1,12 +1,8 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
-use GDO\Core\WithFields;
-
 /**
  * Very simple field that only has custom html content.
- * 
  * 
  * @author gizmore
  * @version 7.0.0

@@ -14,6 +14,16 @@ use GDO\Core\GDT_JSON;
  */
 final class Completion extends MethodCompletion
 {
+	public function getMethodTitle() : string
+	{
+		return "Language Completion";
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return "Language Completion API for GDOv7";
+	}
+	
 	public function execute()
 	{
 		$response = [];

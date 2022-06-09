@@ -6,6 +6,7 @@ use GDO\CLI\CLI;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Util\Permutations;
+use GDO\User\GDO_User;
 
 /**
  * Try to save all GDO.
@@ -32,7 +33,7 @@ final class AutomatedGDOSaveTest extends TestCase
 			$parents = class_parents($klass);
 			if (in_array('GDO\\Core\\GDO', $parents, true))
 			{
-				$n = ++$this->gdoTested;
+				$this->gdoTested++;
 				/** @var $gdo \GDO\Core\GDO **/
 				$k = new \ReflectionClass($klass);
 				if ($k->isAbstract())
@@ -43,7 +44,7 @@ final class AutomatedGDOSaveTest extends TestCase
 				$gdo = call_user_func([
 					$klass,
 					'make'
-				], 'gdt_'.$n);
+				], 'testfield');
 				if ($gdo->gdoAbstract())
 				{
 					$this->gdoAbstract++;
@@ -58,6 +59,7 @@ final class AutomatedGDOSaveTest extends TestCase
 				try
 				{
 					$this->saveTestGDO($gdo);
+					$this->assert200("Test if {$gdo->gdoClassName()} can be saved.");
 					$this->message("%4d.) %s: %s",
 						$this->gdoTested,
 						CLI::bold(CLI::green("SUCCESS")),
@@ -122,6 +124,11 @@ final class AutomatedGDOSaveTest extends TestCase
 	private function saveTestGDO(GDO $gdo)
 	{
 // 		$this->saveTestGDOUnplugged($gdo);
+
+		if ($gdo instanceof GDO_User)
+		{
+			xdebug_break();
+		}
 		
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $name => $gdt)

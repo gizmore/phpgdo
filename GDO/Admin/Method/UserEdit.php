@@ -28,6 +28,12 @@ class UserEdit extends MethodForm
 	
 	public function showInSitemap() { return false; }
 	
+	public function getMethodTitle() : string
+	{
+		return t('ft_admin_useredit', [$this->getUser()->renderUserName()]);
+	}
+	
+	
 	/**
 	 * @var GDO_User
 	 */

@@ -43,8 +43,15 @@ return [
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
 	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
 	'err_user_type' => 'Your user is not of type %s.',
+	'err_local_url_not_allowed' => 'This url may not point to local files.',
 	'err_external_url_not_allowed' => 'This url may not point to an external resource: %s',
-	# Messages
+	'file_not_found' => 'File not Found',
+	'err_file_not_found' => 'The file %s could not been found on this server.',
+	'err_invalid_gdt_var' => 'Your input is invalid!',
+	'forbidden' => 'Forbidden!',
+	'err_forbidden' => 'You are not allowed to access this.',
+	
+# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 
 	# Checkbox
@@ -61,6 +68,7 @@ return [
 	
 	# Buttons
 	'btn_back' => 'Back',
+	'btn_delete' => 'Delete',
 	'btn_edit' => 'Edit',
 	'btn_save' => 'Save',
 	'btn_send' => 'Send',
@@ -89,23 +97,62 @@ return [
 	'user_type' => 'User Type',
 	'user_guest_name' => 'Guest Name',
 	'level' => 'Level',
+	'copyright' => 'Copyright',
 	'ipp' => 'IPP',
 	'keywords' => 'Keywords',
 	'description' => 'Description',
 	'title' => 'Title',
 	'cfg_hook_sidebar' => 'Hook in Sidebar?',
+	'text' => 'Text',
+	'string' => 'String',
+	'xsrf' => 'XSRF Protection',
+	'permission' => 'Permission',
+	'user' => 'User',
+	'username' => 'Username',
+	'edited_at' => 'Edited at',
+	'deleted_at' => 'Deleted at',
+	'deleted_by' => 'Deleted by',
+	'unknown' => 'Unknown',
+	'id' => 'ID',
+	'testfield' => 'Testfield',
+	'created_at' => 'Created at',
+	'created_by' => 'Created by',
+	'page' => 'Page',
+	'search' => 'Search',
+	'path' => 'Path',
+	'font' => 'Font',
+	'color' => 'Color',
+	'priority' => 'Priority',
+	'from' => 'From',
+	'to' => 'To',
+	'version' => 'Version',
+	'count' => 'Count',
+	'backup_file' => 'Backup File',
+	'license' => 'License',
+	'step' => 'Step',
+	'ip' => 'IP',
+	'token' => 'Token',
+	
+	# CBX
+	'sel_all' => 'Select All',
+	'sel_checked' => 'Entries with Yes',
+	'sel_unchecked' => 'Entries with No',
 	
 	# Fineprint
 	'privacy' => 'Privacy',
+	'md_privacy' => 'Privacy and Dataflow information for %s.',
 	'impressum' => 'Impressum',
+	'md_impressum' => 'The impressum for the %s service website.',
 	
 	# Util
 	'and' => ' and ',
 	
 	# Welcome
 	'welcome' => 'Welcome',
+	'md_welcome' => 'The welcome page for the %s service.',
 	
 	# Version
+	'info_version' => 'Display the GDOv7 and PHP version.',
 	'php_version' => 'PHP Version',
 	'gdo_version' => 'GDO Version',
 	
@@ -124,4 +171,57 @@ return [
 	'permissions' => 'Permissions',
 	
 	'msg_sort_success' => 'Successfully sorted?!',
+
+	### Config ###
+	'cfg_asset_revision' => 'Asset revision / Client Cache poisoning',
+	'cfg_system_user' => 'System User',
+	'cfg_show_impressum' => 'Show impressum in the footer?',
+	'cfg_show_privacy' => 'Show privacy information in the footer?',
+	'cfg_allow_guests' => 'Enable GDOv7 Guestuser System?',
+	'cfg_siteshort_title_append' => 'Append Site Shortname in page titles?',
+	'cfg_mail_403' => 'Send mail on 403 errors?',
+	'cfg_mail_404' => 'Send mail on 404 errors?',
+	'cfg_directory_indexing' => 'Enable Directory Indexing?',
+	'cfg_module_assets' => 'Allow assets to be loaded from the GDO source directory?',
+	
+	### 403 ###
+	'mail_title_403' => '%s: 403 (%s)',
+	'mail_body_403' => '
+Dear %s,
+	
+There has been visited an forbidden URL on %s.
+URL: %s
+User: %s
+	
+Kind Regards,
+The %2$s System',
+	
+	### 404 ###
+	'mail_title_404' => '%s: 404 (%s)',
+	'mail_body_404' => '
+Dear %s,
+	
+There has been visited an unknown URL on %s.
+URL: %s
+User: %s
+	
+Kind Regards,
+The %2$s System',
+
+	
+	
+	
+	
+	
+	
+# NEw	
+	'confirm_delete' => 'Do you really want to delete this?',
+	
+	'md_switch_language' => 'Switch language',
+	'gdt_redirect_to' => 'Redirecting to %s...',
+
+	'unknown_permission' => 'This permission is unknown',
+	'add_permissions' => 'Add a permisison',
+
+	
 ];

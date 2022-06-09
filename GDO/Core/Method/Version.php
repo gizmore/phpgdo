@@ -16,6 +16,16 @@ use GDO\Core\GDT_String;
  */
 final class Version extends Method
 {
+	public function getMethodTitle() : string
+	{
+		return t('version');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return t('info_version');
+	}
+	
 	public function execute(): GDT
 	{
 		return GDT_Box::makeWith(

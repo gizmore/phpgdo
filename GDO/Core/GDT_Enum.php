@@ -23,7 +23,11 @@ class GDT_Enum extends GDT_Select
 	
 	public function initChoices()
 	{
-		return $this->choices(array_combine($this->enumValues, $this->enumValues));
+		if (!empty($this->enumValues))
+		{
+			return $this->choices(array_combine($this->enumValues, $this->enumValues));
+		}
+		return $this;
 	}
 	
 	public function toValue(string $var=null)

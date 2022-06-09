@@ -54,4 +54,9 @@ final class GDT_Order extends GDT_String
 		return true;
 	}
 	
+	public function plugVars() : array
+	{
+		return [];
+	}
+	
 }

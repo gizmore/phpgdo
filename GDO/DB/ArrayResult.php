@@ -129,11 +129,10 @@ final class ArrayResult extends Result
 	/**
 	 * Deepsearch a static result. Like a global table search.
 	 * @param GDO[] $data
-	 * @param GDO $table
+	 * @param GDO   $table
 	 * @param GDT[] $filters
-	 * @param string $searchTerm
 	 */
-	public function searchResult(array $data, GDO $table, array $filters, $searchTerm)
+	public function searchResult(array $data, GDO $table, array $filters, string $searchTerm) : self
 	{
 	    if ($searchTerm !== null)
 	    {
@@ -142,7 +141,7 @@ final class ArrayResult extends Result
             {
         	    foreach ($filters as $gdt)
         	    {
-        	        if ($gdt->searchable)
+        	        if ($gdt->isSearchable())
         	        {
        	                if ($gdt->gdo($gdo)->searchGDO($searchTerm))
        	                {
@@ -154,7 +153,9 @@ final class ArrayResult extends Result
             }
             $data = $hits;
 	    }
+	    
 	    $this->data = $data;
+	    
 	    return $this;
 	}
 	

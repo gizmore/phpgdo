@@ -17,4 +17,9 @@ class Welcome extends MethodPage
 		return t('welcome');
 	}
 	
+	public function getMethodDescription() : string
+	{
+		return t('md_welcome', [sitename()]);
+	}
+	
 }

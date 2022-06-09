@@ -18,6 +18,16 @@ use GDO\Core\GDT_String;
  */
 final class ImportBackup extends MethodForm
 {
+	public function getMethodTitle() : string
+	{
+		return t('install_title_8');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return $this->getMethodTitle();
+	}
+	
 	public function renderPage() : GDT
 	{
 		return GDT_Template::templatePHP('Install', 'page/importbackup.php', ['form' => $this->getForm()]);

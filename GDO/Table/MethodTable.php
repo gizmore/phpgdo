@@ -75,7 +75,6 @@ abstract class MethodTable extends Method
      * @return GDO
      */
     public abstract function gdoTable();
-//     public function gdoTableName() { return 'table'; }
     public function gdoFetchAs() { return $this->gdoTable(); }
     
     /**
@@ -211,9 +210,13 @@ abstract class MethodTable extends Method
 		return $this->gdoParameterValue('page');
 	}
 	
-	public function getSearchTerm()
+	public function getSearchTerm() : string
 	{
-		return $this->gdoParameterValue('search');
+		if ($var = $this->gdoParameterVar('search'))
+		{
+			return $var;
+		}
+		return '';
 	}
 	
 	public function getOrderTerm()
@@ -305,6 +308,11 @@ abstract class MethodTable extends Method
 // 			$this->setupCollection($this->table);
 		}
 		return $this->table;
+	}
+	
+	public function onInit() : void
+	{
+		$this->initTable();
 	}
 	
 	public function initTable()

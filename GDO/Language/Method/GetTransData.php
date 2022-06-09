@@ -16,6 +16,16 @@ use GDO\Core\MethodAjax;
  */
 final class GetTransData extends MethodAjax
 {
+	public function getMethodTitle() : string
+	{
+		return "Translation Data";
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return "Get Translation Data via Ajax for JS.";
+	}
+	
 	public function execute()
 	{
 		# Get data

@@ -22,5 +22,10 @@ abstract class MethodAjax extends Method
 	public function isSEOIndexed() { return false; }
 	public function showInSitemap() { return false; }
 	public function isLockingSession() { return false; }
+
+	public function getMethodTitle() : string
+	{
+		return "Ajax Method: {$this->gdoClassName()}";
+	}
 	
 }

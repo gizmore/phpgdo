@@ -14,6 +14,11 @@ use GDO\Core\Application;
  */
 final class Epoch extends Method
 {
+	public function getMethodDescription() : string
+	{
+		return $this->getMethodTitle();
+	}
+	
 	public function gdoParameters() : array
     {
         return [

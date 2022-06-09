@@ -16,6 +16,8 @@ use GDO\Core\GDT_Index;
  */
 final class GDO_Timezone extends GDO
 {
+	public function isTestable() : bool { return false; }
+	
 	###############
 	### Factory ###
 	###############

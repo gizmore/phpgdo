@@ -27,6 +27,16 @@ final class InstallModules extends Method
 	 */
 	private $modules;
 	
+	public function getMethodTitle() : string
+	{
+		return t('install_title_4');
+	}
+	
+	public function getMethodDescription() : string
+	{
+		return t('install_title_4');
+	}
+	
 	public function execute()
 	{
 	    Cache::fileFlush();

@@ -26,7 +26,7 @@ class Modules extends MethodTable
 	/**
 	 * @var GDO_Module[]
 	 */
-	private $modules;
+	private array $modules;
 	
 	public function getTitleLangKey() { return 'btn_modules'; }
 	
@@ -40,9 +40,14 @@ class Modules extends MethodTable
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function execute()
+	public function onInit() : void
 	{
 		$this->modules = ModuleLoader::instance()->loadModules(false, true, false);
+		parent::onInit();
+	}
+	
+	public function execute()
+	{
 		unset($this->modules['install']);
 		return parent::execute();
 	}

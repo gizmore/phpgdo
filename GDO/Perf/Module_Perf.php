@@ -15,12 +15,14 @@ use GDO\UI\GDT_Page;
  * @author gizmore
  * @version 7.0.0
  * @since 5.3.0
- * 
  * @see GDT_PerfBar
  */
 final class Module_Perf extends GDO_Module
 {
-	public function onLoadLanguage() : void { $this->loadLanguage('lang/perf'); }
+	public function onLoadLanguage() : void
+	{
+		$this->loadLanguage('lang/perf');
+	}
     
     ##############
     ### Config ###

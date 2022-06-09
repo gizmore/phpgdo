@@ -63,6 +63,11 @@ final class GDT_PageNum extends GDT_UInt
         $this->max = $this->table->getPageMenu()->getPageCount();
         return parent::gdoExampleVars();
     }
+    
+    public function plugVars() : array
+    {
+    	return ['1'];
+    }
 
     ################
     ### Validate ###

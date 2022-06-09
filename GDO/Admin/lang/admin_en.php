@@ -44,21 +44,21 @@ return [
 'link_edit_permissions' => 'Edit Permissions',
 'link_grant_perm' => 'Grant Permission',
 'link_revoke_perm' => 'Revoke Permission',
-'ft_admin_permissionadd' => 'Add Permission',
+'mt_admin_permissionadd' => 'Add Permission',
 'user_count' => 'Members',
 'perm_revoke' => 'Revoke',
 'msg_perm_added' => 'A new permission has been added: %s',
 ################################################################
-'ft_admin_permissionrevoke' => 'Revoke Permission',
+'mt_admin_permissionrevoke' => 'Revoke Permission',
 ################################################################
-'ft_admin_permissiongrant' => 'Grant Permission',
+'mt_admin_permissiongrant' => 'Grant Permission',
 'choose_permission' => 'Choose permission',
 'msg_perm_granted' => 'You have granted %s permissions to %s.',
 ################################################################
 'msg_cache_flushed' => 'Caches have been flushed. E.g; rm -rf temp/minify, Cache::flush().',
 ################################################################
 'link_create_user' => 'Create new user',
-'ft_admin_usercreate' => 'Create a new user',
+'mt_admin_usercreate' => 'Create a new user',
 ################################################################
 'mdescr_admin_modules' => 'Administrate modules',
 'admin_user_created' => 'The user has been created successfully.',

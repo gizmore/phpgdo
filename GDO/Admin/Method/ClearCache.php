@@ -63,9 +63,6 @@ final class ClearCache extends Method
 	    GDT_MethodTest::$TEST_USERS = [];
 	    # Call hook
 	    GDT_Hook::callWithIPC('ClearCache');
-	    # Clear module loader cache??????
-// 	    ModuleLoader::instance()->reset();
-		
 	}
 
 }

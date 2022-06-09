@@ -100,6 +100,11 @@ class GDT_AntiCSRF extends GDT_Hidden
 		return $token;
 	}
 	
+	public function plugVars() : array
+	{
+		return [];
+	}
+	
 	###################
 	### Load / Save ###
 	###################
