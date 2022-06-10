@@ -1,10 +1,8 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\GDO;
-use GDO\Util\Common;
 use GDO\Core\GDT_Object;
 
 /**
@@ -16,28 +14,20 @@ use GDO\Core\GDT_Object;
  */
 abstract class MethodCard extends Method
 {
-    /**
-     * @return GDO
-     */
-    public abstract function gdoTable();
-    
     public function idName() { return 'id'; }
 
-    public function getID() : ?string { return Common::getRequestString($this->idName()); }
-    
+    public abstract function gdoTable() : GDO;
+
     public function gdoParameters() : array
     {
         return [
             GDT_Object::make($this->idName())->table($this->gdoTable())->notNull(),
         ];
     }
-    
-    /**
-     * @return GDO
-     */
-    public function getObject()
+
+    public function getObject() : GDO
     {
-        return $this->gdoTable()->find($this->getID());
+    	return $this->gdoParameterValue($this->idName());
     }
     
     public function execute()
