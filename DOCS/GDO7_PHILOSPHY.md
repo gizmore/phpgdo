@@ -5,6 +5,8 @@
  - *No* code duplication. Re-use as much as possible. Validator inheritance and js bridge is noteworthy.
  
  - *No* redundant information. I don't need to annotate in three ways that this is a string. Never is bad, one time is great, three times is sad.
+ 
+ - Consistency. Mostly, always?, There is one way to things. Do them this way and as good as you can.
 
  - Less is more. there are no getters, just public attributes. Setters have the same name and allow chaining. This pattern is used across the whole project.
  

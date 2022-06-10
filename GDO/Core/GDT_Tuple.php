@@ -10,25 +10,23 @@ namespace GDO\Core;
  * @author gizmore
  * @version 7.0.0
  */
-final class GDT_Tuple extends GDT
+class GDT_Tuple extends GDT
 {
 	use WithFields;
+	
+	public function addField(GDT $gdt)
+	{
+		if ($gdt instanceof self)
+		{
+			return $this->addFields(...array_values($gdt->getFields()));
+		}
+		return $this->addFieldB($gdt);
+	}
 	
 	protected function addFieldB(GDT $gdt) : self
 	{
 		$this->addFieldA($gdt);
 		return $this;
 	}
-	
-// 	public function renderHTML()
-// 	{
-// 		$html = '';
-// 		foreach ($this->getAllFields() as $gdt)
-// 		{
-			
-// 			$html .= $gdt->renderHTML();
-// 		}
-// 		return $html;
-// 	}
 	
 }

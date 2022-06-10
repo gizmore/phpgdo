@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Core;
 
-use GDO\UI\WithText;
 use GDO\UI\GDT_Page;
 
 /**
@@ -13,11 +12,8 @@ use GDO\UI\GDT_Page;
  * @version 7.0.0
  * @since 5.0.0
  */
-final class GDT_Response extends GDT
+final class GDT_Response extends GDT_Tuple
 {
-	use WithText;
-	use WithFields;
-	
 	public function render() : string
 	{
 		switch (Application::$INSTANCE->mode)
@@ -30,15 +26,6 @@ final class GDT_Response extends GDT
 			default:
 				return parent::render();
 		}
-	}
-	
-	public function addField(GDT $gdt)
-	{
-		if ($gdt instanceof GDT_Response)
-		{
-			return $this->addFields(...array_values($gdt->getFields()));
-		}
-		return $this->addFieldB($gdt);
 	}
 	
 	/**

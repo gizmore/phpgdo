@@ -2,6 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT_Template;
+use GDO\Core\GDT;
 
 /**
  * A panel that collapses on click.
@@ -19,14 +20,22 @@ final class GDT_Accordeon extends GDT_Container
 	##############
 	public function renderHTML() : string
     {
-        return GDT_Template::php('UI', 'accordeon_html.php', ['field' => $this]);
+		return $this->renderAccordeon(GDT::RENDER_HTML);
     }
     
     public function renderForm() : string
     {
-    	return $this->renderHTML();
+    	return $this->renderAccordeon(GDT::RENDER_FORM);
     }
     
+	protected function renderAccordeon(int $mode) : string
+	{
+        return GDT_Template::php('UI', 'accordeon_html.php', [
+        	'field' => $this,
+        	'mode' => $mode,
+        ]);
+	}
+	
     ##############
     ### Opened ###
     ##############
