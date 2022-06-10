@@ -14,8 +14,6 @@ use GDO\DB\Cache;
  *
  * @TODO: write an event system for games.
  *
- * @see Module_Websocket
- * 
  * @author gizmore
  * @version 7.0.0
  * @since 3.0.0

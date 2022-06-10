@@ -444,4 +444,4 @@ if (!defined('GDO_FILECACHE'))
     define('GDO_FILECACHE', 1);
 }
 
-define('GDO_TEMP_PATH', GDO_PATH . Application::$INSTANCE->isUnitTests() ? 'temp_test/' : 'temp/');
+define('GDO_TEMP_PATH', GDO_PATH . (Application::$INSTANCE->isUnitTests() ? 'temp_test/' : 'temp/'));

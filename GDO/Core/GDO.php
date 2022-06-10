@@ -97,11 +97,11 @@ abstract class GDO extends GDT
 		}
 		if (GDO_GDT_DEBUG)
 		{
-			self::logDebug();
+			$this->logDebug();
 		}
 	}
 	
-	private static function logDebug() : void
+	private function logDebug() : void
 	{
 		Logger::log('gdo', sprintf('%d: %s', self::$GDO_COUNT, self::gdoClassNameS()));
 		if (GDO_GDT_DEBUG >= 2)

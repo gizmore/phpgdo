@@ -19,7 +19,7 @@ Open `yourhost/install/index.php` in your web browser.
     ./gdo_adm.sh configure
     # NOW edit protected/config.php manually (@TODO: write a repl configurator)
     ./gdo_adm.sh install_all
-    # MAKE your PATH point to phpgdo/bin
+    # MAKE your PATH point to phpgdo/bin (OPTIONAL)
     gdo core.version # test version method
 
 
