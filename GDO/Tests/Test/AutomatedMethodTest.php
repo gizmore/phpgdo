@@ -38,6 +38,7 @@ final class AutomatedMethodTest extends TestCase
 	private $automatedCalled = 0; # Num plug variants called
 	private $automatedSkippedAuto = 0;
 	private $automatedSkippedHard = 0;
+	private $automatedSkippedAbstract = 0;
 	
 	private function automatedMethods()
 	{
@@ -70,6 +71,7 @@ final class AutomatedMethodTest extends TestCase
 				$k = new \ReflectionClass($klass);
 				if ($k->isAbstract())
 				{
+					$this->automatedSkippedAbstract++;
 					continue;
 				}
 				
@@ -92,13 +94,19 @@ final class AutomatedMethodTest extends TestCase
 				{
 					$this->tryTrivialMethod($method);
 				}
+				else
+				{
+					$this->automatedSkippedAuto++;
+				}
 			} # is Method
 		} # foreach classes
 		
 		$this->message(CLI::bold("Done with automated method tests."));
-		$this->message("Tested %s trivial methods.\n%s have been %s because they were unpluggable.\n%s have been manually skipped via config.",
-			CLI::bold($this->automatedTested), CLI::bold($this->automatedFailed), CLI::bold("SKIPPED"), CLI::bold($this->automatedSkippedAuto));
-		$this->message('From %s trivial called methods, %s', $this->automatedCalled, CLI::bold("{$this->automatedFailed} failed"));
+		$this->message("Tested %s trivial methods.", CLI::bold($this->automatedTested));
+		$this->message(CLI::bold($this->automatedFailed . ' FAILED!'));
+		$this->message("%s were skipped because they were abstract.", CLI::bold($this->automatedSkippedAbstract));
+		$this->message("%s were skipped because they were unpluggable.", CLI::bold($this->automatedSkippedAuto));
+		$this->message("%s have been manually skipped via Method settings.", CLI::bold($this->automatedSkippedHard));
 	}
 	
 	private function tryTrivialMethod(Method $method)

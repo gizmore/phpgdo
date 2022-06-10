@@ -144,6 +144,11 @@ final class GDT_Form extends GDT
 	{
 		return $this->getField($key, $throw)->getVar();
 	}
+	
+	public function getFormValue(string $key, bool $throw=true)
+	{
+		return $this->getField($key, $throw)->getValue();
+	}
 
 	/**
 	 * Get all columns as gdo var.

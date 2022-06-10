@@ -673,15 +673,6 @@ class GDO_Module extends GDO
 	    if ($this->userConfigCache === null)
 	    {
     	    $this->userConfigCache = [];
-    	    if ($config = $this->getUserConfig())
-    	    {
-    	    	$config['div_settings_config'] = GDT_Divider::make('div_settings_config');
-    	        foreach ($config as $gdt)
-    	        {
-    	            $gdt->writeable(false);
-    	            $this->userConfigCache[$gdt->name] = $gdt;
-    	        }
-    	    }
     	    if ($config = $this->getUserSettings())
     	    {
 	    	    $config['div_settings_settings'] = GDT_Divider::make('div_settings_settings');
@@ -697,6 +688,15 @@ class GDO_Module extends GDO
     	        {
     	            $this->userConfigCache[$gdt->name] = $gdt;
     	        }
+    	    }
+    	    if ($config = $this->getUserConfig())
+    	    {
+    	    	$config['div_settings_config'] = GDT_Divider::make('div_settings_config');
+    	    	foreach ($config as $gdt)
+    	    	{
+    	    		$gdt->writeable(false);
+    	    		$this->userConfigCache[$gdt->name] = $gdt;
+    	    	}
     	    }
 	    }
 	    return $this->userConfigCache;

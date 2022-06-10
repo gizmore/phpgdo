@@ -73,6 +73,7 @@ Sie können dann hier fortfahren: %s',
 
 # Admins
 'install_title_6' => 'Administrator anlegen',
+'info_install_admins' => 'Hier können Sie Adminstratoren für Ihre GDOv7 Installation anlegen.',
 'ft_install_installadmins' => 'Administrator anlegen',
 'msg_admin_created' => 'Ein Administrator namens %s wurde angelegt oder das Passwort wurde zurückgesetzt.',
 

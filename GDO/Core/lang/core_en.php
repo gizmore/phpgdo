@@ -50,6 +50,7 @@ return [
 	'err_invalid_gdt_var' => 'Your input is invalid!',
 	'forbidden' => 'Forbidden!',
 	'err_forbidden' => 'You are not allowed to access this.',
+	'err_unknown_field' => 'The field `%s` in this form is either unknown or not writeable.',
 	
 # Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
@@ -208,12 +209,6 @@ User: %s
 Kind Regards,
 The %2$s System',
 
-	
-	
-	
-	
-	
-	
 # NEw	
 	'confirm_delete' => 'Do you really want to delete this?',
 	

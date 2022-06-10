@@ -30,7 +30,7 @@ use GDO\Language\GDO_Language;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.0-r1349';
+	const GDO_REVISION = '7.0.0-r1351';
 	
 	##############
 	### Module ###
@@ -173,12 +173,19 @@ window.GDO_REVISION = '%s';
 	/**
 	 * Check if an url should be restricted due to GDO asset source restriction.
 	 * You should enable this in production.
+	 * te
 	 */
 	public function checkAssetAllowed(string $url) : bool
 	{
-		return $this->cfgModuleAssets() ?
-			true : 
-			(strpos($url, 'GDO/') === false);
+// 		if (strpos($url, 'temp/') !== false)
+// 		{
+// 			return false;
+// 		}
+		if ($this->cfgModuleAssets())
+		{
+			return true;
+		}
+		return (strpos($url, 'GDO/') !== 0);
 	}
 	
 }

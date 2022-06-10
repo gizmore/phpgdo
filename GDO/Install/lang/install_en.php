@@ -73,6 +73,7 @@ You can then continue with %s.',
 
 # Admins 
 'install_title_6' => 'Create Admins',
+'info_install_admins' => 'Here you can create administrator accounts for your GDOv7 installation.',
 'ft_install_installadmins' => 'Create Admins',
 'msg_admin_created' => 'An admin named %s has been created or their password has been reset.',
 

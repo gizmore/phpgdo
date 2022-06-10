@@ -75,7 +75,7 @@ abstract class MethodForm extends Method
 		$this->form->titleRaw($this->getMethodTitle());
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
-			if ($gdt->hasInput())
+			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				if ($form->validate(null))
 				{

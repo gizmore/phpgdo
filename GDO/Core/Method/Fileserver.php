@@ -33,10 +33,21 @@ final class Fileserver extends Method
 	{
 		$url = $this->gdoParameterVar('url', false);
 		$url = ltrim($url, '/');
+		
+		# Deny by asset rule?
 		if (!Module_Core::instance()->checkAssetAllowed($url))
 		{
-			return NotAllowed::make()->execute();
+			return NotAllowed::make()->inputs($this->inputs)->execute();
 		}
+
+		# Deny PHP source
+		$type = FileUtil::mimetype($url);
+		if ($type === 'text/x-php')
+		{
+			return NotAllowed::make()->inputs($this->inputs)->execute();
+		}
+		
+		# Try cached or serve
 		$last_modified_time = filemtime($url);
 		# @TODO: Cache etag-md5 via modified time
 		$etag = md5_file($url);
@@ -54,7 +65,6 @@ final class Fileserver extends Method
 		}
 		
 		# 200 - serve
-		$type = FileUtil::mimetype($url);
 		hdr('Content-Type: '.$type);
 		hdr('Content-Size: '.filesize($url));
 		Application::timingHeader();

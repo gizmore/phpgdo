@@ -4,15 +4,16 @@ namespace GDO\User;
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Crypto\GDT_PasswordHash;
-use GDO\Date\GDT_Timezone;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
-use GDO\Language\GDT_Language;
 use GDO\Language\Trans;
 use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_EditedAt;
 use GDO\DB\Query;
+use GDO\Date\Module_Date;
+use GDO\Language\Module_Language;
+use GDO\Mail\Module_Mail;
 
 /**
  * The holy user class.
@@ -22,7 +23,8 @@ use GDO\DB\Query;
  * @version 7.0.0
  * @since 1.0.0
  * @see GDO
- * @see GDT
+ * @see Module_Date
+ * @see Module_Language
  */
 final class GDO_User extends GDO
 {
@@ -164,8 +166,6 @@ final class GDO_User extends GDO
 			GDT_UserType::make('user_type'),
 			GDT_Username::make('user_name')->unique(),
 			GDT_Username::make('user_guest_name')->unique(),
-			GDT_Language::make('user_language')->notNull()->initial(GDO_LANGUAGE)->cascadeRestrict(),
-			GDT_Timezone::make('user_timezone')->notNull()->initial('1')->cascadeRestrict(),
 			GDT_Level::make('user_level'),
 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
 			GDT_DeletedAt::make('user_deleted'),
@@ -177,9 +177,11 @@ final class GDO_User extends GDO
 	##############
 	### Getter ###
 	##############
+	public function hasMail() : bool { return !!Module_Mail::instance()->cfgUserEmailIsConfirmed($this); }
+
 	public function getName() : ?string { return $this->gdoVar('user_name'); }
 	public function getType() : string { return $this->gdoVar('user_type'); }
-	public function getLangISO() : string { return $this->gdoVar('user_language'); }
+	public function getLangISO() : string { return Module_Language::instance()->cfgUserLangID(); }
 	public function getUserName() : ?string { return $this->gdoVar('user_name'); }
 	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
 	
@@ -223,7 +225,7 @@ final class GDO_User extends GDO
 	 */
 	public function getTimezone() : string
 	{
-		$tz = $this->gdoVar('user_timezone');
+		$tz = Module_Date::instance()->cfgUserTimezoneId($this);
 		if ($tz > 1)
 		{
 			return $tz;
@@ -264,6 +266,7 @@ final class GDO_User extends GDO
 		}
 		return [];
 	}
+	
 	public function hasPermissionID(string $permissionId=null) : bool
 	{
 		if ($permissionId)
@@ -273,10 +276,12 @@ final class GDO_User extends GDO
 		}
 		return true;
 	}
-	public function hasPermissionObject(GDO_Permission $permission) : bool { return $this->hasPermission($permission->getName()); }
-	public function hasPermission(string $permission) : bool { return array_key_exists($permission, $this->loadPermissions()); }
+	
 	public function isAdmin() : bool { return $this->hasPermission('admin'); }
 	public function isStaff() : bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
+	public function hasPermission(string $permission) : bool { return array_key_exists($permission, $this->loadPermissions()); }
+	public function hasPermissionObject(GDO_Permission $permission) : bool { return $this->hasPermission($permission->getName()); }
+	
 	public function changedPermissions() : self
 	{
 		$this->tempUnset('gdo_permission');
@@ -338,10 +343,6 @@ final class GDO_User extends GDO
 		return $this->renderUserName();
 	}
 	
-	/**
-	 * 
-	 * @return string
-	 */
 	public function renderUserName() : string
 	{
 		if ($name = $this->getName())

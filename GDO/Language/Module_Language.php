@@ -31,6 +31,8 @@ use GDO\Net\GDT_Url;
  */
 final class Module_Language extends GDO_Module
 {
+	private array $supported;
+
 	##############
 	### Module ###
 	##############
@@ -52,8 +54,22 @@ final class Module_Language extends GDO_Module
 	
 	public function cfgSwitchLeft() : string { return $this->getConfigVar('langswitch_left'); }
 	public function cfgJavascript() : string { return $this->getConfigVar('use_in_javascript'); }
+
+	################
+	### Settings ###
+	################
+	public function getUserSettings() : array
+	{
+		return [
+			GDT_Language::make('language')->notNull()->initial(GDO_LANGUAGE),
+		];
+	}
 	
-	private array $supported;
+	public function cfgUserLangID(GDO_User $user = null) : string
+	{
+		$user = $user ? $user : GDO_User::current();
+		return $this->userSettingVar($user, 'language');
+	}
 	
 	/**
 	 * Get the supported  languages, GDO_LANGUAGE first.
@@ -73,7 +89,6 @@ final class Module_Language extends GDO_Module
 			}
 			$this->supported = $supported;
 		}
-		
 		return $this->supported;
 	}
 	

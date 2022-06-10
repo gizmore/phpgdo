@@ -43,6 +43,21 @@ final class Module_Date extends GDO_Module
     public function cfgProbeJS() : string { return $this->getConfigVar('tz_probe_js'); }
     public function cfgSidebarSelect() : string { return $this->getConfigVar('tz_sidebar_select'); }
  
+    ################
+    ### Settings ###
+    ################
+    public function getUserSettings() : array
+    {
+    	return [
+    		GDT_Timezone::make('timezone')->initial('1')->notNull(),
+    	];
+    }
+    public function cfgUserTimezoneId(GDO_User $user=null) : string
+    {
+    	$user = $user ? $user : GDO_User::current();
+    	return $this->userSettingVar($user, 'timezone');
+    }
+    
     ############
     ### Init ###
     ############
