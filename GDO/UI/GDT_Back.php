@@ -1,8 +1,6 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\Website;
-
 /**
  * The back button points to your origin.
  * It has a default icon and label.

@@ -10,6 +10,7 @@ use GDO\Core\GDT_Response;
 use GDO\Session\GDO_Session;
 use GDO\Date\GDO_Timezone;
 use GDO\UI\GDT_Redirect;
+use GDO\Date\Module_Date;
 
 /**
  * Change a user's timezone.
@@ -65,10 +66,9 @@ final class Timezone extends MethodForm
         $new = $timezone->getID();
         if ($old != $new)
         {
-            $user->setVar('user_timezone', $new);
             if ($user->isPersisted())
             {
-                $user->save();
+	        	Module_Date::instance()->saveUserSetting($user, 'timezone', $new);
             }
             else
             {

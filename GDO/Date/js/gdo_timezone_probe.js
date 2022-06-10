@@ -16,7 +16,7 @@ window.GDO.Date = {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-	if (GDO_USER.JSON.user_timezone == 1) {
+	if (GDO_USER.JSON.timezone == 1) {
 		GDO.Date.probe();
 	}
 });

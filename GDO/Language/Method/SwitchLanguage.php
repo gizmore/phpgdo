@@ -6,8 +6,9 @@ use GDO\Language\Trans;
 use GDO\UI\GDT_Redirect;
 use GDO\Core\MethodAjax;
 use GDO\Language\GDO_Language;
-use GDO\User\GDO_User;
 use GDO\Net\GDT_Url;
+use GDO\Language\Module_Language;
+use GDO\User\GDO_User;
 
 /**
  * Switch language to user's choice.
@@ -17,9 +18,7 @@ use GDO\Net\GDT_Url;
  * @author gizmore
  * @version 7.0.0
  * @since 6.9.0
- * 
  * @see Module_Language
- * @see GDO_Session
  */
 final class SwitchLanguage extends MethodAjax
 {
@@ -68,7 +67,8 @@ final class SwitchLanguage extends MethodAjax
 			$ref = GDT_Redirect::hrefBack();
 		}
 		$ref = preg_replace("/_lang=[a-z]{2}/", "_lang=".$iso , $ref);
-		GDO_User::current()->persistent()->saveVar('user_language', $iso);
+		$user = GDO_User::current()->persistent();
+		Module_Language::instance()->saveUserSetting($user, 'language', $iso);
 		Trans::setISO($iso);
 		return GDT_Redirect::make()->
 			href($ref)->

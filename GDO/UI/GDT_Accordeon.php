@@ -1,12 +1,10 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 
 /**
- * A panel that collapses monclick.
- * Add 
+ * A panel that collapses on click.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -16,16 +14,6 @@ final class GDT_Accordeon extends GDT_Container
 {
 	use WithTitle;
 	
-// 	public array $titles = [];
-// 	public array $sections = [];
-	
-// 	public function addSection(string $title, GDT $section) : self
-// 	{
-// 		$this->titles[] = $title;
-// 		$this->sections[] = $section;
-// 		return $this;
-// 	}
-	
 	##############
 	### Render ###
 	##############
@@ -34,17 +22,22 @@ final class GDT_Accordeon extends GDT_Container
         return GDT_Template::php('UI', 'accordeon_html.php', ['field' => $this]);
     }
     
+    public function renderForm() : string
+    {
+    	return $this->renderHTML();
+    }
+    
     ##############
     ### Opened ###
     ##############
     public bool $opened = false;
-    public function opened($opened=true)
+    public function opened(bool $opened=true) : self
     {
         $this->opened = $opened;
         return $this;
     }
     
-    public function closed($closed=true)
+    public function closed(bool $closed=true) : self
     {
     	return $this->opened(!$closed);
     }

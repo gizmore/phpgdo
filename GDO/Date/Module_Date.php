@@ -107,7 +107,7 @@ final class Module_Date extends GDO_Module
      */
     public function hookUserAuthenticated(GDO_User $user)
     {
-    	$user->saveVar('user_timezone', $user->getTimezone());
+    	Module_Date::instance()->saveUserSetting($user, 'timezone', $user->getTimezone());
     }
     
     public function hookUserLoggedOut(GDO_User $user)

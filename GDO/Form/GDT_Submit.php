@@ -19,6 +19,7 @@ class GDT_Submit extends GDT_Button
 	use WithName;
 	use WithInput;
 	use WithValue;
+	use WithFormAttributes;
 	use WithClickHandler;
 	
 	public function getDefaultName() : ?string

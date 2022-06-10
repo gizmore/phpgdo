@@ -11,7 +11,7 @@ Requirements and dependencies.
  - MariaDB/MySQL (required)
  - php_bcrypt (required)
  - php_mb_string (required)
- - PHP 7.3/8.0/8.1 (required)
+ - PHP >= 8.0 (required)
  - php_mysqli (required) (yes, also a db is required atm)
  - composer (optional)
  - npm (optional)

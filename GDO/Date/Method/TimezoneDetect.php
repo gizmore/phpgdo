@@ -53,8 +53,12 @@ final class TimezoneDetect extends MethodForm
 	
 	public function formValidated(GDT_Form $form)
 	{
-		$set = Timezone::make()->inputs(['timezone' => $this->tz->getID()]);
-		return $set->execute();
+		$inputs = [
+			'timezone' => $this->tz->getID(),
+			'submit' => '1',
+		];
+		$set = Timezone::make()->inputs($inputs);
+		return $set->executeWithInit();
 	}
 
 }

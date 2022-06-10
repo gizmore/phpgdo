@@ -12,6 +12,8 @@ use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
 use GDO\Net\GDT_Url;
 use GDO\Language\GDO_Language;
+use GDO\Date\Module_Date;
+use GDO\Language\Module_Language;
 
 /**
  * The core module holds some generic config as well as the global revision string.
@@ -30,7 +32,7 @@ use GDO\Language\GDO_Language;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.0-r1352';
+	const GDO_REVISION = '7.0.0-r1354';
 	
 	##############
 	### Module ###
@@ -167,7 +169,10 @@ window.GDO_REVISION = '%s';
 	public function gdoUserJSON()
 	{
 		$user = GDO_User::current();
-		return $user->toJSON();
+		$data = $user->toJSON();
+		$data['timezone'] = Module_Date::instance()->cfgUserTimezoneId($user);
+		$data['language'] = Module_Language::instance()->cfgUserLangID($user);
+		return $data;
 	}
 	
 	/**
