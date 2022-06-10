@@ -2,10 +2,17 @@
 namespace GDO\UI;
 
 /**
- * An error is a message box with a special css class.
+ * A success is a panel with a special css class and icon.
  * 
  * @author gizmore
  */
-final class GDT_Success extends GDT_MessageBox
+final class GDT_Success extends GDT_Panel
 {
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->addClass('gdt-success');
+		$this->icon = 'check';
+	}
+	
 }

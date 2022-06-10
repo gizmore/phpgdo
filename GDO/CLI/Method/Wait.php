@@ -21,7 +21,7 @@ final class Wait extends MethodCLI
 	public function createForm(GDT_Form $form) : void
 	{
 		$form->addFields(
-			GDT_Duration::make('duration')->required(),
+			GDT_Duration::make('duration')->notNull(),
 			GDT_AntiCSRF::make(),
 		);
 		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onExecute']));

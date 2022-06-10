@@ -5,6 +5,10 @@ use GDO\UI\GDT_Panel;
  * @var $field GDT_Panel
  */
 ?>
-<div class="gdt-panel"<?=$field->htmlAttributes()?>>
-  <p><?=$field->renderText()?></p>
+<div<?=$field->htmlAttributes()?>>
+<?php if ($field->hasTitle()) : ?>
+  <h3><?=$field->renderTitle()?></h3>
+<?php endif; ?>
+  <p><?=$field->htmlIcon()?>
+  <?=$field->renderText()?></p>
 </div>

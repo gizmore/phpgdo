@@ -29,7 +29,7 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
   
  - write a module that adds changelog tables for gdo: phpgdo-changelog.
   
- - GDOv7 shoule use xdebug-code-coverage programmatically.
+ - GDOv7 shoule use xdebug-code-coverage programmatically. LOC should be counted for js, css and php, excluding 3rd party.
 
  - /bin/grr - linux binary to replace input with a regex pattern and stream to output. Like awk but only that one thing well :*
  
@@ -40,3 +40,4 @@ Your playlists are ACL sharable.
  
  - get.help.from.gizmore.org - Questions are broadcasted to staff members. Staff replies via various channels. Users keep track via a ticket. Use Helpdesk?
  
+ - Maybe the datatype flow should be input => var => string => int => float => null, and always only support one direction: from input to var to value.

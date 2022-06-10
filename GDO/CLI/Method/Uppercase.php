@@ -21,7 +21,7 @@ final class Uppercase extends MethodForm
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
-			GDT_String::make('string')->required(),
+			GDT_String::make('string')->notNull(),
 			GDT_AntiCSRF::make(),
 		);
 		$form->actions()->addField(

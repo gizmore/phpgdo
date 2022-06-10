@@ -91,7 +91,7 @@ abstract class MethodForm extends Method
 				else
 				{
 					$form->errorFormInvalid();
-					return $form;
+					return $this->renderPage();
 				}
 			}
 		}

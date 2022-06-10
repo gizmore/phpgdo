@@ -13,11 +13,21 @@ use GDO\Core\GDO_Exception;
  * @version 7.0.0
  * @since 3.0.0
  */
-final class GDT_Error extends GDT_MessageBox
+final class GDT_Error extends GDT_Panel
 {
 	public static function fromException(\Throwable $t) : self
 	{
 		return self::make()->exception($t);
+	}
+
+	###########
+	### GDT ###
+	###########
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->icon = 'error';
+		$this->addClass('gdt-error');
 	}
 	
 	public function exception(\Throwable $t) : self
@@ -30,9 +40,8 @@ final class GDT_Error extends GDT_MessageBox
 	
 	public function renderHTML() : string
 	{
-		$this->addClass('gdt-error');
 		hdrc('HTTP/1.1 ' . GDO_Exception::DEFAULT_ERROR_CODE  .' GDO Error');
-// 		hdr('X-GDO-ERROR: ' . $this->renderText());
+		hdr('X-GDO-ERROR: ' . $this->renderText());
 		return parent::renderHTML();
 	}
 	
