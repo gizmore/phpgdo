@@ -16,7 +16,7 @@ use GDO\Core\Application;
  * A card with title, subtitle, creator, date, content and actions.
  *  
  * @author gizmore
- * @version 6.10.6
+ * @version 7.0.0
  * @since 6.0.4
  */
 final class GDT_Card extends GDT
@@ -81,18 +81,18 @@ final class GDT_Card extends GDT
 	{
 	    $back = [];
 	    
-	    if ($this->gdo)
-	    {
-	        $back[] = t('id') . ': ' . $this->gdo->getID();
-	    }
+// 	    if ($this->gdo)
+// 	    {
+// 	        $back[] = t('id') . ': ' . $this->gdo->getID();
+// 	    }
 	    
-	    if ($this->title)
+	    if ($this->hasTitle())
 	    {
-    	    $back[] = $this->title->renderCLI();
+    	    $back[] = $this->renderTitle();
 	    }
-	    if ($this->subtitle)
+	    if ($this->hasSubTitle())
 	    {
-	        $back[] = $this->subtitle->renderCLI();
+	        $back[] = $this->renderSubTitle();
 	    }
 	    foreach ($this->getAllFields() as $gdt)
 	    {

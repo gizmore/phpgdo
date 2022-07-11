@@ -162,11 +162,6 @@ class GDT_String extends GDT_DBField
 	##########
 	### DB ###
 	##########
-// 	public function gdoColumnNames() : array
-// 	{
-// 		return [$this->name];
-// 	}
-	
 	public function gdoColumnDefine() : string
 	{
 		$charset = $this->gdoCharsetDefine();
@@ -201,8 +196,9 @@ class GDT_String extends GDT_DBField
 	###########
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
-		$va = $a->gdoVar($this->name);
-		$vb = $b->gdoVar($this->name);
+		$va = (string)$a->gdoVar($this->name);
+		$vb = (string)$b->gdoVar($this->name);
+		
 		switch ($this->encoding)
 		{
 			case self::ASCII:
@@ -236,6 +232,11 @@ class GDT_String extends GDT_DBField
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
+	}
+	
+	public function renderFilter($f) : string
+	{
+		return GDT_Template::php('Core', 'string_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
 	public function plugVar() : string

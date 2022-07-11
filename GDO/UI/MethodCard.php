@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Object;
+use GDO\Core\GDT;
 
 /**
  * Abstract method to render a single GDO as a card.
@@ -14,10 +15,13 @@ use GDO\Core\GDT_Object;
  */
 abstract class MethodCard extends Method
 {
-    public function idName() { return 'id'; }
+    public function idName() : string { return 'id'; }
 
     public abstract function gdoTable() : GDO;
 
+    ##############
+    ### Params ###
+    ##############
     public function gdoParameters() : array
     {
         return [
@@ -30,6 +34,9 @@ abstract class MethodCard extends Method
     	return $this->gdoParameterValue($this->idName());
     }
     
+    ############
+    ### Exec ###
+    ############
     public function execute()
     {
         $gdo = $this->getObject();
@@ -37,9 +44,23 @@ abstract class MethodCard extends Method
         {
             return $this->error('err_no_data_yet');
         }
-        return $gdo;
+        return $this->executeFor($gdo);
     }
     
+    protected function executeFor(GDO $gdo) : GDT
+    {
+    	$card = GDT_Card::make()->gdo($gdo);
+    	$this->createCard($card);
+    	return $card;
+    }
+    
+    protected function createCard(GDT_Card $card) : void  
+    {
+    }
+    
+    ###########
+    ### Seo ###
+    ###########
     public function getTitle()
     {
         if ($gdo = $this->getObject())

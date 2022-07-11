@@ -16,7 +16,7 @@ final class GDT_Hostname extends GDT_String
 	### Resolve ###
 	###############
 	public static function resolve( $hostname) { return gethostbyname($hostname); }
-	public function getIP() { return self::resolve($this->getVar()); }
+	public function getIP() { return self::resolve($this->gdoVar()); }
 	
 	##################
 	### GDT_String ###

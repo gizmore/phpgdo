@@ -26,7 +26,10 @@ final class Module_User extends GDO_Module
 	
 	public function getFriendencies() : array
 	{
-		return ['Cronjob'];
+		return [
+			'Avatar',
+			'Cronjob',
+		];
 	}
 	
 	public function onInstall() : void { OnInstall::onInstall(); }

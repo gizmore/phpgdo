@@ -37,7 +37,7 @@ $app = Application::instance();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
 Database::init();
-ModuleLoader::init(GDO_DB_ENABLED?true:false);
+ModuleLoader::instance()->loadModulesCache();
 Trans::$ISO = GDO_LANGUAGE;
 if (!module_enabled('Core'))
 {
@@ -106,10 +106,10 @@ if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'], true, false)))
 		{
 			$me = Error::make();
-			$_REQUEST['error'] = t('err_unknown_module', [html($mo->gdoHumanName()), html($_REQUEST['_mo'])]);
+			$_REQUEST['error'] = t('err_unknown_module', [html((string)$_REQUEST['_mo'])]);
 		}
-		unset($_REQUEST['_mo']);
-		if (isset($_REQUEST['_me']))
+// 		unset($_REQUEST['_mo']);
+		elseif (isset($_REQUEST['_me']))
 		{
 			if (!($me = $mo->getMethod((string) @$_REQUEST['_me'])))
 			{

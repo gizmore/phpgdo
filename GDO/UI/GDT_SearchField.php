@@ -15,8 +15,8 @@ class GDT_SearchField extends GDT_String
 {
 	public string $icon = 'search';
 	
-	public int $min = 3;
-	public int $max = 128;
+	public int $min = 2;
+	public int $max = 64;
 	
 	public bool $hidden = true;
     

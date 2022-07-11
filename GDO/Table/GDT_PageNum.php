@@ -72,12 +72,12 @@ final class GDT_PageNum extends GDT_UInt
     ################
     ### Validate ###
     ################
-    public function validate($value) : bool
-    {
-        $this->min = 1;
-        $this->max = $this->table->getPageMenu()->getPageCount();
-        return parent::validate($value);
-    }
+//     public function validate($value) : bool
+//     {
+//         $this->min = 1;
+//         $this->max = $this->table->getPageMenu()->getPageCount();
+//         return parent::validate($value);
+//     }
     
 }
 

@@ -3,7 +3,6 @@ namespace GDO\Core;
 
 use GDO\DB\Query;
 use GDO\CLI\CLI;
-use GDO\Table\GDT_Table;
 
 /**
  * The base class for all GDT.
@@ -183,19 +182,19 @@ abstract class GDT
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderHeader() : string { return ''; }
 	public function renderFilter($f) : string { return ''; }
-	public function renderOrder(GDT_Table $t) : string { return $this->renderTableOrder($t); }
+// 	public function renderOrder(GDT_Table $t) : string { return $this->renderTableOrder($t); }
 
-	protected function renderTableOrder(GDT_Table $t) : string
-	{
-		if ($this->isOrderable())
-		{
-			return GDT_Template::php('Core', '_order_header.php', ['field' => $this, 'table' => $t]);
-		}
-		else
-		{
-			return $this->renderLabel();
-		}
-	}
+// 	protected function renderTableOrder(GDT_Table $t) : string
+// 	{
+// 		if ($this->isOrderable())
+// 		{
+// 			return GDT_Template::php('Core', '_order_header.php', ['field' => $this, 'table' => $t]);
+// 		}
+// 		else
+// 		{
+// 			return $this->renderLabel();
+// 		}
+// 	}
 	
 	public function renderVar() : string
 	{
@@ -476,7 +475,7 @@ abstract class GDT
 		return null;
 	}
 	
-	public function getInput(string $key) : ?string
+	public function getInput(string $key)
 	{
 		return null;
 	}

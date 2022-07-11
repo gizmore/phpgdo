@@ -67,8 +67,8 @@ class GDT_Int extends GDT_DBField
 	###############
 	### Min/Max ###
 	###############
-	public ?int $min = null;
-	public ?int $max = null;
+	public ?float $min = null;
+	public ?float $max = null;
 	public function min(int $min) : self { $this->min = $min; return $this; }
 	public function max(int $max) : self { $this->max = $max; return $this; }
 	

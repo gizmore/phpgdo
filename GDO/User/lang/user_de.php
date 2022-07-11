@@ -29,4 +29,6 @@ return [
 
 	'mt_user_cleanupguests' => 'Gäste säubern',
 	'md_user_cleanupguests' => 'Cronjob um verwaiste Gastnutzer aufzuräumen.',
+
+	'mt_user_profile' => '%s\'s Profil',
 ];

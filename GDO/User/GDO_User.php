@@ -20,7 +20,7 @@ use GDO\Mail\Module_Mail;
  * Most user related fields are in other module settings.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 1.0.0
  * @see GDO
  * @see Module_Date
@@ -290,7 +290,7 @@ final class GDO_User extends GDO
 	
 	public function getLevel() : int
 	{
-		$level = $this->getVar('user_level');
+		$level = $this->gdoVar('user_level');
 		$permLevel = $this->getPermissionLevel();
 		return (int)max([$level, $permLevel]);
 	}
@@ -326,7 +326,7 @@ final class GDO_User extends GDO
 			{
 				if ($session = GDO_Session::instance())
 				{
-					$this->setVar('user_type', self::GUEST);
+					$this->setVar('user_type', GDT_UserType::GUEST);
 					$this->insert();
 					$session->setVar('sess_user', $this->getID());
 				}
@@ -356,6 +356,10 @@ final class GDO_User extends GDO
 		return t('guest');
 	}
 
+	public function renderProfileLink(bool $nickname, bool $avatar, bool $score) : string
+	{
+		return sprintf('%s');
+	}
 }
 
 GDO_User::setCurrent(GDO_User::ghost());

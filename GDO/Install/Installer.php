@@ -365,30 +365,30 @@ class Installer
 	            
 	            if (!$depmod)
 	            {
-	                if ($allResolved === true)
-	                {
-	                    return "Missing dependencie(s)!\n".
-	                       "Please note that this list may not be complete, because missing modules might have more dependencies.\n";
-	                }
-	                $allResolved = false;
-	                $providers = @\GDO\Core\ModuleProviders::$PROVIDERS[$dep];
-	                if (!$providers)
-	                {
-	                    return "{$dep}: Not an official module or a typo somewhere. No Provider known.\n";
-	                }
-	                elseif (is_array($providers))
-	                {
-	                    $back = "{$dep}: Choose between multiple possible providers.\n";
-	                    foreach ($providers as $provider)
-	                    {
-	                        $back .= sprintf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n", $dep);
-	                    }
-	                    return $back;
-	                }
-	                else
-	                {
-	                    return sprintf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n", $dep);
-	                }
+// 	                if ($allResolved === true)
+// 	                {
+// 	                    return "Missing dependencie(s)!\n".
+// 	                       "Please note that this list may not be complete, because missing modules might have more dependencies.\n";
+// 	                }
+// 	                $allResolved = false;
+// 	                $providers = @\GDO\Core\ModuleProviders::$PROVIDERS[$dep];
+// 	                if (!$providers)
+// 	                {
+// 	                    return "{$dep}: Not an official module or a typo somewhere. No Provider known.\n";
+// 	                }
+// 	                elseif (is_array($providers))
+// 	                {
+// 	                    $back = "{$dep}: Choose between multiple possible providers.\n";
+// 	                    foreach ($providers as $provider)
+// 	                    {
+// 	                        $back .= sprintf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n", $dep);
+// 	                    }
+// 	                    return $back;
+// 	                }
+// 	                else
+// 	                {
+// 	                    return sprintf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n", $dep);
+// 	                }
 	                
 	                continue;
 	            }

@@ -264,22 +264,28 @@ class GDT_Template extends GDT
 	private static $PATHES = [];
 
 	/**
-	 * Get the Path for the GDO Design if the file exists
-	 *
-	 * @param string $path
-	 *        templatepath
-	 * @return string
+	 * Get the Path for the GDO Theme Module Path and language.
 	 */
-	private static function getPath($moduleName, $path)
+	private static function getPath(string $moduleName, string $path) : string
 	{
-		return self::getPathB($moduleName, $path);
-		# Cache version is not that fast?
-// 		$key = Trans::$ISO . $moduleName . $path;
-// 		if ( !isset(self::$PATHES[$key]))
-// 		{
-// 			self::$PATHES[$key] = self::getPathB($moduleName, $path);
-// 		}
-// 		return self::$PATHES[$key];
+		static $cache = [];
+		$iso = Trans::$ISO;
+		if (!isset($cache[$iso]))
+		{
+			$cache[$iso] = [$moduleName => []];
+		}
+		elseif (!isset($cache[$moduleName]))
+		{
+			$cache[$iso][$moduleName] = [];
+		}
+		
+		if (isset($cache[$iso][$moduleName][$path]))
+		{
+			return $cache[$iso][$moduleName][$path];
+		}
+		
+		$cache[$iso][$moduleName][$path] = $path = self::getPathB($moduleName, $path);
+		return $path;
 	}
 
 	private static function getPathB($moduleName, $path)

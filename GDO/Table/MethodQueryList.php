@@ -13,7 +13,7 @@ abstract class MethodQueryList extends MethodQueryTable
 {
     public function isFiltered() { return false; }
     
-    public function gdoHeaders() { return []; }
+    public function gdoHeaders() : array { return []; }
     
     public function listName() { return 'list'; }
 	

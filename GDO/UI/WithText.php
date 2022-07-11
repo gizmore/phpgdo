@@ -6,7 +6,7 @@ namespace GDO\UI;
  * 
  * Adds text($key, $args) for I18n version
  * Adds textRaw($text) for raw version
- * Adds textUnescaped() for skipping escaping.
+ * Adds textEscaped() for skipping escaping.
  * 
  * @author gizmore
  * @version 7.0.0

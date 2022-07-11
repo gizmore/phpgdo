@@ -19,6 +19,8 @@ class GDT_Checkbox extends GDT_Select
     
     public function isSearchable() : bool { return false; }
     
+    public function isOrderDefaultAsc() : bool { return false; }
+    
 	protected function __construct()
 	{
 	    parent::__construct();
@@ -194,4 +196,12 @@ class GDT_Checkbox extends GDT_Select
 	    }
 	}
 
+	public function plugVars() : array
+	{
+		return [
+			'0',
+			'1',
+		];
+	}
+	
 }

@@ -8,13 +8,15 @@ use GDO\DB\Result;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\UI\WithHREF;
+use GDO\UI\WithText;
 use GDO\UI\WithTitle;
 use GDO\Form\WithActions;
-use GDO\Core\WithFields;
 use GDO\Core\GDO_Exception;
 use GDO\Form\WithCrud;
 use GDO\Core\WithGDO;
 use GDO\Form\WithAction;
+use GDO\Core\WithName;
+use GDO\Core\WithInput;
 
 /**
  * A filterable, searchable, orderable, paginatable, sortable collection of GDT[] in headers.
@@ -53,16 +55,19 @@ use GDO\Form\WithAction;
 class GDT_Table extends GDT
 {
 	use WithGDO;
+	use WithCrud;
+	use WithName;
 	use WithHREF;
+	use WithText;
 	use WithTitle;
-	use WithHeaders;
+	use WithInput;
 	use WithAction;
 	use WithActions;
-	use WithFields;
-	use WithCrud;
+	use WithHeaders;
 
 	public function getDefaultName() : string
 	{
+// 		return strtolower($this->gdo->gdoShortName());
 		return 'table';
 	}
 
@@ -75,26 +80,6 @@ class GDT_Table extends GDT
 	{
 		parent::__construct();
 		$this->action = @urldecode(@$_SERVER['REQUEST_URI']);
-	}
-
-	# ####################
-	# ## Header fields ###
-	# ####################
-	/**
-	 * @return GDT[]
-	 */
-	public function getHeaderFields() : array
-	{
-		return isset($this->headers) ? $this->headers->getAllFields() : GDT::EMPTY_GDT_ARRAY;
-	}
-
-	/**
-	 * @param string $name
-	 * @return \GDO\Core\GDT
-	 */
-	public function getHeaderField(string $name) : GDT
-	{
-		return $this->headers->getField($name);
 	}
 
 	# #############
@@ -170,26 +155,45 @@ class GDT_Table extends GDT
 	# ###############
 	public GDT_Order $order;
 	
-	public function getOrderField() : GDT_Order
+	public function ordered(GDT_Order $order)
 	{
-		if (!isset($this->order))
-		{
-			$this->order = GDT_Order::make();
-		}
-		return $this->order;
-	}
-
-	public function ordered(bool $ordered = true, string $defaultOrder = null)
-	{
-		if ($ordered)
-		{
-			$this->order = $this->getOrderField()->initial($defaultOrder);
-		}
-		else 
-		{
-			unset($this->order);
-		}
+		$this->order = $order;
+		$order->orders($this->getOrders($order->getVar()));
 		return $this;
+	}
+	
+// 	public function orderFields(array $fields, string $order) : self
+// 	{
+// 		$this->order->setFields($fields);
+// 		$this->order->orders($this->getOrders($order));
+// 		return $this;
+// 	}
+	
+	public function isOrderable() : bool { return isset($this->order); }
+	
+// 	protected function getOrderField() : GDT_Order
+// 	{
+// 		if (!isset($this->order))
+// 		{
+// 			$this->order = GDT_Order::make("{$this->name}_order");
+// 		}
+// 		return $this->order;
+// 	}
+	
+	/**
+	 * Render an order header for a gdt.
+	 * Table only rendering method.
+	 * 
+	 * @param GDT $gdt
+	 * @return string
+	 */
+	public function renderOrder(GDT $gdt) : string
+	{
+		return GDT_Template::php('Table', 'table_order.php', [
+			'table' => $this,
+			'field' => $gdt,
+			'order' => $this->order->href($this->href),
+		]);
 	}
 
 	# #################
@@ -204,20 +208,16 @@ class GDT_Table extends GDT
 		Module_Table::instance()->cfgItemsPerPage());
 	}
 
-	public function paginated($paginated = true, $href = null, $ipp = 0)
+	public function paginated(bool $paginated = true, string $href = null, int $ipp = 0) : self
 	{
-		$ipp = $ipp < 1 ? Module_Table::instance()->cfgItemsPerPage() : (int) $ipp;
+		$ipp = $ipp < 1 ? Module_Table::instance()->cfgItemsPerPage() : $ipp;
 		if ($paginated)
 		{
 			$href = $href === null ? $this->action : $href;
 			$this->pagemenu = $this->getPageMenu();
-			$this->pagemenu->headers($this->headers);
 			$this->pagemenu->href($href);
 			$this->pagemenu->ipp($ipp);
-// 			$o = $this->headers->name;
-			$page = 1;
-			$this->pagemenu->page($page);
-			$this->href($href);
+			$this->pagemenu->page(1);
 		}
 		return $this->ipp($ipp);
 	}
@@ -229,45 +229,41 @@ class GDT_Table extends GDT
 	
 	public function ipp(int $ipp) : self
 	{
-		$this->getPageMenu()->getIPPField()->value($ipp);
+		$this->getPageMenu()->ipp($ipp);
 		return $this;
 	}
 
-	# ##
-	public $result;
-
-	public function result(Result $result)
+	##############
+	### Result ###
+	##############
+	public Result $result;
+	
+	public function result(Result $result) : self
 	{
-		$this->gdo($result->table);
-		if ( !$this->fetchAs)
-		{
-			$this->fetchAs = $result->table;
-		}
 		$this->result = $result;
 		return $this;
 	}
 
-	/**
-	 *
-	 * @return Result
-	 */
-	public function getResult()
+	public function getResult() : Result
 	{
-		if (!$this->result)
+		if (!isset($this->result))
 		{
 			$this->result = $this->queryResult();
 		}
 		return $this->result;
 	}
 
-	public $query;
+	#############
+	### Query ###
+	#############
+	public Query $query;
 
 	public function query(Query $query)
 	{
-		if ( !$this->fetchAs)
-		{
-			$this->fetchAs = $query->table;
-		}
+// 		if (!$this->fetchAs)
+// 		{
+// 			$this->fetchAs = $query->table;
+// 		}
 		$this->query = $this->getFilteredQuery($query);
 		return $this;
 	}
@@ -280,9 +276,9 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	private $filtersApplied = false;
+	private bool $filtersApplied = false;
 
-	public function getFilteredQuery(Query $query)
+	public function getFilteredQuery(Query $query) : Query
 	{
 		if ($this->filtered)
 		{
@@ -311,7 +307,7 @@ class GDT_Table extends GDT
 		return $this->getOrderedQuery($query);
 	}
 
-	private function getOrderedQuery(Query $query)
+	private function getOrderedQuery(Query $query) : Query
 	{
 // 		$headers = $this->headers;
 // 		$o = $headers ? $headers->name : 'o';
@@ -386,11 +382,8 @@ class GDT_Table extends GDT
 	 * In general, GDT_String and GDT_Int is searchable.
 	 *
 	 * @todo GDT_Enum is not searchable yet.
-	 *      
-	 * @param Query $query
-	 * @param string $searchTerm
 	 */
-	public function bigSearchQuery(Query $query, $searchTerm)
+	public function bigSearchQuery(Query $query, string $searchTerm) : Query
 	{
 		$split = preg_split("/\\s+/iD", trim($searchTerm, "\t\r\n "));
 		$first = true;
@@ -416,19 +409,17 @@ class GDT_Table extends GDT
 		}
 	}
 
-	/**
-	 *
-	 * @var int
-	 */
-	public $countItems = null;
+	#############
+	### Count ###
+	#############
+	public int $countItems;
 
 	/**
-	 *
 	 * @return int the total number of matching rows.
 	 */
-	public function countItems()
+	public function countItems() : int
 	{
-		if ($this->countItems === null)
+		if (!isset($this->countItems))
 		{
 			if ($this->countQuery)
 			{
@@ -457,30 +448,33 @@ class GDT_Table extends GDT
 	}
 
 	/**
-	 *
+	 * Create the pagemenu
 	 * @return GDT_PageMenu
 	 */
-	public function getPageMenu()
+	private function getPageMenu() : GDT_PageMenu
 	{
 		if (!isset($this->pagemenu))
 		{
 			$this->pagemenu = GDT_PageMenu::make();
 		}
-		if ($this->query)
-		{
-			if ($this->countItems === null)
-			{
-				$this->pagemenu->numItems($this->countItems());
-			}
-		}
 		return $this->pagemenu;
 	}
 
-	public $fetchAs;
+	################
+	### Fetch As ###
+	################
+	public GDO $fetchAs;
 
-	public function fetchAs(GDO $fetchAs = null)
+	public function fetchAs(GDO $fetchAs = null) : self
 	{
-		$this->fetchAs = $fetchAs;
+		if ($fetchAs)
+		{
+			$this->fetchAs = $fetchAs;
+		}
+		else
+		{
+			unset($this->fetchAs);
+		}
 		return $this;
 	}
 
@@ -496,7 +490,7 @@ class GDT_Table extends GDT
 		return GDT_Template::php('Table', 'table_html.php',
 		[
 			'field' => $this,
-			'form' => false
+			'form' => false,
 		]);
 	}
 
@@ -505,7 +499,7 @@ class GDT_Table extends GDT
 		return GDT_Template::php('Table', 'cell/table.php',
 		[
 			'field' => $this,
-			'form' => true
+			'form' => true,
 		]);
 	}
 
@@ -527,17 +521,18 @@ class GDT_Table extends GDT
 	{
 		return array_merge(parent::configJSON(),
 		[
-			'tableName' => $this->getResult()->table->gdoClassName(),
-			'pagemenu' => $this->pagemenu ? $this->getPageMenu()->configJSON() : null,
+			'tableName' => $this->gdo->gdoClassName(),
+			'pagemenu' => isset($this->pagemenu) ? $this->getPageMenu()->configJSON() : null,
 			'total' => (int) ($this->pagemenu ? $this->pagemenu->numItems : $this->getResult()->numRows()),
-			'searchable' => $this->searchable,
+			'searched' => $this->searched,
+			'searchable' => $this->isSearchable(),
 			'sorted' => $this->sorted,
 			'sortableURL' => $this->sortableURL,
 			'filtered' => $this->filtered,
-			'filterable' => $this->filterable,
-			'orderable' => $this->orderable,
-			'orderDefaultField' => $this->orderDefault,
-			'orderDefaultASC' => $this->orderDefaultAsc,
+			'filterable' => $this->isFilterable(),
+			'ordered' => isset($this->order),
+			'orderable' => $this->isOrderable(),
+			'orderDefault' => $this->order->getVar(),
 		]);
 	}
 
@@ -593,7 +588,7 @@ class GDT_Table extends GDT
 
 	public function renderCLI() : string
 	{
-		$p = $this->getPageMenu();
+		$p = isset($this->pagemenu) ? $this->pagemenu : false;
 		if ($p && $p->getPageCount() > 1)
 		{
 			$items = [];

@@ -37,6 +37,7 @@ class GDO_Module extends GDO
 	public function isCoreModule() : bool { return false; }
 	public function isSiteModule() : bool { return false; }
 	public function isInstallable() : bool { return true; }
+	public function isTestable() : bool { return false; }
 	
 	/**
 	 * A list of required dependencies.
@@ -525,10 +526,10 @@ class GDO_Module extends GDO
 	###################
 	### User config ###
 	###################
-	/**
-	 * Special URL for settings.
-	 */
-	public function getUserSettingsURL() {}
+// 	/**
+// 	 * Special URL for settings.
+// 	 */
+// 	public function getUserSettingsURL() {}
 	
 	/**
 	 * Config that the user cannot change.
@@ -670,12 +671,12 @@ class GDO_Module extends GDO
 	
 	public function &buildSettingsCache()
 	{
-	    if ($this->userConfigCache === null)
+	    if (!isset($this->userConfigCache))
 	    {
     	    $this->userConfigCache = [];
     	    if ($config = $this->getUserSettings())
     	    {
-	    	    $config['div_settings_settings'] = GDT_Divider::make('div_settings_settings');
+    	    	$this->userConfigCache['div_set'] = GDT_Divider::make('div_sett')->label('mt_account_settings');
     	        foreach ($config as $gdt)
     	        {
     	            $this->userConfigCache[$gdt->name] = $gdt;
@@ -683,7 +684,6 @@ class GDO_Module extends GDO
     	    }
     	    if ($config = $this->getUserSettingBlobs())
     	    {
-    	    	$config['div_settings_blob'] = GDT_Divider::make('div_settings_blob');
     	    	foreach ($config as $gdt)
     	        {
     	            $this->userConfigCache[$gdt->name] = $gdt;
@@ -691,7 +691,7 @@ class GDO_Module extends GDO
     	    }
     	    if ($config = $this->getUserConfig())
     	    {
-    	    	$config['div_settings_config'] = GDT_Divider::make('div_settings_config');
+    	    	$this->userConfigCache['div_conf'] = GDT_Divider::make('div_conf')->label('mt_account_config');
     	    	foreach ($config as $gdt)
     	    	{
     	    		$gdt->writeable(false);
@@ -799,15 +799,8 @@ class GDO_Module extends GDO
         if ($withPermission)
         {
             $methods = array_filter($methods, function(Method $method) {
-//                 try
-//                 {
-                    return $method->hasUserPermission(GDO_User::current());
-//                 }
-//                 catch (\Throwable $ex)
-//                 {
-//                     return false;
-//                 }
-            });
+				return $method->hasUserPermission(GDO_User::current());
+			});
         }
         return $methods;
 	}

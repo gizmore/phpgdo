@@ -60,7 +60,7 @@ class InstallAdmins extends MethodForm
 	{
 		/** @var $password GDT_PasswordHash **/
 		$password = $form->getField('user_password');
-		$password->input(BCrypt::create($password->getVar())->__toString());
+		$password->input(BCrypt::create($password->gdoVar())->__toString());
 		
 		$user = GDO_User::blank($this->getInputs());
 		$user->setVar('user_type', 'member');

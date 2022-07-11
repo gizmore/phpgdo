@@ -438,6 +438,5 @@ abstract class Method #extends GDT
 	{
 		return GDT_Template::make()->template($this->getModuleName(), $path, $tVars);
 	}
-	
 
 }

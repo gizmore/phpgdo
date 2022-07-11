@@ -26,11 +26,14 @@ class Install extends MethodForm
 {
 	use MethodAdmin;
 	
-// 	public function formName() { return 'form_install'; }
-// 	public function getPermission() : ?string { return 'admin'; }
+	private GDO_Module $configModule;
+
 	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	
-	private GDO_Module $configModule;
+	public function getFormName() : string
+	{
+		return 'form_install';
+	}
 	
 	public function gdoParameters() : array
 	{
@@ -44,7 +47,7 @@ class Install extends MethodForm
 	{
 		if (!isset($this->configModule))
 		{
-			$this->configModule = $this->gdoParameterValue('module', true);
+			$this->configModule = $this->gdoParameterValue('module');
 		}
 		return $this->configModule;
 	}
@@ -70,10 +73,11 @@ class Install extends MethodForm
 	
 	public function getMethodTitle() : string
 	{
-	    if ($this->configModule)
-	    {
-	        return t('ft_admin_install', [$this->configModule->renderName()]);
-	    }
+		if ($module = $this->configModule())
+		{
+	        return t('ft_admin_install', [$module->renderName()]);
+			
+		}
 	    else
 	    {
 	        return t('btn_install');

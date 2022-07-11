@@ -41,7 +41,7 @@ final class GDT_Error extends GDT_Panel
 	public function renderHTML() : string
 	{
 		hdrc('HTTP/1.1 ' . GDO_Exception::DEFAULT_ERROR_CODE  .' GDO Error');
-		hdr('X-GDO-ERROR: ' . $this->renderText());
+// 		hdr('X-GDO-ERROR: ' . $this->renderText());
 		return parent::renderHTML();
 	}
 	

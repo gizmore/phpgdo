@@ -8,6 +8,11 @@ Great production builds are done on the fly, development mode always integrates 
 Read more in the [changelogs](./DOCS/GDO7_CHANGELOG.md), look around, or maybe check out the [previous version](https://github.com/gizmore/gdo6).
 
 
+## Installation
+
+Please refer to the [DOCS](./DOCS/GDO7_Installation.md) for installation and documentation.
+
+
 ### phpgdo: Help
 
 I might soon be working on a [Module_Helpdesk](http://github.com/gizmore/phpgdo-helpdesk) to track tickets as well.

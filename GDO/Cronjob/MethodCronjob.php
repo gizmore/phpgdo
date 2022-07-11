@@ -15,6 +15,11 @@ use GDO\Core\Method;
  */
 abstract class MethodCronjob extends Method
 {
+	public function getMethodTitle() : string
+	{
+		return t('cronjob_method', [$this->getModuleName(), $this->getMethodName()]);
+	}
+	
 	public abstract function run();
 
 	public function getPermission() : ?string { return 'cronjob'; }

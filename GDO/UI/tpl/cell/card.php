@@ -3,23 +3,23 @@
 $field->addClass('gdt-card');
 ?>
 <div
-<?php if ($field->gdo) : ?>
+<?php if (isset($field->gdo)) : ?>
   id="card-<?=$field->gdo->getID()?>"
 <?php endif; ?>
   <?=$field->htmlAttributes()?>>
 
-<?php if ($field->avatar || $field->title || $field->subtitle) : ?>
+<?php if ($field->avatar || $field->hasTitle() || $field->hasSubTitle()) : ?>
   <div class="gdt-card-upper">
 <?php if ($field->avatar) : ?>
     <div class="gdt-card-avatar"><?=$field->avatar->renderCell()?></div>
 <?php endif; ?>
-<?php if ($field->title || $field->subtitle) : ?>
+<?php if ($field->hasTitle() || $field->hasSubTitle()) : ?>
     <div class="gdt-card-title-texts">
-<?php if ($field->title) : ?>
-    <div class="gdt-card-title"><?=$field->title->renderCell()?></div>
+<?php if ($field->hasTitle()) : ?>
+    <div class="gdt-card-title"><?=$field->renderTitle()?></div>
 <?php endif; ?>
-<?php if ($field->subtitle) : ?>
-    <div class="gdt-card-subtitle"><?=$field->subtitle->renderCell()?></div>
+<?php if ($field->hasSubTitle()) : ?>
+    <div class="gdt-card-subtitle"><?=$field->renderSubTitle()?></div>
 <?php endif; ?>
     </div>
 <?php endif; ?>

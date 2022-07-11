@@ -77,6 +77,13 @@ class GDT_Url extends GDT_String
 	###############
 	### Options ###
 	###############
+	public function allowAll(bool $reachable) : self
+	{
+		$this->allowInternal = true;
+		$this->allowExternal = true;
+		return $this->reachable($reachable);
+	}
+	
 	public function allowInternal(bool $allowInternal=true) : self
 	{
 		$this->allowInternal = $allowInternal;

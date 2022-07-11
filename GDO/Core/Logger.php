@@ -180,7 +180,7 @@ final class Logger
 
 	/**
 	 * Flush all logfiles
-	 * throws an GDOError within logfile content when fails
+	 * throws an GDO_Error within logfile content when fails
 	 */
 	public static function flush()
 	{

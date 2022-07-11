@@ -32,22 +32,17 @@ class Users extends MethodQueryTable
 		return parent::execute()->addField($createLink);
 	}
 	
-	public function gdoHeaders()
+	public function gdoHeaders() : array
 	{
 		$gdo = $this->gdoTable();
 		return [
-			GDT_Button::make('edit_admin')->icon('edit')->noLabel(),
+			GDT_Button::make('edit')->icon('edit')->noLabel(),
 			$gdo->gdoColumn('user_id'),
-// 			$gdo->gdoColumn('user_country')->withName(false),
 			$gdo->gdoColumn('user_type'),
 			GDT_String::make('user_name'),
 			GDT_String::make('user_guest_name'),
 			$gdo->gdoColumn('user_level'),
-// 			GDT_Username::make('username')->orderable(false),
-// 			$gdo->gdoColumn('user_credits'),
-// 			$gdo->gdoColumn('user_email'),
-// 			$gdo->gdoColumn('user_register_time'),
-// 			$gdo->gdoColumn('user_last_activity'),
+			$gdo->gdoColumn('user_last_activity'),
 		];
 	}
 	

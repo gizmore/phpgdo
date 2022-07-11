@@ -75,7 +75,7 @@ final class DirectoryIndex extends MethodTable
 		return $var;
 	}
 	
-	public function getResult()
+	public function getResult() : ArrayResult
 	{
 		$url = $this->getUrl();
 		$data = [];

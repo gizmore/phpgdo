@@ -2,7 +2,6 @@
 namespace GDO\Table;
 
 use GDO\Core\GDT_Template;
-use GDO\Core\GDT;
 
 /**
  * Similiar to a table, a list displays multiple cards or list items.

@@ -31,14 +31,24 @@ class GDT_ComboBox extends GDT_String
 	            'text' => $this->getVar(),
 	            'display' => $this->renderChoice(),
 	        ],
-	        'completionHref' => $this->completionHref,
+	        'completionHref' => isset($this->completionHref) ? $this->completionHref : null,
 	        'combobox' => 1,
 	    ));
 	}
 	
-	public function renderForm() : string
+	##############
+	### Render ###
+	##############
+	public function renderFilter($f) : string
 	{
-	    return GDT_Template::php('Form', 'combobox_form.php', ['field' => $this]);
+		if ($this->hasCompletion())
+		{
+		    return GDT_Template::php('Form', 'combobox_form.php', ['field' => $this, 'f' => $f]);
+		}
+		else
+		{
+			return parent::renderFilter($f);
+		}
 	}
 	
 }

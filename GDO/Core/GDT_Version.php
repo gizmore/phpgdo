@@ -40,5 +40,5 @@ class GDT_Version extends GDT_String
 	{
 		return ["7.0.0"];
 	}
-	
+
 }

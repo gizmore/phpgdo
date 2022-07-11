@@ -37,6 +37,14 @@ trait WithFields
 	 */
 	public array $fieldsFlat;
 	
+	public function setFields(array $fields) : self
+	{
+		unset($this->fields);
+		unset($this->fieldsFlat);
+		$this->addFields(...$fields);
+		return $this;
+	}
+	
 	public function addFields(GDT...$gdts) : self
 	{
 		foreach ($gdts as $gdt)
@@ -236,6 +244,10 @@ trait WithFields
 			if ($gdt->hasName())
 			{
 				$json[$gdt->getName()] = $gdt->renderJSON();
+			}
+			else
+			{
+				$json[] = $gdt->renderJSON();
 			}
 		});
 		return $json;

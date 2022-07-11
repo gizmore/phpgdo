@@ -95,7 +95,7 @@ class UserEdit extends MethodForm
 	
 	public function formValidated(GDT_Form $form)
 	{
-		$values = $form->getFormData();
+		$values = $form->getFormVars();
 		$password = $values['user_password'];
 		unset($values['user_password']);
 		

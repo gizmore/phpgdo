@@ -7,6 +7,7 @@ use GDO\DB\Query;
 use GDO\Table\WithOrder;
 use GDO\Core\Application;
 use GDO\Core\GDT_DBField;
+use GDO\Core\GDO;
 
 /**
  * The GDT_Timestamp field is the baseclass for all datefields.
@@ -227,9 +228,10 @@ class GDT_Timestamp extends GDT_DBField
 		{
 			return Time::displayDateTime($dt, $this->format, '');
 		}
+		return '';
 	}
 	
-	public function _inputToVar($input)
+	public function inputToVar($input = null) : ?string
 	{
 		if (!is_numeric($input))
 		{
@@ -266,15 +268,20 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	### Filter ###
 	##############
+	public function filterVar(string $key=null)
+	{
+		return [];
+	}
+	
 	public function renderFilter($f) : string
 	{
-		return GDT_Template::php('Date', 'filter/timestamp.php', ['field' => $this, 'f' => $f]);
+		return GDT_Template::php('Date', 'timestamp_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
 	public function filterQuery(Query $query, $rq=null) : self
 	{
 		$filter = $this->filterVar($rq);
-		if ($filter != '')
+		if ($filter)
 		{
 			if ($condition = $this->searchQuery($query, $filter, true))
 			{
@@ -290,6 +297,12 @@ class GDT_Timestamp extends GDT_DBField
 	public function searchQuery(Query $query, $searchTerm, $first)
 	{
 		return $this->searchCondition($searchTerm);
+	}
+	
+	protected function searchCondition($searchTerm)
+	{
+		$searchTerm = GDO::escapeSearchS($searchTerm);
+		return "{$this->name} LIKE '%{$searchTerm}%'";
 	}
 	
 }

@@ -464,7 +464,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 		else
 		{
-			$var = $value->getName();
+			$var = $value->getID();
 		}
 		return sprintf(' value="%s"', $var);
 	}
@@ -488,6 +488,18 @@ class GDT_Select extends GDT_ComboBox
 			return $var;
 		}
 		return '';
+	}
+	
+	public function renderFilter($f) : string
+	{
+		if ($this->hasCompletion())
+		{
+			return GDT_Template::php('Core', 'combobox_filter.php', ['field' => $this,  'f' => $f]);
+		}
+		else 
+		{
+			return GDT_Template::php('Core', 'select_filter.php', ['field' => $this,  'f' => $f]);
+		}
 	}
 	
 // 	public function formName()

@@ -42,6 +42,12 @@ class GDT_Validator extends GDT
 		return $this;
 	}
 	
+	public function validatorFor(GDT_Form $form, string $fieldName, callable $validator) : self
+	{
+		$field = $form->getField($fieldName);
+		return $this->validator($form, $field, $validator);
+	}
+	
 	public function validateInput($input) : bool
 	{
 		$field = $this->validatorField;

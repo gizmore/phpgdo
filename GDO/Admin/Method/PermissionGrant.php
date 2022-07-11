@@ -33,7 +33,7 @@ class PermissionGrant extends MethodForm
 	
 	public function formValidated(GDT_Form $form)
 	{
-		$userpermission = GDO_UserPermission::blank($form->getFormData())->replace();
+		$userpermission = GDO_UserPermission::blank($form->getFormVars())->replace();
 		$permission = $userpermission->getPermission();
 		/** @var $permission GDO_Permission **/
 		$permission = $form->getFormValue('perm_perm_id');

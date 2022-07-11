@@ -50,7 +50,7 @@ trait WithOrder
 				'url_asc' => $url_asc,
 				'url_desc' => $url_desc,
 			];
-			return GDT_Template::php('Table', 'filter/_table_order.php', $tVars);
+			return GDT_Template::php('Table', 'table_order.php', $tVars);
 		}
 	}
 	

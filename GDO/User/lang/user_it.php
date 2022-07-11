@@ -30,4 +30,6 @@ return [
 	'mt_user_cleanupguests' => 'Pulisci gli ospiti',
 	'md_user_cleanupguests' => 'Cron job per ripulire gli utenti ospiti orfani.',
 	
+	'mt_user_profile' => '%s\'s Profile',
+	
 ];

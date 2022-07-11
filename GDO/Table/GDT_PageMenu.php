@@ -5,14 +5,15 @@ use GDO\DB\Query;
 use GDO\Core\GDT;
 use GDO\Util\Math;
 use GDO\Core\GDT_Template;
-use GDO\UI\WithHREF;
-use GDO\UI\WithLabel;
 use GDO\UI\GDT_Link;
-use GDO\Core\GDT_Fields;
+use GDO\UI\WithHREF;
 use GDO\DB\ArrayResult;
 
 /**
  * Pagemenu widget.
+ * 
+ * For parameters @see GDT_PageNum and @see GDT_IPP.
+ * 
  * @author gizmore
  * @version 7.0.0
  * @since 3.1.0
@@ -20,7 +21,14 @@ use GDO\DB\ArrayResult;
 class GDT_PageMenu extends GDT
 {
 	use WithHREF;
-	use WithLabel;
+// 	use WithLabel;
+
+	public string $pageName;
+	public function pageName(string $pageName) : self
+	{
+		$this->pageName = $pageName;
+		return $this;
+	}
 	
 	public int $numItems = 0;
 	public function numItems(int $numItems) : self
@@ -29,81 +37,76 @@ class GDT_PageMenu extends GDT
 		return $this;
 	}
 	
-	public GDT_IPP $ipp;
-	public function getIPPField() : GDT_IPP
-	{
-		if (!isset($this->ipp))
-		{
-			$this->ipp = GDT_IPP::make();
-		}
-		return $this->ipp;
-	}
+	###########
+	### IPP ###
+	###########
+	public int $ipp = 10;
 	
 	public function ipp(int $ipp) : self
 	{
-	    return $this;
-	}
-	
-	
-	public GDT_PageNum $pageNum;
-	
-	public function getPageNumField() : GDT_PageNum
-	{
-		if (!isset($this->pageNum))
-		{
-			$this->pageNum = GDT_PageNum::make();
-		}
-		return $this->pageNum;
-	}
-	
-	public function page(int $page) : self
-	{
-		$this->getPageNumField()->value($page);
+		$this->ipp = $ipp;
 		return $this;
 	}
 	
-	public $shown = 5;
-	public function shown($shown)
+// 	public function getIPPField() : GDT_IPP
+// 	{
+// 		if (!isset($this->ipp))
+// 		{
+// 			$this->ipp = GDT_IPP::make();
+// 		}
+// 		return $this->ipp;
+// 	}
+	
+	################
+	### Page Num ###
+	################
+	public int $page;
+	
+	public function page(int $page) : self
+	{
+		$this->page = $page;
+		return $this;
+	}
+
+// 	public function getPageNumField() : GDT_PageNum
+// 	{
+// 		if (!isset($this->pageNum))
+// 		{
+// 			$this->pageNum = GDT_PageNum::make();
+// 		}
+// 		return $this->pageNum;
+// 	}
+	
+	public int $shown = 5;
+	public function shown(int $shown) : self
 	{
 	    $this->shown = $shown;
 	    return $this;
 	}
 	
 	/**
-	 * @var GDT_Fields
-	 */
-	public $headers;
-	public function headers(GDT_Fields $headers)
-	{
-	    $this->headers = $headers;
-	    return $this;
-	}
-	
-	/**
 	 * Set num items via query.
-	 * @optional
-	 * @param Query $query
-	 * @return self
+	 * @deprecated because the query is called twice then.
 	 */
-	public function query(Query $query)
+	public function query(Query $query) : self
 	{
 		$this->numItems = $query->copy()->selectOnly('COUNT(*)')->exec()->fetchValue();
 		return $this;
 	}
 	
-	public function getPageCount()
+	public function getPageCount() : int
 	{
-		return self::getPageCountS($this->numItems, $this->getIPPField()->getVar());
+		return self::getPageCountS($this->numItems, $this->ipp);
 	}
 	
-	public static function getPageCountS($numItems, $ipp)
+	public static function getPageCountS(int $numItems, int $ipp) : int
 	{
 		return max(array(intval((($numItems-1) / $ipp)+1), 1));
 	}
 	
 	public function filterQuery(Query $query, $rq=null) : self
 	{
-		$query->limit($this->ipp->getVar(), $this->getFrom());
+		$query->limit($this->ipp, $this->getFrom());
 		return $this;
 	}
 	
@@ -112,33 +115,32 @@ class GDT_PageMenu extends GDT
 	 */
 	public function getPage() : int
 	{
-		$page = (int)$this->getPageNumField()->getValue();
 		$min = 1;
 		$max = $this->getPageCount();
-		return Math::clampInt($page, $min, $max);
+		return Math::clampInt($this->page, $min, $max);
 	}
 	
-	public function getFrom()
+	public function getFrom() : int
 	{
-		return self::getFromS($this->getPage(), $this->ipp->getVar());
+		return self::getFromS($this->getPage(), $this->ipp);
 	}
 	
-	public static function getFromS($page, $ipp)
+	public static function getFromS(int $page, int $ipp) : int
 	{
 		return ($page - 1) * $ipp;
 	}
 	
-	public function indexToPage($index)
+	public function indexToPage(int $index) : int
 	{
 		return self::indexToPageS($index, $this->ipp);
 	}
 	
-	public static function indexToPageS($index, $ipp)
+	public static function indexToPageS(int $index, int $ipp) : int
 	{
 		return intval($index / $ipp) + 1;
 	}
 	
-	public function paginateResult(ArrayResult $result, $page, $ipp)
+	public function paginateResult(ArrayResult $result, $page, $ipp) : ArrayResult
 	{
 	    $data = array_slice($result->getData(), self::getFromS($page, $ipp), $ipp);
 	    return $result->data($data);
@@ -147,6 +149,11 @@ class GDT_PageMenu extends GDT
 	##############
 	### Render ###
 	##############
+	public function isTestable() : bool
+	{
+		return false;
+	}
+	
 	public function renderCLI() : string
 	{
 		return t('pagemenu_cli', [$this->getPage(), $this->getPageCount()]);
@@ -171,7 +178,7 @@ class GDT_PageMenu extends GDT
 				'pagemenu' => $this,
 				'pages' => $this->pagesObject(),
 			];
-			return GDT_Template::php('Table', 'cell/pagemenu.php', $tVars);
+			return GDT_Template::php('Table', 'pagemenu_html.php', $tVars);
 		}
 		return '';
 	}
@@ -221,7 +228,7 @@ class GDT_PageMenu extends GDT
 	
 	private function replaceHREF($page)
 	{
-		$name = $this->getPageNumField()->name;
+		$name = $this->pageName;
 		if (strpos($this->href, $name) === false)
 		{
 			$this->href .= strpos($this->href, '?') ? '&' : '?';

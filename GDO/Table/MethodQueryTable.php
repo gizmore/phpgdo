@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Table;
 
+use GDO\DB\ArrayResult;
 use GDO\DB\Query;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_DeleteButton;
@@ -11,15 +12,15 @@ use GDO\Core\GDO_Exception;
  * A method that displays a table via a query.
  * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 3.0.0
  * @see GDT_Table
  */
 abstract class MethodQueryTable extends MethodTable
 {
-    public function useFetchInto() { return true; }
+    public function useFetchInto() : bool { return true; }
     
-    public function gdoHeaders()
+    public function gdoHeaders() : array
     {
     	return array_merge(
     		$this->gdoButtonHeaders(),
@@ -49,7 +50,7 @@ abstract class MethodQueryTable extends MethodTable
 	 * {@inheritDoc}
 	 * @see \GDO\Table\MethodTable::getResult()
 	 */
-	public function getResult()
+	public function getResult() : ArrayResult
 	{
 	    throw new GDO_Exception("Shuld not return result for queried methods!");
 	}
@@ -80,8 +81,6 @@ abstract class MethodQueryTable extends MethodTable
 	############
 	protected function beforeCalculateTable(GDT_Table $table)
 	{
-		$table->countQuery($this->getCountQuery());
-		$table->pagemenu->numItems($table->countItems());
 	}
 	
 	/**
@@ -92,18 +91,28 @@ abstract class MethodQueryTable extends MethodTable
 	protected function calculateTable(GDT_Table $table)
 	{
 	    $query = $this->getQuery();
-// 	    GDT_Hook::callHook("MethodQueryTable_{$this->getModuleName()}_{$this->getMethodName()}", $query);
+	    $table->fetchAs($this->gdoTable());
+	    if ($this->isOrdered())
+	    {
+	    	# Get order with sanity check
+	    	$order = $this->gdoParameter($this->getOrderName())->getVar();
+	    	# order the query
+	    	$query->order($order);
+	    }
 	    $table->query($query);
         if ($this->isPaginated())
 	    {
-//             $table->countQuery($this->getCountQuery());
-            $pagemenu = $table->getPageMenu();
-	        $pagemenu->filterQuery($table->query);
+	    	$table->countQuery($this->getCountQuery());
+	    	$table->paginated(true, $this->getCurrentHREF(), $this->getIPP());
+	    	$table->pagemenu->page($this->getPage());
+	    	$table->pagemenu->numItems($table->countItems());
+	    	$table->pagemenu->pageName = $this->getPageName();
+	        $table->pagemenu->filterQuery($table->query);
 	    }
-	    else
-	    {
-	        $this->beforeCalculateTable($table);
-	    }
+// 	    else
+// 	    {
+// 	        $this->beforeCalculateTable($table);
+// 	    }
 	}
 
 }

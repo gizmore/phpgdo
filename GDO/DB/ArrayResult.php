@@ -17,17 +17,17 @@ final class ArrayResult extends Result
     /**
      * @var GDO[]
      */
-    private $data;
+    private array $data;
     
     /**
 	 * @var GDO[]
 	 */
-	private $fullData;
+	private array $fullData;
 	
 	/**
 	 * @var int
 	 */
-	private $index;
+	private int $index = -1;
 	
 	public function __construct(array &$data, GDO $table)
 	{
@@ -37,24 +37,24 @@ final class ArrayResult extends Result
 		$this->reset();
 	}
 	
-	public function data(array &$data)
+	public function data(array &$data) : self
 	{
 	    $this->data = &$data;
 	    return $this;
 	}
 	
-	public function fullData(array &$fullData)
+	public function fullData(array &$fullData) : self
 	{
 	    $this->fullData = &$fullData;
 	    return $this;
 	}
 	
-	public function &getData()
+	public function &getData() : array
 	{
 	    return $this->data;
 	}
 	
-	public function &getFullData()
+	public function &getFullData() : array
 	{
 	    return $this->fullData;
 	}
@@ -62,15 +62,15 @@ final class ArrayResult extends Result
 	#############
 	### Table ###
 	#############
-	public function reset() { $this->index = 0; return $this; }
-	public function numRows() { return count($this->data); }
-	public function fetchRow() { return array_values($this->fetchAssoc()); }
-	public function fetchAssoc() { return $this->fetchObject()->getGDOVars(); }
-	public function fetchAs(GDO $table) { return $this->fetchObject(); }
+	public function reset() : self { $this->index = 0; return $this; }
+	public function numRows() :int { return count($this->data); }
+	public function fetchRow() : array { return array_values($this->fetchAssoc()); }
+	public function fetchAssoc() : array { return $this->fetchObject()->getGDOVars(); }
+	public function fetchAs(GDO $table) : ?GDO { return $this->fetchObject(); }
 	/**
 	 * @return GDO
 	 */
-	public function fetchObject()
+	public function fetchObject() : ?GDO
 	{
 	    if ($this->index >= count($this->data))
 	    {
@@ -79,12 +79,14 @@ final class ArrayResult extends Result
 	    $slice = array_slice($this->data, $this->index++, 1);
 	    return array_pop($slice);
 	}
-	public function fetchInto(GDO $gdo)
+	
+	public function fetchInto(GDO $gdo) : ?GDO
 	{
 	    if ($o = $this->fetchObject())
 	    {
 	        return $gdo->setGDOVars($o->getGDOVars());
 	    }
+	    return null;
 	}
 	
 	
@@ -98,7 +100,7 @@ final class ArrayResult extends Result
 	 * @param GDT[] $filters
 	 * @return ArrayResult
 	 */
-	public function filterResult(array $data, GDO $table, array $filters, $rq)
+	public function filterResult(array $data, GDO $table, array $filters, $rq) : self
 	{
 	    foreach ($filters as $gdt)
 	    {

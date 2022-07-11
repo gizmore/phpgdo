@@ -19,7 +19,6 @@ use GDO\UI\WithPHPJQuery;
  */
 abstract class GDT_Field extends GDT
 {
-// 	use WithGDO;
 	use WithIcon;
 	use WithLabel;
 	use WithValue;
@@ -96,7 +95,6 @@ abstract class GDT_Field extends GDT
 		return $this->hasError() ? ' has-error' : '';
 	}
 	
-	
 	#######################
 	### Input/Var/Value ###
 	#######################
@@ -105,7 +103,7 @@ abstract class GDT_Field extends GDT
 		if (is_string($input))
 		{
 			$input = trim($input);
-			return $input === '' ? null : $input;
+			return $input === '' ? $this->initial : $input;
 		}
 		if ($input instanceof GDT_Method)
 		{
@@ -113,9 +111,9 @@ abstract class GDT_Field extends GDT
 		}
 		if (is_array($input))
 		{
-			die('FUN!');
+			return json_encode($input);
 		}
-		return null;
+		return $this->initial;
 	}
 	
 	public function getVar()
@@ -135,12 +133,4 @@ abstract class GDT_Field extends GDT
 	public function isFilterable() : bool { return true; }
 	public function isSerializable() : bool { return true; }
 	
-// 	##############
-// 	### Render ###
-// 	##############
-// 	public function renderOrder() : string
-// 	{
-// 		return GDT_Template::php('Core', '_order_header.php', ['field' => $this]);
-// 	}
-
 }

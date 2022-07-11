@@ -2,6 +2,7 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDO;
 use GDO\Table\MethodQueryTable;
 use GDO\User\GDO_Permission;
 use GDO\UI\GDT_EditButton;
@@ -17,25 +18,24 @@ class Permissions extends MethodQueryTable
 {
 	use MethodAdmin;
 	
-	public function gdoTable() { return GDO_Permission::table(); }
+	public function gdoTable() : GDO { return GDO_Permission::table(); }
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function getTableTitle()
+	public function getTableTitle() : string
 	{
-	    return $this->getTitle();
+	    return $this->getMethodTitle();
 	}
 	
-	public function getTitle()
+	public function getMethodTitle() : string
 	{
 	    return t('btn_permissions');
 	}
 
-	public function gdoHeaders()
+	public function gdoHeaders() : array
 	{
 	    $perms = GDO_Permission::table();
 		return [
-// 			GDT_Count::make(),
 			GDT_EditButton::make(),
 		    $perms->gdoColumn('perm_name'),
 		    $perms->gdoColumn('perm_usercount'),

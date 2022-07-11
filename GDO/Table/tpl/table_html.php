@@ -2,39 +2,35 @@
 namespace GDO\Table\tpl;
 use GDO\Form\GDT_Form;
 /** @var $field \GDO\Table\GDT_Table **/
-/** @var $form GDT_Form **/
+/** @var $form bool **/
 $headers = $field->getHeaderFields();
-if ($pagemenu = $field->getPageMenu())
-{
-	echo $pagemenu->render();
-}
+$pm = isset($field->pagemenu) ? $field->pagemenu->render() : '';
 $result = $field->getResult();
 ?>
-<?php if (!$form) : ?>
-<form method="get" action="<?=html($field->action)?>" class="b">
-<? #GDT_Form::hiddenMoMe()?>
-<?php endif; ?>
 <div class="gdt-table" <?=$field->htmlID()?>>
+<?php if (!$form) : ?>
+ <form method="get" <?=$field->htmlAction()?>>
+  <?=GDT_Form::htmlHiddenMoMe()?>
+<?php endif; ?>
   <?php if ($field->hasTitle()) : ?>
   <div class="gdo-table-caption">
     <h3><?=$field->renderTitle()?></h3>
   </div>
   <?php endif; ?>
-  <table id="gwfdt-<?=$field->getName()?>">
+  <table>
 	<thead>
+	  <?=$pm?>
 	  <tr>
 	  <?php foreach($headers as $gdt) : ?>
 	  <?php if (!$gdt->isHidden()) : ?>
 		<th class="<?=$gdt->htmlClass()?>">
-		  <label>
-			<?php if ($field->isOrderable()) : ?>
-			<?= $gdt->renderOrder($field); ?>
+			<?php if ($field->isOrderable() && $gdt->isOrderable()) : ?>
+			<?=$field->renderOrder($gdt)?>
 			<?php else : ?>
-			<?=$gdt->renderLabel()?>
+			<label><?=$gdt->renderLabel()?></label>
 			<?php endif; ?>
-		  </label>
 		  <?php if ($field->filtered) : ?>
-			<?= $gdt->renderFilter(''); ?>
+			<?= $gdt->renderFilter($field->headers->name); ?>
 		  <?php endif; ?>
 		</th>
       <?php endif;?>
@@ -42,14 +38,13 @@ $result = $field->getResult();
 	  </tr>
 	</thead>
 	<tbody>
-	
 	<?php if ($field->fetchInto) : ?>
 	<?php $dummy = $result->table->cache->getDummy(); ?>
 	<?php while ($gdo = $result->fetchInto($dummy)) : ?>
 	<tr data-gdo-id="<?=$gdo->getID()?>">
 	  <?php foreach($headers as $gdt) :
-	  if (!$gdt->isHidden()) :
-	       $gdt->gdo($gdo); ?>
+	        if (!$gdt->isHidden()) :
+	        $gdt->gdo($gdo); ?>
 		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
 	  <?php endif; ?>
 	  <?php endforeach; ?>
@@ -59,26 +54,26 @@ $result = $field->getResult();
 	<?php while ($gdo = $result->fetchAs($field->fetchAs)) : ?>
 	<tr data-gdo-id="<?=$gdo->getID()?>">
 	  <?php foreach($headers as $gdt) :
-	  if (!$gdt->isHidden()) :
-	       $gdt->gdo($gdo); ?>
+	        if (!$gdt->isHidden()) :
+	        $gdt->gdo($gdo); ?>
 		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
 	  <?php endif; ?>
 	  <?php endforeach; ?>
 	</tr>
 	<?php endwhile; ?>
 	<?php endif; ?>
-
 	</tbody>
 <?php if (isset($field->footer)) : ?>
 	<tfoot><?=$field->footer->render()?></tfoot>
 <?php endif; ?>
   </table>
   <input type="submit" class="n" />
-</div>
 <?php if ($actions = $field->getActions()) : ?>
-<?php echo $actions->render(); ?>
+<?=$actions->render()?>
 <?php endif; ?>
 <?php if (!$form) : ?>
-</form>
+ </form>
 <?php endif; ?>
-<!-- END of GDT_Table -->
+</div>
+
+<?=$pm?>

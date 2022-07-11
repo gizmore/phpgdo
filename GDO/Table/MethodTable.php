@@ -4,15 +4,14 @@ namespace GDO\Table;
 use GDO\Core\Method;
 use GDO\DB\ArrayResult;
 use GDO\Core\GDT;
-use GDO\Core\GDT_Fields;
 use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_SearchField;
+use GDO\Core\GDT_Tuple;
 
 /**
  * A method that displays a table from memory via ArrayResult.
- * It's the base class for more complex methods like MethodQueryTable or MethodQueryCards.
- * The basic API is identical for static memory results and queried data.
+ * It's the base class for MethodQueryTable or MethodQueryCards.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -26,6 +25,25 @@ abstract class MethodTable extends Method
 {
 	public GDT_Table $table;
 	
+	# Override Feature Parameter Names.
+	protected function getIPPName() : string { return 'ipp'; }
+	protected function getPageName() : string { return 'page'; }
+	protected function getOrderName() : string { return 'by'; }
+	protected function getTableName() : string { return 'table'; }
+	protected function getSearchName() : string { return 'search'; }
+	
+	/**
+	 * Override this.
+	 * Return an array of GDT[] for the table headers.
+	 * Defaults to all fields from your gdoTable().
+	 * @return GDT[]
+	 */
+	public function gdoHeaders() : array { return $this->gdoTable()->gdoColumnsCache(); }
+	protected function gdoTableHREF() : string { return $this->href(); }
+	
+	# event
+	protected function onInitTable() : void {}
+	
 	/**
 	 * @return GDT[string]
 	 */
@@ -35,31 +53,46 @@ abstract class MethodTable extends Method
 		{
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
-			$this->withAppliedInputs($this->getInputs());
 			$this->addComposeParameters($this->gdoTableFeatures());
 		}
 		return $this->parameterCache;
 	}
 	
+	private array $headerCache;
+	public function gdoHeaderCache() : array
+	{
+		if (!isset($this->headerCache))
+		{
+			$this->headerCache = [];
+			foreach ($this->gdoHeaders() as $gdt)
+			{
+				$this->headerCache[$gdt->getName()] = $gdt;
+			}
+		}
+		return $this->headerCache;
+	}
+	
+	/**
+	 * Table features paramter array.
+	 * @return array
+	 */
 	private function gdoTableFeatures() : array
 	{
 		$features = [];
-		$table = $this->getTable();
 		if ($this->isPaginated())
 		{
-			$features[] = $table->paginated(true, $this->getDefaultIPP())->pagemenu->getIPPField();
-			$features[] = $table->pagemenu->getPageNumField();
-			$table->pagemenu->getPageNumField()->table($table);
+			$features[] = GDT_IPP::make($this->getIPPName());
+			$features[] = GDT_PageNum::make($this->getPageName())->initial('1');
 		}
 		if ($this->isSearched())
 		{
-			$features[] = GDT_SearchField::make('search')->gdo($this->gdoTable());
+			$features[] = GDT_SearchField::make($this->getSearchName());
 		}
 		if ($this->isOrdered())
 		{
-			$order = $table->ordered(true, $this->getDefaultOrder())->order;
-			$features[] = $order;
-			$order->gdo($this->gdoTable());
+			$features[] = GDT_Order::make($this->getOrderName())->
+				initial($this->getDefaultOrder())->
+				setFields($this->gdoHeaderCache());
 		}
 		if ($this->isFiltered())
 		{
@@ -75,48 +108,27 @@ abstract class MethodTable extends Method
      * @return GDO
      */
     public abstract function gdoTable();
+   
     public function gdoFetchAs() { return $this->gdoTable(); }
     
     /**
      * Override this with returning an ArrayResult with data.
      * @return ArrayResult
      */
-    public function getResult() { return new ArrayResult([], $this->gdoTable()); }
-
-    /**
-     * Override this, if it is required to fetch a different class than your gdoTable().
-     * @return GDO
-     */
-    public function fetchAs() {}
+    public function getResult() : ArrayResult { return new ArrayResult([], $this->gdoTable()); }
 
     /**
      * Override this to toggle fetchInto speedup in table rendering to reduce GDO allocations.
      * @return boolean
      */
-    public function useFetchInto() { return false; }
+    public function useFetchInto() : bool { return true; }
     
     /**
      * Default IPP defaults to config in Module_Table.
      * @see Module_Table::getConfig()
      * @return string
      */
-    public function getDefaultIPP() { return Module_Table::instance()->cfgItemsPerPage(); }
-    
-    /**
-     * Override this.
-     * Return an array of GDT[] for the table headers.
-     * Defaults to all fields from your gdoTable(). 
-     * @return GDT_Fields
-     */
-    public function gdoHeaders() { return $this->gdoTable()->gdoColumnsCache(); }
-    
-    /**
-     * The header GDT name.
-     * Defaults to 'o' for get parameters.
-     * You need to adjust this when showing multiple tables or methods in a single page.
-     * @return string
-     */
-//     public function getHeaderName() { return 'o'; }
+    public function getDefaultIPP() : int { return Module_Table::instance()->cfgItemsPerPage(); }
     
     /**
      * Override this.
@@ -125,17 +137,21 @@ abstract class MethodTable extends Method
      */
     public function onCreateTable(GDT_Table $table) : void {}
     
+    protected function getCurrentHREF()
+    {
+    	return $_SERVER['REQUEST_URI'];
+    }
+    
     /**
      * Creates the collection GDT.
-     * @return GDT_Table|GDT_List
      */
-    public function createCollection()
+    public function createCollection() : GDT_Table
     {
-        $this->table = GDT_Table::make();
-        $this->onCreateTable($this->table);
-//         $this->table->headerName($this->getHeaderName());
+        $this->table = GDT_Table::make($this->getTableName());
+        $this->table->href($this->gdoTableHREF());
+        $this->table->gdo($this->gdoTable());
+        $this->table->fetchAs($this->gdoFetchAs());
         return $this->table;
-//         return $this->table->gdtTable($this->gdoTable());
     }
     
     ##################
@@ -188,40 +204,40 @@ abstract class MethodTable extends Method
 	public function isUpdateable(GDO_User $user) : bool { return false; }
 	public function isDeleteable(GDO_User $user) : bool { return false; }
 	
-	###
-	public function getDefaultOrder()
+	public function getDefaultOrder() : ?string
 	{
-	    foreach ($this->table->getHeaderFields() as $gdt)
+	    foreach ($this->gdoHeaderCache() as $gdt)
 	    {
 	        if ($gdt->isOrderable())
 	        {
 	            return $gdt->name . ($gdt->isOrderDefaultAsc() ? ' ASC' : ' DESC');
 	        }
 	    }
+	    return null;
 	}
 	
-	public function getIPP()
+	public function getIPP() : int
 	{
-		return $this->gdoParameterValue('ipp');
+		return $this->gdoParameterValue($this->getIPPName());
 	}
 	
-	public function getPage()
+	public function getPage() : int
 	{
-		return $this->gdoParameterValue('page');
+		return $this->gdoParameterValue($this->getPageName());
 	}
 	
 	public function getSearchTerm() : string
 	{
-		if ($var = $this->gdoParameterVar('search'))
+		if ($var = $this->gdoParameterVar($this->getSearchName()))
 		{
 			return $var;
 		}
 		return '';
 	}
 	
-	public function getOrderTerm()
+	public function getOrderTerm() : string
 	{
-		return $this->gdoParameterValue('order');
+		return $this->gdoParameterValue($this->getOrderName());
 	}
 	
 	###############
@@ -229,7 +245,7 @@ abstract class MethodTable extends Method
 	###############
 	public function execute()
 	{
-		return $this->renderTable();
+		return GDT_Tuple::makeWith($this->renderTable());
 	}
 	
 	public function validate() : bool
@@ -257,8 +273,16 @@ abstract class MethodTable extends Method
 	
 	public function getTableTitle()
 	{
-	    $key = $this->getTableTitleLangKey();
-	    return t($key, [$this->table->countItems()]);
+		if (isset($this->table))
+		{
+		    $key = $this->getTableTitleLangKey();
+		    return t($key, [$this->table->countItems()]);
+		}
+		else
+		{
+			$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
+			return t($key);
+		}
 	}
 	
 	protected function setupTitle(GDT_Table $table)
@@ -268,16 +292,22 @@ abstract class MethodTable extends Method
 	
 	protected function setupCollection(GDT_Table $table)
 	{
-	    $table->gdo($this->gdoTable());
+// 	    $table->inputs($this->getInputs());
+	    $headers = $this->gdoHeaderCache();
+	    $this->table->addHeaderFields(...$headers);
 	    
 	    # 5 features
-	    $table->ordered($this->isOrdered(), $this->getDefaultOrder());
+	    if ($this->isOrdered())
+	    {
+		    $table->ordered($this->gdoParameter($this->getOrderName()));
+	    }
 	    $table->filtered($this->isFiltered());
 	    $table->searched($this->isSearched());
 	    $table->sorted($this->isSorted());
 	    if ($this->isPaginated())
 	    {
-	    	$table->paginated($this->isPaginated(), null, $this->getIPP());
+	    	$table->paginated(true, $table->href, $this->getIPP());
+	    	$table->pagemenu->page($this->gdoParameterValue($this->getPageName()));
 	    }
 	    
 	    # 4 editor permissions
@@ -289,13 +319,7 @@ abstract class MethodTable extends Method
 	    
 	    # 1 speedup
 	    $table->fetchInto($this->useFetchInto());
-	}
-	
-	public static function make() : self
-	{
-		$obj = parent::make();
-// 		$obj->onInitTable();
-		return $obj;
+	   
 	}
 	
 	public function getTable() : GDT_Table
@@ -303,35 +327,26 @@ abstract class MethodTable extends Method
 		if (!isset($this->table))
 		{
 			$this->table = $this->createCollection();
-// 			$this->table->setupHeaders($this->isSearched(), $this->isPaginated());
-			$this->table->addHeaders(...$this->gdoHeaders());
-// 			$this->setupCollection($this->table);
 		}
 		return $this->table;
 	}
 	
 	public function onInit() : void
 	{
-		$this->initTable();
+// 		$this->initTable();
 	}
 	
 	public function initTable()
 	{
-// 		$this->onInitTable();
-// 		$this->onInit();
 		$table = $this->getTable();
-		$this->setupCollection($this->table);
-		$this->table->result = null;
+		$this->setupCollection($table);
+		$this->onInitTable();
 		$this->beforeCalculateTable($table);
+		$this->calculateTable($table);
 		$this->validate();
-// 	    $this->createTable($table);
 	    $this->calculateTable($table);
 	    $result = $table->getResult();
-	    if ($fetchAs = $this->fetchAs())
-	    {
-	        $table->fetchAs($fetchAs);
-	        $result->table = $fetchAs;
-	    }
+        $result->table = $this->gdoFetchAs();
 	    $this->setupTitle($table);
 	    return $table;
 	}
@@ -346,6 +361,7 @@ abstract class MethodTable extends Method
 		if ($this->isPaginated())
 		{
 			$result = $this->getResult();
+			$this->table->pagemenu->pageName = $this->getPageName();
 			$this->table->pagemenu->items(count($result->getData()));
 		}
 	}
@@ -366,11 +382,12 @@ abstract class MethodTable extends Method
 	    }
 	    if ($this->isOrdered())
 	    {
-	        $result = $table->multisort($result, $this->getDefaultOrder());
+	    	$table->result($result);
+	    	$result = $table->multisort($this->getOrderTerm());
 	    }
 	    if ($this->isPaginated())
 	    {
-	        $result = $this->table->pagemenu->paginateResult($result, $this->getPage(), $this->getIPP());
+	        $result = $table->pagemenu->paginateResult($result, $this->getPage(), $this->getIPP());
 	    }
 	    $table->result($result);
 	}

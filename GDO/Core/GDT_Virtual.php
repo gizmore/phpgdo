@@ -27,7 +27,8 @@ class GDT_Virtual extends GDT
 	public function isTestable() : bool { return false; }
     public function isVirtual() : bool { return true; }
     public function isSerializable() : bool { return true; }
-
+    public function isOrderable() : bool { return true; }
+    
     #############
     ### Query ###
     #############

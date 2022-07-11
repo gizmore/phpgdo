@@ -25,6 +25,16 @@ class GDT_Button extends GDT
 	use WithFormAttributes;
 	use WithAnchorRelation;
 	
+	#################
+	### Secondary ###
+	#################
+	public bool $secondary = false;
+	public function secondary(bool $secondary=true) : self
+	{
+		$this->secondary = $secondary;
+		return $this;
+	}
+	
 	##############
 	### Render ###
 	##############
@@ -51,6 +61,15 @@ class GDT_Button extends GDT
 	#############
 	### Proxy ###
 	#############
+	public function htmlGDOHREF()
+	{
+		if ($href = $this->gdoHREF())
+		{
+			return sprintf(' href="%s"', $href);
+		}
+		return '';
+	}
+	
 	public function gdoHREF()
 	{
 		if (isset($this->href))

@@ -1,8 +1,8 @@
 <?php
 namespace GDO\Table;
 
-use GDO\Core\GDO;
-use GDO\DB\ArrayResult;
+// use GDO\Core\GDO;
+// use GDO\DB\ArrayResult;
 
 /**
  * Utility class to sort GDOs.
@@ -18,41 +18,43 @@ final class Sort
      * @param GDO $table
      * @param bool[string] $orders
      */
-    public static function sortArray(array &$array, GDO $table, array $orders)
-    {
-        $result = new ArrayResult($array, $table);
-        self::sortResult($result, $orders);
-    }
+//     public static function sortArray(array &$array, GDO $table, array $orders)
+//     {
+//         $result = new ArrayResult($array, $table);
+//         self::sortResult($result, $orders);
+//     }
     
-    /**
-     * Sort a result set, stable, by multiple columns.
-     * @param ArrayResult $result
-     * @param array $orders
-     */
-    public static function sortResult(ArrayResult $result, array $orders)
-    {
-        # Create a table to sort with
-        $table = GDT_Table::make()->addHeaders(...$result->table->gdoColumnsCache());
-//         $table->inputs($orders);
+//     public static function 
+    
+//     /**
+//      * Sort a result set, stable, by multiple columns.
+//      * @param ArrayResult $result
+//      * @param array $orders
+//      */
+//     public static function sortResult(ArrayResult $result, array $orders)
+//     {
+//         # Create a table to sort with
+//         $table = GDT_Table::make()->addHeaderFields(...$result->table->gdoColumnsCache());
+// //         $table->inputs($orders);
         
-//         $table->addHeaders($result->table->gdoColumnsCache());
-//         $table->headers->name = '_mosort_';
-        $table->headers->inputs($orders);
+// //         $table->addHeaders($result->table->gdoColumnsCache());
+// //         $table->headers->name = '_mosort_';
+//         $table->headers->inputs($orders);
         
-        # Plug orders into request vars
-//         $o = $table->headers->name;
-//         $_REQUEST[$o] = ['o' => []];
-//         foreach ($orders as $column => $asc)
-//         {
-//             $_REQUEST[$o]['o'][$column] = $asc ? '1' : '0';
-//         }
+//         # Plug orders into request vars
+// //         $o = $table->headers->name;
+// //         $_REQUEST[$o] = ['o' => []];
+// //         foreach ($orders as $column => $asc)
+// //         {
+// //             $_REQUEST[$o]['o'][$column] = $asc ? '1' : '0';
+// //         }
         
-        # sort the result
-        $table->multisort($result);
+//         # sort the result
+//         $table->multisort($result);
 
-        # Ugly: fix order name prediction
-//         unset($_REQUEST[$o]);
-//         GDT_Table::$ORDER_NAME--;
-    }
+//         # Ugly: fix order name prediction
+// //         unset($_REQUEST[$o]);
+// //         GDT_Table::$ORDER_NAME--;
+//     }
     
 }

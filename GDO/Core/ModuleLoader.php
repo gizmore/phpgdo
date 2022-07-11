@@ -5,8 +5,8 @@ use GDO\Util\Filewalker;
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
-use GDO\Table\Sort;
 use GDO\CLI\CLI;
+use GDO\Table\GDT_Table;
 
 /**
  * Module loader.
@@ -138,25 +138,24 @@ final class ModuleLoader
 	############
 	### Init ###
 	############
-	/**
-	 * Init the module loader for website mode.
-	 * 
-	 * @param bool $withDb
-	 * @return GDO_Module[]
-	 */
-	public static function init(bool $withDb=true) : array
-	{
-		$loader = new ModuleLoader(GDO_PATH . 'GDO/');
-		if ($withDb)
-		{
-			return $loader->loadModulesCache();
-		}
-		else
-		{
-			return $loader->loadModules(false, true);
-		}
-	}
-	
+// 	/**
+// 	 * Init the module loader for website mode.
+// 	 * 
+// 	 * @param bool $withDb
+// 	 * @return GDO_Module[]
+// 	 */
+// 	public static function init(bool $withDb=true) : array
+// 	{
+// 		$loader = new ModuleLoader(GDO_PATH . 'GDO/');
+// 		if ($withDb)
+// 		{
+// 			return $loader->loadModulesCache();
+// 		}
+// 		else
+// 		{
+// 			return $loader->loadModules(false, true);
+// 		}
+// 	}
 	
 	#################
 	### Cacheload ###
@@ -269,7 +268,6 @@ final class ModuleLoader
 		
 		if ($loadFS && (!$this->loadedFS) )
 		{
-// 		    $init = !$loadDB;
 			$this->loadModulesFS(false);
 			$loaded = $this->loadedFS = true;
 		}
@@ -277,17 +275,9 @@ final class ModuleLoader
 		# Loaded one?
 		if ($loaded)
 		{
-// 		    if ( (!Application::$INSTANCE->isInstall()) ||
-// 		         ($this->loadedDB) )
-// 		    {
-    			$this->initModuleVars();
-// 		    }
-
-			$this->modules = $this->sortModules([
-			    'module_priority' => true,
-				'module_name' => true
-			]);
-			
+   			$this->initModuleVars();
+			$order = 'module_priority ASC, module_name ASC';
+			$this->modules = $this->sortModules($order);
 			$this->initModules();
 		}
 		return $this->modules;
@@ -361,7 +351,7 @@ final class ModuleLoader
 // 	    Trans::inited(false);
 		Filewalker::traverse($this->path, null, null, [$this, '_loadModuleFS'], 0, $init);
 		Trans::inited(true);
-		$this->sortModules(['module_priority' => true]);
+		$this->sortModules('module_priority ASC');
 		if ($init)
 		{
 			foreach ($this->modules as $module)
@@ -514,9 +504,16 @@ final class ModuleLoader
 		}
 	}
 	
-	public function sortModules(array $orders)
+	public function sortModules(string $orders) : array
 	{
-	    Sort::sortArray($this->modules, GDO_Module::table(), $orders);
+		uasort($this->modules, function(GDO_Module $a, GDO_Module $b) {
+			return $a->priority - $b->priority;
+		});
+// 		$gdo = GDO_Module::table();
+// 		$table = GDT_Table::make('module_table')->ordered(true, $orders, $gdo->gdoColumnsCache());
+// 		$table->gdo($gdo);
+// 		$table->addHeaderFields(...$gdo->gdoColumnsCache());
+// 		$table->sortArray($this->modules, $orders);
 	    return $this->modules;
 	}
 	

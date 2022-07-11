@@ -8,10 +8,12 @@ namespace GDO\Core;
  */
 class GDT_Enum extends GDT_Select
 {
-	protected function __construct()
-	{
-		parent::__construct();
-	}
+// 	use WithCompletion;
+	
+// 	protected function __construct()
+// 	{
+// 		parent::__construct();
+// 	}
 
 	public array $enumValues;
 	public function enumValues(string...$enumValues) : self
@@ -34,6 +36,10 @@ class GDT_Enum extends GDT_Select
 	{
 		return (string)($var);
 	}
+	
+	##############
+	### Render ###
+	##############
 
 	################
 	### DB Field ###

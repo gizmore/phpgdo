@@ -15,6 +15,7 @@ use GDO\Core\GDT_UInt;
 
 /**
  * Overview of all modules in FS and DB.
+ * 
  * @author gizmore
  * @version 7.0.0
  * @since 3.0.2
@@ -28,15 +29,15 @@ class Modules extends MethodTable
 	 */
 	private array $modules;
 	
-	public function getTitleLangKey() { return 'btn_modules'; }
+	public function getMethodTitle() : string { return t('btn_modules'); }
 	
 	public function gdoTable() { return GDO_Module::table(); }
 	
-	public function useFetchInto() { return false; }
+	public function useFetchInto() : bool { return false; }
 	
 	public function isPaginated() { return false; }
 	
-	public function getDefaultOrder() { return 'module_name ASC'; }
+	public function getDefaultOrder() : ?string { return 'module_name ASC'; }
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
@@ -52,18 +53,14 @@ class Modules extends MethodTable
 		return parent::execute();
 	}
 	
-	public function getResult()
+	public function getResult() : ArrayResult
 	{
-	    return new ArrayResult($this->modules, $this->gdoTable());
+	    return new ArrayResult($this->modules, $this->gdoFetchAs());
 	}
 	
-	/**
-	 * @override
-	 */
-	public function gdoHeaders()
+	public function gdoHeaders() : array
 	{
 		return [
-// 			GDT_Sort::make('module_sort'),
 			GDT_UInt::make('module_priority')->unsigned()->label('priority'),
 			GDT_Checkbox::make('module_enabled')->label('enabled'),
 			GDT_Version::make('module_version')->label('version_db'),

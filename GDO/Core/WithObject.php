@@ -358,9 +358,15 @@ trait WithObject
 	##############
 	### Filter ###
 	##############
+	
+	public function filterVar(string $key=null)
+	{
+		return '';
+	}
+	
 	public function renderFilter($f) : string
 	{
-		return GDT_Template::php('DB', 'filter/object.php', ['field' => $this, 'f' => $f]);
+		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
 	/**

@@ -50,7 +50,7 @@ trait WithInput
 		return $this;
 	}
 	
-	public function getInput(string $key=null) : ?string
+	public function getInput(string $key=null)
 	{
 		if ($key === $this->getName())
 		{
@@ -86,7 +86,10 @@ trait WithInput
 	public function addInput(?string $key, $input) : self
 	{
 		# Add input to the field
-// 		$this->input = $input;
+		if ($this->getName() === $key)
+		{
+			$this->input = $input;
+		}
 
 		# Add inputs to this
 		if (!isset($this->inputs))

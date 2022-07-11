@@ -729,7 +729,7 @@ elseif ($argv[1] === 'migrate')
 {
 	if (count($argv) !== 3)
 	{
-		GDT_Error::responseWith('err_gdoadm_migrate');
+		GDT_Error::make()->text('err_gdoadm_migrate');
 	}
 	else if (!($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
 	{
@@ -738,7 +738,7 @@ elseif ($argv[1] === 'migrate')
 	else
 	{
 		Installer::installModule($module, true);
-		GDT_Success::responseWith('msg_gdoadm_migrated', [$module->renderName()]);
+		GDT_Success::make()->text('msg_gdoadm_migrated', [$module->renderName()]);
 	}
 }
 

@@ -274,7 +274,7 @@ abstract class MethodCrud extends MethodForm
 	public function onCreate(GDT_Form $form)
 	{
 		$table = $this->gdoTable(); # object table
-		$data = $form->getFormData();
+		$data = $form->getFormVars();
 		$gdo = $table->blank($data); # object with files gdt
 		$this->beforeCreate($form, $gdo);
 		$gdo->insert();
@@ -287,7 +287,7 @@ abstract class MethodCrud extends MethodForm
 	public function onUpdate(GDT_Form $form)
 	{
 	    $this->beforeUpdate($form, $this->gdo);
-		$this->gdo->saveVars($form->getFormData());
+		$this->gdo->saveVars($form->getFormVars());
 		$this->message('msg_crud_updated', [$this->gdo->gdoHumanName()]);
 		return $this->afterUpdate($form, $this->gdo);
 	}

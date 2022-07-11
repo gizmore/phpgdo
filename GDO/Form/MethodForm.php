@@ -54,6 +54,13 @@ abstract class MethodForm extends Method
 		return $this->parameterCache;
 	}
 	
+	public function getMethodTitle() : string
+	{
+		$key = sprintf('ft_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return t($key);
+	}
+	
 	public function getForm() : GDT_Form
 	{
 		if (!isset($this->form))
@@ -64,6 +71,7 @@ abstract class MethodForm extends Method
 				$this->form->inputs($this->inputs);
 				$this->form->actions()->inputs($this->inputs);
 			}
+			$this->form->titleRaw($this->getMethodTitle());
 			$this->createForm($this->form);
 		}
 		return $this->form;
@@ -72,7 +80,6 @@ abstract class MethodForm extends Method
 	public function execute()
 	{
 		$form = $this->getForm();
-		$this->form->titleRaw($this->getMethodTitle());
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			if ($gdt->hasInput() && $gdt->isWriteable())

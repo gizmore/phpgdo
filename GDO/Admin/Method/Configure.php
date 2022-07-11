@@ -7,7 +7,6 @@ use GDO\Core\GDO_Module;
 use GDO\Core\GDO_ModuleVar;
 use GDO\Core\GDT_Module;
 use GDO\Core\GDT_Name;
-use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Version;
 use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
@@ -21,6 +20,7 @@ use GDO\Install\Installer;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Container;
 use GDO\Core\GDT_String;
+use GDO\Core\GDT_Tuple;
 
 /**
  * Configure a module.
@@ -69,7 +69,7 @@ class Configure extends MethodForm
 	public function execute()
 	{
 		# Response
-		$response = GDT_Response::make();
+		$response = GDT_Tuple::make();
 
 		# Response for install and configure
 		if ($descr = $this->configModule()->getModuleDescription())
@@ -79,9 +79,8 @@ class Configure extends MethodForm
 		}
 
 		# Response for install panel
-		$response->addField(
-			Install::make()->inputs($this->getInputs())
-				->executeWithInit());
+		$install = Install::make()->inputs($this->getInputs());
+		$response->addField($install->executeWithInit());
 
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())
@@ -120,6 +119,10 @@ class Configure extends MethodForm
 		$deps = array_filter($deps,
 			function (GDO_Module $m) use ($mod)
 			{
+				if ($m->isCoreModule())
+				{
+					return false;
+				}
 				return $m->getName() !== $mod->getName();
 			});
 		$deps = array_map(

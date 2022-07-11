@@ -5,7 +5,6 @@ use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
 use GDO\Table\GDT_Count;
-use GDO\Table\GDT_Table;
 use GDO\Table\MethodQueryTable;
 use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDT_User;
@@ -13,6 +12,7 @@ use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_Permission;
+use GDO\Core\GDO;
 
 /**
  * View all users with a permission.
@@ -28,22 +28,22 @@ class ViewPermission extends MethodQueryTable
 	private GDO_Permission $permission;
 	
 	public function getPermission() : ?string { return 'staff'; }
-	
-	public function gdoTable()
-	{
-	    return GDO_UserPermission::table();
-	}
-	
-	public function createTable(GDT_Table $table)
-	{
-	    $table->fetchAs(GDO_User::table());
-	}
-	
+
 	public function gdoParameters() : array
 	{
 	    return [
 	        GDT_Permission::make('permission')->notNull(),
 	    ];
+	}
+	
+	public function gdoTable() : GDO
+	{
+	    return GDO_UserPermission::table();
+	}
+	
+	public function gdoFetchAs()
+	{
+		return GDO_User::table();
 	}
 	
 	public function getConfigPermission() : GDO_Permission
@@ -55,7 +55,7 @@ class ViewPermission extends MethodQueryTable
 		return $this->permission;
 	}
 	
-	public function gdoHeaders()
+	public function gdoHeaders() : array
 	{
 		return [
 			GDT_Count::make('count'),
@@ -66,10 +66,15 @@ class ViewPermission extends MethodQueryTable
 		];
 	}
 	
+	protected function gdoTableHREF() : string
+	{
+		return $this->href('&permission='.$this->getConfigPermission()->getID());
+	}
+	
 	public function getQuery()
 	{
 		return $this->gdoTable()->
-			select('perm_user_id_t.*, perm_perm_id_t.*')->
+			select('*,perm_user_id_t.*, perm_perm_id_t.*')->
 			joinObject('perm_user_id')->
 			joinObject('perm_perm_id')->
 			where('perm_perm_id='.$this->getConfigPermission()->getID())->

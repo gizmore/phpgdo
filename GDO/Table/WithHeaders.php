@@ -1,16 +1,15 @@
 <?php
 namespace GDO\Table;
 
-use GDO\Core\GDT_Fields;
-use GDO\DB\ArrayResult;
-use GDO\Core\GDT;
 use GDO\Core\GDO;
+use GDO\Core\GDT;
+use GDO\DB\ArrayResult;
 use GDO\Util\Strings;
-use GDO\Util\Arrays;
+use GDO\Core\GDT_Fields;
 
 /**
- * A trait for tables and list which adds an extra headers variable. This has to be a \GDO\Core\GDT_Fields.
- * Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
+ * - A trait for tables and lists which adds an extra headers variable. This has to be a \GDO\Core\GDT_Fields.
+ * - Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
  * 
  * @author gizmore
  * @version 7.0.0
@@ -18,109 +17,108 @@ use GDO\Util\Arrays;
  */
 trait WithHeaders
 {
-	/**
-	 * @var GDT_Fields
-	 */
+	##############
+	### Fields ###
+	##############
 	public GDT_Fields $headers;
 	
-	/**
-	 * @return GDT_Fields
-	 */
-	public function makeHeaders() : self
+	public function getHeaders() : GDT_Fields
 	{
 		if (!isset($this->headers))
 		{
-			$this->headers = GDT_Fields::make();
+			$this->headers = GDT_Fields::make("{$this->name}_headers");
 		}
-		return $this;
+		return $this->headers;
 	}
-
-	public function addHeaders(GDT...$fields) : self
+	
+	/**
+	 * @return GDT[]
+	 */
+	public function getHeaderFields() : array
 	{
-		if (count($fields))
-		{
-			$this->makeHeaders();
-			$this->headers->addFields(...$fields);
-		}
-		return $this;
+		return $this->getHeaders()->getAllFields();
 	}
 	
-	public function addHeader(GDT $field) : self
+	/**
+	 * @param string $name
+	 * @return \GDO\Core\GDT
+	 */
+	public function getHeaderField(string $name) : GDT
 	{
-		$this->makeHeaders();
-		$this->headers->addField($field);
+		return $this->getHeaders()->getField($name);
+	}
+	
+	public function addHeaderField(GDT $gdt) : self
+	{
+		$this->getHeaders()->addField($gdt);
 		return $this;
 	}
 	
-// 	##############
-// 	### Inputs ###
-// 	##############
-// 	public function getOrdersInput() : array
-// 	{
-// 		return $this->headers->inputs;
-// 	}
-	
-// 	public function getFiltersInput() : array
-// 	{
-// 		return $this->headers->getInput();
-// 	}
-	
-	##############################
-	### REQUEST container name ###
-	##############################
-// 	public $headerName = null;
-// 	public function headerName($headerName)
-// 	{
-// 		$this->headerName = $headerName;
-// 		return $this;
-// 	}
-	
-// 	public static $ORDER_NAME = 0;
-// 	public function nextOrderName()
-// 	{
-// 		return $this->headerName ? $this->headerName : ("o" . (++self::$ORDER_NAME));
-// 	}
+	public function addHeaderFields(GDT...$gdt) : self
+	{
+		$this->getHeaders()->addFields(...$gdt);
+		return $this;
+	}
 	
 	###############
 	### Ordered ###
 	###############
+	public function sortArray(array &$data, string $orders) : array
+	{
+		$this->result(new ArrayResult($data, $this->gdo));
+		$this->multisort($orders);
+		return $this->getResult()->getData();
+	}
+	
 	/**
 	 * PHP Sorting is unstable.
 	 * This method does a stable multisort on an ArrayResult.
 	 * @param ArrayResult $result
 	 * @return ArrayResult
 	 */
-	public function multisort(ArrayResult $result, $defaultOrder=null)
+	public function multisort(string $defaultOrder=null) : ArrayResult
 	{
-		$orders = [];# $this->getOrdersInput();
-	    
-	    if (empty($orders) && $defaultOrder)
-	    {
-	        $col = Strings::substrTo($defaultOrder, ' ', $defaultOrder);
-	        $order = stripos($defaultOrder, ' DESC') ? '0' : '1';
-	        $orders[$col] = $order;
-	        $this->headers->inputs($orders);
-	    }
-		
-		# Build sort func
-		$sort = $this->make_cmp($orders);
-		
-		# Use it
-		uasort($result->getData(), $sort);
-		
+		$result = $this->getResult();
+		$orders = $this->getOrders($defaultOrder);
+		$sort_func = $this->make_cmp($orders);
+		uasort($result->getData(), $sort_func);
 		return $result;
 	}
 	
 	/**
-	 * Create a comperator function.
+	 * Build the order array from an order string.
+	 * @return bool[string]
 	 */
-	private function make_cmp() : callable
+	private function getOrders(string $defaultOrder=null) : array
+	{
+		$orders = [];
+		$this->getHeaders()->inputs($this->getInputs());
+		foreach ($this->getHeaderFields() as $gdt)
+		{
+			if ($gdt->hasInput())
+			{
+				$orders[$gdt->getName()] = $gdt->getInput();
+			}
+		}
+		if (empty($orders) && $defaultOrder)
+		{
+			foreach (explode(',', $defaultOrder) as $order)
+			{
+				$order = trim($order);
+				$col = Strings::substrTo($order, ' ', $order);
+				$order = stripos($order, ' DESC') ? 0 : 1;
+				$orders[$col] = $order;
+			}
+		}
+		return $orders;
+	}
+	
+	protected function make_cmp(array $sorting)
 	{
 		$headers = $this->headers;
-		$orders = $this->headers->inputs;
-		return function (GDO $a, GDO $b) use (&$orders, &$headers)
+		return function (GDO $a, GDO $b) use (&$sorting, &$headers)
 		{
-			foreach ($orders as $column => $sortDir)
+			foreach ($sorting as $column => $sortDir)
 			{
 			    if ($gdt = $headers->getField($column))
 			    {

@@ -30,4 +30,7 @@ return [
 	
 	'mt_user_cleanupguests' => 'Guest Cleanup',
 	'md_user_cleanupguests' => 'Guest Cleanup Cronjob for GDOv7.',
+
+	'mt_user_profile' => '%s\'s Profile',
+	
 ];
