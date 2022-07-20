@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\tpl;
 use GDO\Core\GDT_Select;
+use GDO\Core\GDO;
 /** @var $field GDT_Select **/
 if (isset($field->completionHref))
 {
@@ -21,10 +22,12 @@ if (isset($field->completionHref))
 	<option value="<?=$field->emptyVar?>"<?=$field->htmlSelected($field->emptyVar)?>><?=$field->renderEmptyLabel()?></option>
 <?php endif; ?>
 <?php if ($field->hasCompletion()) : ?>
-	<option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$field->displayChoice($field->getValue())?></option>
+<?php if ($choice = $field->getValue()) : ?>
+	<option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$choice instanceof GDO ? $choice->renderChoice() : $field->displayChoice($field->getVar())?></option>
+<?php endif; ?>
 <?php else : ?>
 <?php foreach ($field->getChoices() as $var => $choice) : ?>
-	<option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$field->displayChoice($choice)?></option>
+	<option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderChoice() : $field->displayChoice($var)?></option>
 <?php endforeach; ?>
 <?php endif; ?>
   </select>
