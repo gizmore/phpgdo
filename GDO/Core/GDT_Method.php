@@ -20,22 +20,32 @@ class GDT_Method extends GDT
 {
 	use WithName;
 	use WithInput;
-	use WithFields;
+	use WithValue;
 	use WithEnvironment;
+	
+	public GDT $result;
 	
 	/**
 	 * Exexute this method.
 	 */
 	public function execute(bool $withReset=true)
 	{
-		if ($withReset)
+		if (!isset($this->result))
 		{
-			Application::$INSTANCE->reset();
-			$this->changeUser();
+			$method = $this->method->withAppliedInputs($this->getInputs());
+			# Call either with hooks and stuff or without
+			if ($withReset)
+			{
+				Application::$INSTANCE->reset();
+				$this->changeUser();
+				$this->result = $method->exec();
+			}
+			else
+			{
+				$this->result = $method->execute();
+			}
 		}
-		$response = $this->method->withAppliedInputs($this->getInputs());
-		$response = $response->exec();
-		return $response;
+		return $this->result;
 	}
 	
 	##################
@@ -129,5 +139,16 @@ class GDT_Method extends GDT
 		return $tempDir . $path;
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function render()
+	{
+		if (!isset($this->result))
+		{
+			$this->execute(false);
+		}
+		return $this->result->render();
+	}
 	
 }

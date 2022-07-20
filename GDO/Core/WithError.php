@@ -43,7 +43,21 @@ trait WithError
 	
 	public function hasError() : bool
 	{
-		return isset($this->errorKey) || isset($this->errorRaw);
+		if (isset($this->errorKey) || isset($this->errorRaw))
+		{
+			return true;
+		}
+		if ($this->hasFields())
+		{
+			foreach ($this->getAllFields() as $gdt)
+			{
+				if ($gdt->hasError())
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public function renderError() : string

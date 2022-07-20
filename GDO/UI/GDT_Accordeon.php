@@ -18,9 +18,9 @@ final class GDT_Accordeon extends GDT_Container
 	##############
 	### Render ###
 	##############
-	public function renderHTML() : string
+	public function renderCell() : string
     {
-		return $this->renderAccordeon(GDT::RENDER_HTML);
+		return $this->renderAccordeon(GDT::RENDER_CELL);
     }
     
     public function renderForm() : string

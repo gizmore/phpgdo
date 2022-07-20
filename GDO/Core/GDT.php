@@ -151,13 +151,13 @@ abstract class GDT
 			case self::RENDER_PDF: return $this->renderPDF();
 			case self::RENDER_JSON: return $this->renderJSON();
 			case self::RENDER_XML: return $this->renderXML();
-			# html
 			case self::RENDER_HTML: return $this->renderHTML();
+			# html
 			case self::RENDER_CHOICE: return $this->renderChoice();
 			case self::RENDER_LIST: return $this->renderList();
 			case self::RENDER_FORM: return $this->renderForm();
 			case self::RENDER_CARD: return $this->renderCard();
-			case self::RENDER_CELL: return $this->renderHTML();
+			case self::RENDER_CELL: return $this->renderCell();
 			case self::RENDER_HEADER: return $this->renderHeader();
 			case self::RENDER_FILTER: return $this->renderFilter('');
 			case self::RENDER_ORDER: return $this->renderOrder();

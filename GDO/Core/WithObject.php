@@ -10,7 +10,7 @@ use GDO\DB\Query;
  * - autojoin controlls select behaviour
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * 
  * @see GDT_Object
@@ -18,6 +18,8 @@ use GDO\DB\Query;
  */
 trait WithObject
 {
+	use WithGDO;
+	
 	###################
 	### With Object ###
 	###################
@@ -145,7 +147,7 @@ trait WithObject
 	{
 		if ($value = $this->getValue())
 		{
-			return $value ? sprintf(' value="%s"', html($value->renderChoice())) : '';
+			return $value ? sprintf(' value="%s"', $value->getID()) : '';
 		}
 		return '';
 	}

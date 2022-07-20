@@ -289,7 +289,19 @@ abstract class Method #extends GDT
 			}
 			
 			$this->beforeExecute();
-			GDT_Hook::callHook('BeforeExecute', $this, $response);
+			
+			$result = GDT_Hook::callHook('BeforeExecute', $this, $response);
+			
+			$response->addField($result);
+			
+			if ($result->hasError())
+			{
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
+				return $response;
+			}
 			
 			if ($response->hasError())
 			{
@@ -418,7 +430,7 @@ abstract class Method #extends GDT
 		$error = GDT_Error::make()->titleRaw($this->getModule()->gdoHumanName())->text($key, $args);
 		$top = GDT_Page::instance()->topResponse();
 		$top->addField($error);
-		$response = GDT_Tuple::make();
+		$response = GDT_Response::make();
 		return $response;
 	}
 	

@@ -218,6 +218,23 @@ class Application extends GDT
 		}
 	}
 	
+	#############
+	### Mo/Me ###
+	#############
+	public Method $method;
+	public function method(Method $method) : self
+	{
+		$this->method = $method;
+		return $this;
+	}
+	
+	public function mome()
+	{
+		$me = $this->method->getMethodName();
+		$mo = $this->method->getModuleName();
+		return strtolower("{$mo}::{$me}");
+	}
+	
 }
 
 Application::updateTime();

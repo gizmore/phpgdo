@@ -198,9 +198,9 @@ class GDO_Module extends GDO
 		if ($readme = @file_get_contents($this->filePath('README.md')))
 		{
 			$matches = null;
-			if (preg_match("/^#.*?[\\r\\n]+(.*?)#/siD", $readme, $matches))
+			if (preg_match("/^#.*[\\r\\n]+([^#]+)#?/", $readme, $matches))
 			{
-				return $matches[1];
+				return trim($matches[1]);
 			}
 		}
 		return null;

@@ -6,6 +6,8 @@ use GDO\Util\Random;
 use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;
+use GDO\Core\WithError;
+use GDO\Core\GDT_String;
 
 /**
  * GDT_Form CSRF protection.
@@ -21,13 +23,13 @@ use GDO\User\GDO_User;
  * @version 7.0.0
  * @since 1.0.0
  */
-class GDT_AntiCSRF extends GDT_Hidden
+class GDT_AntiCSRF extends GDT_String
 {
     const KEYLEN = 6;
     const MAX_KEYS = 12;
     
 	public function getDefaultName() : string { return 'xsrf'; }
-
+	
 	###########
 	### GDT ###
 	###########
@@ -169,6 +171,10 @@ class GDT_AntiCSRF extends GDT_Hidden
 		    if (Application::$TIME > ($time + $this->csrfExpire))
 		    {
 		        unset($csrf[$token]);
+		    }
+		    else
+		    {
+		    	break;
 		    }
 		}
 		

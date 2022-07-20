@@ -134,6 +134,7 @@ final class Color
 			case GDT::RENDER_CLI:
 				return "{$colorCLI}{$s} \033[0m";
 			case GDT::RENDER_HTML:
+			case GDT::RENDER_CELL:
 				return sprintf('<span style="color: %s;">%s</span>', $colorHTML, html($s));
 			default:
 				return $s;

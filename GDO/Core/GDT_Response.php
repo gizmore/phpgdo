@@ -14,6 +14,14 @@ use GDO\UI\GDT_Page;
  */
 final class GDT_Response extends GDT_Tuple
 {
+// 	use WithInstance;
+	
+	public static function instanceWith(GDT...$gdts) : self
+	{
+		$instance = self::instance();
+		return $instance->addFields(...$gdts);
+	}
+	
 	public function render() : string
 	{
 		switch (Application::$INSTANCE->mode)
@@ -32,11 +40,17 @@ final class GDT_Response extends GDT_Tuple
 	 * HTML Render this response via GDT_Page
 	 * @return string
 	 */
-	public function renderPage()
+	public function renderPage() : string
 	{
-		$content = $this->renderHTML();
+		$content = $this->renderFields(GDT::RENDER_CELL);
 		$page = GDT_Page::instance();
-		return $page->html($content)->render();
+		return $page->html($content)->renderHTML();
+	}
+	
+	public function code(int $code) : self
+	{
+		Application::$INSTANCE->setResponseCode($code);
+		return $this;
 	}
 	
 }

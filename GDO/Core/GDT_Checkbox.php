@@ -139,7 +139,7 @@ class GDT_Checkbox extends GDT_Select
 	
 	public function displayChoice($choice) : string
 	{
-		return $choice;
+		return $this->displayVar($choice);
 	}
 	
 	public function htmlClass() : string
@@ -147,7 +147,7 @@ class GDT_Checkbox extends GDT_Select
 		return parent::htmlClass() . " gdt-checkbox-{$this->getVar()}";
 	}
 	
-	public function renderHTML() : string
+	public function renderCell() : string
 	{
 	    return $this->displayVar($this->getVar());
 	}
@@ -159,10 +159,10 @@ class GDT_Checkbox extends GDT_Select
 		return parent::renderForm();
 	}
 	
-	public function renderCell() : string
-	{
-		return $this->displayVar($this->getVar());
-	}
+// 	public function renderCell() : string
+// 	{
+// 		return $this->displayVar($this->getVar());
+// 	}
 	
 // 	public function renderJSON()
 // 	{

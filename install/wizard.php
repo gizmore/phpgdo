@@ -49,5 +49,5 @@ catch (\Throwable $ex)
 {
     $result = GDT_Error::make()->exception($ex);
 }
-$response = GDT_Response::make()->addField($result);
+$response = GDT_Response::instance()->addField($result);
 echo $response->render();

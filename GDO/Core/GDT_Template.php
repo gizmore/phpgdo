@@ -268,24 +268,35 @@ class GDT_Template extends GDT
 	 */
 	private static function getPath(string $moduleName, string $path) : string
 	{
+// 		return self::getPathB($moduleName, $path);
+		
 		static $cache = [];
-		$iso = Trans::$ISO;
-		if (!isset($cache[$iso]))
+		$p = $moduleName . $path . Trans::$ISO;
+		if (!isset($cache[$p]))
 		{
-			$cache[$iso] = [$moduleName => []];
+			$cache[$p] = self::getPathB($moduleName, $path);
 		}
-		elseif (!isset($cache[$moduleName]))
-		{
-			$cache[$iso][$moduleName] = [];
-		}
+		return $cache[$p];
 		
-		if (isset($cache[$iso][$moduleName][$path]))
-		{
-			return $cache[$iso][$moduleName][$path];
-		}
 		
-		$cache[$iso][$moduleName][$path] = $path = self::getPathB($moduleName, $path);
-		return $path;
+// 		static $cache = [];
+// 		$iso = Trans::$ISO;
+// 		if (!isset($cache[$iso]))
+// 		{
+// 			$cache[$iso] = [$moduleName => []];
+// 		}
+// 		elseif (!isset($cache[$moduleName]))
+// 		{
+// 			$cache[$iso][$moduleName] = [];
+// 		}
+		
+// 		if (isset($cache[$iso][$moduleName][$path]))
+// 		{
+// 			return $cache[$iso][$moduleName][$path];
+// 		}
+		
+// 		$cache[$iso][$moduleName][$path] = $path = self::getPathB($moduleName, $path);
+// 		return $path;
 	}
 
 	private static function getPathB($moduleName, $path)

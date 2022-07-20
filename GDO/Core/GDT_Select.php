@@ -400,9 +400,10 @@ class GDT_Select extends GDT_ComboBox
 // 		}
 // 	}
 	
-	public function renderHTML() : string
+	public function renderCell() : string
 	{
-		return GDT_Template::php('Core', 'select_cell.php', ['field' => $this]);
+		return $this->displayChoice($this->getVar());
+// 		return GDT_Template::php('Core', 'select_cell.php', ['field' => $this]);
 	}
 	
 	public function renderForm() : string
@@ -489,14 +490,27 @@ class GDT_Select extends GDT_ComboBox
 		]);
 	}
 	
-	public function renderChoice() : string
+	public function displayChoice($choice) : string
 	{
-		if ($var = $this->getVar())
+		if (is_string($choice))
 		{
-			return $var;
+			return $this->displayVar($choice);
 		}
-		return '';
+		else
+		{
+			return $choice->renderChoice();
+		}
+		
 	}
+	
+// 	public function renderChoice() : string
+// 	{
+// 		if ($var = $this->getVar())
+// 		{
+// 			return $var;
+// 		}
+// 		return '';
+// 	}
 	
 	public function renderFilter($f) : string
 	{

@@ -209,40 +209,44 @@ trait WithFields
 		return $this->renderGDT();
 	}
 	
-	/**
-	 * WithFields, we simply iterate over them and render current mode.
-	 */
-	public function renderFields() : string
-	{
-		return $this->renderFieldsB();
-	}
+// 	/**
+// 	 * WithFields, we simply iterate over them and render current mode.
+// 	 */
+// 	public function renderFields() : string
+// 	{
+// 		return $this->renderFieldsB();
+// 	}
 	
 	/**
 	 * WithFields, we simply iterate over them and render current mode.
 	 */
-	public function renderFieldsB() : string
+	public function renderFields(int $renderMode) : string
 	{
+		$app = Application::$INSTANCE;
 		$rendered = '';
 		if (isset($this->fields))
 		{
+			$old = $app->mode;
+			$app->mode($renderMode);
 			foreach ($this->fields as $field)
 			{
 				$rendered .= $field->render();
 			}
+			$app->mode($old);
 		}
 		return $rendered;
 	}
 	
-	public function renderChoice() : string { return $this->renderFields(); }
-	public function renderList() : string { return $this->renderFields(); }
-	public function renderHTML() : string { return $this->renderFields(); }
-	public function renderCell() : string { return $this->renderFields(); }
-	public function renderForm() : string { return $this->renderFields(); }
-	public function renderCLI() : string { return $this->renderFields(); }
-	public function renderCard() : string { return $this->renderFields(); }
-	public function renderPDF() : string { return $this->renderFields(); }
-	public function renderXML() : string { return $this->renderFields(); }
-	public function renderBinary() : string { return $this->renderFields(); }
+	public function renderChoice() : string { return $this->renderFields(GDT::RENDER_CHOICE); }
+	public function renderList() : string { return $this->renderFields(GDT::RENDER_LIST); }
+	public function renderHTML() : string { return $this->renderFields(GDT::RENDER_HTML); }
+	public function renderCell() : string { return $this->renderFields(GDT::RENDER_CELL); }
+	public function renderForm() : string { return $this->renderFields(GDT::RENDER_FORM); }
+	public function renderCLI() : string { return $this->renderFields(GDT::RENDER_CLI); }
+	public function renderCard() : string { return $this->renderFields(GDT::RENDER_CARD); }
+	public function renderPDF() : string { return $this->renderFields(GDT::RENDER_PDF); }
+	public function renderXML() : string { return $this->renderFields(GDT::RENDER_XML); }
+	public function renderBinary() : string { return $this->renderFields(GDT::RENDER_BINARY); }
 
 	public function renderJSON()
 	{

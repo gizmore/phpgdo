@@ -29,7 +29,7 @@ global $GDT_LOADED;
 $GDT_LOADED = 0; # perf
 spl_autoload_register(function(string $name) : void
 {
-	if (str_starts_with($name, 'GDO\\')) # 1 line if
+	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
 	{ # 2 lines path
 		$name = str_replace('\\', '/', $name) . '.php';
 		require GDO_PATH . $name;

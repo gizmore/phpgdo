@@ -15,7 +15,8 @@ use GDO\User\GDO_User;
  */
 trait WithEnvironment
 {
-	use WithFields; # $inputs
+// 	use WithInput;
+	use WithFields;
 	
 	##############
 	### Run As ###

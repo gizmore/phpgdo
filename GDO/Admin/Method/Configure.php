@@ -121,9 +121,9 @@ class Configure extends MethodForm
 		$mod = $this->configModule();
 		$deps = Installer::getDependencyModules($mod->getName());
 		$deps = array_filter($deps,
-			function (GDO_Module $m) use ($mod)
+			function (GDO_Module $m=null) use ($mod)
 			{
-				if ($m->isCoreModule())
+				if ( (!$m) || ($m->isCoreModule()) )
 				{
 					return false;
 				}

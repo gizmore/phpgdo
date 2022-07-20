@@ -349,11 +349,11 @@ final class Time
 	/**
 	 * Get the age of a date in seconds.
 	 */
-	public static function getAgo(string $date) : int
+	public static function getAgo(string $date=null) : float
 	{
 	    return $date ?
 	       Application::$MICROTIME - self::getTimestamp($date) : 
-	       null;
+	       0;
 	}
 	
 	/**
@@ -361,13 +361,16 @@ final class Time
 	 * @param string $date
 	 * @return number
 	 */
-	public static function getAge($date)
+	public static function getAge(string $date = null) : float
 	{
-	    $seconds = self::getAgo($date);
-	    return $seconds / self::ONE_YEAR;
+	    if ($seconds = self::getAgo($date))
+	    {
+	    	return $seconds / self::ONE_YEAR;
+	    }
+	    return 0.0;
 	}
 	
-	public static function getAgeTS($duration)
+	public static function getAgeTS(int $duration)
 	{
 	    return $duration / self::ONE_YEAR;
 	}
@@ -438,7 +441,7 @@ final class Time
 				tiso($iso, 'tu_m') => 60,
 				tiso($iso, 'tu_h') => 24,
 				tiso($iso, 'tu_d') => 7,
-				tiso($iso, 'tu_w') => 53,
+				tiso($iso, 'tu_w') => 53.25,
 // 				tiso($iso, 'tu_mo') => 4,
 				tiso($iso, 'tu_y') => 1000000,
 			);

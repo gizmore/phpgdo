@@ -163,6 +163,7 @@ else
 ############
 ### Exec ###
 ############
+Application::$INSTANCE->method($me);
 $gdtMethod = GDT_Method::make()->method($me)->addInputs($_REQUEST);
 try
 {

@@ -12,6 +12,7 @@ namespace GDO\Core;
  */
 class GDT_Tuple extends GDT
 {
+	use WithError;
 	use WithFields;
 	
 	public function addField(GDT $gdt)
@@ -26,6 +27,10 @@ class GDT_Tuple extends GDT
 	protected function addFieldB(GDT $gdt) : self
 	{
 		$this->addFieldA($gdt);
+		if ($gdt->hasError())
+		{
+			$this->error('err_method_failed', [$gdt->renderError()]);
+		}
 		return $this;
 	}
 	

@@ -147,15 +147,15 @@ trait WithValue
 	##############
 	### Render ###
 	##############
-	/**
-	 * Render the value as dbVar
-	 * @deprecated naming sucks
-	 * @return string
-	 */
-	public function renderHTML() : string
-	{
-		return isset($this->var) ? html($this->var) : '';
-	}
+// 	/**
+// 	 * Render the value as dbVar
+// 	 * @deprecated naming sucks
+// 	 * @return string
+// 	 */
+// 	public function renderHTML() : string
+// 	{
+// 		return isset($this->var) ? html($this->var) : '';
+// 	}
 
 	/**
 	 * Render html value attribute value="foo".

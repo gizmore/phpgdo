@@ -186,6 +186,14 @@ final class GDO_User extends GDO
 	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
 	
 	############
+	### HREF ###
+	############
+	public function href_edit() : string
+	{
+		return href('Admin', 'UserEdit', "&user={$this->getID()}");
+	}
+	
+	############
 	### Type ###
 	############
 	public function isBot() : bool { return $this->isType(GDT_UserType::BOT); }

@@ -758,7 +758,7 @@ else
     printUsage();
 }
 
-#echo GDT_Response::make()->render();
+#echo GDT_Response::instance()->render();
 #echo Website::topResponse()->render();
 
 #die(GDT_Response::globalError() ? 1 : 0);

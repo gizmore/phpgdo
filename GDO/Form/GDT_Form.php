@@ -82,7 +82,7 @@ final class GDT_Form extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderHTML() : string
+	public function render()
 	{
 		return GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
 	}

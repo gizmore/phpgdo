@@ -2,6 +2,7 @@
 namespace GDO\User;
 
 use GDO\Core\GDT_UInt;
+use GDO\Core\WithGDO;
 
 /**
  * User level field.
@@ -17,6 +18,8 @@ use GDO\Core\GDT_UInt;
  */
 final class GDT_Level extends GDT_UInt
 {
+	use WithGDO;
+	
 	public function defaultLabel() : self { return $this->label('level'); }
 	
 	public string $icon = 'level';
@@ -30,7 +33,7 @@ final class GDT_Level extends GDT_UInt
 	{
 		if (isset($this->gdo))
 		{
-			if (!$this->gdo->isTable())
+			if (!$this->gdo->gdoIsTable())
 			{
 				if ($this->gdo instanceof GDO_User)
 				{

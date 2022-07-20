@@ -7,7 +7,6 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use Exception;
-use GDO\UI\GDT_HTML;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Success;
 
@@ -43,11 +42,11 @@ class Cronjob extends MethodForm
 			echo "</pre>\n<br/>";
 			
 			return $this->renderPage()->addField(
-				GDT_HTML::makeWith(GDT_Success::make()->textRaw(ob_get_contents())));
+				GDT_Success::make()->textRaw(ob_get_contents()));
 		}
 		catch (Exception $ex)
 		{
-		    echo ob_get_contents();
+		    echo html(ob_get_contents());
 			throw $ex;
 		}
 		finally

@@ -11,13 +11,10 @@ use GDO\Core\GDT;
 <?php
 switch ($mode)
 {
-	case GDT::RENDER_FORM:
-		$method = 'renderForm';
-		break;
-	case GDT::RENDER_HTML:
+	case GDT::RENDER_FORM: $method = 'renderForm'; break;
+	case GDT::RENDER_HTML: $method = 'renderHTML'; break;
 	default:
-		$method = 'renderHTML';
-		break;
+	case GDT::RENDER_CELL: $method = 'renderCell'; break;
 }
 ?>
 <?php foreach ($field->getFields() as $gdt) : ?>
