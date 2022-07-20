@@ -147,6 +147,7 @@ trait WithObject
 		{
 			return $value ? sprintf(' value="%s"', html($value->renderChoice())) : '';
 		}
+		return '';
 	}
 	
 	public function displayVar(string $var = null) : string

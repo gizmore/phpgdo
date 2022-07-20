@@ -1708,7 +1708,7 @@ abstract class GDO extends GDT
 	#############
 	### Order ###
 	#############
-	public function getDefaultOrder()
+	public function getDefaultOrder() : ?string
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
@@ -1717,6 +1717,7 @@ abstract class GDO extends GDT
 				return $gdt->name;
 			}
 		}
+		return null;
 	}
 	
 	#######################

@@ -89,7 +89,11 @@ class Configure extends MethodForm
 		}
 		else
 		{
-			$response->addField(GDT_Panel::make()->text('info_module_deps', [$this->getDependencyText()]));
+			if ($text = $this->getDependencyText())
+			{
+				$response->addField(
+					GDT_Panel::make()->text('info_module_deps', [$text]));
+			}
 		}
 		
 		# Respond

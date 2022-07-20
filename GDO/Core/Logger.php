@@ -131,7 +131,10 @@ final class Logger
 		self::rawLog('cron', $message, 0);
 		if (!Application::$INSTANCE->isUnitTests())
 		{
-			echo $message.PHP_EOL;
+			if (Application::$INSTANCE->isCLI())
+			{
+				echo $message.PHP_EOL;
+			}
 		}
 	}
 	public static function logWebsocket($message) { self::rawLog('websocket', $message, 0); echo $message.PHP_EOL; }

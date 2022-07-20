@@ -8,6 +8,7 @@ use GDO\Core\Logger;
 use GDO\Core\GDT;
 use GDO\Core\Debug;
 use GDO\Core\GDO_DBException;
+use GDO\Core\GDT_DBField;
 
 /**
  * mySQLi abstraction layer.
@@ -331,7 +332,7 @@ class Database
 		
 		foreach ($gdo->gdoColumnsCache() as $column)
 		{
-			if (!$column->isVirtual())
+			if ($column instanceof GDT_DBField)
 			{
 				if ($define = $column->gdoColumnDefine())
 				{

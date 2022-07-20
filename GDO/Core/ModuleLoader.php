@@ -197,6 +197,7 @@ final class ModuleLoader
 	        }
 		}
 		Trans::inited(true);
+		$this->initModulesB();
 	}
 		
 	public function initModulesB() : void

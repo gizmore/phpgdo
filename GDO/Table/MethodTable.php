@@ -362,7 +362,7 @@ abstract class MethodTable extends Method
 		{
 			$result = $this->getResult();
 			$this->table->pagemenu->pageName = $this->getPageName();
-			$this->table->pagemenu->items(count($result->getData()));
+			$this->table->pagemenu->numItems(count($result->getData()));
 		}
 	}
 	

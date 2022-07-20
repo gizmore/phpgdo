@@ -250,6 +250,11 @@ final class GDO_User extends GDO
 	#############
 	### Perms ###
 	#############
+	public function isAuthenticated() : bool
+	{
+		return $this->getGuestName() || $this->getUserName();
+	}
+	
 	public function loadPermissions() : array
 	{
 		if ($this->isPersisted())

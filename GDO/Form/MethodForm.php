@@ -3,8 +3,6 @@ namespace GDO\Form;
 
 use GDO\Core\Method;
 use GDO\Core\GDT;
-use GDO\Core\GDT_Tuple;
-use GDO\UI\GDT_Success;
 use GDO\File\GDT_File;
 use GDO\Util\Common;
 

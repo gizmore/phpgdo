@@ -14,6 +14,8 @@ use GDO\Core\GDT_Template;
 class GDT_Hidden extends GDT_String
 {
 	public bool $writeable = false;
+
+	public function isHidden() : bool { return true; }
 	
 	public function renderForm() : string
 	{

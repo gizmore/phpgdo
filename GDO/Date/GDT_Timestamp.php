@@ -235,9 +235,16 @@ class GDT_Timestamp extends GDT_DBField
 	{
 		if (!is_numeric($input))
 		{
-			$input = str_replace('T', ' ', $input);
-			$input = str_replace('Z', '', $input);
-			$input = Time::parseDate($input);
+			if (preg_match('#^\\d{4}-\\d{2}-\\d{2}#', $input))
+			{
+				$input = Time::parseDateDB($input);
+			}
+			else
+			{
+				$input = str_replace('T', ' ', $input);
+				$input = str_replace('Z', '', $input);
+				$input = Time::parseDate($input);
+			}
 		}
 		else
 		{

@@ -106,7 +106,14 @@ trait WithFields
 	
 	public function hasFields() : bool
 	{
-		return isset($this->fields) ? count($this->fields) > 0 : false;
+		foreach ($this->getAllFields() as $gdt)
+		{
+			if (!$gdt->isHidden())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public function getFields() : array

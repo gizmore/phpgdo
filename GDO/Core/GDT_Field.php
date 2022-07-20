@@ -14,7 +14,7 @@ use GDO\UI\WithPHPJQuery;
  * The make method sets the name to default or specified parameter.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 abstract class GDT_Field extends GDT
@@ -60,6 +60,13 @@ abstract class GDT_Field extends GDT
 		$v = $this->getVar();
 		$v = ($v === null) || ($v === '') ? null : $v;
 		return [$this->name => $v];
+	}
+
+	public function configJSON() : array
+	{
+		return [
+			'name' => $this->getName(),
+		];
 	}
 	
 	################

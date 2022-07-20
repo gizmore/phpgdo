@@ -11,6 +11,7 @@ use GDO\UI\WithDescription;
 use GDO\CLI\CLI;
 use GDO\UI\GDT_Page;
 use GDO\Language\Trans;
+use GDO\UI\GDT_Redirect;
 
 /**
  * Abstract baseclass for all methods.
@@ -430,7 +431,20 @@ abstract class Method #extends GDT
 		}
 		return GDT_Error::make()->titleRaw($this->getModuleName())->textRaw($message);
 	}
-
+	
+	################
+	### Redirect ###
+	################
+	public function redirectMessage(string $key, array $args = null, string $href)
+	{
+		return GDT_Redirect::make()->href($href)->redirectMessage($key, $args);
+	}
+	
+	public function redirectError(string $key, array $args = null, string $href)
+	{
+		return GDT_Redirect::make()->href($href)->redirectError($key, $args);
+	}
+	
 	################
 	### Template ###
 	################

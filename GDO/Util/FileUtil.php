@@ -6,12 +6,13 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use GDO\Core\GDT_Float;
 use GDO\Core\GDO_Error;
+use GDO\CLI\Process;
 
 /**
  * File system utilities.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 final class FileUtil
@@ -73,6 +74,24 @@ final class FileUtil
 			return copy($src, $dest);
 		}
 		return false;
+	}
+
+	################
+	### Platform ###
+	################
+	/**
+	 * Convert a unix path to a windows path or vice versa.
+	 */
+	public static function path(string $path) : string
+	{
+// 		if (Process::isWindows())
+// 		{
+// 			return str_replace('/', '\\', $path);
+// 		}
+// 		else
+// 		{
+			return str_replace('\\', '/', $path);
+// 		}
 	}
 	
 	###############

@@ -378,7 +378,7 @@ abstract class GDT
 	public function configJSON() : array
 	{
 		return [
-			
+// 			'name' => $this->getName(),
 		];
 // 		return get_object_vars($this); # @TODO only show certain values!
 	}
