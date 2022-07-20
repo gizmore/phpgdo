@@ -370,11 +370,20 @@ final class GDO_User extends GDO
 		return Module_User::instance()->userSettingVar($this, 'gender');
 	}
 	
-	public function getMail() : ?string
+	/**
+	 * Get the email address for a user.
+	 * This requires the mail module.
+	 * 
+	 * @param bool $confirmed if it shall only return confirmed addresses.
+	 */
+	public function getMail(bool $confirmed=true) : ?string
 	{
 		if (module_enabled('Mail'))
 		{
-			return Module_Mail::instance()->userSettingVar($this, 'email');
+			$mod = Module_Mail::instance();
+			$email = $mod->userSettingVar($this, 'email');
+			$confi = $mod->userSettingVar($this, 'email_confirmed');
+			return (!$confi) ? ($confirmed ? null : $email) : $email;
 		}
 		return null;
 	}

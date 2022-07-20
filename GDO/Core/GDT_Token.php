@@ -7,7 +7,7 @@ use GDO\Util\Random;
  * Default random token is 16 chars alphanumeric.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 4.0.0
  */
 class GDT_Token extends GDT_Char
@@ -39,6 +39,25 @@ class GDT_Token extends GDT_Char
 		return [
 		    $this->name => $this->initialNull ? 
 		        null : Random::randomKey($this->max)];
+	}
+
+	######################
+	### Static helpers ###
+	######################
+	/**
+	 * Generate a fixed compute token for arbritrary data.
+	 * @TODO: Test crypto
+	 */
+	public static function generateToken(string $data, int $len=GDO::TOKEN_LENGTH) : string
+	{
+		$hash = sha1( md5($data) . md5(GDO_SALT) ); # the eye of the tiger
+		return substr($hash, 0, $len);
+	}
+	
+	public static function validateToken(string $token, string $data, int $len=GDO::TOKEN_LENGTH) : bool
+	{
+		$compare = self::generateToken($data, $len);
+		return $token === $compare;
 	}
 	
 }

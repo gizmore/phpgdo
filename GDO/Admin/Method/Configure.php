@@ -42,7 +42,7 @@ class Configure extends MethodForm
 		return 'admin';
 	}
 
-	public function showInSitemap()
+	public function showInSitemap() : bool
 	{
 		return false;
 	}

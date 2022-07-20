@@ -50,7 +50,7 @@ final class Fileserver extends Method
 		# Try cached or serve
 		$last_modified_time = filemtime($url);
 		# @TODO: Cache etag-md5 via modified time
-		$etag = md5_file($url);
+		$etag = $this->md5_file($url);
 		hdr("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
 		hdr("Etag: $etag");
 		hdr("Expires: ".gmdate("D, d M Y H:i:s", $last_modified_time + Time::ONE_MONTH)." GMT");
@@ -71,4 +71,13 @@ final class Fileserver extends Method
 		readfile($url);
 		die(0);
 	}
+	
+	/**
+	 * @TODO: implement an md5 cache for the fs.
+	 */
+	private function md5_file(string $path) : string
+	{
+		return md5_file($path);
+	}
+	
 }

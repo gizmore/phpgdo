@@ -80,6 +80,7 @@ class GDT_Link extends GDT_Url
 	##############
 	### Render ###
 	##############
+	public function renderForm() : string { return $this->renderHTML(); }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderHTML() : string { return GDT_Template::php('UI', 'link_html.php', ['link' => $this]); }
 	public function renderJSON()

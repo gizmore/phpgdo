@@ -60,7 +60,7 @@ abstract class MethodCrud extends MethodForm
 	################
 	public function isUserRequired() : bool { return true; }
 	public function isCaptchaRequired() { return !GDO_User::current()->isMember(); }
-	public function showInSitemap() { return false; }
+	public function showInSitemap() : bool { return false; }
 	
 	public function canRead(GDO $gdo)
 	{

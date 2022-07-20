@@ -14,7 +14,7 @@ use GDO\Util\FileUtil;
  */
 final class GDT_Path extends GDT_String
 {
-	public string $pattern = "#^[^?!:]+$#iD";
+	public string $pattern = "#^[^?!]+$#iD";
 	
 	public function defaultLabel() : self { return $this->label('path'); }
 	

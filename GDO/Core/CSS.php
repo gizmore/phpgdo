@@ -13,12 +13,18 @@ use GDO\CSS\Minifier;
  */
 final class CSS
 {
-	public static array $FILES = [];
 	public static string $INLINE = '';
+	public static array $FILES = [];
+	public static array $EXTERNAL = [];
 	
 	public static function addFile(string $path) : void
 	{
 		self::$FILES[] = $path;
+	}
+	
+	public static function addExternalFile(string $path) : void
+	{
+		self::$EXTERNAL[] = $path;
 	}
 	
 	public static function addInline(string $css) : void
@@ -29,7 +35,7 @@ final class CSS
 	public static function render()
 	{
 		# Let module CSS handle it
-		if (GDO_Module::config_var('CSS', 'minify_css', '0'))
+		if (GDO_Module::config_var('CSS', 'minify_css'))
 		{
 			return Minifier::renderMinified();
 		}

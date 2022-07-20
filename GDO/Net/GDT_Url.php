@@ -6,6 +6,7 @@ use GDO\Util\Arrays;
 use GDO\Core\GDT_Template;
 use GDO\UI\WithTitle;
 use GDO\UI\GDT_Link;
+use GDO\Core\GDT;
 
 /**
  * URL field.
@@ -19,6 +20,12 @@ use GDO\UI\GDT_Link;
 class GDT_Url extends GDT_String
 {
     use WithTitle;
+    
+    protected function __construct()
+    {
+    	parent::__construct();
+    	$this->icon = 'url';
+    }
     
     ##############
     ### Static ###
@@ -38,18 +45,10 @@ class GDT_Url extends GDT_String
 		}
 		return self::host() . $port;
 	}
-	public static function protocol() { return isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== 'off') ? 'https' : 'http'; }
-	public static function absolute($url) { return sprintf('%s://%s%s', self::protocol(), self::hostWithPort(), $url); }
-	public static function relative($url) { return GDO_WEB_ROOT . $url; }
+	public static function protocol() : string { return isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== 'off') ? 'https' : 'http'; }
+	public static function absolute($url) : string { return sprintf('%s://%s%s', self::protocol(), self::hostWithPort(), $url); }
+	public static function relative($url) : string { return GDO_WEB_ROOT . $url; }
 
-	protected function __construct()
-	{
-		parent::__construct();
-		$this->icon('url');
-	}
-	
-// 	public function defaultLabel() : self { return $this->label('url'); }
-	
 	public bool $noFollow = false;
 	public bool $reachable = false;
 	public bool $allowInternal = false;

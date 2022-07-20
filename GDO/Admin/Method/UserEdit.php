@@ -26,7 +26,7 @@ class UserEdit extends MethodForm
 {
 	use MethodAdmin; # admin protection
 	
-	public function showInSitemap() { return false; }
+	public function showInSitemap() : bool { return false; }
 	
 	public function getMethodTitle() : string
 	{

@@ -20,7 +20,7 @@ abstract class MethodAjax extends Method
     public function isAjax() { return true; }
 	public function saveLastUrl() { return false; }
 	public function isSEOIndexed() { return false; }
-	public function showInSitemap() { return false; }
+	public function showInSitemap() : bool { return false; }
 	public function isLockingSession() { return false; }
 
 	public function getMethodTitle() : string

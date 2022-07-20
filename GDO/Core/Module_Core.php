@@ -28,11 +28,10 @@ use GDO\Language\Module_Language;
  * @author gizmore
  * @version 7.0.0
  * @since 6.0.0
- * @see Module_Javascript
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.0-r1361';
+	const GDO_REVISION = '7.0.0-r1371';
 	
 	##############
 	### Module ###
