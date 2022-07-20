@@ -30,7 +30,16 @@ final class GDT_DateDisplay extends GDT
     public function renderHTML() : string
     {
         $date = $this->getVar();
+        if ($date === null)
+        {
+        	echo 1;
+        	$date = $this->getVar();
+        }
         $diff = Time::getDiff($date);
+        if ($diff === null)
+        {
+        	echo 2;
+        }
         if ($diff > $this->showDateAfterSeconds)
         {
             $display = Time::displayDate($date, $this->dateformat);
@@ -46,6 +55,11 @@ final class GDT_DateDisplay extends GDT
     {
     	$date = $gdo->gdoVar($this->getName());
     	return $this->var($date);
+    }
+
+    public function plugVar() : string
+    {
+    	return '2022-07-19 13:37:42';
     }
 
 }

@@ -85,7 +85,7 @@ trait WithValue
 	
 	public function getVar()
 	{
-		$input = $this->getInput($this->getName());
+		$input = isset($this->input) ? $this->input : null;
 		if ($input !== null)
 		{
 			return $this->inputToVar($input);
