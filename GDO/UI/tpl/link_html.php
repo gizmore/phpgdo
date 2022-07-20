@@ -14,7 +14,7 @@ namespace GDO\UI\tpl;
      <?php if ($link->hasLabel()) : ?>
        <?=$link->renderLabel()?>
      <?php else : ?>
-       <?=html($link->href)?>
+       <?=html(isset($link->href)?$link->href:'---')?>
      <?php endif; ?>
    </a>
 </span>
