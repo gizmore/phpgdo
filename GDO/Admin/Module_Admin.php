@@ -21,6 +21,8 @@ use GDO\UI\GDT_Page;
  */
 class Module_Admin extends GDO_Module
 {
+	public int $priority = 90;
+	
 	##############
 	### Module ###
 	##############

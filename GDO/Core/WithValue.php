@@ -85,16 +85,15 @@ trait WithValue
 	
 	public function getVar()
 	{
-		$input = $this->getInput();
+		$input = $this->getInput($this->getName());
 		if ($input !== null)
 		{
-			$var = $this->inputToVar($input);
+			return $this->inputToVar($input);
 		}
 		else
 		{
-			$var = parent::getVar();
+			return $this->var;
 		}
-		return $var;
 	}
 	
 	public function getValue()

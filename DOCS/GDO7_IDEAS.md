@@ -41,3 +41,6 @@ Your playlists are ACL sharable.
  - get.help.from.gizmore.org - Questions are broadcasted to staff members. Staff replies via various channels. Users keep track via a ticket. Use Helpdesk?
  
  - Maybe the datatype flow should be input => var => string => int => float => null, and always only support one direction: from input to var to value.
+
+  - serviervorschlag.com => post the most funny Serviervorschläge
+  

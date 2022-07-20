@@ -140,7 +140,7 @@ abstract class Method #extends GDT
 			return GDT_Error::make()->text('err_members_only');
 		}
 		
-		if ( ($this->isUserRequired()) && (!$user->isAuthenticated()) )
+		if ( ($this->isUserRequired()) && (!$user->isUser()) )
 		{
 			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
 			{

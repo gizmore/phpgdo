@@ -19,6 +19,8 @@ use GDO\UI\GDT_Page;
  */
 final class Module_Perf extends GDO_Module
 {
+	public int $priority = 100;
+	
 	public function onLoadLanguage() : void
 	{
 		$this->loadLanguage('lang/perf');

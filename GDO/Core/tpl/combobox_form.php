@@ -17,7 +17,7 @@ namespace GDO\Core\tpl;
    size="<?=min($field->max, 32)?>"
    <?=$field->htmlFormName()?>
    <?=$field->htmlPlaceholder()?>
-   value="<?=$field->display()?>" />
+   value="<?=$field->renderVar()?>" />
   <?=$field->htmlError()?>
-  <input type="hidden" id="completion-<?=$field->name?>" value="<?=$field->display()?>" />
+  <input type="hidden" id="completion-<?=$field->name?>" value="<?=$field->renderVar()?>" />
 </div>

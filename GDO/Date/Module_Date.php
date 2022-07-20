@@ -23,10 +23,9 @@ use GDO\Date\Method\Timezone;
 final class Module_Date extends GDO_Module
 {
     public int $priority = 2;
-    public function onLoadLanguage() : void
-    {
-    	$this->loadLanguage('lang/date');
-    }
+ 
+    public function isCoreModule() : bool { return true; }
+    public function onLoadLanguage() : void { $this->loadLanguage('lang/date'); }
     
     ##############
     ### Config ###

@@ -1,28 +1,33 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Avatar\GDT_Avatar;
 use GDO\Core\GDT;
 use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
 use GDO\Core\GDT_EditedAt;
+use GDO\Core\GDT_EditedBy;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;
+use GDO\User\GDT_ProfileLink;
 use GDO\Date\GDT_DateDisplay;
 use GDO\Form\WithActions;
 use GDO\Core\WithFields;
 use GDO\Core\Application;
+use GDO\Core\WithGDO;
 
 /**
  * A card with title, subtitle, creator, date, content and actions.
  *  
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.4
  */
 final class GDT_Card extends GDT
 {
+	use WithGDO;
 	use WithTitle;
-	use WithSubTitle;
+// 	use WithSubTitle;
 	use WithFields;
 	use WithActions;
 	use WithPHPJQuery;
@@ -75,7 +80,7 @@ final class GDT_Card extends GDT
 // 	    }
 	}
 	public function renderCard() : string { return $this->renderCell(); }
-	public function renderCell() : string { return GDT_Template::php('UI', 'cell/card.php', ['field' => $this]); }
+	public function renderCell() : string { return GDT_Template::php('UI', 'card_html.php', ['field' => $this]); }
 	
 	public function renderCLI() : string
 	{
@@ -120,7 +125,7 @@ final class GDT_Card extends GDT
 	 * Use the subtitle to render creation stats. User (with avatar), Date, Age.
 	 * @return self
 	 */
-	public function creatorHeader(GDT $title=null, $byField=null, $atField=null)
+	public function creatorHeader($byField=null, $atField=null)
 	{
 	    /** @var $user GDO_User **/
 	    if ($byField)
@@ -139,40 +144,33 @@ final class GDT_Card extends GDT
 	    }
 	    else
 	    {
-    	    $date = $this->gdo->gdoColumnOf(GDT_CreatedAt::class);
+	    	$atField = $this->gdo->gdoColumnOf(GDT_CreatedAt::class);
 	    }
-	    
-	    $this->subtitle = GDT_Container::make()->horizontal();
-	    
+
+	    # Add avatar
 	    if (module_enabled('Avatar')) # ugly bridge
 	    {
-	        if (module_enabled('Profile'))
-	        {
-	            $this->avatar = GDT_ProfileLink::make()->forUser($user)->withAvatar();
-	        }
-	        else
-	        {
-    	        $this->avatar = GDT_Avatar::make()->user($user);
-	        }
+	    	$this->avatar = GDT_ProfileLink::make()->user($user)->avatarUser($user);
 	    }
 	    
-	    if (module_enabled('Profile')) # ugly bridge
-	    {
-	        $profileLink = GDT_ProfileLink::make()->forUser($user)->withNickname();
-	    }
-	    else
-	    {
-	        $profileLink = GDT_Label::make()->labelRaw($user->renderUserName());
-	    }
-	    $this->subtitle->addField($profileLink);
-	    $this->subtitle->addField(GDT_DateDisplay::make($date->name)->gdo($this->gdo)->addClass('ri'));
-	    
-	    if ($title)
-	    {
-	        $this->title = $title;
-	    }
+	    # Add created by / at to subtitle
+        $profileLink = GDT_ProfileLink::make()->user($user)->nickname();
+	    $this->subtitle = GDT_Container::make()->horizontal();
+        $this->subtitle->addField($profileLink);
+        $this->subtitle->addField(GDT_DateDisplay::make($atField->name)->gdo($this->gdo)->addClass('ri'));
 	    
 	    return $this;
+	}
+	
+	public function hasSubTitle() : bool
+	{
+		return isset($this->subtitle) &&
+			($this->subtitle->hasFields());
+	}
+	
+	public function renderSubTitle() : string
+	{
+		return $this->subtitle->renderCell();
 	}
 	
 	#####################

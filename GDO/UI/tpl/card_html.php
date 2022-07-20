@@ -1,4 +1,5 @@
 <?php
+namespace GDO\UI\tpl;
 /** @var $field \GDO\UI\GDT_Card **/
 $field->addClass('gdt-card');
 ?>
@@ -7,11 +8,10 @@ $field->addClass('gdt-card');
   id="card-<?=$field->gdo->getID()?>"
 <?php endif; ?>
   <?=$field->htmlAttributes()?>>
-
 <?php if ($field->avatar || $field->hasTitle() || $field->hasSubTitle()) : ?>
   <div class="gdt-card-upper">
 <?php if ($field->avatar) : ?>
-    <div class="gdt-card-avatar"><?=$field->avatar->renderCell()?></div>
+    <div class="gdt-card-avatar"><?=$field->avatar->render()?></div>
 <?php endif; ?>
 <?php if ($field->hasTitle() || $field->hasSubTitle()) : ?>
     <div class="gdt-card-title-texts">
@@ -25,8 +25,7 @@ $field->addClass('gdt-card');
 <?php endif; ?>
   </div>
 <?php endif; ?>
-
-<?php if ($field->image || $field->content || $field->fields) : ?>
+<?php if ($field->image || $field->content || $field->getAllFields()) : ?>
   <div class="gdt-card-middle">
 <?php if ($field->image) : ?>
     <div class="gdt-card-image"><?=$field->image->renderCard()?></div>
@@ -34,9 +33,9 @@ $field->addClass('gdt-card');
 <?php if ($field->content) : ?>
     <div class="gdt-card-content"><?=$field->content->renderCard()?></div>
 <?php endif; ?>
-<?php if ($field->fields) : ?>
+<?php if ($field->getAllFields()) : ?>
     <div class="gdt-card-fields">
-    <?php foreach ($field->fields as $gdt) : ?>
+    <?php foreach ($field->getAllFields() as $gdt) : ?>
       <?=$gdt->renderCard()?>
     <?php endforeach; ?>
     </div>
@@ -44,15 +43,14 @@ $field->addClass('gdt-card');
   </div>
 <?php endif; ?>
 
-<?php if ($field->footer || $field->actions) : ?>
+<?php if ($field->footer || $field->getActions()) : ?>
   <div class="gdt-card-lower">
 <?php if ($field->footer) : ?>
     <div class="gdt-card-footer"><?=$field->footer->renderCell()?></div>
 <?php endif; ?>
-<?php if ($field->actions) : ?>
+<?php if ($field->getActions()) : ?>
     <div class="gdt-card-actions"><?=$field->actions()->renderCell()?></div>
 <?php endif; ?>
   </div>
 <?php endif; ?>
-  
 </div>

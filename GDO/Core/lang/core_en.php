@@ -51,6 +51,7 @@ return [
 	'forbidden' => 'Forbidden!',
 	'err_forbidden' => 'You are not allowed to access this.',
 	'err_unknown_field' => 'The field `%s` in this form is either unknown or not writeable.',
+	'err_user_required' => 'You need to signup to continue. You can also <a href="%s">continue as guest</a>',
 	
 # Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
@@ -74,6 +75,7 @@ return [
 	'btn_save' => 'Save',
 	'btn_send' => 'Send',
 	'btn_set' => 'Set',
+	'btn_upload' => 'Upload',
 	'submit' => 'Submit',
 	
 	# Float

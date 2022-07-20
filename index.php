@@ -108,7 +108,6 @@ if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 			$me = Error::make();
 			$_REQUEST['error'] = t('err_unknown_module', [html((string)$_REQUEST['_mo'])]);
 		}
-// 		unset($_REQUEST['_mo']);
 		elseif (isset($_REQUEST['_me']))
 		{
 			if (!($me = $mo->getMethod((string) @$_REQUEST['_me'])))
@@ -116,7 +115,6 @@ if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 				$me = Error::make();
 				$_REQUEST['error'] = t('err_unknown_method', [html($mo->gdoShortName()), html($_REQUEST['_me'])]);
 			}
-			unset($_REQUEST['_me']);
 		}
 		else
 		{
@@ -128,6 +126,8 @@ if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 		$mo = ModuleLoader::instance()->getModule(GDO_MODULE);
 		$me = $mo->getMethod(GDO_METHOD);
 	}
+	unset($_REQUEST['_mo']);
+	unset($_REQUEST['_me']);
 }
 else
 {

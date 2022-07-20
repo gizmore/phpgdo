@@ -261,12 +261,20 @@ class GDT_Select extends GDT_ComboBox
 			return $this->notNull ? $this->errorNull() : true;
 		}
 		
-		if (is_object($value))
+		if ($value instanceof GDO)
 		{
-    		if (isset($this->choices[$value->getID()])) # check memcached by id
+    		if (isset($this->choices[$value->getID()]))
     		{
     		    return true;
     		}
+		}
+		
+		if ($value instanceof GDT)
+		{
+			if (isset($this->choices[$value->getVar()]))
+			{
+				return true;
+			}
 		}
 		
 		if (in_array($value, $this->choices, true)) # check single identity

@@ -12,7 +12,7 @@ use GDO\User\GDO_User;
  * A data exchange object?.
  * 
  * A GDO is both, a table and an entity.
- * The table gdo just holds the caches and GDT instances.
+ * The table GDO just holds the caches and GDT instances.
  * The other entitites have $gdoVars. A DB row.
  * 
  * An array of db vars, which values are backed by a database and caches.
@@ -195,6 +195,12 @@ abstract class GDO extends GDT
 	##############
 	### Render ###
 	##############
+	public function gdoDisplay(string $key) : string
+	{
+		$var = $this->gdoVar($key);
+		return html($var);
+	}
+	
 	public function renderName() : string
 	{
 		return $this->gdoHumanName() . "#" . $this->getID();

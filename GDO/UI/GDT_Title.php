@@ -43,7 +43,14 @@ class GDT_Title extends GDT_String
 	
 	public function var(string $var = null) : self
 	{
-	    $this->titleRaw = $var;
+		if ($var === null)
+		{
+			unset($this->titleRaw);
+		}
+		else
+		{
+			$this->titleRaw = $var;
+		}
 	    return parent::var($var);
 	}
 

@@ -26,12 +26,15 @@ class GDT_Method extends GDT
 	/**
 	 * Exexute this method.
 	 */
-	public function execute()
+	public function execute(bool $withReset=true)
 	{
-		Application::$INSTANCE->reset();
-		$this->changeUser();
-// 		$this->method->addInputs($this->getInputs());
-		$response = $this->method->withAppliedInputs($this->getInputs())->exec();
+		if ($withReset)
+		{
+			Application::$INSTANCE->reset();
+			$this->changeUser();
+		}
+		$response = $this->method->withAppliedInputs($this->getInputs());
+		$response = $response->exec();
 		return $response;
 	}
 	

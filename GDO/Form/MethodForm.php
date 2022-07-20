@@ -5,6 +5,8 @@ use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Tuple;
 use GDO\UI\GDT_Success;
+use GDO\File\GDT_File;
+use GDO\Util\Common;
 
 /**
  * A method with a form.
@@ -26,9 +28,8 @@ abstract class MethodForm extends Method
 	
 	public function formValidated(GDT_Form $form)
 	{
-		return GDT_Tuple::makeWith(
-			GDT_Success::make()->text('msg_form_validated'),
-			$this->renderPage());
+		$this->message('msg_form_validated');
+		return $this->renderPage();
 	}
 	
 	public function resetForm() : void
@@ -77,9 +78,40 @@ abstract class MethodForm extends Method
 		return $this->form;
 	}
 	
+// 	public function executeEditMethods()
+// 	{
+// 		if (count($_POST))
+// 		{
+// 			foreach ($this->getForm()->getFieldsRec() as $field)
+// 			{
+// 				if ($field instanceof GDT_File)
+// 				{
+// 					$key = 'delete_' . $field->name;
+// 					if (isset($_REQUEST[$this->formName()][$key]))
+// 					{
+// 						$fileIds = array_keys($_REQUEST[$this->formName()][$key]);
+// 						$field->onDeleteFiles($fileIds);
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+	
 	public function execute()
 	{
 		$form = $this->getForm();
+		
+		### Flow upload
+		if ($flowField = Common::getRequestString('flowField'))
+		{
+			/** @var $formField GDT_File **/
+			if ($formField = $form->getField($flowField))
+			{
+				return $formField->flowUpload();
+			}
+		}
+
+		### Execute action
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			if ($gdt->hasInput() && $gdt->isWriteable())

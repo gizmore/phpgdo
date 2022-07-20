@@ -353,13 +353,32 @@ final class GDO_User extends GDO
 		{
 			return '~' . html($name) . '~';
 		}
-		return t('guest');
+		if ($this->isGhost())
+		{
+			return '~~' . t('ghost') . '~~';
+		}
+		return '~~' . t('guest') . '~~';
 	}
 
 	public function renderProfileLink(bool $nickname, bool $avatar, bool $score) : string
 	{
 		return sprintf('%s');
 	}
+	
+	public function getGender() : string
+	{
+		return Module_User::instance()->userSettingVar($this, 'gender');
+	}
+	
+	public function getMail() : ?string
+	{
+		if (module_enabled('Mail'))
+		{
+			return Module_Mail::instance()->userSettingVar($this, 'email');
+		}
+		return null;
+	}
+	
 }
 
 GDO_User::setCurrent(GDO_User::ghost());

@@ -64,7 +64,7 @@ final class GDT_Page extends GDT
 	############
 	### Bars ###
 	############
-	public GDT_Box $topResponse;
+	private GDT_Box $topResponse;
 	
 	public function topResponse() : GDT_Box
 	{
@@ -93,16 +93,16 @@ final class GDT_Page extends GDT
 		}
 	}
 	
-	public GDT_Bar $topBar;
-	public GDT_Bar $leftBar;
-	public GDT_Bar $rightBar;
-	public GDT_Bar $bottomBar;
+	private GDT_Bar $topBar;
+	private GDT_Bar $leftBar;
+	private GDT_Bar $rightBar;
+	private GDT_Bar $bottomBar;
 	
 	public function topBar() : GDT_Bar
 	{
 		if (!isset($this->topBar))
 		{
-			$this->topBar = GDT_Bar::make()->horizontal();
+			$this->topBar = GDT_Bar::make('top')->horizontal();
 		}
 		return $this->topBar;
 	}
@@ -111,7 +111,7 @@ final class GDT_Page extends GDT
 	{
 		if (!isset($this->leftBar))
 		{
-			$this->leftBar = GDT_Bar::make()->vertical();
+			$this->leftBar = GDT_Bar::make('left')->vertical();
 		}
 		return $this->leftBar;
 	}
@@ -120,7 +120,7 @@ final class GDT_Page extends GDT
 	{
 		if (!isset($this->rightBar))
 		{
-			$this->rightBar = GDT_Bar::make()->vertical();
+			$this->rightBar = GDT_Bar::make('right')->vertical();
 		}
 		return $this->rightBar;
 	}
@@ -129,7 +129,7 @@ final class GDT_Page extends GDT
 	{
 		if (!isset($this->bottomBar))
 		{
-			$this->bottomBar = GDT_Bar::make()->horizontal();
+			$this->bottomBar = GDT_Bar::make('bottom')->horizontal();
 		}
 		return $this->bottomBar;
 	}

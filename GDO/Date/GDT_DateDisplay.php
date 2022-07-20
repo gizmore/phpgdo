@@ -4,6 +4,9 @@ namespace GDO\Date;
 use GDO\Core\GDT;
 use GDO\UI\WithPHPJQuery;
 use GDO\Core\GDT_Template;
+use GDO\Core\GDO;
+use GDO\Core\WithName;
+use GDO\Core\WithValue;
 
 /**
  * Display a date either as age or date
@@ -11,14 +14,20 @@ use GDO\Core\GDT_Template;
  */
 final class GDT_DateDisplay extends GDT
 {
-    use WithPHPJQuery;
+	use WithName;
+	use WithValue;
+	use WithPHPJQuery;
+	
+    public int $showDateAfterSeconds = 172800; # 2 days
     
-    public $showDateAfterSeconds = 172800; # 2 days
+    public string $dateformat = 'short';
+    public function dateformat(string $dateformat) : self
+    {
+    	$this->dateformat = $dateformat;
+    	return $this;
+    }
     
-    public $dateformat = 'short';
-    public function dateformat($dateformat) { $this->dateformat = $dateformat; return $this; }
-    
-    public function renderCell() : string
+    public function renderHTML() : string
     {
         $date = $this->getVar();
         $diff = Time::getDiff($date);
@@ -31,6 +40,12 @@ final class GDT_DateDisplay extends GDT
             $display = t('ago', [Time::displayAge($date)]);
         }
         return GDT_Template::php('Date', 'cell/datedisplay.php', ['field' => $this, 'display' => $display]);
+    }
+    
+    public function gdo(GDO $gdo = null) : self
+    {
+    	$date = $gdo->gdoVar($this->getName());
+    	return $this->var($date);
     }
 
 }

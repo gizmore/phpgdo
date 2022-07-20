@@ -37,6 +37,7 @@ final class Module_Language extends GDO_Module
 	### Module ###
 	##############
 	public int $priority = 2; # has to be installed asap.
+	public function isCoreModule() : bool { return true; }
 	public function onInstall() : void { LanguageData::onInstall(); }
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/language'); }
 

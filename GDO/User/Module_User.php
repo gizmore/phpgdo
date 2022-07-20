@@ -32,6 +32,7 @@ final class Module_User extends GDO_Module
 		];
 	}
 	
+	public function isCoreModule() : bool { return true; }
 	public function onInstall() : void { OnInstall::onInstall(); }
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/user'); }
 	public function href_administrate_module() { return href('User', 'Admin'); }
@@ -43,6 +44,16 @@ final class Module_User extends GDO_Module
 			GDO_UserSettingBlob::class,
 	    ];
 	    return $classes;
+	}
+	
+	################
+	### Settings ###
+	################
+	public function getUserSettings() : array
+	{
+		return [
+			GDT_Gender::make('gender'),
+		];
 	}
 	
 }

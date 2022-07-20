@@ -29,11 +29,11 @@ final class GDT_ProfileLink extends GDT_Link
 	public function user(GDO_User $user) : self
 	{
 		$this->user = $user;
-		return $this->avatarUser($user);
+		return $this;
 	}
 	
 	public bool $nickname = false;
-	public function nickname(bool $nickname)
+	public function nickname(bool $nickname = true) : self
 	{
 		$this->nickname = $nickname;
 		return $this;

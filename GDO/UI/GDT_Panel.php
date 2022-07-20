@@ -16,8 +16,8 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Panel extends GDT
 {
-	use WithText;
 	use WithIcon;
+	use WithText;
 	use WithTitle;
 	use WithPHPJQuery;
 	
