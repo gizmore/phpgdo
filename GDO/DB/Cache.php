@@ -336,7 +336,7 @@ class Cache
 	    if (GDO_FILECACHE)
 	    {
 		    $path = self::filePath($key);
-		    FileUtil::createDir(basename($path));
+		    FileUtil::createDir(dirname($path));
 		    return file_put_contents($path, $content);
 	    }
         return false;

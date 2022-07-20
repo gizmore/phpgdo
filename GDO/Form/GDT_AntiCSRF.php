@@ -6,7 +6,6 @@ use GDO\Util\Random;
 use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;
-use GDO\Core\WithError;
 use GDO\Core\GDT_String;
 
 /**
