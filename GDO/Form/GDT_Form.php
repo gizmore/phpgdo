@@ -86,6 +86,11 @@ final class GDT_Form extends GDT
 	{
 		return GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
 	}
+
+	public function renderCell() : string
+	{
+		return $this->render();
+	}
 	
 	public function htmlVerb() : string
 	{
