@@ -3,17 +3,19 @@
 
 ## GDOv7 Events: GDO Events
 
-GDT know the following GDO events:
+GDT know the following GDO events.
+Note that a GDO is also a GDT:
 
-- gdoBeforeCreate(Query)
-- gdoBeforeRead(Query)
-- gdoBeforeUpdate(Query)
-- gdoBeforeDelete(Query)
+- gdoBeforeCreate(GDO $gdo, Query $query) : void
+- gdoBeforeRead(GDO $gdo, Query $query) : void
+- gdoBeforeUpdate(GDO $gdo, Query $query) : void
+- gdoBeforeDelete(GDO $gdo, Query $query) : void
 
-- gdoAfterCreate(Query, GDO)
-- gdoAfterRead(Query, GDO)
-- gdoAfterUpdate(Query, GDO)
-- gdoAfterDelete(Query, GDO)
+
+- gdoAfterCreate(GDO $gdo) : void
+- gdoAfterRead(GDO $gdo) : void
+- gdoAfterUpdate(GDO $gdo) : void
+- gdoAfterDelete(GDO $gdo) : void
 
 
 ## GDOv7 Events: Module Hooks

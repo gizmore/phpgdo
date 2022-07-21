@@ -184,18 +184,6 @@ abstract class GDT
 	public function renderFilter($f) : string { return ''; }
 // 	public function renderOrder(GDT_Table $t) : string { return $this->renderTableOrder($t); }
 
-// 	protected function renderTableOrder(GDT_Table $t) : string
-// 	{
-// 		if ($this->isOrderable())
-// 		{
-// 			return GDT_Template::php('Core', '_order_header.php', ['field' => $this, 'table' => $t]);
-// 		}
-// 		else
-// 		{
-// 			return $this->renderLabel();
-// 		}
-// 	}
-	
 	public function renderVar() : string
 	{
 		if ($var = $this->getVar())

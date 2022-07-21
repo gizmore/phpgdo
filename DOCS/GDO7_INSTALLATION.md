@@ -4,6 +4,22 @@ You can either install GDOv7 via the Web Install Wizard or the gdo_adm.php CLI u
 Note that a webserver is not required to operate GDOv7.
 All methods can be operated via CLI or chat systems.
 
+## GDOv7 Installation: Requirements
+
+GDOv7 core requires:
+
+ - PHP8
+ - php-mbstring
+ 
+Optionally:
+ 
+ - nodejs and yarn (very recommended)
+ - php-fileinfo
+ - php-memcached
+ - php-bcmath
+ - php-curl
+ - php-openssl
+
 
 ## GDOv7 Installation: Web
 

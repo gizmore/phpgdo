@@ -82,7 +82,7 @@ class Application extends GDT
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
 	public function isAjax() : bool { return $this->ajax; }
-	public function isHTML() : bool { return $this->mode === GDT::RENDER_HTML; }
+	public function isHTML() : bool { return $this->modeDetected === GDT::RENDER_HTML; }
 	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
 	public function isCLI() : bool { return $this->cli; }
 	public function isInstall() : bool { return false; }

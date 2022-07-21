@@ -36,6 +36,7 @@ trait MethodAdmin
 			GDT_Bar::make()->addFields(
 				GDT_Link::make()->href(href('Admin', 'Permissions'))->label('permissions'),
 				GDT_Link::make()->href(href('Admin', 'PermissionAdd'))->label('add_permissions'),
+				GDT_Link::make()->href(href('Admin', 'PermissionGrant'))->label('grant_permission'),
 				));
 	}
 	

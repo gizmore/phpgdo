@@ -431,11 +431,11 @@ final class Debug
 		
 		if (!GDO_ERROR_STACKTRACE)
 		{
-			return $html ? sprintf('<pre class="gdo-exception">%s</pre>', $message) . PHP_EOL : $message;
+			return $html ? sprintf('<div class="gdo-exception">%s</div>', $message) . PHP_EOL : $message;
 		}
 		
 		// Append PRE header.
-		$back = $html ? "<pre class=\"gdo-exception\">\n" : '';
+		$back = $html ? "<div class=\"gdo-exception\">\n" : '';
 		
 		// Append general title message.
 		if ($message !== '')
@@ -491,7 +491,7 @@ final class Debug
 		}
 		
 		$back .= $html ? '<div class="gdt-hr"></div>' : "\n";
-		$back .= sprintf('Backtrace starts in %s line %s.', self::shortpath($prefile), $preline) . "\n";
+		$back .= sprintf('<pre>Backtrace starts in %s line %s.', self::shortpath($prefile), $preline) . "\n";
 		$back .= implode("\n", array_reverse($copy));
 		$back .= $html ? "</pre>\n" : '';
 		return $back;

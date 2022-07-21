@@ -13,6 +13,7 @@ use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_Permission;
 use GDO\Core\GDO;
+use GDO\UI\GDT_Button;
 
 /**
  * View all users with a permission.
@@ -62,6 +63,7 @@ class ViewPermission extends MethodQueryTable
 			GDT_User::make('perm_user_id'),
 			GDT_CreatedAt::make('perm_created_at'),
 			GDT_CreatedBy::make('perm_created_by'),
+			GDT_Button::make('perm_add')->icon('add'),
 			GDT_DeleteButton::make('perm_revoke'),
 		];
 	}
