@@ -53,7 +53,7 @@ final class GDT_Language extends GDT_ObjectSelect
 	
 	public function initChoices() : self
 	{
-		return $this->choices ? $this : $this->choices($this->languageChoices());
+		return isset($this->choices) ? $this : $this->choices($this->languageChoices());
 	}
 	
 	private function languageChoices() : array

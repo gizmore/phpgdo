@@ -7,10 +7,10 @@ use GDO\User\GDO_User;
 $href = $field->hrefProfile();
 ?>
 <span class="gdt-profile-link">
-<?php if ($field->avatar) : ?>
+<?php if ($field->hasAvatar()) : ?>
   <a href="<?=$href?>" class="gdt-avatar"><?=$field->renderAvatar()?></a>
 <?php endif; ?>
-<?php if ($field->showNickname()) : ?>
+<?php if ($field->nickname) : ?>
   <a href="<?=$href?>" class="gdt-nickname"><?=$user->renderUserName()?></a>
 <?php endif; ?>
 </span>

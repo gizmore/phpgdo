@@ -5,7 +5,6 @@ use GDO\Core\GDT_Response;
 use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
-use GDO\Form\GDT_Submit;
 use GDO\UI\Color;
 use GDO\User\GDO_User;
 
@@ -13,7 +12,7 @@ use GDO\User\GDO_User;
  * CLI utility.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.2
  * @see Method
  */
@@ -100,7 +99,6 @@ final class CLI
     	return sprintf("\033[%sm%s\033[0m", $mode, $s);
     }
     
-    
 //     /**
 //      * Stop output buffering and start auto flush for CLI mode.
 //      */
@@ -160,157 +158,45 @@ final class CLI
             $module->renderName(), implode(', ', $methods)]));
     }
     
-//     /**
-//      * Turn a line of text into method parameters.
-//      * 
-//      * @param string $line - input line.
-//      * @param Method $method - method for parameter reference.
-//      * @param boolean $asValues - convert args to values?
-//      * 
-//      * @return string[]
-//      */
-//     public static function parseArgline($line, Method $method, $asValues=false)
-//     {
-//         $i = 0;
-//         $success = true;
-//         $args = Strings::args($line);
-//         $parameters = [];
-        
-//         # Clear last request errors
-//         foreach ($method->gdoParameterCache() as $gdt)
-//         {
-//             $gdt->error = null;
-// //             $gdt->var($gdt->initial);
-// //             $_REQUEST[$gdt->name] = $gdt->var;
-// //             $_REQUEST[$gdt->formVariable()][$gdt->name] = $gdt->var;
-// //             $_REQUEST[$gdt->name] = $var;
-// //             $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
-//         }
-        
-//         # Parse optionals --parameter=value
-//         foreach ($args as $var)
-//         {
-//             if (str_starts_with($var, '--'))
-//             {
-//                 $key = Strings::substrTo($var, '=', $var);
-//                 $key = ltrim($key, '-');
-//                 $var = Strings::substrFrom($var, '=', '');
-//                 if ($gdt = $method->gdoParameterByLabel($key))
-//                 {
-//                     $value = $gdt->toValue($gdt->inputToVar($var));
-//                     if ($gdt->validate($value))
-//                     {
-//                         $gdt->varval($var, $value);
-//                     }
-//                     else
-//                     {
-//                         $success = false;
-//                     }
-//                     $parameters[$gdt->name] = $var;
-//                     $_REQUEST[$gdt->name] = $var;
-//                     $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
-//                 }
-//                 $i++;
-//                 continue;
-//             }
-//             break;
-//         }
-        
-//         # Positional / required params
-//         foreach ($method->gdoParameterCache() as $gdt)
-//         {
-//             if ($gdt->name && $gdt->editable && $gdt->isPositional())
-//             {
-//                 $var = $gdt->inputToVar(@$args[$i]);
-//                 $value = $gdt->toValue($var);
-//                 if ($gdt->validate($value))
-//                 {
-//                     $gdt->varval(@$args[$i], $value);
-//                 }
-//                 else
-//                 {
-//                     $success = false;
-//                 }
-//                 $parameters[$gdt->name] = @$args[$i];
-//                 $_REQUEST[$gdt->name] = @$args[$i];
-//                 $_REQUEST[$gdt->formVariable()][$gdt->name] = $var;
-//                 $i++;
-//             }
-//         }
-        
-//         # Convert to values
-//         if ($asValues)
-//         {
-//             $old = $parameters;
-//             $parameters = [];
-//             foreach ($method->gdoParameterCache() as $gdt)
-//             {
-//                 if (isset($old[$gdt->name]))
-//                 {
-//                     $parameters[$gdt->name] = $gdt->getValue();
-//                 }
-//                 else
-//                 {
-//                     $parameters[$gdt->name] = $gdt->getInitialValue();
-//                 }
-//             }
-//         }
-        
-//         return $success ? $parameters : [];
-//     }
-
     /**
      * Render help line for gdt parameters.
      * @param GDT[] $fields
      * @return string
      */
-    public static function renderCLIHelp(Method $method, array $fields) : string
+    public static function renderCLIHelp(Method $method) : string
     {
         $usage1 = [];
         $usage2 = [];
+        $fields = $method->gdoParameterCache();
         foreach ($fields as $gdt)
         {
-            if (!$gdt->editable)
+            if ( (!$gdt->isWriteable()) || ($gdt->isHidden()) )
             {
                 continue;
             }
             if ($gdt->isPositional())
             {
-                $usage1[] = sprintf('<%s>(%s)', $gdt->renderLabel(), $gdt->gdoExampleVars());
+            	$label = $gdt->renderLabel();
+            	$xmplvars = $gdt->gdoExampleVars();
+            	$xmplvars = $xmplvars ? 
+            		sprintf('<%s>(%s)', $label, $xmplvars, ) : 
+            		sprintf('<%s>', $label);
+                $usage1[] = $xmplvars;
             }
             else
             {
-                $usage2[] = sprintf('[--%s=<%s>(%s)]',
-                    $gdt->name, $gdt->gdoExampleVars(), $gdt->getVar());
+            	if ($gdt->name !== 'submit')
+            	{
+	                $usage2[] = sprintf('[--%s=<%s>(%s)]',
+	                    $gdt->name, $gdt->gdoExampleVars(), $gdt->getVar());
+            	}
             }
         }
-        $usage = implode(' ', $usage2) . ' ' . implode(' ', $usage1);
-        $usage = trim($usage);
-        $buttons = self::renderCLIHelpButtons($method);
-        $mome = sprintf('%s.%s', 
-            $method->getCLITrigger(), $buttons);
-        
-        return GDT_Response::newWithHTML(t('cli_usage', [
-            trim(strtolower($mome).' '.$usage), $method->getDescription()]));
-    }
-    
-    private static function renderCLIHelpButtons(Method $method) : string
-    {
-        $impl = [];
-        $buttons = $method->getButtons();
-        foreach ($buttons as $gdt)
-        {
-            if (!($gdt instanceof GDT_Submit))
-            {
-                continue;
-            }
-            if ($gdt->name === 'submit')
-            {
-                continue;
-            }
-            $impl[] = $gdt->name;
-        }
-        return $impl ? '[' . implode('|', $impl) . ']' : '';
+        $usage = implode(',', $usage2) . ',' . implode(',', $usage1);
+        $usage = trim($usage, ', ');
+        $mome = $method->getCLITrigger();
+        return ' ' . t('cli_usage', [
+            trim(strtolower($mome).' '.$usage), $method->getMethodDescription()]);
     }
     
 }

@@ -4,13 +4,8 @@ namespace GDO\Table;
 use GDO\Core\GDT_Template;
 
 /**
- * Similiar to a table, a list displays multiple cards or list items.
- * 
- * Control ->itemTemplate(GDT) which defaults to GDT_GDO.
- * Control ->listMode(1|2) for cards or list items.
- * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.1
  * @since 5.0
  * 
  * @see GDT_GDO
@@ -18,61 +13,12 @@ use GDO\Core\GDT_Template;
  */
 class GDT_List extends GDT_Table
 {
-	const MODE_CARD = 1;
-	const MODE_LIST = 2;
-	
-	private $listMode = self::MODE_LIST;
-	public function listMode($mode)
-	{
-		$this->listMode = $mode;
-		return $this;
-	}
-	
-	################
-	### Template ###
-	################
-// 	public $itemTemplate;
-// 	public function itemTemplate(GDT $gdt)
-// 	{
-// 		$this->itemTemplate = $gdt;
-// 		return $this;
-// 	}
-	
-// 	public function getItemTemplate()
-// 	{
-// 		return $this->itemTemplate ? $this->itemTemplate : GDT_GDO::make();
-// 	}
-	
 	##############
 	### Render ###
 	##############
 	public function renderCell() : string
 	{
-		$template = $this->listMode === self::MODE_CARD ? 'cell/list_card.php' : 'cell/list.php';
-		return GDT_Template::php('Table', $template, ['field' => $this]);
-	}
-	
-	public function configJSON() : array
-	{
-	    return array_merge(parent::configJSON(), [
-	        'listMode' => $this->listMode,
-	    ]);
-	}
-	
-	public static $CURRENT;
-	public $data;
-	
-	protected function renderJSONData()
-	{
-	    self::$CURRENT = $this;
-	    $this->data = [];
-	    $result = $this->getResult();
-	    $table = $result->table;
-	    while ($gdo = $table->fetch($result))
-	    {
-	        $gdo->renderChoice();
-	    }
-	    return $this->data;
+		return GDT_Template::php('Table', 'list_html.php', ['field' => $this]);
 	}
 	
 }

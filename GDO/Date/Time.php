@@ -5,6 +5,7 @@ use GDO\Language\Trans;
 use DateTime;
 use GDO\Core\Application;
 use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 
 /**
  * Time helper class.
@@ -146,13 +147,13 @@ final class Time
 	 * @param string $format
 	 * @return int Timestamp
 	 */
-	public static function parseDate($date, $timezone=null, $format='parse')
+	public static function parseDate($date, $timezone=null, $format='parse') : float
 	{
 	    $timestamp = self::parseDateIso(Trans::$ISO, $date, $timezone, $format);
 	    return $timestamp;
 	}
 	
-	public static function parseDateDB($date)
+	public static function parseDateDB($date) : float
 	{
 		return self::parseDate($date, self::UTC, 'db');
 	}
@@ -167,7 +168,7 @@ final class Time
 	 * @param string $format
 	 * @return int Timestamp
 	 */
-	public static function parseDateIso($iso, $date, $timezone=null, $format='parse')
+	public static function parseDateIso($iso, $date, $timezone=null, $format='parse') : float
 	{
 	    if ($d = self::parseDateTimeISO($iso, $date, $timezone, $format))
 	    {
@@ -219,6 +220,10 @@ final class Time
 	    elseif ($len === 19)
 	    {
 	        $date .= '.000';
+	    }
+	    elseif ($len !== 23)
+	    {
+	    	throw new GDO_Exception("cannot parse invalid date format.");
 	    }
 	    
 	    # Parse
@@ -441,7 +446,7 @@ final class Time
 				tiso($iso, 'tu_m') => 60,
 				tiso($iso, 'tu_h') => 24,
 				tiso($iso, 'tu_d') => 7,
-				tiso($iso, 'tu_w') => 53.25,
+				tiso($iso, 'tu_w') => 53,
 // 				tiso($iso, 'tu_mo') => 4,
 				tiso($iso, 'tu_y') => 1000000,
 			);

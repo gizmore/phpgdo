@@ -1623,7 +1623,7 @@ abstract class GDO extends GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			$gdt->gdo($this);
+// 			$gdt->gdo($this); # this would override input in GDT_Message.
 			call_user_func([$gdt, $methodName], $this, $query);
 		}
 		call_user_func([$this, $methodName], $this, $query);

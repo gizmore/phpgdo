@@ -48,7 +48,7 @@ final class GDT_DateDisplay extends GDT
         {
             $display = t('ago', [Time::displayAge($date)]);
         }
-        return GDT_Template::php('Date', 'cell/datedisplay.php', ['field' => $this, 'display' => $display]);
+        return GDT_Template::php('Date', 'date_html.php', ['field' => $this, 'display' => $display]);
     }
     
     public function gdo(GDO $gdo = null) : self

@@ -6,6 +6,7 @@ use GDO\Core\GDT_String;
 <div class="gdt-container<?=$field->classError()?>">
   <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <input
+  <?=$field->htmlFocus()?>
   type="<?=$field->getInputType()?>"
   <?=$field->htmlID()?>
   <?=$field->htmlRequired()?>

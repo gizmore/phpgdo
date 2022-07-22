@@ -1,8 +1,8 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\GDT_String;
 use GDO\Core\WithGDO;
+use GDO\Core\GDT_Name;
 
 /**
  * Username field without completion.
@@ -10,10 +10,10 @@ use GDO\Core\WithGDO;
  * 
  * @see GDT_User
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
-class GDT_Username extends GDT_String
+class GDT_Username extends GDT_Name
 {
 	use WithGDO;
 	

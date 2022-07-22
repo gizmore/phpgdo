@@ -345,20 +345,20 @@ class GDO_Module extends GDO
 	 */
 	public function templatePHP(string $path, array $tVars=null) : GDT_Template
 	{
-		switch (Application::$INSTANCE->getFormat())
+		switch (Application::$INSTANCE->modeDetected)
 		{
-			case 'json': return $tVars; # @TODO here is the spot to enable json for genereic templates.
-			case 'html':
+			case GDT::RENDER_JSON: return $tVars; # @TODO here is the spot to enable json for genereic templates.
+			case GDT::RENDER_HTML:
 			default: return GDT_Template::make()->template($this->getName(), $path, $tVars);
 		}
 	}
 	
 	public function responsePHP(string $file, array $tVars=null) : GDT
 	{
-		switch (Application::$INSTANCE->getFormat())
+		switch (Application::$INSTANCE->modeDetected)
 		{
-			case 'json': return GDT_JSON::make()->value(...$tVars);
-			case 'html':
+			case GDT::RENDER_JSON: return GDT_JSON::make()->value(...$tVars);
+			case GDT::RENDER_HTML:
 			default: return $this->templatePHP($file, $tVars);
 		}
 	}

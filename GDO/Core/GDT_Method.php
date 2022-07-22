@@ -25,14 +25,32 @@ class GDT_Method extends GDT
 	
 	public GDT $result;
 	
+	private function getCLIAutoButton(array $inputs) : ?string
+	{
+		return $this->method->getAutoButton(array_keys($inputs));
+	}
+	
 	/**
 	 * Exexute this method.
+	 * 
+	 * @return GDT_Response
 	 */
 	public function execute(bool $withReset=true)
 	{
 		if (!isset($this->result))
 		{
-			$method = $this->method->withAppliedInputs($this->getInputs());
+			$inputs = $this->getInputs();
+			
+			if ($this->clibutton)
+			{
+				if ($button = $this->getCLIAutoButton($inputs))
+				{
+					$inputs[$button] = '1';
+				}
+			}
+			
+			$method = $this->method->addInputs($inputs);
+
 			# Call either with hooks and stuff or without
 			if ($withReset)
 			{
@@ -46,6 +64,20 @@ class GDT_Method extends GDT
 			}
 		}
 		return $this->result;
+	}
+	
+	###########
+	### CLI ###
+	###########
+	public bool $clibutton = false;
+	
+	/**
+	 * Toggle if we should autodetect a button.
+	 */
+	public function clibutton(bool $clibutton = true) : self
+	{
+		$this->clibutton = $clibutton;
+		return $this;
 	}
 	
 	##################

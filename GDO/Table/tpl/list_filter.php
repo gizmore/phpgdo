@@ -4,9 +4,10 @@ use GDO\Core\GDT_Select;
 use GDO\Form\GDT_Submit;
 use GDO\UI\GDT_Accordeon;
 use GDO\UI\GDT_SearchField;
+use GDO\Table\GDT_List;
 
 /**
- * @var $field \GDO\Core\GDT
+ * @var $field GDT_List
  */
 ###################
 ### Search Form ###
@@ -14,13 +15,13 @@ use GDO\UI\GDT_SearchField;
 if ($field->headers)
 {
     # The list search criteria form.
-    $frm = GDT_Form::make($field->headers->name)->slim()->methodGET();
+    $frm = GDT_Form::make($field->headers->name)->slim()->verb('GET');
     
     # Searchable input
     if ($field->searched)
     {
         $searchable = [];
-        foreach ($field->headers->fields as $gdt)
+        foreach ($field->headers->getAllFields() as $gdt)
         {
             if ($gdt->searchable)
             {
@@ -34,10 +35,10 @@ if ($field->headers)
     }
     
     # Orderable select
-    if ($field->ordered)
+    if ($field->isOrdered())
     {
         $orderable = [];
-        foreach ($field->headers->fields as $gdt)
+        foreach ($field->headers->getFields() as $gdt)
         {
             if ($gdt->orderable)
             {
@@ -69,7 +70,7 @@ if ($field->headers)
     }
     
     # Show quicksearch form in accordeon
-    if (count($frm->fields))
+    if (count($frm->getFields()))
     {
         $frm->actions()->addField(GDT_Submit::make());
         $accordeon = GDT_Accordeon::make()->addField($frm)->title($frm->displaySearchCriteria());

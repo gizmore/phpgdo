@@ -53,5 +53,10 @@ class GDT_Title extends GDT_String
 		}
 	    return parent::var($var);
 	}
+	
+// 	public function gdoExampleVars() : ?string
+// 	{
+// 		return t('title');
+// 	}
 
 }

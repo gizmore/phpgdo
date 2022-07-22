@@ -18,7 +18,7 @@ use GDO\Util\Strings;
  * @example mail giz;hi there(howdy;$(concat );   wget --abc ssh://)
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see Method
  * @see GDT_Method
@@ -26,6 +26,7 @@ use GDO\Util\Strings;
  */
 final class Parser
 {
+	const QUOTES = '"';
 	const CMD_PREAMBLE = '(';
 	const ARG_SEPARATOR = ',';
 	const ESCAPE_CHARACTER = '\\';
@@ -54,6 +55,7 @@ final class Parser
 		$len = mb_strlen($l);
 		$method = $this->parseMethod($l, $i, $len);
 		$current->method($method);
+		$current->method->clibutton();
 		$arg = '';
 		for (; $i < $len;)
 		{
@@ -73,7 +75,11 @@ final class Parser
 				
 				case self::ESCAPE_CHARACTER:
 					$c2 = $l[$i++];
-					$arg .= $c2;
+					switch ($c2)
+					{
+						case 'n': case 'N': $arg .= "\n"; break;
+						default: $arg .= $c2; break;
+					}
 					break;
 
 				case self::ARG_SEPARATOR:
@@ -137,6 +143,10 @@ final class Parser
 				{
 					break;
 				}
+			}
+			if ($c === self::QUOTES)
+			{
+				continue;
 			}
 			elseif (ctype_alnum($c))
 			{

@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\Core\Expression\Parser;
+use GDO\CLI\CLI;
 
 /**
  * An expression executes a command line.
@@ -42,17 +43,18 @@ final class GDT_Expression extends GDT
 		return $this;
 	}
 	
-// 	public function addInput(string $key, $input)
-// 	{
-// 		return $this->method->addField($key, $input);
-// 	}
-
 	############
 	### Exec ###
 	############
 	public function execute()
 	{
-		return $this->method->execute();
+		$response = $this->method->execute();
+		if ($response->hasError())
+		{
+			$help = CLI::renderCLIHelp($this->method->method);
+			$response->addField(GDT_String::make()->var($help));
+		}
+		return $response;
 	}
 	
 }

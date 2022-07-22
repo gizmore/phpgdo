@@ -5,16 +5,23 @@ namespace GDO\UI;
  * Add HTML href capabilities.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 trait WithHREF
 {
 	public string $href;
 
-	public function href(string $href) : self
+	public function href(string $href=null) : self
 	{
-		$this->href = $href;
+		if ($href)
+		{
+			$this->href = $href;
+		}
+		else
+		{
+			unset($this->href);
+		}
 		return $this;
 	}
 

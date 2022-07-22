@@ -23,6 +23,7 @@ trait WithProxy
 
 	public function proxy(GDT $proxy) : self
 	{
+		$this->proxy = $proxy;
 		return $this;
 	}
 	

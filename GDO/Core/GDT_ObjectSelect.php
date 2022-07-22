@@ -27,7 +27,7 @@ class GDT_ObjectSelect extends GDT_Select
 	
 	public function validate($value) : bool
 	{
-		$this->initChoices();
+// 		$this->initChoices();
         if ($value === null)
         {
             if ($this->notNull)
@@ -38,14 +38,7 @@ class GDT_ObjectSelect extends GDT_Select
                 }
                 return $this->errorNull();
             }
-//             return true;
         }
-        
-//         if (!$this->getValue())
-//         {
-//             return $this->errorInvalidChoice();
-//         }
-        
 		return true;
 	}
 	

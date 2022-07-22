@@ -88,7 +88,7 @@ class Application extends GDT
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
 	public function isWebsocket() : bool { return false; }
-	public function isWebserver() : bool { return true; }
+	public function isWebserver() : bool { return !$this->cli; }
 	
 	###################
 	### Render Mode ###

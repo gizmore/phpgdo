@@ -206,10 +206,10 @@ class Configure extends MethodForm
 		# Update config
 		$info = [];
 		$moduleVarsChanged = false;
-		foreach ($form->getFields() as $gdt)
+		foreach ($form->getAllFields() as $gdt)
 		{
 			// if ($gdt->hasChanged() && $gdt->writeable && $gdt->editable)
-			if ($gdt->isWriteable() && $gdt->hasChanged())
+			if ((!$gdt->isHidden()) && $gdt->isWriteable() && $gdt->hasChanged())
 			{
 				$info[] = '<br/>';
 				GDO_ModuleVar::createModuleVar($mod, $gdt);

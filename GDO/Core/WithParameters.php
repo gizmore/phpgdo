@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\UI\GDT_Repeat;
+
 /**
  * Add GDT parameters.
  * Override gdoParameters() in your methods.
@@ -68,37 +70,44 @@ trait WithParameters
 	private function _gdoParameterB(string $key, bool $throw=true) : ?GDT
 	{
 		$cache = $this->gdoParameterCache();
-		if (!($gdt = @$cache[$key]))
+		$repeater = null;
+		if (isset($cache[$key]))
 		{
-			if (is_numeric($key))
+			return $cache[$key];
+		}
+		
+		elseif (is_numeric($key))
+		{
+			$pos = -1;
+			foreach ($cache as $gdt)
 			{
-				$pos = -1;
-				foreach ($cache as $_gdt)
+				if ($gdt->isPositional())
 				{
-					if ($_gdt->isPositional())
+					$pos++;
+					if ($key == $pos)
 					{
-						$pos++;
-						if ($key == $pos)
-						{
-							return $_gdt;
-						}
+						return $gdt;
 					}
 				}
-				if ($_gdt->isPositional())
+				
+				if ($gdt instanceof GDT_Repeat)
 				{
-					return $_gdt;
+					$repeater = $gdt;
 				}
 			}
 		}
-		if (!$gdt)
+		
+		if (isset($repeater))
 		{
-			if ($throw)
-			{
-				throw new GDO_Error('err_unknown_parameter', [html($key), $this->gdoHumanName()]);
-			}
-			return null;
+			return $repeater;
 		}
-		return $gdt;
+		
+		elseif ($throw)
+		{
+			throw new GDO_Error('err_unknown_parameter', [html($key), $this->gdoHumanName()]);
+		}
+
+		return null;
 	}
 
 	/**
@@ -153,7 +162,7 @@ trait WithParameters
 			if ($name = $gdt->getName())
 			{
 				$this->parameterCache[$name] = $gdt;
-				$gdt->input($this->getInput($name));
+// 				$gdt->input($this->getInput($name));
 			}
 		}
 	}

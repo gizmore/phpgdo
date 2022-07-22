@@ -80,9 +80,11 @@ trait WithObject
 			 	if ( ($gdo = $this->getByName($var)) ||
 			 		 ($gdo = $this->table->getById($var)) )
 			 	{
-// 			 		$_REQUEST[$this->formVariable()][$this->name] = $gdo->getID();
+			 		$this->input = $gdo->getID();
 			 		return $gdo;
 			 	}
+			 	
+			 	
 			}
 			# @TODO: GDO->findOnlyCachedBy[IDs]()
 			if ($user = $this->table->findCached(...explode(':', $var)))
@@ -117,28 +119,45 @@ trait WithObject
 		{
 			return $gdos[0];
 		}
+		$firsts = [];
+		$middles = [];
 		foreach ($gdos as $gdo)
 		{
-			if ($gdo->getName() === $var)
+			$name = $gdo->getName();
+			if (strcasecmp($name, $var) === 0)
 			{
 				return $gdo;
 			}
+			if (stripos($name, $var) === 0)
+			{
+				$firsts[] = $gdo;
+			}
+			$middles[$name] = $gdo;
 		}
+		if (count($firsts) === 1)
+		{
+			return $firsts[0];
+		}
+		if (count($middles) === 1)
+		{
+			return $middles[0];
+		}
+		$this->error('err_select_candidates', [implode('|', array_keys($middles))]);
 		return null;
 	}
 	
-	/**
-	 * Override this with a real byName method.
-	 * @param string $name
-	 * @return \GDO\Core\GDO
-	 */
-	public function findByName($name)
-	{
-		if ($column = $this->table->gdoNameColumn())
-		{
-			return $this->table->getBy($column->name, $name);
-		}
-	}
+// 	/**
+// 	 * Override this with a real byName method.
+// 	 * @param string $name
+// 	 * @return \GDO\Core\GDO
+// 	 */
+// 	public function findByName($name)
+// 	{
+// 		if ($column = $this->table->gdoNameColumn())
+// 		{
+// 			return $this->table->getBy($column->name, $name);
+// 		}
+// 	}
 	
 	##############
 	### Render ###
@@ -184,7 +203,7 @@ trait WithObject
 	
 	public function getGDOData() : ?array
 	{
-		return [$this->name => $this->var];
+		return [$this->name => $this->getVar()];
 	}
 	
 	################
@@ -198,6 +217,10 @@ trait WithObject
 		}
 		elseif ($var = $this->getVar()) # 404, as we have a search term.
 		{
+			if ($this->hasError())
+			{
+				return false;
+			}
 			return $this->error('err_gdo_not_found', [$this->table->gdoHumanName(), html($var)]);
 		}
 		elseif ($this->notNull) # empty input and not null
@@ -316,16 +339,6 @@ trait WithObject
 		return $this->notNull();
 	}
 	
-// 	########################
-// 	### Custom ON clause ###
-// 	########################
-// 	public $fkOn;
-// 	public function fkOn($on)
-// 	{
-// 		$this->fkOn = $on;
-// 		return $this;
-// 	}
-
 	################
 	### Database ###
 	################
@@ -430,25 +443,5 @@ trait WithObject
 	    }
 	    return implode(' OR ', $where);
 	}
-	
-	############
-	### Join ###
-	############
-// 	public $autojoin = true;
-// 	public function noAutojoin($noAutojoin=true) { return $this->autojoin(!$noAutojoin); }
-// 	public function autojoin($autojoin=true)
-// 	{
-// 		$this->autojoin = $autojoin;
-// 		return $this;
-// 	}
-	
-// 	public function gdoBeforeRead(Query $query) : void
-// 	{
-// 		if ($this->autojoin)
-// 		{
-// 			$joinType = $this->notNull ? 'JOIN' : 'LEFT JOIN';
-// 			$query->joinObject($this->name, $joinType, $this->name.'_t');
-// 		}
-// 	}
 	
 }

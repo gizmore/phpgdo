@@ -16,7 +16,7 @@ class GDT_ComboBox extends GDT_String
 	/**
 	 * @var string[]
 	 */
-	public array $choices = [];
+	public array $choices;
 	public function choices(array $choices) : self
 	{
 		$this->choices = $choices;

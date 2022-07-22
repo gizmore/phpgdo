@@ -233,24 +233,29 @@ class GDT_Timestamp extends GDT_DBField
 	
 	public function inputToVar($input = null) : ?string
 	{
+		if ($input === null)
+		{
+			return null;
+		}
 		if (!is_numeric($input))
 		{
 			if (preg_match('#^\\d{4}-\\d{2}-\\d{2}#', $input))
 			{
-				$input = Time::parseDateDB($input);
+				$input = Time::parseDateTimeDB($input);
 			}
 			else
 			{
 				$input = str_replace('T', ' ', $input);
 				$input = str_replace('Z', '', $input);
-				$input = Time::parseDate($input);
+				$input = Time::parseDateTime($input);
 			}
 		}
 		else
 		{
 			$input /= 1000.0;
+			$input = Time::getDateTime($input);
 		}
-		return $input ? Time::getDate($input) : null;
+		return $input ? $input->format("Y-m-d H:i:s.v") : null;
 	}
 	
 	##############

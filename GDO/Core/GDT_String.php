@@ -214,13 +214,18 @@ class GDT_String extends GDT_DBField
 	##############
 	public function renderHTML() : string
 	{
-		$out = '<div>';
+		return sprintf('<div>%s</div>',
+			html($this->renderCLI()));
+	}
+	
+	public function renderCLI() : string
+	{
+		$out = '';
 		if ($this->hasLabel())
 		{
 			$out .= $this->renderLabel() . ': ';
 		}
 		$out .= $this->getVar();
-		$out .= '</div>';
 		return $out;
 	}
 	

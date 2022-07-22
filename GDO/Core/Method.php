@@ -12,12 +12,13 @@ use GDO\CLI\CLI;
 use GDO\UI\GDT_Page;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Redirect;
+use GDO\Form\GDT_Submit;
 
 /**
  * Abstract baseclass for all methods.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.1
  * @see WithParameters
  */
@@ -26,7 +27,6 @@ abstract class Method #extends GDT
 	use WithTitle;
 	use WithInput;
 	use WithModule;
-// 	use WithInstance;
 	use WithParameters;
 	use WithDescription;
 	
@@ -43,8 +43,15 @@ abstract class Method #extends GDT
 	public function getMethodName() : string { return $this->gdoShortName(); }
 	public function getPermission() : ?string { return null; }
 	public function hasPermission(GDO_User $user) : bool { return true; }
+	
 	public abstract function execute();
 	
+	public function getCLITrigger()
+	{
+		$trigger = "{$this->getModuleName()}.{$this->getMethodName()}";
+		return strtolower($trigger);
+	}
+
 	# toggles
 	public function isCLI() : bool { return false; }
 	public function isAjax() { return false; }
@@ -76,6 +83,27 @@ abstract class Method #extends GDT
 		self::$CLI_ALIASES[$alias] = $className;
 	}
 	
+	public function getAutoButton($keys) : ?string
+	{
+		$first = null;
+		foreach ($this->gdoParameterCache() as $key => $gdt)
+		{
+			if (in_array($key, $keys, true))
+			{
+				return $key;
+			}
+			if ($gdt instanceof GDT_Submit)
+			{
+				if (!$first)
+				{
+					$first = $gdt->getName();
+				}
+			}
+		}
+		return $first;
+	}
+	
+	
 	############
 	### HREF ###
 	############
@@ -90,7 +118,7 @@ abstract class Method #extends GDT
 	 * @param string $alias
 	 * @return Method
 	 */
-	public static function getMethod(string $alias, bool $throw=true) : self
+	public static function getMethod(string $alias, bool $throw=true) : ?self
 	{
 		$alias = strtolower($alias);
 		if (isset(self::$CLI_ALIASES[$alias]))
@@ -101,17 +129,27 @@ abstract class Method #extends GDT
 		else
 		{
 			$moduleName = Strings::substrTo($alias, '.', $alias);
-			$methodName = Strings::substrFrom($alias, '.', $alias);
-			$module = ModuleLoader::instance()->getModule($moduleName);
+			
+			if (!($module = ModuleLoader::instance()->getModule($moduleName)))
+			{
+				if ($throw)
+				{
+					throw new GDO_Error('err_unknown_module', [html($moduleName)]);
+				}
+				return null;
+			}
+			
+			$methodName = Strings::substrFrom($alias, '.', t('none'));
 			if ($method = $module->getMethod($methodName))
 			{
 				return $method;
 			}
 			if ($throw)
 			{
-				throw new GDO_Error('err_unknown_method', [html($alias)]);
+				throw new GDO_Error('err_unknown_method', [$module->getName(), html($methodName)]);
 			}
 		}
+		return null;
 	}
 
 	###################
@@ -121,6 +159,7 @@ abstract class Method #extends GDT
 	{
 		return new static();
 	}
+	
 	############
 	### Exec ###
 	############
@@ -133,12 +172,12 @@ abstract class Method #extends GDT
 		
 		if (!($this->isEnabled()))
 		{
-			return GDT_Error::make()->text('err_method_disabled', [$this->getModuleName(), $this->getMethodName()]);
+			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()]);
 		}
 		
 		if ( (!$this->isGuestAllowed()) && (!$user->isMember()) )
 		{
-			return GDT_Error::make()->text('err_members_only');
+			return $this->error('err_members_only');
 		}
 		
 		if ( ($this->isUserRequired()) && (!$user->isUser()) )
@@ -146,11 +185,11 @@ abstract class Method #extends GDT
 			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
 			{
 				$hrefGuest = href('Register', 'Guest', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
-				return GDT_Error::make()->text('err_user_required', [$hrefGuest]);
+				return $this->error('err_user_required', [$hrefGuest]);
 			}
 			else
 			{
-				return GDT_Error::make()->text('err_members_only');
+				return $this->error('err_members_only');
 			}
 		}
 		
@@ -160,18 +199,18 @@ abstract class Method #extends GDT
 			$ut = $user->getType();
 			if (!in_array($ut, $mt, true))
 			{
-				return GDT_Error::make()->text('err_user_type', [$this->getUserType()]);
+				return $this->error('err_user_type', [$this->getUserType()]);
 			}
 		}
 		
 		if ( ($permission = $this->getPermission()) && (!$user->hasPermission($permission)) )
 		{
-			return GDT_Error::make()->text('err_permission_required', [t('perm_'.$permission)]);
+			return $this->error('err_permission_required', [t('perm_'.$permission)]);
 		}
 		
 		if (!$this->hasPermission($user))
 		{
-			return GDT_Error::make('err_no_permission');
+			return $this->error('err_no_permission');
 		}
 		
 		return $this->execWrap();
@@ -199,63 +238,18 @@ abstract class Method #extends GDT
 		# Exec
 		if ($response = $this->executeWithInit())
 		{
-			$this->setupSEO();
+// 			if ($response->hasError())
+// 			{
+// 				$this->setupSEOError();
+// 			}
+// 			else
+// 			{
+				$this->setupSEO();
+// 			}
 		}
 		return $response;
 	}
 	
-	###########
-	### SEO ###
-	###########
-	public function setupSEO()
-	{
-		# SEO
-		Website::setTitle($this->getMethodTitle());
-		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
-		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
-		
-		# Store last URL in session
-		$this->storeLastURL();
-		
-		# Store last activity in user
-		$this->storeLastActivity();
-	}
-	
-	###########
-	### SEO ###
-	###########
-	public function getMethodTitle() : string
-	{
-		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
-		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : '';
-	}
-	
-	public function getMethodDescription() : string
-	{
-		$key = sprintf('md_%s_%s', $this->getModuleName(), $this->getMethodName());
-		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : $this->getMethodTitle();
-	}
-	
-	public function getMethodKeywords() : string
-	{
-		$keywords = [];
-		if (Trans::hasKey('site_keywords'))
-		{
-			$keywords[] = t('site_keywords');
-		}
-		$key = sprintf('mk_%s_%s', $this->getModuleName(), $this->getMethodName());
-		if (Trans::hasKey($key))
-		{
-			$keywords[] = t($key);
-		}
-		return implode(', ', $keywords);
-	}
-	
-	###############
-	### Execute ###
-	###############
 	/**
 	 * Execute this method with all hooks.
 	 */
@@ -271,9 +265,6 @@ abstract class Method #extends GDT
 			{
 				$db->transactionBegin();
 			}
-			
-			# Apply input
-			$this->applyInput();
 			
 			# Init method
 			$this->inited = false;
@@ -294,15 +285,6 @@ abstract class Method #extends GDT
 			
 			$response->addField($result);
 			
-			if ($result->hasError())
-			{
-				if ($transactional)
-				{
-					$db->transactionRollback();
-				}
-				return $response;
-			}
-			
 			if ($response->hasError())
 			{
 				if ($transactional)
@@ -312,6 +294,7 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
+			$this->applyInput();
 			if ($result = $this->execute())
 			{
 				$response->addField($result);
@@ -360,6 +343,52 @@ abstract class Method #extends GDT
 		}
 	}
 	
+	###########
+	### SEO ###
+	###########
+	public function setupSEO()
+	{
+		# SEO
+		Website::setTitle($this->getMethodTitle());
+		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
+		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
+		
+		# Store last URL in session
+		$this->storeLastURL();
+		
+		# Store last activity in user
+		$this->storeLastActivity();
+	}
+	
+	public function getMethodTitle() : string
+	{
+		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return Trans::hasKey($key) ? t($key) : '';
+	}
+	
+	public function getMethodDescription() : string
+	{
+		$key = sprintf('md_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return Trans::hasKey($key) ? t($key) : $this->getMethodTitle();
+	}
+	
+	public function getMethodKeywords() : string
+	{
+		$keywords = [];
+		if (Trans::hasKey('site_keywords'))
+		{
+			$keywords[] = t('site_keywords');
+		}
+		$key = sprintf('mk_%s_%s', $this->getModuleName(), $this->getMethodName());
+		if (Trans::hasKey($key))
+		{
+			$keywords[] = t($key);
+		}
+		return implode(', ', $keywords);
+	}
+	
 	###################
 	### Apply Input ###
 	###################
@@ -385,7 +414,8 @@ abstract class Method #extends GDT
 		{
 			if ($gdt = $this->gdoParameter($key, false, false))
 			{
-				$gdt->input = $input;
+				$gdt->input($input);
+// 				$gdt->input = $input;
 			}
 		}
 	}
@@ -393,6 +423,11 @@ abstract class Method #extends GDT
 	#############
 	### Error ###
 	#############
+	public function response(string $response) : GDT_String
+	{
+		return GDT_String::make()->var($response);
+	}
+	
 	public function message($key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
 		return $this->success($key, $args, $code, $log);
@@ -447,7 +482,7 @@ abstract class Method #extends GDT
 	################
 	### Redirect ###
 	################
-	public function redirectMessage(string $key, array $args = null, string $href)
+	public function redirectMessage(string $key, array $args = null, string $href=null)
 	{
 		return GDT_Redirect::make()->href($href)->redirectMessage($key, $args);
 	}

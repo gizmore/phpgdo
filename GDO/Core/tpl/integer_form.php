@@ -6,6 +6,7 @@ use GDO\Core\GDT_Int;
 <div class="gdt-container<?=$field->classError()?>">
   <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <input
+   <?=$field->htmlFocus()?>
    <?=$field->htmlID()?>
    type="number"
    min="<?=$field->min;?>"

@@ -5,6 +5,7 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDO;
 use GDO\Util\Strings;
 use GDO\User\GDO_User;
+use GDO\User\GDT_ProfileLink;
 use GDO\Core\GDT_Text;
 
 /**
@@ -54,7 +55,7 @@ class GDT_Message extends GDT_Text
     public static $QUOTER = [self::class, 'QUOTE'];
     public static function QUOTE(GDO_User $user, $date, $text)
     {
-        $link = GDT_ProfileLink::make()->withNickname()->forUser($user);
+        $link = GDT_ProfileLink::make()->nickname()->forUser($user);
         return sprintf("<div><blockquote>\n<span class=\"quote-by\">%s</span>\n<span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>\n",
             t('quote_by', [$link->render()]), t('quote_at', [tt($date)]), $text);
     }
@@ -67,9 +68,9 @@ class GDT_Message extends GDT_Text
     ###############
     ### Decoder ###
     ###############
-    public static $EDITOR_NAME = 'GDT';
-    public static $DECODER = [self::class, 'DECODE'];
-    public static $DECODERS = [
+    public static string $EDITOR_NAME = 'GDT';
+    public static array $DECODER = [self::class, 'DECODE'];
+    public static array $DECODERS = [
     	'GDT' => [self::class, 'DECODE'],
     	'NONE' => [self::class, 'NONDECODE'],
     ];
@@ -113,6 +114,11 @@ class GDT_Message extends GDT_Text
         $html = preg_replace('# +#', ' ', $html);
         return trim($html);
     }
+    
+//     public function gdoExampleVars() : ?string
+//     {
+//     	return t('message');
+//     }
     
     ################
     ### Validate ###
@@ -282,7 +288,8 @@ class GDT_Message extends GDT_Text
 	### Render ###
 	##############
     public function renderCLI() : string { return $this->getVarText() . "\n"; }
-    public function renderHTML() : string { return (string) $this->getVarOutput(); }
+    public function renderCell() : string { return (string) $this->getVarOutput(); }
+    public function renderList() : string { return (string) $this->getVarOutput(); }
     public function renderCard() : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
     public function renderForm() : string { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
     public function renderChoice() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }

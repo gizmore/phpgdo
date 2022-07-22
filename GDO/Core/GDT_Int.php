@@ -153,7 +153,7 @@ class GDT_Int extends GDT_DBField
 	    return "4"; # don't get lost
 	}
 	
-	public function gdoExampleVars()
+	public function gdoExampleVars() : ?string
 	{
 	    if ( ($this->min !== null) && ($this->max !== null) )
 	    {

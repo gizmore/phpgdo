@@ -7,6 +7,7 @@ use GDO\Core\GDT_Method;
 /**
  * A parameter repeater.
  * These need to be not null and may not have an initial value.
+ * This means it is always a positional finisher.
  * 
  * @author gizmore
  * @version 7.0.0

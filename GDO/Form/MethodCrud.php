@@ -11,7 +11,6 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Date\Time;
-use GDO\Core\Website;
 use GDO\Util\Common;
 use GDO\Core\GDT_CreatedBy;
 
@@ -19,7 +18,7 @@ use GDO\Core\GDT_CreatedBy;
  * Abstract Create|Update|Delete for a GDO using MethodForm.
  * 
  * @author gizmore
- * @version 6.11.4
+ * @version 7.0.0
  * @since 5.1.0
  */
 abstract class MethodCrud extends MethodForm
@@ -278,7 +277,7 @@ abstract class MethodCrud extends MethodForm
 		$gdo = $table->blank($data); # object with files gdt
 		$this->beforeCreate($form, $gdo);
 		$gdo->insert();
-        Website::redirectMessage('msg_crud_created',
+        $this->redirectMessage('msg_crud_created',
             [$gdo->gdoHumanName(), $gdo->getID()],
             $this->href('&'.$this->crudName().'='.$gdo->getID()));
         return $this->afterCreate($form, $gdo);

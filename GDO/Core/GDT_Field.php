@@ -139,5 +139,17 @@ abstract class GDT_Field extends GDT
 	public function isSearchable() : bool { return true; }
 	public function isFilterable() : bool { return true; }
 	public function isSerializable() : bool { return true; }
-	
+
+	##############
+	### Render ###
+	##############
+	public function htmlFocus() : ?string
+	{
+		if ($this->getVar() === null)
+		{
+			return ' data-focus="data-focus"';
+		}
+		return null;
+	}
+
 }

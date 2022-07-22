@@ -52,8 +52,9 @@ return [
 	'err_forbidden' => 'You are not allowed to access this.',
 	'err_unknown_field' => 'The field `%s` in this form is either unknown or not writeable.',
 	'err_user_required' => 'You need to signup to continue. You can also <a href="%s">continue as guest</a>',
-	
-# Messages
+	'err_select_candidates' => 'There are multiple matches: %s',
+
+	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 
 	# Checkbox

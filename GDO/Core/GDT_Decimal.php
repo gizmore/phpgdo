@@ -25,8 +25,8 @@ class GDT_Decimal extends GDT_Int
 	##############
 	### Digits ###
 	##############
-	public int $digitsBefore = 5;
-	public int $digitsAfter = 5;
+	public int $digitsBefore = 9;
+	public int $digitsAfter = 4;
 	
 	public function digitsBefore(int $before) : self
 	{
@@ -55,11 +55,6 @@ class GDT_Decimal extends GDT_Int
 	    return GDT_Float::displayS($this->getVar(), $this->digitsAfter);
 	}
 	
-	public function renderForm() : string
-	{
-		return GDT_Template::php('Core', 'decimal_form.php', ['field'=>$this]);
-	}
-
 	#############
 	### Value ###
 	#############
@@ -84,7 +79,7 @@ class GDT_Decimal extends GDT_Int
 	
 	public function toValue(string $var = null)
 	{
-		return $var === null ? null : round($var, $this->digitsAfter);
+		return $var === null ? null : round(floatval($var), $this->digitsAfter);
 	}
 	
 }

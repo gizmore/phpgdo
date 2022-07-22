@@ -2,7 +2,6 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
-use GDO\CLI\CLI;
 
 /**
  * The base class for all GDT.
@@ -168,12 +167,12 @@ abstract class GDT
 	public function render() { return $this->renderGDT(); }
 	public function renderNIL() : string { return ''; }
 	public function renderBinary() : string { return ''; }
-	public function renderCLI() : string { return $this->displayCLI($this->renderHTML()); }
+	public function renderCLI() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderJSON() { return $this->renderCLI(); }
 	public function renderXML() : string { return $this->renderHTML(); }
 	# html rendering
-	public function renderHTML() : string { return ''; }
+	public function renderHTML() : string { return $this->renderVar(); }
 	public function renderChoice() : string { return $this->renderHTML(); }
 	public function renderList() : string { return $this->renderHTML(); }
 	public function renderForm() : string { return $this->renderHTML(); }
@@ -186,11 +185,7 @@ abstract class GDT
 
 	public function renderVar() : string
 	{
-		if ($var = $this->getVar())
-		{
-			return html($var);
-		}
-		return '';
+		return $this->displayVar($this->getVar());
 	}
 	
 	/**
@@ -198,13 +193,13 @@ abstract class GDT
 	 */
 	public function displayVar(string $var=null) : string
 	{
-		return $var ? html($var) : '';
+		return $var ? html($var) : sprintf("<i>%s</i>", t('none'));
 	}
 	
-	public function displayCLI(string $html) : string
-	{
-		return CLI::displayCLI($html);
-	}
+// 	public function displayCLI(string $html) : string
+// 	{
+// 		return CLI::displayCLI($html);
+// 	}
 	
 	public function displayChoice($choice) : string
 	{
@@ -681,6 +676,15 @@ abstract class GDT
 		}
 		return $this->getVar();
 	}
+	
+	###########
+	### CLI ###
+	###########
+	public function gdoExampleVars() : ?string
+	{
+		return null;
+	}
+	
 }
 
 if (def('GDT_GDO_DEBUG', false))

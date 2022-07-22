@@ -21,11 +21,11 @@ abstract class MethodQueryList extends MethodQueryTable
 	
 	public function createCollection() : GDT_Table
 	{
-	    return GDT_List::make($this->listName())->
-	       headerName($this->getHeaderName())->
-	       gdtTable($this->gdoTable())->
-	       fetchAs($this->gdoFetchAs())->
-	       listMode($this->gdoListMode());
+		$this->table = GDT_List::make($this->getTableName());
+		$this->table->href($this->gdoTableHREF());
+		$this->table->gdo($this->gdoTable());
+		$this->table->fetchAs($this->gdoFetchAs());
+		return $this->table;
 	}
 	
 }

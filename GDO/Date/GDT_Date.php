@@ -8,13 +8,12 @@ use GDO\Core\GDT_Template;
  * An example is the release date of a book, or a birthdate.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDT_Time
- * @see GDT_Timestamp
  * @see GDT_DateTime
+ * @see GDT_Timestamp
  * @see GDT_Duration
- * @see Module_Birthday
  */
 class GDT_Date extends GDT_Timestamp
 {
@@ -58,7 +57,6 @@ class GDT_Date extends GDT_Timestamp
 	public function renderCell() : string
 	{
 		return Time::displayDate($this->getVar());
-// 		return $this->renderCellSpan($this->renderVar());
 	}
 	
 	public function renderForm() : string
@@ -66,9 +64,13 @@ class GDT_Date extends GDT_Timestamp
 		return GDT_Template::php('Date', 'form/date.php', ['field'=>$this]);
 	}
 	
-// 	public function displayValue($value)
-// 	{
-// 		return Time::displayDateTime($value, $this->format);
-// 	}
+	public function htmlValue() : string
+	{
+		if ($var = $this->getVar())
+		{
+			return sprintf(' value="%s"', substr($var, 0, 10));
+		}
+		return '';
+	}
 
 }

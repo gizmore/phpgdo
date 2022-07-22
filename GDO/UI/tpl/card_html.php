@@ -8,10 +8,10 @@ $field->addClass('gdt-card');
   id="card-<?=$field->gdo->getID()?>"
 <?php endif; ?>
   <?=$field->htmlAttributes()?>>
-<?php if ($field->avatar || $field->hasTitle() || $field->hasSubTitle()) : ?>
+<?php if ($field->hasAvatar() || $field->hasTitle() || $field->hasSubTitle()) : ?>
   <div class="gdt-card-upper">
-<?php if ($field->avatar) : ?>
-    <div class="gdt-card-avatar"><?=$field->avatar->render()?></div>
+<?php if ($field->hasAvatar()) : ?>
+    <div class="gdt-card-avatar"><?=$field->renderAvatar()?></div>
 <?php endif; ?>
 <?php if ($field->hasTitle() || $field->hasSubTitle()) : ?>
     <div class="gdt-card-title-texts">

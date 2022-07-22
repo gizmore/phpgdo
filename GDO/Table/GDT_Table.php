@@ -169,7 +169,8 @@ class GDT_Table extends GDT
 // 		return $this;
 // 	}
 	
-	public function isOrderable() : bool { return isset($this->order); }
+	public function isOrdered() : bool { return isset($this->order); }
+// 	public function isOrderable() : bool { return isset($this->order); }
 	
 // 	protected function getOrderField() : GDT_Order
 // 	{

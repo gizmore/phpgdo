@@ -107,15 +107,7 @@ class GDT_User extends GDT_Object
 			return GDO_User::ghost();
 		}
 	}
-	
-// 	public function displayVar(string $var = null) : string
-// 	{
-// 		if ($gdo = $this->toValue($var))
-// 		{
-// 			return $gdo->renderName();
-// 		}
-// 	}
-	
+
 	public function findByName($name)
 	{
 		if (str_starts_with($name, GDO_User::GHOST_NAME_PREFIX))
@@ -220,6 +212,14 @@ class GDT_User extends GDT_Object
 			}
 		}
 		return $this;
+	}
+	
+	###########
+	### CLI ###
+	###########
+	public function gdoExampleVars() : ?string
+	{
+		return null;
 	}
 	
 }

@@ -86,9 +86,9 @@ trait WithInput
 	public function addInput(?string $key, $input) : self
 	{
 		# Add input to the field
-		if ($this->getName() === $key)
+		if ( ($this->getName() === $key) && ($key !== null) )
 		{
-			$this->input = $input;
+			$this->input($input);
 		}
 
 		# Add inputs to this
@@ -96,7 +96,7 @@ trait WithInput
 		{
 			$this->inputs = [];
 		}
-		if ($key)
+		if ($key !== null)
 		{
 			$this->inputs[$key] = $input;
 		}
@@ -104,7 +104,7 @@ trait WithInput
 		{
 			$this->inputs[] = $input;
 		}
-		$this->valueConverted = false;
+// 		$this->valueConverted = false;
 		return $this;
 	}
 	

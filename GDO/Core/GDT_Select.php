@@ -7,7 +7,7 @@ namespace GDO\Core;
  * Validates min/max selected.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_Select extends GDT_ComboBox
@@ -99,10 +99,6 @@ class GDT_Select extends GDT_ComboBox
 		}
 		if ($this->multiple)
 		{
-			// 	        if (is_array($var))
-			// 	        {
-			// 	            return $var;
-			// 	        }
 			return json_decode($var, true);
 		}
 		if ($var === $this->emptyVar)
@@ -122,13 +118,16 @@ class GDT_Select extends GDT_ComboBox
 	}
 	
 	public function getChoices() {
-// 		$this->initChoices();
 		return $this->choices;
 	}
 	
 	public function initChoices()
 	{
-		return $this->choices($this->getChoices());
+		if (!isset($this->choices))
+		{
+			return $this->choices($this->getChoices());
+		}
+		return $this;
 	}
 	
 	protected function toClosestChoiceValue($var)
@@ -141,14 +140,21 @@ class GDT_Select extends GDT_ComboBox
 	        $pos = stripos($vaar, $var);
 	        if ($pos === false)
 	        {
-	        	$pos = stripos($value->getName(), $var);
+	        	if ($name = $value->getName())
+	        	{
+	        		$pos = stripos($name, $var);
+	        		if ($pos === false)
+	        		{
+	        			continue;
+	        		}
+	        	}
 	        }
 	        if ($pos === 0)
 	        {
 	            $candidatesZero[] = $value;
 	            $candidatesMiddle[] = $value;
 	        }
-	        elseif ($pos > 1)
+	        else
 	        {
 	            $candidatesMiddle[] = $value;
 	        }
@@ -166,11 +172,8 @@ class GDT_Select extends GDT_ComboBox
 	    
 	    if (count($candidatesMiddle) > 1)
 	    {
-	        $candidates = array_map(function($value) {
-	            return $value;
-	        }, $candidatesMiddle);
-            $candidates = array_slice($candidates, 0, 10);
-	        $this->error('err_select_candidates', [implode('|', $candidates)]);
+        	$candidatesMiddle = array_slice($candidatesMiddle, 0, 5);
+        	$this->error('err_select_candidates', [implode('|', $candidatesMiddle)]);
 	    }
 	}
 	
@@ -184,34 +187,9 @@ class GDT_Select extends GDT_ComboBox
 	    return (!$gdo) || $gdo->gdoIsTable() ? $this->var($this->emptyVar) : parent::setGDOData($gdo);
 	}
 	
-// 	public function displayValue($var)
-// 	{
-// 	    $value = $this->toValue($var);
-// 	    if ($this->multiple)
-// 	    {
-// 	        $value = array_map(function($gdo){ 
-// 	            return $this->renderChoice($gdo); },
-// 	            $value);
-// 	        return implode(', ', $value);
-// 	    }
-// 	    return $this->renderChoice($value);
-// 	}
-	
 	################
 	### Validate ###
 	################
-// 	private function fixEmptyMultiple()
-// 	{
-// 	    $f = $this->formVariable();
-// 		if (isset($_REQUEST[$f]) && $this->multiple)
-// 		{
-// 			if (!isset($_REQUEST[$f][$this->name]))
-// 			{
-// 				$_REQUEST[$f][$this->name] = [];
-// 			}
-// 		}
-// 	}
-	
 	public function validate($value) : bool
 	{
 		return $this->multiple ?
@@ -382,28 +360,9 @@ class GDT_Select extends GDT_ComboBox
 		return $this->gdoHumanName() . ': ' . $this->displayVar($this->getVar());
 	}
 	
-// 	/**
-// 	 * Render a chosen value.
-// 	 * This is probably a string or a GDO.  
-// 	 * 
-// 	 * @param GDO|string $choice
-// 	 */
-// 	public function displayChoice($choice) : string
-// 	{
-// 		if (is_string($choice))
-// 		{
-// 			return html($choice);
-// 		}
-// 		else
-// 		{
-// 			return $choice->renderChoice();
-// 		}
-// 	}
-	
 	public function renderCell() : string
 	{
 		return $this->displayChoice($this->getVar());
-// 		return GDT_Template::php('Core', 'select_cell.php', ['field' => $this]);
 	}
 	
 	public function renderForm() : string
@@ -500,17 +459,17 @@ class GDT_Select extends GDT_ComboBox
 		{
 			return $choice->renderChoice();
 		}
-		
 	}
 	
-// 	public function renderChoice() : string
-// 	{
-// 		if ($var = $this->getVar())
-// 		{
-// 			return $var;
-// 		}
-// 		return '';
-// 	}
+	public function displayVar(string $var=null) : string
+	{
+		if ($var === null)
+		{
+			return "<i>" . t('none') . "</i>";
+		}
+		$this->initChoices();
+		return $this->choices[$var];
+	}
 	
 	public function renderFilter($f) : string
 	{
@@ -524,12 +483,6 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 	
-// 	public function formName()
-// 	{
-// 	    $name = parent::formName();
-// 	    return $this->multiple ? "{$name}[]" : $name;
-// 	}
-
 	public function plugVars() : array
 	{
 		$this->initChoices();

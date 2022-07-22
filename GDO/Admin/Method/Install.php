@@ -12,6 +12,7 @@ use GDO\Install\Installer;
 use GDO\UI\GDT_Button;
 use GDO\Util\Strings;
 use GDO\Core\GDT_Tuple;
+use GDO\DB\Cache;
 
 /**
  * Install a module. Wipe a module. Enable and disable a module.
@@ -137,8 +138,8 @@ class Install extends MethodForm
 // 			return parent::formInvalid($form);
 // 		}
 		$response = call_user_func([$this, "execute_$button"]);
-// 		Cache::flush();
-// 		Cache::fileFlush();
+		Cache::flush();
+		Cache::fileFlush();
 		$this->resetForm();
 		return $response;
 	}

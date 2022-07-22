@@ -31,21 +31,18 @@ class GDT_Checkbox extends GDT_Select
 		$this->caseS();
 	}
 	
-	public function initChoices()
+	public function getChoices()
 	{
-		if (!$this->choices)
+		$choices = [
+			'0' => t('enum_no'),
+			'1' => t('enum_yes'),
+		];
+		if ($this->undetermined)
 		{
-			$this->choices([
-				'0' => t('enum_no'),
-				'1' => t('enum_yes'),
-			]);
-			if ($this->undetermined)
-			{
-				$this->emptyInitial(t('please_choose'), $this->emptyVar);
-				$this->choices[$this->emptyVar] = $this->displayEmptyLabel();
-			}
+			$this->emptyInitial(t('please_choose'), $this->emptyVar);
+			$choices[$this->emptyVar] = $this->displayEmptyLabel();
 		}
-		return $this;
+		return $choices;
 	}
 	
 	################
@@ -114,7 +111,7 @@ class GDT_Checkbox extends GDT_Select
 	    return t('err_invalid_gdt_var', [$this->gdoHumanName(), html($var)]);
 	}
 	
-	public function gdoExampleVars()
+	public function gdoExampleVars() : ?string
 	{
 	    return '0|1';
 	}

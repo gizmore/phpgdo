@@ -11,6 +11,7 @@ use GDO\DB\Database;
 use GDO\Language\Trans;
 use GDO\Core\Application;
 use GDO\Core\GDT;
+use GDO\UI\GDT_Page;
 
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
@@ -26,7 +27,7 @@ class gdo extends Application
 {
 	public function isCLI() : bool { return true; }
 }
-gdo::instance()->mode(GDT::RENDER_CLI, true);
+gdo::instance()->cli()->mode(GDT::RENDER_CLI, true);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();
@@ -47,6 +48,7 @@ elseif (CLI::isInteractive())
 	$expression = GDT_Expression::fromLine($line);
 	$result = $expression->execute();
 	echo $result->renderCLI();
+	echo GDT_Page::$INSTANCE->topResponse()->renderCLI();
 }
 // else
 // {

@@ -29,7 +29,7 @@ class GDT_SearchField extends GDT_String
     public function isSearchable() : bool { return false; }
     public function isFilterable() : bool { return false; }
 
-	public function gdoExampleVars()
+	public function gdoExampleVars() : ?string
 	{
 	    return t('search_term');
 	}

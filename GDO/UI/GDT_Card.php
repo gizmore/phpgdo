@@ -1,7 +1,6 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Avatar\GDT_Avatar;
 use GDO\Core\GDT;
 use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
@@ -10,6 +9,7 @@ use GDO\Core\GDT_EditedBy;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
+use GDO\User\WithAvatar;
 use GDO\Date\GDT_DateDisplay;
 use GDO\Form\WithActions;
 use GDO\Core\WithFields;
@@ -23,21 +23,14 @@ use GDO\Core\WithGDO;
  * @version 7.0.1
  * @since 6.0.4
  */
-final class GDT_Card extends GDT
+class GDT_Card extends GDT
 {
 	use WithGDO;
 	use WithTitle;
-// 	use WithSubTitle;
+	use WithAvatar;
 	use WithFields;
 	use WithActions;
 	use WithPHPJQuery;
-	
-	##############
-	### Avatar ###
-	##############
-	/** @var $avatar GDT_Avatar **/
-	public $avatar;
-	public function avatar($avatar) { $this->avatar = $avatar; return $this; }
 	
 	###############
 	### Content ###
@@ -150,16 +143,22 @@ final class GDT_Card extends GDT
 	    # Add avatar
 	    if (module_enabled('Avatar')) # ugly bridge
 	    {
-	    	$this->avatar = GDT_ProfileLink::make()->user($user)->avatarUser($user);
+	    	$this->avatarUser($user);
 	    }
 	    
 	    # Add created by / at to subtitle
         $profileLink = GDT_ProfileLink::make()->user($user)->nickname();
 	    $this->subtitle = GDT_Container::make()->horizontal();
         $this->subtitle->addField($profileLink);
-        $this->subtitle->addField(GDT_DateDisplay::make($atField->name)->gdo($this->gdo)->addClass('ri'));
+        $this->subtitle->addField(GDT_DateDisplay::make($atField->name)->gdo($this->gdo));
 	    
 	    return $this;
+	}
+	
+	public function subtitle(GDT $gdt) : self
+	{
+		$this->subtitle = $gdt;
+		return $this;
 	}
 	
 	public function hasSubTitle() : bool
@@ -186,7 +185,7 @@ final class GDT_Card extends GDT
 	    {
     	    if (module_enabled('Profile'))
     	    {
-    	        $username = GDT_ProfileLink::make()->forUser($user)->withNickname()->withAvatar()->renderCell();
+    	        $username = GDT_ProfileLink::make()->forUser($user)->nickname()->withAvatar()->renderCell();
     	    }
     	    else
     	    {

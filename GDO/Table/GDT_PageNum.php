@@ -57,7 +57,7 @@ final class GDT_PageNum extends GDT_UInt
     ###############
     ### Example ###
     ###############
-    public function gdoExampleVars()
+    public function gdoExampleVars() : ?string
     {
         $this->min = 1;
         $this->max = $this->table->getPageMenu()->getPageCount();
