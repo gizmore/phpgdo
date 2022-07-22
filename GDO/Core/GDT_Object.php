@@ -93,4 +93,9 @@ class GDT_Object extends GDT_UInt
 	    ]);
 	}
 	
+	public function isSearchable() : bool
+	{
+		return false;
+	}
+
 }

@@ -31,5 +31,10 @@ class GDT_Panel extends GDT
 	{
 		return GDT_Template::php('UI', 'panel_html.php', ['field' => $this]);
 	}
+	
+	public function renderCLI() : string
+	{
+		return $this->renderText() . "\n";
+	}
 
 }

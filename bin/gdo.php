@@ -48,7 +48,7 @@ elseif (CLI::isInteractive())
 	$expression = GDT_Expression::fromLine($line);
 	$result = $expression->execute();
 	echo $result->renderCLI();
-	echo GDT_Page::$INSTANCE->topResponse()->renderCLI();
+// 	echo GDT_Page::$INSTANCE->topResponse()->renderCLI();
 }
 // else
 // {

@@ -165,7 +165,7 @@ final class GDO_User extends GDO
 			GDT_AutoInc::make('user_id'),
 			GDT_UserType::make('user_type'),
 			GDT_Username::make('user_name')->unique(),
-			GDT_Username::make('user_guest_name')->unique(),
+			GDT_Username::make('user_guest_name')->unique()->notNull(false),
 			GDT_Level::make('user_level'),
 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
 			GDT_DeletedAt::make('user_deleted'),

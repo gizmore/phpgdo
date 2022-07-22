@@ -19,17 +19,20 @@ trait WithError
 	 */
 	public function error(string $key, array $args=null) : bool
 	{
-		unset($this->errorRaw);
-		$this->errorKey = $key;
-		$this->errorArgs = $args;
+		if (!$this->hasError())
+		{
+			$this->errorKey = $key;
+			$this->errorArgs = $args;
+		}
 		return false;
 	}
 	
 	public function errorRaw(string $message) : bool
 	{
-		$this->errorRaw = $message;
-		unset($this->errorKey);
-		unset($this->errorArgs);
+		if (!$this->hasError())
+		{
+			$this->errorRaw = $message;
+		}
 		return false;
 	}
 	

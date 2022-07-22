@@ -35,7 +35,7 @@ class GDT_Method extends GDT
 	 * 
 	 * @return GDT_Response
 	 */
-	public function execute(bool $withReset=true)
+	public function execute()
 	{
 		if (!isset($this->result))
 		{
@@ -48,20 +48,10 @@ class GDT_Method extends GDT
 					$inputs[$button] = '1';
 				}
 			}
-			
-			$method = $this->method->addInputs($inputs);
 
-			# Call either with hooks and stuff or without
-			if ($withReset)
-			{
-				Application::$INSTANCE->reset();
-				$this->changeUser();
-				$this->result = $method->exec();
-			}
-			else
-			{
-				$this->result = $method->execute();
-			}
+			$method = $this->method->addInputs($inputs);
+			$this->changeUser();
+			$this->result = $method->exec();
 		}
 		return $this->result;
 	}

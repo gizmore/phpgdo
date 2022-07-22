@@ -164,7 +164,7 @@ else
 ### Exec ###
 ############
 Application::$INSTANCE->method($me);
-$gdtMethod = GDT_Method::make()->method($me)->addInputs($_REQUEST);
+$gdtMethod = GDT_Method::make()->method($me->withAppliedInputs($_REQUEST));
 try
 {
 	$result = $gdtMethod->execute();
