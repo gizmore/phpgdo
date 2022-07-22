@@ -10,6 +10,7 @@ namespace GDO\Core\tpl;
    <?=$field->htmlID()?>
    type="search"
    class="gdo-autocomplete-input"
+   <?=$field->htmlFocus()?>
    <?=$field->htmlPlaceholder()?>
    <?=$field->htmlRequired()?>
    <?=$field->htmlDisabled()?>

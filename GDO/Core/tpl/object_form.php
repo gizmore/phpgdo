@@ -8,6 +8,7 @@ namespace GDO\Core\tpl;
    <?=$field->htmlID()?>
    type="number"
    step="1"
+   <?=$field->htmlFocus()?>
    <?=$field->htmlFormName()?>
    value="<?=$field->renderVar()?>"
    <?=$field->htmlRequired()?>

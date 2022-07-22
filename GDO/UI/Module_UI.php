@@ -16,4 +16,11 @@ final class Module_UI extends GDO_Module
     
     public function isCoreModule() : bool { return true; }
 
+    public function getUserSettings() : array
+    {
+    	return [
+    		
+    	];
+    }
+    
 }

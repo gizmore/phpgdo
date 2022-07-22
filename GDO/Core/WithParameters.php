@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Repeat;
+use GDO\UI\GDT_Message;
 
 /**
  * Add GDT parameters.

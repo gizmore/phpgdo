@@ -7,11 +7,12 @@ use GDO\UI\WithLabel;
 use GDO\UI\WithPHPJQuery;
 
 /**
+ * A GDT with user input.
+ * 
  * Fields have a name and a value.
  * Fields have an optional error message.
  * Fields can be nullable.
- * 
- * The make method sets the name to default or specified parameter.
+ * Fields can have an icon.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -24,8 +25,8 @@ abstract class GDT_Field extends GDT
 	use WithValue;
 	use WithError;
 	use WithInput;
-	use WithPlaceholder;
 	use WithPHPJQuery;
+	use WithPlaceholder;
 	use WithFormAttributes;
 	
 	##################
@@ -147,7 +148,7 @@ abstract class GDT_Field extends GDT
 	{
 		if ($this->getVar() === null)
 		{
-			return ' data-focus="data-focus"';
+			return ' data-focus';
 		}
 		return null;
 	}

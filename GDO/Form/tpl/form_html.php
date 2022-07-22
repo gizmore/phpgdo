@@ -5,7 +5,7 @@ use GDO\Form\GDT_Form;
  * @var GDT_Form $field
  */
 ?>
-<div class="gdt-form<?=$field->slim?' gdt-form-slim':''?>" <?=$field->htmlID()?>>
+<div class="gdt-form<?=$field->slim?' gdt-form-slim':' gdt-form-compact'?>" <?=$field->htmlID()?>>
 
 <?php if ($field->hasError()) : ?>
   <?=$field->renderError()?>

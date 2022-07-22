@@ -9,11 +9,8 @@ window.GDO = {};
  * Automatically focus the first editable form field.
  */
 window.GDO.autofocusForm = function() {
-	let id = window.GDO_FIRST_EDITABLE_FIELD;
-	if (id) {
-		let e = window.document.getElementById(id);
-		e && e.focus();
-	}
+	let elements = window.document.querySelectorAll('[data-focus]');
+	elements[0] && elements[0].focus();
 };
 
 window.GDO.enterForm = function(form, event) {

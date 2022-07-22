@@ -229,7 +229,7 @@ gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links
 		'Git' => [],
 		'Gitwatch' => ['Git', 'Bootstrap5Theme', 'Session'],
 		'Guestbook' => ['Admin'],
-		'Helpdesk' => ['Comment'],
+		'Helpdesk' => ['Comments'],
 		'Instagram' => [],
 		'Install' => [],
 		'Invite' => [],

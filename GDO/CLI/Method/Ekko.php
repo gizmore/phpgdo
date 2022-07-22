@@ -5,11 +5,10 @@ use GDO\Core\Method;
 use GDO\Core\GDT_String;
 
 /**
- * Reply the input back.
- * GDOv7 style =)
+ * Reply the input back. (ECHO). GDOv7 style =)
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 final class Ekko extends Method
@@ -17,13 +16,13 @@ final class Ekko extends Method
 	public function gdoParameters() : array
 	{
 		return [
-			GDT_String::make('text')->notNull(),
+			GDT_String::make('text')->notNull()->noLabel(),
 		];
 	}
 	
 	public function execute()
 	{
-		return $this->gdoParameter('text')->validated();
+		return $this->gdoParameter('text');
 	}
 	
 }

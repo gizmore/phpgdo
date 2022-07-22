@@ -9,6 +9,7 @@ namespace GDO\Core\tpl;
    data-config='<?=$field->displayConfigJSON()?>'
    type="<?=$field->_inputType?>"
    <?=$field->htmlID()?>
+   <?=$field->htmlFocus()?>
    <?=$field->htmlRequired()?>
    <?=$field->htmlPattern()?>
    <?=$field->htmlDisabled()?>
