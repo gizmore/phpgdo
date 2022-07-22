@@ -40,6 +40,7 @@ return [
 	'err_method_is_stub' => 'This function is not implemented yet: %s',
 	'err_username_taken' => 'This username is already taken.',
 	'err_form_invalid' => 'Your formular is invalid or incomplete. %s errors have been found.',
+	'err_unknown_module' => 'The module `%s` is unknown',
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
 	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
 	'err_user_type' => 'Your user is not of type %s.',
