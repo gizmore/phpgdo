@@ -9,7 +9,7 @@ use GDO\Core\GDT_Template;
  * Uses gdoParameters to populate template vars.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.4.0
  */
 abstract class MethodPage extends Method
@@ -36,9 +36,9 @@ abstract class MethodPage extends Method
 		return $tVars;
 	}
 
-	public function getMethodTitle() : string
-	{
-		return t(strtolower('ft_' . $this->gdoShortName()));
-	}
+// 	public function getMethodTitle() : string
+// 	{
+// 		return t(strtolower('mt_' . $this->gdoShortName()));
+// 	}
 	
 }

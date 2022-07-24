@@ -16,7 +16,7 @@ namespace GDO\Core;
  * 
  * @author gizmore
  * @see GDT_String
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 abstract class GDT_DBField extends GDT_Field

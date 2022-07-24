@@ -15,7 +15,7 @@ trait WithAnchorRelation
 	#####################
 	### Link relation ###
 	#####################
-    public string $relation;
+    public string $relation = '';
 	public function relation(string $relation) : self
 	{
 		$this->relation = $relation ? trim($this->relation . " $relation") : $this->relation;

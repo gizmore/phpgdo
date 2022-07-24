@@ -24,8 +24,8 @@ final class GDO_Permission extends GDO
 	{
 		return [
 			GDT_AutoInc::make('perm_id'),
-			GDT_Name::make('perm_name')->unique(),
-		    GDT_Level::make('perm_level'),
+			GDT_Name::make('perm_name')->notNull(),
+		    GDT_Level::make('perm_level')->notNull(false),
 		    GDT_Virtual::make('perm_usercount')->gdtType(GDT_UInt::make())->label('user_count')->
 		        subquery("SELECT COUNT(*) FROM gdo_userpermission WHERE perm_perm_id = perm_id"),
 		];
@@ -56,7 +56,7 @@ final class GDO_Permission extends GDO
 	### Getter ###
 	##############
 	public function getName() : ?string { return $this->gdoVar('perm_name'); }
-	public function getLevel() : string { return $this->gdoVar('perm_level'); }
+	public function getLevel() : ?string { return $this->gdoVar('perm_level'); }
 	
 	###############
 	### Display ###

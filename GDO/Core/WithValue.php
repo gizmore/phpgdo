@@ -170,5 +170,14 @@ trait WithValue
 	{
 		return $this->renderLabel();
 	}
+	
+	public function setGDOData(array $data) : self
+	{
+		if (isset($data[$this->name]))
+		{
+			$this->input = $data[$this->name];
+		}
+		return $this;
+	}
 
 }

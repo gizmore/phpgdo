@@ -2,18 +2,16 @@
 namespace GDO\Core;
 
 /**
- * A String.
+ * A String is a database capable GDT_DBField, but you can also use it without a db.
  * 
- * - database backed
- * 
- * - optional length validator
- * - optional pattern validator
+ * - Optional min and max length
+ * - Optional regex pattern
  * 
  * - Supports Binary,ASCII,UTF8
  * - Supports CaseI/S
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class GDT_String extends GDT_DBField

@@ -24,11 +24,11 @@ return [
 'msg_module_enabled' =>'É stato attivato il modulo %s.',
 'msg_module_disabled' =>'É stato disattivato il modulo %s.',
 ################################################################		
-'ft_admin_install' =>'Installare %s',
+'mt_admin_install' =>'Installare %s',
 'msg_module_installed' =>'Il modulo %s é stato attivato con successo.',
 'msg_module_uninstalled' =>'Il modulo %s é stato deinstallato. Tutte le sue tabelle sono state eliminate.',
 ################################################################
-'ft_admin_configure' =>'Configurare %s',
+'mt_admin_configure' =>'Configurare %s',
 'module_version' =>'Versione',
 'version_available' =>'Versione disponibile',
 'form_div_config_vars' =>'Configurazione',
@@ -37,7 +37,7 @@ return [
 'href_admin' =>'Area Admin',
 'confirm_wipe_module' =>'Desidera cancellare le seguenti tabelle dalla databanchi: %s?',
 ################################################################
-'ft_admin_useredit' =>'editare utente %s',
+'mt_admin_useredit' =>'editare utente %s',
 'msg_user_password_is_now' =>'Il Password di questo utente é: %s',
 ################################################################
 'link_add_perm' =>'Nuova autorizzazione',
@@ -60,14 +60,14 @@ return [
 'link_create_user' =>'Crea nuovo utente',
 'mt_admin_usercreate' =>'Crea nuovo utente',
 ################################################################
-'mdescr_admin_modules' => 'Amministrare i moduli',
+'md_admin_modules' => 'Amministrare i moduli',
 'admin_user_created' => 'L\'utente è stato creato con successo.',
 'link_user_edit' => 'Modifica utente',
-'mdescr_admin_configure' => 'Configura modulo',
+'md_admin_configure' => 'Configura modulo',
 ################################################################
 'msg_perm_revoked' => 'L\'autorizzazione è stata rifiutata.',
 'info_module_deps' => 'Dipendenze del modulo: %s',
-'mtitle_admin_clearcache' => 'Elimina il buffer',
+'mt_admin_clearcache' => 'Elimina il buffer',
 ################################################################
 'list_admin_viewpermission' => '%s utenti hanno questa autorizzazione',
 ];

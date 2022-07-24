@@ -6,6 +6,7 @@ use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
 use GDO\Language\Trans;
 use GDO\User\GDO_User;
+use GDO\Form\GDT_Form;
 
 /**
  * A GDT_Method holds a Method and inputs to bind.
@@ -40,16 +41,20 @@ class GDT_Method extends GDT
 		if (!isset($this->result))
 		{
 			$inputs = $this->getInputs();
-			
 			if ($this->clibutton)
 			{
 				if ($button = $this->getCLIAutoButton($inputs))
 				{
 					$inputs[$button] = '1';
+					Application::instance()->verb(GDT_Form::POST);
+				}
+				else
+				{
+					Application::instance()->verb(GDT_Form::GET);
 				}
 			}
 
-			$method = $this->method->addInputs($inputs);
+			$method = $this->method->inputs($inputs);
 			$this->changeUser();
 			$this->result = $method->exec();
 		}

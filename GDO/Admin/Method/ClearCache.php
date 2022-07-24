@@ -32,7 +32,7 @@ final class ClearCache extends Method
 	
 	public function isTrivial() { return false; } # Clearing the cache during tests randomly is not a good idea.
 	
-	public function saveLastUrl() { return false; }
+	public function saveLastUrl() : bool { return false; }
 	
 	public function getPermission() : ?string { return 'staff'; }
 	

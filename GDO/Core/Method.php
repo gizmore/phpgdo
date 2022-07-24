@@ -13,6 +13,7 @@ use GDO\UI\GDT_Page;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Redirect;
 use GDO\Form\GDT_Submit;
+use GDO\Form\GDT_Form;
 
 /**
  * Abstract baseclass for all methods.
@@ -56,17 +57,16 @@ abstract class Method #extends GDT
 	public function isCLI() : bool { return false; }
 	public function isAjax() { return false; }
 	public function isTrivial() { return true; }
-	public function saveLastUrl() { return true; }
 	public function getUserType() : ?string { return null; }
 	public function isUserRequired() : bool { return false; }
 	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
-	public function isTransactional() : bool { return false; }
+	public function isTransactional() : bool { return Application::$INSTANCE->verb === GDT_Form::POST; }
 	public function isAlwaysTransactional() : bool { return false; }
-	public function storeLastURL() : bool { return true; }
-	public function storeLastActivity() : bool { return true; }
+	public function saveLastUrl() : bool { return true; }
+	public function showInSitemap() : bool { return true; }
 	
 	# events
-	public function onInit() : void {}
+	public function onInit() {}
 	public function beforeExecute() : void {}
 	public function afterExecute() : void {}
 	
@@ -163,13 +163,9 @@ abstract class Method #extends GDT
 	############
 	### Exec ###
 	############
-	/**
-	 * Test permissions and execute method.
-	 */
-	public function exec()
+	
+	public function checkPermission(GDO_User $user)
 	{
-		$user = GDO_User::current();
-		
 		if (!($this->isEnabled()))
 		{
 			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()]);
@@ -213,6 +209,21 @@ abstract class Method #extends GDT
 			return $this->error('err_no_permission');
 		}
 		
+		return true;
+	}
+	
+	/**
+	 * Test permissions and execute method.
+	 */
+	public function exec()
+	{
+		$user = GDO_User::current();
+		
+		if (true !== ($error = $this->checkPermission($user)))
+		{
+			return $error;
+		}
+		
 		return $this->execWrap();
 	}
 	
@@ -224,8 +235,9 @@ abstract class Method #extends GDT
 	public function transactional()
 	{
 		return
-		($this->isAlwaysTransactional()) ||
-		($this->isTransactional() && (count($_POST)>0) );
+			($this->isAlwaysTransactional()) ||
+			($this->isTransactional() &&
+				(Application::$INSTANCE->verb === GDT_Form::POST) );
 	}
 	
 	/**
@@ -268,7 +280,13 @@ abstract class Method #extends GDT
 			
 			# Init method
 			$this->inited = false;
-			$this->onInit();
+			
+			$this->applyInput();
+			
+			if ($result = $this->onInit())
+			{
+				$response->addField($result);
+			}
 			
 			if (Application::isError())
 			{
@@ -294,7 +312,6 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
-			$this->applyInput();
 			if ($result = $this->execute())
 			{
 				$response->addField($result);
@@ -354,10 +371,11 @@ abstract class Method #extends GDT
 		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
 		
 		# Store last URL in session
-		$this->storeLastURL();
-		
-		# Store last activity in user
-		$this->storeLastActivity();
+		if ($this->saveLastUrl())
+		{
+			$this->storeLastURL();
+			$this->storeLastActivity();
+		}
 	}
 	
 	public function getMethodTitle() : string
@@ -389,6 +407,18 @@ abstract class Method #extends GDT
 		return implode(', ', $keywords);
 	}
 	
+	##################
+	### Statistics ###
+	##################
+	public function storeLastURL() : void
+	{
+	}
+
+	public function storeLastActivity() : void
+	{
+	}
+	
+	
 	###################
 	### Apply Input ###
 	###################
@@ -410,13 +440,10 @@ abstract class Method #extends GDT
 	
 	protected function applyInput()
 	{
-		foreach ($this->getInputs() as $key => $input)
+		$inputs = $this->getInputs();
+		foreach ($this->gdoParameterCache() as $gdt)
 		{
-			if ($gdt = $this->gdoParameter($key, false, false))
-			{
-				$gdt->input($input);
-// 				$gdt->input = $input;
-			}
+			$gdt->setGDOData($inputs);
 		}
 	}
 	
@@ -482,23 +509,23 @@ abstract class Method #extends GDT
 	################
 	### Redirect ###
 	################
-	public function redirect(string $href) : self
+	public function redirect(string $href) : GDT_Redirect
 	{
 		return GDT_Redirect::make()->href($href);
 	}
 	
-	public function redirectBack(string $default = null)
+	public function redirectBack(string $default = null) : GDT_Redirect
 	{
 		$href = GDT_Redirect::make()->hrefBack($default);
 		return $this->redirect($href);
 	}
 	
-	public function redirectMessage(string $key, array $args = null, string $href=null) : self
+	public function redirectMessage(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
 		return GDT_Redirect::make()->href($href)->redirectMessage($key, $args);
 	}
 	
-	public function redirectError(string $key, array $args = null, string $href) : self
+	public function redirectError(string $key, array $args = null, string $href) : GDT_Redirect
 	{
 		return GDT_Redirect::make()->href($href)->redirectError($key, $args);
 	}

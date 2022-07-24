@@ -4,9 +4,9 @@ namespace GDO\Net;
 use GDO\Core\GDT_String;
 use GDO\Util\Arrays;
 use GDO\Core\GDT_Template;
+use GDO\UI\WithAnchorRelation;
 use GDO\UI\WithTitle;
 use GDO\UI\GDT_Link;
-use GDO\Core\GDT;
 
 /**
  * URL field.
@@ -14,12 +14,13 @@ use GDO\Core\GDT;
  * Value is a @see URL.
  * 
  * @author gizmore
- * @version 6.11.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class GDT_Url extends GDT_String
 {
     use WithTitle;
+    use WithAnchorRelation;
     
     protected function __construct()
     {
@@ -55,7 +56,8 @@ class GDT_Url extends GDT_String
 	public bool $allowExternal = false;
 	public array $schemes = ['http', 'https'];
 	public int $min = 0;
-	public int $max = 768; # Max length for a unique constraint on older mysql systems
+	public int $max = 767; # Max length for a unique constraint on older mysql systems
+	public int $encoding = GDT_String::ASCII;
 	
 	public function toValue(string $var = null)
 	{
@@ -76,7 +78,7 @@ class GDT_Url extends GDT_String
 	###############
 	### Options ###
 	###############
-	public function allowAll(bool $reachable) : self
+	public function allowAll(bool $reachable=true) : self
 	{
 		$this->allowInternal = true;
 		$this->allowExternal = true;
@@ -113,7 +115,7 @@ class GDT_Url extends GDT_String
 	    return $this;
 	}
 	
-// 	public function noFollow() : self
+// 	public function noFollow(bool $noFollow) : self
 // 	{
 // 	    $this->noFollow = $noFollow;
 // 	    return $this;

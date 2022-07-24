@@ -7,21 +7,26 @@ use GDO\Core\GDT;
  * A horizontal divider tag.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_Divider extends GDT
 {
 	use WithLabel;
 	
+	public function renderCLI() : string
+	{
+		return sprintf("===%s===\n", $this->renderLabelText());
+	}
+	
 	public function renderHTML() : string
 	{
-	    return '<div class="gdt-divider"><h5>'.$this->renderLabel().'</h5></div>';
+	    return '<div class="gdt-divider"><h5>'.$this->renderLabelText().'</h5></div>';
 	}
 	
 	public function renderCell() : string
 	{
-		return '<div class="gdt-divider" colspan=99>'.$this->renderLabel().'</div>';
+		return '<div class="gdt-divider">'.$this->renderLabelText().'</div>';
 	}
 	
 }

@@ -23,7 +23,7 @@ final class Module_Install extends GDO_Module
 	
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/install'); }
 
-	public function onInit() : void
+	public function onInit()
 	{
 		ClearCache::make()->clearCache();
 	}

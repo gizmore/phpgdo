@@ -23,11 +23,8 @@ final class InstallAllModulesTest extends TestCase
 		$loader = ModuleLoader::instance();
 		$loader->loadModules(false, true, true);
 		$modules = $loader->getInstallableModules();
-		foreach ($modules as $module)
-		{
-			Installer::installModule($module);
-		}
-		
+		Installer::installModules($modules);
+		$this->assert200('Check if all modules can be installed.');
 		$installed = $loader->getEnabledModules();
 		assertGreaterThanOrEqual(7, count($installed), 'Test if installer utility works.');
 	}

@@ -27,15 +27,46 @@ class Installer
 	/**
 	 * @param GDO_Module[] $modules
 	 */
-	public static function installModules(array $modules) : void
+	public static function installModules(array $modules) : bool
 	{
+		$isCLI = Application::$INSTANCE->isCLI();
+		$isInstall = Application::$INSTANCE->isInstall();
+		
+		if ($isInstall && $isCLI)
+		{
+			echo "Checking system dependencies...\n";
+		}
+		
+		$passed = true;
+		foreach ($modules as $module)
+		{
+			if (!$module->checkSystemDependencies())
+			{
+				$passed = false;
+			}
+		}
+		
+		if (!$passed)
+		{
+			return false;
+		}
+		
 		/**
 		 * @var $module GDO_Module
 		 */
 		foreach ($modules as $module)
 		{
+			if (!$module->isInstallable())
+			{
+				continue;
+			}
 			try
 			{
+				if ($isInstall && $isCLI)
+				{
+					echo "Installing {$module->getName()}\n";
+					flush();
+				}
 				self::installModule($module);
 			}
 			catch (\Throwable $e)
@@ -51,6 +82,7 @@ class Installer
 				}
 			}
 		}
+		return true;
 	}
 	
 	public static function installModule(GDO_Module $module, bool $forceMigrate=false) : void
@@ -195,13 +227,10 @@ class Installer
 					$gdo = $classname::table();
 					if ($gdo->gdoIsTable())
 					{
+						# Remove old temp table
 						$tablename = $gdo->gdoTableName();
 						$temptable = "zzz_temp_{$tablename}";
-						
-						if ($db->tableExists($temptable))
-						{
-							$db->dropTable($gdo);
-						}
+						$db->dropTableName($temptable);
 						
 						# create temp and copy as old
 						$db->disableForeignKeyCheck();
@@ -347,14 +376,14 @@ class Installer
 	 */
 	public static function getDependencyModules(string $moduleName) : array
 	{
-	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
+// 	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, false, true);
 	    $deps = $module->getDependencies();
 	    $deps[] = $module->getName();
 	    $deps[] = 'Core';
 // 	    $deps = array_unique($deps);
 	    $cnt = 0;
-	    $allResolved = true; # All required modules provided?
+// 	    $allResolved = true; # All required modules provided?
 	    while ($cnt !== count($deps))
 	    {
 	        $cnt = count($deps);

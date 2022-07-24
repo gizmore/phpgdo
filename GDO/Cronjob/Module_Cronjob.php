@@ -9,7 +9,7 @@ use GDO\Date\Time;
  * Cronjob stuff.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 class Module_Cronjob extends GDO_Module
@@ -52,12 +52,12 @@ class Module_Cronjob extends GDO_Module
 	    $this->loadLanguage('lang/cronjob');
 	}
 
-	public function href_administrate_module()
+	public function href_administrate_module() : ?string
 	{
 		return href('Cronjob', 'Cronjob');
 	}
 	
-	public function onInit() : void
+	public function onInit()
 	{
 		# @TODO: Cronjob shall run via any request randomly.
 	}

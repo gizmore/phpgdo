@@ -331,7 +331,7 @@ abstract class MethodTable extends Method
 		return $this->table;
 	}
 	
-	public function onInit() : void
+	public function onInit()
 	{
 // 		$this->initTable();
 	}

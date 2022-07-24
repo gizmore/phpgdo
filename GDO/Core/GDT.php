@@ -16,7 +16,7 @@ use GDO\DB\Query;
  * The current rendering mode is stored in Application.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDO
  * @see GDT_Field
@@ -189,17 +189,12 @@ abstract class GDT
 	}
 	
 	/**
-	 * Display a given var. 
+	 * Display a given var with this GDT. 
 	 */
 	public function displayVar(string $var=null) : string
 	{
-		return $var ? html($var) : sprintf("<i>%s</i>", t('none'));
+		return $var === null ? sprintf("<i>%s</i>", t('none')) : html($var);
 	}
-	
-// 	public function displayCLI(string $html) : string
-// 	{
-// 		return CLI::displayCLI($html);
-// 	}
 	
 	public function displayChoice($choice) : string
 	{
@@ -347,11 +342,6 @@ abstract class GDT
 		return '';
 	}
 	
-// 	public function renderError() : string
-// 	{
-// 		re
-// 	}
-	
 	##############
 	### Config ###
 	##############
@@ -361,9 +351,7 @@ abstract class GDT
 	public function configJSON() : array
 	{
 		return [
-// 			'name' => $this->getName(),
 		];
-// 		return get_object_vars($this); # @TODO only show certain values!
 	}
 	
 	/**
@@ -560,6 +548,11 @@ abstract class GDT
 		return null;
 	}
 	
+	public function setGDOData(array $data) : self
+	{
+		return $this;
+	}
+	
 	public function value($value) : self
 	{
 		return $this;
@@ -598,6 +591,11 @@ abstract class GDT
 	public function writeable(bool $writeable) : self
 	{
 		return $this;
+	}
+	
+	public function isACLCapable() : bool
+	{
+		return false;
 	}
 	
 	##################

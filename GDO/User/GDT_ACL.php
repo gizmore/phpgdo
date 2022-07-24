@@ -1,138 +1,175 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\GDT_Enum;
-use GDO\Core\GDO_Exception;
-use GDO\DB\Query;
-use GDO\Friends\GDO_Friendship;
+use GDO\Core\WithName;
+use GDO\Core\WithGDO;
+use GDO\Core\GDT;
+use GDO\UI\GDT_Container;
+use GDO\UI\WithLabel;
 
 /**
- * An ACL field has default ACL options.
- * It checks access based on user relation and member status.
- * It helps to construct queries to reflect ACL permission.
+ * An ACL adds 3 fields to a GDT.
  * 
- * @author gizmore@wechall.net
+ * 1) GDT_ACLRelation - friend, member, friends friend etc
+ * 2) GDT_Permission - the group required
+ * 3) GDT_Level - the level required
+ * 
+ * This is used in profiles / user config and settings.
+ * 
+ * @author gizmore
  * @version 7.0.1
- * @since 6.8.0
+ * @since 6.4.0
+ * 
+ * @see Module_Account
+ * @see Module_User
  */
-final class GDT_ACL extends GDT_Enum
+final class GDT_ACL extends GDT
 {
-	const ALL = 'acl_all';
-	const GUESTS = 'acl_guests';
-	const MEMBERS = 'acl_members';
-	const FRIENDS = 'acl_friends';
-	const FRIEND_FRIENDS = 'acl_friend_friends';
-	const NOONE = 'acl_noone';
+	use WithGDO;
+	use WithName;
+	use WithLabel;
 	
-	protected function __construct()
+	public GDT_Level $aclLevel;
+	public GDT_ACLRelation $aclRelation;
+	public GDT_Permission $aclPermission;
+	
+	public function isACLCapable() : bool { return $this->aclcapable; }
+	public bool $aclcapable = false;
+	public function noacl() : self { return $this->aclcapable(false); }
+	public function aclcapable(bool $aclcapable=true) : self
 	{
-	    parent::__construct();
-	    $this->enumValues(self::ALL, self::GUESTS, self::MEMBERS, self::FRIEND_FRIENDS, self::FRIENDS, self::NOONE);
-		$this->initial = self::NOONE;
-		$this->notNull = true;
-		$this->icon = 'eye';
+		$this->aclcapable = $aclcapable;
+		return $this;
 	}
 	
-	/**
-	 * Check if a userpair allows access for this setting.
-	 * @param GDO_User $user
-	 * @param GDO_User $target
-	 * @param string $reason
-	 * @throws GDO_Exception
-	 * @return boolean
-	 */
-	public function hasAccess(GDO_User $user, GDO_User $target, &$reason, $throwException=true)
+	public static function make(string $name=null) : self
+	{
+		$obj = self::makeNamed($name);
+		$obj->initACLFields();
+		return $obj;
+	}
+	
+	###########
+	### ACL ###
+	###########
+	public function initialACL(string $relation, int $level=0, string $permission=null) : self
+	{
+		$this->aclLevel->initial($level);
+		$this->aclRelation->initial($relation);
+		$this->aclPermission->initial($permission);
+		return $this;
+	}
+	
+	public function setupLabels(GDT $gdt)
+	{
+		$label = $gdt->renderLabel();
+		$this->aclLevel->label('lbl_acl_level', [$label]);
+		$this->aclRelation->label('lbl_acl_relation', [$label]);
+		$this->aclPermission->label('lbl_acl_permission', [$label]);
+	}
+	
+	public bool $withPermission = true;
+	public function noPermission() : self { return $this->withPermission(false); }
+	public function withPermission(bool $withPermission=true) : self
+	{
+		$this->withPermission = $withPermission;
+		return $this;
+	}
+	
+	############
+	### Data ###
+	############
+	public function getGDOData() : ?array
+	{
+		return array_merge(
+			$this->aclLevel->getGDOData(),
+			$this->aclRelation->getGDOData(),
+			$this->aclPermission->getGDOData(),
+		);
+	}
+	
+	public function setGDOData(array $data) : self
+	{
+		$this->aclLevel->setGDOData($data);
+		$this->aclRelation->setGDOData($data);
+		$this->aclPermission->setGDOData($data);
+		return $this;
+	}
+	
+	##########
+	### DB ###
+	##########
+	public function gdoColumnDefine() : string
+	{
+		return
+			$this->aclLevel->gdoColumnDefine() . "\n" .
+			$this->aclRelation->gdoColumnDefine() . "\n" .
+			$this->aclPermission->gdoColumnDefine();
+	}
+	
+	###########
+	### API ###
+	###########
+	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason) : bool
 	{
 		# Self is fine
-		if ($user === $target) { return true; }
-		
-		# Other cases
-		switch ($this->var)
+		if ($user === $target)
 		{
-			case self::ALL:
-				return true;
-
-			case self::GUESTS:
-				if (!($result = $user->isUser()))
-				{
-					$reason = t('err_only_user_access');
-				}
-				return $result;
-				
-			case self::MEMBERS:
-				if (!$result = $user->isMember())
-				{
-					$reason = t('err_only_member_access');
-				}
-				return $result;
-			
-			case self::FRIEND_FRIENDS:
-				$result = module_enabled('Friends') ? GDO_Friendship::isFriendFriend($user, $target) : false;
-				if (!$result)
-				{
-					$reason = t('err_only_friend_friend_access');
-				}
-				return $result;
-				
-			case self::FRIENDS:
-				$result = module_enabled('Friends') ? GDO_Friendship::areRelated($user, $target) : false;
-				if (!$result)
-				{
-					$reason = t('err_only_friend_access');
-				}
-				return $result;
-				
-			case self::NOONE:
-				$reason = t('err_only_private_access');
-				return false;
-			
-			default: # Should never happen.
-				$reason = t('err_unknown_acl_setting', [$this->var]);
-				if ($throwException)
-				{
-					throw new GDO_Exception($reason);
-				}
-				return false;
+			return true;
 		}
+		
+		# Check level
+		$minLevel = $this->aclLevel->getValue();
+		$userLevel = $user->getLevel();
+		if ($userLevel < $minLevel)
+		{
+			$reason = t('err_only_level_access', [$minLevel]);
+			return false;
+		}
+		
+		# Check relation
+		if (!$this->aclRelation->hasAccess($user, $target, $reason))
+		{
+			return false;
+		}
+		
+		# Check permission
+		$permission = $this->aclPermission->getValue();
+		if (!$user->hasPermissionObject($permission))
+		{
+			$reason = t('err_only_permission_access', [$permission->renderName()]);
+			return false;
+		}
+		
+		# This is fine. Ô-o
+		return true;
 	}
 	
-	/**
-	 * Add where conditions to a query that reflect acl settings.
-	 * @param Query $query
-	 * @param GDO_User $user
-	 * @param string $creatorColumn
-	 * @return self
-	 */
-	public function aclQuery(Query $query, GDO_User $user, $creatorColumn)
+	##############
+	### Render ###
+	##############
+	public function renderHTML() : string
 	{
-		# All
-		$idf = $this->identifier();
-		$condition = "$idf = 'acl_all'";
+		$this->setupOwnLabels();
+		return GDT_Container::makeWith($this->aclRelation, $this->aclLevel, $this->aclPermission)->horizontal()->render();
+	}
+	
+	###############
+	### Private ###
+	###############
+	private function initACLFields() : void
+	{
+		$this->aclLevel = GDT_Level::make("{$this->name}_level");
+		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation");
+		$this->aclPermission = GDT_Permission::make("{$this->name}_permission")->onlyPermitted();
+	}
 
-		# Members
-		if ($user->isMember())
-		{
-			$condition .= " OR $idf = 'acl_members'";
-		}
-		
-		# Friends and own require a owner column
-		if ($creatorColumn)
-		{
-			# Own
-			$uid = $user->getID();
-			$condition .= " OR $creatorColumn = {$uid}";
-
-			# Friends
-			if (module_enabled('Friends'))
-			{
-				$subquery = "SELECT 1 FROM gdo_friendship WHERE friend_user=$uid AND friend_friend=$creatorColumn";
-				$condition .= " OR ( $idf = 'acl_friends' AND ( $subquery ) )";
-			}
-		}
-		
-		# Apply condition
-		$query->where($condition);
-		return $this;
+	private function setupOwnLabels()
+	{
+		$label = $this->renderLabel();
+		$this->aclLevel->label('lbl_own_acl_level', [$label]);
+		$this->aclRelation->label('lbl_own_acl_relation', [$label]);
+		$this->aclPermission->label('lbl_own_acl_permission', [$label]);
 	}
 	
 }

@@ -33,7 +33,7 @@ class GDT_Container extends GDT
 		{
 			foreach ($this->fields as $field)
 			{
-				$rendered .= $field->render();
+				$rendered .= $field->renderCLI();
 				$rendered .= $newline;
 			}
 		}

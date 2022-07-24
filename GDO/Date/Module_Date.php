@@ -16,7 +16,7 @@ use GDO\Date\Method\Timezone;
  * - Time utility helper
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.1
  * @see Time
  */
@@ -57,6 +57,13 @@ final class Module_Date extends GDO_Module
     	return $this->userSettingVar($user, 'timezone');
     }
     
+    public function getACLDefaults() : ?array
+    {
+    	return [
+    		'timezone' => ['acl_all', 1, 'cronjob'],
+    	];
+    }
+    
     ############
     ### Init ###
     ############
@@ -65,7 +72,7 @@ final class Module_Date extends GDO_Module
     	Install::install($this);
     }
     
-    public function onInit() : void
+    public function onInit()
     {
         $user = GDO_User::current();
         $this->timezone = $user->hasTimezone() ?

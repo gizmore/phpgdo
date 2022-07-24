@@ -15,6 +15,7 @@ use GDO\Date\Time;
 use GDO\Tests\TestCase;
 use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
+use GDO\UI\GDT_Page;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -56,7 +57,7 @@ final class gdo_test extends Application
 {
 	public function isUnitTests(): bool { return true; }
 }
-gdo_test::instance()->mode(GDT::RENDER_CLI, true);
+gdo_test::instance()->mode(GDT::RENDER_CLI, true)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Database::init(null);
@@ -88,6 +89,12 @@ if ($argc === 1)
 	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
 	Module_Tests::runTestSuite($install);
+}
+
+if (Application::$INSTANCE->isError())
+{
+	CLI::flushTopResponse();
+	die(1);
 }
 
 # #############
@@ -137,40 +144,36 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 
 	Trans::inited(true);
 
-	# Install all selected modules, so all permissions are populate.
-	foreach ($modules as $module)
+	if (Installer::installModules($modules))
 	{
-		printf("Installing %s\n", CLI::bold($module->getName()));
-		Installer::installModule($module);
-	}
-	foreach ($modules as $module)
-	{
-		Module_Tests::runTestSuite($module);
+		foreach ($modules as $module)
+		{
+			Module_Tests::runTestSuite($module);
+		}
 	}
 }
 else # All!
 {
 	echo "Loading and install all modules from filesystem again...\n";
 	$modules = $loader->loadModules(false, true, true);
-	foreach ($modules as $module)
+	if (Installer::installModules($modules))
 	{
-		printf("Installing %s\n", CLI::bold($module->getName()));
-		Installer::installModule($module);
-	}
-
-	echo "Running tests for all modules.\n";
-	foreach ($modules as $module)
-	{
-		Module_Tests::runTestSuite($module);
+		echo "Running tests for all modules.\n";
+		foreach ($modules as $module)
+		{
+			Module_Tests::runTestSuite($module);
+		}
 	}
 }
+
+echo GDT_Page::instance()->topResponse()->renderCLI();
 
 # ###########
 # ## PERF ###
 # ###########
 $time = microtime(true) - GDO_TIME_START;
 $perf = GDT_PerfBar::make('performance');
-$perf = $perf->renderMode();
+$perf = $perf->renderMode(GDT::RENDER_CLI);
 printf("Finished with %s asserts after %s.\nGDT_PerfBar->render() says:\n%s",
 	TestCase::$ASSERT_COUNT, Time::humanDuration($time),
 	$perf);

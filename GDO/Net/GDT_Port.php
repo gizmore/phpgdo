@@ -14,7 +14,7 @@ final class GDT_Port extends GDT_UInt
 	
 	public bool $unsigned = true;
 
-	public ?int $min = 1;
-	public ?int $max = 65535;
+	public ?float $min = 1;
+	public ?float $max = 65535;
 
 }

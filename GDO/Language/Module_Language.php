@@ -26,7 +26,7 @@ use GDO\Net\GDT_Url;
  * @see GDO_Language
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 2.0.0
  */
 final class Module_Language extends GDO_Module
@@ -104,7 +104,7 @@ final class Module_Language extends GDO_Module
 	/**
 	 * Add meta tag on init.
 	 */
-	public function onInit() : void
+	public function onInit()
 	{
         Website::addMeta(['language', Trans::$ISO, 'name']);
 	}

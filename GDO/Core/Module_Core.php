@@ -26,12 +26,12 @@ use GDO\Language\Module_Language;
  * Very basic vanilla JS is loaded.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.0-r1380';
+	const GDO_REVISION = '7.0.1-r1401';
 	
 	##############
 	### Module ###
@@ -57,6 +57,7 @@ final class Module_Core extends GDO_Module
 			GDO_Timezone::class,
 			GDO_User::class,
 			GDO_UserPermission::class,
+			GDO_FileCache::class,
 		];
 	}
 	
@@ -71,6 +72,15 @@ final class Module_Core extends GDO_Module
 		FileUtil::createDir(GDO_TEMP_PATH);
 		FileUtil::createDir(GDO_TEMP_PATH.'cache');
 		FileUtil::createFile(GDO_TEMP_PATH.'ipc.socket');
+	}
+	
+	public function checkSystemDependencies() : bool
+	{
+		if (PHP_MAJOR_VERSION < 8)
+		{
+			return $this->errorSystemDependency('err_php_major_version', ['8.0']);
+		}
+		return true;
 	}
 	
 	##############
@@ -92,7 +102,6 @@ final class Module_Core extends GDO_Module
 			GDT_Checkbox::make('module_assets')->initial('1'),
 		];
 	}
-	
 	public function cfgSystemUser() : GDO_User { return $this->getConfigValue('system_user'); }
 	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
 	public function cfgShowImpressum() : string { return $this->getConfigVar('show_impressum'); }
@@ -147,13 +156,13 @@ final class Module_Core extends GDO_Module
 	public function gdoConfigJS()
 	{
 		return sprintf(
-		"window.GDO_CONFIG = {};
-window.GDO_PROTOCOL = '%s';
-window.GDO_DOMAIN = '%s';
-window.GDO_PORT = '%s';
-window.GDO_WEB_ROOT = '%s';
-window.GDO_LANGUAGE = '%s';
-window.GDO_REVISION = '%s';
+		"	window.GDO_CONFIG = {};
+	window.GDO_PROTOCOL = '%s';
+	window.GDO_DOMAIN = '%s';
+	window.GDO_PORT = '%s';
+	window.GDO_WEB_ROOT = '%s';
+	window.GDO_LANGUAGE = '%s';
+	window.GDO_REVISION = '%s';
 ", GDO_PROTOCOL, GDO_DOMAIN, GDT_Url::port(),
 		GDO_WEB_ROOT, Trans::$ISO,
 		$this->nocacheVersion());
@@ -177,14 +186,9 @@ window.GDO_REVISION = '%s';
 	/**
 	 * Check if an url should be restricted due to GDO asset source restriction.
 	 * You should enable this in production.
-	 * te
 	 */
 	public function checkAssetAllowed(string $url) : bool
 	{
-// 		if (strpos($url, 'temp/') !== false)
-// 		{
-// 			return false;
-// 		}
 		if ($this->cfgModuleAssets())
 		{
 			return true;

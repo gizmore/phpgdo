@@ -30,7 +30,7 @@ class UserEdit extends MethodForm
 	
 	public function getMethodTitle() : string
 	{
-		return t('ft_admin_useredit', [$this->getUser()->renderUserName()]);
+		return t('mt_admin_useredit', [$this->getUser()->renderUserName()]);
 	}
 	
 	
@@ -63,7 +63,7 @@ class UserEdit extends MethodForm
 	public function getTitle()
 	{
 	    $user = $this->getUser();
-	    return t('ft_admin_useredit', [$user->renderName()]);
+	    return t('mt_admin_useredit', [$user->renderName()]);
 	}
 	
 	public function createForm(GDT_Form $form) : void

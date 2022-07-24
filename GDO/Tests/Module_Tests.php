@@ -10,15 +10,13 @@ use PHPUnit\TextUI\Command;
  * A good start to easily try many code paths.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class Module_Tests extends GDO_Module
 {
     public int $priority = 1000; # very last
 
-    public string $version = "7.0.1"; # This version is the release / install level.
-    
     public function isInstallable() : bool { return false; }
     
     public function onInstall() : void
@@ -34,7 +32,7 @@ final class Module_Tests extends GDO_Module
     	$testDir = $module->filePath('Test/');
     	if (FileUtil::isDir($testDir))
     	{
-    		echo "Verarbeite Tests für {$module->getName()}\n";
+    		echo "Running tests for {$module->getName()}\n";
     		$command = new Command();
     		$exit = false;
     		$command->run(['phpunit', $testDir], $exit);

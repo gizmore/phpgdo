@@ -24,7 +24,7 @@ final class Security extends MethodForm
 	
 	public function getMethodDescription() : string
 	{
-		return t('ft_install_security');
+		return t('mt_install_security');
 	}
 	
 	public function execute()

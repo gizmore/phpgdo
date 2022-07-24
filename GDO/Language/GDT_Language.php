@@ -7,7 +7,7 @@ use GDO\Core\GDT_ObjectSelect;
  * Language select.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class GDT_Language extends GDT_ObjectSelect
 {
@@ -22,6 +22,9 @@ final class GDT_Language extends GDT_ObjectSelect
 		$this->cascadeRestrict();
 	}
 	
+	###############
+	### Options ###
+	###############
 	public bool $withName = false;
 	public function withName(bool $withName=true)
 	{
@@ -36,6 +39,9 @@ final class GDT_Language extends GDT_ObjectSelect
 		return $this;
 	}
 	
+	############
+	### Test ###
+	############
 	public function plugVars() : array
 	{
 		return ['en', 'de'];
@@ -51,12 +57,7 @@ final class GDT_Language extends GDT_ObjectSelect
 		return $this;
 	}
 	
-	public function initChoices() : self
-	{
-		return isset($this->choices) ? $this : $this->choices($this->languageChoices());
-	}
-	
-	private function languageChoices() : array
+	public function getChoices()
 	{
 		$languages = GDO_Language::table();
 		return $this->all ? $languages->all() : $languages->allSupported();

@@ -48,10 +48,10 @@ trait WithPHPJQuery
 	{
 		# Old classes
 		$classes = explode(" ", $this->attr('class'));
-		if (!$classes)
-		{
-			$classes = [];
-		}
+// 		if (!$classes)
+// 		{
+// 			$classes = [];
+// 		}
 		
 		# Merge new classes
 		$newclss = explode(" ", $class); # multiple possible
@@ -98,4 +98,11 @@ trait WithPHPJQuery
 		return $this->attr('style', $rules);
 	}
 
+// 	### event 
+// 	###
+// 	public function jsclick(string $js) : self
+// 	{
+// 		$this->attr('onclick', $js);
+// 		return $this;
+// 	}
 }

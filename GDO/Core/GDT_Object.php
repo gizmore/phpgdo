@@ -19,6 +19,13 @@ class GDT_Object extends GDT_UInt
 		return ' gdt-object';
 	}
 	
+	public bool $searchable = true;
+	public function searchable(bool $searchable) : self
+	{
+		$this->searchable = $searchable;
+		return $this;
+	}
+	
 	##############
 	### Render ###
 	##############
@@ -91,11 +98,6 @@ class GDT_Object extends GDT_UInt
 	        'selected' => $selected,
 	        'completionHref' => $this->completionHref,
 	    ]);
-	}
-	
-	public function isSearchable() : bool
-	{
-		return false;
 	}
 
 }

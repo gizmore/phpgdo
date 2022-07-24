@@ -12,12 +12,13 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\GDT_Hook;
 use GDO\UI\GDT_Panel;
 use GDO\Mail\Mail;
+use GDO\CLI\CLI;
 
 /**
  * Performance statistics panel.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.1
  */
 final class GDT_PerfBar extends GDT_Panel
@@ -34,7 +35,7 @@ final class GDT_PerfBar extends GDT_Panel
 		$phpTime = $totalTime - Database::$QUERY_TIME;
 		$memphp = memory_get_peak_usage(false);
 		$memreal = memory_get_peak_usage(true);
-		return array(
+		return [
 			'logWrites' => Logger::$WRITES,
 
 			'dbReads' => Database::$READS,
@@ -66,9 +67,14 @@ final class GDT_PerfBar extends GDT_Panel
 // 		    'gdoHookNames' => GDT_Hook::$CALL_NAMES,
 			'gdoIPC' => GDT_Hook::$IPC_CALLS,
 			'gdoMails' => Mail::$SENT,
-		);
+		];
 	}
 
+	public function renderCLI() : string
+	{
+		return CLI::displayCLI($this->renderHTML());
+	}
+	
 	public function renderHTML() : string
 	{
 		return GDT_Template::php('Perf', 'perfbar_html.php', ['bar' => $this]);

@@ -78,6 +78,9 @@ else
 	Trans::$ISO = Module_Language::instance()->detectISO();
 }
 
+# HTTP verb
+$app->verb($_SERVER['REQUEST_METHOD']);
+
 # Content Type
 $mode = GDT::RENDER_HTML;
 if (isset($_REQUEST['_fmt']))
@@ -163,8 +166,9 @@ else
 ############
 ### Exec ###
 ############
+Application::$INSTANCE->inputs($_REQUEST);
 Application::$INSTANCE->method($me);
-$gdtMethod = GDT_Method::make()->method($me->withAppliedInputs($_REQUEST));
+$gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 try
 {
 	$result = $gdtMethod->execute();

@@ -6,6 +6,8 @@ use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
 use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
+use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Checkbox;
 use GDO\Core\ModuleLoader;
 use GDO\Admin\GDT_ModuleNameLink;
@@ -31,7 +33,7 @@ class Modules extends MethodTable
 	
 	public function getMethodTitle() : string { return t('btn_modules'); }
 	
-	public function gdoTable() { return GDO_Module::table(); }
+	public function gdoTable() : GDO { return GDO_Module::table(); }
 	
 	public function useFetchInto() : bool { return false; }
 	
@@ -41,10 +43,10 @@ class Modules extends MethodTable
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function onInit() : void
+	public function onInit()
 	{
 		$this->modules = ModuleLoader::instance()->loadModules(false, true, false);
-		parent::onInit();
+		return parent::onInit();
 	}
 	
 	public function execute()

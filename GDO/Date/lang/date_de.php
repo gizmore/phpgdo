@@ -25,7 +25,7 @@ return [
     'tu_y' => 'y',
     
     # Timezone
-    'ft_date_timezone' => 'Setzen Ihrer Zeitzone',
+    'mt_date_timezone' => 'Setzen Ihrer Zeitzone',
 	'md_date_timezone' => 'Setzen Sie Ihre Zeitzone auf %s.',
 	'msg_timezone_changed' => 'Ihre Zeitzone ist nun %s.',
     'cfg_tz_probe_js' => 'Zeitzone mit Javascript ermitteln?',

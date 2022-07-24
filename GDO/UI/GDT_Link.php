@@ -20,15 +20,18 @@ class GDT_Link extends GDT_Url
 	use WithLabel;
 	use WithTarget;
 	use WithPHPJQuery;
-	use WithAnchorRelation;
 
-	public bool $caseSensitive = true;
-	
 	protected function __construct()
 	{
 		parent::__construct();
 		unset($this->icon);
+		$this->caseS();
 	}
+	
+	###########
+	### GDT ###
+	###########
+	public function isWriteable() : bool { return false; }
 	
 	################
 	### Relation ###
@@ -46,23 +49,6 @@ class GDT_Link extends GDT_Url
 	const REL_PREV = 'prev';
 	const REL_SEARCH = 'search';
 	const REL_TAG = 'tag';
-	
-	################
-	### GDO href ###
-	################
-// 	public function gdo(GDO $gdo=null)
-// 	{
-// 	    if ($gdo)
-// 	    {
-//     	    $method = "href_{$this->name}";
-//     	    if (method_exists($gdo, $method))
-//     	    {
-//     	        $this->href(call_user_func([$gdo, $method]));
-//     	    }
-// 	    }
-// 	    return parent::gdo($gdo);
-// 	}
-	
 	
 	/**
 	 * Output a link / anchor.
@@ -99,14 +85,6 @@ class GDT_Link extends GDT_Url
 	}
 	public function renderFilter($f) : string { return GDT_String::make($this->name)->renderFilter($f); }
 	
-// 	###################
-// 	### Link target ###
-// 	###################
-// 	public $target;
-// 	public function target($target) { $this->target = $target; return $this; }
-// 	public function targetBlank() { return $this->target('_blank'); }
-// 	public function htmlTarget() { return $this->target === null ? '' : " target=\"{$this->target}\""; }
-
 	###########
 	### URL ###
 	###########

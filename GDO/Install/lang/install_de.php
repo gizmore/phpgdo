@@ -28,7 +28,7 @@ return [
 
 # Config
 'install_title_3' => 'GDO Konfiguration',
-'ft_install_configure' => 'Konfigurationsdatei schreiben',
+'mt_install_configure' => 'Konfigurationsdatei schreiben',
 'install_config_section_site' => 'Seite',
 'cfg_sitename' => 'Kurzer Sitenname',
 'language' => 'Hauptsprache',
@@ -74,7 +74,7 @@ Sie können dann hier fortfahren: %s',
 # Admins
 'install_title_6' => 'Administrator anlegen',
 'info_install_admins' => 'Hier können Sie Adminstratoren für Ihre GDOv7 Installation anlegen.',
-'ft_install_installadmins' => 'Administrator anlegen',
+'mt_install_installadmins' => 'Administrator anlegen',
 'msg_admin_created' => 'Ein Administrator namens %s wurde angelegt oder das Passwort wurde zurückgesetzt.',
 
 'install_title_7' => 'Javascript installieren',
@@ -98,15 +98,15 @@ Note: Currently bower and yarn are both in use. Bower will be dropped.<br/>
 ',
 	
 'install_title_8' => 'Backup einspielen',
-'ft_install_importbackup' => 'Backup einspielen',
+'mt_install_importbackup' => 'Backup einspielen',
 
 'install_title_9' => 'htaccess kopieren (optional)',
-'ft_install_copyhtaccess' => 'Standard-htaccess in das gdo6-Installationsverzeichnis kopieren',
+'mt_install_copyhtaccess' => 'Standard-htaccess in das gdo6-Installationsverzeichnis kopieren',
 'copy_htaccess_info' => '<b>Eine schon vorhandene <i>.htaccess</i>-Dateie wird überschrieben!</b><br>Sie können dann hier fortfahren: %s',
 'copy_htaccess' => 'Standard-htaccess kopieren',
 
 'install_title_10' => 'Sicherheit',
-'ft_install_security' => 'Installation abschließen und den Zugang zum Installer und protected Ordner verhindern.',
+'mt_install_security' => 'Installation abschließen und den Zugang zum Installer und protected Ordner verhindern.',
 'protect_folders' => 'Ordner schützen',
 
 # gdo6 binary

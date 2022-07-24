@@ -7,6 +7,7 @@ use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
 use GDO\UI\Color;
 use GDO\User\GDO_User;
+use GDO\UI\GDT_Page;
 
 /**
  * CLI utility.
@@ -60,6 +61,14 @@ final class CLI
     ##############
     ### Render ###
     ##############
+    public static function flushTopResponse()
+    {
+    	$response = GDT_Page::instance()->topResponse();
+    	echo $response->renderCLI();
+    	$response->removeFields();
+    }
+    
+    
     public static function displayCLI(string $html) : string
     {
     	return self::htmlToCLI($html);

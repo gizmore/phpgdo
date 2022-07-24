@@ -8,11 +8,12 @@ use GDO\UI\GDT_Page;
  * Application runtime data.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 class Application extends GDT
 {
+	use WithVerb;
 	use WithInstance;
 
 	################
@@ -120,6 +121,7 @@ class Application extends GDT
 	{
 		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
+		$this->mode = $this->modeDetected;
 		self::updateTime();
 	}
 	
@@ -154,6 +156,13 @@ class Application extends GDT
 	{
 		$this->cli = $cli;
 		return $this->mode(GDT::RENDER_CLI, true);
+	}
+	
+	public array $inputs;
+	public function inputs(array $inputs)
+	{
+		$this->inputs = $inputs;
+		return $this;
 	}
 	
 	##############

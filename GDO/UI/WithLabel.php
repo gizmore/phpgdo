@@ -2,6 +2,8 @@
 namespace GDO\UI;
 
 use GDO\Core\WithName;
+use GDO\Core\Application;
+use GDO\Core\GDT;
 
 /**
  * Add label fields to a GDT.
@@ -51,6 +53,25 @@ trait WithLabel
 	### Render ###
 	##############
 	public function renderLabel() : string
+	{
+		$text = $this->renderLabelText();
+		if (Application::$INSTANCE->mode === GDT::RENDER_FORM)
+		{
+			$text .= $this->charRequired();
+		}
+		return $text;
+	}
+	
+	private function charRequired() : string
+	{
+		if (isset($this->notNull) && $this->notNull)
+		{
+			return '<span class="gdt-required">*</span>';
+		}
+		return '';
+	}
+	
+	public function renderLabelText() : string
 	{
 		if ($this->labelKey)
 		{

@@ -46,22 +46,15 @@ final class GDT_Protocol extends GDT_Select
 		return $this;
 	}
 	
-	####################
-	### Init Choices ###
-	####################
-	public function initChoices()
+	###############
+	### Choices ###
+	###############
+	public function getChoices()
 	{
-		if (!$this->choices)
-		{
-			$choices = array();
-			if ($this->emptyVar)
-			{
-				$choices = array($this->emptyVar => $this->displayEmptyLabel());
-			}
-			$choices = array_merge($choices, $this->protocols);
-			return $this->choices($choices);
-		}
-		return $this->choices;
+		$choices = $this->emptyVar === null ? [] :
+			[$this->emptyVar => $this->displayEmptyLabel()];
+		$choices = array_merge($choices, $this->protocols);
+		return $choices;
 	}
 	
 	##############

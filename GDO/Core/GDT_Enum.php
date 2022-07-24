@@ -2,44 +2,38 @@
 namespace GDO\Core;
 
 /**
+ * An enum.
+ * It is a select with special rendering.
  * 
  * @author gizmore
- *
+ * @version 7.0.1
+ * @since 6.0.0
  */
 class GDT_Enum extends GDT_Select
 {
-// 	use WithCompletion;
-	
-// 	protected function __construct()
-// 	{
-// 		parent::__construct();
-// 	}
-
 	public array $enumValues;
 	public function enumValues(string...$enumValues) : self
 	{
 		$this->enumValues = $enumValues;
-		$this->initChoices();
 		return $this;
 	}
 	
-	public function initChoices()
+	public function getChoices()
 	{
-		if (!empty($this->enumValues))
+		if (isset($this->enumValues))
 		{
-			return $this->choices(array_combine($this->enumValues, $this->enumValues));
+			return array_combine($this->enumValues, $this->enumValues);
 		}
-		return $this;
-	}
-	
-	public function toValue(string $var=null)
-	{
-		return (string)($var);
+		return [];
 	}
 	
 	##############
 	### Render ###
 	##############
+	public function displayVar(string $var=null) : string
+	{
+		return t('enum_' . $var);
+	}
 
 	################
 	### DB Field ###

@@ -4,14 +4,16 @@ return [
 	'gdo_user' => 'Benutzer',
 	'gdo_session' => 'Sitzung',
 	'gender' => 'Geschlecht',
-	'gender_none' => 'keine Angabe',
-	'gender_male' => 'Männlich',
-	'gender_female' => 'Weiblich',
+	'profile_views' => 'Profiltreffer',
+
+	'enum_none' => 'keine Angabe',
+	'enum_male' => 'Männlich',
+	'enum_female' => 'Weiblich',
+	
 	'registered_at' => 'Registriert am',
 	'last_activity' => 'Letzte Aktivität',
 	
 	'user_name' => 'Benutzername',
-	'user_real_name' => 'Echter Name',
 	
 	'tt_password' => 'Ihr password sollte mindestens 9 Zeichen enthalten und nicht in Wortlisten auftauchen.',
 	
@@ -22,8 +24,8 @@ return [
 	
 	'link_user_add_user' => 'Nutzer erstellen',
 	
-	'mdescr_user_adduser' => 'Nutzer erstellen',
-	'mdescr_user_admin' => 'Nutzer administrieren',
+	'md_user_adduser' => 'Nutzer erstellen',
+	'md_user_admin' => 'Nutzer administrieren',
 	
 	'user_subtitle' => 'Mitglied seit %s. Level: %s',
 
@@ -31,4 +33,16 @@ return [
 	'md_user_cleanupguests' => 'Cronjob um verwaiste Gastnutzer aufzuräumen.',
 
 	'mt_user_profile' => '%s\'s Profil',
+
+	'lbl_acl_level' => '%s sichtbar ab Level',
+	'lbl_acl_relation' => '%s sichtbar für',
+	'lbl_acl_permission' => '%s - Sichtbarkeitsrechte',
+	
+	'enum_acl_noone' => 'Niemanden',
+	'enum_acl_friends' => 'Freunde',
+	'enum_acl_friend_friends' => 'Freundesfreunde',
+	'enum_acl_members' => 'Mitglieder',
+	'enum_acl_guests' => 'Gäste',
+	'enum_acl_all' => 'Alle',
+	
 ];

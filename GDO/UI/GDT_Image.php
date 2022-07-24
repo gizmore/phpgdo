@@ -4,16 +4,18 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\File\GDO_File;
+use GDO\Core\WithName;
 
 /**
  * HTML Image element.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class GDT_Image extends GDT
 {
+	use WithName;
 	use WithPHPJQuery;
 	
 	const GIF = 'image/gif';

@@ -45,4 +45,9 @@ final class GDT_Error extends GDT_Panel
 		return parent::renderHTML();
 	}
 	
+	public function renderCLI() : string
+	{
+		return Color::red($this->renderText());
+	}
+	
 }

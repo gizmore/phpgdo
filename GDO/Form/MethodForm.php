@@ -55,7 +55,7 @@ abstract class MethodForm extends Method
 	
 	public function getMethodTitle() : string
 	{
-		$key = sprintf('ft_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
 		$key = strtolower($key);
 		return t($key);
 	}

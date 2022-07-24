@@ -10,7 +10,7 @@ Read more in the [changelogs](./DOCS/GDO7_CHANGELOG.md), look around, or maybe c
 
 ## Installation
 
-Please refer to the [DOCS](./DOCS/GDO7_Installation.md) for installation and documentation.
+Please refer to the [DOCS](./DOCS/GDO7_INSTALLATION.md) for installation and documentation.
 
 
 ### phpgdo: Help

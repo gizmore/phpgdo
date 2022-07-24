@@ -170,7 +170,7 @@ class GDT_Table extends GDT
 // 	}
 	
 	public function isOrdered() : bool { return isset($this->order); }
-// 	public function isOrderable() : bool { return isset($this->order); }
+	public function isOrderable() : bool { return isset($this->order); }
 	
 // 	protected function getOrderField() : GDT_Order
 // 	{
@@ -310,69 +310,10 @@ class GDT_Table extends GDT
 
 	private function getOrderedQuery(Query $query) : Query
 	{
-// 		$headers = $this->headers;
-// 		$o = $headers ? $headers->name : 'o';
-// 		$o = 'o';
-		
-// 		$hasCustomOrder = false;
-
-		if ($this->order)
+		if (isset($this->order))
 		{
-// 			# Convert single to multiple fake
-// 			if (isset($_REQUEST[$o]['order_by']))
-// 			{
-// 				unset($_REQUEST[$o]['o']);
-// 				$by = $_REQUEST[$o]['order_by'];
-// 				$_REQUEST[$o]['o'][$by] = $_REQUEST[$o]['order_dir'] === 'ASC';
-// 				// unset($_REQUEST[$o]['order_by']);
-// 				// unset($_REQUEST[$o]['order_dir']);
-// 			}
 			$this->order->filterQuery($query);
-
-// 			if ($this->headers)
-// 			{
-// 				if ($cols = Common::getRequestArray($o))
-// 				{
-// 					if ($cols = @$cols['o'])
-// 					{
-// 						$o = '1';
-// 						foreach ($cols as $name => $asc)
-// 						{
-// 							if ($field = $this->headers->getField($name))
-// 							{
-// 								if ($field->orderable)
-// 								{
-// 									$asc = $asc ? ' ASC' : ' DESC';
-// // 									$query->order($field->orderFieldName() .$asc);
-									
-// 									if ((Classes::class_uses_trait($field,
-// 									'GDO\\DB\\WithObject')) &&
-// 									($field->orderFieldName() !== $field->name))
-// 									{
-// // 										$query->joinObject($field->name, 'JOIN');
-// 										$query->order($field->name . '_t.'  . $field->orderFieldName() .$asc);
-// 									}
-// 									else
-// 									{
-// 										$query->order($field->orderFieldName() . $asc);
-// 									}
-// 									$hasCustomOrder = true;
-// 								}
-// 							}
-// 						}
-// 					}
-// 				}
-// 			}
 		}
-
-// 		if ( !$hasCustomOrder)
-// 		{
-// 			if ($this->orderDefault)
-// 			{
-// 				$query->order($this->orderDefault);
-// 			}
-// 		}
-
 		return $query;
 	}
 

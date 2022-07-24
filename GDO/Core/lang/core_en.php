@@ -5,6 +5,9 @@ return [
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
 	
 	# Errors
+	'err_php_extension_missing' => 'This module requires the %s PHP extension.',
+	'err_system_dependency' => 'A system requirement is not fulfilled: %s',
+	'err_php_major_version' => 'GDOv7 requires PHP version %s.',
 	'err_db' => "SQL Error %s: %s\nQuery: %s",
 	'err_db_connect' => 'The database connection could not be established: %s.',
 	'err_db_no_link' => 'The database connection could not be established.',
@@ -85,9 +88,13 @@ return [
 	'thousands_seperator' => ',',
 	
 	# UserType
-	'guest' => 'Guest',
-	'member' => 'Member',
-
+	'enum_system' => 'System',
+	'enum_ghost' => 'Ghost',
+	'enum_guest' => 'Guest',
+	'enum_member' => 'Member',
+	'enum_link' => 'Link',
+	'enum_bot' => 'Bot',
+	
 	# GDTs
 	'file_size' => 'Filesize',
 	'message' => 'Message',
@@ -151,6 +158,7 @@ return [
 	
 	# Util
 	'and' => ' and ',
+	'none' => 'None',
 	
 	# Welcome
 	'welcome' => 'Welcome',
@@ -162,9 +170,9 @@ return [
 	'gdo_version' => 'GDO Version',
 	
 	# Directory Index
-	'ft_dir_index' => '%s (%s files and folders)',
-	'ft_filenotfound' => 'Not Found!',
-	'ft_notallowed' => 'Forbidden!',
+	'mt_dir_index' => '%s (%s files and folders)',
+	'mt_filenotfound' => 'Not Found!',
+	'mt_notallowed' => 'Forbidden!',
 	
 	# Table
 	'cfg_spr' => 'Suggestions per Request',

@@ -5,7 +5,6 @@ use GDO\Core\GDO;
 use GDO\Core\GDO_PermissionException;
 use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDO_User;
-use GDO\Captcha\GDT_Captcha;
 use GDO\Core\GDT_Object;
 use GDO\Core\GDT;
 use GDO\Core\GDT_DeletedAt;
@@ -18,7 +17,7 @@ use GDO\Core\GDT_CreatedBy;
  * Abstract Create|Update|Delete for a GDO using MethodForm.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.1.0
  */
 abstract class MethodCrud extends MethodForm
@@ -126,12 +125,12 @@ abstract class MethodCrud extends MethodForm
 	public function gdoParameters() : array
 	{
 	    $p = [
-	        GDT_Object::make($this->crudName())->table($this->gdoTable())->positional(),
+	        GDT_Object::make($this->crudName())->table($this->gdoTable()),
 	    ];
 	    return array_merge($p, parent::gdoParameters());
 	}
 	
-	public function onInit() : void
+	public function onInit()
 	{
 		parent::onInit();
 	    $this->crudMode = self::CREATED;
@@ -173,7 +172,7 @@ abstract class MethodCrud extends MethodForm
 		    $gdo = $this->gdo ? $this->gdo : $table;
 	        $this->createFormRec($form, $gdt->gdo($gdo));
 		}
-		$this->createCaptcha($form);
+// 		$this->createCaptcha($form);
 		$this->createFormButtons($form);
 	}
 	
@@ -189,16 +188,16 @@ abstract class MethodCrud extends MethodForm
 		}
 	}
 
-	public function createCaptcha(GDT_Form $form)
-	{
-		if (module_enabled('Captcha'))
-		{
-			if ($this->isCaptchaRequired())
-			{
-				$form->addField(GDT_Captcha::make());
-			}
-		}
-	}
+// 	public function createCaptcha(GDT_Form $form)
+// 	{
+// 		if (module_enabled('Captcha'))
+// 		{
+// 			if ($this->isCaptchaRequired())
+// 			{
+// 				$form->addField(GDT_Captcha::make());
+// 			}
+// 		}
+// 	}
 	
 	public function createFormButtons(GDT_Form $form) : void
 	{
@@ -236,12 +235,12 @@ abstract class MethodCrud extends MethodForm
 	
 	protected function getCreateTitle()
 	{
-		return t('ft_crud_create', [$this->gdoTable()->gdoHumanName()]);
+		return t('mt_crud_create', [$this->gdoTable()->gdoHumanName()]);
 	}
 	
 	protected function getUpdateTitle()
 	{
-        return t('ft_crud_update', [$this->gdo->gdoHumanName()]);
+        return t('mt_crud_update', [$this->gdo->gdoHumanName()]);
 	}
 	
 	##############

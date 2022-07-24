@@ -9,7 +9,7 @@ use GDO\Date\Time;
 use GDO\User\GDO_User;
 
 /**
- * A data exchange object?.
+ * A data exchange object, and...
  * 
  * A GDO is both, a table and an entity.
  * The table GDO just holds the caches and GDT instances.
@@ -27,8 +27,8 @@ use GDO\User\GDO_User;
  * 
  * @author gizmore@wechall.net
  * @license GDOv7-LICENSE
- * @version 7.0.0
- * @since 3.2.0
+ * @version 7.0.1
+ * @since 3.0.0
  * @see GDT
  * @see Cache
  * @see Database
@@ -90,7 +90,7 @@ abstract class GDO extends GDT
 	private function afterLoaded() : void
 	{
 		self::$GDO_COUNT++;
-		$alive = self::$GDT_COUNT - self::$GDT_KILLS;
+		$alive = self::$GDO_COUNT - self::$GDO_KILLS;
 		if ($alive > self::$GDO_PEAKS)
 		{
 			self::$GDO_PEAKS = $alive;
@@ -152,11 +152,10 @@ abstract class GDO extends GDT
 	### Escaping ###
 	################
 	public static function escapeIdentifierS(string $identifier) : string { return str_replace("`", "\\`", $identifier); }
-// 	public static function quoteIdentifierS(string $identifier) : string { return "`" . self::escapeIdentifierS($identifier) . "`"; }
-	public static function quoteIdentifierS(string $identifier) : string { return $identifier; } # performance for features
-	public static function escapeSearchS(string $var) : string { return str_replace(['%', "'", '"'], ['\\%', "\\'", '\\"'], $var); }
-	public static function escapeS(string $var) : string { return str_replace(['\\', "'", '"'], ['\\\\', '\\\'', '\\"'], $var); }
-	public static function quoteS($var) : string
+	public static function quoteIdentifierS(?string $identifier) : string { return $identifier; } # performance for features
+	public static function escapeSearchS(?string $var) : string { return str_replace(['%', "'", '"'], ['\\%', "\\'", '\\"'], $var); }
+	public static function escapeS(?string $var) : string { return str_replace(['\\', "'", '"'], ['\\\\', '\\\'', '\\"'], $var); }
+	public static function quoteS(?string $var) : string
 	{
 		if (is_string($var))
 		{
@@ -188,10 +187,6 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-// 	private bool $inited = false;
-// 	public function isInited() : bool { return $this->inited; }
-// 	public function setInited(bool $inited=true) : self { $this->inited = $inited; return $this; }
-	
 	##############
 	### Render ###
 	##############
@@ -205,16 +200,6 @@ abstract class GDO extends GDT
 	{
 		return $this->gdoHumanName() . "#" . $this->getID();
 	}
-	
-// 	public function display($key)
-// 	{
-// 		return html($this->gdoVars[$key]);
-// 	}
-	
-// 	public function renderCLI()
-// 	{
-// 		return $this->getID() . '-' . $this->renderName();
-// 	}
 	
 	public function renderChoice() : string
 	{
@@ -256,34 +241,35 @@ abstract class GDO extends GDT
 		return $values;
 	}
 	
+	public function renderVar() : string
+	{
+		return $this->renderName();
+	}
+	
 	############
 	### Vars ###
 	############
 	/**
 	 * Mark vars as dirty.
 	 * Either true for all, false for none, or an assoc array with field mappings.
-	 * @var mixed[] $dirty
+	 * @var mixed $dirty
 	 */
 	private $dirty = false;
 	
 	/**
 	 * Entity gdt vars.
-	 * @var string[]
+	 * @var string[string]
 	 */
 	private array $gdoVars;
 	
 	public function &getGDOVars() : array { return $this->gdoVars; }
 	
-	/**
-	 * @param string $key
-	 * @return bool
-	 */
-	public function hasVar($key) : bool
+	public function hasVar(string $key) : bool
 	{
 		return array_key_exists($key, $this->gdoVars);
 	}
 	
-	public function hasColumn($key) : bool
+	public function hasColumn(string $key) : bool
 	{
 		return array_key_exists($key, $this->gdoColumnsCache());
 	}
@@ -320,7 +306,7 @@ abstract class GDO extends GDT
 		throw new GDO_Error('err_gdo_no_gdt', ['getValue', $this->gdoHumanName()]);
 	}
 	
-/**
+	/**
 	 * @param string $key
 	 * @param string $var
 	 * @param boolean $markDirty
@@ -369,7 +355,7 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function setGDOVars(array $vars, $dirty=false) : self
+	public function setGDOVars(array $vars, bool $dirty=false) : self
 	{
 		unset($this->id);
 		$this->gdoVars = $vars;
@@ -571,6 +557,9 @@ abstract class GDO extends GDT
 		return $names;
 	}
 	
+	#################
+	### Column Of ###
+	#################
 	/**
 	 * Get the first column of a specified GDT.
 	 * Useful to make GDTs more automated. E.g. The auto inc column syncs itself on gdoAfterCreate.
@@ -578,7 +567,7 @@ abstract class GDO extends GDT
 	 * @param string $className
 	 * @return \GDO\Core\GDT
 	 */
-	public function gdoColumnOf($className) : ?GDT
+	public function gdoColumnOf(string $className) : ?GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
@@ -590,12 +579,12 @@ abstract class GDO extends GDT
 		return null;
 	}
 	
-	public function gdoVarOf($className) : ?string
+	public function gdoVarOf(string $className) : ?string
 	{
 		return $this->gdoVar($this->gdoColumnOf($className)->name);
 	}
 	
-	public function gdoValueOf($className)
+	public function gdoValueOf(string $className)
 	{
 		return $this->gdoColumnOf($className)->getValue();
 	}
@@ -651,7 +640,7 @@ abstract class GDO extends GDT
 	 * @param string[] ...$except
 	 * @return GDT[]
 	 */
-	public function gdoColumnsExcept(...$except) : array
+	public function gdoColumnsExcept(string...$except) : array
 	{
 		$columns = [];
 		foreach (array_keys($this->gdoColumnsCache()) as $key)
@@ -693,7 +682,7 @@ abstract class GDO extends GDT
 		}
 	}
 	
-	public function findCached(...$ids) : ?self
+	public function findCached(string...$ids) : ?self
 	{
 		if (!($gdo = $this->table()->cache->findCached(...$ids)))
 		{
@@ -702,11 +691,7 @@ abstract class GDO extends GDT
 		return $gdo;
 	}
 	
-	/**
-	 * @param string $where
-	 * @return string
-	 */
-	public function countWhere($condition='true') : int
+	public function countWhere(string $condition='true') : int
 	{
 		return $this->select('COUNT(*)', false)->where($condition)->
 		noOrder()->exec()->fetchValue();
@@ -714,10 +699,8 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Find a row by condition. Throws GDO::notFoundException.
-	 * @param string $where
-	 * @return self
 	 */
-	public function findWhere($condition) : ?self
+	public function findWhere(string $condition) : ?self
 	{
 		if (!($gdo = $this->getWhere($condition)))
 		{
@@ -728,19 +711,13 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Get a row by condition.
-	 * @param string $condition
-	 * @return self
 	 */
-	public function getWhere($condition) : ?self
+	public function getWhere(string $condition) : ?self
 	{
 		return $this->select()->where($condition)->
-		first()->exec()->fetchObject();
+			first()->exec()->fetchObject();
 	}
 	
-	/**
-	 * @param string $columns
-	 * @return \GDO\DB\Query
-	 */
 	public function select(string $columns='*', bool $withHooks=true) : Query
 	{
 		$query = $this->query()->select($columns)->from($this->gdoTableIdentifier());
@@ -773,10 +750,8 @@ abstract class GDO extends GDT
 	##############
 	/**
 	 * Delete this entity.
-	 * @param boolean $withHooks
-	 * @return self
 	 */
-	public function delete($withHooks=true)
+	public function delete(bool $withHooks=true) : self
 	{
 		return $this->deleteB($withHooks);
 	}
@@ -803,7 +778,7 @@ abstract class GDO extends GDT
 	 * @param boolean $withHooks
 	 * @return self
 	 */
-	public function markDeleted($withHooks=true)
+	public function markDeleted(bool $withHooks=true) : self
 	{
 		if ($gdt = $this->gdoColumnOf(GDT_DeletedAt::class))
 		{
@@ -822,6 +797,7 @@ abstract class GDO extends GDT
 			{
 				$this->afterDelete();
 			}
+			return $this;
 		}
 		else
 		{
@@ -881,7 +857,7 @@ abstract class GDO extends GDT
 	###############
 	### Replace ###
 	###############
-	public function insert($withHooks=true)
+	public function insert(bool $withHooks=true) : self
 	{
 		$query = $this->query()->
 		insert($this->gdoTableIdentifier())->
@@ -889,7 +865,7 @@ abstract class GDO extends GDT
 		return $this->insertOrReplace($query, $withHooks);
 	}
 	
-	public function replace($withHooks=true)
+	public function replace(bool $withHooks=true) : self
 	{
 		# Check for empty id.
 		# Checking for $persisted is wrong, as replace rows can be constructed from scratch.
@@ -907,7 +883,7 @@ abstract class GDO extends GDT
 		return $this->insertOrReplace($query, $withHooks);
 	}
 	
-	private function insertOrReplace(Query $query, $withHooks)
+	private function insertOrReplace(Query $query, bool $withHooks) : self
 	{
 		if ($withHooks)
 		{
@@ -931,24 +907,20 @@ abstract class GDO extends GDT
 	 * Build a generic update query for the whole table.
 	 * @return Query
 	 */
-	public function update()
+	public function update() : Query
 	{
 		return $this->query()->update($this->gdoTableIdentifier());
 	}
 	
-	/**
-	 * @return Query
-	 */
-	public function deleteQuery()
+	public function deleteQuery() : Query
 	{
 		return $this->query()->delete($this->gdoTableName());
 	}
 	
 	/**
 	 * Build an entity update query.
-	 * @return Query
 	 */
-	public function updateQuery()
+	public function updateQuery() : Query
 	{
 		return $this->entityQuery()->update($this->gdoTableIdentifier());
 	}
@@ -957,7 +929,7 @@ abstract class GDO extends GDT
 	 * Save this entity.
 	 * @return self
 	 */
-	public function save($withHooks=true)
+	public function save(bool $withHooks=true) : self
 	{
 		if (!$this->persisted)
 		{
@@ -988,23 +960,20 @@ abstract class GDO extends GDT
 	########################
 	### Var manipulation ###
 	########################
-	public function increase($key, $by=1)
+	public function increase(string $key, float $by=1) : self
 	{
 		return $by == 0 ? $this : $this->saveVar($key, $this->gdoVar($key) + $by);
 	}
 	
-	public function saveVar($key, $var, $withHooks=true, &$worthy=false)
+	public function saveVar(string $key, ?string $var, bool $withHooks=true, bool &$worthy=false) : self
 	{
 		return $this->saveVars([$key => $var], $withHooks, $worthy);
 	}
 	
 	/**
-	 * @param array $vars
-	 * @param boolean $withHooks
-	 * @param boolean $worthy
-	 * @return GDO
+	 * @param string[string] $vars
 	 */
-	public function saveVars(array $vars, $withHooks=true, &$worthy=false)
+	public function saveVars(array $vars, bool $withHooks=true, bool &$worthy=false) : self
 	{
 		$worthy = false; # Anything changed?
 		$query = $this->updateQuery();
@@ -1053,13 +1022,13 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function saveValue($key, $value, $withHooks=true)
+	public function saveValue(string $key, $value, bool $withHooks=true) : self
 	{
 		$var = $this->gdoColumn($key)->toVar($value);
 		return $this->saveVar($key, $var, $withHooks);
 	}
 	
-	public function saveValues(array $values, $withHooks=true)
+	public function saveValues(array $values, bool $withHooks=true) : self
 	{
 		$vars = [];
 		foreach ($values as $key => $value)
@@ -1070,10 +1039,7 @@ abstract class GDO extends GDT
 		return $this->saveVars($vars, $withHooks);
 	}
 	
-	/**
-	 * @return \GDO\DB\Query
-	 */
-	public function entityQuery()
+	public function entityQuery() : Query
 	{
 		if (!$this->persisted)
 		{
@@ -1082,7 +1048,7 @@ abstract class GDO extends GDT
 		return $this->query()->where($this->getPKWhere());
 	}
 	
-	public function getSetClause()
+	public function getSetClause() : string
 	{
 		$setClause = '';
 		if ($this->dirty !== false)
@@ -1115,9 +1081,9 @@ abstract class GDO extends GDT
 	 * Get the primary key where condition for this row.
 	 * @return string
 	 */
-	public function getPKWhere()
+	public function getPKWhere() : string
 	{
-		$where = "";
+		$where = '';
 		foreach ($this->gdoPrimaryKeyColumns() as $column)
 		{
 			if ($where)
@@ -1136,15 +1102,14 @@ abstract class GDO extends GDT
 	################
 	public static function make(string $name=null) : GDT
 	{
-		return self::blank();
-// 		throw new GDO_Error('err_gdo_no_gdt', ['make', get_class($this)]);
+		return new static();
+// 		throw new GDO_Error('err_gdo_no_gdt', ['make', self::class]);
 	}
 	
 	/**
-	 * @param array $gdoVars
-	 * @return self
+	 * @param string[string] $gdoVars
 	 */
-	public static function entity(array $gdoVars)
+	public static function entity(array $gdoVars) : self
 	{
 		$instance = new static();
 		$instance->gdoVars = $gdoVars;
@@ -1157,7 +1122,7 @@ abstract class GDO extends GDT
 	 * @param array $initial data to copy
 	 * @return array the new blank data1
 	 */
-	public static function getBlankData(array $initial = null)
+	public static function getBlankData(array $initial = null) : array
 	{
 		$table = self::table();
 		$gdoVars = [];
@@ -1275,7 +1240,7 @@ abstract class GDO extends GDT
 	 * @param array $vars
 	 * @return self
 	 */
-	public static function getByVars(array $vars)
+	public static function getByVars(array $vars) : ?self
 	{
 		$query = self::table()->select();
 		foreach ($vars as $key => $value)
@@ -1312,7 +1277,7 @@ abstract class GDO extends GDT
 	 * @param string ...$id
 	 * @return self
 	 */
-	public static function findById(string...$id)
+	public static function findById(string...$id) : self
 	{
 		if ($object = self::getById(...$id))
 		{
@@ -1321,27 +1286,25 @@ abstract class GDO extends GDT
 		self::notFoundException(implode(':', $id));
 	}
 	
-	public static function findByGID(string $id)
+	public static function findByGID(string $id) : self
 	{
 		return self::findById(...explode(':', $id));
 	}
 	
-	public static function notFoundException(string $id)
+	public static function notFoundException(string $id) : void
 	{
 		throw new GDO_Error('err_gdo_not_found', [self::table()->gdoHumanName(), html($id)]);
 	}
 	
 	/**
 	 * Fetch from result set as this table.
-	 * @param Result $result
-	 * @return self
 	 */
-	public function fetch(Result $result)
+	public function fetch(Result $result) : self
 	{
 		return $result->fetchAs($this);
 	}
 	
-	public function fetchAll(Result $result)
+	public function fetchAll(Result $result) : array
 	{
 		$back = [];
 		while ($gdo = $this->fetch($result))
@@ -1691,19 +1654,19 @@ abstract class GDO extends GDT
 		return substr(sha1(GDO_SALT.json_encode($gdoVars)), 0, self::TOKEN_LENGTH);
 	}
 	
-	###############
-	### Sorting ###
-	###############
-	/**
-	 * Sort GDO[] by a field.
-	 * @param GDO[] $array
-	 * @param string $columnName
-	 * @param bool $ascending
-	 */
-	public function sort(array &$array, string $columnName, bool $ascending=true)
-	{
-		return $this->gdoColumn($columnName)->sort($array, $ascending);
-	}
+// 	###############
+// 	### Sorting ###
+// 	###############
+// 	/**
+// 	 * Sort GDO[] by a field.
+// 	 * @param GDO[] $array
+// 	 * @param string $columnName
+// 	 * @param bool $ascending
+// 	 */
+// 	public function sort(array &$array, string $columnName, bool $ascending=true)
+// 	{
+// 		return $this->gdoColumn($columnName)->sort($array, $ascending);
+// 	}
 	
 	#############
 	### Order ###
@@ -1726,7 +1689,6 @@ abstract class GDO extends GDT
 	/**
 	 * Mass insertion.
 	 * @param GDT[] $fields
-	 * @param array $data
 	 */
 	public static function bulkReplace(array $fields, array $data, $chunkSize=100)
 	{

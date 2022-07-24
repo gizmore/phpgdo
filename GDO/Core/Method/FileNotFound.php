@@ -16,7 +16,7 @@ use GDO\User\GDO_User;
  */
 final class FileNotFound extends MethodPage
 {
-	public function saveLastUrl() { return false; }
+	public function saveLastUrl() : bool { return false; }
 	
 	public function getMethodTitle() : string
 	{

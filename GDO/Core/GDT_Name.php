@@ -24,7 +24,7 @@ class GDT_Name extends GDT_String
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	public string $pattern = "/^[A-Za-z][-A-Za-z _0-9;:]{1,63}$/sD";
-	public bool $notNull = true;
+// 	public bool $notNull = true;
 	public bool $unique = true;
 	
 	##############

@@ -21,6 +21,7 @@ use GDO\Util\Arrays;
 use GDO\UI\GDT_Container;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Tuple;
+use GDO\Core\Application;
 
 /**
  * Configure a module.
@@ -79,7 +80,7 @@ class Configure extends MethodForm
 		}
 
 		# Response for install panel
-		$install = Install::make()->inputs($this->getInputs());
+		$install = Install::make()->inputs(Application::$INSTANCE->inputs);
 		$response->addField($install->executeWithInit());
 
 		# Configuration if installed
@@ -102,7 +103,7 @@ class Configure extends MethodForm
 
 	public function getMethodTitle() : string
 	{
-		return t('ft_admin_configure',
+		return t('mt_admin_configure',
 			[
 				$this->configModule()->renderName()
 			]);
@@ -110,7 +111,7 @@ class Configure extends MethodForm
 
 	public function getMethodDescription() : string
 	{
-		return t('mdescr_admin_configure',
+		return t('md_admin_configure',
 			[
 				$this->configModule()->renderName()
 			]);

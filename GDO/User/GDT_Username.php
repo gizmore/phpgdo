@@ -46,7 +46,7 @@ class GDT_Username extends GDT_Name
 	{
 		return isset($this->gdo) ? 
 			$this->gdo->renderName() :
-			$this->renderHTML();
+			$this->renderCell();
 	}
 	
 	################

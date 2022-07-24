@@ -393,9 +393,14 @@ class Database
 	
 	public function dropTable(GDO $gdo)
 	{
-	    $tableName = $gdo->gdoTableIdentifier();
+		return $this->dropTableName($gdo->gdoTableIdentifier());
+	}
+	
+	public function dropTableName(string $tableName)
+	{
 		return $this->queryWrite("DROP TABLE IF EXISTS {$tableName}");
 	}
+	
 	
 	public function truncateTable(GDO $gdo)
 	{

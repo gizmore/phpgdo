@@ -20,7 +20,7 @@ use GDO\DB\Cache;
  * @TODO Automatic DB migration for GDO. triggered by re-install module.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 class Install extends MethodForm
@@ -28,6 +28,8 @@ class Install extends MethodForm
 	use MethodAdmin;
 	
 	private GDO_Module $configModule;
+	
+	public function showInSitemap() : bool { return false; }
 
 	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	
@@ -76,7 +78,7 @@ class Install extends MethodForm
 	{
 		if ($module = $this->configModule())
 		{
-	        return t('ft_admin_install', [$module->renderName()]);
+	        return t('mt_admin_install', [$module->renderName()]);
 			
 		}
 	    else

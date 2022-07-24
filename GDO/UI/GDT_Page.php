@@ -12,10 +12,8 @@ use GDO\Session\GDO_Session;
  * A website page object.
  * Adds 4 sidebars and a top response box.
  * 
- * @TODO: Add $sidebar to opt-in for sidebar generation code.
- * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 final class GDT_Page extends GDT

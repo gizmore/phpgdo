@@ -9,7 +9,7 @@ use GDO\Core\GDT;
  * The method gets the form, the field, and the field's value to call error on the field.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDT_Form
  */
@@ -60,5 +60,10 @@ class GDT_Validator extends GDT
 		$field = $this->validatorField;
 		return call_user_func($this->validator, $this->validatorForm, $field, $value);
 	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderHTML() : string { return ''; }
 	
 }

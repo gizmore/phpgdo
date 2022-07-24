@@ -10,15 +10,19 @@ use GDO\User\GDO_User;
 use GDO\Tests\Module_Tests;
 use GDO\Util\FileUtil;
 use GDO\Util\Strings;
-use GDO\UI\GDT_Link;
 use GDO\Table\GDT_Sort;
 use GDO\UI\GDT_Divider;
+use GDO\User\GDT_ACL;
+use GDO\UI\GDT_Container;
+use GDO\UI\GDT_HR;
+use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Error;
 
 /**
  * GDO base module class.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 2.0.1
  */
 class GDO_Module extends GDO
@@ -27,17 +31,21 @@ class GDO_Module extends GDO
 	### Override ###
 	################
 	public int $priority = 50;
-	public string $version = "7.0.0";
+	
+	public string $version = "7.0.1";
 	public string $license = "GDOv7-LICENSE";
-	public string $authors = "Christian B. <gizmore@wechall.net>";
+	public string $authors = "gizmore <gizmore@wechall.net>";
 	
 	public function gdoCached() : bool { return false; }
 	public function memCached() : bool { return false; }
+	
 	public function defaultEnabled() : bool { return !$this->isSiteModule(); }
 	public function isCoreModule() : bool { return false; }
 	public function isSiteModule() : bool { return false; }
 	public function isInstallable() : bool { return true; }
-	public function isTestable() : bool { return false; }
+	
+	### Hax
+	public function isTestable() : bool { return false; } # Overrides the GDT behaviour. GDO_Module is abstract.
 	
 	/**
 	 * A list of required dependencies.
@@ -59,18 +67,28 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_GDT_ARRAY;
 	}
 	
+	/**
+	 * Run system checks for this module, for example if bcmath is installed.
+	 * return errorSystemDependency('err_key') for a system dependency error.
+	 * @see Module_Core
+	 */
+	public function checkSystemDependencies() : bool
+	{
+		return true;
+	}
+	
     /**
 	 * Skip these folders in unit tests using strpos.
-	 * 
 	 * @see Module_Tests
 	 * @return string[]
 	 */
-	public function thirdPartyFolders() : array {
+	public function thirdPartyFolders() : array
+	{
 		return [
-			'bower_components/',
-			'node_modules/',
-			'vendor/',
-			'3p/',
+			'/bower_components/',
+			'/node_modules/',
+			'/vendor/',
+			'/3p/',
 		];
 	}
 	
@@ -115,79 +133,12 @@ class GDO_Module extends GDO
 		return $this->getModuleLicense();
 	}
 	
-	public function getModuleLicenseFilenames() : array
+	public function getLicenseFilenames() : array
 	{
 	    return [
 	        'LICENSE',
 	    ];
 	}
-	
-	/**
-	 * Print license information.
-	 * @TODO move to module gdo6-licenses
-	 * @return string
-	 */
-	public function getModuleLicense() : string
-	{
-	    $all = '';
-	    
-	    $files = $this->getModuleLicenseFilenames();
-	    
-	    $div = '<hr/>';
-	    
-	    if ($descr = $this->getModuleDescription())
-	    {
-	    	$all .= "$descr\n$div";
-	    	if ($files)
-	    	{
-	    		$gdo = 0; # gdo licenses
-	    		foreach ($files as $file)
-	    		{
-	    			# @TODO this is bullocks. how to identify a gdo license?
-	    			if ($this->filePath('LICENSE') === $this->filePath($file))
-	    			{
-	    				$gdo = 1;
-	    			}
-	    		}
-	    		
-	    		$count = count($files) - $gdo;
-	    		if ($count)
-	    		{
-		    		$all .= "$count third-party-licenses involved:";
-		    		$all .= "\n$div";
-	    		}
-	    	}
-	    }
-	    
-	    if ($files)
-	    {
-	        foreach ($files as $i => $filename)
-	        {
-	            if ($i > 0)
-	            {
-	            	$all .= "\n$div";
-	            }
-
-	            $all .= GDT_Link::make()->
-	            	labelRaw(Strings::substrFrom($filename, GDO_WEB_ROOT))->
-	            	href($this->wwwPath($filename))->
-	            	renderCell();
-	            
-       	        $filename = $this->filePath($filename);
-        	    if (FileUtil::isFile($filename))
-        	    {
-        	        $all .= file_get_contents($filename);
-        	    }
-	        }
-	    }
-	    else
-	    {
-	        $all .= 'UNLICENSED / PROPERITARY';
-	    }
-        return $all;
-	}
-
-// 	public function displayModuleDescription() : string { return html($this->getModuleDescription()); }
 	
 	/**
 	 * Module description is fetched from README.md by default.
@@ -212,7 +163,7 @@ class GDO_Module extends GDO
 	public function onWipe() : void {}
 	public function onInstall() : void {}
 	public function onAfterInstall() : void {}
-	public function onInit() : void {}
+	public function onInit() {}
 	public function onInitCLI() : void {}
 	public function onInitSidebar() : void {}
 	public function onLoad() : void {}
@@ -287,7 +238,7 @@ class GDO_Module extends GDO
 	public function href($methodName, $append='') { return href($this->getName(), $methodName, $append); }
 	public function href_install_module() { return href('Admin', 'Install', '&module='.$this->getName()); }
 	public function href_configure_module() { return href('Admin', 'Configure', '&module='.$this->getName()); }
-	public function href_administrate_module() {}
+	public function href_administrate_module() : ?string { return null; }
 	
 	##############
 	### Helper ###
@@ -526,11 +477,6 @@ class GDO_Module extends GDO
 	###################
 	### User config ###
 	###################
-// 	/**
-// 	 * Special URL for settings.
-// 	 */
-// 	public function getUserSettingsURL() {}
-	
 	/**
 	 * Config that the user cannot change.
 	 * @return GDT[]
@@ -552,7 +498,7 @@ class GDO_Module extends GDO
 	####################
 	### Settings API ###
 	####################
-	public function setting($key)
+	public function setting($key) : GDT
 	{
 	    return $this->userSetting(GDO_User::current(), $key);
 	}
@@ -563,14 +509,20 @@ class GDO_Module extends GDO
 	 * @param string $key
 	 * @return GDT
 	 */
-	public function userSetting(GDO_User $user, $key)
+	public function userSetting(GDO_User $user, $key) : GDT
 	{
 	    if ($gdt = $this->getSetting($key))
 	    {
-	    	$gdt->gdo($user);
     	    $settings = $this->loadUserSettings($user);
-    	    $var = isset($settings[$key]) ? $settings[$key] : $gdt->initial;
-   	        return $gdt->initial($var);
+    	    if ($acl = @$this->userConfigCacheACL[$key])
+    	    {
+    	    	if ($def = $this->getACLDefaultsFor($key))
+    	    	{
+    	    		$acl->initialACL($def[0], $def[1], $def[2]);
+    	    	}
+    	    }
+    	    $gdt->setGDOData($settings);
+    	    return $gdt;
 	    }
 	}
 	
@@ -605,7 +557,7 @@ class GDO_Module extends GDO
 	    $gdt = $this->getSetting($key);
 	    if (!$user->getID())
 	    {
-	        return $gdt;
+	        return $gdt; # @TODO either persist the user on save setting or else?
 	    }
 	    $data = [
 	        'uset_user' => $user->getID(),
@@ -633,10 +585,21 @@ class GDO_Module extends GDO
 	}
 	
 	# Cache
+	
 	/**
 	 * @var GDT[]
 	 */
-	private $userConfigCache;
+	private array $userConfigCache;
+	
+	/**
+	 * @var GDT_ACL[]
+	 */
+	private array $userConfigCacheACL;
+	
+	/**
+	 * @var GDT[]
+	 */
+	private array $userConfigCacheContainers;
 	
 	/**
 	 * @return GDT[]
@@ -648,6 +611,15 @@ class GDO_Module extends GDO
 	        $this->buildSettingsCache();
 	    }
 	    return $this->userConfigCache;
+	}
+	
+	public function &getSettingsCacheContainers() : array
+	{
+		if (!isset($this->userConfigCache))
+		{
+			$this->buildSettingsCache();
+		}
+		return $this->userConfigCacheContainers;
 	}
 	
 	public function hasSetting($key)
@@ -669,37 +641,90 @@ class GDO_Module extends GDO
 	    }
 	}
 	
+	public function getSettingACL(string $name) : ?GDT_ACL
+	{
+		return isset($this->userConfigCacheACL[$name]) ? $this->userConfigCacheACL[$name] : null;
+	}
+	
 	public function &buildSettingsCache()
 	{
 	    if (!isset($this->userConfigCache))
 	    {
-    	    $this->userConfigCache = [];
+	    	$this->userConfigCache = [];
+	    	$this->userConfigCacheACL = [];
+	    	$this->userConfigCacheContainers = [];
+	    	$configs = [];
     	    if ($config = $this->getUserSettings())
     	    {
-    	    	$this->userConfigCache['div_set'] = GDT_Divider::make('div_sett')->label('mt_account_settings');
-    	        foreach ($config as $gdt)
-    	        {
-    	            $this->userConfigCache[$gdt->name] = $gdt;
-    	        }
+    	    	$configs = $config;
     	    }
     	    if ($config = $this->getUserSettingBlobs())
     	    {
-    	    	foreach ($config as $gdt)
-    	        {
-    	            $this->userConfigCache[$gdt->name] = $gdt;
-    	        }
+    	    	$configs = array_merge($configs, $config);
+    	    }
+    	    if ($configs)
+    	    {
+    	    	$this->userConfigCacheContainers['div_set'] = GDT_Divider::make('div_sett')->label('mt_account_settings');
+    	    	$this->_buildSettingsCacheB($configs, true);
     	    }
     	    if ($config = $this->getUserConfig())
     	    {
-    	    	$this->userConfigCache['div_conf'] = GDT_Divider::make('div_conf')->label('mt_account_config');
-    	    	foreach ($config as $gdt)
-    	    	{
-    	    		$gdt->writeable(false);
-    	    		$this->userConfigCache[$gdt->name] = $gdt;
-    	    	}
+    	    	$this->userConfigCacheContainers['div_conf'] = GDT_Divider::make('div_conf')->label('mt_account_config');
+    	    	$this->_buildSettingsCacheB($config, false);
     	    }
 	    }
 	    return $this->userConfigCache;
+	}
+	
+	private function _buildSettingsCacheB(array $gdts, bool $writeable) : void
+	{
+		$first = true;
+		foreach ($gdts as $gdt)
+		{
+			if (!$first)
+			{
+				$this->userConfigCacheContainers[] = GDT_HR::make();
+			}
+			else
+			{
+				$first = false;
+			}
+			$gdt->writeable($writeable);
+			$this->_buildSettingsCacheC($gdt);
+		}
+	}
+	
+	private function _buildSettingsCacheC(GDT $gdt) : void
+	{
+		$name = $gdt->getName();
+		$this->userConfigCache[$name] = $gdt;
+		$this->userConfigCacheContainers[$name] = $gdt;
+		# If it's a saved field, build the ACL container.
+		if ($gdt->isACLCapable())
+		{
+			$this->_buildSettingsCacheD($gdt);
+		}
+	}
+	
+	private function _buildSettingsCacheD(GDT $gdt) : void
+	{
+		$name = $gdt->getName();
+		$acl = GDT_ACL::make("acl_{$name}");
+		$this->userConfigCacheACL[$name] = $acl;
+		
+		$level = $acl->aclLevel;
+		$relation = $acl->aclRelation;
+		$permission = $acl->aclPermission;
+		
+		# Each var results in 3 GDT ACL vars in config cache.
+		$this->userConfigCache[$level->name] = $level;
+		$this->userConfigCache[$relation->name] = $relation;
+		$this->userConfigCache[$permission->name] = $permission;
+		
+		# we add the GDT + a container with 3 acl fields to the container cache.
+		$cont = GDT_Container::make()->horizontal();
+		$cont->addFields($relation, $level, $permission);
+		$this->userConfigCacheContainers[] = $cont;
 	}
 	
 	private function loadUserSettings(GDO_User $user)
@@ -708,7 +733,7 @@ class GDO_Module extends GDO
 	    {
 	        $settings = self::loadUserSettingsB($user);
 	        $user->tempSet('gdo_setting', $settings);
-// 	        $user->recache();
+	        $user->recache();
 	    }
 	    return $settings;
 	}
@@ -725,6 +750,53 @@ class GDO_Module extends GDO
 	        GDO_UserSettingBlob::table()->select('uset_name, uset_value')->
 	           where("uset_user={$user->getID()}")->exec()->fetchAllArray2dPair()
 	    );
+	}
+	
+	###########
+	### ACL ###
+	###########
+	protected function getACLDefaults() : ?array
+	{
+		return null;
+	}
+	
+	private function getACLDefaultsFor(string $key) : ?array
+	{
+		if ($defaults = $this->getACLDefaults())
+		{
+			if (isset($defaults[$key]))
+			{
+				return $defaults[$key];
+			}
+		}
+		return null;
+	}
+	
+	private function getACLDefaultRelation(string $key) : string
+	{
+		if ($defaults = $this->getACLDefaultsFor($key))
+		{
+			return $defaults[0];
+		}
+		return 'acl_noone';
+	}
+	
+	private function getACLDefaultLevel(string $key) : int
+	{
+		if ($defaults = $this->getACLDefaultsFor($key))
+		{
+			return $defaults[1];
+		}
+		return 0;
+	}
+	
+	private function getACLDefaultPermission(string $key) : ?string
+	{
+		if ($defaults = $this->getACLDefaultsFor($key))
+		{
+			return $defaults[2];
+		}
+		return null;
 	}
 	
 	##############
@@ -869,17 +941,22 @@ class GDO_Module extends GDO
 	    Website::addPrefetch($href, $type);
 	}
 	
-	######################
-	### Default Method ###
-	######################
-	/**
-	 * Override this in case your module has a special default method.
-	 * The default case is that all modules reference to your config.php - GDO_MODULE + GDO_METHOD
-	 */
-	public function getDefaultMethod() : Method
+	#############
+	### Error ###
+	#############
+	protected function errorSystemDependency(string $key, array $args = null) : bool
 	{
-		$klass = sprintf('\\GDO\\%s\\Method\\%s', GDO_MODULE, GDO_METHOD);
-		return call_user_func([$klass, 'make']);
+		$msg = t($key, $args);
+		return $this->error('err_system_dependency', [$msg]);
+	}
+	
+	public function error(string $key, array $args=null) : bool
+	{
+		$gdt = GDT_Error::make()->text($key, $args)->titleRaw($this->renderName());
+		Application::$INSTANCE->setResponseCode(409);
+		Logger::logError(ten($key, $args));
+		GDT_Page::instance()->topResponse()->addField($gdt);
+		return false;
 	}
 	
 }

@@ -7,10 +7,10 @@ use GDO\Core\GDT;
  * A label is not field. It has no values. Only label. Label rendering is called on render functions.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
-final class GDT_Label extends GDT
+class GDT_Label extends GDT
 {
 	use WithLabel;
 	

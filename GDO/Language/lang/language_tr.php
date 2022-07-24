@@ -1,11 +1,11 @@
 <?php
 namespace GDO\Language\lang;
 return [
-'lbl_langswitch' => 'Dil',
+'language' => 'Dil',
 'msg_language_set' => 'Diliniz %s olarak ayarlandı.',
 'cfg_languages' => 'Desteklenen diller',
-'mdescr_language_switchlanguage' => 'Dilinizi %s olarak değiştirin.',
-'mdescr_language_switchlanguage2' => 'Dilinizi değiştirin.',
+'md_language_switchlanguage' => 'Dilinizi %s olarak değiştirin.',
+'md_language_switchlanguage2' => 'Dilinizi değiştirin.',
 
 'cfg_use_in_javascript' => 'Çeviri verileri JavaScript istemcisine kopyalansın mı?',
 'tt_cfg_use_in_javascript' => 'Bu, çeviri javascript dosyasını yükleyecektir.',

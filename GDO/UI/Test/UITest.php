@@ -8,24 +8,15 @@ use GDO\Form\GDT_Form;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 use GDO\UI\GDT_Label;
 use GDO\Core\GDT;
-use GDO\UI\GDT_Message;
 use GDO\UI\GDT_Page;
 use function PHPUnit\Framework\assertEquals;
 
 final class UITest extends TestCase
 {
-	public function testMessageRendering()
-	{
-		$string = '<p><a>Test</a></p>';
-		$message = GDT_Message::make('msg')->var($string);
-		$html = $message->renderHTML();
-		assertEquals($string, $html, 'Test if default renderer does not mess with user input.');
-	}
-	
 	public function testSimpleLabel()
 	{
 		$label = GDT_Label::make()->labelRaw('teyst');
-		$result = $label->renderMode(GDT::RENDER_CELL);
+		$result = $label->renderMode(GDT::RENDER_HTML);
 		assertStringContainsString("teyst", $result, 'Test if basic rendering works.');
 		assertStringContainsString("<label", $result, 'Test if basic html rendering works.');
 	}
@@ -33,12 +24,12 @@ final class UITest extends TestCase
     public function testButtons()
     {
         $btn = GDT_Button::make()->href(hrefDefault());
-        $html = $btn->renderMode(GDT::RENDER_CELL);
+        $html = $btn->renderMode(GDT::RENDER_HTML);
         assertStringContainsStringIgnoringCase(GDO_MODULE, $html, "Test if Button renders without name.");
         
         $form = GDT_Form::make();
         $form->addField($btn);
-        $html = $form->renderMode(GDT::RENDER_HTML);
+        $html = $form->renderMode(GDT::RENDER_FORM);
         assertStringContainsString('gdt-button', $html, "Test if Button renders without name inside forms.");
     }
 

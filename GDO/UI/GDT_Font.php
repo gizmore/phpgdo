@@ -19,25 +19,30 @@ class GDT_Font extends GDT_Select
     
 	public function defaultLabel() : self { return $this->label('font'); }
 	
-	public function __construct()
+	protected function __construct()
 	{
 	    parent::__construct();
-	    $this->choices($this->fontChoices());
+	    $this->initChoices();
 	}
 	
 	public function renderForm() : string
 	{
-		$this->choices = $this->fontChoices();
+// 		$this->choices = $this->fontChoices();
 		return parent::renderForm();
 	}
 	
 	public function validate($value) : bool
 	{
-		$this->choices = $this->fontChoices();
+// 		$this->choices = $this->fontChoices();
 		return parent::validate($value);
 	}
 	
-	public function fontChoices()
+	public function renderCLI() : string
+	{
+		return parent::renderCLI();
+	}
+	
+	public function getChoices()
 	{
 		static $choices;
 		if (!isset($choices))

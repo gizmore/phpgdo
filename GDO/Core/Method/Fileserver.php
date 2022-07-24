@@ -7,6 +7,7 @@ use GDO\Date\Time;
 use GDO\Util\FileUtil;
 use GDO\Core\Application;
 use GDO\Net\GDT_Url;
+use GDO\Core\GDO_FileCache;
 
 /**
  * Serve a static file from the webserver.
@@ -15,7 +16,7 @@ use GDO\Net\GDT_Url;
  * 
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 final class Fileserver extends Method
@@ -50,7 +51,7 @@ final class Fileserver extends Method
 		# Try cached or serve
 		$last_modified_time = filemtime($url);
 		# @TODO: Cache etag-md5 via modified time
-		$etag = $this->md5_file($url);
+		$etag = $this->md5_file($url, $last_modified_time);
 		hdr("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
 		hdr("Etag: $etag");
 		hdr("Expires: ".gmdate("D, d M Y H:i:s", $last_modified_time + Time::ONE_MONTH)." GMT");
@@ -75,9 +76,9 @@ final class Fileserver extends Method
 	/**
 	 * @TODO: implement an md5 cache for the fs.
 	 */
-	private function md5_file(string $path) : string
+	private function md5_file(string $path, int $last_modified_time) : string
 	{
-		return md5_file($path);
+		return GDO_FileCache::md5For($path, $last_modified_time);
 	}
 	
 }

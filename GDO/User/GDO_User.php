@@ -8,12 +8,12 @@ use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Language\Trans;
 use GDO\Core\GDT_DeletedAt;
-use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_EditedAt;
 use GDO\DB\Query;
 use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
-use GDO\Mail\Module_Mail;
+use GDO\Core\GDT;
+use GDO\Core\ModuleLoader;
 
 /**
  * The holy user class.
@@ -89,6 +89,7 @@ final class GDO_User extends GDO
 	}
 	
 	/**
+	 * Get all users with a permisison.
 	 * @return GDO_User[]
 	 */
 	public static function withPermission(string $permission) : array
@@ -97,8 +98,7 @@ final class GDO_User extends GDO
 	}
 	
 	/**
-	 * Get all users with a permisison.
-	 * @return self[]
+	 * Get the query to get all users with a permisison.
 	 */
 	public static function withPermissionQuery(string $permission) : Query
 	{
@@ -112,7 +112,6 @@ final class GDO_User extends GDO
 	/**
 	 * Get current user.
 	 * Not neccisarilly via session!
-	 * @return self
 	 */
 	public static function current() : self
 	{
@@ -135,7 +134,10 @@ final class GDO_User extends GDO
 	 */
 	public static function ghost() : self
 	{
-		return self::blank(['user_id' => '0', 'user_type' => 'ghost']);
+		return self::blank([
+			'user_id' => '0',
+			'user_type' => 'ghost'
+		]);
 	}
 	
 	public static function getByName(string $name) : ?self
@@ -169,7 +171,7 @@ final class GDO_User extends GDO
 			GDT_Level::make('user_level'),
 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
 			GDT_DeletedAt::make('user_deleted'),
-			GDT_DeletedBy::make('user_deletor'),
+// 			GDT_DeletedBy::make('user_deletor'),
 			GDT_PasswordHash::make('user_password'),
 		];
 	}
@@ -177,8 +179,6 @@ final class GDO_User extends GDO
 	##############
 	### Getter ###
 	##############
-	public function hasMail() : bool { return !!Module_Mail::instance()->cfgUserEmailIsConfirmed($this); }
-
 	public function getName() : ?string { return $this->gdoVar('user_name'); }
 	public function getType() : string { return $this->gdoVar('user_type'); }
 	public function getLangISO() : string { return Module_Language::instance()->cfgUserLangID(); }
@@ -197,6 +197,7 @@ final class GDO_User extends GDO
 	### Type ###
 	############
 	public function isBot() : bool { return $this->isType(GDT_UserType::BOT); }
+	public function isLink() : bool { return $this->isType(GDT_UserType::LINK); }
 	public function isGhost() : bool { return $this->isType(GDT_UserType::GHOST); }
 	public function isAnon() : bool { return $this->isGuest() && (!$this->getGuestName()); }
 	public function isMember() : bool { return $this->isType(GDT_UserType::MEMBER); }
@@ -258,6 +259,9 @@ final class GDO_User extends GDO
 	#############
 	### Perms ###
 	#############
+	/**
+	 * Not really checking auth status, but check for a user or guest name, then this user could be authed. if it's the current user you are surely authed. weird!
+	 */
 	public function isAuthenticated() : bool
 	{
 		return $this->getGuestName() || $this->getUserName();
@@ -305,7 +309,7 @@ final class GDO_User extends GDO
 	{
 		$level = $this->gdoVar('user_level');
 		$permLevel = $this->getPermissionLevel();
-		return (int)max([$level, $permLevel]);
+		return $level + $permLevel;
 	}
 	
 	public function getPermissionLevel() : int
@@ -383,6 +387,35 @@ final class GDO_User extends GDO
 		return Module_User::instance()->userSettingVar($this, 'gender');
 	}
 	
+	################
+	### Settings ###
+	################
+	public function setting(string $moduleName, string $key) : GDT
+	{
+		$module = ModuleLoader::instance()->getModule($moduleName);
+		$gdt = $module->userSetting($this, $key);
+		return $gdt;
+	}
+	
+	public function settingVar(string $moduleName, string $key) : ?string
+	{
+		return $this->setting($moduleName, $key)->getVar();
+	}
+	
+	public function settingValue(string $moduleName, string $key)
+	{
+		return $this->setting($moduleName, $key)->getValue();
+	}
+	
+	
+	#############
+	### Email ###
+	#############
+	public function hasMail(bool $confirmed=true)
+	{
+		return !!$this->getMail($confirmed);
+	}
+	
 	/**
 	 * Get the email address for a user.
 	 * This requires the mail module.
@@ -391,14 +424,21 @@ final class GDO_User extends GDO
 	 */
 	public function getMail(bool $confirmed=true) : ?string
 	{
-		if (module_enabled('Mail'))
-		{
-			$mod = Module_Mail::instance();
-			$email = $mod->userSettingVar($this, 'email');
-			$confi = $mod->userSettingVar($this, 'email_confirmed');
-			return (!$confi) ? ($confirmed ? null : $email) : $email;
-		}
-		return null;
+		$email = $this->settingVar('Mail', 'email');
+		$confi = $this->settingVar('Mail', 'email_confirmed');
+		return (!$confi) ? ($confirmed ? null : $email) : $email;
+	}
+
+	#######################
+	### Setting helpers ###
+	#######################
+	/**
+	 * Get the credits for a user.
+	 * @see Module_PaymentCredits.
+	 */
+	public function getCredits() : int
+	{
+		return $this->settingValue('PaymentCredits', 'credits');
 	}
 	
 }

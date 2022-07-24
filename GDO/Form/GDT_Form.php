@@ -6,10 +6,12 @@ use GDO\Core\WithFields;
 use GDO\UI\WithTitle;
 use GDO\UI\WithText;
 use GDO\UI\WithTarget;
+use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithError;
 use GDO\Core\WithInput;
 use GDO\Core\WithName;
+use GDO\Core\WithVerb;
 
 /**
  * A form has a title, a text, fields, menu actions and an html action/target.
@@ -28,6 +30,7 @@ final class GDT_Form extends GDT
 {
 	use WithName; # Id
 	use WithText; # form info
+	use WithVerb; # http request method
 	use WithInput; # need input
 	use WithTitle; # form title
 	use WithError; # form error
@@ -35,6 +38,19 @@ final class GDT_Form extends GDT
 	use WithTarget; # html target
 	use WithAction; # html action
 	use WithActions; # menu
+	
+	const GET = 'GET';
+	const POST = 'POST';
+	const HEAD = 'HEAD';
+	const OPTIONS = 'OPTIONS';
+	
+	public static ?self $CURRENT = null;
+	
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->verb(self::POST);
+	}
 	
 	##############
 	### Inputs ###
@@ -58,24 +74,26 @@ final class GDT_Form extends GDT
 	}
 	
 	############
-	### Verb ###
-	############
-	const GET = 'get';
-	const POST = 'post';
-	public string $verb = self::POST;
-	public function verb(string $verb) : self
-	{
-		$this->verb = $verb;
-		return $this;
-	}
-
-	############
 	### Slim ###
 	############
 	public bool $slim = false;
 	public function slim(bool $slim=true) : self
 	{
 		$this->slim = $slim;
+		return $this;
+	}
+	
+	#############
+	### Focus ###
+	#############
+	public bool $focus = true;
+	public function noFocus() : self
+	{
+		return $this->focus(false);
+	}
+	public function focus(bool $focus) : self
+	{
+		$this->focus = $focus;
 		return $this;
 	}
 	
@@ -91,12 +109,14 @@ final class GDT_Form extends GDT
 
 	public function renderCell() : string
 	{
-		return GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
-	}
-	
-	public function htmlVerb() : string
-	{
-		return sprintf(' method="%s"', $this->verb);
+		self::$CURRENT = $this;
+		$app = Application::$INSTANCE;
+		$old = $app->mode;
+		$app->mode(GDT::RENDER_FORM);
+		$html = GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
+		self::$CURRENT = null;
+		$app->mode($old);
+		return $html;
 	}
 	
 	public function htmlID() : string
@@ -155,6 +175,9 @@ final class GDT_Form extends GDT
 		return $count;
 	}
 	
+	###########
+	### Var ###
+	###########
 	public function getFormVar(string $key, bool $throw=true) : string
 	{
 		return $this->getField($key, $throw)->getVar();
@@ -180,6 +203,14 @@ final class GDT_Form extends GDT
 			}
 		}
 		return $back;
+	}
+	
+	##############
+	### Fields ###
+	##############
+	public function removeFormField(string $key) : self
+	{
+		return $this->removeField($this->getField($key));
 	}
 	
 }

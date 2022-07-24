@@ -24,11 +24,11 @@ return [
 'msg_module_enabled' => 'The %s module has been enabled.',
 'msg_module_disabled' => 'The %s module has been disabled.',
 ################################################################		
-'ft_admin_install' => 'Install %s',
+'mt_admin_install' => 'Install %s',
 'msg_module_installed' => 'The %s module has been successfully installed.',
 'msg_module_uninstalled' => 'The %s has been wiped from disk. All database records should have been destroyed.',
 ################################################################
-'ft_admin_configure' => 'Configure %s',
+'mt_admin_configure' => 'Configure %s',
 'module_version' => 'Version',
 'version_available' => 'Version available',
 'form_div_config_vars' => 'Configuration Variables',
@@ -37,7 +37,7 @@ return [
 'href_admin' => 'Admin section',
 'confirm_wipe_module' => 'Do you want to drop these tables: %s?',
 ################################################################
-'ft_admin_useredit' => 'Edit user ´%s´',
+'mt_admin_useredit' => 'Edit user ´%s´',
 'msg_user_password_is_now' => 'The user`s password is now: %s',
 ################################################################
 'link_add_perm' => 'Add Permission',
@@ -60,14 +60,14 @@ return [
 'link_create_user' => 'Create new user',
 'mt_admin_usercreate' => 'Create a new user',
 ################################################################
-'mdescr_admin_modules' => 'Administrate modules',
+'md_admin_modules' => 'Administrate modules',
 'admin_user_created' => 'The user has been created successfully.',
 'link_user_edit' => 'Edit user',
-'mdescr_admin_configure' => 'Configure the %s module',
+'md_admin_configure' => 'Configure the %s module',
 ################################################################
 'msg_perm_revoked' => 'The permission has been revoked.',
 'info_module_deps' => 'This module has these dependencies: %s',
-'mtitle_admin_clearcache' => 'Clear Cache',
+'mt_admin_clearcache' => 'Clear Cache',
 ################################################################
 'list_admin_viewpermission' => '%s Users got this permission',
 ];

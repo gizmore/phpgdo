@@ -164,6 +164,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function assert409(string $message) { $this->assertCode(409, $message); }
     protected function assertCode(int $code, string $message)
     {
+    	if (Application::isError())
+    	{
+    		CLI::flushTopResponse();
+    	}
         assertEquals($code, Application::$RESPONSE_CODE, $message);
     }
     

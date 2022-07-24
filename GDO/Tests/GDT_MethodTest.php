@@ -15,7 +15,7 @@ use GDO\UI\Color;
  * @TODO: Replace Tests\MethodTest with GDT_Method or GDT_Expression. Copy the test user stuff! Add effective user attribute to the GDT_Method.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.11.2
  */
 final class GDT_MethodTest extends GDT_Method
@@ -30,51 +30,19 @@ final class GDT_MethodTest extends GDT_Method
      */
     public static array $TEST_USERS = []; # store some users here for testing.
     
-//     ############
-//     ### Exec ###
-//     ############
-//     /**
-//      * Execute the settings. Copy the parameters into request array. 
-//      * @param string $btn
-//      * @return \GDO\Core\GDT_Response
-//      */
-//     public function execute(string $btn='submit', bool $permissions=true) : GDT
-//     {
-//     	if (isset($this->user))
-//         {
-//         	GDO_User::setCurrent($this->user);
-//         }
-
-//         $p = array_merge($this->getParameters, $this->parameters);
-//         $p[$btn] = '1';
-//         $this->method->parameters($p);
-
-//         echo "Executing Method {$this->method->gdoHumanName()}\n";
-//         ob_flush();
-//         $response = $permissions ? $this->method->exec() : $this->method->executeWithInit();
-//         ob_flush();
-//         return $response;
-//     }
+    /**
+     * @deprecated Use ->inputs() method
+     */
+    public function parameters(array $inputs) : self
+    {
+    	return $this->inputs($inputs);
+    }
     
-    ################################
-    ### Automatic Method Testing ###
-    ################################
-//     /**
-//      * Try to plug default values for a method and test it.
-//      * 
-//      * @TODO: Keep defaultMethod() in MethodTest?
-//      * 
-//      * @param string $moduleName
-//      * @param string $methodName
-//      * @param array $parameters
-//      * @return self
-//      */
-//     public function defaultMethod(Method $method)
-//     {
-// //     	$inputs = [];
-//     	$method = GDT_Method::make()->method($method)->runAs();
-// //     	$method->inputs($inputs);
-//     }
+    public function execute()
+    {
+    	$this->clibutton();
+    	return parent::execute();
+    }
     
     /**
      * Try to guess default params for a GDT.
@@ -82,7 +50,7 @@ final class GDT_MethodTest extends GDT_Method
      * @param GDT $gdt
      * @return string
      */
-    public function plugParam(GDT $gdt, Method $method) : string
+    public function xxxplugParam(GDT $gdt, Method $method) : string
     {
         $klass = get_class($gdt);
         $plugvar = $gdt->plugVar();

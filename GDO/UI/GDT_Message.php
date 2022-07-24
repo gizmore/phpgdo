@@ -252,13 +252,13 @@ class GDT_Message extends GDT_Text
      * {@inheritDoc}
      * @see \GDO\Core\GDT::setGDOData()
      */
-    public function setGDOData(GDO $gdo) : self
+    public function setGDOData(array $data) : self
     {
         $name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
-        $this->msgInput = $gdo->getVar("{$name}_input");
-        $this->msgOutput = $gdo->getVar("{$name}_output");
-        $this->msgText = $gdo->getVar("{$name}_text");
-        $this->msgEditor = $gdo->getVar("{$name}_editor");
+        $this->msgInput = @$data["{$name}_input"];
+        $this->msgOutput = @$data["{$name}_output"];
+        $this->msgText = @$data["{$name}_text"];
+        $this->msgEditor = @$data["{$name}_editor"];
         return $this;
     }
     

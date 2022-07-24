@@ -2,7 +2,6 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Repeat;
-use GDO\UI\GDT_Message;
 
 /**
  * Add GDT parameters.
@@ -163,7 +162,6 @@ trait WithParameters
 			if ($name = $gdt->getName())
 			{
 				$this->parameterCache[$name] = $gdt;
-// 				$gdt->input($this->getInput($name));
 			}
 		}
 	}

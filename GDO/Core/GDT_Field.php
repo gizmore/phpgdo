@@ -5,6 +5,7 @@ use GDO\Form\WithFormAttributes;
 use GDO\UI\WithIcon;
 use GDO\UI\WithLabel;
 use GDO\UI\WithPHPJQuery;
+use GDO\Form\GDT_Form;
 
 /**
  * A GDT with user input.
@@ -12,7 +13,7 @@ use GDO\UI\WithPHPJQuery;
  * Fields have a name and a value.
  * Fields have an optional error message.
  * Fields can be nullable.
- * Fields can have an icon.
+ * Fields can have an icon, a label and a placeholder.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -50,7 +51,7 @@ abstract class GDT_Field extends GDT
 		{
 			return [$key => $this->getVar()];
 		}
-		return [$this->getVar()];
+		return GDT::EMPTY_GDT_ARRAY;
 	}
 	
 	############
@@ -59,10 +60,18 @@ abstract class GDT_Field extends GDT
 	public function getGDOData() : ?array
 	{
 		$v = $this->getVar();
-		$v = ($v === null) || ($v === '') ? null : $v;
-		return [$this->name => $v];
+		return $v === null ? null : [$this->name => $v];
 	}
 
+	public function setGDOData(array $data) : self
+	{
+		if (isset($data[$this->name]))
+		{
+			return $this->initial($data[$this->name]);
+		}
+		return $this->var($this->initial);
+	}
+	
 	public function configJSON() : array
 	{
 		return [
@@ -136,19 +145,58 @@ abstract class GDT_Field extends GDT
 	################
 	### Features ###
 	################
-	public function isOrderable() : bool { return true; }
-	public function isSearchable() : bool { return true; }
-	public function isFilterable() : bool { return true; }
+	public bool $orderable = true;
+	public bool $aclcapable = true;
+	public bool $searchable = true;
+	public bool $filterable = true;
+	public function isOrderable() : bool { return $this->orderable; }
+	public function isACLCapable() : bool { return $this->aclcapable; }
+	public function isSearchable() : bool { return $this->searchable; }
+	public function isFilterable() : bool { return $this->filterable; }
 	public function isSerializable() : bool { return true; }
-
+	
+	public function orderable(bool $orderable) : self
+	{
+		$this->orderable = $orderable;
+		return $this;
+	}
+	
+	public function noacl() : self { return $this->aclcapable(false); }
+	public function aclcapable(bool $aclcapable) : self
+	{
+		$this->aclcapable = $aclcapable;
+		return $this;
+	}
+	
+	public function searchable(bool $searchable) : self
+	{
+		$this->searchable = $searchable;
+		return $this;
+	}
+	
+	public function filterable(bool $filterable) : self
+	{
+		$this->filterable = $filterable;
+		return $this;
+	}
+	
 	##############
 	### Render ###
 	##############
 	public function htmlFocus() : ?string
 	{
-		if ($this->getVar() === null)
+		if ($form = GDT_Form::$CURRENT)
 		{
-			return ' data-focus';
+			if ($form->focus)
+			{
+				if ($this->notNull)
+				{
+					if ($this->getVar() === null)
+					{
+						return ' data-focus';
+					}
+				}
+			}
 		}
 		return null;
 	}

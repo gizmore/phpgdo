@@ -5,7 +5,7 @@ namespace GDO\Core;
  * Add children fields to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.1
  * @see GDT
  */
@@ -104,18 +104,53 @@ trait WithFields
 		return $this;
 	}
 	
-	public function hasFields() : bool
+	public function removeFields() : self
 	{
-		foreach ($this->getAllFields() as $gdt)
-		{
-			if (!$gdt->isHidden())
-			{
-				return true;
-			}
-		}
-		return false;
+		unset($this->fields);
+		unset($this->fieldsFlat);
+		return $this;
 	}
 	
+	public function removeField(GDT $field) : self
+	{
+		if ($field->hasFields())
+		{
+			foreach ($field->getAllFields() as $gdt)
+			{
+				if ($name = $gdt->getName())
+				{
+					unset($this->fieldsFlat[$name]);
+				}
+			}
+		}
+		$name = $field->getName();
+		unset($this->fields[$name]);
+		unset($this->fieldsFlat[$name]);
+		return $this;
+	}
+	
+	public function hasFields(bool $ignoreHidden=false) : bool
+	{
+		if (!$ignoreHidden)
+		{
+			return count($this->getAllFields()) > 0;
+		}
+		else
+		{
+			foreach ($this->getAllFields() as $gdt)
+			{
+				if (!$gdt->isHidden())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * @return GDT[]
+	 */
 	public function getFields() : array
 	{
 		return isset($this->fields) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
@@ -143,7 +178,7 @@ trait WithFields
 	 */
 	public function getAllFields() : array
 	{
-		return isset($this->fieldsFlat) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
+		return isset($this->fieldsFlat) ? $this->fieldsFlat : GDT::EMPTY_GDT_ARRAY;
 	}
 	
 	###########################
@@ -208,14 +243,6 @@ trait WithFields
 	{
 		return $this->renderGDT();
 	}
-	
-// 	/**
-// 	 * WithFields, we simply iterate over them and render current mode.
-// 	 */
-// 	public function renderFields() : string
-// 	{
-// 		return $this->renderFieldsB();
-// 	}
 	
 	/**
 	 * WithFields, we simply iterate over them and render current mode.

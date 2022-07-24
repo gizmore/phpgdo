@@ -1,11 +1,11 @@
 <?php
 namespace GDO\Language\lang;
 return [
-    'lbl_langswitch' => 'Langue',
+    'language' => 'Langue',
     'msg_language_set' => 'Votre langue a été définie sur %s.',
     'cfg_languages' => 'Langues supportées',
-    'mdescr_language_switchlanguage' => 'Modifier votre langue vers %s.',
-    'mdescr_language_switchlanguage2' => 'Modifier votre langue.',
+    'md_language_switchlanguage' => 'Modifier votre langue vers %s.',
+    'md_language_switchlanguage2' => 'Modifier votre langue.',
     
     'cfg_use_in_javascript' => 'Copier les données de traduction vers le client Javascript?',
     'tt_cfg_use_in_javascript' => 'Cela chargera le fichier javascript de traduction.',

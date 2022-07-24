@@ -25,7 +25,7 @@ return [
     'tu_y' => 'y',
     
     # Timezone
-    'ft_date_timezone' => 'Imposta il tuo fuso orario',
+    'mt_date_timezone' => 'Imposta il tuo fuso orario',
 	'md_date_timezone' => 'Imposta il tuo fuso orario su %s.',
 	'msg_timezone_changed' => 'Il tuo fuso orario ora è %s.',
     'cfg_tz_probe_js' => 'Determina il fuso orario con Javascript?',

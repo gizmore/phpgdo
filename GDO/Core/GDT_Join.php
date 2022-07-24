@@ -32,7 +32,7 @@ final class GDT_Join extends GDT
 	
 	public function joinRaw($join, $type='LEFT')
 	{
-	    $this->table = null;
+		unset($this->table);
 	    $this->join = "{$type} JOIN $join";
 	    return $this;
 	}

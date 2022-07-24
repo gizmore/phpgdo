@@ -8,7 +8,7 @@ namespace GDO\Core;
  * It inits the choices with a call to $table->all()!
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.2.0
  */
 class GDT_ObjectSelect extends GDT_Select
@@ -18,11 +18,6 @@ class GDT_ObjectSelect extends GDT_Select
 	public function getChoices()
 	{
 		return isset($this->table) ? $this->table->allCached() : [];
-	}
-	
-	public function initChoices()
-	{
-		return $this->choices($this->getChoices());
 	}
 	
 	public function validate($value) : bool
@@ -128,9 +123,11 @@ class GDT_ObjectSelect extends GDT_Select
 	{
 		if (isset($this->table))
 		{
-			return [
-				$this->table->select()->first()->exec()->fetchObject()->getID(),
-			];
+			$first = $this->table->select()->first()->exec()->fetchObject();
+			if ($first)
+			{
+				return [$first->getID()];
+			}
 		}
 		return [];
 	}
@@ -220,9 +217,16 @@ class GDT_ObjectSelect extends GDT_Select
 	
 	public function configJSON() : array
 	{
-	    return array_merge(parent::configJSON(), array(
+	    return array_merge(parent::configJSON(), [
 	        'selected' => $this->configJSONSelected(),
-	    ));
+	    ]);
+	}
+	
+	public bool $searchable = true;
+	public function searchable(bool $searchable) : self
+	{
+		$this->searchable = $searchable;
+		return $this;
 	}
 	
 }

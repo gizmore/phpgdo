@@ -197,7 +197,7 @@ trait WithObject
 		}
 		else
 		{
-			return '';
+			return sprintf('<i>%s</i>', t('none'));
 		}
 	}
 	

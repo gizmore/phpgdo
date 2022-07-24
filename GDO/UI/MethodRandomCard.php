@@ -2,6 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Util\Random;
+use GDO\Core\GDO;
 use GDO\Core\GDT_DeletedAt;
 
 /**
@@ -12,9 +13,10 @@ abstract class MethodRandomCard extends MethodCard
 {
 	public function gdoParameters() : array
     {
+		return [];
     }
     
-    public function getObject()
+    public function getObject() : GDO
     {
         $table = $this->gdoTable();
         $id = $table->gdoPrimaryKeyColumn()->name;

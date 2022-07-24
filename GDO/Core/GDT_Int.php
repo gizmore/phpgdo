@@ -69,8 +69,8 @@ class GDT_Int extends GDT_DBField
 	###############
 	public ?float $min = null;
 	public ?float $max = null;
-	public function min(int $min) : self { $this->min = $min; return $this; }
-	public function max(int $max) : self { $this->max = $max; return $this; }
+	public function min(float $min) : self { $this->min = $min; return $this; }
+	public function max(float $max) : self { $this->max = $max; return $this; }
 	
 	################
 	### Validate ###
@@ -221,11 +221,6 @@ class GDT_Int extends GDT_DBField
 	{
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
-	
-// 	public function renderOrder() : string
-// 	{
-// 		return GDT_Template::php('Core', '_order_header.php', ['field' => $this]);
-// 	}
 	
 	##############
 	### Filter ###

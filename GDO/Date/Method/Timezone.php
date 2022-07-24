@@ -27,7 +27,7 @@ final class Timezone extends MethodForm
     
     public function getMethodTitle() : string
     {
-    	return t('ft_date_timezone');
+    	return t('mt_date_timezone');
     }
 
     public function getMethodDescription() : string

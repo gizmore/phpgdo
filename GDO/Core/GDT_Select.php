@@ -14,6 +14,12 @@ class GDT_Select extends GDT_ComboBox
 {
 	const SELECTED = ' selected="selected"'; # for options
 	
+	protected function __construct()
+	{
+		parent::__construct();
+// 		$this->initial = $this->emptyVar;
+	}
+	
 	###################
 	### Var / Value ###
 	###################
@@ -76,7 +82,7 @@ class GDT_Select extends GDT_ComboBox
 		{
 			return null;
 		}
-		elseif (false === ($var = array_search($value, $this->choices, true)))
+		elseif (false === ($var = array_search($value, $this->initChoices(), true)))
 		{
 			return null;
 		}
@@ -117,17 +123,18 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 	
-	public function getChoices() {
-		return $this->choices;
+	public function getChoices()
+	{
+		return GDT::EMPTY_GDT_ARRAY;
 	}
 	
-	public function initChoices()
+	public function initChoices() : array
 	{
 		if (!isset($this->choices))
 		{
-			return $this->choices($this->getChoices());
+			$this->choices($this->getChoices());
 		}
-		return $this;
+		return $this->choices;
 	}
 	
 	protected function toClosestChoiceValue($var)
@@ -179,13 +186,15 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getGDOData() : ?array
 	{
-		return [$this->name => ($this->var === $this->emptyVar ? null : $this->var)];
+		$var = $this->getVar();
+		return ( ($var === null) || ($var === $this->emptyVar) ) ?
+			null : [$this->name => $var];
 	}
 	
-	public function setGDOData(GDO $gdo=null)
-	{
-	    return (!$gdo) || $gdo->gdoIsTable() ? $this->var($this->emptyVar) : parent::setGDOData($gdo);
-	}
+// 	public function setGDOData(array $data) : self
+// 	{
+// 	    return (!$gdo) || $gdo->gdoIsTable() ? $this->var($this->emptyVar) : parent::setGDOData($gdo);
+// 	}
 	
 	################
 	### Validate ###
@@ -463,7 +472,7 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function displayVar(string $var=null) : string
 	{
-		if ($var === null)
+		if (empty($var))
 		{
 			return "<i>" . t('none') . "</i>";
 		}

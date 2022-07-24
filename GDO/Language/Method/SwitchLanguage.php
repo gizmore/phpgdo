@@ -32,7 +32,7 @@ final class SwitchLanguage extends MethodAjax
 	
 	public function getMethodTitle() : string
 	{
-		return t('lbl_langswitch');
+		return t('language');
 	}
 	
 	public function getMethodDescription() : string

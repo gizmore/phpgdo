@@ -1,12 +1,11 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Util\Filewalker;
 use GDO\DB\Cache;
+use GDO\CLI\CLI;
+use GDO\Util\Filewalker;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
-use GDO\CLI\CLI;
-use GDO\Table\GDT_Table;
 
 /**
  * Module loader.
@@ -14,7 +13,7 @@ use GDO\Table\GDT_Table;
  * Uses memcached for fast modulecache loading.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 final class ModuleLoader
@@ -510,11 +509,6 @@ final class ModuleLoader
 		uasort($this->modules, function(GDO_Module $a, GDO_Module $b) {
 			return $a->priority - $b->priority;
 		});
-// 		$gdo = GDO_Module::table();
-// 		$table = GDT_Table::make('module_table')->ordered(true, $orders, $gdo->gdoColumnsCache());
-// 		$table->gdo($gdo);
-// 		$table->addHeaderFields(...$gdo->gdoColumnsCache());
-// 		$table->sortArray($this->modules, $orders);
 	    return $this->modules;
 	}
 	

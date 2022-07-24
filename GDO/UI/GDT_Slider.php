@@ -1,9 +1,7 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
-use GDO\Form\WithFormAttributes;
 use GDO\Core\GDT_Field;
 
 /**

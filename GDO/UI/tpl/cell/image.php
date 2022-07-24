@@ -7,6 +7,6 @@ $field->addClass('gdt-image');
 ?>
 <img
  <?=$field->htmlID()?>
- name="<?=$field->name?>"
+ <?=$field->htmlName()?>
  src="<?=html($field->src)?>"
  <?=$field->htmlAttributes()?> />

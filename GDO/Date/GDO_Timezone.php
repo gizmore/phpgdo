@@ -3,7 +3,7 @@ namespace GDO\Date;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
-use GDO\Core\GDT_String;
+use GDO\Core\GDT_Name;
 use GDO\Core\GDT_Int;
 use GDO\Core\GDT_Index;
 
@@ -11,7 +11,7 @@ use GDO\Core\GDT_Index;
  * Timezone mapping entities.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.7
  */
 final class GDO_Timezone extends GDO
@@ -37,7 +37,7 @@ final class GDO_Timezone extends GDO
 	{
 		return [
 			GDT_AutoInc::make('tz_id')->bytes(2),
-			GDT_String::make('tz_name')->caseS()->ascii()->max(64)->unique()->notNull(),
+			GDT_Name::make('tz_name')->caseS()->ascii()->max(64)->unique()->notNull(),
 			GDT_Int::make('tz_offset')->bytes(2)->notNull()->initial('0'),
 			GDT_Index::make('tz_index_name')->indexColumns('tz_name')->btree(),
 		];

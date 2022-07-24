@@ -18,6 +18,7 @@ Table of contents in alphabetical order.
  - [GDT](GDO7_GDT.md)
  - [IDEAS](GDO7_IDEAS.md)
  - [INSTALL](GDO7_INSTALLATION.md)
+ - [JAVASCRIPT](GDO7_JAVASCRIPT.md)
  - [MODULES](GDO7_MODULES.md)
  - [PACKAGING](GDO7_PACKAGING.md)
  - [PHILOSPHY](GDO7_PHILOSPHY.md)

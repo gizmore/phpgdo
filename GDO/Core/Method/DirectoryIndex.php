@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDO;
 use GDO\Core\Module_Core;
 use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
@@ -52,7 +53,7 @@ final class DirectoryIndex extends MethodTable
 		return parent::execute();
 	}
 	
-	public function gdoTable()
+	public function gdoTable() : GDO
 	{
 		return GDO_DirectoryIndex::table();
 	}
@@ -60,7 +61,7 @@ final class DirectoryIndex extends MethodTable
 	public function getTableTitle()
 	{
 		$count = $this->table->countItems();
-		return t('ft_dir_index', [html($this->getUrl()), $count]);
+		return t('mt_dir_index', [html($this->getUrl()), $count]);
 	}
 	
 	public function getMethodTitle() : string

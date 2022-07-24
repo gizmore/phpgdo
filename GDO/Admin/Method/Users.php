@@ -3,6 +3,7 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Table\MethodQueryTable;
+use GDO\Core\GDO;
 use GDO\Core\GDT_String;
 use GDO\UI\GDT_Button;
 use GDO\User\GDO_User;
@@ -22,7 +23,7 @@ class Users extends MethodQueryTable
 	
 	public function getTitleLangKey() { return 'btn_users'; }
 	
-	public function gdoTable() { return GDO_User::table(); }
+	public function gdoTable() : GDO { return GDO_User::table(); }
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
