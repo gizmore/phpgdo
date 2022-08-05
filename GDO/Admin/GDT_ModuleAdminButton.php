@@ -23,14 +23,14 @@ class GDT_ModuleAdminButton extends GDT_Button
 		return isset($this->gdo) ? $this->gdo : null;
 	}
 	
-	public function renderHTML() : string
+	public function renderCell() : string
 	{
 		if ($module = $this->getConfigModule())
 		{
 		    if ($href = $module->href_administrate_module())
 			{
 			    $this->href($href);
-				return parent::renderHTML();
+				return parent::renderCell();
 			}
 		}
 		return '';

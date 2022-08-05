@@ -159,7 +159,7 @@ class Application extends GDT
 	}
 	
 	public array $inputs;
-	public function inputs(array $inputs)
+	public function inputs(array $inputs=null) : self
 	{
 		$this->inputs = $inputs;
 		return $this;

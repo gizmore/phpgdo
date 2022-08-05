@@ -18,7 +18,7 @@ final class GDT_Permission extends GDT_ObjectSelect
 	{
 	    parent::__construct();
 		$this->table(GDO_Permission::table());
-// 		$this->emptyLabel('none');
+		$this->emptyLabel('none');
 	}
 	
 	#################

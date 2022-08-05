@@ -42,5 +42,11 @@ Your playlists are ACL sharable.
  
  - Maybe the datatype flow should be input => var => string => int => float => null, and always only support one direction: from input to var to value.
 
-  - serviervorschlag.com => post the most funny Serviervorschläge
+ - serviervorschlag.com => post the most funny Serviervorschläge
   
+ - A new game: Combination of GO and GOL.
+ 
+ - DoubleChess:
+ 
+ - RockPaperScissors: You only play against Dog. Dog challenges a random user from the channel.
+ 

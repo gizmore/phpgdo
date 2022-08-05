@@ -148,7 +148,7 @@ class Install extends MethodForm
 	
 	public function execute_install()
 	{
-		Installer::installModule($this->configModule);
+		Installer::installModuleWithDependencies($this->configModule);
 		$this->configModule->saveVar('module_enabled', '1');
 		return $this->message('msg_module_installed', [$this->configModule->getName()]);
 	}

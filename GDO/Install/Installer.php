@@ -85,6 +85,12 @@ class Installer
 		return true;
 	}
 	
+	public static function installModuleWithDependencies(GDO_Module $module) : void
+	{
+		$modules = self::getDependencyModules($module->getName());
+		self::installModules($modules);
+	}
+	
 	public static function installModule(GDO_Module $module, bool $forceMigrate=false) : void
 	{
 		self::installModuleClasses($module, $forceMigrate);

@@ -433,7 +433,7 @@ abstract class Method #extends GDT
 	
 	public function withAppliedInputs(array $inputs) : self
 	{
-		$this->addInputs($inputs);
+		$this->inputs($inputs);
 		$this->applyInput();
 		return $this;
 	}
@@ -443,8 +443,14 @@ abstract class Method #extends GDT
 		$inputs = $this->getInputs();
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
-			$gdt->setGDOData($inputs);
+			$gdt->inputs($inputs);
+// 			$gdt->setGDOData($inputs);
 		}
+	}
+	
+	public function hasFields() : bool
+	{
+		return false;
 	}
 	
 	#############

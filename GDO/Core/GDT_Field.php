@@ -135,9 +135,11 @@ abstract class GDT_Field extends GDT
 	
 	public function getVar()
 	{
-		if (isset($this->input))
+		$name = $this->getName();
+		if (isset($this->inputs[$name]))
 		{
-			return $this->inputToVar($this->input);
+			$input = $this->inputs[$name];
+			return $this->inputToVar($input);
 		}
 		return $this->var;
 	}

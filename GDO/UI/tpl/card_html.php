@@ -35,7 +35,7 @@ $field->addClass('gdt-card');
 <?php endif; ?>
 <?php if ($field->getAllFields()) : ?>
     <div class="gdt-card-fields">
-    <?php foreach ($field->getAllFields() as $gdt) : ?>
+    <?php foreach ($field->getFields() as $gdt) : ?>
       <?=$gdt->renderCard()?>
     <?php endforeach; ?>
     </div>

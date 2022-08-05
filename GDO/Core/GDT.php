@@ -451,6 +451,11 @@ abstract class GDT
 		return null;
 	}
 	
+	public function inputs(array $inputs=null) : self
+	{
+		return $this;
+	}
+	
 	public function getVar()
 	{
 		return null;

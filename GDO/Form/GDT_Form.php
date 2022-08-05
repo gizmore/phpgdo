@@ -55,12 +55,16 @@ final class GDT_Form extends GDT
 	##############
 	### Inputs ###
 	##############
-	public function inputs(array $inputs) : self
-	{
-		$this->addInputs($inputs);
-		$this->actions()->addInputs($inputs);
-		return $this;
-	}
+// 	public function inputs(array $inputs) : self
+// 	{
+// 		$this->addInputs($inputs);
+// 		foreach ($this->getAllFields() as $gdt)
+// 		{
+// 			$gdt->inputs($inputs);
+// 		}
+// 		$this->actions()->addInputs($inputs);
+// 		return $this;
+// 	}
 	
 	public function plugVars() : array
 	{
@@ -144,7 +148,7 @@ final class GDT_Form extends GDT
 		$valid = true;
 		foreach ($this->getAllFields() as $key => $gdt)
 		{
-			if ($gdt->hasInputs())
+// 			if ($gdt->hasInputs())
 			{
 				$input = $gdt->getInput($key);
 				if (!$gdt->validateInput($input, false))
