@@ -12,6 +12,8 @@ use GDO\Core\GDT_Template;
  */
 class GDT_DateTime extends GDT_Date
 {
+	public string $format = Time::FMT_SHORT;
+	
 	public function gdoColumnDefine() : string
 	{
 		return "{$this->identifier()} DATETIME({$this->millis}) {$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
