@@ -43,8 +43,8 @@ final class Time
 	const ONE_HOUR = 3600;
 	const ONE_DAY = 86400;
 	const ONE_WEEK = 604800;
-	const ONE_MONTH = 2592000;
-	const ONE_YEAR = 31536000;
+	const ONE_MONTH = 2629800;
+	const ONE_YEAR = 31557600;
 	
 	# known display formats from lang file
 	const FMT_MINUTE = 'minute';
@@ -363,8 +363,6 @@ final class Time
 	
 	/**
 	 * Get the age in years of a date.
-	 * @param string $date
-	 * @return number
 	 */
 	public static function getAge(string $date = null) : float
 	{

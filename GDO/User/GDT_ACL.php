@@ -6,6 +6,7 @@ use GDO\Core\WithGDO;
 use GDO\Core\GDT;
 use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
+use GDO\DB\Query;
 
 /**
  * An ACL adds 3 fields to a GDT.
@@ -19,7 +20,6 @@ use GDO\UI\WithLabel;
  * @author gizmore
  * @version 7.0.1
  * @since 6.4.0
- * 
  * @see Module_Account
  * @see Module_User
  */
@@ -40,6 +40,11 @@ final class GDT_ACL extends GDT
 	{
 		$this->aclcapable = $aclcapable;
 		return $this;
+	}
+	
+	public function isWriteable() : bool
+	{
+		return true;
 	}
 	
 	public static function make(string $name=null) : self
@@ -79,6 +84,8 @@ final class GDT_ACL extends GDT
 	############
 	### Data ###
 	############
+	public string $initial = '';
+	
 	public function getGDOData() : ?array
 	{
 		return array_merge(
@@ -93,6 +100,22 @@ final class GDT_ACL extends GDT
 		$this->aclLevel->setGDOData($data);
 		$this->aclRelation->setGDOData($data);
 		$this->aclPermission->setGDOData($data);
+		return $this;
+	}
+	
+	public function hasChanged() : bool
+	{
+		return
+			$this->aclLevel->hasChanged() ||
+			$this->aclRelation->hasChanged() ||
+			$this->aclPermission->hasChanged();
+	}
+	
+	public function inputs(array $inputs = null) : self
+	{
+		$this->aclLevel->inputs($inputs);
+		$this->aclRelation->inputs($inputs);
+		$this->aclPermission->inputs($inputs);
 		return $this;
 	}
 	
@@ -134,15 +157,26 @@ final class GDT_ACL extends GDT
 		}
 		
 		# Check permission
-		$permission = $this->aclPermission->getValue();
-		if (!$user->hasPermissionObject($permission))
+		if ($permission = $this->aclPermission->getValue())
 		{
-			$reason = t('err_only_permission_access', [$permission->renderName()]);
-			return false;
+			if (!$user->hasPermissionObject($permission))
+			{
+				$reason = t('err_only_permission_access', [$permission->renderName()]);
+				return false;
+			}
 		}
 		
 		# This is fine. Ô-o
 		return true;
+	}
+	
+	/**
+	 * Extend a query to filter by ACL settings.
+	 */
+	public function aclQuery(Query $query, GDO_User $user, string $creatorColumn) : self
+	{
+		$this->aclRelation->aclQuery($query, $user, $creatorColumn);
+		return $this;
 	}
 	
 	##############
@@ -159,9 +193,9 @@ final class GDT_ACL extends GDT
 	###############
 	private function initACLFields() : void
 	{
-		$this->aclLevel = GDT_Level::make("{$this->name}_level");
-		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation");
-		$this->aclPermission = GDT_Permission::make("{$this->name}_permission")->onlyPermitted();
+		$this->aclLevel = GDT_Level::make("{$this->name}_level")->noacl();
+		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation")->noacl();
+		$this->aclPermission = GDT_Permission::make("{$this->name}_permission")->onlyPermitted()->noacl();
 	}
 
 	private function setupOwnLabels()

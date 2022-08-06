@@ -14,6 +14,8 @@ return [
 	'last_activity' => 'Last activity',
 
 	'user_name' => 'Username',
+	
+	'link_your_profile' => 'Your profile',
 
 	'tt_password' => 'Your password should be at least 9 chars and not be included in dictionaries.',
 
@@ -49,4 +51,7 @@ return [
 	'lbl_own_acl_relation' => '%s Usertype',
 	'lbl_own_acl_permission' => '%s Permission',
 	
+	'err_only_user_access' => 'Only users can see this',
+	'err_only_friend_friend_access' => 'Sie müssen zumindest Freundesfreund sein um dies zu sehen.',
+	'err_only_level_access' => 'You need level %s to see this.',
 ];

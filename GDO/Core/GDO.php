@@ -1299,7 +1299,7 @@ abstract class GDO extends GDT
 	/**
 	 * Fetch from result set as this table.
 	 */
-	public function fetch(Result $result) : self
+	public function fetch(Result $result) : ?self
 	{
 		return $result->fetchAs($this);
 	}

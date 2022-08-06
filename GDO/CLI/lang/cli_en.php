@@ -22,4 +22,7 @@ return [
 	'mt_cli_wait' => 'Wait',
 	'md_cli_wait' => 'Wait a specified duration.',
 	
+	'mt_cli_help' => 'Help',
+	'md_cli_help' => 'Print short help for a method.',
+	
 ];

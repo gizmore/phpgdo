@@ -13,7 +13,7 @@ use GDO\Core\WithGDO;
  * Renders effective level in table cells.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.2
  */
 final class GDT_Level extends GDT_UInt

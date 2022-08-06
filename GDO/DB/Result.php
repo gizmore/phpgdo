@@ -111,20 +111,13 @@ class Result
 		}
 		return $data;
 	}
-	
-	/**
-	 * @return GDO
-	 */
-	public function fetchObject()
+
+	public function fetchObject() : ?GDO
 	{
 		return $this->fetchAs($this->table);
 	}
 	
-	/**
-	 * @param GDO $table
-	 * @return GDO
-	 */
-	public function fetchAs(GDO $table)
+	public function fetchAs(GDO $table) : ?GDO
 	{
 		if ($gdoData = $this->fetchAssoc())
 		{
@@ -144,6 +137,7 @@ class Result
 				return $object->setGDOVars($gdoData)->setPersisted();
 			}
 		}
+		return null;
 	}
 	
 	public function fetchInto(GDO $gdo)

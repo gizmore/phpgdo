@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
+use GDO\Form\WithFormAttributes;
 
 /**
  * A composite is a container that proxies certain methods to all it's fields.
@@ -17,6 +18,7 @@ class GDT_Composite extends GDT_Container
 	use WithLabel;
 	use WithValue;
 	use WithInput;
+	use WithFormAttributes;
 	
 	public function gdoCompositeFields() : array
 	{
@@ -38,6 +40,16 @@ class GDT_Composite extends GDT_Container
 		foreach ($this->getAllFields() as $gdt)
 		{
 			$gdt->notNull($notNull);
+		}
+		return $this;
+	}
+	
+	public function inputs(array $inputs=null) : self
+	{
+		$this->inputs = $inputs;
+		foreach ($this->getAllFields() as $gdt)
+		{
+			$gdt->inputs($inputs);
 		}
 		return $this;
 	}
@@ -100,14 +112,6 @@ class GDT_Composite extends GDT_Container
 		}
 		return $data;
 	}
-	
-// 	public function gdoColumnNames()
-// 	{
-// 		return [
-// 			"{$this->name}_lat",
-// 			"{$this->name}_lng",
-// 			];
-// 	}
 	
 	public function gdoColumnDefine() : string
 	{

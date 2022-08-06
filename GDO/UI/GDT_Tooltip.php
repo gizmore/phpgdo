@@ -18,5 +18,16 @@ class GDT_Tooltip extends GDT_Icon
 	{
 		return GDT_Template::php('UI', 'cell/tooltip.php', ['field'=>$this]);
 	}
+	
+	public function renderCard() : string
+	{
+		return $this->displayCard("<i>{$this->renderIconText()}</i>");
+	}
+
+	public function displayCard($var) : string
+	{
+		return sprintf("<label>%s:</label><span>%s</span>\n",
+			$this->renderLabel(), $var);
+	}
 
 }

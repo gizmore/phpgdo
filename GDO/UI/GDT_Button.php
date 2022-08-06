@@ -5,6 +5,7 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithGDO;
 use GDO\Form\WithFormAttributes;
+use GDO\Core\WithName;
 
 /**
  * A simple button with only a label.
@@ -18,6 +19,7 @@ use GDO\Form\WithFormAttributes;
 class GDT_Button extends GDT
 {
 	use WithGDO;
+	use WithName;
 	use WithHREF;
 	use WithIcon;
 	use WithLabel;

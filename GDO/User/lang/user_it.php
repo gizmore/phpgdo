@@ -14,7 +14,9 @@ return [
 	'last_activity' => 'Ultima attivitá',
 
 	'user_name' => 'Nome utente',
-
+	
+	'link_your_profile' => 'Your profile',
+	
 	'tt_password' => 'Il password dovrebbe avere minimo 9 caratteri e non essere presente in liste di parole.',
 	'lvlpopup_item_level' => 'Livello necessitato: %s',
 	'lvlpopup_your_level' => 'Il suo livello é: %s',
@@ -43,4 +45,12 @@ return [
 	'enum_acl_members' => 'Mitglieder',
 	'enum_acl_guests' => 'Gäste',
 	'enum_acl_all' => 'Alle',
+	
+	'lbl_own_acl_level' => '%s Level',
+	'lbl_own_acl_relation' => '%s Usertype',
+	'lbl_own_acl_permission' => '%s Permission',
+	
+	'err_only_user_access' => 'Only users can see this',
+	'err_only_friend_friend_access' => 'Sie müssen zumindest Freundesfreund sein um dies zu sehen.',
+	'err_only_level_access' => 'You need level %s to see this.',
 ];

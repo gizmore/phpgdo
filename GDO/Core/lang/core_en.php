@@ -64,6 +64,7 @@ return [
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
+	'enum_undetermined_yes_no' => 'undecided',
 	
 	# Enum
 	'enum_none' => '-None-',
@@ -230,5 +231,4 @@ The %2$s System',
 	'unknown_permission' => 'This permission is unknown',
 	'add_permissions' => 'Add a permisison',
 
-	
 ];

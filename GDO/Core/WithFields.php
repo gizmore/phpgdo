@@ -41,7 +41,7 @@ trait WithFields
 	{
 		unset($this->fields);
 		unset($this->fieldsFlat);
-		$this->addFields(...$fields);
+		$this->addFields(...array_values($fields));
 		return $this;
 	}
 	
@@ -54,12 +54,17 @@ trait WithFields
 		return $this;
 	}
 
-	public function addField(GDT $gdt) : self
+	public function addField(GDT $gdt, bool $first=false) : self
 	{
-		return $this->addFieldB($gdt);		
+		return $this->addFieldB($gdt, $first);		
 	}
 	
-	protected function addFieldA(GDT $gdt) : void
+	public function addFieldFirst(GDT $gdt) : self
+	{
+		return $this->addField($gdt, true);
+	}
+	
+	protected function addFieldA(GDT $gdt, bool $first=false) : void
 	{
 		# Init
 		if (!isset($this->fields))
@@ -81,9 +86,9 @@ trait WithFields
 		}
 	}
 	
-	protected function addFieldB(GDT $gdt) : self
+	protected function addFieldB(GDT $gdt, bool $first=false) : self
 	{
-		$this->addFieldA($gdt);
+		$this->addFieldA($gdt, $first);
 		
 		# Add children in flatten only
 		if ($gdt->hasFields())
@@ -109,6 +114,12 @@ trait WithFields
 		unset($this->fields);
 		unset($this->fieldsFlat);
 		return $this;
+	}
+	
+	public function removeFieldNamed(string $key) : self
+	{
+		$field = $this->getField($key);
+		return $this->removeField($field);
 	}
 	
 	public function removeField(GDT $field) : self

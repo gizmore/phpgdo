@@ -178,9 +178,9 @@ abstract class MethodCrud extends MethodForm
 	
 	public function createFormRec(GDT_Form $form, GDT $gdt) : void
 	{
-		if ($gdt->editable)
+		if ($gdt->writeable)
 		{
-	        $gdt->writeable = $this->crudMode !== self::READ;
+// 	        $gdt->writeable = $this->crudMode !== self::READ;
 			if (!$gdt->virtual)
 			{
 			    $form->addField($gdt);

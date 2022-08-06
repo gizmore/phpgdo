@@ -67,7 +67,7 @@ abstract class GDT_Field extends GDT
 	{
 		if (isset($data[$this->name]))
 		{
-			return $this->initial($data[$this->name]);
+			return $this->var($data[$this->name]);
 		}
 		return $this->var($this->initial);
 	}
@@ -201,6 +201,17 @@ abstract class GDT_Field extends GDT
 			}
 		}
 		return null;
+	}
+	
+	public function renderCard() : string
+	{
+		return $this->displayCard($this->renderCell());
+	}
+	
+	public function displayCard($var) : string
+	{
+		return sprintf("<label>%s%s:</label><span>%s</span>\n",
+			$this->htmlIcon(), $this->renderLabel(), $var);
 	}
 
 }

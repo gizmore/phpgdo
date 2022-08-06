@@ -3,6 +3,9 @@ namespace GDO\User;
 
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_UInt;
+use GDO\Core\GDT_Checkbox;
+use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Link;
 
 /**
  * GDO_User related types and plugins.
@@ -31,7 +34,17 @@ final class Module_User extends GDO_Module
 			'Avatar',
 			'Cronjob',
 			'Friends',
+			'Session',
 		];
+	}
+	
+	public function getClasses() : array
+	{
+		$classes = [
+			GDO_UserSetting::class,
+			GDO_UserSettingBlob::class,
+		];
+		return $classes;
 	}
 	
 	public function isCoreModule() : bool { return true; }
@@ -39,14 +52,27 @@ final class Module_User extends GDO_Module
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/user'); }
 	public function href_administrate_module() : ?string { return href('User', 'Admin'); }
 
-	public function getClasses() : array
+	public function onInitSidebar() : void
 	{
-	    $classes = [
-			GDO_UserSetting::class,
-			GDO_UserSettingBlob::class,
-	    ];
-	    return $classes;
+		if ($this->cfgSidebar())
+		{
+			$uid = GDO_User::current()->getID();
+			GDT_Page::instance()->rightBar()->addField(
+				GDT_Link::make('link_your_profile')->href(
+					href('User', 'Profile', "&id=$uid")));
+		}
 	}
+	
+	##############
+	### Config ###
+	##############
+	public function getConfig() : array
+	{
+		return [
+			GDT_Checkbox::make('hook_sidebar')->initial('1'),
+		];
+	}
+	public function cfgSidebar() : bool { return $this->getConfigValue('hook_sidebar'); }
 	
 	################
 	### Settings ###

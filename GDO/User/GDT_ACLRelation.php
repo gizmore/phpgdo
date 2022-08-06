@@ -2,7 +2,6 @@
 namespace GDO\User;
 
 use GDO\Core\GDT_Enum;
-use GDO\Core\GDO_Exception;
 use GDO\DB\Query;
 use GDO\Friends\GDO_Friendship;
 
@@ -35,17 +34,15 @@ final class GDT_ACLRelation extends GDT_Enum
 	
 	/**
 	 * Check if a userpair allows access for this setting.
-	 * 
-	 * @param GDO_User $user
-	 * @param GDO_User $target
-	 * @param string $reason
-	 * @throws GDO_Exception
-	 * @return boolean
 	 */
 	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason) : bool
 	{
 		# Other cases
-		switch ($this->getVar())
+		if (null === ($var = $this->getVar()))
+		{
+// 			return true;
+		}
+		switch ($var)
 		{
 			case self::ALL:
 				return true;

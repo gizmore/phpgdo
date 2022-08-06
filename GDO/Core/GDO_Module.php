@@ -520,6 +520,7 @@ class GDO_Module extends GDO
     	    	{
     	    		$acl->initialACL($def[0], $def[1], $def[2]);
     	    	}
+	    	    $acl->setGDOData($settings);
     	    }
     	    $gdt->setGDOData($settings);
     	    return $gdt;
@@ -702,14 +703,17 @@ class GDO_Module extends GDO
 		# If it's a saved field, build the ACL container.
 		if ($gdt->isACLCapable())
 		{
-			$this->_buildSettingsCacheD($gdt);
+			if (!($gdt instanceof GDT_ACL))
+			{
+				$this->_buildSettingsCacheD($gdt);
+			}
 		}
 	}
 	
 	private function _buildSettingsCacheD(GDT $gdt) : void
 	{
 		$name = $gdt->getName();
-		$acl = GDT_ACL::make("acl_{$name}");
+		$acl = GDT_ACL::make("_acl_{$name}");
 		$this->userConfigCacheACL[$name] = $acl;
 		
 		$level = $acl->aclLevel;
@@ -755,6 +759,13 @@ class GDO_Module extends GDO
 	###########
 	### ACL ###
 	###########
+	public function getUserConfigACLField(string $key, GDO_User $user=null) : ?GDT_ACL
+	{
+		$c = $this->userConfigCacheACL;
+		$user = $user ? $user : GDO_User::current();
+		return isset($c[$key]) ? $c[$key] : null;
+	}
+	
 	protected function getACLDefaults() : ?array
 	{
 		return null;

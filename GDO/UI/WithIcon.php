@@ -102,6 +102,12 @@ trait WithIcon
 	    return $this->iconText($textKey, $textArgs);
 	}
 	
+	public function tooltipRaw(string $tooltipText) : self
+	{
+		$this->iconTextRaw = $tooltipText;
+		return $this;
+	}
+	
 	##############
 	### Render ###
 	##############

@@ -15,6 +15,8 @@ return [
 	
 	'user_name' => 'Benutzername',
 	
+	'link_your_profile' => 'Ihr Profil',
+	
 	'tt_password' => 'Ihr password sollte mindestens 9 Zeichen enthalten und nicht in Wortlisten auftauchen.',
 	
 	'lvlpopup_item_level' => 'Benötigter Level: %s',
@@ -45,4 +47,11 @@ return [
 	'enum_acl_guests' => 'Gäste',
 	'enum_acl_all' => 'Alle',
 	
+	'lbl_own_acl_level' => '%s Level',
+	'lbl_own_acl_relation' => '%s Usertype',
+	'lbl_own_acl_permission' => '%s Permission',
+	
+	'err_only_user_access' => 'Only users can see this',
+	'err_only_friend_friend_access' => 'Sie müssen zumindest Freundesfreund sein um dies zu sehen.',
+	'err_only_level_access' => 'You need level %s to see this.',
 ];

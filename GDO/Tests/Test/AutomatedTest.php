@@ -113,7 +113,7 @@ final class AutomatedTest extends TestCase
 			{
 //				echo "Checking GDO $klass\n"; ob_flush();
 				$table = GDO::tableFor($klass, false);
-				if ($table)
+				if (!$table->gdoAbstract())
 				{
 					$count++;
 					# Test GDO creation.

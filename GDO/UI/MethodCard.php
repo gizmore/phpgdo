@@ -5,6 +5,7 @@ use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Object;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Hook;
 
 /**
  * Abstract method to render a single GDO as a card.
@@ -51,6 +52,7 @@ abstract class MethodCard extends Method
     {
     	$card = GDT_Card::make()->gdo($gdo);
     	$this->createCard($card);
+    	GDT_Hook::callHook("CreateCard{$this->getModuleName()}{$this->getMethodName()}", $card);
     	return $card;
     }
     

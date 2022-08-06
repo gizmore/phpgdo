@@ -19,6 +19,8 @@ final class GDO_Profile extends GDO
 			GDT_CreatedAt::make('profile_created'),
 		];
 	}
+	
+	public function getUser() : GDO_User { return $this->gdoValue('profile_user'); }
 
 	public static function forUser(GDO_User $user) : self
 	{

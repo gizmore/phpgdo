@@ -14,11 +14,11 @@ class GDT_Select extends GDT_ComboBox
 {
 	const SELECTED = ' selected="selected"'; # for options
 	
-	protected function __construct()
-	{
-		parent::__construct();
-// 		$this->initial = $this->emptyVar;
-	}
+// 	protected function __construct()
+// 	{
+// 		parent::__construct();
+// // 		$this->initial = $this->emptyVar;
+// 	}
 	
 	###################
 	### Var / Value ###
@@ -180,6 +180,13 @@ class GDT_Select extends GDT_ComboBox
 	    if (count($candidatesMiddle) > 1)
 	    {
         	$candidatesMiddle = array_slice($candidatesMiddle, 0, 5);
+        	foreach ($candidatesMiddle as $i => $candidate)
+        	{
+        		if (is_object($candidate))
+        		{
+        			$candidatesMiddle[$i] = $candidate->renderName();
+        		}
+        	}
         	$this->error('err_select_candidates', [implode('|', $candidatesMiddle)]);
 	    }
 	}
@@ -460,7 +467,7 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function displayChoice($choice) : string
 	{
-		if (is_string($choice))
+		if (is_string($choice) || ($choice === null))
 		{
 			return $this->displayVar($choice);
 		}

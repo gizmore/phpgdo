@@ -109,7 +109,7 @@ trait WithValue
 	
 	public function hasChanged() : bool
 	{
-		return $this->initial !== $this->getVar();
+		return $this->var !== $this->getVar();
 	}
 
 	/**

@@ -44,6 +44,12 @@ trait WithInput
 		return $this;
 	}
 	
+	public function addInput(string $key, $var) : self
+	{
+		$this->inputs[$key] = $var;
+		return $this;
+	}
+	
 	public function getInputs() : array
 	{
 		return isset($this->inputs) ? $this->inputs : GDT::EMPTY_GDT_ARRAY;

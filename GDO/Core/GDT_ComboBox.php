@@ -56,5 +56,5 @@ class GDT_ComboBox extends GDT_String
 			return parent::renderFilter($f);
 		}
 	}
-	
+
 }

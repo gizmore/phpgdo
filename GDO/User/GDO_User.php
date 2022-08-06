@@ -10,6 +10,7 @@ use GDO\Language\Trans;
 use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_EditedAt;
 use GDO\DB\Query;
+use GDO\DB\Result;
 use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
 use GDO\Core\GDT;
@@ -407,6 +408,18 @@ final class GDO_User extends GDO
 		return $this->setting($moduleName, $key)->getValue();
 	}
 	
+	public static function withSettingResult(string $moduleName, string $key, string $var, bool $like=false) : Result
+	{
+		return GDO_UserSetting::usersWith($moduleName, $key, $var, $like);
+	}
+	
+	/**
+	 * @return self[]
+	 */
+	public static function withSetting(string $moduleName, string $key, string $var, bool $like=false) : array
+	{
+		return self::withSettingResult($moduleName, $key, $var, $like)->fetchAllObjects();
+	}
 	
 	#############
 	### Email ###
