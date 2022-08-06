@@ -147,13 +147,15 @@ class GDT_Select extends GDT_ComboBox
 	        $pos = stripos($vaar, $var);
 	        if ($pos === false)
 	        {
-	        	if ($name = $value->getName())
-	        	{
-	        		$pos = stripos($name, $var);
-	        		if ($pos === false)
-	        		{
-	        			continue;
-	        		}
+	        	$name = is_string($value) ? $value : $value->getName();
+// 	        	if ($name === null)
+// 	        	{
+// 	        		xdebug_break();
+// 	        	}
+        		$pos = stripos($name, $var);
+        		if ($pos === false)
+        		{
+        			continue;
 	        	}
 	        }
 	        if ($pos === 0)
@@ -484,7 +486,7 @@ class GDT_Select extends GDT_ComboBox
 			return "<i>" . t('none') . "</i>";
 		}
 		$this->initChoices();
-		return $this->choices[$var];
+		return isset($this->choices[$var]) ? $this->choices[$var] : '';
 	}
 	
 	public function renderFilter($f) : string

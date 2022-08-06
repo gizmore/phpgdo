@@ -23,7 +23,7 @@ return [
 	'err_pattern_mismatch' => 'Your input does not match the pattern %s.',
 	'err_parameter' => 'A method parameter is errorneous: %s - %s',
 	'err_unknown_config' => 'Module %s does not have a configuration variable named %s.',
-	'err_unknown_user_setting' => 'Module %s does not have a user settig variable named %s.',
+	'err_unknown_user_setting' => 'Module %s does not have a user setting variable named %s.',
 	'err_text_only_numeric' => 'Your input is only numeric. This is unexpected.',
 	'err_input_not_numeric' => 'This field expects a number.',
 	'err_int_bytes_length' => 'The bytesize of this integer is invalid: %s.',
@@ -57,8 +57,10 @@ return [
 	'err_unknown_field' => 'The field `%s` in this form is either unknown or not writeable.',
 	'err_user_required' => 'You need to signup to continue. You can also <a href="%s">continue as guest</a>',
 	'err_select_candidates' => 'There are multiple matches: %s',
-
+	'err_string_length' => 'This text has to be between %s and %s chars in length.',
+	
 	# Messages
+	'editor' => 'Editor',
 	'msg_form_validated' => 'Your form has been sent successfully.',
 
 	# Checkbox

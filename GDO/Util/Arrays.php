@@ -62,7 +62,7 @@ final class Arrays
 	 * @param array $array
 	 * @return string
 	 */
-	public static function implodeHuman(array $array)
+	public static function implodeHuman(array $array) : string
 	{
 		switch (count($array))
 		{
@@ -72,6 +72,19 @@ final class Arrays
 				$last = array_pop($array);
 				return implode(', ', $array) . ' ' . t('and') . ' ' . $last;
 		}
+	}
+	
+	public static function unique(array $array) : array
+	{
+		$unique = [];
+		foreach ($array as $key => $item)
+		{
+			if (!in_array($item, $unique, true))
+			{
+				$unique[$key] = $item;
+			}
+		}
+		return $unique;
 	}
 	
 }

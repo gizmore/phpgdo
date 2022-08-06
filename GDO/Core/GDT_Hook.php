@@ -21,10 +21,10 @@ use GDO\DB\Cache;
 final class GDT_Hook extends GDT
 {
 	# Hook cache key
-	const CACHE_KEY = 'HOOKS.gdo7';
+	const CACHE_KEY = 'HOOKS.GDOv7';
 	
 	/**
-	 * @var string[string[]]
+	 * @var string[string]
 	 */
 	private static array $CACHE;
 	

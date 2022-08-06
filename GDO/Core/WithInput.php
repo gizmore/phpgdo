@@ -81,8 +81,9 @@ trait WithInput
 // 		return $this;
 // 	}
 	
-	public function getInput(string $key=null)
+	public function getInput() : ?string
 	{
+		$key = $this->getName();
 		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
 // 		if ($key === $this->getName())
 // 		{

@@ -1,18 +1,15 @@
 <?php
 namespace GDO\Tests;
 
-use GDO\Core\GDT;
-use GDO\Core\Method;
 use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Core\GDT_Method;
-use GDO\UI\Color;
 
 /**
  * Helper Class to test GDOv7 methods.
- * 
- * @TODO: Replace Tests\MethodTest with GDT_Method or GDT_Expression. Copy the test user stuff! Add effective user attribute to the GDT_Method.
+ * Holds global user objects for test cases.
+ * This is ensured by a quirky and important module priority and dependency graph.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -30,6 +27,9 @@ final class GDT_MethodTest extends GDT_Method
      */
     public static array $TEST_USERS = []; # store some users here for testing.
     
+    ###########
+    ### boo ###
+    ###########
     /**
      * @deprecated Use ->inputs() method
      */
@@ -38,36 +38,46 @@ final class GDT_MethodTest extends GDT_Method
     	return $this->inputs($inputs);
     }
     
-    public function execute()
+    ############
+    ### Exec ###
+    ############
+    public function execute(string $button=null)
     {
-    	$this->clibutton();
+    	if ($button === null)
+    	{
+    		$this->clibutton();
+    	}
+    	else
+    	{
+    		$this->addInput($button, '1');
+    	}
     	return parent::execute();
     }
     
-    /**
-     * Try to guess default params for a GDT.
-     * 
-     * @param GDT $gdt
-     * @return string
-     */
-    public function xxxplugParam(GDT $gdt, Method $method) : string
-    {
-        $klass = get_class($gdt);
-        $plugvar = $gdt->plugVar();
-        if ($plugvar)
-        {
-            echo "Try to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
-            ob_flush();
-        }
-        else
-        {
-            echo Color::red("FAILED")." to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
-            ob_flush();
-        }
+//     /**
+//      * Try to guess default params for a GDT.
+//      * 
+//      * @param GDT $gdt
+//      * @return string
+//      */
+//     public function xxxplugParam(GDT $gdt, Method $method) : string
+//     {
+//         $klass = get_class($gdt);
+//         $plugvar = $gdt->plugVar();
+//         if ($plugvar)
+//         {
+//             echo "Try to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
+//             ob_flush();
+//         }
+//         else
+//         {
+//             echo Color::red("FAILED")." to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
+//             ob_flush();
+//         }
         
-        $this->addInput($gdt->getName(), $plugvar);
+//         $this->addInput($gdt->getName(), $plugvar);
         
-        return $plugvar;
-    }
+//         return $plugvar;
+//     }
 
 }

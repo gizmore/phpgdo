@@ -699,6 +699,10 @@ class GDO_Module extends GDO
 	{
 		$name = $gdt->getName();
 		$this->userConfigCache[$name] = $gdt;
+		foreach ($gdt->gdoColumnNames() as $key)
+		{
+			$this->userConfigCache[$key] = $gdt;
+		}
 		$this->userConfigCacheContainers[$name] = $gdt;
 		# If it's a saved field, build the ACL container.
 		if ($gdt->isACLCapable())

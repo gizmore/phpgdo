@@ -32,7 +32,7 @@ class GDT_Enum extends GDT_Select
 	##############
 	public function displayVar(string $var=null) : string
 	{
-		return t('enum_' . $var);
+		return $var === null ? '' : t('enum_' . $var);
 	}
 
 	################

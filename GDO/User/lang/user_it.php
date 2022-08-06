@@ -5,6 +5,7 @@ return [
 	'gdo_session' => 'Sessione',
 	'gender' => 'Sesso',
 	'profile_views' => 'Visualizzazioni del profilo',
+	'about_me' => 'Su di me',
 	
 	'enum_none' => 'Nessuna indicazione',
 	'enum_male' => 'Maschile',

@@ -6,20 +6,26 @@ use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_Checkbox;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Link;
+use GDO\UI\GDT_Message;
+use GDO\Net\GDT_Url;
 
 /**
  * GDO_User related types and plugins.
  * 
+ * Adds user config and settings: last url, gender, ...
+ * 
  * @author gizmore
  * @version 7.0.1
- * @since 3.0.0
+ * @since 3.0.4
+ * @see GDO
+ * @see GDO_User
  */
 final class Module_User extends GDO_Module
 {
 	##############
 	### Module ###
 	##############
-	public int $priority = 4; # start very early
+	public int $priority = 4; # Start very early. Important for test chain.
 	
 	public function getDependencies() : array
 	{
@@ -70,9 +76,11 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			GDT_Checkbox::make('hook_sidebar')->initial('1'),
+			GDT_Checkbox::make('about_me')->initial('1'),
 		];
 	}
 	public function cfgSidebar() : bool { return $this->getConfigValue('hook_sidebar'); }
+	public function cfgAboutMe() : bool { return $this->getConfigValue('about_me'); }
 	
 	################
 	### Settings ###
@@ -83,22 +91,35 @@ final class Module_User extends GDO_Module
 	public function getACLDefaults() : ?array
 	{
 		return [
-			'profile_views' => ['acl_all', 0, null],
+			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
+			'about_me' => [GDT_ACLRelation::MEMBERS, 0, null],
+			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
 		];
 	}
 	
 	public function getUserConfig() : array
 	{
 		return [
+			GDT_Url::make('last_url')->noacl()->hidden(),
 			GDT_UInt::make('profile_views')->initial('0'),
 		];
 	}
-	
+		
 	public function getUserSettings() : array
 	{
 		return [
 			GDT_Gender::make('gender'),
 		];
+	}
+	
+	public function getUserSettingBlobs() : array
+	{
+		$settings = [];
+		if ($this->cfgAboutMe())
+		{
+			$settings[] = GDT_Message::make('about_me')->label('about_me')->max(2048);
+		}
+		return $settings;
 	}
 	
 }

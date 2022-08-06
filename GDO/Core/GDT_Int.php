@@ -19,7 +19,7 @@ use GDO\DB\Query;
  * Uses WithLabel, WithFormFields, WithDatabase and WithOrder.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * 
  * @see GDT_UInt
@@ -181,11 +181,6 @@ class GDT_Int extends GDT_DBField
 	##########
 	### DB ###
 	##########
-	public function gdoColumnNames()
-	{
-		return [$this->name];
-	}
-	
 	public function gdoColumnDefine() : string
 	{
 		$unsigned = $this->unsigned ? " UNSIGNED" : "";

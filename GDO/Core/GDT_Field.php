@@ -42,6 +42,11 @@ abstract class GDT_Field extends GDT
 		return $this;
 	}
 	
+	public function gdoColumnNames() : array
+	{
+		return [$this->name];
+	}
+	
 	################
 	### Creation ###
 	################

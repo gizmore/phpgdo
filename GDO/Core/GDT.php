@@ -428,6 +428,15 @@ abstract class GDT
 	}
 	
 	/**
+	 * Get all DB column names for this GDT.
+	 * @return string[]
+	 */
+	public function gdoColumnNames() : array
+	{
+		return self::EMPTY_GDT_ARRAY;
+	}
+	
+	/**
 	 * Setup the default label. None by default.
 	 * @return self
 	 */
@@ -446,7 +455,7 @@ abstract class GDT
 		return null;
 	}
 	
-	public function getInput(string $key)
+	public function getInput() : ?string
 	{
 		return null;
 	}
@@ -525,10 +534,10 @@ abstract class GDT
 		return '';
 	}
 	
-	public function input($input = null) : self
-	{
-		return $this;
-	}
+// 	public function input($input = null) : void
+// 	{
+// // 		return $this;
+// 	}
 	
 	public function initial(string $initial = null) : self
 	{

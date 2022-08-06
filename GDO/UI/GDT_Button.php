@@ -40,7 +40,7 @@ class GDT_Button extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    if ($this->checkEnabled)
 	    {

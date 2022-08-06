@@ -7,7 +7,7 @@ use GDO\Core\GDO_Module;
  * The UI module offers many html rendering widgets and traits.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 final class Module_UI extends GDO_Module
@@ -19,7 +19,7 @@ final class Module_UI extends GDO_Module
     public function getUserSettings() : array
     {
     	return [
-    		
+//     		GDT_MessageEditor::make('editor'),
     	];
     }
     

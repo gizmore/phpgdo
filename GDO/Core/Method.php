@@ -14,6 +14,7 @@ use GDO\Language\Trans;
 use GDO\UI\GDT_Redirect;
 use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Form;
+use GDO\Date\Time;
 
 /**
  * Abstract baseclass for all methods.
@@ -46,6 +47,11 @@ abstract class Method #extends GDT
 	public function hasPermission(GDO_User $user) : bool { return true; }
 	
 	public abstract function execute();
+	
+	protected function executeB()
+	{
+		return $this->execute();
+	}
 	
 	public function getCLITrigger()
 	{
@@ -88,12 +94,12 @@ abstract class Method #extends GDT
 		$first = null;
 		foreach ($this->gdoParameterCache() as $key => $gdt)
 		{
-			if (in_array($key, $keys, true))
-			{
-				return $key;
-			}
 			if ($gdt instanceof GDT_Submit)
 			{
+				if (in_array($key, $keys, true))
+				{
+					return $key;
+				}
 				if (!$first)
 				{
 					$first = $gdt->getName();
@@ -312,7 +318,7 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
-			if ($result = $this->execute())
+			if ($result = $this->executeB())
 			{
 				$response->addField($result);
 			}
@@ -416,6 +422,9 @@ abstract class Method #extends GDT
 
 	public function storeLastActivity() : void
 	{
+		$time = Application::$TIME % 60;
+		$date = Time::getDate($time);
+		GDO_User::current()->saveVar('user_edited', $date);
 	}
 	
 	
@@ -444,7 +453,6 @@ abstract class Method #extends GDT
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
 			$gdt->inputs($inputs);
-// 			$gdt->setGDOData($inputs);
 		}
 	}
 	

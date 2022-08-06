@@ -5,6 +5,7 @@ return [
 	'gdo_session' => 'Session',
 	'gender' => 'Gender',
 	'profile_views' => 'Profile Views',
+	'about_me' => 'About Me',
 	
 	'enum_none' => 'not specified',
 	'enum_male' => 'male',
@@ -36,9 +37,9 @@ return [
 
 	'mt_user_profile' => '%s\'s Profile',
 	
-	'lbl_acl_level' => '%s visible from level',
-	'lbl_acl_relation' => '%s visible for',
-	'lbl_acl_permission' => '%s visible for group',
+	'lbl_acl_level' => '%s requires level',
+	'lbl_acl_relation' => '%s is visible for',
+	'lbl_acl_permission' => '%s is visible for',
 	
 	'enum_acl_noone' => 'Noone',
 	'enum_acl_friends' => 'Friends',

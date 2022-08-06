@@ -41,7 +41,7 @@ trait WithValue
 	###########################
 	public bool    $valueConverted = false; # remember value has been converted already
 	public ?string $initial = null; # initial dbinput var
-	public         $input = null; # userinput string
+// 	public         $input = null; # userinput string
 	public ?string $var = null; # dbinput var
 	public         $value; # output value
 	
@@ -51,12 +51,12 @@ trait WithValue
 		return $this->var($initial);
 	}
 
-	public function input($input = null) : self
-	{
-		$this->input = $input;
-		$this->valueConverted = false;
-		return $this;
-	}
+// 	public function input($input = null) : self
+// 	{
+// 		$this->input = $input;
+// 		$this->valueConverted = false;
+// 		return $this;
+// 	}
 
 // 	public function hasInput(string $key=null) : bool
 // 	{
@@ -83,9 +83,16 @@ trait WithValue
 		return $this->initial;
 	}
 	
+// 	public function getInput() : ?string
+// 	{
+// 		$name = $this->name;
+// 		$input = isset($this->inputs[$name]) ? $this->inputs[$name] : null;
+// 		return $input;
+// 	}
+	
 	public function getVar()
 	{
-		$input = isset($this->input) ? $this->input : null;
+		$input = $this->getInput();
 		if ($input !== null)
 		{
 			return $this->inputToVar($input);
@@ -99,11 +106,11 @@ trait WithValue
 	public function getValue()
 	{
 // 		if (!$this->valueConverted)
-		{
+// 		{
 			$var = $this->getVar();
 			$this->value = $this->toValue($var);
 			$this->valueConverted = true;
-		}
+// 		}
 		return $this->value;
 	}
 	
@@ -173,10 +180,8 @@ trait WithValue
 	
 	public function setGDOData(array $data) : self
 	{
-		if (isset($data[$this->name]))
-		{
-			$this->input = $data[$this->name];
-		}
+		$n = $this->name;
+		$this->var = isset($data[$n]) ? $data[$n] : null;
 		return $this;
 	}
 

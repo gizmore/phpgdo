@@ -6,7 +6,7 @@ use GDO\CLI\CLI;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Util\Permutations;
-use GDO\User\GDO_User;
+use GDO\Core\Application;
 
 /**
  * Try to save all GDO.
@@ -14,7 +14,7 @@ use GDO\User\GDO_User;
  * Once with plugged. (should be a success)
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class AutomatedGDOSaveTest extends TestCase
 {
@@ -75,6 +75,7 @@ final class AutomatedGDOSaveTest extends TestCase
 						$t->getMessage());
 					$this->error(Debug::backtraceException($t, false, $t->getMessage()));
 					$this->gdoFailure++;
+					Application::$INSTANCE->reset();
 				}
 			}
 		}
@@ -117,7 +118,7 @@ final class AutomatedGDOSaveTest extends TestCase
 		$new = $gdo->table()->cache->getNewDummy();
 		if ($new->isValid())
 		{
-			$new->save();
+			$new->replace();
 		}
 	}
 	
@@ -125,14 +126,15 @@ final class AutomatedGDOSaveTest extends TestCase
 	{
 // 		$this->saveTestGDOUnplugged($gdo);
 
-		if ($gdo instanceof GDO_User)
-		{
-			xdebug_break();
-		}
+// 		if ($gdo instanceof GDO_ModuleVar)
+// 		{
+// 			xdebug_break();
+// 		}
 		
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $name => $gdt)
 		{
+			$gdt->inputs();
 			$this->addPlugVars($name, $gdt->plugVars());
 		}
 		
@@ -143,7 +145,7 @@ final class AutomatedGDOSaveTest extends TestCase
 			$new->setVars($inputs);
 			if ($new->isValid())
 			{
-				$new->save();
+				$new->replace();
 			}
 		}
 	}

@@ -10,20 +10,43 @@ use GDO\Util\Common;
  * A method with a form.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.2
  */
 abstract class MethodForm extends Method
 {
+	#################
+	### Submitted ###
+	#################
+	public bool $submitted = false;
+	public function submitted(bool $submitted=true) : self
+	{
+		$this->submitted = $submitted;
+		return $this;
+	}
+	
+	#################
+	### Validated ###
+	#################
+	public bool $validated = false;
+	public function validated(bool $validated=true) : self
+	{
+		$this->validated = $validated;
+		return $this;
+	}
+	
+	############
+	### Form ###
+	############
 	private GDT_Form $form;
 	
-	public abstract function createForm(GDT_Form $form) : void;
-
 	public function getFormName() : string
 	{
 		return 'form';
 	}
 	
+	public abstract function createForm(GDT_Form $form) : void;
+
 	public function formValidated(GDT_Form $form)
 	{
 		$this->message('msg_form_validated');
@@ -43,7 +66,6 @@ abstract class MethodForm extends Method
 			$this->addComposeParameters($this->gdoParameters());
 			if (isset($this->inputs))
 			{
-// 				$this->addInputs($this->inputs);
 				$this->applyInput();
 			}
 			$form = $this->getForm();
@@ -68,6 +90,7 @@ abstract class MethodForm extends Method
 	{
 		if (!isset($this->form))
 		{
+			$this->submitted = false;
 			$this->form = GDT_Form::make($this->getFormName());
 			if (isset($this->inputs))
 			{
@@ -99,9 +122,15 @@ abstract class MethodForm extends Method
 // 		}
 // 	}
 	
+	############
+	### Exec ###
+	############
 	public function execute()
 	{
 		$form = $this->getForm();
+		
+		$this->submitted = false;
+		$this->validated = false;
 		
 		### Flow upload
 		if ($flowField = Common::getRequestString('flowField'))
@@ -118,8 +147,10 @@ abstract class MethodForm extends Method
 		{
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
+				$this->submitted = true;
 				if ($form->validate(null))
 				{
+					$this->validated = true;
 					if ($gdt->onclick)
 					{
 						return $gdt->click();

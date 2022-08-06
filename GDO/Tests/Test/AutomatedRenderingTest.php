@@ -9,6 +9,7 @@ use GDO\Util\Permutations;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Core\Debug;
 use GDO\Core\ModuleLoader;
+use GDO\Date\GDT_DateDisplay;
 
 /**
  * Test all rendering methods on all GDO + GDT.
@@ -134,6 +135,11 @@ final class AutomatedRenderingTest extends TestCase
 	{
 // 		$this->renderAll($gdt); # unplugged
 
+// 		if ($gdt instanceof GDT_DateDisplay)
+// 		{
+// 			xdebug_break();
+// 		}
+
 		$name = $gdt->getName();
 		$name = $name ? $name : "testfield";
 		$this->plugVariants = [];
@@ -143,7 +149,7 @@ final class AutomatedRenderingTest extends TestCase
 		$success = true;
 		foreach ($permutations->generate() as $inputs)
 		{
-			$gdt->input($inputs[$name]);
+			$gdt->inputs($inputs);
 			if (!$this->renderAll($gdt)) # plugged
 			{
 				$success = false;

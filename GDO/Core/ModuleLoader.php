@@ -490,7 +490,10 @@ final class ModuleLoader
 			$app = Application::$INSTANCE;
 		    if ($app->isCLI()) # && (!$app->isInstall()))
 		    {
-		        echo "No database available yet...\n";
+		    	if (!$app->isUnitTests())
+		    	{
+		    		echo "No database available yet...\n";
+		    	}
 		    }
 		}
 		catch (\Throwable $e)

@@ -10,23 +10,37 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
 use GDO\User\Module_User;
 use GDO\UI\GDT_Tooltip;
+use GDO\Core\WithFileCache;
 
 /**
  * Show a user's profile.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 7.0.1
  */
 final class Profile extends MethodCard
 {
+	use WithFileCache;
+	
 	public function gdoTable(): GDO
 	{
 		return GDO_User::table();
 	}
+
+	public function getUser() : GDO_User
+	{
+		if (!($user = $this->getObject()))
+		{
+			$user = GDO_User::current();
+		}
+		return $user;
+	}
 	
 	public function getMethodTitle() : string
 	{
-		return t('mt_user_profile', [$this->getObject()->renderUserName()]);
+		$user = $this->getUser();
+		return t('mt_user_profile', [$user->renderUserName()]);
 	}
 	
 	public function execute()

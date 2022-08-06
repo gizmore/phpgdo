@@ -62,7 +62,7 @@ final class Module_Language extends GDO_Module
 	public function getUserSettings() : array
 	{
 		return [
-			GDT_Language::make('language')->notNull()->initial(GDO_LANGUAGE)->withCompletion()
+			GDT_Language::make('language')->notNull()->initial(GDO_LANGUAGE)->withCompletion(),
 		];
 	}
 	

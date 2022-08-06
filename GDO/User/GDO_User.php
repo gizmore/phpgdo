@@ -378,10 +378,10 @@ final class GDO_User extends GDO
 		return '~~' . t('guest') . '~~';
 	}
 
-	public function renderProfileLink(bool $nickname, bool $avatar, bool $score) : string
-	{
-		return sprintf('%s');
-	}
+// 	public function renderProfileLink(bool $nickname, bool $avatar, bool $score) : string
+// 	{
+// 		return sprintf('%s');
+// 	}
 	
 	public function getGender() : string
 	{

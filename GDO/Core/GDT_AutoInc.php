@@ -27,7 +27,6 @@ final class GDT_AutoInc extends GDT_UInt
 	##############
 	### Column ###
 	##############
-	public function gdoColumnNames() { return [$this->name]; }
 	public function primary(bool $primary=true) : self { return $this; } 
 	public function isPrimary() : bool { return true; } # Weird workaround for mysql primary key defs.
 	public function gdoColumnDefine() : string { return "{$this->identifier()} {$this->gdoSizeDefine()}INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY"; }

@@ -177,8 +177,11 @@ final class Trans
 	
 	private static function missing(string $key) : void
 	{
-		self::$MISS++;
-		self::$MISSING[$key] = $key;
+		if ($key !== 'err_db')
+		{
+			self::$MISS++;
+			self::$MISSING[$key] = $key;
+		}
 	}
 
 	private static function getCacheKey(string $iso) : string

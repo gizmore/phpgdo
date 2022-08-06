@@ -5,7 +5,7 @@ namespace GDO\UI;
  * Very simple field that only has custom html content.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.7.0
  */
 final class GDT_HTML extends GDT_Container
@@ -21,6 +21,11 @@ final class GDT_HTML extends GDT_Container
 // 	    });
 //     	return $html;
 // 	}
+
+	public function renderCell() : string
+	{
+		return $this->getVar() . parent::renderCell();
+	}
 	
 	public function renderCard() : string
 	{

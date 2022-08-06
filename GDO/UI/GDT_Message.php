@@ -18,7 +18,7 @@ use GDO\Core\GDT_Text;
  * @see \GDO\Markdown\Module_Markdown
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 4.0.0
  */
 class GDT_Message extends GDT_Text
@@ -68,11 +68,11 @@ class GDT_Message extends GDT_Text
     ###############
     ### Decoder ###
     ###############
-    public static string $EDITOR_NAME = 'GDT';
+    public static string $EDITOR_NAME = 'HTML';
     public static array $DECODER = [self::class, 'DECODE'];
     public static array $DECODERS = [
-    	'GDT' => [self::class, 'DECODE'],
-    	'NONE' => [self::class, 'NONDECODE'],
+    	'TEXT' => [self::class, 'NONDECODE'],
+    	'HTML' => [self::class, 'DECODE'],
     ];
     
     public static function setDecoder($decoder)
@@ -88,7 +88,7 @@ class GDT_Message extends GDT_Text
     
     public static function NONDECODE($s)
     {
-    	return $s;
+    	return html($s);
     }
     
     public static function decodeMessage($s)

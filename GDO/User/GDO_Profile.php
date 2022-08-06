@@ -26,7 +26,7 @@ final class GDO_Profile extends GDO
 	{
 		$profile = self::blank([
 			'profile_user' => $user->getID(),
-			'profile_created' => $user->settingVar('Register', 'register_date'),
+			'profile_created' => $user->gdoVar('user_last_activity'),
 		]);
 		return $profile;
 	}

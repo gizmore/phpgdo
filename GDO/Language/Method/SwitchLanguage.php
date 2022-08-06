@@ -16,7 +16,7 @@ use GDO\User\GDO_User;
  * Stores your choice in your session.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.9.0
  * @see Module_Language
  */
@@ -52,7 +52,7 @@ final class SwitchLanguage extends MethodAjax
 	 */
 	protected function getLanguage(bool $throw=true) : ?GDO_Language
 	{
-        return $this->gdoParameterValue('lang', true, $throw);
+		return $this->gdoParameterValue('lang', $throw, $throw);
 	}
 
 	/**

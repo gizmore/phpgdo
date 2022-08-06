@@ -7,6 +7,7 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDO;
 use GDO\Core\WithName;
 use GDO\Core\WithValue;
+use GDO\Core\WithInput;
 
 /**
  * Display a date either as age or date
@@ -16,6 +17,7 @@ final class GDT_DateDisplay extends GDT
 {
 	use WithName;
 	use WithValue;
+	use WithInput;
 	use WithPHPJQuery;
 	
     public int $showDateAfterSeconds = 172800; # 2 days

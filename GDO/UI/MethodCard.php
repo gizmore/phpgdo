@@ -9,67 +9,74 @@ use GDO\Core\GDT_Hook;
 
 /**
  * Abstract method to render a single GDO as a card.
- * 
+ *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.6.4
  */
 abstract class MethodCard extends Method
 {
-    public function idName() : string { return 'id'; }
 
-    public abstract function gdoTable() : GDO;
+	public abstract function gdoTable(): GDO;
 
-    ##############
-    ### Params ###
-    ##############
-    public function gdoParameters() : array
-    {
-        return [
-            GDT_Object::make($this->idName())->table($this->gdoTable())->notNull(),
-        ];
-    }
+	public function idName(): string
+	{
+		return 'id';
+	}
 
-    public function getObject() : GDO
-    {
-    	return $this->gdoParameterValue($this->idName());
-    }
-    
-    ############
-    ### Exec ###
-    ############
-    public function execute()
-    {
-        $gdo = $this->getObject();
-        if (!$gdo)
-        {
-            return $this->error('err_no_data_yet');
-        }
-        return $this->executeFor($gdo);
-    }
-    
-    protected function executeFor(GDO $gdo) : GDT
-    {
-    	$card = GDT_Card::make()->gdo($gdo);
-    	$this->createCard($card);
-    	GDT_Hook::callHook("CreateCard{$this->getModuleName()}{$this->getMethodName()}", $card);
-    	return $card;
-    }
-    
-    protected function createCard(GDT_Card $card) : void  
-    {
-    }
-    
-    ###########
-    ### Seo ###
-    ###########
-    public function getTitle()
-    {
-        if ($gdo = $this->getObject())
-        {
-            return $gdo->renderName();
-        }
-        return parent::getTitle();
-    }
-    
+	# #############
+	# ## Params ###
+	# #############
+	public function gdoParameters(): array
+	{
+		return [
+			GDT_Object::make($this->idName())->table($this->gdoTable()),
+		];
+	}
+
+	public function getObject(): ?GDO
+	{
+		return $this->gdoParameterValue($this->idName());
+	}
+
+	# ###########
+	# ## Exec ###
+	# ###########
+	public function execute()
+	{
+		$gdo = $this->getObject();
+		return $this->executeFor($gdo);
+	}
+
+	protected function executeFor(GDO $gdo): GDT
+	{
+		$card = GDT_Card::make()->gdo($gdo);
+		$this->createCard($card);
+		$this->callCardHook($card);
+		return $card;
+	}
+
+	protected function createCard(GDT_Card $card): void
+	{
+	}
+
+	private function callCardHook(GDT_Card $card): void
+	{
+		$mo = $this->getModuleName();
+		$me = $this->getMethodName();
+		GDT_Hook::callHook("CreateCard{$mo}{$me}", $card);
+	}
+
+	# ##########
+	# ## Seo ###
+	# ##########
+	public function getTitle()
+	{
+		if ($gdo = $this->getObject())
+		{
+			return $gdo->renderName();
+		}
+		return parent::getTitle();
+	}
+
 }

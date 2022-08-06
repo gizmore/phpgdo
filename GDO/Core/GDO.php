@@ -196,6 +196,11 @@ abstract class GDO extends GDT
 		return html($var);
 	}
 	
+	public function getName() : ?string
+	{
+		return $this->renderName();
+	}
+	
 	public function renderName() : string
 	{
 		return $this->gdoHumanName() . "#" . $this->getID();
@@ -370,6 +375,15 @@ abstract class GDO extends GDT
 	public function gdoValue(string $key)
 	{
 		return $this->gdoColumn($key)->getValue();
+	}
+	
+	public function inputs(array $inputs=null) : self
+	{
+		foreach ($this->gdoColumnsCache() as $gdt)
+		{
+			$gdt->inputs($inputs);
+		}
+		return $this;
 	}
 	
 	#############

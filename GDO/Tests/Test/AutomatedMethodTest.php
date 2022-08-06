@@ -16,6 +16,8 @@ use function PHPUnit\Framework\assertGreaterThanOrEqual;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertLessThan;
+use GDO\User\Method\Profile;
+use GDO\CLI\Method\Concat;
 
 /***
  * Test all GDOv7 with plugvar fuzzing.
@@ -121,14 +123,20 @@ final class AutomatedMethodTest extends TestCase
 	
 	private function tryTrivialMethodVariant(Method $method, array $plugVars)
 	{
+// 		if ($method instanceof Concat)
+// 		{
+// 			xdebug_break();
+// 		}
+		
 		try
 		{
+			Application::$INSTANCE->reset();
 			$n = $this->automatedTested;
 			$this->automatedCalled++;
 			$mt = GDT_MethodTest::make()->inputs($plugVars);
-			$result = $mt->runAs($this->gizmore())
-			->method($method)
-			->execute();
+			$mt->runAs($this->gizmore());
+			$mt->method($method);
+			$result = $mt->execute();
 			assertLessThan(500,
 				Application::$RESPONSE_CODE,
 				"Test if trivial method {$this->mome($method)} has a success error code.");
@@ -138,7 +146,7 @@ final class AutomatedMethodTest extends TestCase
 				$this->message('%4d.) %s: %s (%s)',
 					$n, CLI::bold(CLI::green('SUCCESS')),
 					$this->boldmome($mt->method),
-					implode(',', $plugVars));
+					json_encode($plugVars));
 		}
 		catch (\Throwable $ex)
 		{

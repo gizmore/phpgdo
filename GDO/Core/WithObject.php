@@ -80,7 +80,7 @@ trait WithObject
 			 	if ( ($gdo = $this->getByName($var)) ||
 			 		 ($gdo = $this->table->getById($var)) )
 			 	{
-			 		$this->addInput($this->getName(), $gdo->getID());
+// 			 		$this->addInput($this->getName(), $gdo->getID());
 			 		return $gdo;
 			 	}
 			 	
