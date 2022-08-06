@@ -249,8 +249,6 @@ class GDT_Message extends GDT_Text
     /**
      * Set GDO Data is called when the GDO sets up the GDT.
      * We copy the 3 text columns and revert a special naming hack in module news; 'iso][en][colum_name' could be it's name.
-     * {@inheritDoc}
-     * @see \GDO\Core\GDT::setGDOData()
      */
     public function setGDOData(array $data) : self
     {
@@ -291,7 +289,7 @@ class GDT_Message extends GDT_Text
     public function renderCell() : string { return (string) $this->getVarOutput(); }
     public function renderList() : string { return (string) $this->getVarOutput(); }
     public function renderCard() : string { return '<div class="gdt-message-card">'.$this->getVarOutput().'</div>'; }
-    public function renderForm() : string { return GDT_Template::php('UI', 'form/message.php', ['field'=>$this]); }
+    public function renderForm() : string { return GDT_Template::php('UI', 'message_form.php', ['field'=>$this]); }
     public function renderChoice() : string { return '<div class="gdo-message-condense">'.$this->renderCell().'</div>'; }
 	
 	##############

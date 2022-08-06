@@ -56,7 +56,7 @@ final class GDT_Page extends GDT
 				$module->onInitSidebar();
 			}
 		}
-		return GDT_Template::php('UI', 'page.php', ['page' => $this]);
+		return GDT_Template::php('UI', 'page_html.php', ['page' => $this]);
 	}
 	
 	############

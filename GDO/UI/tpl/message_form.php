@@ -1,4 +1,6 @@
-<?php /** @var $field \GDO\UI\GDT_Message **/ ?>
+<?php
+/** @var $field \GDO\UI\GDT_Message **/
+?>
 <div class="gdt-container<?=$field->classError()?>">
   <?=$field->htmlIcon()?>
   <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>

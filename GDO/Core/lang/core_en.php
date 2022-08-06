@@ -58,6 +58,7 @@ return [
 	'err_user_required' => 'You need to signup to continue. You can also <a href="%s">continue as guest</a>',
 	'err_select_candidates' => 'There are multiple matches: %s',
 	'err_string_length' => 'This text has to be between %s and %s chars in length.',
+	'err_unknown_order_column' => 'This column cannot be sorted: %s.',
 	
 	# Messages
 	'editor' => 'Editor',
@@ -84,6 +85,7 @@ return [
 	'btn_send' => 'Send',
 	'btn_set' => 'Set',
 	'btn_upload' => 'Upload',
+	'btn_overview' => 'Overview',
 	'submit' => 'Submit',
 	
 	# Float

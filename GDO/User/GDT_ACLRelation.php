@@ -22,11 +22,12 @@ final class GDT_ACLRelation extends GDT_Enum
 	const FRIENDS = 'acl_friends';
 	const FRIEND_FRIENDS = 'acl_friend_friends';
 	const NOONE = 'acl_noone';
+	const HIDDEN = 'acl_hidden';
 	
 	protected function __construct()
 	{
 	    parent::__construct();
-	    $this->enumValues(self::ALL, self::GUESTS, self::MEMBERS, self::FRIEND_FRIENDS, self::FRIENDS, self::NOONE);
+	    $this->enumValues(self::ALL, self::GUESTS, self::MEMBERS, self::FRIEND_FRIENDS, self::FRIENDS, self::NOONE, self::HIDDEN);
 	    $this->initial = self::NOONE;
 		$this->notNull = true;
 		$this->icon = 'eye';

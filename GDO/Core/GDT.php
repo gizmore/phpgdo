@@ -522,6 +522,10 @@ abstract class GDT
 	
 	public function htmlID() : string
 	{
+		if ($name = $this->getName())
+		{
+			return sprintf(' id="%s_%s"', $name, spl_object_id($this));
+		}
 		return '';
 	}
 	
