@@ -11,11 +11,11 @@ use GDO\User\GDO_User;
  * Add effective GDO_User attribute.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 7.0.0
  */
 trait WithEnvironment
 {
-// 	use WithInput;
 	use WithFields;
 	
 	##############
@@ -57,10 +57,10 @@ trait WithEnvironment
 	###############
 	### Execute ###
 	###############
-	protected function changeUser() : self
+	protected function changeUser(bool $changeLocale=false) : self
 	{
 		$user = isset($this->runAs) ? $this->runAs : GDO_User::current();
-		GDO_User::setCurrent($user, true);
+		GDO_User::setCurrent($user, $changeLocale);
 		return $this;
 	}
 	

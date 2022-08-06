@@ -76,6 +76,7 @@ if (isset($_REQUEST['_lang']))
 else
 {
 	Trans::$ISO = Module_Language::instance()->detectISO();
+// 	$user->saveSettingVar('Language', 'language', Trans::$ISO);
 }
 
 # HTTP verb
@@ -156,7 +157,8 @@ else
 	}
 	elseif (GDO_SEO_URLS)
 	{
-		$me = SeoProxy::make();
+		unset($_REQUEST['url']);
+		$me = SeoProxy::makeProxied($url);
 	}
 	else
 	{

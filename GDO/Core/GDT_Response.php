@@ -43,6 +43,10 @@ final class GDT_Response extends GDT_Tuple
 	public function renderPage() : string
 	{
 		$content = $this->renderFields(GDT::RENDER_CELL);
+		if (Application::$INSTANCE->isAjax())
+		{
+			return $content; # ajax is html without html boilerplate.
+		}
 		$page = GDT_Page::instance();
 		return $page->html($content)->renderHTML();
 	}

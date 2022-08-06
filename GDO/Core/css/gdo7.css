@@ -4,7 +4,8 @@ p { word-break: break-word; }
 *[background-image] { background-size: cover; }
 .cf:after { content: "."; clear: both; display: block; visibility: hidden; height: 0px; }
 .ce { text-align: center; margin: auto; }
-.gdo-exception { white-space: pre-line; font-family: monospace; word-break: break-all; text-align: left; }
+/* .gdo-exception { white-space: pre-line; font-family: monospace; word-break: break-all; text-align: left; } */
+.gdo-exception { text-align: left; }
 .gdt-tblorder { display: inline-block; }
 img.gdo-country,
 img.gdo-language { width: 32px; border: 1px solid #555; }

@@ -37,15 +37,15 @@ trait WithObject
 		return $this;
 	}
 
-	###################
-	### Composition ### @TODO unused, implement composite CRUD forms?
-	###################
-	public $composition = false;
-	public function composition(bool $composition=true) : self
-	{
-		$this->composition = $composition;
-		return $this;
-	}
+// 	###################
+// 	### Composition ### @TODO unused, implement composite CRUD forms?
+// 	###################
+// 	public $composition = false;
+// 	public function composition(bool $composition=true) : self
+// 	{
+// 		$this->composition = $composition;
+// 		return $this;
+// 	}
 	
 	###################
 	### Var / Value ###
