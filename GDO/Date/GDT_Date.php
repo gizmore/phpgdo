@@ -56,7 +56,7 @@ class GDT_Date extends GDT_Timestamp
 	##############
 	public function renderCell() : string
 	{
-		return Time::displayDate($this->getVar());
+		return Time::displayDate($this->getVar(), $this->format);
 	}
 	
 	public function renderForm() : string
