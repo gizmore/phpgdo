@@ -117,12 +117,13 @@ class Application extends GDT
 	/**
 	 * Call when you create the next command in a loop.
 	 */
-	public function reset() : void
+	public function reset() : self
 	{
 		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
 		$this->mode = $this->modeDetected;
 		self::updateTime();
+		return $this;
 	}
 	
 	public int $mode = GDT::RENDER_HTML;

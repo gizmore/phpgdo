@@ -16,7 +16,7 @@ use GDO\Core\GDO_Error;
  * @example GDO_User::table()->select()->execute()->fetchAll();
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDO
  * @see Cache
@@ -78,8 +78,6 @@ final class Query
 
 	/**
 	 * Mark this query's buffered mode.
-	 * @param boolean $buffered
-	 * @return self
 	 */
 	public function buffered(bool $buffered) : self
 	{
@@ -97,7 +95,6 @@ final class Query
 	#############
 	/**
 	 * Enable logging and verbose output.
-	 * @return \GDO\DB\Query
 	 */
 	public function debug($debug=true) : self { $this->debug = $debug; return $this; }
 	
@@ -137,10 +134,7 @@ final class Query
 	}
 	
 	/**
-	 * Specify which GDO class is used for fetching.
-	 * @TODO Rename function
-	 * @param GDO $fetchTable
-	 * @return \GDO\DB\Query
+	 * Specify which GDO class is used for fetching. @TODO Rename function.
 	 */
 	public function fetchTable(GDO $fetchTable) : self
 	{
@@ -169,11 +163,6 @@ final class Query
 		return $this->from($tableName);
 	}
 	
-	/**
-	 * @param string $condition
-	 * @param string $op
-	 * @return static
-	 */
 	public function where(string $condition, string $op="AND") : self
 	{
 		$this->where = isset($this->where) ? $this->where . " $op ($condition)" : "($condition)";
@@ -190,11 +179,6 @@ final class Query
 		return isset($this->where) ? " WHERE {$this->where}" : "";
 	}
 	
-	/**
-	 * @param string $condition
-	 * @param string $op
-	 * @return self
-	 */
 	public function having(string $condition, string $op="AND") : self
 	{
 		if (isset($this->having))
@@ -213,11 +197,6 @@ final class Query
 		return isset($this->having) ? " HAVING {$this->having}" : "";
 	}
 	
-		
-	/**
-	 * @param string $tableName
-	 * @return self
-	 */	
 	public function from(string $tableName) : self
 	{
 		$this->from = isset($this->from) ? $this->from . ", $tableName" : $tableName;
@@ -236,8 +215,6 @@ final class Query
 	
 	/**
 	 * Build a select.
-	 * @param string $columns
-	 * @return self
 	 */
 	public function select(string $columns=null) : self
 	{

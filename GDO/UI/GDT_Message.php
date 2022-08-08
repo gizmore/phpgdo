@@ -35,6 +35,7 @@ class GDT_Message extends GDT_Text
     ###########
     public static int $NUM = 1;
     public int $num = 0;
+    
     /**
      * On make, setup order and search field.
      * @param string $name
@@ -53,14 +54,14 @@ class GDT_Message extends GDT_Text
     ### Quoter ###
     ##############
     public static $QUOTER = [self::class, 'QUOTE'];
-    public static function QUOTE(GDO_User $user, $date, $text)
+    public static function QUOTE(GDO_User $user, string $date, string $text) : string
     {
-        $link = GDT_ProfileLink::make()->nickname()->forUser($user);
+        $link = GDT_ProfileLink::make()->nickname()->user($user);
         return sprintf("<div><blockquote>\n<span class=\"quote-by\">%s</span>\n<span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>\n",
             t('quote_by', [$link->render()]), t('quote_at', [tt($date)]), $text);
     }
     
-    public static function quoteMessage(GDO_User $user, $date, $text)
+    public static function quoteMessage(GDO_User $user, string $date, string $text) : string
     {
         return call_user_func(self::$QUOTER, $user, $date, $text);
     }
@@ -75,23 +76,23 @@ class GDT_Message extends GDT_Text
     	'HTML' => [self::class, 'DECODE'],
     ];
     
-    public static function setDecoder($decoder)
+    public static function setDecoder(string $decoder) : void
     {
     	self::$EDITOR_NAME = $decoder;
     	self::$DECODER = self::$DECODERS[$decoder];
     }
 
-    public static function DECODE($s)
+    public static function DECODE(string $s) : string
     {
     	return self::getPurifier()->purify($s);
     }
     
-    public static function NONDECODE($s)
+    public static function NONDECODE(?string $s) : ?string
     {
-    	return html($s);
+    	return $s ? html($s) : null;
     }
     
-    public static function decodeMessage($s)
+    public static function decodeMessage(?string $s) : ?string
     {
         if ($s === null)
         {
@@ -100,19 +101,19 @@ class GDT_Message extends GDT_Text
         return call_user_func(self::$DECODER, $s);
     }
     
-    public static function plaintext($html)
+    public static function plaintext(?string $html) : ?string
     {
-        if ($html === null)
-        {
-            return null;
-        }
-        $html = html_entity_decode($html, ENT_HTML5);
-        $html = preg_replace("#\r?\n#", ' ', $html);
-        $html = preg_replace('#<a .*href="(.*)".*>(.*)</a>#i', ' $2($1) ', $html);
-        $html = preg_replace('#</p>#i', "\n", $html);
-        $html = preg_replace('#<[^\\>]*>#', ' ', $html);
-        $html = preg_replace('# +#', ' ', $html);
-        return trim($html);
+    	if ($html)
+    	{
+	        $html = html_entity_decode($html, ENT_HTML5);
+	        $html = preg_replace("#\r?\n#", ' ', $html);
+	        $html = preg_replace('#<a .*href="(.*)".*>(.*)</a>#i', ' $2($1) ', $html);
+	        $html = preg_replace('#</p>#i', "\n", $html);
+	        $html = preg_replace('#<[^\\>]*>#', ' ', $html);
+	        $html = preg_replace('# +#', ' ', $html);
+	        return trim($html);
+    	}
+    	return null;
     }
     
 //     public function gdoExampleVars() : ?string
@@ -154,7 +155,6 @@ class GDT_Message extends GDT_Text
     
     /**
      * Validate via String validation twice, the input and output variants.
-     * {@inheritDoc}
      * @see GDT_Text::validate()
      */
     public function validate($value) : bool
@@ -212,8 +212,8 @@ class GDT_Message extends GDT_Text
     {
         $this->msgInput = $var;
         $this->msgOutput = self::decodeMessage($var);
-        $this->msgText = self::plaintext($this->output);
-        $this->msgEditor = $this->nowysiwyg ? 'GDT' : self::$EDITOR_NAME;
+        $this->msgText = self::plaintext($this->msgOutput);
+        $this->msgEditor = $this->nowysiwyg ? 'HTML' : self::$EDITOR_NAME;
         return parent::initial($var);
     }
     
@@ -227,7 +227,7 @@ class GDT_Message extends GDT_Text
         $this->msgInput = $var;
         $this->msgOutput = self::decodeMessage($var);
         $this->msgText = self::plaintext($this->msgOutput);
-        $this->msgEditor = $this->nowysiwyg ? 'GDT' : self::$EDITOR_NAME;
+        $this->msgEditor = $this->nowysiwyg ? 'HTML' : self::$EDITOR_NAME;
         return parent::var($var);
     }
     
@@ -296,7 +296,15 @@ class GDT_Message extends GDT_Text
 	### Editor ###
 	##############
 	public bool $nowysiwyg = false;
-	public function nowysiwyg(bool $nowysiwyg=true) : self { $this->nowysiwyg = $nowysiwyg; return $this; }
-	public function classEditor() : string { return $this->nowysiwyg ? 'as-is' : 'wysiwyg'; }
+	public function nowysiwyg(bool $nowysiwyg=true) : self
+	{
+		$this->nowysiwyg = $nowysiwyg;
+		return $this;
+	}
+	
+	public function classEditor() : string
+	{
+		return $this->nowysiwyg ? 'as-is' : 'wysiwyg';
+	}
 	
 }

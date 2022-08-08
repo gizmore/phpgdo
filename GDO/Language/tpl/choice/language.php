@@ -3,7 +3,7 @@ namespace GDO\Language\tpl\choice;
 use GDO\Language\GDO_Language;
 /** @var $language GDO_Language **/
 ?>
-<div>
+<span class="gdt-choice">
 <?php if ($language) :
 $href = GDO_WEB_ROOT . "GDO/Language/img/{$language->getID()}.png";
 ?>
@@ -22,4 +22,4 @@ $href = GDO_WEB_ROOT . "GDO/Language/img/zz.png";
  src="<?=$href?>" />
 <?=t('unknown_language')?>
 <?php endif; ?>
-</div>
+</span>

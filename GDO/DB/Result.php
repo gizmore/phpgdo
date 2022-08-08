@@ -66,16 +66,15 @@ class Result
 	### Fetch ###
 	#############
 	/**
-	 * Fetch the first value of the next row.
-	 * @TODO rename to fetchVar()
-	 * @return string
+	 * Fetch the first value of the next row. @TODO rename to fetchVar()
 	 */
-	public function fetchValue()
+	public function fetchValue() : ?string
 	{
 		if ($row = $this->fetchRow())
 		{
 			return $row[0];
 		}
+		return null;
 	}
 	
 	public function fetchRow()
@@ -151,7 +150,7 @@ class Result
 	/**
 	 * @return GDO[]
 	 */
-	public function fetchAllObjects($json=false)
+	public function fetchAllObjects(bool $json=false) : array
 	{
 		return $this->fetchAllObjectsAs($this->table, $json);
 	}
@@ -159,7 +158,7 @@ class Result
 	/**
 	 * @return GDO[]
 	 */
-	public function fetchAllObjectsAs(GDO $table, $json=false)
+	public function fetchAllObjectsAs(GDO $table, bool $json=false) : array
 	{
 		$objects = [];
 		while ($object = $this->fetchAs($table, $json))
@@ -173,7 +172,7 @@ class Result
 	 * Fetch all 2 column rows as a 0 => 1 assoc array.
 	 * @return string[]
 	 */
-	public function fetchAllArray2dPair()
+	public function fetchAllArray2dPair() : array
 	{
 		$array2d = [];
 		while ($row = $this->fetchRow())
@@ -247,4 +246,5 @@ class Result
 		}
 		return $data;
 	}
+	
 }

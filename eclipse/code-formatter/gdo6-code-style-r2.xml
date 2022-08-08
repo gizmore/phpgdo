@@ -197,7 +197,7 @@
         <setting id="org.eclipse.php.formatter.core.formatter.keep_imple_if_on_one_line" value="false"/>
         <setting id="org.eclipse.php.formatter.core.formatter.keep_then_statement_on_same_line" value="false"/>
         <setting id="org.eclipse.php.formatter.core.formatter.keep_trailing_comma_in_list" value="true"/>
-        <setting id="org.eclipse.php.formatter.core.formatter.lineSplit" value="64"/>
+        <setting id="org.eclipse.php.formatter.core.formatter.lineSplit" value="120"/>
         <setting id="org.eclipse.php.formatter.core.formatter.never_indent_block_comments_on_first_column" value="false"/>
         <setting id="org.eclipse.php.formatter.core.formatter.never_indent_line_comments_on_first_column" value="false"/>
         <setting id="org.eclipse.php.formatter.core.formatter.number_of_blank_lines_after_namespace" value="1"/>

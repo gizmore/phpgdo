@@ -10,18 +10,17 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
 use GDO\User\Module_User;
 use GDO\UI\GDT_Tooltip;
-use GDO\Core\WithFileCache;
 
 /**
  * Show a user's profile.
  * 
  * @author gizmore
  * @version 7.0.1
- * @since 7.0.1
+ * @since 7.0.0
  */
 final class Profile extends MethodCard
 {
-	use WithFileCache;
+	public function idName(): string { return 'for'; }
 	
 	public function gdoTable(): GDO
 	{
@@ -57,7 +56,10 @@ final class Profile extends MethodCard
 
 	protected function createCard(GDT_Card $card) : void
 	{
-		$card->creatorHeader('profile_user', 'profile_created');
+		/** @var $user GDO_User **/
+		$user = $card->gdo->getUser();
+		$card->creatorHeader('profile_user', 'profile_activity');
+		$card->title('mt_user_profile', [$user->renderUserName()]);
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		foreach ($modules as $module)
 		{

@@ -16,7 +16,7 @@ namespace GDO\UI;
  * @see GDT_IconUTF8 - for the minimal icon provider.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 trait WithIcon
@@ -78,7 +78,6 @@ trait WithIcon
 		return $this;
 	}
 
-// 	public int $iconSize = GDT_Icon::DEFAULT_SIZE;
 	public ?int $iconSize = null;
 	public function iconSize(int $size) : self
 	{
@@ -113,9 +112,9 @@ trait WithIcon
 	##############
 	public function renderIconText() : string
 	{
-		if (isset($this->iconText))
+		if (isset($this->iconTextKey))
 		{
-			return t($this->iconText, $this->iconTextArgs);
+			return t($this->iconTextKey, $this->iconTextArgs);
 		}
 		if (isset($this->iconTextRaw))
 		{
@@ -127,13 +126,14 @@ trait WithIcon
 	public function htmlIcon() : string
 	{
 	    $text = $this->renderIconText();
+	    $color = isset($this->iconColor) ? $this->iconColor : ($text ? 'gold' : null);
 		if (isset($this->icon))
 		{
-			return self::iconS($this->icon, $text, $this->iconSize, $this->iconColor);
+			return self::iconS($this->icon, $text, $this->iconSize, $color);
 		}
 		if (isset($this->rawIcon))
 		{
-			return self::rawIconS($this->rawIcon, $text, $this->iconSize, $this->iconColor);
+			return self::rawIconS($this->rawIcon, $text, $this->iconSize, $color);
 		}
 		return '';
 	}

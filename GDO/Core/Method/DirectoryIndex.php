@@ -18,7 +18,7 @@ use GDO\Net\GDT_Url;
  */
 final class DirectoryIndex extends MethodTable
 {
-	public function isTrivial() { return false; }
+	public function isTrivial() : bool { return false; }
 	
 	public function isOrdered() { return false; }
 	public function isFiltered() { return false; }

@@ -26,9 +26,10 @@ use GDO\User\GDO_User;
  * - Offers bulk operations
  * 
  * @author gizmore@wechall.net
- * @license GDOv7-LICENSE
+ * 
  * @version 7.0.1
  * @since 3.0.0
+ * 
  * @see GDT
  * @see Cache
  * @see Database
@@ -36,6 +37,8 @@ use GDO\User\GDO_User;
  * @see Result
  * @see WithTemp
  * @see WithModule
+ * 
+ * @license GDOv7-LICENSE
  */
 abstract class GDO extends GDT
 {
@@ -56,7 +59,6 @@ abstract class GDO extends GDT
 	##############
 	/**
 	 * Get the table GDO for this class.
-	 * @return self
 	 */
 	public static function table() : self
 	{
@@ -72,7 +74,7 @@ abstract class GDO extends GDT
 	
 	public function __construct()
 	{
-// 		parent::__construct(); # DO NOT! call GDT perf counter!
+// 		parent::__construct(); # DO *NOT* call the GDT perf counter!
 		$this->afterLoaded();
 	}
 	
@@ -120,25 +122,21 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Is this GDO backed by the GDO process cache?
-	 * @return bool
 	 */
 	public function gdoCached() : bool { return true; }
 
 	/**
 	 * Is this GDO backed by the Memcached cache?
-	 * @return bool
 	 */
 	public function memCached() : bool { return $this->gdoCached() && GDO_MEMCACHE; }
 
 	/**
 	 * Is this GDO backed by any cache means?
-	 * @return bool
 	 */
 	public function cached() : bool { return $this->gdoCached() || $this->memCached(); }
 	
 	/**
 	 * Return the mysql storage engine for this gdo.
-	 * @return string
 	 */
 	public function gdoEngine() : string { return self::INNODB; } # @see self::MYISAM
 	
@@ -256,13 +254,15 @@ abstract class GDO extends GDT
 	############
 	/**
 	 * Mark vars as dirty.
-	 * Either true for all, false for none, or an assoc array with field mappings.
+	 * Either true for all,
+	 * false for none,
+	 * or an assoc array with field mappings.
 	 * @var mixed $dirty
 	 */
 	private $dirty = false;
 	
 	/**
-	 * Entity gdt vars.
+	 * DB entity vars.
 	 * @var string[string]
 	 */
 	private array $gdoVars;
@@ -279,10 +279,6 @@ abstract class GDO extends GDT
 		return array_key_exists($key, $this->gdoColumnsCache());
 	}
 	
-	/**
-	 * @param string $key
-	 * @return string
-	 */
 	public function gdoVar(string $key) : ?string
 	{
 		return isset($this->gdoVars[$key]) ? $this->gdoVars[$key] : null;
@@ -577,9 +573,6 @@ abstract class GDO extends GDT
 	/**
 	 * Get the first column of a specified GDT.
 	 * Useful to make GDTs more automated. E.g. The auto inc column syncs itself on gdoAfterCreate.
-	 *
-	 * @param string $className
-	 * @return \GDO\Core\GDT
 	 */
 	public function gdoColumnOf(string $className) : ?GDT
 	{
@@ -591,6 +584,23 @@ abstract class GDO extends GDT
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get all columns of a type. Used to load users via two different GDT_Name fields.
+	 * @return GDT[]
+	 */
+	public function gdoColumnsOf(string $className) : array
+	{
+		$back = [];
+		foreach ($this->gdoColumnsCache() as $gdt)
+		{
+			if (is_a($gdt, $className, true))
+			{
+				$back[$gdt->getName()] = $gdt->gdo($this);
+			}
+		}
+		return $back;
 	}
 	
 	public function gdoVarOf(string $className) : ?string
@@ -772,7 +782,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Check if we are deleted.
-	 * @return boolean
 	 */
 	public function isDeleted() : bool
 	{
@@ -789,8 +798,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Mark this GDO as deleted, or delete physically.
-	 * @param boolean $withHooks
-	 * @return self
 	 */
 	public function markDeleted(bool $withHooks=true) : self
 	{
@@ -809,7 +816,7 @@ abstract class GDO extends GDT
 			$this->save($withHooks);
 			if ($withHooks)
 			{
-				$this->afterDelete();
+				$this->afterDelete(true);
 			}
 			return $this;
 		}
@@ -890,9 +897,9 @@ abstract class GDO extends GDT
 		}
 		
 		$query = $this->query()->
-		replace($this->gdoTableIdentifier())->
-		values($this->gdoPrimaryKeyValues())->
-		values($this->getDirtyVars());
+			replace($this->gdoTableIdentifier())->
+			values($this->gdoPrimaryKeyValues())->
+			values($this->getDirtyVars());
 		
 		return $this->insertOrReplace($query, $withHooks);
 	}
@@ -1237,11 +1244,8 @@ abstract class GDO extends GDT
 	/**
 	 * Get a row by a single column value.
 	 * Throw exception if not found.
-	 * @param string $key
-	 * @param string $value
-	 * @return self
 	 */
-	public static function findBy(string $key, string $var) : ?self
+	public static function findBy(string $key, string $var) : self
 	{
 		if (!($gdo = self::getBy($key, $var)))
 		{
@@ -1251,8 +1255,7 @@ abstract class GDO extends GDT
 	}
 	
 	/**
-	 * @param array $vars
-	 * @return self
+	 * @param string[string] $vars
 	 */
 	public static function getByVars(array $vars) : ?self
 	{
@@ -1266,8 +1269,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Get a row by IDs.
-	 * @param string ...$id
-	 * @return self
 	 */
 	public static function getById(string...$id) : ?self
 	{
@@ -1287,10 +1288,6 @@ abstract class GDO extends GDT
 		return $object;
 	}
 	
-	/**
-	 * @param string ...$id
-	 * @return self
-	 */
 	public static function findById(string...$id) : self
 	{
 		if ($object = self::getById(...$id))
@@ -1628,11 +1625,11 @@ abstract class GDO extends GDT
 		$this->afterEvent('gdoAfterUpdate');
 	}
 	
-	private function afterDelete() : void
+	private function afterDelete(bool $persisted=false) : void
 	{
 		# Flags
 		$this->dirty = false;
-		$this->persisted = false;
+		$this->persisted = $persisted;
 		$this->afterEvent('gdoAfterDelete');
 	}
 	
@@ -1667,20 +1664,6 @@ abstract class GDO extends GDT
 	{
 		return substr(sha1(GDO_SALT.json_encode($gdoVars)), 0, self::TOKEN_LENGTH);
 	}
-	
-// 	###############
-// 	### Sorting ###
-// 	###############
-// 	/**
-// 	 * Sort GDO[] by a field.
-// 	 * @param GDO[] $array
-// 	 * @param string $columnName
-// 	 * @param bool $ascending
-// 	 */
-// 	public function sort(array &$array, string $columnName, bool $ascending=true)
-// 	{
-// 		return $this->gdoColumn($columnName)->sort($array, $ascending);
-// 	}
 	
 	#############
 	### Order ###

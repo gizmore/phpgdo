@@ -45,23 +45,24 @@ final class Module_Date extends GDO_Module
     ################
     ### Settings ###
     ################
+    public function getACLDefaults() : ?array
+    {
+    	return [
+    		'timezone' => ['acl_all', 0, null],
+    	];
+    }
+    
     public function getUserSettings() : array
     {
     	return [
     		GDT_Timezone::make('timezone')->initial('1')->notNull(),
     	];
     }
+    
     public function cfgUserTimezoneId(GDO_User $user=null) : string
     {
     	$user = $user ? $user : GDO_User::current();
     	return $this->userSettingVar($user, 'timezone');
-    }
-    
-    public function getACLDefaults() : ?array
-    {
-    	return [
-    		'timezone' => ['acl_all', 1, 'cronjob'],
-    	];
     }
     
     ############

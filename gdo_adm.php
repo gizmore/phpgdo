@@ -27,6 +27,7 @@ use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_Error;
 use GDO\Core\GDT_Expression;
 use GDO\Util\Arrays;
+use GDO\Form\GDT_Form;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -83,8 +84,8 @@ function printUsage(int $code = 1)
 	echo "php $exe wipe <module> - To uninstall modules\n";
 	echo "php $exe wipe_all - To erase the whole database\n";
 	echo "php $exe update - Is automatically called after gdo_update.sh - it re-installs all installed modules.\n";
-	echo "php $exe migrate <module> - To force-migrate gdo tables for a module.\n";
-	echo "php $exe migrate_all> - To force-migrate all gdo tables for all modules.\n";
+	echo "php $exe migrate <module> - To force-migrate gdo tables for an installed module. Handle with care.\n";
+	echo "php $exe migrate_all> - To force-migrate all gdo tables for all installed modules. Handle with special care.\n";
 	echo "\n--- Module config ---\n";
 	echo "php $exe config <module> - To show the config variables for a module\n";
 	echo "php $exe config <module> <key> - To show the description for a module variable\n";
@@ -111,7 +112,7 @@ else # try :]
 	@include 'protected/config.php';
 }
 
-Application::instance()->cli(true);
+Application::instance()->cli(true)->verb(GDT_Form::POST);
 
 # Load config defaults
 if ( !defined('GDO_CONFIGURED'))
@@ -854,8 +855,3 @@ else
 	echo "Unknown command {$argv[1]}\n\n";
 	printUsage();
 }
-
-#echo GDT_Response::instance()->render();
-#echo Website::topResponse()->render();
-
-#die(GDT_Response::globalError() ? 1 : 0);

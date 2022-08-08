@@ -226,7 +226,7 @@ class GDT_Timestamp extends GDT_DBField
 		return '';
 	}
 	
-	public function inputToVar($input = null) : ?string
+	public function inputToVar(string $input=null) : ?string
 	{
 		if ($input === null)
 		{

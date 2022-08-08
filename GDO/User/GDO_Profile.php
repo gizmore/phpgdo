@@ -16,7 +16,7 @@ final class GDO_Profile extends GDO
 	{
 		return [
 			GDT_User::make('profile_user')->primary(),
-			GDT_CreatedAt::make('profile_created'),
+			GDT_CreatedAt::make('profile_activity'),
 		];
 	}
 	
@@ -26,7 +26,7 @@ final class GDO_Profile extends GDO
 	{
 		$profile = self::blank([
 			'profile_user' => $user->getID(),
-			'profile_created' => $user->gdoVar('user_last_activity'),
+			'profile_activity' => $user->gdoVar('user_last_activity'),
 		]);
 		return $profile;
 	}

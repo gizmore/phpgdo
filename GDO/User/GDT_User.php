@@ -17,7 +17,7 @@ use GDO\Core\GDT_Object;
  * @TODO: rename fallbackCurrentUser()
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_User extends GDT_Object
@@ -108,24 +108,39 @@ class GDT_User extends GDT_Object
 		}
 	}
 
-	public function findByName($name)
-	{
-		if (str_starts_with($name, GDO_User::GHOST_NAME_PREFIX))
-		{
-			return null;
-		}
-// 		elseif (str_starts_with($name, GDO_User::REAL_NAME_PREFIX))
+// 	public function findByName($name)
+// 	{
+// 		if (str_starts_with($name, GDO_User::GHOST_NAME_PREFIX))
 // 		{
-// 			return GDO_User::table()->findBy('user_real_name', trim($name, GDO_User::REAL_NAME_PREFIX.GDO_User::REAL_NAME_POSTFIX));
+// 			return null;
 // 		}
-		elseif (str_starts_with($name, GDO_User::GUEST_NAME_PREFIX))
+// // 		elseif (str_starts_with($name, GDO_User::REAL_NAME_PREFIX))
+// // 		{
+// // 			return GDO_User::table()->findBy('user_real_name', trim($name, GDO_User::REAL_NAME_PREFIX.GDO_User::REAL_NAME_POSTFIX));
+// // 		}
+// 		elseif (str_starts_with($name, GDO_User::GUEST_NAME_PREFIX))
+// 		{
+// 			return GDO_User::table()->findBy('user_guest_name', trim($name, GDO_User::GUEST_NAME_PREFIX));
+// 		}
+// 		else
+// 		{
+// 			return GDO_User::getByName($name);
+// 		}
+// 	}
+	
+	protected function getGDOsByName(string $var): array
+	{
+		$field = 'user_name';
+		$p = GDO_User::GUEST_NAME_PREFIX;
+		if ($var[0] === $p)
 		{
-			return GDO_User::table()->findBy('user_guest_name', trim($name, GDO_User::GUEST_NAME_PREFIX));
+			$field = 'user_guest_name';
 		}
-		else
-		{
-			return GDO_User::getByName($name);
-		}
+		$var = GDO::escapeSearchS(trim($var, "$p \t\r\n"));
+		$query = GDO_User::table()->select()->
+			where("{$field} LIKE '%{$var}%'")->
+			limit(GDT_Object::MAX_SUGGESTIONS);
+		return $query->exec()->fetchAllObjects();
 	}
 	
 	################
@@ -138,7 +153,7 @@ class GDT_User extends GDT_Object
 	    
 	    if (!parent::validate($value))
 	    {
-	        return false; # $this->error('err_user');
+	        return false;
 	    }
 	    
 	    if ($value === null)
@@ -219,7 +234,7 @@ class GDT_User extends GDT_Object
 	###########
 	public function gdoExampleVars() : ?string
 	{
-		return null;
+		return 'giz|tehr|liv|d';
 	}
 	
 }

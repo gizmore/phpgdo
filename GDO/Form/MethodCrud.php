@@ -51,14 +51,14 @@ abstract class MethodCrud extends MethodForm
 	 * @return string href
 	 * @see href()
 	 */
-	public abstract function hrefList();
+	public abstract function hrefList() : string;
 	
 	################
 	### Override ###
 	################
 	public function isUserRequired() : bool { return true; }
 	public function isCaptchaRequired() { return !GDO_User::current()->isMember(); }
-	public function showInSitemap() : bool { return false; }
+	public function isShownInSitemap() : bool { return false; }
 	
 	public function canRead(GDO $gdo)
 	{
@@ -154,7 +154,8 @@ abstract class MethodCrud extends MethodForm
 	    }
 	    elseif (!$this->canCreate($table))
 	    {
-	        throw new GDO_PermissionException('err_permission_create');
+	    	return $this->error('err_permission');
+// 	        throw new GDO_PermissionException('err_permission_create', $this, $);
 	    }
 	    
 	    $this->getForm();
@@ -218,17 +219,17 @@ abstract class MethodCrud extends MethodForm
 			$form->actions()->addField(GDT_DeleteButton::make());
 		}
 
-		if ($this->gdo)
-		{
-    	    $form->withGDOValuesFrom($this->gdo);
-		}
-		else
-		{
-		    $form->withGDOValuesFrom($this->gdoTable());
-		}
+// 		if ($this->gdo)
+// 		{
+//     	    $form->withGDOValuesFrom($this->gdo);
+// 		}
+// 		else
+// 		{
+// 		    $form->withGDOValuesFrom($this->gdoTable());
+// 		}
 	}
 	
-	public function getTitle()
+	public function getMethodTitle() : string
 	{
 	    return $this->gdo ? $this->getUpdateTitle() : $this->getCreateTitle();
 	}

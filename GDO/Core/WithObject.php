@@ -6,109 +6,100 @@ use GDO\DB\Query;
 /**
  * You would expect this to be in GDT_Object,
  * but this is also mixed into GDT_ObjectSelect, hence it is a trait.
- * 
- * - autojoin controlls select behaviour
- * 
+ *
  * @author gizmore
  * @version 7.0.1
  * @since 6.0.0
- * 
+ *       
  * @see GDT_Object
  * @see GDT_ObjectSelect
  */
 trait WithObject
 {
 	use WithGDO;
-	
-	###################
-	### With Object ###
-	###################
+
+	# ##################
+	# ## With Object ###
+	# ##################
 	public GDO $table;
 
 	/**
 	 * The GDO table to operate on.
-	 * 
+	 *
 	 * @param GDO $table
 	 * @return self
 	 */
-	public function table(GDO $table) : self
+	public function table(GDO $table): self
 	{
 		$this->table = $table;
 		return $this;
 	}
 
-// 	###################
-// 	### Composition ### @TODO unused, implement composite CRUD forms?
-// 	###################
-// 	public $composition = false;
-// 	public function composition(bool $composition=true) : self
-// 	{
-// 		$this->composition = $composition;
-// 		return $this;
-// 	}
-	
-	###################
-	### Var / Value ###
-	###################
+	# ##################
+	# ## Var / Value ###
+	# ##################
 	public function getVar()
 	{
-		if (!($var = $this->getInput($this->name)))
+		if ( !($var = $this->getInput($this->name)))
 		{
-		    $var = $this->var;
+			$var = $this->var;
 		}
-	    return empty($var) ? null : $var;
+		return empty($var) ? null : $var;
 	}
-	
-	public function toVar($value) : ?string
+
+	public function toVar($value): ?string
 	{
 		return $value !== null ? $value->getID() : null;
 	}
-	
+
 	public function toValue(string $var = null)
 	{
 		if ($var !== null)
 		{
-		    $noCompletion =
-		        Application::$INSTANCE->isCLI() ||
-		        @$_REQUEST['nocompletion_'.$this->name];
-		    
+			// $noCompletion =
+			// Application::$INSTANCE->isCLI() ||
+			// @$_REQUEST['nocompletion_'.$this->name];
+
 			# Without javascript, convert the name input
-			if ($noCompletion)
+			// if ($noCompletion)
+			// {
+			// unset($_REQUEST['nocompletion_'.$this->name]);
+
+			if (($gdo = $this->table->getById($var)) ||
+				($gdo = $this->getByName($var)))
 			{
-			 	unset($_REQUEST['nocompletion_'.$this->name]);
-			 	
-			 	if ( ($gdo = $this->getByName($var)) ||
-			 		 ($gdo = $this->table->getById($var)) )
-			 	{
-// 			 		$this->addInput($this->getName(), $gdo->getID());
-			 		return $gdo;
-			 	}
-			 	
-			 	
+				// $this->addInput($this->getName(), $gdo->getID());
+				return $gdo;
 			}
-			# @TODO: GDO->findOnlyCachedBy[IDs]()
-			if ($user = $this->table->findCached(...explode(':', $var)))
-			{
-				return $user;
-			}
+
+			// }
+			// # @TODO: GDO->findOnlyCachedBy[IDs]()
+			// if ($user = $this->table->findCached(...explode(':', $var)))
+			// {
+			// return $user;
+			// }
 		}
 	}
 
 	/**
+	 * Get possible matching inputs via GDT_Name fields.
 	 * @return GDO[]
 	 */
-	private function getGDOsByName(string $var) : array
+	protected function getGDOsByName(string $var): array
 	{
-		if ($gdt = $this->table->gdoColumnOf(GDT_Name::class))
-		{
-			$v = GDO::escapeSearchS($var);
-			$gdos = $this->table->select()->where("{$gdt->getName()} LIKE '%{$v}%'")->exec()->fetchAllObjects();
-			return $gdos;
-		}
-		return [];
+		$query = $this->table->select();
+		$gdt = $this->table->gdoColumnOf(GDT_Name::class);
+		$var = GDO::escapeSearchS($var);
+		$query->where("{$gdt->name} LIKE '%{$var}%'");
+		$query->limit(GDT_Object::MAX_SUGGESTIONS);
+		return $query->exec()->fetchAllObjects();
 	}
-	
-	private function getByName(string $var) : ?GDO
+
+	/**
+	 * Analyze seearch hits for getGDOsByName.
+	 * Maybe only one user starts with the input.
+	 */
+	private function getByName(string $var): ?GDO
 	{
 		$gdos = $this->getGDOsByName($var);
 		if (count($gdos) === 0)
@@ -142,27 +133,16 @@ trait WithObject
 		{
 			return $middles[0];
 		}
-		$this->error('err_select_candidates', [implode('|', array_keys($middles))]);
+		$this->error('err_select_candidates', [
+			implode('|', array_keys($middles))
+		]);
 		return null;
 	}
-	
-// 	/**
-// 	 * Override this with a real byName method.
-// 	 * @param string $name
-// 	 * @return \GDO\Core\GDO
-// 	 */
-// 	public function findByName($name)
-// 	{
-// 		if ($column = $this->table->gdoNameColumn())
-// 		{
-// 			return $this->table->getBy($column->name, $name);
-// 		}
-// 	}
-	
-	##############
-	### Render ###
-	##############
-	public function htmlValue() : string
+
+	# #############
+	# ## Render ###
+	# #############
+	public function htmlValue(): string
 	{
 		if ($value = $this->getValue())
 		{
@@ -170,14 +150,15 @@ trait WithObject
 		}
 		return '';
 	}
-	
-	public function displayVar(string $var = null) : string
+
+	public function displayVar(string $var = null): string
 	{
 		if (isset($this->multiple) && $this->multiple)
 		{
 			if ($gdos = $this->toValue($var))
 			{
-				return implode(', ', array_map(function(GDO $gdo) {
+				return implode(', ', array_map(function (GDO $gdo)
+				{
 					return $gdo->renderName();
 				}, $gdos));
 			}
@@ -192,7 +173,7 @@ trait WithObject
 			}
 			else
 			{
-			    return $gdo->renderName();
+				return $gdo->renderName();
 			}
 		}
 		else
@@ -200,16 +181,25 @@ trait WithObject
 			return sprintf('<i>%s</i>', t('none'));
 		}
 	}
-	
-	public function getGDOData() : ?array
+
+	public function getGDOData(): ?array
 	{
-		return [$this->name => $this->getVar()];
+		if ($gdo = $this->getValue())
+		// if ($gdo = $this->toValue($this->getVar()))
+		{
+			return [
+				$this->name => $gdo->getID()
+			];
+		}
+		return [
+			$this->name => null
+		];
 	}
-	
-	################
-	### Validate ###
-	################
-	public function validate($value) : bool
+
+	# ###############
+	# ## Validate ###
+	# ###############
+	public function validate($value): bool
 	{
 		if ($value) # we successfully converted the var to value.
 		{
@@ -221,7 +211,10 @@ trait WithObject
 			{
 				return false;
 			}
-			return $this->error('err_gdo_not_found', [$this->table->gdoHumanName(), html($var)]);
+			return $this->error('err_gdo_not_found', [
+				$this->table->gdoHumanName(),
+				html($var)
+			]);
 		}
 		elseif ($this->notNull) # empty input and not null
 		{
@@ -232,11 +225,12 @@ trait WithObject
 			return true;
 		}
 	}
-	
+
 	/**
+	 *
 	 * @return GDO
 	 */
-	public function plugVars() : array
+	public function plugVars(): array
 	{
 		if (isset($this->table))
 		{
@@ -251,22 +245,28 @@ trait WithObject
 		}
 		return [];
 	}
-	
-	private function plugVarsSingle() : array
+
+	private function plugVarsSingle(): array
 	{
 		$back = [];
-		if ($first = $this->table->select()->first()->exec()->fetchObject())
+		if ($first = $this->table->select()
+			->first()
+			->exec()
+			->fetchObject())
 		{
 			$back[] = $first->getID();
 		}
-		if ($second = $this->table->select()->limit(1, 1)->exec()->fetchObject())
+		if ($second = $this->table->select()
+			->limit(1, 1)
+			->exec()
+			->fetchObject())
 		{
 			$back[] = $second->getID();
 		}
 		return $back;
 	}
-	
-	private function plugVarsMultiple() : array
+
+	private function plugVarsMultiple(): array
 	{
 		$two = $this->plugVarsSingle();
 		$first = isset($two[0]) ? $two[0] : null;
@@ -282,82 +282,86 @@ trait WithObject
 		}
 		if ($first && $second)
 		{
-			$plugs[] = json_encode([$first, $second]);
+			$plugs[] = json_encode([
+				$first,
+				$second
+			]);
 		}
 		return $plugs;
 	}
-	
-	###############
-	### Cascade ###
-	###############
-	
+
+	# ##############
+	# ## Cascade ###
+	# ##############
 	/**
 	 * Cascade mode for foreign keys.
 	 * Default is SET NULL, so nothing gets lost easily.
-	 * 
+	 *
 	 * Fun bug was:
-	 *   delete a language => delete all users that use this language
-	 *   triggered by a replace on install module_language.
-	 *   
+	 * delete a language => delete all users that use this language
+	 * triggered by a replace on install module_language.
+	 *
 	 * @var string
 	 */
 	public $cascade = 'SET NULL';
 
-	public function cascade()
+	public function cascade(): self
 	{
 		$this->cascade = 'CASCADE';
 		return $this;
 	}
-	
-	public function cascadeNull()
+
+	public function cascadeNull(): self
 	{
 		$this->cascade = 'SET NULL';
 		return $this;
 	}
-	
-	public function cascadeRestrict()
+
+	public function cascadeRestrict(): self
 	{
 		$this->cascade = 'RESTRICT';
 		return $this;
 	}
-	
+
 	/**
 	 * If object columns are not null, they cascade upon deletion.
 	 */
-	public function notNull(bool $notNull=true) : self
+	public function notNull(bool $notNull = true): self
 	{
 		$this->notNull = $notNull;
 		return $this->cascade();
 	}
-	
+
 	/**
 	 * If object columns are primary, they cascade upon deletion.
 	 */
-	public function primary(bool $primary=true) : self
+	public function primary(bool $primary = true): self
 	{
 		$this->primary = $primary;
 		return $this->notNull();
 	}
-	
-	################
-	### Database ###
-	################
+
+	# ###############
+	# ## Database ###
+	# ###############
 	/**
-	 * Take the foreign key primary key definition and str_replace to convert to foreign key definition.
-	 *
-	 * {@inheritDoc}
-	 * @see GDT::gdoColumnDefine()
+	 * Take the foreign key primary key definition and use str_replace to convert to foreign key definition.
 	 */
-	public function gdoColumnDefine() : string
+	public function gdoColumnDefine(): string
 	{
-		if (!($table = $this->table))
+		if ( !($table = $this->table))
 		{
-			throw new GDO_Error('err_gdo_object_no_table', [$this->identifier()]);
+			throw new GDO_Error('err_gdo_object_no_table', [
+				$this->identifier()
+			]);
 		}
 		$tableName = $table->gdoTableIdentifier();
-		if (!($primaryKey = $table->gdoPrimaryKeyColumn()))
+		if ( !($primaryKey = $table->gdoPrimaryKeyColumn()))
 		{
-			throw new GDO_Error('err_gdo_no_primary_key', [$tableName, $this->identifier()]);
+			throw new GDO_Error('err_gdo_no_primary_key', [
+				$tableName,
+				$this->identifier()
+			]);
 		}
 		$define = $primaryKey->gdoColumnDefine();
 		$define = str_replace($primaryKey->identifier(), $this->identifier(), $define);
@@ -365,52 +369,56 @@ trait WithObject
 		$define = str_replace(' PRIMARY KEY', '', $define);
 		$define = str_replace(' AUTO_INCREMENT', '', $define);
 		$define = preg_replace('#,FOREIGN KEY .* ON UPDATE (?:CASCADE|RESTRICT|SET NULL)#', '', $define);
-// 		$on = $this->fkOn ? $this->fkOn : $primaryKey->identifier();
+		// $on = $this->fkOn ? $this->fkOn : $primaryKey->identifier();
 		$on = $primaryKey->identifier();
-		return "$define{$this->gdoNullDefine()}".
+		return "$define{$this->gdoNullDefine()}" .
 			",FOREIGN KEY ({$this->identifier()}) REFERENCES $tableName($on) ON DELETE {$this->cascade} ON UPDATE {$this->cascade}";
 	}
 
-	##############
-	### Filter ###
-	##############
-	
-	public function filterVar(string $key=null)
+	# #############
+	# ## Filter ###
+	# #############
+	public function filterVar(string $key = null)
 	{
 		return '';
 	}
-	
-	public function renderFilter($f) : string
+
+	public function renderFilter($f): string
 	{
-		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
+		return GDT_Template::php('Core', 'object_filter.php', [
+			'field' => $this,
+			'f' => $f
+		]);
 	}
-	
+
 	/**
-	 * Proxy filter to the pk filterColumn if specified. else filter like parent.??
-	 * @TODO check
-	 * 
+	 * Proxy filter to the pk filterColumn if specified.
+	 * else filter like parent.??
+	 *
+	 * @todo check
+	 *      
 	 * @see GDT_Int::filterQuery()
 	 * @see GDT_String::filterQuery()
 	 */
-	public function filterQuery(Query $query, $rq=null) : self
+	public function filterQuery(Query $query, $rq = null): self
 	{
 		if ($field = $this->filterField)
 		{
-		    $this->table->gdoColumn($field)->filterQuery($query, $rq);
+			$this->table->gdoColumn($field)->filterQuery($query, $rq);
 			return $this;
 		}
 		else
 		{
-		    return parent::filterQuery($query, $rq);
+			return parent::filterQuery($query, $rq);
 		}
 	}
-	
-	##############
-	### Search ###
-	##############
+
+	# #############
+	# ## Search ###
+	# #############
 	/**
 	 * Build a huge quicksearch query.
-	 * 
+	 *
 	 * @param Query $query
 	 * @param string $searchTerm
 	 * @param boolean $first
@@ -418,30 +426,30 @@ trait WithObject
 	 */
 	public function searchQuery(Query $query, $searchTerm, $first)
 	{
-        $table = $this->table;
-	    $nameT = GDO::escapeIdentifierS('t_' . $this->name);
-	    
-	    if ($first) // first time joined this table?
-	    {
-	        $name = GDO::escapeIdentifierS($this->name);
-	        $fk = $table->gdoPrimaryKeyColumn()->name;
-	        $fkI = GDO::escapeIdentifierS($fk);
-	        $myT = $this->gdtTable->gdoTableName();
-	        $query->join("LEFT JOIN {$table->gdoTableName()} {$nameT} ON {$myT}.{$name} = {$nameT}.{$fkI}");
-	    }
-	    
-	    $where = [];
-	    foreach ($table->gdoColumnsCache() as $gdt)
-	    {
-	        if ($gdt->searchable)
-	        {
-	            if ($condition = $gdt->searchCondition($searchTerm, $nameT))
-	            {
-	                $where[] = $condition;
-	            }
-	        }
-	    }
-	    return implode(' OR ', $where);
+		$table = $this->table;
+		$nameT = GDO::escapeIdentifierS('t_' . $this->name);
+
+		if ($first) // first time joined this table?
+		{
+			$name = GDO::escapeIdentifierS($this->name);
+			$fk = $table->gdoPrimaryKeyColumn()->name;
+			$fkI = GDO::escapeIdentifierS($fk);
+			$myT = $this->gdtTable->gdoTableName();
+			$query->join("LEFT JOIN {$table->gdoTableName()} {$nameT} ON {$myT}.{$name} = {$nameT}.{$fkI}");
+		}
+
+		$where = [];
+		foreach ($table->gdoColumnsCache() as $gdt)
+		{
+			if ($gdt->searchable)
+			{
+				if ($condition = $gdt->searchCondition($searchTerm, $nameT))
+				{
+					$where[] = $condition;
+				}
+			}
+		}
+		return implode(' OR ', $where);
 	}
-	
+
 }

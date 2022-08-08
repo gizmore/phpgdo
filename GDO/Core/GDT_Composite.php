@@ -22,7 +22,7 @@ class GDT_Composite extends GDT_Container
 	
 	public function gdoCompositeFields() : array
 	{
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public static function make(string $name=null) : self
@@ -79,7 +79,7 @@ class GDT_Composite extends GDT_Container
 		return $this;
 	}
 	
-	public function validated() : ?self
+	public function validated(bool $throw=false) : ?self
 	{
 		$valid = true;
 		foreach ($this->getAllFields() as $gdt)
@@ -87,6 +87,10 @@ class GDT_Composite extends GDT_Container
 			if (!$gdt->inputs($this->inputs)->validated())
 			{
 				$valid = false;
+				if ($throw)
+				{
+					throw new GDO_ArgException($gdt);
+				}
 			}
 		}
 		return $valid ? $this : null;

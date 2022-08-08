@@ -37,7 +37,7 @@ final class GDO_Timezone extends GDO
 	{
 		return [
 			GDT_AutoInc::make('tz_id')->bytes(2),
-			GDT_Name::make('tz_name')->caseS()->ascii()->max(64)->unique()->notNull(),
+			GDT_Name::make('tz_name')->notNull(),
 			GDT_Int::make('tz_offset')->bytes(2)->notNull()->initial('0'),
 			GDT_Index::make('tz_index_name')->indexColumns('tz_name')->btree(),
 		];

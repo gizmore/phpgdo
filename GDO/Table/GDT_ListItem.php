@@ -8,7 +8,7 @@ use GDO\UI\GDT_Card;
  * A list item.
  * Has a title, subtitle, subtext, image and menu.
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.7.0
  */
 final class GDT_ListItem extends GDT_Card
@@ -38,13 +38,13 @@ final class GDT_ListItem extends GDT_Card
 	public function renderJSON()
 	{
 	    $data = [];
-	    if ($this->title)
+	    if ($this->hasTitle())
 	    {
-	        $data['title'] = $this->title->renderCell();
+	        $data['title'] = $this->renderTitle();
 	    }
-	    if ($this->subtitle)
+	    if ($this->hasSubTitle())
 	    {
-	        $data['subtitle'] = $this->subtitle->renderCell();
+	        $data['subtitle'] = $this->renderSubTitle();
 	    }
 	    if ($this->content)
 	    {
@@ -54,10 +54,10 @@ final class GDT_ListItem extends GDT_Card
 	    {
 	        $data['right'] = $this->right->renderCell();
 	    }
-	    if ($this->subtext)
-	    {
-	        $data['subtext'] = $this->subtext->renderCell();
-	    }
+// 	    if ($this->su)
+// 	    {
+// 	        $data['subtext'] = $this->subtext->renderCell();
+// 	    }
 	    return $data;
 	}
 	

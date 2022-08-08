@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Date\tpl;
 /** @var $field \GDO\Date\GDT_Timestamp **/
 /** @var $f string **/
 ?>

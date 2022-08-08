@@ -36,11 +36,13 @@ return [
 	'md_user_cleanupguests' => 'Guest Cleanup Cronjob for GDOv7.',
 
 	'mt_user_profile' => '%s\'s Profile',
+	'tt_user_level' => '%s holds userlevel %s.',
 	
 	'lbl_acl_level' => '%s requires level',
 	'lbl_acl_relation' => '%s is visible for',
 	'lbl_acl_permission' => '%s is visible for',
 	
+	'enum_acl_hidden' => 'Hidden',
 	'enum_acl_noone' => 'Noone',
 	'enum_acl_friends' => 'Friends',
 	'enum_acl_friend_friends' => 'Friend Friends',

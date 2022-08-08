@@ -6,10 +6,9 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use GDO\Core\GDT_Float;
 use GDO\Core\GDO_Error;
-use GDO\CLI\Process;
 
 /**
- * File system utilities.
+ * File system utilities which are too common for the bigger file handling module.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -33,7 +32,7 @@ final class FileUtil
      */
     public static function isFile(string $filename) : bool
     {
-    	return is_file($filename) && is_readable($filename);
+    	return is_file($filename); # && is_readable($filename);
 #    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
     }
 
@@ -99,10 +98,7 @@ final class FileUtil
 	###############
 	/**
 	 * Get the size of a folder recursively.
-	 * 
 	 * @deprecated too slow!
-	 * @param string $path
-	 * @return int
 	 */
 	public static function dirsize(string $path) : int
 	{
@@ -168,10 +164,6 @@ final class FileUtil
 	/**
 	 * Convert bytes to human filesize like "12.29kb".
 	 * @example humanFilesize(12288, 1000, 3); # => 12.288kb
-	 * @param int $bytes
-	 * @param int $factor - 1024 or 1000 should be used
-	 * @param int $digits - number of fraction digits
-	 * @return string
 	 */
 	public static function humanFilesize(int $bytes, int $factor=1024, int $digits=2) : string
 	{
@@ -271,6 +263,9 @@ final class FileUtil
 	##############
 	### Sanity ###
 	##############
+	/**
+	 * Remove invalid characters from a filename.
+	 */
 	public static function saneFilename(string $filename) : string
 	{
 	    return str_replace(['/', '\\', '$', ':'], '#', $filename);
@@ -309,9 +304,8 @@ final class FileUtil
 	 * Get the last line from a filehandle.
 	 * Destroys seek.
 	 * @param resource $fh
-	 * @return string
 	 */
-	public static function _lastLine($fh)
+	public static function _lastLine($fh) : string
 	{
 	    $line = '';
 

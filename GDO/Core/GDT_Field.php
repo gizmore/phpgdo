@@ -56,7 +56,7 @@ abstract class GDT_Field extends GDT
 		{
 			return [$key => $this->getVar()];
 		}
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	############
@@ -120,7 +120,7 @@ abstract class GDT_Field extends GDT
 	#######################
 	### Input/Var/Value ###
 	#######################
-	public function inputToVar($input=null) : ?string
+	public function inputToVar(string $input=null) : ?string
 	{
 		if (is_string($input))
 		{
@@ -152,15 +152,15 @@ abstract class GDT_Field extends GDT
 	################
 	### Features ###
 	################
-	public bool $orderable = true;
-	public bool $aclcapable = true;
-	public bool $searchable = true;
-	public bool $filterable = true;
-	public function isOrderable() : bool { return $this->orderable; }
+	public bool $orderable  = true; # 
+	public bool $aclcapable = true; # produces 3 ACL settings per GDT
+	public bool $searchable = true; # is searched during big searches
+	public bool $filterable = true; #
+	public function isOrderable() :  bool { return $this->orderable; }
 	public function isACLCapable() : bool { return $this->aclcapable; }
 	public function isSearchable() : bool { return $this->searchable; }
 	public function isFilterable() : bool { return $this->filterable; }
-	public function isSerializable() : bool { return true; }
+	public function isSerializable():bool { return true; }
 	
 	public function orderable(bool $orderable) : self
 	{
@@ -200,7 +200,7 @@ abstract class GDT_Field extends GDT
 				{
 					if ($this->getVar() === null)
 					{
-						return ' data-focus';
+						return ' gdo-focus';
 					}
 				}
 			}

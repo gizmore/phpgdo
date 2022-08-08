@@ -32,9 +32,9 @@ class GDO_Module extends GDO
 	################
 	public int $priority = 50;
 	
-	public string $version = "7.0.1";
-	public string $license = "GDOv7-LICENSE";
-	public string $authors = "gizmore <gizmore@wechall.net>";
+	public string $version = '7.0.1';
+	public string $license = 'GDOv7-LICENSE';
+	public string $authors = 'gizmore <gizmore@wechall.net>';
 	
 	public function gdoCached() : bool { return false; }
 	public function memCached() : bool { return false; }
@@ -54,7 +54,7 @@ class GDO_Module extends GDO
 	 */
 	public function getDependencies() : array
 	{
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
     /**
@@ -64,7 +64,7 @@ class GDO_Module extends GDO
 	 */
 	public function getFriendencies() : array
 	{
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	/**
@@ -102,13 +102,13 @@ class GDO_Module extends GDO
 	 * GDO classes to install.
 	 * @return string[]
 	 */
-	public function getClasses() : array { return GDT::EMPTY_GDT_ARRAY; }
+	public function getClasses() : array { return GDT::EMPTY_ARRAY; }
 	
 	/**
 	 * Module config GDTs
 	 * @return GDT[]
 	 */
-	public function getConfig() : array { return GDT::EMPTY_GDT_ARRAY; }
+	public function getConfig() : array { return GDT::EMPTY_ARRAY; }
 	
 	############
 	### Info ###
@@ -199,6 +199,10 @@ class GDO_Module extends GDO
 		return ModuleLoader::instance()->getModule(self::getNameS(), true);
 	}
 	
+	/**
+	 * Modulename cache. @TODO: delete?
+	 * @var string[string]
+	 */
 	private static array $nameCache = [];
 
 	public static function getNameS()
@@ -215,8 +219,22 @@ class GDO_Module extends GDO
 	### Getter ###
 	##############
 	public function getID() : ?string { return $this->gdoVar('module_id'); }
-	public function getName() : ?string { return $this->getModuleName(); }
-	public function getVersion() : Version { return $this->gdoValue('module_version'); }
+	
+	private string $name; 
+	public function getName() : ?string
+	{
+		if (!isset($this->name))
+		{
+			$this->name = $this->getModuleName();
+		}
+		return $this->name;
+	}
+	
+	public function getVersion() : Version
+	{
+		return $this->gdoValue('module_version');
+	}
+	
 	public function isEnabled() : bool
 	{
 		if (GDO_DB_ENABLED)
@@ -225,7 +243,11 @@ class GDO_Module extends GDO
 		}
 		return true;
 	}
-	public function isInstalled() : bool { return $this->isPersisted(); }
+	
+	public function isInstalled() : bool
+	{
+		return $this->isPersisted();
+	}
 	
 	###############
 	### Display ###
@@ -235,30 +257,46 @@ class GDO_Module extends GDO
 	############
 	### Href ###
 	############
-	public function href($methodName, $append='') { return href($this->getName(), $methodName, $append); }
-	public function href_install_module() { return href('Admin', 'Install', '&module='.$this->getName()); }
-	public function href_configure_module() { return href('Admin', 'Configure', '&module='.$this->getName()); }
+	/**
+	 * HREF generation helper.
+	 */
+	public function href(string $methodName, string $append='') : string
+	{
+		return href($this->getName(), $methodName, $append);
+	}
+	
+	public function href_install_module() : string { return href('Admin', 'Install', '&module='.$this->getName()); }
+	public function href_configure_module() : string { return href('Admin', 'Configure', '&module='.$this->getName()); }
 	public function href_administrate_module() : ?string { return null; }
+	
+	#############
+	### Hooks ###
+	#############
+	/**
+	 * After creation reset the module version so the install form is up-to-date.
+	 */
+	public function gdoAfterCreate(GDO $gdo) : void
+	{
+		$gdo->setVar('module_version', $gdo->version, false);
+	}
 	
 	##############
 	### Helper ###
 	##############
-	public function canUpdate() { return $this->version !== $this->getVersion()->__toString(); }
-	public function canInstall() { return !$this->isPersisted(); }
+	public function canUpdate() : bool { return $this->version !== $this->getVersion()->__toString(); }
+	public function canInstall() : bool { return !$this->isPersisted(); }
 	
 	/**
 	 * Filesystem path for a file within this module.
-	 * @param string $path
-	 * @return string
 	 */
-	public function filePath($path='') { return rtrim(GDO_PATH, '/') . $this->wwwPath($path, '/'); }
+	public function filePath(string $path='') : string { return rtrim(GDO_PATH, '/') . $this->wwwPath($path, '/'); }
 	
 	/**
 	 * Relative www path for a resource.
 	 * @param string $path
 	 * @return string
 	 */
-	public function wwwPath($path='', $webRoot=GDO_WEB_ROOT)
+	public function wwwPath(string $path='', string $webRoot=GDO_WEB_ROOT) : string
 	{
 	    return $webRoot . "GDO/{$this->getName()}/{$path}";
 	}
@@ -268,7 +306,7 @@ class GDO_Module extends GDO
 	 * @param string $filename appendix filename
 	 * @return string the absolute path
 	 */
-	public function tempPath($path='')
+	public function tempPath(string $path='') : string
 	{
 	    $base = Application::$INSTANCE->isUnitTests() ?
 	       'temp_test' : 'temp';
@@ -281,7 +319,7 @@ class GDO_Module extends GDO
 	#################
 	### Templates ###
 	#################
-	public function php($path, array $tVars=null)
+	public function php(string $path, array $tVars=null) : string
 	{
 	    return GDT_Template::php($this->getName(), $path, $tVars);
 	}
@@ -323,17 +361,18 @@ class GDO_Module extends GDO
 	    parent::__wakeup();
 	}
 
-	private bool $inited = false;
+	public bool $inited = false;
 	
-	public function initedModule() : void
+	public function inited(bool $inited=true) : self
 	{
 		$this->inited = true;
+		return $this;
 	}
 	
-	public function isInited() : bool
-	{
-		return $this->inited;
-	}
+// 	public function isInited() : bool
+// 	{
+// 		return $this->inited;
+// 	}
 	
 	public function loadLanguage($path) : self
 	{
@@ -522,6 +561,12 @@ class GDO_Module extends GDO
     	    	}
 	    	    $acl->setGDOData($settings);
     	    }
+    	    
+//     	    if ($gdt instanceof GDT_Language)
+//     	    {
+//     	    	xdebug_break();
+//     	    }
+    	    
     	    $gdt->setGDOData($settings);
     	    return $gdt;
 	    }
@@ -539,7 +584,8 @@ class GDO_Module extends GDO
 	
 	public function userSettingVar(GDO_User $user, string $key) : ?string
 	{
-	    return $this->userSetting($user, $key)->var;
+		$gdt = $this->userSetting($user, $key);
+		return $gdt->var;
 	}
 	
 	public function userSettingValue(GDO_User $user, $key)

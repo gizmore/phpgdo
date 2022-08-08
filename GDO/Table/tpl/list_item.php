@@ -24,7 +24,7 @@ $gdt->addClass('gdt-list-item');
   </div>
 <?php endif; ?>
 
-<?php if ($gdt->image ||  $gdt->content || $gdt->right) : ?>
+<?php if (isset($gdt->image) ||  isset($gdt->content) || isset($gdt->right)) : ?>
   <div class="gdt-li-main">
 <?php if ($gdt->image) : ?>
     <div class="gdt-li-image"><?=$gdt->image->renderCell()?></div>

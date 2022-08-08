@@ -164,7 +164,7 @@ trait WithFields
 	 */
 	public function getFields() : array
 	{
-		return isset($this->fields) ? $this->fields : GDT::EMPTY_GDT_ARRAY;
+		return isset($this->fields) ? $this->fields : GDT::EMPTY_ARRAY;
 	}
 	
 	public function getField(string $key, bool $throw=true) : ?GDT
@@ -189,7 +189,7 @@ trait WithFields
 	 */
 	public function getAllFields() : array
 	{
-		return isset($this->fieldsFlat) ? $this->fieldsFlat : GDT::EMPTY_GDT_ARRAY;
+		return isset($this->fieldsFlat) ? $this->fieldsFlat : GDT::EMPTY_ARRAY;
 	}
 	
 	###########################

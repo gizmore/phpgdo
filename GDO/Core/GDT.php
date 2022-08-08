@@ -29,14 +29,15 @@ abstract class GDT
 	/**
 	 * @var GDT[]
 	 */
-	const EMPTY_GDT_ARRAY = [];
+	const EMPTY_ARRAY = [];
+	const EMPTY_STRING = '';
 	
 	/**
 	 * Really, for WithFields traversal rendering.
 	 * Else fields are rendered twice.
-	 * @var integer
+	 * @deprecated not needed anymore? mode rendering...
 	 */
-	public static int $NESTING_LEVEL = 0; 
+	public static int $NESTING_LEVEL = 0; # @TODO Remove?
 	
 	###################
 	### Instanciate ###
@@ -54,7 +55,7 @@ abstract class GDT
 	
 	public function blankData() : array
 	{
-		return self::EMPTY_GDT_ARRAY;
+		return self::EMPTY_ARRAY;
 	}
 	
 	#############
@@ -158,15 +159,15 @@ abstract class GDT
 			case self::RENDER_CARD: return $this->renderCard();
 			case self::RENDER_CELL: return $this->renderCell();
 			case self::RENDER_HEADER: return $this->renderHeader();
-			case self::RENDER_FILTER: return $this->renderFilter('');
+			case self::RENDER_FILTER: return $this->renderFilter(self::EMPTY_STRING);
 			case self::RENDER_ORDER: return $this->renderOrder();
 		}
 	}
 	
 	# various output/rendering formats
 	public function render() { return $this->renderGDT(); }
-	public function renderNIL() : string { return ''; }
-	public function renderBinary() : string { return ''; }
+	public function renderNIL() : string { return self::EMPTY_STRING; }
+	public function renderBinary() : string { return self::EMPTY_STRING; }
 	public function renderCLI() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderJSON() { return $this->renderCLI(); }
@@ -179,8 +180,8 @@ abstract class GDT
 	public function renderCard() : string { return $this->renderHTML(); }
 	# html table rendering
 	public function renderCell() : string { return $this->renderHTML(); }
-	public function renderHeader() : string { return ''; }
-	public function renderFilter($f) : string { return ''; }
+	public function renderHeader() : string { return self::EMPTY_STRING; }
+	public function renderFilter($f) : string { return self::EMPTY_STRING; }
 // 	public function renderOrder(GDT_Table $t) : string { return $this->renderTableOrder($t); }
 
 	public function renderVar() : string
@@ -241,9 +242,10 @@ abstract class GDT
 	### Features ###
 	################
 	public function isOrderable() : bool { return false; }
-	public function isOrderDefaultAsc() : bool { return true; }
+	public function isOrderDefaultAsc() : bool { return true; } # @TODO rename this method
 	public function isSearchable() : bool { return false; }
 	public function isFilterable() : bool { return false; }
+	public function isSortable() : bool { return false; }
 	
 	##############
 	### Events ###
@@ -294,37 +296,25 @@ abstract class GDT
 	 * @see GDT_Enum
 	 *
 	 * @param mixed $value
-	 * @return boolean
 	 */
 	public function validate($value) : bool
 	{
 		return true; # all empty GDT does nothing... what can it do? randomly fail?!
 	}
 	
-	public function hasInputs() : bool
+	public function validated(bool $throw=false) : ?self
 	{
-		return false;
-	}
-	
-	public function validateInput($input) : bool
-	{
-		$var = $this->inputToVar($input);
+		$var = $this->getVar();
 		$value = $this->toValue($var);
-		if (!$this->validate($value))
+		if ($this->validate($value))
+		{
+			return $this;
+		}
+		elseif ($throw)
 		{
 			throw new GDO_ArgException($this);
 		}
-		return true;
-	}
-	
-	/**
-	 * Chain this GDT, but only if validated.
-	 * @return self
-	 */
-	public function validated() : ?self
-	{
-		$var = $this->getVar();
-		return $this->validateInput($var) ? $this : null;
+		return null;
 	}
 	
 	public function hasError() : bool
@@ -339,7 +329,7 @@ abstract class GDT
 	
 	public function classError() : string
 	{
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 	##############
@@ -374,7 +364,7 @@ abstract class GDT
 	 */
 	public function filterVar(string $key=null)
 	{
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 	/**
@@ -417,6 +407,10 @@ abstract class GDT
 	#########################
 	### Bridge for traits ###
 	#########################
+	/**
+	 * @deprecated
+	 * @return bool
+	 */
 	public function hasName() : bool
 	{
 		return false;
@@ -433,19 +427,28 @@ abstract class GDT
 	 */
 	public function gdoColumnNames() : array
 	{
-		return self::EMPTY_GDT_ARRAY;
+		return self::EMPTY_ARRAY;
 	}
 	
 	/**
 	 * Setup the default label. None by default.
-	 * @return self
 	 */
 	public function defaultLabel() : self
 	{
 		return $this;
 	}
 	
+	/**
+	 * @deprecated
+	 * @param string $key
+	 * @return bool
+	 */
 	public function hasInput(string $key=null) : bool
+	{
+		return false;
+	}
+	
+	public function hasInputs() : bool
 	{
 		return false;
 	}
@@ -487,7 +490,7 @@ abstract class GDT
 	
 	public function getFields() : array
 	{
-		return self::EMPTY_GDT_ARRAY;
+		return self::EMPTY_ARRAY;
 	}
 	
 	public function gdo(GDO $gdo = null) : self
@@ -500,7 +503,7 @@ abstract class GDT
 	 */
 	public function htmlName() : string
 	{
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 	public function htmlClass() : string
@@ -515,18 +518,18 @@ abstract class GDT
 	{
 		if ($name = $this->getName())
 		{
-			return sprintf(' name="%s"', $name);
+			return " name=\"{$name}\"";
 		}
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 	public function htmlID() : string
 	{
 		if ($name = $this->getName())
 		{
-			return sprintf(' id="%s_%s"', $name, spl_object_id($this));
+			return " id=\"{$name}\"";
 		}
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 	/**
@@ -535,7 +538,7 @@ abstract class GDT
 	 */
 	public function htmlAttributes() : string
 	{
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 // 	public function input($input = null) : void
@@ -616,10 +619,15 @@ abstract class GDT
 		return false;
 	}
 	
+	public function reset() : self
+	{
+		return $this;
+	}
+	
 	##################
 	### Conversion ###
 	##################
-	public function inputToVar($input=null) : ?string
+	public function inputToVar(string $input=null) : ?string
 	{
 		if ($input === null)
 		{
@@ -657,7 +665,7 @@ abstract class GDT
 	 */
 	public function plugVar() : string
 	{
-		return '';
+		return self::EMPTY_STRING;
 	}
 	
 	/**

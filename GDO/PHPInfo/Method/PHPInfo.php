@@ -5,7 +5,7 @@ use GDO\Core\Method;
 
 final class PHPInfo extends Method
 {
-	public function isTrivial() { return false; }
+	public function isTrivial() : bool { return false; }
 	
     public function getPermission() : ?string { return 'staff'; }
     

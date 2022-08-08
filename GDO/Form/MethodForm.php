@@ -5,6 +5,7 @@ use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\File\GDT_File;
 use GDO\Util\Common;
+use GDO\Core\GDO_Error;
 
 /**
  * A method with a form.
@@ -18,6 +19,7 @@ abstract class MethodForm extends Method
 	#################
 	### Submitted ###
 	#################
+	public ?string $pressedButton = null;
 	public bool $submitted = false;
 	public function submitted(bool $submitted=true) : self
 	{
@@ -99,6 +101,7 @@ abstract class MethodForm extends Method
 			}
 			$this->form->titleRaw($this->getMethodTitle());
 			$this->createForm($this->form);
+// 			$this->form->inputs($this->getInputs());
 		}
 		return $this->form;
 	}
@@ -127,10 +130,11 @@ abstract class MethodForm extends Method
 	############
 	public function execute()
 	{
-		$form = $this->getForm();
-		
 		$this->submitted = false;
 		$this->validated = false;
+		$this->pressedButton = null;
+		
+		$form = $this->getForm()->inputs($this->inputs);
 		
 		### Flow upload
 		if ($flowField = Common::getRequestString('flowField'))
@@ -145,19 +149,27 @@ abstract class MethodForm extends Method
 		### Execute action
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
+			/** @var $gdt GDT_Submit **/
+			$gdt->inputs($this->inputs);
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;
+				$this->pressedButton = $gdt->name;
 				if ($form->validate(null))
 				{
 					$this->validated = true;
+					$this->resetForm();
 					if ($gdt->onclick)
 					{
 						return $gdt->click();
 					}
-					else
+					elseif ($this->pressedButton === 'submit')
 					{
 						return $this->formValidated($form);
+					}
+					else
+					{
+						throw new GDO_Error('err_submit_without_click_handler');
 					}
 				}
 				else

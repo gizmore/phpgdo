@@ -35,12 +35,12 @@ final class GDT_RowNum extends GDT_Checkbox
 
 	public function renderHeader() : string
 	{
-		return GDT_Template::php('Table', 'filter/rownum.php', ['field'=>$this]);
+		return GDT_Template::php('Table', 'filter/rownum.php', ['field' => $this]);
 	}
 	
 	public function renderHTML() : string
 	{
-		return GDT_Template::php('Table', 'rownum_html.php', ['field'=>$this]);
+		return GDT_Template::php('Table', 'rownum_html.php', ['field' => $this]);
 	}
 	
 }

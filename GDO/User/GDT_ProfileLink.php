@@ -8,24 +8,30 @@ use GDO\Core\GDT_Template;
  * A link to a profile.
  * 
  *  - Requires user()
+ *  
+ *  - Optional level()
  *  - Optional avatar()
  *  - Optional nickname()
  *  
  * @author gizmore
  * @version 7.0.1
+ * @since 6.2.0
  */
 final class GDT_ProfileLink extends GDT_Link
 {
-	use WithAvatar;
 	use WithUser;
+	use WithAvatar;
 	
 	public string $icon = 'user';
 	
 	public function hrefProfile() : string
 	{
-		return href('User', 'Profile', "&id={$this->user->getID()}");
+		return $this->user->href_profile();
 	}
 	
+	################
+	### Nickname ###
+	################
 	public bool $nickname = false;
 	public function nickname(bool $nickname = true) : self
 	{
@@ -33,10 +39,15 @@ final class GDT_ProfileLink extends GDT_Link
 		return $this;
 	}
 	
-// 	public function showNickname() : bool
-// 	{
-// 		return $this->avatar ? $this->nickname : true;
-// 	}
+	#############
+	### Level ###
+	#############
+	public bool $level = false;
+	public function level(bool $level=true) : self
+	{
+		$this->level = $level;
+		return $this;
+	}
 	
 	##############
 	### Render ###

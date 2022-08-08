@@ -64,32 +64,40 @@ class GDT_Select extends GDT_ComboBox
 		$this->value = $value;
 		return $value;
 	}
+	
+	public function inputToVar(string $input=null) : ?string
+	{
+		if ($input === $this->emptyVar)
+		{
+			$input = null;
+		}
+		return parent::inputToVar($input);
+	}
 
 	public function toVar($value) : ?string
 	{
+		if ($value === null)
+		{
+			return null;
+		}
+		
+		# Multiple var
 		if ($this->multiple)
 		{
-		    if ($value)
-		    {
-		        return json_encode(array_values($value));
-		    }
-		    else
-		    {
-		        return null;
-		    }
+	        return json_encode(array_values($value));
 		}
-		elseif ($value === $this->emptyVar) 
+		
+		# Single var
+		if ($value === $this->emptyVar) 
 		{
 			return null;
 		}
-		elseif (false === ($var = array_search($value, $this->initChoices(), true)))
-		{
-			return null;
-		}
-		else
+		if (false !== ($var = array_search($value, $this->initChoices(), true)))
 		{
 			return $var;
 		}
+
+		return null;
 	}
 	
 	public function toValue(string $var = null)
@@ -125,7 +133,7 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getChoices()
 	{
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public function initChoices() : array
@@ -408,7 +416,7 @@ class GDT_Select extends GDT_ComboBox
 	{
 		if ($this->multiple)
 		{
-			if ($selected = @json_decode($this->getVar()))
+			if ($selected = @json_decode($this->var))
 			{
 				if (in_array($var, $selected, true))
 				{
@@ -419,7 +427,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 		else
 		{
-			return $this->getVar() === $var ? self::SELECTED : '';
+			return $this->var === $var ? self::SELECTED : '';
 		}
 	}
 	

@@ -15,7 +15,7 @@ use GDO\Core\GDT_String;
  * Generates href cycle for template.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class GDT_Order extends GDT_String
 {
@@ -58,6 +58,7 @@ final class GDT_Order extends GDT_String
 		$dir = Strings::substrFrom($order, ' ', 'ASC');
 		$dir = stripos($dir, 'desc') === false ? 'ASC' : 'DESC';
 		$by = Strings::substrTo($order, ' ', $order);
+		$by = Strings::rsubstrFrom($by, '.', $by);
 		if (!($gdt = $this->getField($by, false)))
 		{
 			return $this->error('err_unknown_order_column', [html($by)]);

@@ -4,12 +4,11 @@ namespace GDO\Core;
 /**
  * Raw data retrieval methods.
  * 
- * - Does not store last url.
- * - Rendering is done without page template.
+ * - Do not store last urls.
  * - Does not lock session by default.
  * - Does not show up in sitemap.
  * - Is not indexed by robots.
- * - Does not work in CLI.
+ * - Do not render the website boilerplate.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -17,10 +16,10 @@ namespace GDO\Core;
  */
 abstract class MethodAjax extends Method
 {
-    public function isAjax() { return true; }
+	public function isAjax() : bool { return true; }
 	public function isSEOIndexed() { return false; }
 	public function isLockingSession() { return false; }
-	public function saveLastUrl() : bool { return false; }
-	public function showInSitemap() : bool { return false; }
+	public function isSavingLastUrl() : bool { return false; }
+	public function isShownInSitemap() : bool { return false; }
 
 }

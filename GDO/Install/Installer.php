@@ -95,13 +95,15 @@ class Installer
 	{
 		self::installModuleClasses($module, $forceMigrate);
 		
-// 		$module->gdoColumn('module_name');
-		
 		if (!$module->isPersisted())
 		{
 			$version = $module->version;
-// 			GDO_Module::table()->deleteWhere('module_name = '.$module->quoted('module_name'));
-			$module->setVars(['module_name' => $module->getName(), 'module_enabled'=>'1', 'module_version'=>$version, 'module_priority' => $module->priority]);
+			$module->setVars([
+				'module_name' => $module->getName(),
+				'module_enabled' => '1',
+				'module_version' => $version,
+				'module_priority' => $module->priority,
+			]);
 			$module->insert();
 			ModuleLoader::instance()->setModule($module);
 		}
@@ -123,10 +125,6 @@ class Installer
 		$module->onInstall();
 		
 		ModuleLoader::instance()->addEnabledModule($module);
-		
-// 		Cache::flush();
-// 		Cache::fileFlush();
-// 		ModuleLoader::instance()->flushEnabledModules();
 	}
 	
 	public static function installModuleClasses(GDO_Module $module) : void
@@ -213,9 +211,6 @@ class Installer
 	/**
 	 * Recreate a database schema.
 	 * I call this "automigration".
-	 * 
-	 * @param GDO_Module $module
-	 * @param string $version
 	 * @since 6.11.5
 	 */
 	public static function recreateDatabaseSchema(GDO_Module $module) : void
@@ -316,10 +311,6 @@ class Installer
 	
 	/**
 	 * Increase version by one patch level.
-	 * 
-	 * @param GDO_Module $module
-	 * @param bool $write
-	 * @return string
 	 */
 	private static function increaseVersion(GDO_Module $module, bool $write) : string
 	{
@@ -376,55 +367,25 @@ class Installer
 
 	/**
 	 * Return all modules needed for a module.
-	 * Used in gdo6-docs to generate a module list for a single module documentation output.
-	 * @param String $moduleName
+	 * Used in phpgdo-docs to generate a module list for a single module documentation output.
 	 * @return GDO_Module[]
 	 */
 	public static function getDependencyModules(string $moduleName) : array
 	{
-// 	    $git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, false, true);
 	    $deps = $module->getDependencies();
 	    $deps[] = $module->getName();
 	    $deps[] = 'Core';
-// 	    $deps = array_unique($deps);
 	    $cnt = 0;
-// 	    $allResolved = true; # All required modules provided?
 	    while ($cnt !== count($deps))
 	    {
 	        $cnt = count($deps);
 	        foreach ($deps as $dep)
 	        {
-// 	            $depmod = ModuleLoader::instance()->getModule($dep, true, false);
 	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, false, true);
 	            
 	            if (!$depmod)
 	            {
-// 	                if ($allResolved === true)
-// 	                {
-// 	                    return "Missing dependencie(s)!\n".
-// 	                       "Please note that this list may not be complete, because missing modules might have more dependencies.\n";
-// 	                }
-// 	                $allResolved = false;
-// 	                $providers = @\GDO\Core\ModuleProviders::$PROVIDERS[$dep];
-// 	                if (!$providers)
-// 	                {
-// 	                    return "{$dep}: Not an official module or a typo somewhere. No Provider known.\n";
-// 	                }
-// 	                elseif (is_array($providers))
-// 	                {
-// 	                    $back = "{$dep}: Choose between multiple possible providers.\n";
-// 	                    foreach ($providers as $provider)
-// 	                    {
-// 	                        $back .= sprintf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n", $dep);
-// 	                    }
-// 	                    return $back;
-// 	                }
-// 	                else
-// 	                {
-// 	                    return sprintf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n", $dep);
-// 	                }
-	                
 	                continue;
 	            }
 	            

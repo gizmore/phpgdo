@@ -30,7 +30,7 @@ use GDO\Form\GDT_Form;
 <?php 
 foreach ($field->getFields() as $gdt)
 {
-	echo $gdt->renderForm();
+	echo $gdt->inputs($field->getInputs())->render();
 }
 ?>
    </div>

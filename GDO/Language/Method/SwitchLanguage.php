@@ -7,8 +7,8 @@ use GDO\UI\GDT_Redirect;
 use GDO\Core\MethodAjax;
 use GDO\Language\GDO_Language;
 use GDO\Net\GDT_Url;
-use GDO\Language\Module_Language;
 use GDO\User\GDO_User;
+use GDO\UI\GDT_Link;
 
 /**
  * Switch language to user's choice.
@@ -47,9 +47,6 @@ final class SwitchLanguage extends MethodAjax
 	    }
 	}
 	
-	/**
-	 * @return \GDO\Language\GDO_Language
-	 */
 	protected function getLanguage(bool $throw=true) : ?GDO_Language
 	{
 		return $this->gdoParameterValue('lang', $throw, $throw);
@@ -61,18 +58,25 @@ final class SwitchLanguage extends MethodAjax
 	public function execute()
 	{
 		# Set new ISO language
-		$iso = $this->getLanguage()->getISO();
+		$lang = $this->getLanguage();
+		$iso = $lang->getISO();
+		Trans::setISO($iso);
+
+		# Redirect back to new language
 		if (!($ref = $this->gdoParameterVar('_ref')))
 		{
 			$ref = GDT_Redirect::hrefBack();
 		}
-		$ref = preg_replace("/_lang=[a-z]{2}/", "_lang=".$iso , $ref);
+		$ref = GDT_Link::replacedHREFS($ref, '_lang', $iso);
+		
+		# Save new iso
 		$user = GDO_User::current()->persistent();
-		Module_Language::instance()->saveUserSetting($user, 'language', $iso);
-		Trans::setISO($iso);
+		$user->saveSettingVar('Language', 'language', $iso);
+		
+		# Do it
 		return GDT_Redirect::make()->
 			href($ref)->
-			redirectMessage('msg_language_set', [$this->getLanguage()->renderName()]);
+			redirectMessage('msg_language_set', [$lang->renderName()]);
 			
 	}
 	

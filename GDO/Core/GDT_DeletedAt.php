@@ -7,7 +7,7 @@ use GDO\Date\GDT_Timestamp;
  * Mark a row as deleted.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0
  */
 final class GDT_DeletedAt extends GDT_Timestamp

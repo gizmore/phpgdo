@@ -15,6 +15,7 @@ use GDO\UI\GDT_Redirect;
 use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Form;
 use GDO\Date\Time;
+use GDO\Session\GDO_Session;
 
 /**
  * Abstract baseclass for all methods.
@@ -61,15 +62,18 @@ abstract class Method #extends GDT
 
 	# toggles
 	public function isCLI() : bool { return false; }
-	public function isAjax() { return false; }
-	public function isTrivial() { return true; }
+	public function isAjax() : bool { return false; }
+	/**
+	 * Toggle if method can be trivially fuzz-tested. defaults to yes.
+	 */
+	public function isTrivial() : bool { return true; }
 	public function getUserType() : ?string { return null; }
 	public function isUserRequired() : bool { return false; }
 	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
 	public function isTransactional() : bool { return Application::$INSTANCE->verb === GDT_Form::POST; }
 	public function isAlwaysTransactional() : bool { return false; }
-	public function saveLastUrl() : bool { return true; }
-	public function showInSitemap() : bool { return true; }
+	public function isSavingLastUrl() : bool { return true; }
+	public function isShownInSitemap() : bool { return true; }
 	
 	# events
 	public function onInit() {}
@@ -268,6 +272,12 @@ abstract class Method #extends GDT
 		return $response;
 	}
 	
+	public function executeWithInputs(array $inputs=null)
+	{
+		$this->inputs = $inputs;
+		return $this->executeWithInit();
+	}
+	
 	/**
 	 * Execute this method with all hooks.
 	 */
@@ -275,25 +285,25 @@ abstract class Method #extends GDT
 	{
 		$db = Database::instance();
 		$response = GDT_Response::make();
-		$transactional = $this->transactional();
 		try
 		{
-			# Wrap transaction start
-			if ($transactional)
-			{
-				$db->transactionBegin();
-			}
+			$transactional = false;
 			
 			# Init method
-			$this->inited = false;
-			
-			$this->applyInput();
-			
 			if ($result = $this->onInit())
 			{
 				$response->addField($result);
 			}
 			
+			# Wrap transaction start
+			$transactional = $this->transactional();
+			if ($transactional)
+			{
+				$db->transactionBegin();
+			}
+			
+			$this->applyInput();
+
 			if (Application::isError())
 			{
 				if ($transactional)
@@ -377,7 +387,7 @@ abstract class Method #extends GDT
 		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
 		
 		# Store last URL in session
-		if ($this->saveLastUrl())
+		if ($this->isSavingLastUrl())
 		{
 			$this->storeLastURL();
 			$this->storeLastActivity();
@@ -418,13 +428,28 @@ abstract class Method #extends GDT
 	##################
 	public function storeLastURL() : void
 	{
+// 		$user = GDO_User::current();
+		if (class_exists('GDO\\Session\\GDO_Session', false))
+		{
+			GDO_Session::set('sess_last_url', $_SERVER['REQUEST_URI']);
+		}
+// 		->saveSettingVar('User', 'last_url', $var)
 	}
 
+	/**
+	 * Update user last activity timestamp, for persisted users/guests.
+	 */
 	public function storeLastActivity() : void
 	{
-		$time = Application::$TIME % 60;
-		$date = Time::getDate($time);
-		GDO_User::current()->saveVar('user_edited', $date);
+		$user = GDO_User::current();
+		if ($user->isPersisted())
+		{
+			$time = Application::$TIME;
+			$time -= $time % 60;
+			$date = Time::getDate($time);
+			$user->saveVar('user_last_activity', $date);
+			$user->saveSettingVar('User', 'last_activity', $date);
+		}
 	}
 	
 	
@@ -437,7 +462,7 @@ abstract class Method #extends GDT
 	 */
 	public function plugVars() : array
 	{
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public function withAppliedInputs(array $inputs) : self

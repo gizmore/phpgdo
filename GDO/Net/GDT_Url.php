@@ -22,10 +22,17 @@ class GDT_Url extends GDT_String
     use WithTitle;
     use WithAnchorRelation;
     
+    public function getInputType() : string
+    {
+    	return 'url';
+    }
+    
     protected function __construct()
     {
     	parent::__construct();
     	$this->icon = 'url';
+    	$this->ascii()->caseS();
+    	$this->min(10)->max(767);
     }
     
     ##############
@@ -50,15 +57,18 @@ class GDT_Url extends GDT_String
 	public static function absolute($url) : string { return sprintf('%s://%s%s', self::protocol(), self::hostWithPort(), $url); }
 	public static function relative($url) : string { return GDO_WEB_ROOT . $url; }
 
+	###############
+	### Options ###
+	###############
 	public bool $noFollow = false;
 	public bool $reachable = false;
 	public bool $allowInternal = false;
 	public bool $allowExternal = false;
 	public array $schemes = ['http', 'https'];
-	public int $min = 0;
-	public int $max = 767; # Max length for a unique constraint on older mysql systems
-	public int $encoding = GDT_String::ASCII;
 	
+	###################
+	### Var / Value ###
+	###################
 	public function toValue(string $var = null)
 	{
 		return $var ? new URL($var) : null;
@@ -72,8 +82,8 @@ class GDT_Url extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string { return GDT_Template::php('Net', 'cell/url.php', ['field' => $this]); }
-	public function displayValue($value) { return GDT_Link::anchor($value->raw, $this->renderLabel()); }
+// 	public function renderCell() : string { return GDT_Template::php('Net', 'cell/url.php', ['field' => $this]); }
+// 	public function displayValue($value) { return GDT_Link::anchor($value->raw, $this->renderLabel()); }
 	
 	###############
 	### Options ###
@@ -103,7 +113,7 @@ class GDT_Url extends GDT_String
 		return $this;
 	}
 	
-	public function schemes(...$schemes)
+	public function schemes(string...$schemes) : self
 	{
 	    $this->schemes = $schemes;
 	    return $this;
@@ -115,12 +125,6 @@ class GDT_Url extends GDT_String
 	    return $this;
 	}
 	
-// 	public function noFollow(bool $noFollow) : self
-// 	{
-// 	    $this->noFollow = $noFollow;
-// 	    return $this;
-// 	}
-
 	################
 	### Validate ###
 	################
@@ -200,9 +204,9 @@ class GDT_Url extends GDT_String
 	    return $this->error('err_local_url_not_allowed');
 	}
 	
-	/**
-	 * @override
-	 */
+	#############
+	### Tests ###
+	#############
 	public function plugVar() : string
 	{
 	    if ($this->allowExternal)

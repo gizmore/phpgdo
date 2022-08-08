@@ -5,7 +5,7 @@ namespace GDO\Util;
  * String utility class.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 final class Strings
@@ -15,10 +15,6 @@ final class Strings
 	#########################
 	/**
 	 * Get a substring from a string until an occurance of another string.
-	 * @param string $s Haystack
-	 * @param string $to Needle
-	 * @param ?string $default Default result
-	 * @return ?string
 	 */
 	public static function substrTo(string $s, string $to, string $default=null) : ?string
 	{
@@ -31,11 +27,6 @@ final class Strings
 	
 	/**
 	 * Take the portion of a string after/from a portion. You can nibble tokens with that. slow?
-	 * 
-	 * @param string $s
-	 * @param string $from
-	 * @param string $default
-	 * @return string
 	 */
 	public static function substrFrom(string $s, string $from, string $default=null) : ?string
 	{
@@ -48,11 +39,6 @@ final class Strings
 	
 	/**
 	 * Get a portion of $s from 0 to last occurance of $to.
-	 * 
-	 * @param string $s
-	 * @param string $to
-	 * @param string $default
-	 * @return string
 	 */
 	public static function rsubstrTo(string $s, string $to, string $default=null) : ?string
 	{
@@ -65,11 +51,6 @@ final class Strings
 
 	/**
 	 * Get a portion of $s from the last occurance of $from.
-	 * 
-	 * @param string $s
-	 * @param string $from
-	 * @param string $default
-	 * @return string
 	 */
 	public static function rsubstrFrom(string $s, string $from, string $default=null) : ?string
 	{
@@ -85,8 +66,6 @@ final class Strings
 	#######################
 	/**
 	 * Changes newline to <br/> but only when no tags are open.
-	 * @param string $s
-	 * @return string
 	 */
 	public static function nl2brHTMLSafe(string $s) : string
 	{
@@ -130,44 +109,44 @@ final class Strings
 	    return $back;
 	}
 	
-	###################
-	### Args parser ###
-	###################
-	/**
-	 * Parse a line into args.
-	 * 
-	 * @deprecated because unused
-	 * @see https://stackoverflow.com/a/18229461/13599483
-	 * @param string $line
-	 * @return string[]
-	 */
-	public static function args(string $line) : array
-	{
-	    $pattern = <<<REGEX
-/(?:"((?:(?<=\\\\)"|[^"])*)"|'((?:(?<=\\\\)'|[^'])*)'|(\S+))/x
-REGEX;
-	    /** @var $matches string[] **/
-	    preg_match_all($pattern, $line, $matches, PREG_SET_ORDER);
+// 	###################
+// 	### Args parser ###
+// 	###################
+// 	/**
+// 	 * Parse a line into args.
+// 	 * 
+// 	 * @deprecated because unused
+// 	 * @see https://stackoverflow.com/a/18229461/13599483
+// 	 * @param string $line
+// 	 * @return string[]
+// 	 */
+// 	public static function args(string $line) : array
+// 	{
+// 	    $pattern = <<<REGEX
+// /(?:"((?:(?<=\\\\)"|[^"])*)"|'((?:(?<=\\\\)'|[^'])*)'|(\S+))/x
+// REGEX;
+// 	    /** @var $matches string[] **/
+// 	    preg_match_all($pattern, $line, $matches, PREG_SET_ORDER);
 	    
-	    # Choose right match
-	    $args = [];
-	    foreach ($matches as $match)
-	    {
-	        if (isset($match[3]))
-	        {
-	            $args[] = $match[3];
-	        }
-	        elseif (isset($match[2]))
-	        {
-	            $args[] = str_replace(['\\\'', '\\\\'], ["'", '\\'], $match[2]);
-	        }
-	        else
-	        {
-	            $args[] = str_replace(['\\"', '\\\\'], ['"', '\\'], $match[1]);
-	        }
-	    }
-	    return $args;
-	}
+// 	    # Choose right match
+// 	    $args = [];
+// 	    foreach ($matches as $match)
+// 	    {
+// 	        if (isset($match[3]))
+// 	        {
+// 	            $args[] = $match[3];
+// 	        }
+// 	        elseif (isset($match[2]))
+// 	        {
+// 	            $args[] = str_replace(['\\\'', '\\\\'], ["'", '\\'], $match[2]);
+// 	        }
+// 	        else
+// 	        {
+// 	            $args[] = str_replace(['\\"', '\\\\'], ['"', '\\'], $match[1]);
+// 	        }
+// 	    }
+// 	    return $args;
+// 	}
 	
 	###################
 	### Trim dotted ###
@@ -183,4 +162,18 @@ REGEX;
 		return $text;
 	}
 
+	#####################
+	### HTML Shrinker ###
+	#####################
+	/**
+	 * Remove uncessary whitespace from html output.
+	 * @deprecated slows down
+	 */
+	public static function shrinkHTML(string $html) : string
+	{
+// 		$html = preg_replace('/\s+/', ' ', $html);
+// 		$html = str_replace('> <', '><', $html);
+		return $html;
+	}
+	
 }

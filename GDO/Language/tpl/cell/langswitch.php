@@ -7,7 +7,7 @@ use GDO\Language\Trans;
 $languages = Module_Language::instance()->cfgSupported();
 ?>
 <div class="gdo-lang-switch">
- <form method="post">
+ <form method="post" action="<?=href('Language', 'SwitchLanguage')?>">
   <input type="hidden" name="_mo" value="Language" />
   <input type="hidden" name="_me" value="SwitchLanguage" />
   <input type="hidden" name="_ref" value="<?=html(urldecode($_SERVER['REQUEST_URI']))?>" />

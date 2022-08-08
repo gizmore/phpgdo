@@ -181,7 +181,7 @@ final class ModuleLoader
 	private function initFromCache(array $cache) : void
 	{
 		$this->modules = $cache;
-		$this->initModules();
+// 		$this->initModules();
 	}
 	
 	public function initModules() : void
@@ -207,14 +207,14 @@ final class ModuleLoader
 		{
 			foreach ($this->getEnabledModules() as $module)
 			{
-				if (!$module->isInited())
+				if (!$module->inited)
 				{
 					$module->onInit();
 					if (CLI::isCLI())
 					{
 						$module->onInitCLI();
 					}
-					$module->initedModule();
+					$module->inited();
 				}
 			}
 		}
@@ -278,7 +278,7 @@ final class ModuleLoader
    			$this->initModuleVars();
 			$order = 'module_priority ASC, module_name ASC';
 			$this->modules = $this->sortModules($order);
-			$this->initModules();
+// 			$this->initModules();
 		}
 		return $this->modules;
 	}

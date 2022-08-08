@@ -41,7 +41,6 @@ trait WithValue
 	###########################
 	public bool    $valueConverted = false; # remember value has been converted already
 	public ?string $initial = null; # initial dbinput var
-// 	public         $input = null; # userinput string
 	public ?string $var = null; # dbinput var
 	public         $value; # output value
 	
@@ -51,18 +50,6 @@ trait WithValue
 		return $this->var($initial);
 	}
 
-// 	public function input($input = null) : self
-// 	{
-// 		$this->input = $input;
-// 		$this->valueConverted = false;
-// 		return $this;
-// 	}
-
-// 	public function hasInput(string $key=null) : bool
-// 	{
-// 		return !empty($this->input);
-// 	}
-	
 	public function var(string $var = null) : self
 	{
 		$this->var = $var;
@@ -78,17 +65,15 @@ trait WithValue
 		return $this;
 	}
 	
+	public function reset() : self
+	{
+		return $this->var($this->initial);
+	}
+	
 	public function getInitial() : ?string
 	{
 		return $this->initial;
 	}
-	
-// 	public function getInput() : ?string
-// 	{
-// 		$name = $this->name;
-// 		$input = isset($this->inputs[$name]) ? $this->inputs[$name] : null;
-// 		return $input;
-// 	}
 	
 	public function getVar()
 	{

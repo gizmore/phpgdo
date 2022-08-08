@@ -10,7 +10,7 @@ use GDO\Core\MethodCompletion;
  * Auto completion for GDT_User.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class Completion extends MethodCompletion

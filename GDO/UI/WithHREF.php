@@ -6,7 +6,7 @@ namespace GDO\UI;
  * 
  * @author gizmore
  * @version 7.0.1
- * @since 6.0.0
+ * @since 6.1.0
  */
 trait WithHREF
 {
@@ -27,35 +27,42 @@ trait WithHREF
 
 	public function htmlHREF() : string
 	{
-		if (!isset($this->href))
-		{
-			return '';
-		}
-		return sprintf(' href="%s"', html($this->href));
+		return isset($this->href) ? sprintf(' href="%s"', html($this->href)) : '';
 	}
 
+	####################
+	### Replace HREF ###
+	####################
 	/**
-	 * Replace a get parameter in URL.
-	 * Adds if not found
+	 * Get this href with a replaced parameter.
 	 */
-	public function replacedHREF(string $key, string $value, string $href = null) : string
+	public function replacedHREF(string $key, ?string $var) : string
 	{
-	    $href = $href === null ? $this->href : $href;
-	    
-	    $new = "&{$key}=" . urlencode($value);
-	    
-	    if (strpos($href, "&$key=") !== false)
-	    {
-	        $key = preg_quote($key);
-	        $href = preg_replace("#&{$key}=[^&]+#", $new, $href);
-	    }
-	    
-	    else
-	    {
-	        $href = $href . $new;
-	    }
-	    
-	    return $href;
+		return isset($this->href) ? 
+			self::replacedHREFS($this->href, $key, $var) :
+			'';
 	}
-
+	
+	/**
+	 * Replace a GET Parameter inside an URL.
+	 * Adds it, if not found.
+	 * Removes if replacement var is empty.
+	 * 
+	 * @TODO Speed up replacedHREFS() or at least fix the ?problem for the first element.
+	 */
+	public static function replacedHREFS(string $href, string $key, ?string $var) : string
+	{
+		$new = $var ? ("&{$key}=" . urlencode($var)) : '';
+		if (strpos($href, "&{$key}=") !== false)
+		{
+			$key = preg_quote($key);
+			$href = preg_replace("#&{$key}=[^&]+#D", $new, $href);
+		}
+		else
+		{
+			$href .= $new;
+		}
+		return $href;
+	}
+	
 }

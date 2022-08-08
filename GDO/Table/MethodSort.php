@@ -11,7 +11,7 @@ use GDO\Core\MethodAjax;
  * Generic ajax adapter that swaps two items using their GDT_Sort column.
  * 
  * @author gizmore
- * @version 6.10.1
+ * @version 7.0.1
  * @since 5.0.0
  */
 abstract class MethodSort extends MethodAjax
@@ -88,27 +88,35 @@ abstract class MethodSort extends MethodAjax
 		return $this->message('msg_sort_success');
 	}
 	
+	###################
+	### Sort Column ###
+	###################
 	/**
 	 * Determine the sort column.
-	 * @param GDO $table
-	 * @return GDT
 	 */
-	protected function getSortingColumn(GDO $table)
+	protected function getSortingColumn(GDO $table) : ?GDT
 	{
 	    return $table->gdoColumnOf(GDT_Sort::class);
 	}
 	
 	/**
 	 * Get the name of the table's sort column.
-	 * @param GDO $table
-	 * @return string
 	 */
-	protected function getSortingColumnName(GDO $table)
+	protected function getSortingColumnName(GDO $table) : ?string
 	{
 	    if ($gdt = $this->getSortingColumn($table))
 	    {
 	        return $gdt->name;
 	    }
+	    return null;
+	}
+
+	###########
+	### SEO ###
+	###########
+	public function getMethodTitle() : string
+	{
+		return t('mt_sort', [$this->gdoSortObjects()->gdoHumanName()]);
 	}
 	
 }

@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Page;
+use GDO\Util\Strings;
 
 /**
  * A response renders a GDT result.
@@ -27,7 +28,7 @@ final class GDT_Response extends GDT_Tuple
 		switch (Application::$INSTANCE->mode)
 		{
 			case GDT::RENDER_HTML:
-				return $this->renderPage();
+				return Strings::shrinkHTML($this->renderPage());
 			case GDT::RENDER_JSON:
 				hdr('Content-Type: application/json');
 				return json_encode($this->renderJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json

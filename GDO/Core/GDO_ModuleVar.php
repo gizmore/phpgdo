@@ -3,10 +3,13 @@ namespace GDO\Core;
 
 /**
  * Module config table.
+ * As long as nothing is configured, the initial value from the config gdt is used.
+ * @TODO Write a configure page that condenses all the module configs into a single page, like settings.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
+ * @see \GDO\User\GDO_UserSetting
  */
 final class GDO_ModuleVar extends GDO
 {
@@ -23,38 +26,39 @@ final class GDO_ModuleVar extends GDO
 			GDT_String::make('mv_value'),
 		];
 	}
-	public function getVarName() { return $this->gdoVar('mv_name'); }
-	public function getVarValue() { return $this->gdoVar('mv_value'); }
-	
-	public static function createModuleVar(GDO_Module $module, GDT $gdt)
+	public function getVarName() : string { return $this->gdoVar('mv_name'); }
+	public function getVarValue() : ?string { return $this->gdoVar('mv_value'); }
+
+	###########
+	### API ###
+	###########
+	/**
+	 * Change a config var.
+	 */
+	public static function createModuleVar(GDO_Module $module, GDT $gdt) : GDT
 	{
-	    $var = $gdt->getVar();
-	    if ($var === null)
+		$inputs = [];
+		foreach ($gdt->getGDOData() as $key => $var)
 		{
-		    $gdt->var($gdt->initial);
-		    $moduleVar = self::removeModuleVar($module, $gdt->name);
-		}
-		else
-		{
-		    $moduleVar = self::table()->blank([
+		    self::table()->blank([
     			'mv_module' => $module->getID(),
     		    'mv_name' => $gdt->name,
     			'mv_value' => $var,
     		])->replace();
+			$inputs[$key] = $var;
 		}
-		
-		return $moduleVar;
+		return $gdt->setGDOData($inputs);
 	}
 	
-	public static function removeModuleVar(GDO_Module $module, $varname)
-	{
-		$varname = GDO::escapeS($varname);
-		self::table()->deleteWhere("mv_module={$module->getID()} AND mv_name='$varname'");
-		return self::table()->blank([
-		    'mv_module' => $module->getID(),
-		    'mv_name' => $varname,
-		    'mv_value' => null,
-		]);
-	}
+// 	public static function removeModuleVar(GDO_Module $module, $varname)
+// 	{
+// 		$varname = GDO::escapeS($varname);
+// 		self::table()->deleteWhere("mv_module={$module->getID()} AND mv_name='$varname'");
+// 		return self::table()->blank([
+// 		    'mv_module' => $module->getID(),
+// 		    'mv_name' => $varname,
+// 		    'mv_value' => null,
+// 		]);
+// 	}
 	
 }

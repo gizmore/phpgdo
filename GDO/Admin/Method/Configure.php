@@ -26,10 +26,8 @@ use GDO\Core\Application;
 /**
  * Configure a module.
  *
- * @TODO: Write a unit test that does configure on each module.
- *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.4.0
  */
 class Configure extends MethodForm
@@ -43,7 +41,7 @@ class Configure extends MethodForm
 		return 'admin';
 	}
 
-	public function showInSitemap() : bool
+	public function isShownInSitemap() : bool
 	{
 		return false;
 	}
@@ -83,6 +81,8 @@ class Configure extends MethodForm
 		$install = Install::make()->inputs(Application::$INSTANCE->inputs);
 		$response->addField($install->executeWithInit());
 
+		$this->resetForm();
+		
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())
 		{
@@ -184,20 +184,19 @@ class Configure extends MethodForm
 			foreach ($config as $gdt)
 			{
 				$gdt->label('cfg_' . $gdt->name);
-				$key = 'cfg_tt_' . $gdt->name;
+				$key = 'tt_cfg_' . $gdt->name;
 				if (Trans::hasKey($key))
 				{
 					$gdt->tooltip($key);
 				}
-				// $gdt->focusable(false);
-				$form->addField($gdt); # ->var($mod->getConfigVar($gdt->name)));
+				$form->addField($gdt)->var($mod->getConfigVar($gdt->name));
 			}
 		}
 		
 		$form->actions()->addField(
 			GDT_Submit::make()->label('btn_save'));
 		$form->addField(GDT_AntiCSRF::make());
-		$form->action($this->href("&module=" . $mod->getName()));
+		$form->action($this->href("&module={$mod->getName()}"));
 	}
 
 	public function formValidated(GDT_Form $form)
@@ -209,7 +208,6 @@ class Configure extends MethodForm
 		$moduleVarsChanged = false;
 		foreach ($form->getAllFields() as $gdt)
 		{
-			// if ($gdt->hasChanged() && $gdt->writeable && $gdt->editable)
 			if ((!$gdt->isHidden()) && $gdt->isWriteable() && $gdt->hasChanged())
 			{
 				$info[] = '<br/>';

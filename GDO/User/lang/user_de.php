@@ -36,11 +36,13 @@ return [
 	'md_user_cleanupguests' => 'Cronjob um verwaiste Gastnutzer aufzuräumen.',
 
 	'mt_user_profile' => '%s\'s Profil',
-
+	'tt_user_level' => '%s hält einen Nutzerlevel von %s.',
+	
 	'lbl_acl_level' => '%s sichtbar ab Level',
 	'lbl_acl_relation' => '%s sichtbar für',
 	'lbl_acl_permission' => '%s - Sichtbarkeitsrechte',
 	
+	'enum_acl_hidden' => 'Verbergen',
 	'enum_acl_noone' => 'Niemanden',
 	'enum_acl_friends' => 'Freunde',
 	'enum_acl_friend_friends' => 'Freundesfreunde',

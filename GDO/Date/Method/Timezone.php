@@ -19,7 +19,7 @@ use GDO\Date\Module_Date;
  */
 final class Timezone extends MethodForm
 {
-	public function saveLastUrl() : bool { return false; }
+	public function isSavingLastUrl() : bool { return false; }
     public function isTransactional() : bool { return false; }
     public function isUserRequired() : bool { return false; }
     

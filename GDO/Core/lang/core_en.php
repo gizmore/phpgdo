@@ -58,10 +58,10 @@ return [
 	'err_user_required' => 'You need to signup to continue. You can also <a href="%s">continue as guest</a>',
 	'err_select_candidates' => 'There are multiple matches: %s',
 	'err_string_length' => 'This text has to be between %s and %s chars in length.',
-	'err_unknown_order_column' => 'This column cannot be sorted: %s.',
+	'err_unknown_order_column' => 'This column is unknown and cannot be sorted by: %s.',
+	'err_no_data_yet' => 'There is no data for this item yet.',
 	
 	# Messages
-	'editor' => 'Editor',
 	'msg_form_validated' => 'Your form has been sent successfully.',
 
 	# Checkbox
@@ -81,11 +81,13 @@ return [
 	'btn_back' => 'Back',
 	'btn_delete' => 'Delete',
 	'btn_edit' => 'Edit',
+	'btn_overview' => 'Overview',
+	'btn_preview' => 'Preview',
 	'btn_save' => 'Save',
 	'btn_send' => 'Send',
 	'btn_set' => 'Set',
 	'btn_upload' => 'Upload',
-	'btn_overview' => 'Overview',
+	'btn_view' => 'View',
 	'submit' => 'Submit',
 	
 	# Float
@@ -101,7 +103,9 @@ return [
 	'enum_bot' => 'Bot',
 	
 	# GDTs
+	'age' => 'Age',
 	'file_size' => 'Filesize',
+	'folder' => 'Folder',
 	'message' => 'Message',
 	'password' => 'Password',
 	'url' => 'URL',
@@ -149,6 +153,10 @@ return [
 	'step' => 'Step',
 	'ip' => 'IP',
 	'token' => 'Token',
+	'editor' => 'Editor',
+	'quote_by' => 'Quote by %s',
+	'quote_at' => 'At %s',
+	'not_specified' => 'Not Specified',
 	
 	# CBX
 	'sel_all' => 'Select All',
@@ -183,6 +191,11 @@ return [
 	'cfg_spr' => 'Suggestions per Request',
 	'cfg_ipp_cli' => 'Items per page (CLI)',
 	'cfg_ipp_http' => 'Items per page (HTML)',
+	
+	# List
+	'lbl_search_criteria' => 'Search: %s',
+	'order_by' => 'Order By',
+	'order_dir' => 'Direction',
 	
 	# User
 	'users' => 'Users',
@@ -226,7 +239,6 @@ User: %s
 Kind Regards,
 The %2$s System',
 
-# NEw	
 	'confirm_delete' => 'Do you really want to delete this?',
 	
 	'md_switch_language' => 'Switch language',
@@ -235,4 +247,5 @@ The %2$s System',
 	'unknown_permission' => 'This permission is unknown',
 	'add_permissions' => 'Add a permisison',
 
+	'mt_sort' => 'Sort %s Database',
 ];

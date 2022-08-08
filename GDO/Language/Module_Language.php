@@ -59,6 +59,13 @@ final class Module_Language extends GDO_Module
 	################
 	### Settings ###
 	################
+	public function getACLDefaults() : ?array
+	{
+		return [
+			'language' => ['acl_all', 0, null],
+		];
+	}
+	
 	public function getUserSettings() : array
 	{
 		return [
@@ -72,6 +79,9 @@ final class Module_Language extends GDO_Module
 		return $this->userSettingVar($user, 'language');
 	}
 	
+	#################
+	### Supported ###
+	#################
 	/**
 	 * Get the supported  languages, GDO_LANGUAGE first.
 	 * @return GDO_Language[]
@@ -153,11 +163,11 @@ final class Module_Language extends GDO_Module
 		{
 			return $iso;
 		}
-		if ($iso = $this->detectAcceptLanguage())
+		if ($iso = GDO_User::current()->getLangISO())
 		{
 			return $iso;
 		}
-		if ($iso = GDO_User::current()->getLangISO())
+		if ($iso = $this->detectAcceptLanguage())
 		{
 			return $iso;
 		}

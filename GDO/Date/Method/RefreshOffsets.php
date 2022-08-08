@@ -13,7 +13,7 @@ use GDO\Date\GDO_Timezone;
  */
 final class RefreshOffsets extends MethodCronjob
 {
-	public function isTrivial() { return false; }
+	public function isTrivial() : bool { return false; }
 	
 	public function runAt()
 	{

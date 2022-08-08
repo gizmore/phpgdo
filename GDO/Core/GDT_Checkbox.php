@@ -8,7 +8,7 @@ use GDO\UI\Color;
  * Implemented as select to reflect undetermined status. Also HTML does not send unchecked boxes over HTTP.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class GDT_Checkbox extends GDT_Select
@@ -156,27 +156,12 @@ class GDT_Checkbox extends GDT_Select
 		return parent::renderForm();
 	}
 	
-// 	public function renderCell() : string
-// 	{
-// 		return $this->displayVar($this->getVar());
-// 	}
-	
-// 	public function renderJSON()
-// 	{
-// 	    return $this->displayValue($this->getVar());
-// 	}
-	
 	public function renderFilter($f) : string
 	{
 	    $vars = ['field' => $this, 'f'=> $f];
 		return GDT_Template::php('Core', 'checkbox_filter.php', $vars);
 	}
 	
-// 	public function htmlChoiceVar($choice) : string
-// 	{
-// 		return $this->toVar($choice);
-// 	}
-
 	####################
 	### Dynamic Icon ###
 	####################

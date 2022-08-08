@@ -23,7 +23,7 @@ class Configure extends MethodForm
 {
 	public function isEnabled() : bool { return true; }
 	
-	public function isTrivial() { return false; }
+	public function isTrivial() : bool { return false; }
 	
 	public function gdoParameters() : array
     {

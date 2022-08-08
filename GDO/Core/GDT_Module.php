@@ -3,9 +3,10 @@ namespace GDO\Core;
 
 /**
  * A module select.
+ * 
  * Features installed and uninstalled choices.
- * Loads module via module loader.
- * PlugVar for auto tests is module Core.
+ * Loads modules via module loader.
+ * Plugs vars for auto tests is module UI first, so nothing get's horribly hurt?
  *
  * @author gizmore
  * @version 7.0.1
@@ -15,7 +16,9 @@ namespace GDO\Core;
  */
 final class GDT_Module extends GDT_ObjectSelect
 {
-
+	###########
+	### GDT ###
+	###########
 	public function getDefaultName(): ?string
 	{
 		return 'module';
@@ -27,28 +30,25 @@ final class GDT_Module extends GDT_ObjectSelect
 		$this->table(GDO_Module::table());
 	}
 
-	// public function toVar($value) : ?string
-	// {
-	// if ($value)
-	// {
-	// return strtolower($value->getName());
-	// }
-	// }
-
 	# ###################
 	# ## Un/Installed ###
 	# ###################
 	public bool $installed = true;
+	public bool $uninstalled = false;
 
-	public function installed(bool $installed = true)
+	/**
+	 * Also consider installed modules, or not when false.
+	 */
+	public function installed(bool $installed = true) : self
 	{
 		$this->installed = $installed;
 		return $this;
 	}
 
-	public bool $uninstalled = false;
-
-	public function uninstalled(bool $uninstalled = true)
+	/**
+	 * Also consider / not consider uninstalled modules.
+	 */
+	public function uninstalled(bool $uninstalled = true) : self
 	{
 		$this->uninstalled = $uninstalled;
 		return $this;
@@ -67,7 +67,7 @@ final class GDT_Module extends GDT_ObjectSelect
 		foreach ($modules as $module)
 		{
 			if ((($module->isInstalled()) && $this->installed) ||
-				(( !$module->isInstalled()) && $this->uninstalled))
+				((!$module->isInstalled()) && $this->uninstalled))
 			{
 				$choices[$module->getLowerName()] = $module->renderName();
 			}
@@ -78,15 +78,6 @@ final class GDT_Module extends GDT_ObjectSelect
 	# ################
 	# ## Var/Value ###
 	# ################
-	public function plugVars(): array
-	{
-		return [
-			'Core',
-			'Table',
-			'Admin'
-		];
-	}
-
 	public function getValueSingle(string $moduleName): ?GDO_Module
 	{
 		return ModuleLoader::instance()->getModule($moduleName,
@@ -107,4 +98,16 @@ final class GDT_Module extends GDT_ObjectSelect
 		return $back;
 	}
 
+	#############
+	### Tests ###
+	#############
+	public function plugVars(): array
+	{
+		return [
+			'UI',
+			'Table',
+			'Admin'
+		];
+	}
+	
 }

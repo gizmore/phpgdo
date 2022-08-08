@@ -1,62 +1,61 @@
 <?php
 namespace GDO\Core;
 
-use GDO\UI\WithLabel;
 use GDO\Util\Strings;
 use GDO\Language\Trans;
 use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
 
 /**
- * GDO Template Engine and GDT implementation.
- *
- * Automatically appends fields from tVars.
+ * GDOv7 Template Engine as a GDT implementation.
  *
  * - There are php and static file templates.
  * - Themes is an array, so you can always override with your theme.
- * - Templates add WithFields for GDT $templateVars ($tVars). It can render with JSON.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 class GDT_Template extends GDT
 {
-	use WithGDO;
-	use WithLabel;
-	use WithFields;
+// 	use WithGDO;
+// 	use WithLabel;
+// 	use WithFields;
 
 	/**
-	 *
-	 * @var string[]
+	 * Loaded themes. Name => Path
+	 * @var string[string]
 	 */
-	public static $THEMES = [];
+	public static array $THEMES = [];
 
-	public static function themeNames()
+	public static function themeNames() : array
 	{
 		return array_keys(self::$THEMES);
 	}
 
-	public static function registerTheme($theme, $path)
+	public static function registerTheme(string $theme, string $path) : void
 	{
 		self::$THEMES[$theme] = $path;
 	}
 
-	############
-	### Base ###
-	############
-	public function defaultLabel() : self
+	# ###########
+	# ## Base ###
+	# ###########
+	public function defaultLabel(): self
 	{
 		return $this->noLabel();
 	}
 
-	public function htmlClass() : string
+	public function htmlClass(): string
 	{
 		return parent::htmlClass() . "-{$this->templateModule}-" .
-		Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
+			Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
 	}
 
-	public function render() : string
+	##############
+	### Render ###
+	##############
+	public function render(): string
 	{
 		return $this->renderTemplate();
 	}
@@ -65,112 +64,69 @@ class GDT_Template extends GDT
 	{
 		return null;
 	}
-	
-	public function renderCell() : string
+
+	public function renderCell(): string
 	{
 		return $this->renderTemplate();
 	}
 
-	public function renderForm() : string
+	public function renderForm(): string
 	{
 		return $this->renderTemplate();
 	}
 
-	public function renderCLI() : string
+	public function renderCLI(): string
 	{
 		return strip_tags($this->renderTemplate());
 	}
 
-	public function renderFilter($f) : string
+	public function renderFilter($f): string
 	{
 		return $this->renderTemplate($f);
 	}
 
-	public function renderTemplate($f = null)
+	public function renderTemplate($f = null) : string
 	{
 		$tVars = [
 			'field' => $this,
 			'f' => $f
 		];
-		$tVars = $this->templateVars ? array_merge($this->templateVars, $tVars) : $tVars;
+		$tVars = isset($this->templateVars) ? array_merge($this->templateVars, $tVars) : $tVars;
 		return self::php($this->templateModule, $this->templatePath, $tVars);
 	}
 
 	# ###########
 	# ## Type ###
 	# ###########
-	public $templateModule;
+	public string $templateModule;
+	public string $templatePath;
+	public array  $templateVars;
 
-	public $templatePath;
-
-	public $templateVars;
-
-	public function template($moduleName, $path, array $tVars = null)
+	public function template(string $moduleName, string $path, array $tVars = null) : self
 	{
 		$this->templateModule = $moduleName;
 		$this->templatePath = $path;
-		$this->templateVars = $tVars;
-		
-// 		# HTML renders directly.
-// 		# JSON/CLI/XML render only the fields.
-// 		if (!Application::$INSTANCE->isHTML())
-// 		{
-// 			GDT_Response::make()->addFields($tVars);
-// 		}
-		return $this;
-	}
-
-	# #############
-	# ## Header ###
-	# #############
-	public $templateModuleHead;
-
-	public $templatePathHead;
-
-	public $templateVarsHead;
-
-	public function templateHead($moduleName, $path, array $tVars = null)
-	{
-		$this->templateModuleHead = $moduleName;
-		$this->templatePathHead = $path;
-		$this->templateVarsHead = $tVars;
-		return $this;
-	}
-
-	public function renderHeader() : string
-	{
-		if ( !$this->templateModuleHead)
+		if ($tVars)
 		{
-			return $this->renderLabel();
+			$this->templateVars = $tVars;
 		}
-		$tVars = [
-			'field' => $this
-		];
-		$tVars = $this->templateVarsHead ? array_merge($this->templateVarsHead,
-		$tVars) : $tVars;
-		return self::php($this->templateModuleHead, $this->templatePathHead,
-		$tVars);
+		else
+		{
+			unset($this->templateVars);
+		}
+		return $this;
 	}
 
 	# #############
 	# ## Engine ###
 	# #############
-	public static $CALLS = 0;
-
-	# Performance counter
+	public static $CALLS = 0; # Performance counter
 
 	/**
 	 * Include a template for a user.
 	 * Sets/Wraps locale ISO for the template call.
-	 *
-	 * @param GDO_User $user
-	 * @param string $moduleName
-	 * @param string $path
-	 * @param array $tVars
-	 * @return string
 	 */
-	public static function phpUser(GDO_User $user, $moduleName, $path,
-	array $tVars = null)
+	public static function phpUser(GDO_User $user, string $moduleName, string $path, array $tVars = null) : string
 	{
 		$old = Trans::$ISO;
 		Trans::setISO($user->getLangISO());
@@ -180,14 +136,9 @@ class GDT_Template extends GDT
 	}
 
 	/**
-	 * Render a template via include.
-	 *
-	 * @param string $moduleName
-	 * @param string $path
-	 * @param array $tVars
-	 * @return string
+	 * Render a template via PHP include.
 	 */
-	public static function php($moduleName, $path, array $tVars = null)
+	public static function php(string $moduleName, string $path, array $tVars = null): string
 	{
 		try
 		{
@@ -217,8 +168,7 @@ class GDT_Template extends GDT
 		catch (\Throwable $ex)
 		{
 			Logger::logException($ex);
-			return html(ob_get_contents()) .
-				Debug::debugException($ex);
+			return html(ob_get_contents()) . Debug::debugException($ex);
 		}
 		finally
 		{
@@ -227,31 +177,10 @@ class GDT_Template extends GDT
 	}
 
 	/**
-	 *
-	 * @param string $moduleName
-	 * @param string $path
-	 * @param array $tVars
-	 * @return self
-	 */
-	public static function templatePHP($moduleName, $path, array $tVars = null)
-	{
-		return self::make()->template($moduleName, $path, $tVars);
-	}
-
-// 	public static function responsePHP($moduleName, $path, array $tVars = null)
-// 	{
-// 		return GDT_Response::makeWith(
-// 			self::templatePHP($moduleName, $path, $tVars));
-// 	}
-
-	/**
 	 * Include a static file.
-	 *
-	 * @param string $moduleName
-	 * @param string $path
-	 * @return string
+	 * Useful for localized asset loading.
 	 */
-	public static function file($moduleName, $path)
+	public static function file(string $moduleName, string $path): string
 	{
 		self::$CALLS++;
 		$path = self::getPath($moduleName, $path);
@@ -266,47 +195,25 @@ class GDT_Template extends GDT
 	/**
 	 * Get the Path for the GDO Theme Module Path and language.
 	 */
-	private static function getPath(string $moduleName, string $path) : string
+	private static function getPath(string $moduleName, string $path): string
 	{
-// 		return self::getPathB($moduleName, $path);
-		
+//		return self::getPathB($moduleName, $path);
 		static $cache = [];
 		$p = $moduleName . $path . Trans::$ISO;
-		if (!isset($cache[$p]))
+		if ( !isset($cache[$p]))
 		{
 			$cache[$p] = self::getPathB($moduleName, $path);
 		}
 		return $cache[$p];
-		
-		
-// 		static $cache = [];
-// 		$iso = Trans::$ISO;
-// 		if (!isset($cache[$iso]))
-// 		{
-// 			$cache[$iso] = [$moduleName => []];
-// 		}
-// 		elseif (!isset($cache[$moduleName]))
-// 		{
-// 			$cache[$iso][$moduleName] = [];
-// 		}
-		
-// 		if (isset($cache[$iso][$moduleName][$path]))
-// 		{
-// 			return $cache[$iso][$moduleName][$path];
-// 		}
-		
-// 		$cache[$iso][$moduleName][$path] = $path = self::getPathB($moduleName, $path);
-// 		return $path;
 	}
 
-	private static function getPathB($moduleName, $path)
+	private static function getPathB(string $moduleName, string $path): string
 	{
-		$isos = array_unique(
-		[
+		$isos = array_unique([
 			'_' . Trans::$ISO,
 			'_' . GDO_LANGUAGE,
 			'_en',
-			'', # 
+			'',
 		]);
 
 		# cut at dot.
@@ -339,8 +246,10 @@ class GDT_Template extends GDT
 				return $path1;
 			}
 		}
-		
-		throw new GDO_Error('err_missing_template', [html("$moduleName/tpl/$path")]);
+
+		throw new GDO_Error('err_missing_template', [
+			html("$moduleName/tpl/$path")
+		]);
 	}
 
 }

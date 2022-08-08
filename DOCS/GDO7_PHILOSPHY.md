@@ -17,7 +17,9 @@
  - Do things the right and easy way. *KISS\** :)
 If Something does not work right away, maybe come back later.
 Of course you have to try things first.
- 
+
+ - No external resources unless really wanted. No production libraries during development, all src of everything.
+  
 
 ## GDOv7 Philosophy: Public attribute pattern
 

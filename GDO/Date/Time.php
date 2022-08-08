@@ -555,7 +555,6 @@ final class Time
 		if (!is_string($duration)) { return 0.0; }
 		if (is_numeric($duration)) { return floatval($duration); }
 		$matches = null;
-// 		$duration = strtolower(trim($duration));
 		if (!preg_match_all('/(?:([0-9]+)\\s*([smhdwoy]{0,2}))+/Di', $duration, $matches))
 		{
 			return 0.0;

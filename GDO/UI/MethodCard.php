@@ -16,13 +16,12 @@ use GDO\Core\GDT_Hook;
  */
 abstract class MethodCard extends Method
 {
-
 	public abstract function gdoTable(): GDO;
 
-	public function idName(): string
-	{
-		return 'id';
-	}
+	/**
+	 * Parameter name.
+	 */
+	public function idName(): string { return 'id'; }
 
 	# #############
 	# ## Params ###
@@ -56,10 +55,16 @@ abstract class MethodCard extends Method
 		return $card;
 	}
 
+	/**
+	 * Override this method to setup your card.
+	 */
 	protected function createCard(GDT_Card $card): void
 	{
 	}
 
+	/**
+	 * Call the card creation hook for all modules.
+	 */
 	private function callCardHook(GDT_Card $card): void
 	{
 		$mo = $this->getModuleName();
@@ -70,7 +75,7 @@ abstract class MethodCard extends Method
 	# ##########
 	# ## Seo ###
 	# ##########
-	public function getTitle()
+	public function getMethodTitle() : string
 	{
 		if ($gdo = $this->getObject())
 		{

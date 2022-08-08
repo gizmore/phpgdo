@@ -24,15 +24,20 @@ trait WithFileCache
 	
 	protected function fileCacheKey()
 	{
+		$app = Application::$INSTANCE;
+		
+		$sep = ';';
 		$key = $this->getModuleName();
-		$key .= ':';
+		$key .= $sep;
 		$key .= $this->getMethodName();
-		$key .= ':';
+		$key .= $sep;
 		$key .= Trans::$ISO;
+		$key .= $sep;
+		$key .= $app->modeDetected;
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
-			$key .= ':';
-			$key = $gdt->getVar();
+			$key .= $sep;
+			$key .= $gdt->getVar();
 		}
 		return $key;
 	}
@@ -45,8 +50,18 @@ trait WithFileCache
 			# Cache hit :)
 			return GDT_HTML::make()->var($content);
 		}
-		# No cache
-		return $this->execute();
+		else
+		{
+			$app = Application::$INSTANCE;
+			$result = $this->execute();
+			if (!$app->isError())
+			{
+				$content = $result->renderMode($app->modeDetected);
+				Cache::fileSet($key, $content);
+				return GDT_HTML::withHTML($content);
+			}
+			return $result;
+		}
 	}
 	
 }

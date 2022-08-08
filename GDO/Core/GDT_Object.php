@@ -5,14 +5,16 @@ namespace GDO\Core;
  * Object is an integer in the database. Uses WithObject trait for magic.
  * 
  * @author gizmore
- * @version 7.0.0
- * @since 6.0.4
+ * @version 7.0.1
+ * @since 6.4.0
  * @see WithObject
  */
 class GDT_Object extends GDT_UInt
 {
 	use WithObject;
 	use WithCompletion;
+	
+	const MAX_SUGGESTIONS = 10;
 	
 	public function htmlClass() : string
 	{

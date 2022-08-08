@@ -12,13 +12,16 @@ use GDO\Core\WithError;
 use GDO\Core\WithInput;
 use GDO\Core\WithName;
 use GDO\Core\WithVerb;
+use GDO\UI\GDT_SearchField;
+use GDO\Table\GDT_Order;
 
 /**
- * A form has a title, a text, fields, menu actions and an html action/target.
+ * A form has a title, a text, fields, menu actions and an http action/target.
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.4
+ * @see GDT
  * @see MethodForm
  * @see WithText
  * @see WithTitle
@@ -44,7 +47,7 @@ final class GDT_Form extends GDT
 	const HEAD = 'HEAD';
 	const OPTIONS = 'OPTIONS';
 	
-	public static ?self $CURRENT = null;
+	public static ?self $CURRENT = null; # required to handle focus requester engine.
 	
 	protected function __construct()
 	{
@@ -55,17 +58,6 @@ final class GDT_Form extends GDT
 	##############
 	### Inputs ###
 	##############
-// 	public function inputs(array $inputs) : self
-// 	{
-// 		$this->addInputs($inputs);
-// 		foreach ($this->getAllFields() as $gdt)
-// 		{
-// 			$gdt->inputs($inputs);
-// 		}
-// 		$this->actions()->addInputs($inputs);
-// 		return $this;
-// 	}
-	
 	public function plugVars() : array
 	{
 		$back = [];
@@ -91,10 +83,12 @@ final class GDT_Form extends GDT
 	### Focus ###
 	#############
 	public bool $focus = true;
+	
 	public function noFocus() : self
 	{
 		return $this->focus(false);
 	}
+	
 	public function focus(bool $focus) : self
 	{
 		$this->focus = $focus;
@@ -108,7 +102,7 @@ final class GDT_Form extends GDT
 	{
 		$title = $this->renderTitle();
 		$text = $this->renderText();
-		return $title . ' ' . $text;
+		return trim($title . ' ' . $text);
 	}
 
 	public function renderCell() : string
@@ -123,38 +117,42 @@ final class GDT_Form extends GDT
 		return $html;
 	}
 	
-	public function htmlID() : string
-	{
-		if ($name = $this->getName())
-		{
-			return sprintf(' id="form_%s"', $name);
-		}
-		return '';
-	}
+// 	public function htmlID() : string
+// 	{
+// 		if ($name = $this->getName())
+// 		{
+// 			return sprintf(' id="form_%s"', $name);
+// 		}
+// 		return '';
+// 	}
 	
+	/**
+	 * Render html hidden fields for mo/me.
+	 * @deprecated Feels not nice.
+	 */
 	public static function htmlHiddenMoMe() : string
 	{
 		return
-		"<input type=\"hidden\" name=\"_mo\" value=\"{}\" />\n".
-		"<input type=\"hidden\" name=\"_me\" value=\"{}\" />\n";
+			"<input type=\"hidden\" name=\"_mo\" value=\"{}\" />\n".
+			"<input type=\"hidden\" name=\"_me\" value=\"{}\" />\n";
 	}
 	
 	
 	################
 	### Validate ###
 	################
+	/**
+	 * Validate the form fields.
+	 */
 	public function validate($value) : bool
 	{
 		$valid = true;
-		foreach ($this->getAllFields() as $key => $gdt)
+		foreach ($this->getAllFields() as $gdt)
 		{
-// 			if ($gdt->hasInputs())
+			$gdt->inputs($this->inputs);
+			if (!$gdt->validated())
 			{
-				$input = $gdt->getInput($key);
-				if (!$gdt->validateInput($input, false))
-				{
-					$valid = false;
-				}
+				$valid = false;
 			}
 		}
 		return $valid ? true : $this->errorFormInvalid();
@@ -171,10 +169,7 @@ final class GDT_Form extends GDT
 		$count = 0;
 		foreach ($this->getAllFields() as $gdt)
 		{
-			if ($gdt->hasError())
-			{
-				$count++;
-			}
+			$count += $gdt->hasError(); # And this ladies and gentlemen, seems to be the first non branching algo i wrote :)
 		}
 		return $count;
 	}
@@ -217,4 +212,31 @@ final class GDT_Form extends GDT
 		return $this->removeField($this->getField($key));
 	}
 	
+	###############
+	### Display ###
+	###############
+	/**
+	 * Display a label with current filter and order criteria. @TODO: rename method
+	 */
+	public function displaySearchCriteria() : string
+	{
+		$data = [];
+		foreach ($this->getAllFields() as $gdt)
+		{
+			if (($gdt instanceof GDT_Order) ||
+				($gdt instanceof GDT_SearchField))
+			{
+				if (!($var = $gdt->filterVar($this->name)))
+				{
+					$var = $gdt->getVar();
+				}
+				if ($var)
+				{
+					$data[] = sprintf('%s: %s', $gdt->renderLabel(), $gdt->displayVar($var));
+				}
+			}
+		}
+		return t('lbl_search_criteria', [implode(', ', $data)]);
+	}
+
 }

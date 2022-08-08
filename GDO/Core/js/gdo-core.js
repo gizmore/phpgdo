@@ -6,11 +6,11 @@
 window.GDO = {};
 
 /**
- * Automatically focus the first editable form field.
+ * Automatically focus the first editable, required form field.
  */
 window.GDO.autofocusForm = function() {
-	let elements = window.document.querySelectorAll('[data-focus]');
-	elements[0] && elements[0].focus();
+	const el = window.document.querySelector('[gdo-focus]');
+	el?.focus();
 };
 
 window.GDO.enterForm = function(form, event) {
@@ -19,6 +19,7 @@ window.GDO.enterForm = function(form, event) {
 		let nn = event.srcElement.nodeName;
 		if ( (nn === 'INPUT') || (nn === 'SELECT') ) {
 			event.preventDefault();
+			// @TODO This is horrible stupid to press the first submit you see in a doc -.-
 			let submits = form.querySelectorAll('input[type=submit]');
 			submits[0] && submits[0].click();
 		}
@@ -43,7 +44,7 @@ window.GDO.triggerEvent = function(name) {
 };
 
 /**
- * Init GDO612js
+ * Init GDO612jsv701
  * @returns interest
  */
 document.addEventListener('DOMContentLoaded', function(){
@@ -89,9 +90,11 @@ window.GDO.responseError = function(response) {
 	return window.GDO.error(message, "Error");
 };
 
+/**
+ * This method is a candidate to get overriden by JS frameworks.
+ */
 window.GDO.error = function(html, title) {
-	alert(html);
-//	alert(title + "\n\n" + html);
+	alert(title + " - " + html);
 };
 
 window.GDO.exception = function(ex) {
@@ -128,9 +131,9 @@ window.GDO.openDialog = function(dialogId) {
 
 /**
  * @TODO make seo friendly urls like in PHP.
- * @see GDO6.php
+ * @see GDO7.php
  */
-window.GDO.href = function(module, method, append) {
+window.GDO.href = function(module, method, append='') {
 	return GDO_WEB_ROOT + 'index.php?_mo=' + module + '&_me=' + method + append;
 };
 

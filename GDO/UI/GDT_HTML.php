@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\WithValue;
+
 /**
  * Very simple field that only has custom html content.
  * 
@@ -10,6 +12,8 @@ namespace GDO\UI;
  */
 final class GDT_HTML extends GDT_Container
 {
+	use WithValue;
+	
 // 	##############
 // 	### Render ###
 // 	##############
@@ -22,6 +26,11 @@ final class GDT_HTML extends GDT_Container
 //     	return $html;
 // 	}
 
+	public static function withHTML(?string $html) : self
+	{
+		return self::make()->var($html);
+	}
+
 	public function renderCell() : string
 	{
 		return $this->getVar() . parent::renderCell();
@@ -29,7 +38,7 @@ final class GDT_HTML extends GDT_Container
 	
 	public function renderCard() : string
 	{
-	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
+	    return "<div class=\"gdt-html\">{$this->renderCell()}</div>";
 	}
 	
 }

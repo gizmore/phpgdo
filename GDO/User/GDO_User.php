@@ -3,6 +3,7 @@ namespace GDO\User;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
+use GDO\Core\GDT_DeletedBy;
 use GDO\Crypto\GDT_PasswordHash;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
@@ -54,6 +55,25 @@ final class GDO_User extends GDO
 			self::$CURRENT = self::ghost();
 		}
 		return $this;
+	}
+	
+	###########
+	### GDO ###
+	###########
+	public function isTestable() : bool { return false; }
+	public function gdoColumns() : array
+	{
+		return [
+			GDT_AutoInc::make('user_id'),
+			GDT_UserType::make('user_type'),
+			GDT_Username::make('user_name')->unique(),
+			GDT_Username::make('user_guest_name')->unique()->notNull(false),
+			GDT_Level::make('user_level'),
+			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
+			GDT_DeletedAt::make('user_deleted'),
+			GDT_DeletedBy::make('user_deletor'),
+			GDT_PasswordHash::make('user_password'),
+		];
 	}
 	
 	###############
@@ -157,26 +177,6 @@ final class GDO_User extends GDO
 		return self::getByName($name);
 	}
 	
-	###########
-	### GDO ###
-	###########
-	public function isTestable() : bool { return false; }
-	
-	public function gdoColumns() : array
-	{
-		return [
-			GDT_AutoInc::make('user_id'),
-			GDT_UserType::make('user_type'),
-			GDT_Username::make('user_name')->unique(),
-			GDT_Username::make('user_guest_name')->unique()->notNull(false),
-			GDT_Level::make('user_level'),
-			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
-			GDT_DeletedAt::make('user_deleted'),
-// 			GDT_DeletedBy::make('user_deletor'),
-			GDT_PasswordHash::make('user_password'),
-		];
-	}
-	
 	##############
 	### Getter ###
 	##############
@@ -186,12 +186,17 @@ final class GDO_User extends GDO
 	public function getUserName() : ?string { return $this->gdoVar('user_name'); }
 	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
 	
-	############
-	### HREF ###
-	############
+	#############
+	### HREFs ###
+	#############
 	public function href_edit() : string
 	{
 		return href('Admin', 'UserEdit', "&user={$this->getID()}");
+	}
+	
+	public function href_profile() : string
+	{
+		return href('User', 'Profile', "&for={$this->renderUserName()}");
 	}
 	
 	############
@@ -306,6 +311,9 @@ final class GDO_User extends GDO
 		return $this->recache();
 	}
 	
+	/**
+	 * Get the effective userlevel for this user.
+	 */
 	public function getLevel() : int
 	{
 		$level = $this->gdoVar('user_level');
@@ -313,6 +321,9 @@ final class GDO_User extends GDO
 		return $level + $permLevel;
 	}
 	
+	/**
+	 * Get the highest level for all permissions.
+	 */
 	public function getPermissionLevel() : int
 	{
 		$max = 0;
@@ -377,15 +388,31 @@ final class GDO_User extends GDO
 		}
 		return '~~' . t('guest') . '~~';
 	}
+	
+	public function getProfileLink(bool $nickname=true, bool $avatar=true, bool $level=true) : GDT_ProfileLink
+	{
+		$link = GDT_ProfileLink::make()->gdo($this);
+		$link->nickname($nickname);
+		if ($avatar)
+		{
+			$link->avatarUser($this);
+		}
+		if ($level)
+		{
+			$link->tooltip('tt_user_profile_link', [$this->renderUserName(), $this->getLevel()]);
+		}
+		return $link;
+	}
 
-// 	public function renderProfileLink(bool $nickname, bool $avatar, bool $score) : string
-// 	{
-// 		return sprintf('%s');
-// 	}
+	public function renderProfileLink(bool $nickname=true, bool $avatar=true, bool $level=true) : string
+	{
+		$link = $this->getProfileLink($nickname, $avatar, $level);
+		return $link->render();
+	}
 	
 	public function getGender() : string
 	{
-		return Module_User::instance()->userSettingVar($this, 'gender');
+		return $this->settingVar('User', 'gender');
 	}
 	
 	################
@@ -415,17 +442,19 @@ final class GDO_User extends GDO
 		return $this;
 	}
 	
-	public static function withSettingResult(string $moduleName, string $key, string $var, bool $like=false) : Result
-	{
-		return GDO_UserSetting::usersWith($moduleName, $key, $var, $like);
-	}
-	
 	/**
+	 * Get all users with a specified setting.
+	 * Optionally an SQL like match is performed.
 	 * @return self[]
 	 */
 	public static function withSetting(string $moduleName, string $key, string $var, bool $like=false) : array
 	{
 		return self::withSettingResult($moduleName, $key, $var, $like)->fetchAllObjects();
+	}
+	
+	public static function withSettingResult(string $moduleName, string $key, string $var, bool $like=false) : Result
+	{
+		return GDO_UserSetting::usersWith($moduleName, $key, $var, $like);
 	}
 	
 	#############
@@ -449,6 +478,11 @@ final class GDO_User extends GDO
 		return (!$confi) ? ($confirmed ? null : $email) : $email;
 	}
 
+	public function getMailFormat() : string
+	{
+		return $this->settingVar('Mail', 'email_format');
+	}
+	
 	#######################
 	### Setting helpers ###
 	#######################

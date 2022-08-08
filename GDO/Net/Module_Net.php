@@ -7,7 +7,7 @@ use GDO\Core\GDO_Module;
  * Network related stuff.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.11.0
  */
 final class Module_Net extends GDO_Module

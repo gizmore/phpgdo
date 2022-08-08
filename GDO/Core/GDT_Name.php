@@ -3,10 +3,10 @@ namespace GDO\Core;
 
 /**
  * Named identifier.
- * Is unique among their table and case-s ascii.
+ * Is unique among their table and case-i ascii.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 class GDT_Name extends GDT_String
@@ -22,7 +22,7 @@ class GDT_Name extends GDT_String
 	public int $min = 2;
 	public int $max = self::LENGTH;
 	public int $encoding = self::ASCII;
-	public bool $caseSensitive = true;
+	public bool $caseSensitive = false;
 	public string $pattern = "/^[A-Za-z][-A-Za-z _0-9;:]{1,63}$/sD";
 // 	public bool $notNull = true;
 	public bool $unique = true;

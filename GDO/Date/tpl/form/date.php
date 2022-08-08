@@ -1,12 +1,15 @@
-<?php /** @var $field \GDO\Date\GDT_Date **/ ?>
+<?php
+namespace GDO\Date\tpl\form;
+use GDO\Date\GDT_Date
+/**
+ * @var $field GDT_Date
+ */
+?>
 <div class="gdt-container<?=$field->classError()?>">
-  <?=$field->htmlIcon()?>
-  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
-  <input
-   <?=$field->htmlID()?>
-   type="date"
-   <?=$field->htmlFormName()?>
-   <?=$field->htmlValue()?>
-   <?=$field->htmlDisabled()?> />
-  <?=$field->htmlError()?>
+<label<?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
+<input<?=$field->htmlID()?> type="date"
+<?=$field->htmlFormName()?>
+<?=$field->htmlValue()?>
+<?=$field->htmlDisabled()?> />
+ <?=$field->htmlError()?>
 </div>

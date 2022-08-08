@@ -6,21 +6,15 @@ namespace GDO\Core;
  * For example Used in GDT_FontWeight and JQueryUI Theme selector. 
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  * @see GDT_Enum
  */
 class GDT_EnumNoI18n extends GDT_Enum
 {
-	public function renderCell() : string
+	public function displayVar(string $var=null) : string
 	{
-		$var = $this->getVar();
-		return $var ? $var : '';
-	}
-	
-	public function enumLabel(string $enumValue=null) : string
-	{
-		return $enumValue;
+		return $var === null ? t('none') : $var;
 	}
 	
 }

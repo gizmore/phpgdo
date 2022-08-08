@@ -16,9 +16,12 @@ use GDO\UI\GDT_Redirect;
 
 /**
  * Edit a user.
+ * Beside level, password and deletion, nothing much can be changed.
+ * 
+ * @TODO To edit user config and settings, a new module has to be written (or account settings need a god mode).
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.1
  * @since 3.0.4
  * @see GDO_User
  */
@@ -26,18 +29,14 @@ class UserEdit extends MethodForm
 {
 	use MethodAdmin; # admin protection
 	
-	public function showInSitemap() : bool { return false; }
+	public function isShownInSitemap() : bool { return false; }
 	
 	public function getMethodTitle() : string
 	{
 		return t('mt_admin_useredit', [$this->getUser()->renderUserName()]);
 	}
 	
-	
-	/**
-	 * @var GDO_User
-	 */
-	private $user;
+	private GDO_User $user;
 	
 	public function gdoParameters() : array
 	{
@@ -59,13 +58,7 @@ class UserEdit extends MethodForm
     	    $this->renderPermissionBar();
 	    }
 	}
-	
-	public function getTitle()
-	{
-	    $user = $this->getUser();
-	    return t('mt_admin_useredit', [$user->renderName()]);
-	}
-	
+
 	public function createForm(GDT_Form $form) : void
 	{
 		# Add all columns
@@ -100,7 +93,7 @@ class UserEdit extends MethodForm
 		unset($values['user_password']);
 		
 		$this->user->saveVars($values);
-		$form->withGDOValuesFrom($this->user);
+// 		$form->withGDOValuesFrom($this->user);
 		if (!empty($password))
 		{
 			$this->user->saveVar('user_password', BCrypt::create($password)->__toString());

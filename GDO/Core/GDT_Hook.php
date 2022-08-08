@@ -268,7 +268,7 @@ final class GDT_Hook extends GDT
 		{
 			return self::$CACHE[$event];
 		}
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	/**

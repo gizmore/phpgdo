@@ -1,14 +1,14 @@
-<?php /** @var $field \GDO\Date\GDT_DateTime **/
+<?php
+namespace GDO\Date\tpl\form;
+use GDO\Date\GDT_DateTime;
+/** @var $field GDT_DateTime **/
 ?>
 <div class="gdt-container<?=$field->classError()?>">
-  <?=$field->htmlIcon()?>
-  <label <?=$field->htmlForID()?>><?=$field->renderLabel()?></label>
-  <input
-   <?=$field->htmlID()?>
-   type="datetime-local"
-   autocomplete="off"
-   value="<?=tt($field->getVar(), 'local')?>"
-   <?=$field->htmlFormName()?>
-   <?=$field->htmlDisabled()?> />
-  <?=$field->htmlError()?>
+<label<?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
+<input<?=$field->htmlID()?> type="datetime-local"
+ autocomplete="off"
+ value="<?=tt($field->getVar(), 'local')?>"
+<?=$field->htmlFormName()?>
+<?=$field->htmlDisabled()?> />
+<?=$field->htmlError()?>
 </div>

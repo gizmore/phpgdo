@@ -24,6 +24,7 @@ Table of contents in alphabetical order.
  - [PHILOSPHY](GDO7_PHILOSPHY.md)
  - [RESPONSE FORMATS](GDO7_RESPONSE_FORMATS.md)
  - [SECURITY](GDO7_SECURITY.md)
+ - [SEO](GDO7_SEO.md)
  - [TESTING](GDO7_TESTING.md)
  - [TODO](GDO7_TODO.md)
  - [TRAITS](GDO7_TRAITS.md)

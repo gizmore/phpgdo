@@ -8,6 +8,7 @@ use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Message;
 use GDO\Net\GDT_Url;
+use GDO\Date\GDT_Date;
 
 /**
  * GDO_User related types and plugins.
@@ -56,16 +57,16 @@ final class Module_User extends GDO_Module
 	public function isCoreModule() : bool { return true; }
 	public function onInstall() : void { OnInstall::onInstall(); }
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/user'); }
-	public function href_administrate_module() : ?string { return href('User', 'Admin'); }
+// 	public function href_administrate_module() : ?string { return href('User', 'Admin'); }
 
 	public function onInitSidebar() : void
 	{
 		if ($this->cfgSidebar())
 		{
-			$uid = GDO_User::current()->getID();
+			$user = GDO_User::current();
 			GDT_Page::instance()->rightBar()->addField(
 				GDT_Link::make('link_your_profile')->href(
-					href('User', 'Profile', "&id=$uid")));
+					$user->href_profile()));
 		}
 	}
 	
@@ -101,6 +102,7 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			GDT_Url::make('last_url')->noacl()->hidden(),
+			GDT_Date::make('last_activity'),
 			GDT_UInt::make('profile_views')->initial('0'),
 		];
 	}

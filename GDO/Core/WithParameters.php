@@ -23,7 +23,7 @@ trait WithParameters
 	 */
 	public function gdoParameters() : array # @TODO: make gdoParameters() protected
 	{
-		return GDT::EMPTY_GDT_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	##################
@@ -54,6 +54,7 @@ trait WithParameters
 		{
 			if ($validate)
 			{
+				$gdt->reset();
 				if (!$gdt->validated())
 				{
 					if ($throw)

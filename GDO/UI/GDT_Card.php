@@ -15,6 +15,7 @@ use GDO\Form\WithActions;
 use GDO\Core\WithFields;
 use GDO\Core\Application;
 use GDO\Core\WithGDO;
+use GDO\User\GDT_User;
 
 /**
  * A card with title, subtitle, creator, date, content and actions.
@@ -35,23 +36,32 @@ class GDT_Card extends GDT
 	###############
 	### Content ###
 	###############
-	/** @var $content GDT **/
-	public $content;
-	public function content($content) { $this->content = $content; return $this; }
+	public GDT $content;
+	public function content($content) : self
+	{
+		$this->content = $content;
+		return $this;
+	}
 	
 	#############
 	### Image ###
 	#############
-	/** @var $image GDT **/
-	public $image;
-	public function image($image) { $this->image = $image; return $this; }
+	public GDT $image;
+	public function image($image) : self
+	{
+		$this->image = $image;
+		return $this;
+	}
 	
 	##############
 	### Footer ###
 	##############
-	/** @var $footer GDT **/
-	public $footer;
-	public function footer($footer) { $this->footer = $footer; return $this; }
+	public GDT $footer;
+	public function footer($footer) : self
+	{
+		$this->footer = $footer;
+		return $this;
+	}
 	
 	##############
 	### Render ###
@@ -79,10 +89,10 @@ class GDT_Card extends GDT
 	{
 	    $back = [];
 	    
-// 	    if ($this->gdo)
-// 	    {
-// 	        $back[] = t('id') . ': ' . $this->gdo->getID();
-// 	    }
+	    if ($this->gdo)
+	    {
+	        $back[] = t('id') . ': ' . $this->gdo->getID();
+	    }
 	    
 	    if ($this->hasTitle())
 	    {
@@ -96,20 +106,20 @@ class GDT_Card extends GDT
 	    {
 	        $back[] = $gdt->renderCLI();
 	    }
-	    if ($this->footer)
+	    if (isset($this->footer))
 	    {
 	        $back[] = $this->footer->renderCLI();
 	    }
 	    return implode(', ', $back);
 	}
 	
-	##############
-	### Helper ###
-	##############
-	public function addLabel($key, array $args=null)
-	{
-	    return $this->addField(GDT_Label::make()->label($key, $args));
-	}
+// 	##############
+// 	### Helper ###
+// 	##############
+// 	public function addLabel($key, array $args=null)
+// 	{
+// 	    return $this->addField(GDT_Label::make()->label($key, $args));
+// 	}
 	
 	######################
 	### Creation title ###
@@ -118,7 +128,7 @@ class GDT_Card extends GDT
 	 * Use the subtitle to render creation stats. User (with avatar), Date, Age.
 	 * @return self
 	 */
-	public function creatorHeader($byField=null, $atField=null)
+	public function creatorHeader(string $byField=null, string $atField=null) : self
 	{
 	    /** @var $user GDO_User **/
 	    if ($byField)
@@ -129,7 +139,12 @@ class GDT_Card extends GDT
 	    {
 	        $byField = $this->gdo->gdoColumnOf(GDT_CreatedBy::class);
 	    }
-	    $user = $byField->getValue();
+	    if (!$byField)
+	    {
+	    	$byField = $this->gdo->gdoColumnOf(GDT_User::class);
+	    }
+	    
+	    $user = $byField ? $byField->getValue() : null;
 
 	    if ($atField)
 	    {
@@ -147,7 +162,7 @@ class GDT_Card extends GDT
 	    }
 	    
 	    # Add created by / at to subtitle
-        $profileLink = GDT_ProfileLink::make()->user($user)->nickname();
+        $profileLink = GDT_ProfileLink::make()->user($user)->nickname()->level();
 	    $this->subtitle = GDT_Container::make()->horizontal();
         $this->subtitle->addField($profileLink);
         $this->subtitle->addField(GDT_DateDisplay::make($atField->name)->gdo($this->gdo));
@@ -163,13 +178,12 @@ class GDT_Card extends GDT
 	
 	public function hasSubTitle() : bool
 	{
-		return isset($this->subtitle) &&
-			($this->subtitle->hasFields());
+		return isset($this->subtitle);
 	}
 	
 	public function renderSubTitle() : string
 	{
-		return $this->subtitle->renderCell();
+		return $this->subtitle->render();
 	}
 	
 	#####################
@@ -183,15 +197,7 @@ class GDT_Card extends GDT
 	    /** @var $user GDO_User **/
 	    if ($user = $this->gdo->gdoColumnOf(GDT_EditedBy::class)->getValue())
 	    {
-    	    if (module_enabled('Profile'))
-    	    {
-    	        $username = GDT_ProfileLink::make()->forUser($user)->nickname()->withAvatar()->renderCell();
-    	    }
-    	    else
-    	    {
-    	        $username = $user->renderUserName();
-    	    }
-    	    
+   	        $username = $user->renderProfileLink();
     	    $at = $this->gdo->gdoColumnOf(GDT_EditedAt::class)->renderCell();
     	    $this->footer = GDT_Label::make()->label('edited_info', [$username, $at]);
 	    }

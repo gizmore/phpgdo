@@ -37,8 +37,9 @@ $app = Application::instance();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
 Database::init();
-ModuleLoader::instance()->loadModulesCache();
 Trans::$ISO = GDO_LANGUAGE;
+$loader = ModuleLoader::instance();
+$loader->loadModulesCache();
 if (!module_enabled('Core'))
 {
 	require 'index_install.php';
@@ -49,6 +50,7 @@ if (@class_exists('\\GDO\\Session\\GDO_Session', true))
 	$session = GDO_Session::instance();
 }
 $user = GDO_User::current();
+$loader->initModules();	
 $app->initThemes();
 Logger::init($user->getName(), GDO_ERROR_LEVEL);
 if (GDO_LOG_REQUEST)
@@ -60,7 +62,7 @@ define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###
 ###########
-$_GET = $_POST = null; # cleanup unused stuff
+// $_GET = $_POST = null; # cleanup unused stuff
 # HTTP Method
 $rqmethod = (string) @$_SERVER['REQUEST_METHOD'];
 if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
@@ -168,6 +170,8 @@ else
 ############
 ### Exec ###
 ############
+$_GET = null;
+$_POST = null;
 Application::$INSTANCE->inputs($_REQUEST);
 Application::$INSTANCE->method($me);
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);

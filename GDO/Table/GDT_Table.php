@@ -465,7 +465,7 @@ class GDT_Table extends GDT
 		[
 			'tableName' => $this->gdo->gdoClassName(),
 			'pagemenu' => isset($this->pagemenu) ? $this->getPageMenu()->configJSON() : null,
-			'total' => (int) ($this->pagemenu ? $this->pagemenu->numItems : $this->getResult()->numRows()),
+			'total' => (int) (isset($this->pagemenu) ? $this->pagemenu->numItems : $this->getResult()->numRows()),
 			'searched' => $this->searched,
 			'searchable' => $this->isSearchable(),
 			'sorted' => $this->sorted,

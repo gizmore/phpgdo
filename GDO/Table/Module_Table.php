@@ -15,7 +15,7 @@ use GDO\Core\Application;
  * - configure default suggestions per request. 
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.3
  * @see GDT_List
  * @see GDT_Table

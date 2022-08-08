@@ -9,7 +9,7 @@ use GDO\Core\GDT;
  * Add label fields to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.1
  */
 trait WithLabel
@@ -99,6 +99,7 @@ trait WithLabel
 	 */
 	public function htmlForID() : string
 	{
-		return sprintf(' for="%s"', $this->htmlId());
+		return " for=\"{$this->name}\"";
 	}
+
 }

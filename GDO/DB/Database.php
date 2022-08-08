@@ -17,7 +17,7 @@ use GDO\Core\GDT_DBField;
  * @TODO support sqlite? This can be achieved by a few string tricks maybe. No foreign keys? no idea.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  * 
  * @see GDO
@@ -59,14 +59,13 @@ class Database
 	public static float $QUERY_TIME = 0.0;
 	
 	/**
-	 * Available GDO classes
-	 * 
+	 * Available GDO classes.
 	 * @var GDO[]
 	 */
 	private static array $TABLES = [];
 
 	/**
-	 * gdoColumns for all GDO
+	 * gdoColumns for all GDO.
 	 * @var GDT[]
 	 */
 	private static array $COLUMNS = [];
@@ -369,8 +368,6 @@ class Database
 	
 	/**
 	 * Create a database table from a GDO. 
-	 * @param GDO $gdo
-	 * @return bool
 	 */
 	public function createTable(GDO $gdo) : bool
 	{
@@ -469,7 +466,7 @@ class Database
 		return $this->queryRead($query);
 	}
 	
-	public function unlock($lock) : mysqli_result
+	public function unlock(string $lock) : mysqli_result
 	{
 		$query = "SELECT RELEASE_LOCK('{$lock}') as L";
 		return $this->queryRead($query);
@@ -494,8 +491,6 @@ class Database
 	##############
 	/**
 	 * Import a large SQL file.
-	 * 
-	 * @param string $path
 	 */
 	public function parseSQLFile(string $path) : bool
 	{

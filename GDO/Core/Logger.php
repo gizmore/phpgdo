@@ -121,7 +121,10 @@ final class Logger
 	/**
 	 * Log the request.
 	 */
-	public static function logRequest() { self::log('request', self::getRequest()); }
+	public static function logRequest()
+	{
+		self::log('request', self::getRequest());
+	}
 
 	########################
 	### Default logfiles ###

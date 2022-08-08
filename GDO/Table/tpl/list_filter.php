@@ -1,4 +1,6 @@
 <?php
+namespace GDO\Table\tpl;
+
 use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Select;
 use GDO\Form\GDT_Submit;
@@ -53,13 +55,13 @@ if ($field->headers)
         {
             $select = GDT_Select::make('order_by')->icon('arrow_up');
             $select->choices($orderable);
-            $select->initial($field->orderDefault);
+            $select->initial($field->order->initial);
             $frm->addField($select);
             
             $ascdesc = GDT_Select::make('order_dir');
             $ascdesc->choices['ASC'] = t('asc');
             $ascdesc->choices['DESC'] = t('desc');
-            $ascdesc->initial($field->orderDefaultAsc ? 'ASC' : 'DESC');
+            $ascdesc->initial($field->order->initial);
             $frm->addField($ascdesc);
         }
     }

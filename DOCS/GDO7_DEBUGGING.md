@@ -3,13 +3,20 @@
 In this page i want to explain the debugging techniques available in GDOv7.
 
 
-# GDOv7 Debugging: Logging
+## GDOv7 Debugging: Logging
 
 
-# GDOv7 Debugging: xDebug
+## GDOv7 Debugging: Allocation backtrace.
 
 
-# GDOv7 Debugging: Eclipse
+## GDOv7 Debugging: xDebug
 
 
-# GDOv7 Debugging: Performance
+## GDOv7 Debugging: Eclipse
+
+
+## GDOv7 Debugging: Performance
+
+You might be interested in the
+[Performance](GDO7_PERFORMANCE.md) chapter.
+

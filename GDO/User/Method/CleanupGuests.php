@@ -10,7 +10,7 @@ use GDO\Date\Time;
  * Cleanup old guest accounts that are unused.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.3
  */
 final class CleanupGuests extends MethodCronjob

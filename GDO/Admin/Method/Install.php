@@ -29,7 +29,7 @@ class Install extends MethodForm
 	
 	private GDO_Module $configModule;
 	
-	public function showInSitemap() : bool { return false; }
+	public function isShownInSitemap() : bool { return false; }
 
 	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	

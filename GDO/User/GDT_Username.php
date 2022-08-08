@@ -29,6 +29,12 @@ class GDT_Username extends GDT_Name
 
 	public function defaultLabel() : self { return $this->label('username'); }
 	
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->caseI();
+	}
+	
 	##############
 	### Exists ###
 	##############

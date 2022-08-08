@@ -2,6 +2,7 @@
 namespace GDO\Form;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_Template;
 
 /**
  * A field that is an additional validator for a field.
@@ -34,10 +35,10 @@ class GDT_Validator extends GDT
 	public GDT $validatorField;
 	public array $validator;
 	
-	public function validator(GDT_Form $form, GDT $field, callable $validator) : self
+	public function validator(GDT_Form $form, ?GDT $field, callable $validator) : self
 	{
 		$this->validatorForm = $form;
-		$this->validatorField = $field;
+		$this->validatorField = $field ? $field : $this;
 		$this->validator = $validator;
 		return $this;
 	}
@@ -64,6 +65,16 @@ class GDT_Validator extends GDT
 	##############
 	### Render ###
 	##############
-	public function renderHTML() : string { return ''; }
+	public function renderHTML() : string
+	{
+		if (isset($this->validatorField))
+		{
+			if ($this->validatorField === $this)
+			{
+				return GDT_Template::php('Form', 'validator_form.php', ['field' => $this]);
+			}
+		}
+		return '';
+	}
 	
 }

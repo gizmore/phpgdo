@@ -1,9 +1,12 @@
 <?php
 namespace GDO\Util;
+
 /**
  * Array utility.
+ * 
  * @author gizmore
- * @version 6.05
+ * @version 7.0.1
+ * @since 6.5.0
  */
 final class Arrays
 {
@@ -18,23 +21,18 @@ final class Arrays
 	
 	/**
 	 * Fixed explode with no elements on empty string.
-	 * @param string $string
-	 * @param string $delimiter
-	 * @return array
 	 */
-	public static function explode($string, $delimiter=',')
+	public static function explode(string $string, string $delimiter=',') : array
 	{
-		return empty($string) ? array() : explode($delimiter, $string);
+		return $string === '' ? [] : explode($delimiter, $string);
 	}
 	
 	/**
 	 * Recursive implode. Code taken from php.net.
 	 * Original code by: kromped@yahoo.com
-	 * @param string $glue
-	 * @param array $pieces
-	 * @return string
+	 * @param string[] $pieces
 	 */
-	public static function implode($glue, array $pieces, array $retVal=array())
+	public static function implode(string $glue, array $pieces, array $retVal=[]) : string
 	{
 		foreach ($pieces as $r_pieces)
 		{
@@ -45,10 +43,8 @@ final class Arrays
 	
 	/**
 	 * Reverse an array but keep keys.
-	 * @param array $array
-	 * @return array
 	 */
-	public static function reverse(array $array)
+	public static function reverse(array $array) : array
 	{
 		$k = array_keys($array);
 		$v = array_values($array);
@@ -59,8 +55,6 @@ final class Arrays
 	
 	/**
 	 * Return comma seperated and a final "and" like foo, bar and boo.
-	 * @param array $array
-	 * @return string
 	 */
 	public static function implodeHuman(array $array) : string
 	{
@@ -74,6 +68,9 @@ final class Arrays
 		}
 	}
 	
+	/**
+	 * Unique array filter that respect same objects as equal.
+	 */
 	public static function unique(array $array) : array
 	{
 		$unique = [];

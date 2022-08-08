@@ -5,20 +5,20 @@ use GDO\DB\Database;
 /**
  * The auto inc column is unsigned and sets the primary key after insertions.
  * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 5.0.0
  * @see GDT_CreatedAt
  * @see GDT_CreatedBy
  * @see GDT_EditedAt
  * @see GDT_EditedBy
- *
- * @author gizmore
- * @version 7.0.0
- * @since 5.0.0
  */
 final class GDT_AutoInc extends GDT_UInt
 {
 	############
 	### Base ###
 	############
+	public bool $hidden = true; # hide in forms
 	public bool $notNull = true;
 	public bool $writeable = false;
 

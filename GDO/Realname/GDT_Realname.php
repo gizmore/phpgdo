@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Realname;
 
-use GDO\Core\GDT_String;
+use GDO\Core\GDT_Name;
 
 /**
  * A Person's realname. 
@@ -10,7 +10,7 @@ use GDO\Core\GDT_String;
  * @version 7.0.1
  * @since 6.0.0
  */
-class GDT_Realname extends GDT_String
+class GDT_Realname extends GDT_Name
 {
 	public int $min = 3;
 	public int $max = 96;

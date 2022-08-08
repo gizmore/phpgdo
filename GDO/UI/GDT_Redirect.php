@@ -9,12 +9,12 @@ use GDO\Core\Logger;
 /**
  * A redirect.
  * Renders <script> in ajax mode.
- * Sets headers in html and displays a redirect message.
+ * Sets headers in html and can display a message after a redirect (session required).
  * 
  * @TODO rename html to http rendering?
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.11.5
  */
 final class GDT_Redirect extends GDT
@@ -39,10 +39,8 @@ final class GDT_Redirect extends GDT
 	
 	/**
 	 * Try to get a referrer URL for hrefBack.
-	 * @param string $default
-	 * @return string
 	 */
-	public static function hrefBack($default=null) : string
+	public static function hrefBack(string $default=null) : string
 	{
 		if (Application::$INSTANCE->isCLI())
 		{
@@ -160,14 +158,17 @@ final class GDT_Redirect extends GDT
 			$time = $this->redirectTime;
 			if ($time > 0)
 			{
-				hdr("Refresh:$time; url=$url");
+				hdr("Refresh: {$time}; url={$url}");
 			}
 			else
 			{
-				hdr('Location: ' . $url);
+				hdr("Location: {$url}");
 			}
 		}
-		return t('gdt_redirect_to', [html($url)]) . $ajax;
+		
+		$link = GDT_Link::make()->href($url);
+		
+		return t('gdt_redirect_to', [$link->render()]) . $ajax;
 	}
 	
 	private function renderAjaxRedirect()
