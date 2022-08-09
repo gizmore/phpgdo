@@ -2,27 +2,26 @@
 namespace GDO\DB;
 
 use GDO\Core\GDO;
-use GDO\Core\GDT;
 
 /**
  * A Database query result.
  * Use fetchTable() to control the object type for fetching objects. 
  * 
  * @author gizmore
- * @version 6.10.4
+ * @version 7.0.1
  * @since 6.0.0
  * @see ArrayResult
  */
 class Result
 {
-    /**
-     * @var GDO
-     */
-	public $table;
-	private $result;
-	private $useCache;
+	public GDO $table;
+	private bool $useCache;
+	private \mysqli_result $result;
 	
-	public function __construct(GDO $table, $result, $useCache)
+	###################
+	### Instanciate ###
+	###################
+	public function __construct(GDO $table, $result, bool $useCache)
 	{
 		$this->table = $table;
 		$this->result = $result;
@@ -37,27 +36,24 @@ class Result
 	    $this->free();
 	}
 	
-	public function free()
+	public function free() : void
 	{
-	    if ($this->result)
+	    if (isset($this->result))
 	    {
 	        mysqli_free_result($this->result);
-	        $this->result = null;
+	        unset($this->result);
 	    }
 	}
 	
 	################
 	### Num rows ###
 	################
-	/**
-	 * @return int
-	 */
-	public function numRows()
+	public function numRows() : int
 	{
 		return mysqli_num_rows($this->result);
 	}
 	
-	public function affectedRows()
+	public function affectedRows() : int
 	{
 	    return Database::instance()->affectedRows();
 	}
@@ -77,12 +73,12 @@ class Result
 		return null;
 	}
 	
-	public function fetchRow()
+	public function fetchRow() : ?array
 	{
 		return mysqli_fetch_row($this->result);
 	}
 	
-	public function fetchAllRows()
+	public function fetchAllRows() : array
 	{
 		$allRows = [];
 		while ($row = mysqli_fetch_row($this->result))
@@ -93,15 +89,12 @@ class Result
 	}
 	
 	
-	/**
-	 * @return string[]
-	 */
-	public function fetchAssoc()
+	public function fetchAssoc() : ?array
 	{
 		return mysqli_fetch_assoc($this->result);
 	}
 	
-	public function fetchAllAssoc()
+	public function fetchAllAssoc() : ?array
 	{
 		$data = [];
 		while ($row = $this->fetchAssoc())
@@ -139,25 +132,20 @@ class Result
 		return null;
 	}
 	
-	public function fetchInto(GDO $gdo)
+	public function fetchInto(GDO $gdo) : ?GDO
 	{
 	    if ($gdoVars = $this->fetchAssoc())
 	    {
-	        return $gdo->tempReset()->setGDOVars($gdoVars)->setPersisted();
+	        $gdo->tempReset()->setGDOVars($gdoVars)->setPersisted();
 	    }
+	    return null;
 	}
 
-	/**
-	 * @return GDO[]
-	 */
 	public function fetchAllObjects(bool $json=false) : array
 	{
 		return $this->fetchAllObjectsAs($this->table, $json);
 	}
 	
-	/**
-	 * @return GDO[]
-	 */
 	public function fetchAllObjectsAs(GDO $table, bool $json=false) : array
 	{
 		$objects = [];
@@ -169,8 +157,8 @@ class Result
 	}
 
 	/**
+	 * For a 2 column select.
 	 * Fetch all 2 column rows as a 0 => 1 assoc array.
-	 * @return string[]
 	 */
 	public function fetchAllArray2dPair() : array
 	{
@@ -182,7 +170,11 @@ class Result
 		return $array2d;
 	}
 	
-	public function &fetchAllArray2dObject(GDO $table=null, $json=false)
+	/**
+	 * Fetch all objects and have the ID as array key.
+	 * @return GDO[]
+	 */
+	public function &fetchAllArray2dObject(GDO $table=null, $json=false) : array
 	{
 		$table = $table ? $table : $this->table;
 		$array2d = [];
@@ -193,7 +185,10 @@ class Result
 		return $array2d;
 	}
 	
-	public function fetchAllArrayAssoc2dObject(GDO $table=null)
+	/**
+	 * @return GDO[]
+	 */
+	public function fetchAllArrayAssoc2dObject(GDO $table=null) : array
 	{
 		$table = $table ? $table : $this->table;
 		$array2d = [];
@@ -208,9 +203,8 @@ class Result
 	
 	/**
 	 * Fetch all, but only a single column as simple array.
-	 * @return string[]
 	 */
-	public function fetchAllValues()
+	public function fetchAllValues() : array
 	{
 		$values = [];
 		while ($value = $this->fetchValue())
@@ -220,31 +214,33 @@ class Result
 		return $values;
 	}
 	
-	public function fetchColumn()
+	/**
+	 * Alias for fetchAllValues().
+	 */
+	public function fetchColumn() : array
 	{
 	    return $this->fetchAllValues();
 	}
 	
-	############
-	### JSON ###
-	############
-	/**
-	 * @param GDT[] $headers
-	 * @return string[]
-	 */
-	public function renderJSON(array $headers)
-	{
-		$data = [];
-		while ($gdo = $this->fetchObject())
-		{
-			$row = [];
-			foreach($headers as $gdt)
-			{
-				$row[] = $gdt->gdo($gdo)->gdoRenderCell();
-			}
-			$data[] = $row;
-		}
-		return $data;
-	}
+// 	############
+// 	### JSON ###
+// 	############
+// 	/**
+// 	 * @param GDT[] $headers
+// 	 */
+// 	public function renderJSON(array $headers) : array
+// 	{
+// 		$data = [];
+// 		while ($gdo = $this->fetchObject())
+// 		{
+// 			$row = [];
+// 			foreach($headers as $gdt)
+// 			{
+// 				$row[] = $gdt->gdo($gdo)->gdoRenderCell();
+// 			}
+// 			$data[] = $row;
+// 		}
+// 		return $data;
+// 	}
 	
 }

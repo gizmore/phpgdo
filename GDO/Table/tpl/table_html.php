@@ -7,9 +7,9 @@ $headers = $field->getHeaderFields();
 $pm = isset($field->pagemenu) ? $field->pagemenu->render() : '';
 $result = $field->getResult();
 ?>
-<div class="gdt-table" <?=$field->htmlID()?>>
+<div class="gdt-table"<?=$field->htmlID()?>>
 <?php if (!$form) : ?>
- <form method="get" <?=$field->htmlAction()?>>
+ <form method="get"<?=$field->htmlAction()?>>
   <?=GDT_Form::htmlHiddenMoMe()?>
 <?php endif; ?>
   <?php if ($field->hasTitle()) : ?>
@@ -45,7 +45,7 @@ $result = $field->getResult();
 	  <?php foreach($headers as $gdt) :
 	        if (!$gdt->isHidden()) :
 	        $gdt->gdo($gdo); ?>
-		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
+		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->render()?></td>
 	  <?php endif; ?>
 	  <?php endforeach; ?>
 	</tr>
@@ -56,7 +56,7 @@ $result = $field->getResult();
 	  <?php foreach($headers as $gdt) :
 	        if (!$gdt->isHidden()) :
 	        $gdt->gdo($gdo); ?>
-		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
+		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->render()?></td>
 	  <?php endif; ?>
 	  <?php endforeach; ?>
 	</tr>

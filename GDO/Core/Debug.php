@@ -14,7 +14,7 @@ use GDO\UI\Color;
  * @example Debug::enableErrorHandler(); fatal_ooops();
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.1
  * @see Mail
  * @see Module_Perf
@@ -41,7 +41,6 @@ final class Debug
 		self::setDieOnError($die);
 		self::setMailOnError($mail);
 	}
-	
 	
 	###############
 	## Settings ###
@@ -273,8 +272,6 @@ final class Debug
 	
 	/**
 	 * Send error report mail.
-	 * 
-	 * @param string $message			
 	 */
 	public static function sendDebugMail(string $message) : bool
 	{
@@ -311,14 +308,9 @@ final class Debug
 			isset($_SERVER['USER_AGENT']) ? $_SERVER['USER_AGENT'] : 'NULL',
 			$user,
 			$message,
-// 		    print_r($_ENV, true), # security vuln here?
-// 			print_r($_GET, true),
-// 		    print_r($_POST, true),
 		    print_r($_REQUEST, true),
-// 		    print_r($_COOKIE, true),
 		];
 		$args = array_map('html', $args);
-// 		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\n_GET: %s\n\n_POST: %s\n\nREQUEST: %s\n\n_COOKIE: %s\n\n";
 		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\nREQUEST: %s\n\n";
 		return vsprintf($pattern, $args);
 	}

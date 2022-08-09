@@ -2,12 +2,13 @@
 namespace GDO\Form;
 
 use GDO\UI\GDT_Menu;
+use GDO\Core\GDT;
 
 /**
  * Add an array of actions GDT like buttons.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.2.0
  */
 trait WithActions
@@ -25,7 +26,7 @@ trait WithActions
 	
 	public function getActions()
 	{
-		return isset($this->actions) ? $this->actions : null;
+		return isset($this->actions) ? $this->actions : GDT::EMPTY_ARRAY;
 	}
 
 	public function hasActions() : bool

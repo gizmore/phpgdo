@@ -3,14 +3,13 @@ namespace GDO\Core;
 
 /**
  * Datatype that uses JSON encoding to store arbitrary data in a column.
- * If you write a method to return json, use GDT_Array.
- * 
- * @see GDT_Array
+ * If you write a method to return json data, use GDT_Array.
  * 
  * @author gizmore
- * @see GDO_Session
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.5.0
+ * @see GDT_Array
+ * @see GDO_Session
  */
 class GDT_JSON extends GDT_Text
 {
@@ -27,6 +26,11 @@ class GDT_JSON extends GDT_Text
 	public function renderJSON()
 	{
 		return $this->getValue();
+	}
+	
+	public static function with(array $data) : self
+	{
+		return self::make()->value($data);
 	}
 
 }

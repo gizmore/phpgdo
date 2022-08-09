@@ -32,13 +32,6 @@ abstract class GDT
 	const EMPTY_ARRAY = [];
 	const EMPTY_STRING = '';
 	
-	/**
-	 * Really, for WithFields traversal rendering.
-	 * Else fields are rendered twice.
-	 * @deprecated not needed anymore? mode rendering...
-	 */
-	public static int $NESTING_LEVEL = 0; # @TODO Remove?
-	
 	###################
 	### Instanciate ###
 	###################
@@ -220,7 +213,6 @@ abstract class GDT
 	public function renderMode(int $mode=-1)
 	{
 		$mode = $mode < 0 ? Application::$INSTANCE->modeDetected : $mode;
-		self::$NESTING_LEVEL = 0;
 		$app = Application::$INSTANCE;
 		$old = $app->mode;
 		$app->mode($mode);
@@ -228,7 +220,6 @@ abstract class GDT
 		$app->mode($old);
 		return $result;
 	}
-	
 	
 	###################
 	### Permissions ###
@@ -259,6 +250,8 @@ abstract class GDT
 	public function gdoAfterRead(GDO $gdo) : void {}
 	public function gdoAfterUpdate(GDO $gdo) : void {}
 	public function gdoAfterDelete(GDO $gdo) : void {}
+	
+	public function onValidated() : void {}
 	
 	################
 	### Validate ###
@@ -308,6 +301,7 @@ abstract class GDT
 		$value = $this->toValue($var);
 		if ($this->validate($value))
 		{
+			$this->onValidated();
 			return $this;
 		}
 		elseif ($throw)
@@ -619,7 +613,7 @@ abstract class GDT
 		return false;
 	}
 	
-	public function reset() : self
+	public function reset(bool $removeInput=false) : self
 	{
 		return $this;
 	}
@@ -627,7 +621,7 @@ abstract class GDT
 	##################
 	### Conversion ###
 	##################
-	public function inputToVar(string $input=null) : ?string
+	public function inputToVar($input) : ?string
 	{
 		if ($input === null)
 		{

@@ -285,7 +285,6 @@ final class ModuleLoader
 	
 	/**
 	 * Force module reloading.
-	 * @return true
 	 */
 	public function reset() : self
 	{

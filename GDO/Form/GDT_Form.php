@@ -57,19 +57,19 @@ final class GDT_Form extends GDT
 		$this->verb(self::POST);
 	}
 	
-	##############
-	### Inputs ###
-	##############
-	public function plugVars() : array
-	{
-		$back = [];
-		foreach ($this->actions()->getAllFields() as $gdt)
-		{
-			$name = $gdt->getName();
-			$back[$name] = '1';
-		}
-		return array_values($back);
-	}
+// 	##############
+// 	### Inputs ###
+// 	##############
+// 	public function plugVars() : array
+// 	{
+// 		$back = [];
+// 		foreach ($this->actions()->getAllFields() as $gdt)
+// 		{
+// 			$name = $gdt->getName();
+// 			$back[$name] = '1';
+// 		}
+// 		return array_values($back);
+// 	}
 	
 	############
 	### Slim ###
@@ -85,7 +85,6 @@ final class GDT_Form extends GDT
 	### Focus ###
 	#############
 	public bool $focus = true;
-	
 	public function noFocus() : self
 	{
 		return $this->focus(false);
@@ -191,7 +190,6 @@ final class GDT_Form extends GDT
 
 	/**
 	 * Get all columns as gdo var.
-	 * @return array
 	 */
 	public function getFormVars() : array
 	{

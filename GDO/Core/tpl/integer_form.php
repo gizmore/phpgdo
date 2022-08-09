@@ -15,6 +15,7 @@ use GDO\Core\GDT_Int;
 <?=$field->htmlFormName()?>
 <?=$field->htmlDisabled()?>
 <?=$field->htmlRequired()?>
+<?=$field->htmlFocus()?>
  value="<?=$field->getVar()?>" />
 <?=$field->htmlError()?>
 </div>

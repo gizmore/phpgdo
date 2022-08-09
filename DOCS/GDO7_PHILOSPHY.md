@@ -12,7 +12,11 @@
  
  - Aggressive programming! not defensive. Do not check for null values or anything. If there is a problem, a helpful error has to be shown automatically!
  
- - A method should fit on a screen. A file should have not more than 200 lines. Of course that's not always feasible, like [GDO.php](../GDO/Core/GDO.php) has almost 2000 lines of code.
+ - A method should fit on a screen. A file should have not more than 300 lines.
+Of course that's not always feasible,
+like [GDO.php](../GDO/Core/GDO.php)
+has almost 2000 lines of code.
+Those huge classes are very rare in GDOv7.
  
  - Do things the right and easy way. *KISS\** :)
 If Something does not work right away, maybe come back later.
@@ -22,7 +26,7 @@ Of course you have to try things first.
   
 ## GDOv7 Philosophy: Public attribute pattern
 
-Here is an example of how the code pattern above looks like.
+Here is an example of how this code pattern looks like.
 
     public string $label = 'test';
     public function label(string $label) : self
@@ -30,6 +34,8 @@ Here is an example of how the code pattern above looks like.
         $this->label = $label;
         return $this;
     }
+    
+This way you can chain setters like `GDT_String::make()->label('hi')->max(32)->ascii()->caseSensitive(true)`
 
 
 ## GDOv7 Philosophy: Pluggable traits

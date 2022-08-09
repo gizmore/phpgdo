@@ -22,7 +22,7 @@ class GDT_PasswordHash extends GDT_Password
 		return $this->getValue()->__toString();
 	}
 	
-	public function inputToVar(string $input=null) : string
+	public function inputToVar($input) : ?string
 	{
 		if ($input === null)
 		{

@@ -151,10 +151,8 @@ class Cache
 	
 	/**
 	 * Try GDO Cache and Memcached.
-	 * @param string $id
-	 * @return GDO
 	 */
-	public function findCached(...$ids)
+	public function findCached(string...$ids) : ?GDO
 	{
 		$id = implode(':', $ids);
 		if (!isset($this->cache[$id]))
@@ -165,7 +163,7 @@ class Cache
 			}
 			else
 			{
-			    return false;
+			    return null;
 			}
 		}
 		return $this->cache[$id];

@@ -65,8 +65,12 @@ trait WithValue
 		return $this;
 	}
 	
-	public function reset() : self
+	public function reset(bool $removeInput=false) : self
 	{
+		if ($removeInput)
+		{
+			unset($this->inputs[$this->name]);
+		}
 		return $this->var($this->initial);
 	}
 	
@@ -106,21 +110,36 @@ trait WithValue
 
 	/**
 	 * Setup this GDT from a GDO.
-	 * 
-	 * @param GDO $gdo
-	 * @return self
 	 */
 	public function gdo(GDO $gdo = null) : self
 	{
 		if ($gdo)
 		{
-// 			$this->gdo = $gdo;
+			if ($name = $this->getName())
+			{
+				return $this->var($gdo->gdoVar($name));
+			}
+		}
+		return $this->var(null);
+	}
+	
+	public function gdoInitial(GDO $gdo = null) : self
+	{
+		if ($gdo)
+		{
 			if ($name = $this->getName())
 			{
 				return $this->initial($gdo->gdoVar($name));
 			}
 		}
-		return $this->var(null);
+		return $this->initial(null);
+	}
+	
+	public function setGDOData(array $data) : self
+	{
+		$n = $this->name;
+		$this->var = isset($data[$n]) ? $data[$n] : null;
+		return $this;
 	}
 	
 	##################
@@ -139,16 +158,6 @@ trait WithValue
 	##############
 	### Render ###
 	##############
-// 	/**
-// 	 * Render the value as dbVar
-// 	 * @deprecated naming sucks
-// 	 * @return string
-// 	 */
-// 	public function renderHTML() : string
-// 	{
-// 		return isset($this->var) ? html($this->var) : '';
-// 	}
-
 	/**
 	 * Render html value attribute value="foo".
 	 */
@@ -163,11 +172,4 @@ trait WithValue
 		return $this->renderLabel();
 	}
 	
-	public function setGDOData(array $data) : self
-	{
-		$n = $this->name;
-		$this->var = isset($data[$n]) ? $data[$n] : null;
-		return $this;
-	}
-
 }

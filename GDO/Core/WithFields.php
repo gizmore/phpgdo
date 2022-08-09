@@ -201,7 +201,6 @@ trait WithFields
 	 */
 	public function withFields($callback, bool $returnEarly=false)
 	{
-		GDT_Response::$NESTING_LEVEL++;
 		if (isset($this->fields))
 		{
 			foreach ($this->fields as $gdt)
@@ -266,9 +265,9 @@ trait WithFields
 		{
 			$old = $app->mode;
 			$app->mode($renderMode);
-			foreach ($this->fields as $field)
+			foreach ($this->fields as $gdt)
 			{
-				$rendered .= $field->render();
+				$rendered .= $gdt->render();
 			}
 			$app->mode($old);
 		}

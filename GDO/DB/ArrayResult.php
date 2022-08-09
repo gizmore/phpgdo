@@ -9,7 +9,7 @@ use GDO\Core\GDT;
  * Used in, e.g. Admin_Modules overview, as its loaded from FS.
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.1
  * @since 5.0.0
  */
 final class ArrayResult extends Result
@@ -24,9 +24,6 @@ final class ArrayResult extends Result
 	 */
 	private array $fullData;
 	
-	/**
-	 * @var int
-	 */
 	private int $index = -1;
 	
 	public function __construct(array &$data, GDO $table)
@@ -67,9 +64,6 @@ final class ArrayResult extends Result
 	public function fetchRow() : array { return array_values($this->fetchAssoc()); }
 	public function fetchAssoc() : array { return $this->fetchObject()->getGDOVars(); }
 	public function fetchAs(GDO $table) : ?GDO { return $this->fetchObject(); }
-	/**
-	 * @return GDO
-	 */
 	public function fetchObject() : ?GDO
 	{
 	    if ($this->index >= count($this->data))
@@ -84,21 +78,17 @@ final class ArrayResult extends Result
 	{
 	    if ($o = $this->fetchObject())
 	    {
-	        return $gdo->setGDOVars($o->getGDOVars());
+	        $gdo->setGDOVars($o->getGDOVars());
 	    }
 	    return null;
 	}
-	
 	
 	##############
 	### Filter ###
 	##############
 	/**
-	 *
 	 * @param GDO[] $data
-	 * @param GDO $table
 	 * @param GDT[] $filters
-	 * @return ArrayResult
 	 */
 	public function filterResult(array $data, GDO $table, array $filters, $rq) : self
 	{
@@ -131,7 +121,6 @@ final class ArrayResult extends Result
 	/**
 	 * Deepsearch a static result. Like a global table search.
 	 * @param GDO[] $data
-	 * @param GDO   $table
 	 * @param GDT[] $filters
 	 */
 	public function searchResult(array $data, GDO $table, array $filters, string $searchTerm) : self

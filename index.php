@@ -19,8 +19,13 @@ use GDO\Core\Method\NotAllowed;
 use GDO\Core\Method\Error;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_Error;
-# really the first thing we do :) Go Go GDOv7!
-define('GDO_TIME_START', microtime(true)); 
+use GDO\UI\GDT_HTML;
+#
+# really the first thing we do is measure performance :)
+# Go Go Go! GDO7
+#
+define('GDO_TIME_START', microtime(true));
+#
 #######################
 ### Bootstrap GDOv7 ###
 #######################
@@ -39,7 +44,7 @@ Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
 Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
-$loader->loadModulesCache();
+$loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
 if (!module_enabled('Core'))
 {
 	require 'index_install.php';
@@ -50,8 +55,7 @@ if (@class_exists('\\GDO\\Session\\GDO_Session', true))
 	$session = GDO_Session::instance();
 }
 $user = GDO_User::current();
-$loader->initModules();	
-$app->initThemes();
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 Logger::init($user->getName(), GDO_ERROR_LEVEL);
 if (GDO_LOG_REQUEST)
 {
@@ -62,14 +66,18 @@ define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###
 ###########
-// $_GET = $_POST = null; # cleanup unused stuff
-# HTTP Method
+#
+# HTTP Method. Deny anything not supported.
+#
 $rqmethod = (string) @$_SERVER['REQUEST_METHOD'];
 if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 {
-	$me = NotAllowed::make();
+	$me = NotAllowed::make(); # early setting of method.
 }
-# Language
+
+#
+# Setup Language
+#
 if (isset($_REQUEST['_lang']))
 {
 	Trans::setISO((string) @$_REQUEST['_lang']);
@@ -80,19 +88,25 @@ else
 	Trans::$ISO = Module_Language::instance()->detectISO();
 }
 
-# HTTP verb
+#
+# Remember GET/POST HTTP verb.
+#
 $app->verb($_SERVER['REQUEST_METHOD']);
 
-# Content Type
+#
+# Detect Content Type and set application render mode.
+# 
 $mode = GDT::RENDER_HTML;
 if (isset($_REQUEST['_fmt']))
 {
-	$mode = Application::$INSTANCE->detectRenderMode((string)@$_REQUEST['_fmt']);
+	$mode = $app->detectRenderMode((string)@$_REQUEST['_fmt']);
 	unset($_REQUEST['_fmt']);
 }
 $app->mode($mode, true); # set detected mode.
 
-# Ajax
+#
+# Remember ajax request option
+#
 $ajax = false;
 if (isset($_REQUEST['_ajax']))
 {
@@ -100,10 +114,22 @@ if (isset($_REQUEST['_ajax']))
 	unset($_REQUEST['_ajax']);
 }
 $app->ajax($ajax);
+
 ###################
 ### Pick Method ###
 ###################
-if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
+#
+# We already have a method. This is a 403!
+if (isset($me))
+{
+	# Patch all input to only the error!
+	$_REQUEST = ['url' => (string) $_SERVER['REQUEST_METHOD']];
+}
+#
+# index.php is called directly.
+# Read $_GET _mo/_me
+#
+elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
 	unset($_REQUEST['_url']);
 	if (isset($_REQUEST['_mo']))
@@ -166,37 +192,64 @@ else
 		$me = FileNotFound::make();
 	}
 }
+
 ############
 ### Exec ###
 ############
-$_GET = null;
+$_GET = null; # from this point we have everything only in gdo.
 $_POST = null;
-Application::$INSTANCE->inputs($_REQUEST);
-Application::$INSTANCE->method($me);
+$app->inputs($_REQUEST);
+$app->method($me);
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
+
+#
+# Execute and force a GDO result.
+#
 try
 {
-	$result = $gdtMethod->execute();
+	if (null === ($result = $gdtMethod->execute()))
+	{
+		$result = GDT_HTML::make(); # empty response... okay? Oo?
+	}
+
+	elseif (is_string($result)) # text response, we wanna support that?
+	{
+		$result = GDT_HTML::withHTML($result);
+	}
 }
 catch (\Throwable $t)
 {
+	# Error message result
 	$result =  GDT_Error::fromException($t);
 }
+
+#
+# If it is not a GDT_Response, wrap it.
+# Because GDT_Response renders the GDT_Page template (in html, non ajax mode)
+#
 if (!($result instanceof GDT_Response))
 {
 	$result = GDT_Response::make()->addField($result);
 }
+
+# Render the response.
 $content = $result->renderMode();
+
 ##############
 ### Finish ###
 ##############
-Cache::recacheHooks();
 if (isset($session))
 {
-	$session->commit();
+	$session->commit(); # setting headers sometimes
 }
-Application::timingHeader(); # The last thing we do before any output
+# The last thing we do before any output
+Application::timingHeader();
 ##############
 ### Output ###
 ##############
-echo $content;
+# Output asap. Very late but still
+echo $content; # asap
+#########################
+### fire IPC recaches ###
+#########################
+Cache::recacheHooks();

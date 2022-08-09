@@ -21,7 +21,7 @@ use GDO\Core\ModuleLoader;
  * The holy user class.
  * Most user related fields are in other module settings.
  * 
- * @TODO Move user_password into a separate table.
+ * @TODO Move user_password into a separate table or Module_User settings.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -140,7 +140,7 @@ final class GDO_User extends GDO
 		return self::$CURRENT;
 	}
 	
-	public static function setCurrent(GDO_User $user, bool $switchLocale=false)
+	public static function setCurrent(GDO_User $user, bool $switchLocale=true)
 	{
 		self::$CURRENT = $user;
 		if ($switchLocale)
@@ -181,6 +181,7 @@ final class GDO_User extends GDO
 	##############
 	### Getter ###
 	##############
+	public function getID() : ?string { return $this->gdoVar('user_id'); }
 	public function getName() : ?string { return $this->gdoVar('user_name'); }
 	public function getType() : string { return $this->gdoVar('user_type'); }
 	public function getLangISO() : string { return Module_Language::instance()->cfgUserLangID(); }

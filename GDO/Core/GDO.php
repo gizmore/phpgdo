@@ -629,16 +629,39 @@ abstract class GDO extends GDT
 	}
 	
 	/**
+	 * Get a GDT column by name.
+	 */
+	public function getColumn(string $key) : GDT
+	{
+		return $this->gdoColumnsCache()[$key];
+	}
+	
+	/**
 	 * Get the GDT column for a key.
-	 * @param string $key
-	 * @return GDT
+	 * Assign my GDO values to the GDT.
 	 */
 	public function gdoColumn(string $key, bool $throw=true) : GDT
 	{
-		/** @var $gdt GDT **/
 		if ($gdt = $this->gdoColumnsCache()[$key])
 		{
-			return $gdt->gdo($this);
+			return $gdt->gdo($this); # assign values
+		}
+		elseif ($throw)
+		{
+			throw new GDO_Error('err_unknown_gdo_column', [$this->renderName(), html($key)]);
+		}
+		return null;
+	}
+
+	/**
+	 * Copy a GDT column and assign my values.
+	 */
+	public function gdoColumnCopy(string $key, bool $throw=true) : GDT
+	{
+		if ($gdt = $this->gdoColumnsCache()[$key])
+		{
+			$column = clone $gdt;
+			return $column->gdo($this);
 		}
 		elseif ($throw)
 		{
@@ -647,21 +670,8 @@ abstract class GDO extends GDT
 		return null;
 	}
 	
-// 	/**
-// 	 * Get a copy of a GDT column.
-// 	 * @param string $key
-// 	 * @return GDT
-// 	 */
-// 	public function gdoColumnCopy($key)
-// 	{
-// 		/** @var $column GDT **/
-// 		$column = clone $this->gdoColumnsCache()[$key];
-// 		return $column->gdo($this);#->var($column->initial);
-// 	}
-	
 	/**
 	 * Get all GDT columns except those listed.
-	 * @param string[] ...$except
 	 * @return GDT[]
 	 */
 	public function gdoColumnsExcept(string...$except) : array
@@ -1272,6 +1282,7 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Get a row by IDs.
+	 * Tries GDO process cache first.
 	 */
 	public static function getById(string...$id) : ?self
 	{
@@ -1556,9 +1567,13 @@ abstract class GDO extends GDT
 	public function truncate() : bool { return !!Database::instance()->truncateTable($this); }
 	
 	/**
+	 * Get all GDT for a GDO.
 	 * @return GDT[]
 	 */
-	public function &gdoColumnsCache() : array { return Database::columnsS(static::class); }
+	public function &gdoColumnsCache() : array
+	{
+		return Database::columnsS(static::class);
+	}
 	
 	/**
 	 * @return GDT[]

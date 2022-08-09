@@ -1,16 +1,23 @@
 "use strict";
 
 /**
- * Let'z'eh'goh
+ * Let'z'eh'goh with GDO namespace
  */
 window.GDO = {};
 
 /**
- * Automatically focus the first editable, required form field.
+ * Automatically focus the first writeable + required form field.
+ * If none, focus the first writeable form field.
+ * If none, all is ok.
  */
 window.GDO.autofocusForm = function() {
-	const el = window.document.querySelector('[gdo-focus]');
-	el?.focus();
+	let el = window.document.querySelector('[gdo-focus-required]');
+	if (el) {
+		el.focus();
+	} else {
+		el = window.document.querySelector('[gdo-focus]');
+		el && el.focus();
+	}
 };
 
 window.GDO.enterForm = function(form, event) {

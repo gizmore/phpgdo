@@ -99,12 +99,12 @@ function href(string $module, string $method, string $append = null, bool $lang 
 				$href .= '?' . implode('&', $q);
 				if ($lang)
 				{
-					$href .= '&_lang=' . Trans::$ISO;
+// 					$href .= '&_lang=' . Trans::$ISO;
 				}
 			}
 			elseif ($lang)
 			{
-				$href .= '?_lang=' . Trans::$ISO;
+// 				$href .= '?_lang=' . Trans::$ISO;
 			}
 			else
 			{
@@ -121,7 +121,7 @@ function href(string $module, string $method, string $append = null, bool $lang 
 		$href = GDO_WEB_ROOT . "index.php?_mo={$module}&_me={$method}";
 		if ($lang)
 		{
-			$href .= '&_lang=' . Trans::$ISO;
+// 			$href .= '&_lang=' . Trans::$ISO;
 		}
 		$href .= $append;
 	}
@@ -158,15 +158,15 @@ function html(string $html=null) : string
 	$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 	return $is_html ? str_replace(
 	[
-// 		'&',
+		'&',
 		'"',
-// 		"'",
+		"'",
 		'<',
-// 		'>'
+		'>'
 	], [
-// 		'&amp;',
+		'&amp;',
 		'&quot;',
-// 		'&#39;',
+		'&#39;',
 		'&lt;',
 		'&gt;'
 	], $html) : $html;

@@ -4,12 +4,13 @@ namespace GDO\Core\Method;
 use GDO\UI\MethodPage;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT;
-use GDO\UI\GDT_Error;
 
 /**
  * Render an arbitrary error. 
+ * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 7.0.0
  */
 final class Error extends MethodPage
 {
@@ -24,7 +25,7 @@ final class Error extends MethodPage
 	
 	public function execute() : GDT
 	{
-		return GDT_Error::make()->textEscaped()->textRaw($this->gdoParameterValue('error'));
+		return $this->errorRaw($this->gdoParameterVar('error'));
 	}
 	
 }

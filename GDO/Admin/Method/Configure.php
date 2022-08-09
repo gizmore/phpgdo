@@ -21,7 +21,6 @@ use GDO\Util\Arrays;
 use GDO\UI\GDT_Container;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Tuple;
-use GDO\Core\Application;
 
 /**
  * Configure a module.
@@ -78,11 +77,9 @@ class Configure extends MethodForm
 		}
 
 		# Response for install panel
-		$install = Install::make()->inputs(Application::$INSTANCE->inputs);
+		$install = Install::make()->inputs($this->inputs);
 		$response->addField($install->executeWithInit());
 
-		$this->resetForm();
-		
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())
 		{
@@ -168,7 +165,7 @@ class Configure extends MethodForm
 				->initial($mod->filePath()));
 		$c = GDT_Container::make('versions')->horizontal(false);
 		$c->addField(
-			GDT_Version::make('module_version')->gdo($mod)->writeable(
+			GDT_Version::make('module_version')->gdoInitial($mod)->writeable(
 				false));
 		$c->addField(
 			GDT_Version::make('version_available')->writeable(
@@ -228,6 +225,8 @@ class Configure extends MethodForm
 			Cache::fileFlush();
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);
 		}
+		
+		$this->resetForm();
 
 		# Announce
 		return $this->message('msg_module_saved',

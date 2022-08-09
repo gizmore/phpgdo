@@ -10,13 +10,11 @@ use GDO\Util\Strings;
  * If you add a response to a response, it will just steal it's fields. (unwrap)
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 final class GDT_Response extends GDT_Tuple
 {
-// 	use WithInstance;
-	
 	public static function instanceWith(GDT...$gdts) : self
 	{
 		$instance = self::instance();

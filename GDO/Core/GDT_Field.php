@@ -10,10 +10,11 @@ use GDO\Form\GDT_Form;
 /**
  * A GDT with user input.
  * 
- * Fields have a name and a value.
+ * Fields have a name and an initial/var/value.
  * Fields have an optional error message.
  * Fields can be nullable.
  * Fields can have an icon, a label and a placeholder.
+ * Fields can have various form attributes.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -105,7 +106,7 @@ abstract class GDT_Field extends GDT
 	#######################
 	### Input/Var/Value ###
 	#######################
-	public function inputToVar(string $input=null) : ?string
+	public function inputToVar($input) : ?string
 	{
 		if (is_string($input))
 		{
@@ -185,7 +186,14 @@ abstract class GDT_Field extends GDT
 				{
 					if ($this->getVar() === null)
 					{
-						return ' gdo-focus';
+						if ($this->notNull)
+						{
+							return ' gdo-focus-required';
+						}
+						else
+						{
+							return ' gdo-focus';
+						}
 					}
 				}
 			}

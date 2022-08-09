@@ -14,7 +14,7 @@ use GDO\Form\GDT_Form;
  * A method saves it response [WithResult.php]()
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 class GDT_Method extends GDT
@@ -36,7 +36,7 @@ class GDT_Method extends GDT
 	 * 
 	 * @return GDT_Response
 	 */
-	public function execute()
+	public function execute(bool $changeLocale=false)
 	{
 		if (!isset($this->result))
 		{
@@ -55,7 +55,7 @@ class GDT_Method extends GDT
 			}
 
 			$method = $this->method->withAppliedInputs($inputs);
-			$this->changeUser();
+			$this->changeUser($changeLocale);
 			$this->result = $method->exec();
 		}
 		return $this->result;

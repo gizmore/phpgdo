@@ -6,7 +6,7 @@ namespace GDO\UI;
  * Render with htmlAttributes().
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.7.0
  */
 trait WithPHPJQuery
@@ -48,10 +48,6 @@ trait WithPHPJQuery
 	{
 		# Old classes
 		$classes = explode(" ", $this->attr('class'));
-// 		if (!$classes)
-// 		{
-// 			$classes = [];
-// 		}
 		
 		# Merge new classes
 		$newclss = explode(" ", $class); # multiple possible
@@ -98,11 +94,4 @@ trait WithPHPJQuery
 		return $this->attr('style', $rules);
 	}
 
-// 	### event 
-// 	###
-// 	public function jsclick(string $js) : self
-// 	{
-// 		$this->attr('onclick', $js);
-// 		return $this;
-// 	}
 }

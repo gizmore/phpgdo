@@ -27,7 +27,7 @@ $gdt->addClass('gdt-list-item');
 <?php if (isset($gdt->image) ||  isset($gdt->content) || isset($gdt->right)) : ?>
   <div class="gdt-li-main">
 <?php if ($gdt->image) : ?>
-    <div class="gdt-li-image"><?=$gdt->image->renderCell()?></div>
+    <div class="gdt-li-image"><?=$gdt->image->render()?></div>
 <?php endif; ?>
 <?php if ($gdt->content) : ?>
     <div class="gdt-li-content">
@@ -35,7 +35,7 @@ $gdt->addClass('gdt-list-item');
     </div>
 <?php endif; ?>
 <?php if ($gdt->right) : ?>
-    <div class="gdt-li-right"><?=$gdt->right->renderCell()?></div>
+    <div class="gdt-li-right"><?=$gdt->right->render()?></div>
 <?php endif; ?>
   </div>
 <?php endif; ?>
@@ -43,7 +43,7 @@ $gdt->addClass('gdt-list-item');
 <?php if ($gdt->hasActions()) : ?>
   <div class="gdt-li-lower">
 <?php if ($gdt->hasActions()) : ?>
-    <div class="gdt-li-actions"><?=$gdt->actions()->renderCell()?></div>
+    <div class="gdt-li-actions"><?=$gdt->actions()->render()?></div>
 <?php endif; ?>
   </div>
 <?php endif; ?>

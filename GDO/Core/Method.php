@@ -277,40 +277,32 @@ abstract class Method #extends GDT
 	{
 		$db = Database::instance();
 		$response = GDT_Response::make();
+		$transactional = false;
 		try
 		{
-			$transactional = false;
-			
+			# 0) Init
 			$this->applyInput();
-			
-			# Init method
 			if ($result = $this->onInit())
 			{
 				$response->addField($result);
 			}
+			if (Application::isError())
+			{
+				return $response;
+			}
 			
-			# Wrap transaction start
+			# 1) Start the transaction
 			$transactional = $this->transactional();
 			if ($transactional)
 			{
 				$db->transactionBegin();
 			}
-			
-			if (Application::isError())
-			{
-				if ($transactional)
-				{
-					$db->transactionRollback();
-				}
-				return $response;
-			}
-			
+
+			# 2) Before execute
+			$this->applyInput();
 			$this->beforeExecute();
-			
 			$result = GDT_Hook::callHook('BeforeExecute', $this, $response);
-			
 			$response->addField($result);
-			
 			if ($response->hasError())
 			{
 				if ($transactional)
@@ -320,32 +312,37 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
+			# 3) Execute
 			if ($result = $this->executeB())
 			{
 				$response->addField($result);
 			}
-			
-			if (Application::isSuccess())
-			{
-				$this->afterExecute();
-				GDT_Hook::callHook('AfterExecute', $this, $response);
-				if (Application::isSuccess())
-				{
-					if ($transactional)
-					{
-						$db->transactionEnd();
-						$transactional = false;
-					}
-				}
-			}
-			
-			# Wrap transaction end
-			if (Application::isError())
+			if ($response->hasError())
 			{
 				if ($transactional)
 				{
 					$db->transactionRollback();
 				}
+				return $response;
+			}
+			
+			# 4) After execute
+			$this->afterExecute();
+			$result = GDT_Hook::callHook('AfterExecute', $this, $response);
+			$response->addField($result);
+			if ($response->hasError())
+			{
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
+				return $response;
+			}
+			
+			# 5) Commit transaction
+			if ($transactional)
+			{
+				$db->transactionEnd();
 			}
 			
 			return $response;

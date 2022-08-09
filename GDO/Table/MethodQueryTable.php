@@ -42,6 +42,12 @@ abstract class MethodQueryTable extends MethodTable
     	return $headers;
     }
     
+    public function createCollection() : GDT_Table
+    {
+    	$table = parent::createCollection();
+    	return $table->query($this->getQuery());
+    }
+    
 	################
 	### Abstract ###
 	################
@@ -58,20 +64,18 @@ abstract class MethodQueryTable extends MethodTable
 	/**
 	 * Override this function to return a query for your table.
 	 * Defaults to select all from your GDO table.
-	 * @return Query
 	 */
-	public function getQuery()
+	public function getQuery() : Query
 	{
 	    return $this->gdoTable()->select();
 	}
 	
 	/**
 	 * Return a query to count items for pagination.
-	 * Usually you can leave this to gdo6, letting it transform your query above.
+	 * Usually you can leave this to gdo, letting it transform your query above.
 	 * But it's possible to return an own CountQuery.
-	 * @return Query
 	 */
-	public function getCountQuery()
+	public function getCountQuery() : Query
 	{
 	    return $this->getQuery();
 	}
@@ -85,12 +89,10 @@ abstract class MethodQueryTable extends MethodTable
 	
 	/**
 	 * Calculate the GDT_Table object for queried tables.
-	 * {@inheritDoc}
-	 * @see \GDO\Table\MethodTable::calculateTable()
 	 */
 	protected function calculateTable(GDT_Table $table)
 	{
-	    $query = $this->getQuery();
+	    $query = $table->query;
 	    $table->fetchAs($this->gdoTable());
 	    if ($this->isOrdered())
 	    {
@@ -99,7 +101,6 @@ abstract class MethodQueryTable extends MethodTable
 	    	# order the query
 	    	$query->order($order);
 	    }
-	    $table->query($query);
         if ($this->isPaginated())
 	    {
 	    	$table->countQuery($this->getCountQuery());
@@ -109,10 +110,6 @@ abstract class MethodQueryTable extends MethodTable
 	    	$table->pagemenu->pageName = $this->getPageName();
 	        $table->pagemenu->filterQuery($table->query);
 	    }
-// 	    else
-// 	    {
-// 	        $this->beforeCalculateTable($table);
-// 	    }
 	}
 
 }

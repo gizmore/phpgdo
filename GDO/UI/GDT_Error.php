@@ -10,7 +10,7 @@ use GDO\Core\GDO_Exception;
  * It can be configured via an exception.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 final class GDT_Error extends GDT_Panel

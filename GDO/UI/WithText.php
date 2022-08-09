@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * Adds text attributes.
  * 
@@ -9,9 +11,9 @@ namespace GDO\UI;
  * Adds textEscaped() for skipping escaping.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.2.0
- * @see GDO7 - for global functions
+ * @see [GDO7](../../GDO7.php) - for global functions
  */
 trait WithText
 {
@@ -25,7 +27,7 @@ trait WithText
 		unset($this->textRaw);
 	    $this->textKey = $key;
 	    $this->textArgs = $args;
-	    return $this;
+	    return $this->textUnescaped();
 	}
 	
 	public function textRaw(string $text) : self
@@ -75,7 +77,7 @@ trait WithText
 		}
 		else
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 		return $this->textEscaped ? html($txt) : $txt;
 	}

@@ -65,7 +65,7 @@ class GDT_Select extends GDT_ComboBox
 		return $value;
 	}
 	
-	public function inputToVar(string $input=null) : ?string
+	public function inputToVar($input) : ?string
 	{
 		if ($input === $this->emptyVar)
 		{

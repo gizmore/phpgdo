@@ -7,7 +7,7 @@ use GDO\Form\GDT_Submit;
  * A delete button confirms before the action is executed.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.8.0
  */
 class GDT_DeleteButton extends GDT_Submit

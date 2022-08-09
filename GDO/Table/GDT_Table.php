@@ -258,19 +258,13 @@ class GDT_Table extends GDT
 	### Query ###
 	#############
 	public Query $query;
-
 	public function query(Query $query)
 	{
-// 		if (!$this->fetchAs)
-// 		{
-// 			$this->fetchAs = $query->table;
-// 		}
 		$this->query = $this->getFilteredQuery($query);
 		return $this;
 	}
 
 	public $countQuery;
-
 	public function countQuery(Query $query)
 	{
 		$this->countQuery = $this->getFilteredQuery($query->copy());

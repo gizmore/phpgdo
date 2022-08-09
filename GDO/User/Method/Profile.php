@@ -44,7 +44,7 @@ final class Profile extends MethodCard
 	
 	public function execute()
 	{
-		$user = $this->getObject();
+		$user = $this->getUser();
 		if (!$user)
 		{
 			return $this->error('err_no_data_yet');
@@ -70,7 +70,7 @@ final class Profile extends MethodCard
 	private function createCardB(GDT_Card $card, GDO_Module $module) : void
 	{
 		$user = GDO_User::current();
-		$target = $this->getObject();
+		$target = $this->getUser();
 		foreach ($module->getSettingsCache() as $gdt)
 		{
 			$name = $gdt->getName();

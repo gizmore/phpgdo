@@ -13,6 +13,7 @@ use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_Permission;
 use GDO\Core\GDO;
+use GDO\DB\Query;
 use GDO\UI\GDT_Button;
 
 /**
@@ -73,7 +74,7 @@ class ViewPermission extends MethodQueryTable
 		return $this->href('&permission='.$this->getConfigPermission()->getID());
 	}
 	
-	public function getQuery()
+	public function getQuery() : Query
 	{
 		return $this->gdoTable()->
 			select('*,perm_user_id_t.*, perm_perm_id_t.*')->

@@ -2,6 +2,8 @@
 namespace GDO\Core;
 
 
+use GDO\Util\Arrays;
+
 /**
  * A select WithObject trait.
  * It behaves a tiny bit different than GDT_Select, for the selected value.
@@ -62,12 +64,10 @@ class GDT_ObjectSelect extends GDT_Select
 		{
 			if (is_array($obj))
 			{
-				$back = '';
-				foreach ($obj as $gdo)
-				{
-					$back .= $gdo->renderName();
-				}
-				return $back;
+				$back = array_map(function(GDO $gdo) {
+					return $gdo->renderName();
+				}, $obj);
+				return Arrays::implodeHuman($back);
 			}
 			return $obj->renderName();
 		}

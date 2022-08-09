@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Page;
 
 /**
@@ -117,12 +116,16 @@ class Application extends GDT
 	/**
 	 * Call when you create the next command in a loop.
 	 */
-	public function reset() : self
+	public function reset(bool $removeInput=false) : self
 	{
 		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
 		$this->mode = $this->modeDetected;
 		self::updateTime();
+		if ($removeInput)
+		{
+			self::$INSTANCE->inputs();
+		}
 		return $this;
 	}
 	
@@ -169,19 +172,14 @@ class Application extends GDT
 	##############
 	### Themes ###
 	##############
-	/**
-	 * # @TODO: There must be a quicker way todo templating.
-	 * @var string[]
-	 */
 	private array $themes;
 	
 	public function &getThemes() : array
 	{
 		if (!isset($this->themes))
 		{
-			$themes = def('GDO_THEMES', 'default');
-			$this->themes = explode(',', $themes);
-			$this->themes = array_combine($this->themes, $this->themes);
+			$themes = explode(',', def('GDO_THEMES', 'default'));
+			$this->themes = array_combine($themes, $themes);
 		}
 		return $this->themes;
 	}
@@ -191,32 +189,11 @@ class Application extends GDT
 		return isset($this->getThemes()[$theme]);
 	}
 	
-	/**
-	 * Init themes from session settin.
-	 * @deprecated do we want this?
-	 * @return self
-	 */
-	public function initThemes() : self
-	{
-		if ( (!$this->isInstall()) && (!$this->isCLI()) )
-		{
-			if (class_exists('GDO\\Session\\GDO_Session', false))
-			{
-				if (GDO_Session::get('theme_name'))
-				{
-					$this->themes = GDO_Session::get('theme_chain');
-				}
-			}
-		}
-		return $this;
-	}
-	
 	##################
 	### JSON Input ###
 	##################
 	/**
 	 * Turn JSON requests into normal Requests.
-	 * @since 6.11.8
 	 */
 	public function handleJSONRequests() : void
 	{
@@ -238,11 +215,21 @@ class Application extends GDT
 		return $this;
 	}
 	
-	public function mome()
+	public function mo() : string
 	{
-		$me = $this->method->getMethodName();
-		$mo = $this->method->getModuleName();
-		return strtolower("{$mo}::{$me}");
+		return strtolower($this->method->getModuleName());
+	}
+	
+	public function me() : string
+	{
+		return strtolower($this->method->getMethodName());
+	}
+	
+	public function mome() : string
+	{
+		$me = $this->mo();
+		$mo = $this->me();
+		return "{$mo}::{$me}";
 	}
 	
 }

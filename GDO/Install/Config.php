@@ -17,6 +17,7 @@ use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
 use GDO\Core\Logger;
 use GDO\Core\GDT_UInt;
+use GDO\Core\GDT_TinyInt;
 
 /**
  * Configuration helper during install wizard.
@@ -25,7 +26,7 @@ use GDO\Core\GDT_UInt;
  * Holds fields for a configuration form.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class Config
@@ -95,7 +96,7 @@ class Config
 		if (!defined('GDO_SEO_URLS')) define('GDO_SEO_URLS', false);
 		if (!defined('GDO_IPC')) define('GDO_IPC', 'none');
 		if (!defined('GDO_IPC_DEBUG')) define('GDO_IPC_DEBUG', false);
-		if (!defined('GDO_GDT_DEBUG')) define('GDO_GDT_DEBUG', false);
+		if (!defined('GDO_GDT_DEBUG')) define('GDO_GDT_DEBUG', 0);
 		if (!defined('GDO_JSON_DEBUG')) define('GDO_JSON_DEBUG', false);
 		# HTTP
 		if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
@@ -121,7 +122,7 @@ class Config
 		if (!defined('GDO_DB_USER')) define('GDO_DB_USER', '');
 		if (!defined('GDO_DB_PASS')) define('GDO_DB_PASS', '');
 		if (!defined('GDO_DB_NAME')) define('GDO_DB_NAME', '');
-		if (!defined('GDO_DB_DEBUG')) define('GDO_DB_DEBUG', false);
+		if (!defined('GDO_DB_DEBUG')) define('GDO_DB_DEBUG', 0);
 		# Cache
 		if (!defined('GDO_FILECACHE')) define('GDO_FILECACHE', false);
 		if (!defined('GDO_MEMCACHE')) define('GDO_MEMCACHE', false);
@@ -164,7 +165,7 @@ class Config
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD),
 			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC),
 			GDT_Checkbox::make('ipc_debug')->initialValue(GDO_IPC_DEBUG?true:false),
-			GDT_Checkbox::make('gdt_debug')->initialValue(GDO_GDT_DEBUG),
+			GDT_TinyInt::make('gdt_debug')->unsigned()->initialValue(GDO_GDT_DEBUG)->min(0)->max(2),
 			GDT_Checkbox::make('json_debug')->initialValue(GDO_JSON_DEBUG?true:false),
 			# HTTP
 			GDT_Divider::make()->label('install_config_section_http'),
@@ -191,8 +192,7 @@ class Config
 			GDT_String::make('db_user')->initialValue(GDO_DB_USER),
 			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS),
 			GDT_String::make('db_name')->initialValue(GDO_DB_NAME),
-			//			 Text::make('db_prefix')->initialValue(GDO_DB_PREFIX)->notNull(),
-			GDT_Checkbox::make('db_debug')->initialValue(GDO_DB_DEBUG),
+			GDT_TinyInt::make('db_debug')->unsigned()->initialValue(GDO_DB_DEBUG)->min(0)->max(2),
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
 			GDT_Checkbox::make('filecache')->initialValue(GDO_FILECACHE),

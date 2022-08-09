@@ -31,7 +31,7 @@ use GDO\Language\Module_Language;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.1-r1411';
+	const GDO_REVISION = '7.0.1-r1413';
 	
 	##############
 	### Module ###
@@ -43,8 +43,6 @@ final class Module_Core extends GDO_Module
 	public function getTheme() : string { return 'default'; }
 	
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/core'); }
-	
-	public function thirdPartyFolders() : array { return ['/htmlpurifier/']; }
 	
 	public function getClasses() : array
 	{
@@ -79,6 +77,14 @@ final class Module_Core extends GDO_Module
 		if (PHP_MAJOR_VERSION < 8)
 		{
 			return $this->errorSystemDependency('err_php_major_version', ['8.0']);
+		}
+		if (!function_exists('mb_strcut'))
+		{
+			return $this->errorSystemDependency('err_php_extension', ['mbstring']);
+		}
+		if (!function_exists('iconv'))
+		{
+			return $this->errorSystemDependency('err_php_extension', ['iconv']);
 		}
 		return true;
 	}

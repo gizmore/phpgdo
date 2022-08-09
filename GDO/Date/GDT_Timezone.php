@@ -28,7 +28,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
         $this->completionHref(href('Date', 'TimezoneComplete'));
     }
     
-    public function inputToVar(string $input=null) : ?string
+    public function inputToVar($input) : ?string
     {
     	if ($input !== null)
     	{

@@ -29,7 +29,7 @@ if (isset($field->completionHref))
   <option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$choice instanceof GDO ? $choice->renderChoice() : $field->displayChoice($field->getVar())?></option>
 <?php endif; ?>
 <?php else : ?>
-<?php foreach ($field->getChoices() as $var => $choice) : ?>
+<?php foreach ($field->initChoices() as $var => $choice) : ?>
   <option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderChoice() : $field->displayChoice($var)?></option>
 <?php endforeach; ?>
 <?php endif; ?>

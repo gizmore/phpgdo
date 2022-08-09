@@ -8,7 +8,7 @@ use GDO\Javascript\MinifyJS;
  * Can make use of minifier.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * @see Module_Javascript
  */
@@ -17,24 +17,24 @@ final class Javascript
 	###################################
 	### Asset loader and obfuscator ###
 	###################################
-	public static $_JAVASCRIPTS = [];
-	public static $_JAVASCRIPT_PRE_INLINE = '';
-	public static $_JAVASCRIPT_POST_INLINE = '';
+	public static array  $_JAVASCRIPTS = [];
+	public static string $_JAVASCRIPT_PRE_INLINE = '';
+	public static string $_JAVASCRIPT_POST_INLINE = '';
 	
 	###########
 	### Add ###
 	###########
-	public static function addJS($path)
+	public static function addJS(string $path) : void
 	{
 		self::$_JAVASCRIPTS[] = $path;
 	}
 	
-	public static function addJSPreInline($script_html)
+	public static function addJSPreInline(string $script_html) : void
 	{
 	    self::$_JAVASCRIPT_PRE_INLINE .= $script_html . "\n";
 	}
 	
-	public static function addJSPostInline($script_html)
+	public static function addJSPostInline(string $script_html) : void
 	{
 	    self::$_JAVASCRIPT_POST_INLINE .= $script_html . "\n";
 	}
@@ -42,7 +42,7 @@ final class Javascript
 	##############
 	### Render ###
 	##############
-	public static function displayJavascripts()
+	public static function displayJavascripts() : string
 	{
 		$minify = GDO_Module::config_var('Javascript', 'minify_js', 'no');
 		$minify = $minify === 'concat';
@@ -64,17 +64,17 @@ final class Javascript
 	###############
 	### Private ###
 	###############
-	private static function displayJavascriptPreInline()
+	private static function displayJavascriptPreInline() : string
 	{
 	    return self::displayJavascriptInline(self::$_JAVASCRIPT_PRE_INLINE);
 	}
 	
-	private static function displayJavascriptPostInline()
+	private static function displayJavascriptPostInline() : string
 	{
 	    return self::displayJavascriptInline(self::$_JAVASCRIPT_POST_INLINE);
 	}
 	
-	private static function displayJavascriptInline($inline)
+	private static function displayJavascriptInline(string $inline) : string
 	{
 	    return $inline ? sprintf("<script>\n%s\n</script>\n", $inline) : '';
 	}

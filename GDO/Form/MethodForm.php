@@ -19,8 +19,8 @@ abstract class MethodForm extends Method
 	#################
 	### Submitted ###
 	#################
-	public ?string $pressedButton = null;
 	public bool $submitted = false;
+	public ?string $pressedButton = null;
 	public function submitted(bool $submitted=true) : self
 	{
 		$this->submitted = $submitted;
@@ -54,10 +54,28 @@ abstract class MethodForm extends Method
 		$this->message('msg_form_validated');
 		return $this->renderPage();
 	}
-	
-	public function resetForm() : void
+
+	/**
+	 * Reset a form.
+	 * Clear the form.
+	 * Reset GDT to initial.
+	 * Optionally remove inputs.
+	 */
+	public function resetForm(bool $removeInput = false) : void
 	{
-		unset($this->form);
+		if (isset($this->form))
+		{
+			$fields = $this->form->getAllFields();
+			foreach ($fields as $gdt)
+			{
+				$gdt->reset($removeInput);
+			}
+			unset($this->form);
+		}
+		if ($removeInput)
+		{
+			unset($this->inputs);
+		}
 	}
 	
 	public function &gdoParameterCache() : array

@@ -38,9 +38,9 @@ return [
 	'mt_user_profile' => '%s\'s Profile',
 	'tt_user_level' => '%s holds userlevel %s.',
 	
-	'lbl_acl_level' => '%s requires level',
-	'lbl_acl_relation' => '%s is visible for',
-	'lbl_acl_permission' => '%s is visible for',
+	'lbl_acl_level' => '`%s` requires level',
+	'lbl_acl_relation' => '`%s` visible for',
+	'lbl_acl_permission' => '`%s` requires permission',
 	
 	'enum_acl_hidden' => 'Hidden',
 	'enum_acl_noone' => 'Noone',

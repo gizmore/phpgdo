@@ -174,8 +174,8 @@ return [
 	
 	# CBX
 	'sel_all' => 'Select All',
-	'sel_checked' => 'Entries with Yes',
-	'sel_unchecked' => 'Entries with No',
+	'sel_checked' => 'Yes',
+	'sel_unchecked' => 'No',
 	
 	# Fineprint
 	'privacy' => 'Privacy',

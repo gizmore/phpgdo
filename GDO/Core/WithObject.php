@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
+use GDO\UI\TextStyle;
 
 /**
  * You would expect this to be in GDT_Object,
@@ -10,7 +11,6 @@ use GDO\DB\Query;
  * @author gizmore
  * @version 7.0.1
  * @since 6.0.0
- *       
  * @see GDT_Object
  * @see GDT_ObjectSelect
  */
@@ -22,12 +22,8 @@ trait WithObject
 	# ## With Object ###
 	# ##################
 	public GDO $table;
-
 	/**
 	 * The GDO table to operate on.
-	 *
-	 * @param GDO $table
-	 * @return self
 	 */
 	public function table(GDO $table): self
 	{
@@ -56,28 +52,12 @@ trait WithObject
 	{
 		if ($var !== null)
 		{
-			// $noCompletion =
-			// Application::$INSTANCE->isCLI() ||
-			// @$_REQUEST['nocompletion_'.$this->name];
-
-			# Without javascript, convert the name input
-			// if ($noCompletion)
-			// {
-			// unset($_REQUEST['nocompletion_'.$this->name]);
-
 			if (($gdo = $this->table->getById($var)) ||
 				($gdo = $this->getByName($var)))
 			{
 				// $this->addInput($this->getName(), $gdo->getID());
 				return $gdo;
 			}
-
-			// }
-			// # @TODO: GDO->findOnlyCachedBy[IDs]()
-			// if ($user = $this->table->findCached(...explode(':', $var)))
-			// {
-			// return $user;
-			// }
 		}
 	}
 
@@ -178,14 +158,13 @@ trait WithObject
 		}
 		else
 		{
-			return sprintf('<i>%s</i>', t('none'));
+			return TextStyle::italic(t('none'));
 		}
 	}
 
 	public function getGDOData(): ?array
 	{
 		if ($gdo = $this->getValue())
-		// if ($gdo = $this->toValue($this->getVar()))
 		{
 			if (is_object($gdo))
 			{
@@ -238,10 +217,6 @@ trait WithObject
 		}
 	}
 
-	/**
-	 *
-	 * @return GDO
-	 */
 	public function plugVars(): array
 	{
 		if (isset($this->table))
@@ -335,6 +310,7 @@ trait WithObject
 		return $this;
 	}
 
+	#####
 	/**
 	 * If object columns are not null, they cascade upon deletion.
 	 */

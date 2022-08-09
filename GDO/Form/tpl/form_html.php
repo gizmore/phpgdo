@@ -5,7 +5,7 @@ use GDO\Form\GDT_Form;
  * @var GDT_Form $field
  */
 ?>
-<div class="gdt-form<?=$field->slim?' gdt-form-slim':' gdt-form-compact'?>" <?=$field->htmlID()?>>
+<div<?=$field->htmlID()?> class="gdt-form<?=$field->slim?' gdt-form-slim':' gdt-form-compact'?>">
 
 <?php if ($field->hasError()) : ?>
   <?=$field->renderError()?>
@@ -34,7 +34,7 @@ foreach ($field->getFields() as $gdt)
 	{
 		$gdt->gdo($field->gdo);
 	}
-	echo $gdt->render();
+	echo $gdt->renderForm();
 }
 ?>
    </div>

@@ -38,9 +38,9 @@ return [
 	'mt_user_profile' => '%s\'s Profil',
 	'tt_user_level' => '%s hält einen Nutzerlevel von %s.',
 	
-	'lbl_acl_level' => '%s sichtbar ab Level',
-	'lbl_acl_relation' => '%s sichtbar für',
-	'lbl_acl_permission' => '%s - Sichtbarkeitsrechte',
+	'lbl_acl_level' => '`%s` sichtbar ab Level',
+	'lbl_acl_relation' => '`%s` sichtbar für',
+	'lbl_acl_permission' => '`%s`- benö. Rechte',
 	
 	'enum_acl_hidden' => 'Verbergen',
 	'enum_acl_noone' => 'Niemanden',

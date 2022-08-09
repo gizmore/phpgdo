@@ -162,6 +162,20 @@ final class Strings
 		return $text;
 	}
 
+	###################
+	### UTF8 strcmp ###
+	###################
+	/**
+	 * UTF8 supported string comparison
+// 	 * @deprecated Slow.
+	 */
+	public static function compare(string $a, string $b) : int
+	{
+		$a = iconv('utf-8', 'ascii//TRANSLIT', $a);
+		$b = iconv('utf-8', 'ascii//TRANSLIT', $b);
+		return strcasecmp($a, $b);
+	}
+	
 	#####################
 	### HTML Shrinker ###
 	#####################
