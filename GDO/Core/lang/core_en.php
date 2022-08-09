@@ -60,6 +60,13 @@ return [
 	'err_string_length' => 'This text has to be between %s and %s chars in length.',
 	'err_unknown_order_column' => 'This column is unknown and cannot be sorted by: %s.',
 	'err_no_data_yet' => 'There is no data for this item yet.',
+	'err_pass_too_short' => 'Your password has to be at least %s characters long.',
+	'err_members_only' => 'You need to signup to continue.',
+	'err_only_member_access' => 'Only Members are allowed to access this.',
+	'err_only_friend_access' => 'Only their friends are allowed to access this.',
+	'err_only_private_access' => 'Only the user theyself is allowed to access this.',
+	'err_unknown_acl_setting' => 'Unknown ACL Setting: %s.',
+	'err_submit_without_click_handler' => 'A submit button is missing a click handler.',
 	
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
@@ -71,6 +78,8 @@ return [
 	
 	# Enum
 	'enum_none' => '-None-',
+	'enum_all' => 'All',
+	'enum_staff' => 'Staff',
 	
 	# Permissions
 	'perm_admin' => 'Admin',
@@ -79,6 +88,7 @@ return [
 	
 	# Buttons
 	'btn_back' => 'Back',
+	'btn_create' => 'Create',
 	'btn_delete' => 'Delete',
 	'btn_edit' => 'Edit',
 	'btn_overview' => 'Overview',
@@ -103,6 +113,9 @@ return [
 	'enum_bot' => 'Bot',
 	
 	# GDTs
+	'ghost' => 'Ghost',
+	'guest' => 'Guest',
+	'last_url' => 'Last URL',
 	'age' => 'Age',
 	'file_size' => 'Filesize',
 	'folder' => 'Folder',
@@ -157,6 +170,7 @@ return [
 	'quote_by' => 'Quote by %s',
 	'quote_at' => 'At %s',
 	'not_specified' => 'Not Specified',
+	'email' => 'E-Mail',
 	
 	# CBX
 	'sel_all' => 'Select All',
@@ -248,4 +262,7 @@ The %2$s System',
 	'add_permissions' => 'Add a permisison',
 
 	'mt_sort' => 'Sort %s Database',
+	
+	'mt_crud_create' => 'New %s',
+	
 ];

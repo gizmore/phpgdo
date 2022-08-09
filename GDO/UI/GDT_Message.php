@@ -241,6 +241,27 @@ class GDT_Message extends GDT_Text
         ];
     }
     
+    public function inputs(array $inputs = null) : self
+    {
+    	return parent::inputs($inputs);
+    }
+    
+    public function getVar()
+    {
+    	$name = $this->getName();
+    	if (isset($this->inputs[$name]))
+    	{
+    		$input = $this->inputs[$name];
+    		return $this->inputToVar($input);
+    	}
+    	if (isset($this->inputs["{$name}_input"]))
+    	{
+    		$input = $this->inputs["{$name}_input"];
+    		return $this->inputToVar($input);
+    	}
+    	return $this->msgInput;
+    }
+    
     public function gdo(GDO $gdo = null) : self
     {
     	return $this->var($gdo->gdoVar("{$this->name}_input"));
@@ -277,7 +298,7 @@ class GDT_Message extends GDT_Text
     ##############
     ### Getter ###
     ##############
-    public function getVar() { return $this->getVarInput(); }
+//     public function getVar() { return $this->getVarInput(); }
     public function getVarInput() : ?string { return $this->msgInput; }
     public function getVarOutput() : ?string { return $this->msgOutput; }
     public function getVarText() : ?string { return $this->msgText; }

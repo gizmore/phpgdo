@@ -144,7 +144,7 @@ class GDT_ObjectSelect extends GDT_Select
 		return json_encode(array_values($ids));
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		if ($var)
 		{
@@ -163,7 +163,7 @@ class GDT_ObjectSelect extends GDT_Select
 		
 		if (!is_array($var))
 		{
-		    $var = json_decode($var);
+		    $var = json_decode($var, true);
 		}
 		
 		foreach ($var as $id)

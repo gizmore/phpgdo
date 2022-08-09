@@ -52,7 +52,7 @@ trait WithObject
 		return $value !== null ? $value->getID() : null;
 	}
 
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		if ($var !== null)
 		{
@@ -187,13 +187,25 @@ trait WithObject
 		if ($gdo = $this->getValue())
 		// if ($gdo = $this->toValue($this->getVar()))
 		{
+			if (is_object($gdo))
+			{
+				return [
+					$this->name => $gdo->getID(),
+				];
+			}
+			elseif (is_array($gdo))
+			{
+				return [
+					$this->name => json_encode(array_keys($gdo)),
+				];
+			}
+		}
+		else
+		{
 			return [
-				$this->name => $gdo->getID()
+				$this->name => null,
 			];
 		}
-		return [
-			$this->name => null
-		];
 	}
 
 	# ###############

@@ -59,7 +59,7 @@ class GDT_Validator extends GDT
 	public function validate($value) : bool
 	{
 		$field = $this->validatorField;
-		return call_user_func($this->validator, $this->validatorForm, $field, $value);
+		return call_user_func($this->validator, $this->validatorForm, $field, $field->getValue());
 	}
 	
 	##############

@@ -108,26 +108,6 @@ class GDT_User extends GDT_Object
 		}
 	}
 
-// 	public function findByName($name)
-// 	{
-// 		if (str_starts_with($name, GDO_User::GHOST_NAME_PREFIX))
-// 		{
-// 			return null;
-// 		}
-// // 		elseif (str_starts_with($name, GDO_User::REAL_NAME_PREFIX))
-// // 		{
-// // 			return GDO_User::table()->findBy('user_real_name', trim($name, GDO_User::REAL_NAME_PREFIX.GDO_User::REAL_NAME_POSTFIX));
-// // 		}
-// 		elseif (str_starts_with($name, GDO_User::GUEST_NAME_PREFIX))
-// 		{
-// 			return GDO_User::table()->findBy('user_guest_name', trim($name, GDO_User::GUEST_NAME_PREFIX));
-// 		}
-// 		else
-// 		{
-// 			return GDO_User::getByName($name);
-// 		}
-// 	}
-	
 	protected function getGDOsByName(string $var): array
 	{
 		$field = 'user_name';

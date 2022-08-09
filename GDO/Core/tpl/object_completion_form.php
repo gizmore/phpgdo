@@ -3,7 +3,7 @@ namespace GDO\Core\tpl;
 /** @var $field \GDO\Core\GDT_Object **/
 ?>
 <div class="gdt-container<?=$field->classError()?> gdo-autocomplete">
- <div><label<?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label></div>
+ <label<?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
  <span>
   <input
 <?=$field->htmlAutocompleteOff()?>

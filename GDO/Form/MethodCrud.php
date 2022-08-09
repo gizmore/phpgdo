@@ -182,7 +182,7 @@ abstract class MethodCrud extends MethodForm
 		if ($gdt->writeable)
 		{
 // 	        $gdt->writeable = $this->crudMode !== self::READ;
-			if (!$gdt->virtual)
+			if (!$gdt->isVirtual())
 			{
 			    $form->addField($gdt);
 			}

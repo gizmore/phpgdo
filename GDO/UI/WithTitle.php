@@ -6,7 +6,7 @@ namespace GDO\UI;
  * This title is not rendered with a H tag.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.1
  * @see GDT_Headline
  */
@@ -38,6 +38,14 @@ trait WithTitle
 	    return $this;
 	}
 	
+	public function noTitle() : self
+	{
+		unset($this->titleRaw);
+		unset($this->titleKey);
+		unset($this->titleArgs);
+		return $this;
+	}
+	
 	##############
 	### Render ###
 	##############
@@ -62,12 +70,4 @@ trait WithTitle
 		}
 	}
 	
-	public function noTitle() : self
-	{
-		unset($this->titleRaw);
-		unset($this->titleKey);
-		unset($this->titleArgs);
-		return $this;
-	}
-
 }

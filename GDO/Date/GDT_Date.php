@@ -46,7 +46,7 @@ class GDT_Date extends GDT_Timestamp
 		return $input;
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 	    return empty($var) ? null : Time::parseDateTimeDB($var);
 	}

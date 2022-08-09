@@ -418,7 +418,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 
 elseif ($argv[1] === 'admin')
 {
-	if ($argc !== 4)
+	if ( ($argc !== 4) && ($argc !== 5) )
 	{
 		printUsage();
 	}

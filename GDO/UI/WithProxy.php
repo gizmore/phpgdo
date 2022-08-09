@@ -83,10 +83,10 @@ trait WithProxy
 	
 	public function toVar($value) : ?string
 	{
-		return $this->proxy->toVar();
+		return $this->proxy->toVar($value);
 	}
 	
-	public function toValue(string $var=null)
+	public function toValue($var=null)
 	{
 		return $this->proxy->toValue($var);
 	}

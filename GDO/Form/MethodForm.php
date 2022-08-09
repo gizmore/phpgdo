@@ -101,7 +101,6 @@ abstract class MethodForm extends Method
 			}
 			$this->form->titleRaw($this->getMethodTitle());
 			$this->createForm($this->form);
-// 			$this->form->inputs($this->getInputs());
 		}
 		return $this->form;
 	}
@@ -158,19 +157,22 @@ abstract class MethodForm extends Method
 				if ($form->validate(null))
 				{
 					$this->validated = true;
-					$this->resetForm();
 					if ($gdt->onclick)
 					{
-						return $gdt->click();
+						$result = $gdt->click();
 					}
 					elseif ($this->pressedButton === 'submit')
 					{
-						return $this->formValidated($form);
+						$result = $this->formValidated($form);
 					}
 					else
 					{
 						throw new GDO_Error('err_submit_without_click_handler');
 					}
+					
+					$this->resetForm();
+					
+					return $result;
 				}
 				else
 				{

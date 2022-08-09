@@ -257,17 +257,9 @@ abstract class Method #extends GDT
 	 */
 	public function execWrap()
 	{
-		# Exec
 		if ($response = $this->executeWithInit())
 		{
-// 			if ($response->hasError())
-// 			{
-// 				$this->setupSEOError();
-// 			}
-// 			else
-// 			{
-				$this->setupSEO();
-// 			}
+			$this->setupSEO();
 		}
 		return $response;
 	}
@@ -289,6 +281,8 @@ abstract class Method #extends GDT
 		{
 			$transactional = false;
 			
+			$this->applyInput();
+			
 			# Init method
 			if ($result = $this->onInit())
 			{
@@ -302,8 +296,6 @@ abstract class Method #extends GDT
 				$db->transactionBegin();
 			}
 			
-			$this->applyInput();
-
 			if (Application::isError())
 			{
 				if ($transactional)

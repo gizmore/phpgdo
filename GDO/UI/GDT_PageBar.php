@@ -17,7 +17,7 @@ final class GDT_PageBar extends GDT_Enum
 		$this->enumValues('none', 'left', 'right', 'bottom');
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		switch ($var)
 		{

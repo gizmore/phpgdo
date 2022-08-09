@@ -14,7 +14,7 @@ use GDO\Core\GDT_Tuple;
  * It's the base class for MethodQueryTable or MethodQueryCards.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see ArrayResult
  * @see GDT_Table
@@ -253,7 +253,7 @@ abstract class MethodTable extends Method
 		$valid = true;
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
-			if (!$gdt->validateInput($this->getInput($gdt->getName())))
+			if (!$gdt->validated())
 			{
 				$valid = false;
 			}

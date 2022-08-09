@@ -1149,6 +1149,9 @@ abstract class GDO extends GDT
 		$gdoVars = [];
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
+			# Reset to initial state.
+			$gdt->reset();
+			
 			# init gdt with initial var.
 			if (isset($initial[$gdt->getName()]))
 			{

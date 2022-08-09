@@ -78,7 +78,7 @@ class GDT_Checkbox extends GDT_Select
 		else { return '2'; }
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		if ($var === '0') { return false; }
 		elseif ($var === '1') { return true; }

@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\Util\Strings;
 use GDO\Language\Trans;
+use GDO\UI\WithLabel;
 use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
 
@@ -18,9 +19,11 @@ use GDO\Util\FileUtil;
  */
 class GDT_Template extends GDT
 {
-// 	use WithGDO;
-// 	use WithLabel;
+	use WithGDO;
+	use WithLabel; # so you can use GDT_Template in GDT_Table
 // 	use WithFields;
+
+	public function isTestable() : bool { return false; } # skip this class in tests
 
 	/**
 	 * Loaded themes. Name => Path

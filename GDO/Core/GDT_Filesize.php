@@ -23,7 +23,7 @@ final class GDT_Filesize extends GDT_UInt
 		return '';
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 	    return $var === null ? null : (int) FileUtil::humanToBytes($var);
 	}

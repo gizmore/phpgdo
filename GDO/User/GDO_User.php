@@ -21,6 +21,8 @@ use GDO\Core\ModuleLoader;
  * The holy user class.
  * Most user related fields are in other module settings.
  * 
+ * @TODO Move user_password into a separate table.
+ * 
  * @author gizmore
  * @version 7.0.1
  * @since 1.0.0
@@ -31,7 +33,6 @@ use GDO\Core\ModuleLoader;
 final class GDO_User extends GDO
 {
 	const GUEST_NAME_PREFIX = '~';
-	const GHOST_NAME_PREFIX = '~~';
 	
 	#############
 	### Cache ###
@@ -67,7 +68,7 @@ final class GDO_User extends GDO
 			GDT_AutoInc::make('user_id'),
 			GDT_UserType::make('user_type'),
 			GDT_Username::make('user_name')->unique(),
-			GDT_Username::make('user_guest_name')->unique()->notNull(false),
+			GDT_Username::make('user_guest_name')->unique()->notNull(false)->label('user_guest_name'),
 			GDT_Level::make('user_level'),
 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
 			GDT_DeletedAt::make('user_deleted'),
@@ -378,15 +379,19 @@ final class GDO_User extends GDO
 		{
 			return html($name);
 		}
+		
+		$p = self::GUEST_NAME_PREFIX;
 		if ($name = $this->getGuestName())
 		{
-			return '~' . html($name) . '~';
+			return $p . html($name) . $p;
 		}
+		
+		$pp = $p.$p;
 		if ($this->isGhost())
 		{
-			return '~~' . t('ghost') . '~~';
+			return $pp . t('ghost') . $pp;
 		}
-		return '~~' . t('guest') . '~~';
+		return $pp . t('guest') . $pp;
 	}
 	
 	public function getProfileLink(bool $nickname=true, bool $avatar=true, bool $level=true) : GDT_ProfileLink
@@ -421,8 +426,7 @@ final class GDO_User extends GDO
 	public function setting(string $moduleName, string $key) : GDT
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
-		$gdt = $module->userSetting($this, $key);
-		return $gdt;
+		return $module->userSetting($this, $key);
 	}
 	
 	public function settingVar(string $moduleName, string $key) : ?string

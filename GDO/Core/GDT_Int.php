@@ -29,7 +29,7 @@ use GDO\DB\Query;
  */
 class GDT_Int extends GDT_DBField
 {
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $var === null ? null : intval($var, 10);
 	}

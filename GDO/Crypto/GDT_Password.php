@@ -34,7 +34,7 @@ class GDT_Password extends GDT_String
 
 	public function defaultLabel() : self { return $this->label('password'); }
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $var === null ? null : new BCrypt($var);
 	}

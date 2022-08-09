@@ -89,7 +89,7 @@ class GDT_Card extends GDT
 	{
 	    $back = [];
 	    
-	    if ($this->gdo)
+	    if (isset($this->gdo))
 	    {
 	        $back[] = t('id') . ': ' . $this->gdo->getID();
 	    }

@@ -29,14 +29,10 @@ class UserEdit extends MethodForm
 {
 	use MethodAdmin; # admin protection
 	
-	public function isShownInSitemap() : bool { return false; }
-	
 	public function getMethodTitle() : string
 	{
 		return t('mt_admin_useredit', [$this->getUser()->renderUserName()]);
 	}
-	
-	private GDO_User $user;
 	
 	public function gdoParameters() : array
 	{
@@ -45,7 +41,7 @@ class UserEdit extends MethodForm
 	    ];
 	}
 	
-	public function getUser() : ?GDO_User
+	public function getUser() : GDO_User
 	{
 		return $this->gdoParameterValue('user');
 	}
@@ -64,6 +60,7 @@ class UserEdit extends MethodForm
 		# Add all columns
 	    $table = GDO_User::table();
 	    $user = $this->getUser();
+	    $form->gdo($user);
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
 			if ($name = $gdt->getName())
@@ -74,29 +71,27 @@ class UserEdit extends MethodForm
 		
 		# Add buttons
 		$form->actions()->addField(GDT_Submit::make());
-		$form->actions()->addField(GDT_DeleteButton::make()->onclick([$this, 'onDeleteUser()', $this->getUser()]));
+		$form->actions()->addField(GDT_DeleteButton::make()->onclick([$this, 'onDeleteUser()']));
 		$form->addField(GDT_AntiCSRF::make());
-		
-		# Fill form values with user data
-// 		$this->withAppliedInputs($this->getUser()->getGDOVars());
 		
 		# Patch columns a bit
 		$form->getField('user_name')->noPattern(null);
-		$form->getField('user_password')->notNull(false)->gdo(null)->initial('');
-		$form->getField('user_id')->writeable(false);
+		$form->getField('user_password')->notNull(false)->initial('');
+// 		$form->getField('user_id')->writeable(false);
 	}
 	
 	public function formValidated(GDT_Form $form)
 	{
+		$user = $this->getUser();
 		$values = $form->getFormVars();
 		$password = $values['user_password'];
 		unset($values['user_password']);
 		
-		$this->user->saveVars($values);
+		$user->saveVars($values);
 // 		$form->withGDOValuesFrom($this->user);
 		if (!empty($password))
 		{
-			$this->user->saveVar('user_password', BCrypt::create($password)->__toString());
+			$user->saveVar('user_password', BCrypt::create($password)->__toString());
 			return $this->message('msg_user_password_is_now', [$password])->addField(parent::formValidated($form));
 		}
 		return parent::formValidated($form)->addField($this->renderPage());

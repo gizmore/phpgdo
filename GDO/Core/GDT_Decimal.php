@@ -77,7 +77,7 @@ class GDT_Decimal extends GDT_Int
 		return $var;
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $var === null ? null : round(floatval($var), $this->digitsAfter);
 	}

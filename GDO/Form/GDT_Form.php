@@ -14,6 +14,7 @@ use GDO\Core\WithName;
 use GDO\Core\WithVerb;
 use GDO\UI\GDT_SearchField;
 use GDO\Table\GDT_Order;
+use GDO\Core\WithGDO;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
@@ -31,6 +32,7 @@ use GDO\Table\GDT_Order;
  */
 final class GDT_Form extends GDT
 {
+	use WithGDO; # GDO
 	use WithName; # Id
 	use WithText; # form info
 	use WithVerb; # http request method

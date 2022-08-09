@@ -53,7 +53,10 @@ trait WithInput
 	{
 		if ($name = $this->getName())
 		{
-			return isset($this->inputs[$name]);
+			if (isset($this->inputs[$name]))
+			{
+				return $this->inputs[$name] !== null;
+			}
 		}
 		return false;
 	}

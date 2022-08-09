@@ -10,7 +10,7 @@ use GDO\Util\Strings;
  * Themes have hard times here.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 final class GDT_LangSwitch extends GDT_Select

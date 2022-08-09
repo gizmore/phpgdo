@@ -10,6 +10,7 @@ use function PHPUnit\Framework\assertEquals;
 use GDO\Core\Debug;
 use GDO\Core\ModuleLoader;
 use GDO\Date\GDT_DateDisplay;
+use GDO\Language\GDT_LangSwitch;
 
 /**
  * Test all rendering methods on all GDO + GDT.
@@ -135,7 +136,7 @@ final class AutomatedRenderingTest extends TestCase
 	{
 // 		$this->renderAll($gdt); # unplugged
 
-// 		if ($gdt instanceof GDT_DateDisplay)
+// 		if ($gdt instanceof GDT_LangSwitch)
 // 		{
 // 			xdebug_break();
 // 		}
@@ -189,6 +190,11 @@ final class AutomatedRenderingTest extends TestCase
 	
 	private function renderAll(GDT $gdt) : bool
 	{
+// 		if ($gdt instanceof GDT_LangSwitch)
+// 		{
+// 			xdebug_break();
+// 		}
+		
 // 		$table = GDT_Table::make();
 // 		$table->addHeaders($gdt);
 		# various output/rendering formats

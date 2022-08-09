@@ -31,7 +31,7 @@ class GDT_Version extends GDT_String
 		return $value ? $value->__toString() : null;
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $var ? new Version($var) : null;
 	}

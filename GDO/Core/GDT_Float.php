@@ -11,7 +11,7 @@ class GDT_Float extends GDT_Int
 	#######################
 	### Input/Var/Value ###
 	#######################
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		if ($var === null)
 		{

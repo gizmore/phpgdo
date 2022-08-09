@@ -650,7 +650,7 @@ abstract class GDT
 		return $value;
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $var;
 	}

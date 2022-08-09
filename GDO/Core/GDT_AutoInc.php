@@ -18,7 +18,7 @@ final class GDT_AutoInc extends GDT_UInt
 	############
 	### Base ###
 	############
-	public bool $hidden = true; # hide in forms
+// 	public bool $hidden = true; # hide in tables
 	public bool $notNull = true;
 	public bool $writeable = false;
 

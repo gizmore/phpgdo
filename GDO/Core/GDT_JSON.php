@@ -22,7 +22,7 @@ class GDT_JSON extends GDT_Text
 	public static function decode(string $string) : ?array { return @json_decode($string, true); }
 	
 	public function toVar($value) : ?string { return $value === null ? null : self::encode($value); }
-	public function toValue(string $var = null) { return $var === null ? null : self::decode($var); }
+	public function toValue($var = null) { return $var === null ? null : self::decode($var); }
 
 	public function renderJSON()
 	{

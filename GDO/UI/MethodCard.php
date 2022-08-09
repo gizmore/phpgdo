@@ -81,7 +81,7 @@ abstract class MethodCard extends Method
 		{
 			return $gdo->renderName();
 		}
-		return parent::getTitle();
+		return parent::getMethodTitle();
 	}
 
 }

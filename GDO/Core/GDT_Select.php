@@ -61,7 +61,7 @@ class GDT_Select extends GDT_ComboBox
 			$value = $this->toValue($var);
 		}
 // 		$this->valueConverted = true;
-		$this->value = $value;
+// 		$this->value = $value;
 		return $value;
 	}
 	
@@ -100,7 +100,7 @@ class GDT_Select extends GDT_ComboBox
 		return null;
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $this->selectToValue($var);
 	}
@@ -489,12 +489,25 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function displayVar(string $var=null) : string
 	{
-		if (empty($var))
+		if ($var === null)
 		{
 			return "<i>" . t('none') . "</i>";
 		}
 		$this->initChoices();
-		return isset($this->choices[$var]) ? $this->choices[$var] : '';
+		
+		if (!isset($this->choices[$var]))
+		{
+			return GDT::EMPTY_STRING;
+		}
+		
+		$value = $this->choices[$var];
+		
+		if (is_string($value))
+		{
+			return $value;
+		}
+		
+		return $value->renderName();
 	}
 	
 	public function renderFilter($f) : string
@@ -513,7 +526,7 @@ class GDT_Select extends GDT_ComboBox
 	{
 		$this->initChoices();
 		$result = [];
-		foreach ($this->choices as $choice)
+		foreach (array_keys($this->choices) as $choice)
 		{
 			$result[] = $choice;
 			if (count($result) >= 2)

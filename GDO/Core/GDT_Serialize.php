@@ -32,7 +32,7 @@ class GDT_Serialize extends GDT_Text
 		return empty($value) ? null : self::serialize($value);
 	}
 	
-	public function toValue(string $var = null)
+	public function toValue($var = null)
 	{
 		return $var === null ? null : self::unserialize($var);
 	}
