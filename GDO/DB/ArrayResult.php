@@ -78,7 +78,7 @@ final class ArrayResult extends Result
 	{
 	    if ($o = $this->fetchObject())
 	    {
-	        $gdo->setGDOVars($o->getGDOVars());
+	        return $gdo->setGDOVars($o->getGDOVars());
 	    }
 	    return null;
 	}
