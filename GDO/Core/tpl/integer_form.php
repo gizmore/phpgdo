@@ -12,7 +12,7 @@ use GDO\Core\GDT_Int;
  min="<?=$field->min?>"
  max="<?=$field->max?>"
  step="<?=$field->step?>"
-<?=$field->htmlFormName()?>
+<?=$field->htmlName()?>
 <?=$field->htmlDisabled()?>
 <?=$field->htmlRequired()?>
 <?=$field->htmlFocus()?>

@@ -6,7 +6,7 @@ use GDO\Form\GDT_AntiCSRF;
 <div class="gdt-container<?=$field->classError()?>">
   <input
    type="hidden"
-   <?=$field->htmlFormName()?>
+   <?=$field->htmlName()?>
    value="<?=$field->csrfToken()?>" />
   <?=$field->htmlError()?>
 </div>

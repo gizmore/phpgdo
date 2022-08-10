@@ -5,7 +5,7 @@ namespace GDO\Date\tpl\form;
 <div class="gdt-container<?=$field->classError()?>">
 <label<?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
 <input<?=$field->htmlID()?> type="time"
-<?=$field->htmlFormName()?>
+<?=$field->htmlName()?>
  value="<?=$field->renderVar()?>"
 <?=$field->htmlDisabled()?> />
  <?=$field->htmlError()?>

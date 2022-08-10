@@ -9,7 +9,7 @@ namespace GDO\Core\tpl;
    type="number"
    step="1"
    <?=$field->htmlFocus()?>
-   <?=$field->htmlFormName()?>
+   <?=$field->htmlName()?>
    value="<?=$field->renderVar()?>"
    <?=$field->htmlRequired()?>
    <?=$field->htmlDisabled()?> />

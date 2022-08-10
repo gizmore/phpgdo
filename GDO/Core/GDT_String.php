@@ -162,8 +162,8 @@ class GDT_String extends GDT_DBField
 			return false;
 		}
 		return $value === null ? true :  
-			$this->validatePattern($value) &&
-			$this->validateLength($value);
+			($this->validatePattern($value) &&
+			$this->validateLength($value));
 	}
 	
 	##########
@@ -230,16 +230,16 @@ class GDT_String extends GDT_DBField
 		return $out;
 	}
 	
-	public function renderHTML() : string
-	{
-		$text = $this->renderCLI();
-		return "<div>{$text}</div>";
-	}
+// 	public function renderHTML() : string
+// 	{
+// 		$text = $this->renderCLI();
+// 		return "<div>{$text}</div>";
+// 	}
 	
-	public function renderCell() : string
-	{
-		return (string) $this->getVar();
-	}
+// 	public function renderCell() : string
+// 	{
+// 		return (string) $this->getVar();
+// 	}
 	
 	public function renderForm() : string
 	{

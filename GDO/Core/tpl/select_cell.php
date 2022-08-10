@@ -18,7 +18,7 @@ if (isset($field->completionHref))
 <?php if ($field->hasCompletion()) : ?>
  data-config='<?=$field->displayConfigJSON()?>'
 <?php endif; ?>
-<?=$field->htmlFormName()?>
+<?=$field->htmlName()?>
 <?=$field->htmlMultiple()?>
 <?=$field->htmlDisabled()?>>
 <?php if ($field->hasEmptyLabel()) : ?>

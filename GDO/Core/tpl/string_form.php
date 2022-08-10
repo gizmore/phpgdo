@@ -14,7 +14,7 @@ use GDO\Core\GDT_String;
   <?=$field->htmlDisabled()?>
   maxlength="<?=$field->max?>"
   size="<?=min($field->max, 32)?>"
-  <?=$field->htmlFormName()?>
+  <?=$field->htmlName()?>
   <?=$field->htmlValue()?> />
   <?=$field->htmlError()?>
 </div>

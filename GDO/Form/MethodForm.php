@@ -102,10 +102,12 @@ abstract class MethodForm extends Method
 	
 	public function getForm() : GDT_Form
 	{
-		$inputs = $this->getInputs();
 		if (!isset($this->form))
 		{
+			$inputs = $this->getInputs();
 			$this->submitted = false;
+			$this->validated = false;
+			$this->pressedButton = null;
 			$this->form = GDT_Form::make($this->getFormName());
 			$this->form->inputs($inputs);
 			$this->form->actions()->inputs($inputs);
@@ -113,11 +115,11 @@ abstract class MethodForm extends Method
 			$this->applyInput();
 			$this->createForm($this->form);
 		}
-		else
-		{
-			$this->form->inputs($inputs);
-			$this->form->actions()->inputs($inputs);
-		}
+// 		else
+// 		{
+// 			$this->form->inputs($inputs);
+// 			$this->form->actions()->inputs($inputs);
+// 		}
 		return $this->form;
 	}
 	
@@ -145,7 +147,7 @@ abstract class MethodForm extends Method
 	############
 	public function execute()
 	{
-		### validation result 
+// 		### validation result 
 		$this->submitted = false;
 		$this->validated = false;
 		$this->pressedButton = null;

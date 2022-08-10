@@ -8,7 +8,7 @@ namespace GDO\UI\tpl;
 <textarea
 <?=$field->htmlRows()?>
 <?=$field->htmlFocus()?>
-<?=$field->htmlFormName()?>
+<?=$field->htmlName()?>
 <?=$field->htmlRequired()?>
 <?=$field->htmlDisabled()?>><?=html($field->getVar())?></textarea>
  <?=$field->htmlError()?>

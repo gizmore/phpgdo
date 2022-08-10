@@ -5,7 +5,7 @@
   <input
    <?=$field->htmlID()?>
    type="number"
-   <?=$field->htmlFormName()?>
+   <?=$field->htmlName()?>
    <?= $field->htmlDisabled(); ?>
    <?= $field->htmlRequired(); ?>
    min="<?= $field->min; ?>"

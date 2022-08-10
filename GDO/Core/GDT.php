@@ -14,8 +14,8 @@ use GDO\UI\TextStyle;
  * HTML SUBMODES : HTML / CARD / FORM / OPTION / LIST /
  * TABLE SUBMODES: ORDER / CELL / THEAD / TFOOT / FILTER
  * 
- * The current rendering mode is stored in Application.
- * 
+ * The current rendering mode is stored in @link \GDO\Core\Application
+ *  
  * @author gizmore
  * @version 7.0.1
  * @since 5.0.0
@@ -185,6 +185,9 @@ abstract class GDT
 	#############################
 	### render default stubs ####
 	#############################
+	/**
+	 * @return string|array
+	 */
 	public function render() { return $this->renderGDT(); }
 	public function renderNIL() : ?string { return null; }
 	public function renderBinary() : string { return self::EMPTY_STRING; }
@@ -202,7 +205,7 @@ abstract class GDT
 	public function renderOption() : string { return $this->renderHTML(); }
 	# HTML table rendering
 	public function renderTHead() : string { return $this->renderHTML(); }
-	public function renderOrder() : string { return $this->renderLabelText(); }
+	public function renderOrder() : string { return ''; }
 	public function renderFilter($f) : string { return self::EMPTY_STRING; }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderTFoot() : string { return $this->renderHTML(); }
@@ -249,7 +252,7 @@ abstract class GDT
 		$app = Application::$INSTANCE;
 		$old = $app->mode;
 		$app->mode($mode);
-		$result = $this->render();
+		$result = $this->renderGDT();
 		$app->mode($old);
 		return $result;
 	}
@@ -430,7 +433,7 @@ abstract class GDT
 	##############
 	public function searchGDO(string $searchTerm) : bool
 	{
-		if ($haystack = (string) $this->getVar())
+		if (null !== ($haystack = $this->getVar()))
 		{
 			return stripos($haystack, $searchTerm) !== false;
 		}
@@ -522,10 +525,14 @@ abstract class GDT
 	}
 
 	/**
-	 * Render HTML name attribute.
+	 * Render the HTML name attribute.
 	 */
 	public function htmlName() : string
 	{
+		if ($name = $this->getName())
+		{
+			return " name=\"{$name}\"";
+		}
 		return self::EMPTY_STRING;
 	}
 	
@@ -533,18 +540,6 @@ abstract class GDT
 	{
 		$class = strtolower($this->gdoShortName());
 		return str_replace('_', '-', $class);
-	}
-	
-	/**
-	 * Render HTML name attribute, but in form mode.
-	 */
-	public function htmlFormName() : string
-	{
-		if ($name = $this->getName())
-		{
-			return " name=\"{$name}\"";
-		}
-		return self::EMPTY_STRING;
 	}
 	
 	public function htmlID() : string
@@ -676,6 +671,11 @@ abstract class GDT
 	#############
 	### Tests ###
 	#############
+	public function isTestable() : bool
+	{
+		return true;
+	}
+	
 	/**
 	 * This is the default input for automagical unit tests.
 	 */
@@ -694,11 +694,6 @@ abstract class GDT
 			return [$plug];
 		}
 		return [];
-	}
-	
-	public function isTestable() : bool
-	{
-		return true;
 	}
 	
 // 	##################

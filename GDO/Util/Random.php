@@ -10,7 +10,7 @@ namespace GDO\Util;
  * @author noother
  * @author dloser
  * 
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.5
  */
 final class Random
@@ -30,8 +30,6 @@ final class Random
 	/**
 	 * Get a single random item from an array.
 	 * This is not cryptographically safe.
-	 * @param array $array
-	 * @return mixed
 	 */
 	public static function arrayItem(array $array)
 	{
@@ -40,10 +38,6 @@ final class Random
 
 	/**
 	 * Generate a randomkey from a charset. A bit slow but should be random.
-	 * 
-	 * @param $len int
-	 * @param $alpha string or true
-	 * @return string
 	 */
 	public static function randomKey(int $len=self::TOKEN_LEN, string $alpha=self::ALPHANUMUPLOW) : string
 	{
@@ -59,12 +53,9 @@ final class Random
 	
 	/**
 	 * Secure and evenly distributed random generator.
-	 * 
+	 * @author dloser
 	 * @author noother
 	 * @author gizmore
-	 * @param int $min
-	 * @param int $max
-	 * @return int
 	 */
 	public static function rand(int $min=0, int $max=self::RAND_MAX) : int
 	{
@@ -78,7 +69,7 @@ final class Random
 		# Take 4 bytes and unpack to a signed int
 		$n = unpack('L', substr($BUFFER, 0, 4));
 		# thx to dloser we convert to unsigned on 32 bit arch
-		$n = PHP_INT_SIZE === 4 ? $n[1] + 2147483648 : $n[1];
+		$n = PHP_INT_SIZE === 4 ? $n[1] + 2147483648 : $n[1]; # @TODO get rid of the branch with branchless programming.
 		
 		# Eat from random buffer
 		$BUFFER = substr($BUFFER, 4);

@@ -1,19 +1,13 @@
 <?php
 namespace GDO\Form\tpl;
-use GDO\Form\GDT_Form;
-/**
- * @var GDT_Form $field
- */
+/** @var \GDO\Form\GDT_Form $field **/
 ?>
-<div<?=$field->htmlID()?> class="gdt-form<?=$field->slim?' gdt-form-slim':' gdt-form-compact'?>">
-
+<div<?=$field->htmlID()?><?=$field->htmlAttributes()?>>
 <?php if ($field->hasError()) : ?>
-  <?=$field->renderError()?>
+<?=$field->renderError()?>
 <?php endif;?>
-
- <form<?=$field->htmlVerb()?><?=$field->htmlAction()?>>
-  <div class="gdt-form-inner">
-  
+<form<?=$field->htmlVerb()?><?=$field->htmlAction()?>>
+ <div class="gdt-form-inner">
 <?php if ($field->hasTitle() || $field->hasText()) : ?>
    <div class="gdt-form-text">
 <?php if ($field->hasTitle()) : ?>
@@ -24,7 +18,6 @@ use GDO\Form\GDT_Form;
 <?php endif; ?>
    </div>
 <?php endif; ?>
-   
 <?php if ($field->hasFields()) : ?>
    <div class="gdt-form-fields">
 <?php 
@@ -35,17 +28,13 @@ foreach ($field->getFields() as $gdt)
 		$gdt->gdo($field->gdo);
 	}
 	echo $gdt->renderForm();
-}
-?>
-   </div>
+}?></div>
 <?php endif; ?>
-
 <?php if ($field->hasActions()) : ?>
    <div class="gdt-form-actions">
-     <?=$field->actions()->renderForm()?>
-   </div>
-<?php endif; ?>
-
+<?=$field->actions()->renderForm()?>
   </div>
- </form>
+<?php endif; ?>
+ </div>
+</form>
 </div>

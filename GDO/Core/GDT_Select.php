@@ -432,7 +432,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this->multiple ? ' multiple="multiple" size="8"' : '';
 	}
 	
-	public function htmlFormName() : string
+	public function htmlName() : string
 	{
 		if ($name = $this->getName())
 		{

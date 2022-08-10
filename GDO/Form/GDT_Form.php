@@ -61,6 +61,7 @@ final class GDT_Form extends GDT
 	{
 		parent::__construct();
 		$this->verb(self::POST);
+		$this->addClass('gdt-form');
 	}
 	
 	############
@@ -100,6 +101,8 @@ final class GDT_Form extends GDT
 
 	public function renderHTML() : string
 	{
+		$this->addClass($this->slim?'gdt-form-slim':'gdt-form-compact');
+
 		self::$CURRENT = $this;
 		$app = Application::$INSTANCE;
 		$old = $app->mode;

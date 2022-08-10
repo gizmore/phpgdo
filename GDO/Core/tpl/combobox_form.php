@@ -16,7 +16,7 @@ namespace GDO\Core\tpl;
    min="<?=$field->min?>"
    max="<?=$field->max?>"
    size="<?=min($field->max, 32)?>"
-   <?=$field->htmlFormName()?>
+   <?=$field->htmlName()?>
    <?=$field->htmlPlaceholder()?>
    value="<?=$field->renderVar()?>" />
   <?=$field->htmlError()?>

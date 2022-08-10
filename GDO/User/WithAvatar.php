@@ -68,7 +68,7 @@ trait WithAvatar
 		{
 			self::$AVATAR_DUMMY = GDT_Avatar::make();
 		}
-		return self::$AVATAR_DUMMY->imageSize($this->avatarSize)->user($user)->render();
+		return self::$AVATAR_DUMMY->imageSize($this->avatarSize)->user($user)->renderHTML();
 	}
 	
 }

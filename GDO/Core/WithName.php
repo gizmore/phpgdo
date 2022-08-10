@@ -6,11 +6,10 @@ namespace GDO\Core;
  * Display human classname.
  * Add trait WithModule.
  * 
- * @see WithModule
- * 
  * @author gizmore
  * @version 7.0.1
  * @since 6.0.0
+ * @see WithModule
  */
 trait WithName
 {
@@ -46,17 +45,17 @@ trait WithName
 		return $this;
 	}
 	
-	##############
-	### Render ###
-	##############
-	public function htmlName() : string
-	{
-		if ($name = $this->getName())
-		{
-			return sprintf(' name="%s"', $name);
-		}
-		return '';
-	}
+// 	##############
+// 	### Render ###
+// 	##############
+// 	public function htmlName() : string
+// 	{
+// 		if ($name = $this->getName())
+// 		{
+// 			return " name=\"{$name}\"";
+// 		}
+// 		return GDT::EMPTY_STRING;
+// 	}
 	
 	###############
 	### Factory ###

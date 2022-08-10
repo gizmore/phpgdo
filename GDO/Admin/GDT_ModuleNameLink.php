@@ -26,8 +26,9 @@ final class GDT_ModuleNameLink extends GDT_Link
 	
     public function renderHTML() : string
 	{
-		$this->labelRaw($this->getModuleLinked()->getName());
-		$this->href(href('Admin', 'Configure', "&module=".$this->gdo->getName()));
+		$name = $this->getModuleLinked()->getName();
+		$this->labelRaw($name);
+		$this->href(href('Admin', 'Configure', "&module=$name"));
 		return parent::renderHTML();
 	}
 	

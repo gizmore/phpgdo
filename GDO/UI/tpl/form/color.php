@@ -5,7 +5,7 @@
   <input
    type="color"
    <?=$field->htmlID()?>
-   <?=$field->htmlFormName()?>
+   <?=$field->htmlName()?>
    value="<?= html($field->getVar()); ?>"
    <?= $field->htmlRequired(); ?>
    <?= $field->htmlDisabled(); ?>/>

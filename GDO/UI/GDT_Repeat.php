@@ -31,9 +31,10 @@ final class GDT_Repeat extends GDT
 		return $this;
 	}
 	
-	public function htmlFormName() : string
+	public function htmlName() : string
 	{
-		return $this->getName() . '[]';
+		$name = $this->getName();
+		return " name=\"{$name}[]\"";
 	}
 
 	public function getVar()

@@ -7,7 +7,7 @@ use GDO\Form\GDT_Submit;
   <?=$field->htmlIcon()?>
   <input
    type="submit"
-   <?=$field->htmlFormName()?>
+   <?=$field->htmlName()?>
    <?=$field->htmlAttributes()?>
    <?=$field->htmlDisabled()?>
    <?=$field->htmlValue()?> />

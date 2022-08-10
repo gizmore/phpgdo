@@ -15,7 +15,7 @@ namespace GDO\Core\tpl;
 <?=$field->htmlPlaceholder()?>
 <?=$field->htmlRequired()?>
 <?=$field->htmlDisabled()?>
-<?=$field->htmlFormName()?>
+<?=$field->htmlName()?>
 <?=$field->htmlValue()?> />
   <input type="hidden" id="nocompletion_<?=$field->name?>" name="nocompletion_<?=$field->name?>" value="1" />
   <input type="hidden" id="completion-<?=$field->name?>" <?=$field->htmlValue()?> />

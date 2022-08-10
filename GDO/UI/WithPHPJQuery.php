@@ -5,7 +5,15 @@ use GDO\Core\GDT;
 
 /**
  * Extend a GDT with an API similiar to jQuery.
- * Render with htmlAttributes().
+ * Render all HTML attributes with htmlAttributes().
+ * Currently only a very small subset is implemented,
+ * as you do not do that fancy DOM manipulations.
+ * 
+ * Implemented:
+ * 
+ * - addClass()
+ * - attr()
+ * - css()
  * 
  * @author gizmore
  * @version 7.0.1
@@ -16,9 +24,16 @@ trait WithPHPJQuery
 	#######################
 	### HTML Attributes ###
 	#######################
+	/**
+	 * @var string[string]
+	 */
 	public array $htmlAttributes;
 	
-	public function attr(string $attribute, $value=null)
+	/**
+	 * Change an attribute.
+	 * @return self|string
+	 */
+	public function attr(string $attr, string $value=null)
 	{
 		if (!isset($this->htmlAttributes))
 		{
@@ -26,33 +41,24 @@ trait WithPHPJQuery
 		}
 		if ($value === null)
 		{
-			return isset($this->htmlAttributes[$attribute]) ? 
-			    $this->htmlAttributes[$attribute] : GDT::EMPTY_STRING;
+			return isset($this->htmlAttributes[$attr]) ? 
+			$this->htmlAttributes[$attr] : GDT::EMPTY_STRING;
 		}
-		$this->htmlAttributes[$attribute] = $value;
+		$this->htmlAttributes[$attr] = $value;
 		return $this;
 	}
 	
-	public function htmlAttributes() : string
-	{
-		$html = '';
-		if (isset($this->htmlAttributes))
-		{
-			foreach ($this->htmlAttributes as $attribute => $value)
-			{
-				$html .= " $attribute=\"$value\"";
-			}
-		}
-		return $html;
-	}
-
+	###################
+	### CSS Classes ###
+	###################
 	public function addClass(string $class) : self
 	{
 		# Old classes
-		$classes = explode(" ", trim($this->attr('class')));
+		$s = ' ';
+		$classes = explode($s, trim($this->attr('class')));
 		
 		# Merge new classes
-		$newclss = explode(" ", $class); # multiple possible
+		$newclss = explode($s, $class); # multiple possible
 		foreach ($newclss as $class)
 		{
 		    if ($class = trim($class))
@@ -64,12 +70,16 @@ trait WithPHPJQuery
 		    }
 		}
 		
-		return $this->attr('class', implode(" ", $classes));
+		# Join them
+		return $this->attr('class', implode($s, $classes));
 	}
 	
 	###########
 	### CSS ###
 	###########
+	/**
+	 * @var string[string]
+	 */
 	private array $css;
 	
 	public function css(string $attr, $value=null)
@@ -80,20 +90,39 @@ trait WithPHPJQuery
 		}
 		if ($value === null)
 		{
-			return @$this->css[$attr];
+			return (string) @$this->css[$attr];
 		}
 		$this->css[$attr] = $value;
 		return $this->updateCSS();
 	}
 	
-	private function updateCSS()
+	private function updateCSS() : self
 	{
 		$rules = '';
-		foreach ($this->css as $key => $value)
+		foreach ($this->css as $key => $var)
 		{
-			$rules .= "$key: $value; ";
+			$rules .= "$key: $var; ";
 		}
-		return $this->attr('style', $rules);
+		return $this->attr('style', trim($rules));
+	}
+	
+	##############
+	### Render ###
+	##############
+	/**
+	 * The returned html string has a leading space.
+	 */
+	public function htmlAttributes() : string
+	{
+		$html = '';
+		if (isset($this->htmlAttributes))
+		{
+			foreach ($this->htmlAttributes as $attr => $var)
+			{
+				$html .= " $attr=\"$var\"";
+			}
+		}
+		return $html;
 	}
 
 }

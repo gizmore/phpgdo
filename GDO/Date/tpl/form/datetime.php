@@ -8,7 +8,7 @@ use GDO\Date\GDT_DateTime;
 <input<?=$field->htmlID()?> type="datetime-local"
  autocomplete="off"
  value="<?=tt($field->getVar(), 'local')?>"
-<?=$field->htmlFormName()?>
+<?=$field->htmlName()?>
 <?=$field->htmlDisabled()?> />
 <?=$field->htmlError()?>
 </div>
