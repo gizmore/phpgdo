@@ -24,11 +24,11 @@ final class GDT_ModuleNameLink extends GDT_Link
 		return $this->gdo;
 	}
 	
-    public function renderCell() : string
+    public function renderHTML() : string
 	{
 		$this->labelRaw($this->getModuleLinked()->getName());
 		$this->href(href('Admin', 'Configure', "&module=".$this->gdo->getName()));
-		return parent::renderCell();
+		return parent::renderHTML();
 	}
 	
 // 	public function renderJSON()

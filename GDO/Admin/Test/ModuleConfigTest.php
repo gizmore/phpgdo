@@ -44,14 +44,14 @@ final class ModuleConfigTest extends TestCase
     	$inputs = ['module' => $module->getName()];
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
-    	$html = $result->renderMode(GDT::RENDER_HTML);
+    	$html = $result->renderMode(GDT::RENDER_WEBSITE);
     	assertStringContainsString('</form>', $html, "Test if {$module->getName()} can be configured correctly.");
     	
     	# Save
     	$inputs = ['module' => $module->getName(), 'submit' => 'submit'];
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
-    	$html = $result->renderMode(GDT::RENDER_HTML);
+    	$html = $result->renderMode(GDT::RENDER_WEBSITE);
     	$this->assert200("Test if {$module->getName()} can save it's configuration.");
     }
     

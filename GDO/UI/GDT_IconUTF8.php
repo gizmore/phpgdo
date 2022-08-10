@@ -1,18 +1,23 @@
 <?php
 namespace GDO\UI;
+
+use GDO\Core\GDT;
+
 /**
- * Default icon provider using UTF8 icons.
+ * Default icon provider using UTF8 icon glyphs.
  * This is the most primitive and cheap icon rendering.
  * It is included in the core, and a reference for possible icons.
- * However, the possible icons are not limited to the few used ones.
+ * However, the possible icons are not limited to the ones defined here.
+ * 
  * @author gizmore
- * @since 6.05
- * @version 6.10.6
+ * @version 7.0.1
+ * @since 6.5.0
  * @see https://www.utf8icons.com/
+ * @see \GDO\FontAwesome\FA_Icon
  */
 final class GDT_IconUTF8
 {
-    public static $MAP = array(
+    public static array $MAP = [
         'account' => '⛁',
         'add' => '✚',
         'alert' => '!',
@@ -67,7 +72,8 @@ final class GDT_IconUTF8
         'menu' => '≡',
         'message' => '☰',
         'minus' => '-',
-        'money' => '💰',
+        'money' => '$',
+    	'numeric' => 'π',
         'password' => '⚷',
         'pause' => '⏸',
         'phone' => '📞',
@@ -95,11 +101,11 @@ final class GDT_IconUTF8
         'users' => '😂',
         'view' => '👁',
         'wait' => '◴',
-    );
+    ];
     
-	public static function iconS($icon, $iconText, $style)
+	public static function iconS(string $icon, string $iconText = null, string $style = '')
 	{
-	    $title = $iconText ? ' title="'.html($iconText).'"' : '';
+	    $title = $iconText ? ' title="'.html($iconText).'"' : GDT::EMPTY_STRING;
 		$_icon = isset(self::$MAP[$icon]) ? self::$MAP[$icon] : $icon;
 		return "<span class=\"gdo-icon gdo-utf8-icon-$icon\"$style$title>$_icon</span>";
 	}

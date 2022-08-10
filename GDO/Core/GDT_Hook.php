@@ -73,7 +73,7 @@ final class GDT_Hook extends GDT
 // 		return $response->addField($res2);
 // 	}
 	
-// 	public function renderCell() : string
+// 	public function renderHTML() : string
 // 	{
 // 	    return $this->render()->renderHTML();
 // 	}

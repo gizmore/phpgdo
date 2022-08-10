@@ -10,7 +10,7 @@ use GDO\Table\GDT_Table;
  * Used in GDT_Repeat for reapeated arguments, like concat a;b;c;...
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see GDT
  */
@@ -53,12 +53,12 @@ trait WithProxy
 	public function renderXML() : string { return $this->proxy->renderXML(); }
 	# html rendering
 	public function renderHTML() : string { return $this->proxy->renderHTML(); }
-	public function renderChoice() : string { return $this->proxy->renderChoice(); }
+	public function renderOption() : string { return $this->proxy->renderOption(); }
 	public function renderList() : string { return $this->proxy->renderList(); }
 	public function renderForm() : string { return $this->proxy->renderForm(); }
 	public function renderCard() : string { return $this->proxy->renderCard(); }
 	# html table rendering
-	public function renderCell() : string { return $this->proxy->renderHTML(); }
+	public function renderHTML() : string { return $this->proxy->renderHTML(); }
 	public function renderHeader() : string { return $this->proxy->renderHeader(); }
 	public function renderFilter($f) : string { return $this->proxy->renderFilter($f); }
 	public function renderOrder(GDT_Table $table) : string { return $this->proxy->renderOrder($table); }

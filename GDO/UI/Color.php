@@ -7,7 +7,7 @@ use GDO\Core\GDT;
 /**
  * Color utility and conversion object.
  * 
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.5.0
  */
 final class Color
@@ -135,7 +135,7 @@ final class Color
 				return "{$colorCLI}{$s} \033[0m";
 			case GDT::RENDER_HTML:
 			case GDT::RENDER_CELL:
-				return sprintf('<span style="color: %s;">%s</span>', $colorHTML, html($s));
+				return sprintf('<span style="color: %s;">%s</span>', $colorHTML, $s);
 			default:
 				return $s;
 		}

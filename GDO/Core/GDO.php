@@ -26,10 +26,8 @@ use GDO\User\GDO_User;
  * - Offers bulk operations
  * 
  * @author gizmore@wechall.net
- * 
  * @version 7.0.1
  * @since 3.0.0
- * 
  * @see GDT
  * @see Cache
  * @see Database
@@ -37,7 +35,6 @@ use GDO\User\GDO_User;
  * @see Result
  * @see WithTemp
  * @see WithModule
- * 
  * @license GDOv7-LICENSE
  */
 abstract class GDO extends GDT
@@ -97,7 +94,7 @@ abstract class GDO extends GDT
 		{
 			self::$GDO_PEAKS = $alive;
 		}
-		if (GDO_GDT_DEBUG)
+		if (self::$GDT_DEBUG)
 		{
 			$this->logDebug();
 		}
@@ -106,7 +103,7 @@ abstract class GDO extends GDT
 	private function logDebug() : void
 	{
 		Logger::log('gdo', sprintf('%d: %s', self::$GDO_COUNT, self::gdoClassNameS()));
-		if (GDO_GDT_DEBUG >= 2)
+		if (self::$GDT_DEBUG >= 2)
 		{
 			Logger::log('gdo', Debug::backtrace('Backtrace', false));
 		}
@@ -203,7 +200,7 @@ abstract class GDO extends GDT
 		return $this->gdoHumanName() . "#" . $this->getID();
 	}
 	
-	public function renderChoice() : string
+	public function renderOption() : string
 	{
 		return $this->renderName();
 	}
@@ -1474,8 +1471,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Get all rows via allcache.
-	 * @param string $order
-	 * @param boolean $asc
 	 * @return self[]
 	 */
 	public function &allCached(string $order=null, bool $json=false) : array
@@ -1527,9 +1522,6 @@ abstract class GDO extends GDT
 	##############
 	/**
 	 * Get the table GDO for a classname.
-	 * 
-	 * @param string $className
-	 * @return self
 	 */
 	public static function tableFor(string $className, bool $throw=true) : ?self
 	{
@@ -1547,7 +1539,6 @@ abstract class GDO extends GDT
 	/**
 	 * Check if this gdo row entity is the table GDO.
 	 * This is done via the always generated cache object and should be efficient. The memory cost for the old private $isTable was horrible!
-	 * @return bool
 	 */
 	public function gdoIsTable() : bool
 	{
@@ -1562,8 +1553,8 @@ abstract class GDO extends GDT
 		}
 		return !!$db->createTable($this);
 	}
-	public function dropTable() : bool { return !!Database::instance()->dropTable($this); }
 	public function truncate() : bool { return !!Database::instance()->truncateTable($this); }
+	public function dropTable() : bool { return !!Database::instance()->dropTable($this); }
 	
 	/**
 	 * Get all GDT for a GDO.
@@ -1614,7 +1605,6 @@ abstract class GDO extends GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-// 			$gdt->gdo($this); # this would override input in GDT_Message.
 			call_user_func([$gdt, $methodName], $this, $query);
 		}
 		call_user_func([$this, $methodName], $this, $query);
@@ -1665,7 +1655,6 @@ abstract class GDO extends GDT
 	/**
 	 * Generate a hashcode from gdo vars.
 	 * This is often used in approval tokens or similar.
-	 * @return string
 	 */
 	public function gdoHashcode() : string
 	{
@@ -1674,8 +1663,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Generate a hashcode from an associative array.
-	 * @param array $gdoVars
-	 * @return string
 	 */
 	public static function gdoHashcodeS(array $gdoVars) : string
 	{
@@ -1704,7 +1691,7 @@ abstract class GDO extends GDT
 	 * Mass insertion.
 	 * @param GDT[] $fields
 	 */
-	public static function bulkReplace(array $fields, array $data, $chunkSize=100)
+	public static function bulkReplace(array $fields, array $data, int $chunkSize=100) : void
 	{
 		self::bulkInsert($fields, $data, $chunkSize, 'REPLACE');
 	}

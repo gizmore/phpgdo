@@ -14,7 +14,7 @@ class GDT_Tooltip extends GDT_Icon
 {
 	public string $icon = 'help';
 
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('UI', 'cell/tooltip.php', ['field'=>$this]);
 	}

@@ -207,7 +207,7 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return Time::displayDateTime(
 			Time::parseDateTimeDB($this->getVar()),

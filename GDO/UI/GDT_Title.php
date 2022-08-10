@@ -28,7 +28,7 @@ class GDT_Title extends GDT_String
 	public int $encoding = self::UTF8;
 	public bool $caseSensitive = false;
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    $text = $this->renderTitle();
 	    $text = $this->titleEscaped ? html($text) : $text;

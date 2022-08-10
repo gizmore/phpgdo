@@ -135,7 +135,7 @@ class GDT_Float extends GDT_Int
 	    return $this;
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    return self::displayS($this->var, $this->decimals);
 	}

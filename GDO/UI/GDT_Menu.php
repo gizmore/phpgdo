@@ -20,9 +20,20 @@ final class GDT_Menu extends GDT_Container
 	public bool $flexWrap = true;
 	public bool $flexShrink = true;
 	
-	public function getDefaultName() : string { return 'menu'; }
+	public function getDefaultName() : string
+	{
+		return 'menu';
+	}
 	
-	public function renderCell() : string
+	##############
+	### Render ###
+	##############
+	public function renderForm() : string
+	{
+		return $this->renderHTML();
+	}
+
+	public function renderHTML() : string
 	{
 		$this->setupHTML();
 		return GDT_Template::php('UI', 'menu_html.php', ['field' => $this]);

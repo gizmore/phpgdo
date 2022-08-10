@@ -2,12 +2,13 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT_Template;
-use GDO\Core\GDT_String;
 use GDO\Net\URL;
 use GDO\Net\GDT_Url;
 
 /**
  * An anchor for menus or paragraphs.
+ * Extends GDT_Url which is a GDT_String configured for URLs.
+ * Link renders the HTML anchor.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -21,14 +22,18 @@ class GDT_Link extends GDT_Url
 	protected function __construct()
 	{
 		parent::__construct();
-		unset($this->icon);
-		$this->caseS();
+		unset($this->icon); # @TODO: Optionally give a global icon for all links, like TBS did like the enter key.
 	}
 	
 	###########
 	### GDT ###
 	###########
 	public function isWriteable() : bool { return false; }
+	
+	###########
+	### URL ###
+	###########
+	public function getURL() : URL { return new URL($this->href); }
 	
 	################
 	### Relation ###
@@ -54,15 +59,22 @@ class GDT_Link extends GDT_Url
 	public static function anchor(string $href, string $labelRaw=null) : string
 	{
 		$labelRaw = $labelRaw !== null ? $labelRaw : $href;
-		return self::make()->href($href)->labelRaw($labelRaw)->renderCell();
+		return self::make()->href($href)->labelRaw($labelRaw)->renderHTML();
 	}
 	
 	##############
 	### Render ###
 	##############
-	public function renderForm() : string { return $this->renderHTML(); }
-	public function renderCell() : string { return $this->renderHTML(); }
-	public function renderHTML() : string { return GDT_Template::php('UI', 'link_html.php', ['link' => $this]); }
+	public function renderHTML() : string
+	{
+		return GDT_Template::php('UI', 'link_html.php', ['field' => $this]);
+	}
+	
+	public function renderForm() : string
+	{
+		return $this->renderHTML();
+	}
+	
 	public function renderJSON()
 	{
 		$out = '';
@@ -77,11 +89,5 @@ class GDT_Link extends GDT_Url
 		}
 		return $out;
 	}
-	public function renderFilter($f) : string { return GDT_String::make($this->name)->renderFilter($f); }
-	
-	###########
-	### URL ###
-	###########
-	public function getURL() : URL { return new URL($this->href); }
 	
 }

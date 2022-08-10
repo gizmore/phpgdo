@@ -18,4 +18,4 @@ foreach (array_keys($steps) as $step)
 	$bar->addField($link);
 }
 
-echo $bar->renderCell();
+echo $bar->renderHTML();

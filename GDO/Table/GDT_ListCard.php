@@ -18,7 +18,7 @@ use GDO\Core\GDT_Template;
  */
 class GDT_ListCard extends GDT_List
 {
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('Table', 'cell/list_card.php', ['field' => $this]);
 	}

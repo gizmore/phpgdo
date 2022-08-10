@@ -27,7 +27,7 @@ class GDT_Submit extends GDT_Button
 		return 'submit';
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('Form', 'submit_form.php', ['field' => $this]);
 	}

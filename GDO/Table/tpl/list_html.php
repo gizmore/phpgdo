@@ -14,14 +14,14 @@ echo GDT_Template::php('Table', 'list_filter.php', ['field' => $field]);
 // 	$formSearch = GDT_Form::make($field->headers->name)->slim()->verb('GET');
 // 	$formSearch->addField(GDT_SearchField::make('search'));
 // 	$formSearch->actions()->addField(GDT_Submit::make()->css('display', 'none'));
-// 	echo $formSearch->renderCell();
+// 	echo $formSearch->renderHTML();
 // }
 
 ############
 ### List ###
 ############
 $pagemenu = @$field->pagemenu;
-$pagemenu = $pagemenu ? $pagemenu->renderCell() : '';
+$pagemenu = $pagemenu ? $pagemenu->renderHTML() : '';
 
 if (!$field->countItems())
 {

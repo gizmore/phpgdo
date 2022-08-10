@@ -219,12 +219,6 @@ class GDT_String extends GDT_DBField
 	##############
 	### Render ###
 	##############
-	public function renderHTML() : string
-	{
-		return sprintf('<div>%s</div>',
-			html($this->renderCLI()));
-	}
-	
 	public function renderCLI() : string
 	{
 		$out = '';
@@ -236,9 +230,15 @@ class GDT_String extends GDT_DBField
 		return $out;
 	}
 	
+	public function renderHTML() : string
+	{
+		$text = $this->renderCLI();
+		return "<div>{$text}</div>";
+	}
+	
 	public function renderCell() : string
 	{
-		return html($this->getVar());
+		return (string) $this->getVar();
 	}
 	
 	public function renderForm() : string

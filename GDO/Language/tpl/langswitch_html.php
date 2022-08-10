@@ -18,7 +18,7 @@ foreach ($languages as $language)
 {
 	$language instanceof GDO_Language;
 	$sel = Trans::$ISO === $language->getISO() ? ' selected="selected"' : '';
-	printf("<option value=\"%s\"%s>%s</option>", $language->getISO(), $sel, $language->renderChoice());
+	printf("<option value=\"%s\"%s>%s</option>", $language->getISO(), $sel, $language->renderOption());
 }
 ?>  
   </select>

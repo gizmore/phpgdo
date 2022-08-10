@@ -10,7 +10,7 @@ namespace GDO\UI;
  */
 class GDT_CodeParagraph extends GDT_Paragraph
 {
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return sprintf(
 			"<div class=\"gdt-code\"><code><pre>%s\n</pre></code></div>\n",

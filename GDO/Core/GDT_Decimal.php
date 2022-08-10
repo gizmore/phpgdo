@@ -50,7 +50,7 @@ class GDT_Decimal extends GDT_Int
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    return GDT_Float::displayS($this->getVar(), $this->digitsAfter);
 	}

@@ -84,17 +84,11 @@ abstract class MethodForm extends Method
 		{
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
-			if (isset($this->inputs))
-			{
-				$this->applyInput();
-			}
+			$this->applyInput();
 			$form = $this->getForm();
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
-			if (isset($this->inputs))
-			{
-				$this->applyInput();
-			}
+			$this->applyInput();
 		}
 		return $this->parameterCache;
 	}
@@ -108,17 +102,21 @@ abstract class MethodForm extends Method
 	
 	public function getForm() : GDT_Form
 	{
+		$inputs = $this->getInputs();
 		if (!isset($this->form))
 		{
 			$this->submitted = false;
 			$this->form = GDT_Form::make($this->getFormName());
-			if (isset($this->inputs))
-			{
-				$this->form->inputs($this->inputs);
-				$this->form->actions()->inputs($this->inputs);
-			}
+			$this->form->inputs($inputs);
+			$this->form->actions()->inputs($inputs);
 			$this->form->titleRaw($this->getMethodTitle());
+			$this->applyInput();
 			$this->createForm($this->form);
+		}
+		else
+		{
+			$this->form->inputs($inputs);
+			$this->form->actions()->inputs($inputs);
 		}
 		return $this->form;
 	}
@@ -147,10 +145,12 @@ abstract class MethodForm extends Method
 	############
 	public function execute()
 	{
+		### validation result 
 		$this->submitted = false;
 		$this->validated = false;
 		$this->pressedButton = null;
 		
+		### Generate form
 		$form = $this->getForm()->inputs($this->inputs);
 		
 		### Flow upload
@@ -167,7 +167,7 @@ abstract class MethodForm extends Method
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			/** @var $gdt GDT_Submit **/
-			$gdt->inputs($this->inputs);
+// 			$gdt->inputs($this->getInputs());
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;
@@ -175,6 +175,11 @@ abstract class MethodForm extends Method
 				if ($form->validate(null))
 				{
 					$this->validated = true;
+
+					# submit events
+					$this->onSubmitted();
+					
+					# Click it
 					if ($gdt->onclick)
 					{
 						$result = $gdt->click();
@@ -202,6 +207,18 @@ abstract class MethodForm extends Method
 		return $this->renderPage();
 	}
 	
+	private function onSubmitted() : void
+	{
+		foreach ($this->gdoParameterCache() as $gdt)
+		{
+			$gdt->onSubmitted();
+		}
+	}
+
+	### Override ###
+	/**
+	 * @TODO renderPage() is not a GDT method. Maybe rename and make it a Method thingy.
+	 */
 	public function renderPage() : GDT
 	{
 		return $this->getForm();

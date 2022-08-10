@@ -74,7 +74,7 @@ final class GDO_Permission extends GDO
 	
 	public function display_perm_edit() { return GDT_EditButton::make()->href($this->hrefEdit()); }
 	public function display_user_count() { return $this->gdoVar('user_count'); }
-	public function renderChoice() : string { return sprintf('%s–%s', $this->getID(), $this->renderName()); }
+	public function renderOption() : string { return sprintf('%s–%s', $this->getID(), $this->renderName()); }
 	
 	############
 	### HREF ###

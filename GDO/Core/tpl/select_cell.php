@@ -26,11 +26,11 @@ if (isset($field->completionHref))
 <?php endif; ?>
 <?php if ($field->hasCompletion()) : ?>
 <?php if ($choice = $field->getValue()) : ?>
-  <option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$choice instanceof GDO ? $choice->renderChoice() : $field->displayChoice($field->getVar())?></option>
+  <option value="<?=html($field->getVar())?>"<?=$field->htmlSelected($field->getVar())?>><?=$choice instanceof GDO ? $choice->renderOption() : $field->displayChoice($field->getVar())?></option>
 <?php endif; ?>
 <?php else : ?>
 <?php foreach ($field->initChoices() as $var => $choice) : ?>
-  <option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderChoice() : $field->displayChoice($var)?></option>
+  <option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderOption() : $field->displayChoice($var)?></option>
 <?php endforeach; ?>
 <?php endif; ?>
 </select>

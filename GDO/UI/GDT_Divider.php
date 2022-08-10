@@ -26,7 +26,7 @@ class GDT_Divider extends GDT
 	    return '<div class="gdt-divider">' . $text . '</div>';
 	}
 	
-// 	public function renderCell() : string
+// 	public function renderHTML() : string
 // 	{
 // 		return '<div class="gdt-divider">'.$this->renderLabelText().'</div>';
 // 	}

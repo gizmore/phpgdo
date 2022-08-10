@@ -340,16 +340,29 @@ trait WithFields
 		return $rendered;
 	}
 	
-	public function renderChoice() : string { return $this->renderFields(GDT::RENDER_CHOICE); }
-	public function renderList() : string { return $this->renderFields(GDT::RENDER_LIST); }
-	public function renderHTML() : string { return $this->renderFields(GDT::RENDER_HTML); }
-	public function renderCell() : string { return $this->renderFields(GDT::RENDER_CELL); }
-	public function renderForm() : string { return $this->renderFields(GDT::RENDER_FORM); }
+	####################
+	### Render modes ### Proxy them to renderFields().
+	####################
+// 	public function renderNIL() : ?string { return null; } # hehe
+	public function renderBinary() : string { return $this->renderFields(GDT::RENDER_BINARY); }
 	public function renderCLI() : string { return $this->renderFields(GDT::RENDER_CLI); }
-	public function renderCard() : string { return $this->renderFields(GDT::RENDER_CARD); }
 	public function renderPDF() : string { return $this->renderFields(GDT::RENDER_PDF); }
 	public function renderXML() : string { return $this->renderFields(GDT::RENDER_XML); }
-	public function renderBinary() : string { return $this->renderFields(GDT::RENDER_BINARY); }
+// 	public function renderJSON() : { return $this->renderFields(GDT::RENDER_JSON); }
+	public function renderGTK() { return $this->renderFields(GDT::RENDER_GTK); }
+	public function renderWebsite() : string { return $this->renderFields(GDT::RENDER_WEBSITE); } # Cannot happen
+	# html rendering
+	public function renderHTML() : string { return $this->renderFields(GDT::RENDER_HTML); }
+	public function renderCard() : string { return $this->renderFields(GDT::RENDER_CARD); }
+	public function renderList() : string { return $this->renderFields(GDT::RENDER_LIST); }
+	public function renderForm() : string { return $this->renderFields(GDT::RENDER_FORM); }
+	public function renderOption() : string { return $this->renderFields(GDT::RENDER_OPTION); }
+	# html table rendering
+	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
+	public function renderOrder() : string { return $this->renderFields(GDT::RENDER_ORDER); }
+	public function renderFilter($f) : string { return $this->renderFields(GDT::RENDER_FILTER); }
+	public function renderCell() : string { return $this->renderFields(GDT::RENDER_CELL); }
+	public function renderTFoot() : string { return $this->renderFields(GDT::RENDER_TFOOT); }
 
 	public function renderJSON()
 	{

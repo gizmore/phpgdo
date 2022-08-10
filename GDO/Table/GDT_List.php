@@ -16,7 +16,7 @@ class GDT_List extends GDT_Table
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('Table', 'list_html.php', ['field' => $this]);
 	}

@@ -21,7 +21,6 @@ use GDO\DB\Query;
  * @author gizmore
  * @version 7.0.1
  * @since 6.0.0
- * 
  * @see GDT_UInt
  * @see GDT_Decimal
  * @see GDT_Float
@@ -29,6 +28,8 @@ use GDO\DB\Query;
  */
 class GDT_Int extends GDT_DBField
 {
+	public string $icon = 'numeric';
+	
 	public function toValue($var = null)
 	{
 		return $var === null ? null : intval($var, 10);
@@ -212,7 +213,7 @@ class GDT_Int extends GDT_DBField
 		return GDT_Template::php('Core', 'integer_form.php', ['field'=>$this]);
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Float::displayS($this->getVar(), 0);
 	}

@@ -7,7 +7,6 @@ use GDO\Util\Strings;
 
 /**
  * Displays a language switcher.
- * Themes have hard times here.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -25,7 +24,7 @@ final class GDT_LangSwitch extends GDT_Select
     
     public function renderHTML() : string
 	{
-		return GDT_Template::php('Language', 'cell/langswitch.php',['field'=>$this]);
+		return GDT_Template::php('Language', 'langswitch_html.php', ['field' => $this]);
 	}
 	
 	public function hrefLangSwitch(GDO_Language $language)

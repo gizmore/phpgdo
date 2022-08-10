@@ -20,10 +20,16 @@ use GDO\Core\Method\Error;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
-#
-# really the first thing we do is measure performance :)
-# Go Go Go! GDO7
-#
+/**
+ * GDOv7 - The best PHP Framework on Planet SOL.
+ * 
+ * @author gizmore@wechall.net
+ * @version 7.0.1
+ * @since 1.0.0
+ */
+# Really, the first thing we do is measure performance :)
+# Go Go Go GDO7!
+// gc_disable(); # GC slows things down? => Nope... GDO is just slow.
 define('GDO_TIME_START', microtime(true));
 #
 #######################
@@ -32,7 +38,7 @@ define('GDO_TIME_START', microtime(true));
 @include 'protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
-	require 'index_install.php';
+	require 'index_install.php'; # no config. bail out
 }
 require 'GDO7.php';
 ############
@@ -74,7 +80,6 @@ if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 {
 	$me = NotAllowed::make(); # early setting of method.
 }
-
 #
 # Setup Language
 #
@@ -96,7 +101,7 @@ $app->verb($_SERVER['REQUEST_METHOD']);
 #
 # Detect Content Type and set application render mode.
 # 
-$mode = GDT::RENDER_HTML;
+$mode = GDT::RENDER_WEBSITE;
 if (isset($_REQUEST['_fmt']))
 {
 	$mode = $app->detectRenderMode((string)@$_REQUEST['_fmt']);
@@ -123,7 +128,10 @@ $app->ajax($ajax);
 if (isset($me))
 {
 	# Patch all input to only the error!
-	$_REQUEST = ['error' => (string) $_SERVER['REQUEST_METHOD']];
+	$_REQUEST = [
+		'error' => t('err_request_method_denied', [
+			html((string) $_SERVER['REQUEST_METHOD'])]),
+	];
 }
 #
 # index.php is called directly.
@@ -169,11 +177,11 @@ else
 	$url2 = ltrim($url, '/');
 
 	# Cleanup
-	unset($_REQUEST['_av']);
-	unset($_REQUEST['_url']);
-	unset($_REQUEST['_v']);
+	unset($_REQUEST['_v']); # gdo version
+	unset($_REQUEST['_av']); # asset version
+	unset($_REQUEST['_url']); # seo url
 
-	# Choose method
+	# Choose method for url
 	if (is_dir($url2))
 	{
 		$me = DirectoryIndex::make();
@@ -192,26 +200,25 @@ else
 		$me = FileNotFound::make();
 	}
 }
-
 ############
 ### Exec ###
 ############
 $_GET = null; # from this point we have everything only in gdo.
 $_POST = null;
-$app->inputs($_REQUEST);
+// $app->inputs($_REQUEST);
 // $app->method($me);
+# plug together GDT_Method
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
-
 #
 # Execute and force a GDO result.
 #
 try
 {
+	# exec and check
 	if (null === ($result = $gdtMethod->execute()))
 	{
 		$result = GDT_HTML::make(); # empty response... okay? Oo?
 	}
-
 	elseif (is_string($result)) # text response, we wanna support that?
 	{
 		$result = GDT_HTML::withHTML($result);
@@ -220,12 +227,12 @@ try
 catch (\Throwable $t)
 {
 	# Error message result
-	$result =  GDT_Error::fromException($t);
+	$result = GDT_Error::fromException($t);
 }
 
 #
 # If it is not a GDT_Response, wrap it.
-# Because GDT_Response renders the GDT_Page template (in html, non ajax mode)
+# Because GDT_Response renders the GDT_Page template (in website, non ajax mode)
 #
 if (!($result instanceof GDT_Response))
 {
@@ -243,13 +250,13 @@ if (isset($session))
 	$session->commit(); # setting headers sometimes
 }
 # The last thing we do before any output
-$app->timingHeader();
-##############
-### Output ###
-##############
-# Output asap. Very late but still
+$app->timingHeader(); # :) so every GDO request can be measured quickly.
+##############.
+### Output ###,
+###############,
+# Output asap. # Very late but still
 echo $content; # asap
 #########################
 ### fire IPC recaches ###
 #########################
-Cache::recacheHooks();
+Cache::recacheHooks(); # we have time to recache now.

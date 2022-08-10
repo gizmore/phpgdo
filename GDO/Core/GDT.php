@@ -6,13 +6,13 @@ use GDO\UI\TextStyle;
 
 /**
  * The base class for all GDT.
- * It shall not have any attributes at all, to allow lightweight memory types like GDO or GDT_Icon.
+ * It shall not have any attributes, to allow lightweight memory types like GDO or GDT_Icon.
  * 
  * A GDT can, better, has to, support the following rendering mode functions a.k.a output formats;
  * 
- * RENDERING MODES: CLI/JSON/XML/HTML/HEADER/CELL/FORM/CARD/PDF/BINARY/CHOICE/LIST/FILTER
- * 
- * @TODO: Performance can be increased by avoiding WithFields() and using getAllFields()
+ * OUTPUT MODES  : CLI / JSON / XML / WEBSITE / PDF / BINARY / GTK
+ * HTML SUBMODES : HTML / CARD / FORM / OPTION / LIST /
+ * TABLE SUBMODES: ORDER / CELL / THEAD / TFOOT / FILTER
  * 
  * The current rendering mode is stored in Application.
  * 
@@ -31,7 +31,8 @@ abstract class GDT
 	 * @var GDT[]
 	 */
 	const EMPTY_ARRAY = [];
-	const EMPTY_STRING = '';
+	
+	const EMPTY_STRING = ''; # @TODO Does this safe allocs or cycles? i doubt... we can test :)=
 	
 	###################
 	### Instanciate ###
@@ -39,8 +40,6 @@ abstract class GDT
 	/**
 	 * Create a GDT instance.
 	 * The very basic GDT don't know anything, don't have attributes or much functions.
-	 * @param string $name
-	 * @return self
 	 */
 	public static function make(string $name = null) : self
 	{
@@ -55,10 +54,10 @@ abstract class GDT
 	#############
 	### Debug ###
 	#############
-	public static bool $GDT_DEBUG = false; # debug can also be a backtrace for every alloc.
-	public static int  $GDT_COUNT = 0; # total allocs
-	public static int  $GDT_KILLS = 0; # total deallocs
-	public static int  $GDT_PEAKS = 0; # max sim. alive
+	public static int $GDT_DEBUG = 0; # counts allocations (1) - or can also add a backtrace for every allocation (2).
+	public static int $GDT_COUNT = 0; # total allocs
+	public static int $GDT_KILLS = 0; # total deallocs
+	public static int $GDT_PEAKS = 0; # highest simultan. alive
 	
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
@@ -95,37 +94,57 @@ abstract class GDT
 	private function logDebug()
 	{
 		Logger::log('gdt', sprintf('%d: %s', self::$GDT_COUNT, get_class($this)));
-		if (self::$GDT_DEBUG > 1)
+		if (self::$GDT_DEBUG >= 2)
 		{
 			Logger::log('gdt', Debug::backtrace('Backtrace GDT allocation', false));
 		}
 	}
 	
+	###########################
+	# --- GDT Render Core --- #
+	###########################
+	/**
+	 * @license GDOv7-LICENSE (c)2020-2023 C.B. gizmore@wechall.net
+	 */
 	##############
-	### Render ### 13 modes so far
-	##############
-	# Various output formats
-	const RENDER_NIL = 0; # null renderer
-	const RENDER_BINARY = 1;
-	const RENDER_CLI = 2;
-	const RENDER_PDF = 3;
-	const RENDER_XML = 4;
-	const RENDER_JSON = 5;
-	# HTML format rendering
-	const RENDER_HTML = 6;
-	const RENDER_CHOICE = 7; # @TODO rename to RENDER_OPTION
-	const RENDER_LIST = 8; # <li>
-	const RENDER_FORM = 9;
-	const RENDER_CARD = 10; # many ui frameworks use card?
-	const RENDER_CELL = 11;
-	const RENDER_HEADER = 12; # table head
-	const RENDER_FILTER = 13; # table head filter
-	const RENDER_ORDER = 14; # table head order @TODO rename to RENDER_ORDER
+	### Render ### 19 Render modes
+	##############  6 Output formats
+	#########################.
+	# Various output formats #
+	const RENDER_NIL = 0;     # nil
+	const RENDER_BINARY = 1;  # websocket (@TODO WS Render Mode)
+	const RENDER_CLI = 2;     # plaintext
+	const RENDER_PDF = 3;     # pdf (@TODO PDF Render Mode)
+	const RENDER_XML = 4;     # xml (@TODO XML Render Mode)
+	const RENDER_JSON= 5;     # json
+	const RENDER_GTK = 6;     #### Enjoy!
+// 	const RENDER_RESERVED_7 = 7; # who
+// 	const RENDER_RESERVED_8 = 8; # knows
+// 	const RENDER_RESERVED_9 = 9; # :) ... maybe soap? maybe the new safe JSON?
+	# HTML format rendering   #### Your Flight!
+	const RENDER_WEBSITE   = 10; # <html> page skeleton, html init mode that switches to RENDER_HTML.
+	const RENDER_HTML   = 11; # <div> plain html mode
+	const RENDER_CARD   = 12; # <div> many ui frameworks use cards...
+	const RENDER_LIST   = 13; # <li>
+	const RENDER_FORM   = 14; # <form><input>
+	const RENDER_OPTION = 15; # <option>
+	# HTML table subrendering # # # # # # # # # # # # # # # # # # # # 
+	const RENDER_HEADER = 16; # table <th>
+	const RENDER_ORDER  = 17; # table <th> order
+	const RENDER_FILTER = 18; # table <th> filter
+	const RENDER_CELL   = 19; # table <td>
+	const RENDER_THEAD  = 20; # table <thead>
+	const RENDER_TFOOT  = 21; # table <tfoot>
 	
-// 	public static array $RENDER_HASHMAP = [
-// 			[$this, 'renderNIL'],
-// 			[$this, 'renderCLI'],
-// 		];
+// 	/**
+// 	 * Switchable rendering callmap.
+// 	 * @var callable[]
+// 	 */
+// 	public array $RENDER_CALLMAP = [
+// 		[static::class, 'renderNIL'],
+// 		[static::class, 'renderBinary'],
+// 		# ...
+// 	];
 	
 	/**
 	 * Call the applications mode rendering method. 
@@ -133,52 +152,64 @@ abstract class GDT
 	 */
 	protected function renderGDT()
 	{
-		# Now comes a trick :)
-		# @TODO We simply call the function im map[$mode]
+		# Now could come a trick :)
+		# @TODO We simply call the function im map[$mode] / switchmap trick
 // 		self::render$this->callRenderMap
 		switch (Application::$INSTANCE->mode)
 		{
-			# outputs
-			case self::RENDER_NIL: return null;
+			# Output modes
+			case self::RENDER_NIL: return $this->renderNIL();
 			case self::RENDER_BINARY: return $this->renderBinary();
 			case self::RENDER_CLI: return $this->renderCLI();
 			case self::RENDER_PDF: return $this->renderPDF();
-			case self::RENDER_JSON: return $this->renderJSON();
 			case self::RENDER_XML: return $this->renderXML();
+			case self::RENDER_JSON: return $this->renderJSON();
+			case self::RENDER_GTK: return $this->renderGTK();
+			# Reserved 1-3
+			case self::RENDER_WEBSITE: return $this->renderWebsite(); # HTML start mode
+			# HTML submodes
 			case self::RENDER_HTML: return $this->renderHTML();
-			# html
-			case self::RENDER_CHOICE: return $this->renderChoice();
+			case self::RENDER_CARD: return $this->renderCard();
 			case self::RENDER_LIST: return $this->renderList();
 			case self::RENDER_FORM: return $this->renderForm();
-			case self::RENDER_CARD: return $this->renderCard();
-			case self::RENDER_CELL: return $this->renderCell();
-			case self::RENDER_HEADER: return $this->renderHeader();
-			case self::RENDER_FILTER: return $this->renderFilter(self::EMPTY_STRING);
+			case self::RENDER_OPTION: return $this->renderOption();
+			# HTML table submodes
+			case self::RENDER_THEAD: return $this->renderTHead();
 			case self::RENDER_ORDER: return $this->renderOrder();
+			case self::RENDER_FILTER: return $this->renderFilter(self::EMPTY_STRING);
+			case self::RENDER_CELL: return $this->renderHTML();
+			case self::RENDER_TFOOT: return $this->renderTFoot();
 		}
 	}
 	
-	# various output/rendering formats
+	#############################
+	### render default stubs ####
+	#############################
 	public function render() { return $this->renderGDT(); }
-	public function renderNIL() : string { return self::EMPTY_STRING; }
+	public function renderNIL() : ?string { return null; }
 	public function renderBinary() : string { return self::EMPTY_STRING; }
 	public function renderCLI() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
-	public function renderJSON() { return $this->renderCLI(); }
 	public function renderXML() : string { return $this->renderHTML(); }
-	# html rendering
+	public function renderJSON() { return $this->renderCLI(); }
+	public function renderGTK() { return null; }
+	public function renderWebsite() : string { return self::EMPTY_STRING; }
+	# HTML rendering
 	public function renderHTML() : string { return $this->renderVar(); }
-	public function renderChoice() : string { return $this->renderHTML(); }
+	public function renderCard() : string { return $this->renderHTML(); }
 	public function renderList() : string { return $this->renderHTML(); }
 	public function renderForm() : string { return $this->renderHTML(); }
-	public function renderCard() : string { return $this->renderHTML(); }
-	# html table rendering
-	public function renderCell() : string { return $this->renderHTML(); }
-	public function renderHeader() : string { return self::EMPTY_STRING; }
+	public function renderOption() : string { return $this->renderHTML(); }
+	# HTML table rendering
+	public function renderTHead() : string { return $this->renderHTML(); }
+	public function renderOrder() : string { return $this->renderLabelText(); }
 	public function renderFilter($f) : string { return self::EMPTY_STRING; }
-// 	public function renderOrder(GDT_Table $t) : string { return $this->renderTableOrder($t); }
-	public function renderOrderLabel() : string { return $this->renderLabel(); }
-
+	public function renderCell() : string { return $this->renderHTML(); }
+	public function renderTFoot() : string { return $this->renderHTML(); }
+	
+	#####################
+	### Render Helper ###
+	#####################
 	public function renderVar() : string
 	{
 		return $this->displayVar($this->getVar());
@@ -200,7 +231,7 @@ abstract class GDT
 		}
 		else
 		{
-			return $choice->renderChoice();
+			return $choice->renderOption();
 		}
 	}
 	
@@ -234,26 +265,37 @@ abstract class GDT
 	################
 	### Features ###
 	################
+	public function isSortable() : bool { return false; }
 	public function isOrderable() : bool { return false; }
-	public function isOrderDefaultAsc() : bool { return true; } # @TODO rename this method
+	public function isDefaultAsc() : bool { return true; }
 	public function isSearchable() : bool { return false; }
 	public function isFilterable() : bool { return false; }
-	public function isSortable() : bool { return false; }
 	
-	##############
-	### Events ###
-	##############
+	##################
+	### GDO Events ###
+	##################
 	public function gdoBeforeCreate(GDO $gdo, Query $query) : void {}
-	public function gdoBeforeRead(GDO $gdo, Query $query) : void {}
+	public function gdoBeforeRead  (GDO $gdo, Query $query) : void {}
 	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void {}
 	public function gdoBeforeDelete(GDO $gdo, Query $query) : void {}
 	
 	public function gdoAfterCreate(GDO $gdo) : void {}
-	public function gdoAfterRead(GDO $gdo) : void {}
+	public function gdoAfterRead  (GDO $gdo) : void {}
 	public function gdoAfterUpdate(GDO $gdo) : void {}
 	public function gdoAfterDelete(GDO $gdo) : void {}
-	
+
+	###################
+	### Form events ###
+	###################
+	/**
+	 * The method has been succesfully validated.
+	 */
 	public function onValidated() : void {}
+
+	/**
+	 * The form has been executed and submittted.
+	 */
+	public function onSubmitted() : void {}
 	
 	################
 	### Validate ###
@@ -261,8 +303,6 @@ abstract class GDT
 	/**
 	 * Validation is a great experience in GDOv7.
 	 * 
-	 * @TODO make validate use $var instead of $value. Or maybe make a second func validateVar.
-	 *
 	 * Almost all GDT have a quite decent validator. There is also a GDT to top that; The GDT_Validator.
 	 * This GDT parameterizes the target GDT to validate, the value to validate, and the form to check for related fields.
 	 * To indicate an error return false. Please use $gdt->error() to make the field in question blink and noting your error
@@ -289,8 +329,6 @@ abstract class GDT
 	 * @see GDT_Select
 	 * @see GDT_ComboBox
 	 * @see GDT_Enum
-	 *
-	 * @param mixed $value
 	 */
 	public function validate($value) : bool
 	{
@@ -336,8 +374,7 @@ abstract class GDT
 	 */
 	public function configJSON() : array
 	{
-		return [
-		];
+		return self::EMPTY_ARRAY;
 	}
 	
 	/**
@@ -403,14 +440,14 @@ abstract class GDT
 	#########################
 	### Bridge for traits ###
 	#########################
-	/**
-	 * @deprecated
-	 * @return bool
-	 */
-	public function hasName() : bool
-	{
-		return false;
-	}
+// 	/**
+// 	 * @deprecated
+// 	 * @return bool
+// 	 */
+// 	public function hasName() : bool
+// 	{
+// 		return false;
+// 	}
 	
 	public function getName() : ?string
 	{
@@ -434,17 +471,7 @@ abstract class GDT
 		return $this;
 	}
 	
-	/**
-	 * @deprecated
-	 * @param string $key
-	 * @return bool
-	 */
-	public function hasInput(string $key=null) : bool
-	{
-		return false;
-	}
-	
-	public function hasInputs() : bool
+	public function hasInput() : bool
 	{
 		return false;
 	}
@@ -531,17 +558,11 @@ abstract class GDT
 	
 	/**
 	 * Provided by WithPHPJQuery.
-	 * @return string
 	 */
 	public function htmlAttributes() : string
 	{
 		return self::EMPTY_STRING;
 	}
-	
-// 	public function input($input = null) : void
-// 	{
-// // 		return $this;
-// 	}
 	
 	public function initial(string $initial = null) : self
 	{
@@ -559,7 +580,7 @@ abstract class GDT
 	}
 	
 	/**
-	 * @return string[]
+	 * @return string[string]
 	 */
 	public function getGDOData() : ?array
 	{
@@ -657,8 +678,6 @@ abstract class GDT
 	#############
 	/**
 	 * This is the default input for automagical unit tests.
-	 * 
-	 * @return string
 	 */
 	public function plugVar() : string
 	{
@@ -667,7 +686,6 @@ abstract class GDT
 	
 	/**
 	 * Get multiple variants of a plug var.
-	 * @return array
 	 */
 	public function plugVars() : array
 	{
@@ -683,20 +701,20 @@ abstract class GDT
 		return true;
 	}
 	
-	##################
-	### DEPRECATED ### backwards compat :(
-	##################
-	/**
-	 * @deprecated I don't like this method anymore. it is all input now.
-	 */
-	public function getRequestVar(string $name=null, $default=null, $bla=null) : string
-	{
-		if ($input = $this->getInput($name))
-		{
-			return $this->inputToVar($input);
-		}
-		return $this->getVar();
-	}
+// 	##################
+// 	### DEPRECATED ### backwards compat :(
+// 	##################
+// 	/**
+// 	 * @deprecated I don't like this method anymore. it is all input now.
+// 	 */
+// 	public function getRequestVar(string $name=null, $default=null, $bla=null) : string
+// 	{
+// 		if ($input = $this->getInput($name))
+// 		{
+// 			return $this->inputToVar($input);
+// 		}
+// 		return $this->getVar();
+// 	}
 	
 	###########
 	### CLI ###
@@ -708,10 +726,10 @@ abstract class GDT
 	
 }
 
-if (def('GDT_GDO_DEBUG', false))
+if (def('GDT_GDO_DEBUG', 0))
 {
 	# Clear trace log
-	GDT::$GDT_DEBUG = true;
+	GDT::$GDT_DEBUG = GDT_GDO_DEBUG;
 	Logger::log('gdt', '--- NEW RUN ---');
 	Logger::log('gdo', '--- NEW RUN ---');
 }

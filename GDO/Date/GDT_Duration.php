@@ -50,7 +50,7 @@ class GDT_Duration extends GDT_String
 	    return $value === null ? null : Time::humanDuration($value);
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return html($this->getVar());
 	}

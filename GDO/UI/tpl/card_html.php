@@ -28,10 +28,10 @@ $field->addClass('gdt-card');
 <?php if (isset($field->image) || isset($field->content) || $field->getAllFields()) : ?>
   <div class="gdt-card-middle">
 <?php if (isset($field->image)) : ?>
-    <div class="gdt-card-image"><?=$field->image->renderCell()?></div>
+    <div class="gdt-card-image"><?=$field->image->renderHTML()?></div>
 <?php endif; ?>
 <?php if (isset($field->content)) : ?>
-    <div class="gdt-card-content"><?=$field->content->renderCell()?></div>
+    <div class="gdt-card-content"><?=$field->content->renderHTML()?></div>
 <?php endif; ?>
 <?php if ($field->getAllFields()) : ?>
     <div class="gdt-card-fields">
@@ -46,10 +46,10 @@ $field->addClass('gdt-card');
 <?php if (isset($field->footer) || $field->hasActions()) : ?>
   <div class="gdt-card-lower">
 <?php if (isset($field->footer)) : ?>
-    <div class="gdt-card-footer"><?=$field->footer->renderCell()?></div>
+    <div class="gdt-card-footer"><?=$field->footer->renderHTML()?></div>
 <?php endif; ?>
 <?php if ($field->getActions()) : ?>
-    <div class="gdt-card-actions"><?=$field->actions()->renderCell()?></div>
+    <div class="gdt-card-actions"><?=$field->actions()->renderHTML()?></div>
 <?php endif; ?>
   </div>
 <?php endif; ?>

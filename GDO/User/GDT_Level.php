@@ -29,7 +29,7 @@ final class GDT_Level extends GDT_UInt
 	
 	public function isSearchable() : bool { return false; }
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		if (isset($this->gdo))
 		{

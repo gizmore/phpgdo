@@ -31,11 +31,11 @@ class GDT_Object extends GDT_UInt
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		if ($obj = $this->getValue())
 		{
-			return $obj->renderCell();
+			return $obj->renderHTML();
 		}
 		if ($var = $this->getVar())
 		{
@@ -44,12 +44,12 @@ class GDT_Object extends GDT_UInt
 		return '';
 	}
 	
-	public function renderChoice() : string
+	public function renderOption() : string
 	 {
 	     /** @var $obj GDO **/
 		 if ($obj = $this->getValue())
 		 {
-			 return $obj->renderChoice();
+			 return $obj->renderOption();
 		 }
 		 return '';
 	 }
@@ -84,7 +84,7 @@ class GDT_Object extends GDT_UInt
 	        $selected = [
 	            'id' => $gdo->getID(),
 	            'text' => $gdo->renderName(),
-	            'display' => json_quote($gdo->renderChoice()),
+	            'display' => json_quote($gdo->renderOption()),
 	        ];
 	    }
 	    else 

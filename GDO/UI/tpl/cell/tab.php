@@ -4,7 +4,7 @@
   <div class="content">
 <?php
 foreach ($field->getFields() as $gdt) :
-	echo $cell ? $gdt->renderCell() : $gdt->renderForm();
+	echo $cell ? $gdt->renderHTML() : $gdt->renderForm();
 endforeach;?>
   </div>
 </div>

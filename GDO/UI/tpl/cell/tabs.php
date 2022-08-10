@@ -2,7 +2,7 @@
 <div class="gdo-tabs">
 <?php
 foreach ($field->getTabs() as $tab) :
-  echo $cell ? $tab->renderCell() : $tab->renderForm();
+  echo $cell ? $tab->renderHTML() : $tab->renderForm();
 endforeach;
 ?>
 </div>

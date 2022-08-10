@@ -3,7 +3,7 @@ namespace GDO\Core\tpl;
 use GDO\Core\GDT_Int;
 /** @var $field GDT_Int **/
 ?>
-<div class="gdt-container<?=$field->classError()?>">
+<div class="gdt-number gdt-container<?=$field->classError()?>">
 <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
 <input
 <?=$field->htmlFocus()?>

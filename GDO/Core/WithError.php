@@ -5,7 +5,7 @@ namespace GDO\Core;
  * Adds error annotations to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 trait WithError
@@ -40,7 +40,7 @@ trait WithError
 	{
 		unset($this->errorRaw);
 		unset($this->errorKey);
-		unset($this->errorArgs);
+		$this->errorArgs = null;
 		return $this;
 	}
 	
@@ -73,7 +73,7 @@ trait WithError
 		{
 			return t($this->errorKey, $this->errorArgs);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	/**
@@ -83,7 +83,7 @@ trait WithError
 	{
 		return $this->hasError() ?
 			('<div class="gdt-form-error">' . $this->renderError() . '</div>') :
-			'';
+			GDT::EMPTY_STRING;
 	}
 	
 }

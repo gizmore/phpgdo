@@ -19,7 +19,7 @@ use GDO\Language\GDT_LangSwitch;
  * This is merely to detect crashes.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 final class AutomatedRenderingTest extends TestCase
@@ -194,28 +194,26 @@ final class AutomatedRenderingTest extends TestCase
 // 		{
 // 			xdebug_break();
 // 		}
-		
-// 		$table = GDT_Table::make();
-// 		$table->addHeaders($gdt);
 		# various output/rendering formats
+		$gdt->renderNIL();
 		$gdt->renderBinary();
 		$gdt->renderCLI();
 		$gdt->renderPDF();
-		$gdt->renderJSON();
 		$gdt->renderXML();
+		$gdt->renderJSON();
+		$gdt->renderGTK();
+		$gdt->renderPage();
 		# html rendering
 		$gdt->renderHTML();
-		$gdt->renderChoice();
+		$gdt->renderOption();
 		$gdt->renderList();
 		$gdt->renderForm();
 		$gdt->renderCard();
 		# html table rendering
-		$gdt->renderCell();
+		$gdt->renderHTML();
 // 		$gdt->renderHeader();
 // 		$gdt->renderFilter('');
 		return true;
-// 		$out .= $gdt->renderOrder($table);
-// 		assertNotEquals('', $out, "Test if {$gdt->gdoClassName()} renders something at least.");
 	}
 
 }

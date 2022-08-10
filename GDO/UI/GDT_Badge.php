@@ -15,7 +15,7 @@ class GDT_Badge extends GDT
 	public $badge;
 	public function badge($badge) { $this->badge = $badge; return $this; }
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('UI', 'cell/badge.php', ['field' => $this]);
 	}

@@ -16,7 +16,7 @@ final class UITest extends TestCase
 	public function testSimpleLabel()
 	{
 		$label = GDT_Label::make()->labelRaw('teyst');
-		$result = $label->renderMode(GDT::RENDER_HTML);
+		$result = $label->renderMode(GDT::RENDER_WEBSITE);
 		assertStringContainsString("teyst", $result, 'Test if basic rendering works.');
 		assertStringContainsString("<label", $result, 'Test if basic html rendering works.');
 	}
@@ -24,7 +24,7 @@ final class UITest extends TestCase
     public function testButtons()
     {
         $btn = GDT_Button::make()->href(hrefDefault());
-        $html = $btn->renderMode(GDT::RENDER_HTML);
+        $html = $btn->renderMode(GDT::RENDER_WEBSITE);
         assertStringContainsStringIgnoringCase(GDO_MODULE, $html, "Test if Button renders without name.");
         
         $form = GDT_Form::make();

@@ -67,7 +67,7 @@ final class Module_User extends GDO_Module
 			if ($user->isUser()) {
 				GDT_Page::instance()->rightBar()->addField(
 					GDT_Link::make('link_your_profile')->href(
-						$user->href_profile()));
+						$user->hrefProfile()));
 			}
 		}
 	}

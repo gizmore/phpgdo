@@ -7,9 +7,11 @@ use GDO\Core\WithInput;
 
 /**
  * A parameter repeater.
- * Used for CLI parameter lists, like sum 1,2,3,...
- * These need to be not null and may not have an initial value.
+ * 
+ * Used for CLI parameter lists, like $sum 1,2,3,...
+ * These need to be notNull and may not have an initial value.
  * This means it is always a positional finisher.
+ * It is probably not possible at the moment to proxy a GDT_Composite like GDT_Message or GDT_Position.
  * 
  * @author gizmore
  * @version 7.0.1

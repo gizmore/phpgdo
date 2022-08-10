@@ -6,6 +6,7 @@ use GDO\Core\GDT_Template;
 
 /**
  * A link to a profile.
+ * If the user is admin, he is rel="author".
  * 
  *  - Requires user()
  *  
@@ -26,7 +27,7 @@ final class GDT_ProfileLink extends GDT_Link
 	
 	public function hrefProfile() : string
 	{
-		return $this->user->href_profile();
+		return $this->user->hrefProfile();
 	}
 	
 	################

@@ -108,7 +108,7 @@ GDOv7.0.0 comes with *only* the core modules, but all of them cleaned up and *no
 
  - These GDT have been removed: [GDT_IconButton](../)
 
- - Confusion resolved. RENDER_LIST is for <ul> and RENDER_CHOICE is for <option>.
+ - Confusion resolved. RENDER_LIST is for <ul> and RENDER_OPTION is for <option>.
 
  - New Domain: phpgdo.com :)
 

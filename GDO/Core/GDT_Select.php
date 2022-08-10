@@ -382,7 +382,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this->gdoHumanName() . ': ' . $this->displayVar($this->getVar());
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return $this->displayChoice($this->getVar());
 	}
@@ -479,7 +479,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 		else
 		{
-			return $choice->renderChoice();
+			return $choice->renderOption();
 		}
 	}
 	

@@ -20,7 +20,7 @@ class GDT_CreatedAt extends GDT_Timestamp
 	
 	public function defaultLabel() : self { return $this->label('created_at'); }
 
-	public function isOrderDefaultAsc() : bool { return false; }
+	public function isDefaultAsc() : bool { return false; }
 	
 	public function gdoColumnDefine() : string
 	{

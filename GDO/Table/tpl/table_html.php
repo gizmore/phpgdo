@@ -4,7 +4,7 @@ use GDO\Form\GDT_Form;
 /** @var $field \GDO\Table\GDT_Table **/
 /** @var $form bool **/
 $headers = $field->getHeaderFields();
-$pm = isset($field->pagemenu) ? $field->pagemenu->render() : '';
+$pm = isset($field->pagemenu) ? $field->pagemenu->renderHTML() : '';
 $result = $field->getResult();
 ?>
 <div class="gdt-table"<?=$field->htmlID()?>>
@@ -24,13 +24,13 @@ $result = $field->getResult();
 	  <?php foreach($headers as $gdt) : ?>
 	  <?php if (!$gdt->isHidden()) : ?>
 		<th class="<?=$gdt->htmlClass()?>">
-			<?php if ($field->isOrderable() && $gdt->isOrderable()) : ?>
-			<?=$field->renderOrder($gdt)?>
+		<?php if ($field->isOrderable() && $gdt->isOrderable()) : ?>
+			<?=$field->renderTableOrder($gdt)?>
 			<?php else : ?>
-			<label><?=$gdt->renderOrderLabel()?></label>
+			<label><?=$gdt->renderOrder()?></label>
 			<?php endif; ?>
 		  <?php if ($field->filtered) : ?>
-			<?= $gdt->renderFilter($field->headers->name); ?>
+			<?=$gdt->renderFilter($field->headers->name)?>
 		  <?php endif; ?>
 		</th>
       <?php endif;?>
@@ -45,7 +45,7 @@ $result = $field->getResult();
 	  <?php foreach($headers as $gdt) :
 	        if (!$gdt->isHidden()) :
 	        $gdt->gdo($gdo); ?>
-		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->render()?></td>
+		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
 	  <?php endif; ?>
 	  <?php endforeach; ?>
 	</tr>
@@ -56,7 +56,7 @@ $result = $field->getResult();
 	  <?php foreach($headers as $gdt) :
 	        if (!$gdt->isHidden()) :
 	        $gdt->gdo($gdo); ?>
-		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->render()?></td>
+		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
 	  <?php endif; ?>
 	  <?php endforeach; ?>
 	</tr>
@@ -64,12 +64,12 @@ $result = $field->getResult();
 	<?php endif; ?>
 	</tbody>
 <?php if (isset($field->footer)) : ?>
-	<tfoot><?=$field->footer->render()?></tfoot>
+	<tfoot><?=$field->footer->renderTFoot()?></tfoot>
 <?php endif; ?>
   </table>
   <input type="submit" class="n" />
 <?php if ($actions = $field->getActions()) : ?>
-<?=$actions->render()?>
+<?=$actions->renderHTML()?>
 <?php endif; ?>
 <?php if (!$form) : ?>
  </form>

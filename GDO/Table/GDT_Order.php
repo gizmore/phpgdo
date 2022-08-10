@@ -103,7 +103,7 @@ final class GDT_Order extends GDT_String
 	public function nextHref(GDT $gdt) : string
 	{
 		$name = $gdt->getName();
-		$asc = $gdt->isOrderDefaultAsc();
+		$asc = $gdt->isDefaultAsc();
 		switch ($this->state($gdt))
 		{
 			case self::ASC:

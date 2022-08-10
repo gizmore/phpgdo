@@ -5,11 +5,15 @@ namespace GDO\Form;
  * Add jQuery like click handling to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 trait WithClickHandler
 {
+	/**
+	 * The click handler.
+	 * @var callable
+	 */
 	public $onclick;
 	
 	/**

@@ -8,14 +8,15 @@ namespace GDO\Core;
  * In JSON it does inflatten. instead of response => values you will just get values.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
+ * @since 7.0.0
  */
 class GDT_Tuple extends GDT
 {
 	use WithError;
 	use WithFields;
 	
-	public function addField(GDT $gdt)
+	public function addField(GDT $gdt, GDT $after=null, bool $last=true) : self
 	{
 		if ($gdt instanceof self)
 		{
@@ -24,9 +25,9 @@ class GDT_Tuple extends GDT
 		return $this->addFieldB($gdt);
 	}
 	
-	protected function addFieldB(GDT $gdt) : self
+	protected function addFieldB(GDT $gdt, GDT $after=null, bool $last=true) : self
 	{
-		$this->addFieldA($gdt);
+		$this->addFieldA($gdt, $after, $last);
 		if ($gdt->hasError())
 		{
 			$this->error('err_method_failed', [$gdt->renderError()]);

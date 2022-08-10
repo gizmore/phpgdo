@@ -67,7 +67,7 @@ class GDT_Template extends GDT
 		return null;
 	}
 
-	public function renderCell(): string
+	public function renderHTML(): string
 	{
 		return $this->renderTemplate();
 	}

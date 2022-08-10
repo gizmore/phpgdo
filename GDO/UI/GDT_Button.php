@@ -6,15 +6,22 @@ use GDO\Core\GDT_Template;
 use GDO\Core\WithGDO;
 use GDO\Form\WithFormAttributes;
 use GDO\Core\WithName;
+use GDO\Form\WithClickHandler;
 
 /**
- * A simple button with only a label.
+ * A simple button with only a label, href and icon.
+ * 
+ * - Can be marked as secondary.
+ * - Can have a GDO to generate it's HREF.
+ * 
+ * @TODO: PHPJQuery can be used to attach some JS to buttons?
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 6.1.0
  * @see GDT_Link
  * @see GDT_Submit
+ * @see WithGDO
  */
 class GDT_Button extends GDT
 {
@@ -24,6 +31,7 @@ class GDT_Button extends GDT
 	use WithIcon;
 	use WithLabel;
 	use WithPHPJQuery;
+	use WithClickHandler;
 	use WithFormAttributes;
 	use WithAnchorRelation;
 	
@@ -42,7 +50,7 @@ class GDT_Button extends GDT
 	##############
 	public function renderHTML() : string
 	{
-	    if ($this->checkEnabled)
+		if (isset($this->checkEnabled))
 	    {
     	    $this->writeable(call_user_func($this->checkEnabled, $this));
 	    }
@@ -52,10 +60,13 @@ class GDT_Button extends GDT
 	
 	public function renderForm() : string
 	{
-	    return $this->renderCell();
+	    return $this->renderHTML();
 	}
 	
-	public function renderOrderLabel() : string { return ''; }
+	public function renderOrder() : string
+	{
+		return GDT::EMPTY_STRING;
+	}
 	
 	public function renderJSON()
 	{
@@ -65,13 +76,13 @@ class GDT_Button extends GDT
 	#############
 	### Proxy ###
 	#############
-	public function htmlGDOHREF()
+	public function htmlGDOHREF() : string
 	{
 		if ($href = $this->gdoHREF())
 		{
-			return sprintf(' href="%s"', $href);
+			return " href=\"{$href}\"";
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function gdoHREF()
@@ -83,26 +94,30 @@ class GDT_Button extends GDT
 	    if (isset($this->gdo))
 	    {
 	    	$method_name = 'href_' . $this->name;
-	    	if (method_exists($this->gdo, $method_name))
+// 	    	if (method_exists($this->gdo, $method_name))
 	    	{
 				return call_user_func([$this->gdo, $method_name]);
 	    	}
 	    }
 	}
 	
-	public function gdoLabel()
-	{
-		return call_user_func(
-			[$this->gdo, 'display_'.$this->name]);
-	}
+// 	public function gdoLabel()
+// 	{
+// 		return call_user_func(
+// 			[$this->gdo, 'display_'.$this->name]);
+// 	}
 	
 	########################
 	### Enabled callback ###
 	########################
+	/**
+	 * Do a callback check for the GDO if button is enabled?
+	 * @var callable
+	 */
 	public $checkEnabled;
-	public function checkEnabled(callable $checkEnabled)
+	public function checkEnabled(callable $checkEnabled) : self
 	{
-	    $this->checkEnabled = call_user_func($checkEnabled);
+	    $this->checkEnabled = $checkEnabled;
 	    return $this;
 	}
 

@@ -41,7 +41,7 @@ final class Completion extends MethodCompletion
 				$response[] = array(
 					'id' => $iso,
 					'text' => $language->renderName(),
-					'display' => $language->renderChoice(),
+					'display' => $language->renderOption(),
 				);
 			}
 		}

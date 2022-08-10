@@ -33,7 +33,7 @@ return [
 'version_available' => 'Version verfügbar',
 'form_div_config_vars' => 'Konfiguration',
 'msg_module_saved' => 'Konfiguration wurde gespeichtert. %s',
-'msg_modulevar_changed' => '%s wurde von <i>%s</i> nach <i>%s</i> geändert.',
+'msg_modulevar_changed' => '`%s` wurde von %s nach %s geändert.',
 'href_admin' => 'Admin Bereich',
 'confirm_wipe_module' => 'Möchten Sie diese Datenbank-Tabellen löschen: %s?',
 ################################################################

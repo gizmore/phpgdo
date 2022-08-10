@@ -461,7 +461,7 @@ abstract class Method #extends GDT
 		return GDT::EMPTY_ARRAY;
 	}
 	
-	public function withAppliedInputs(array $inputs) : self
+	public function appliedInputs(array $inputs) : self
 	{
 		$this->inputs($inputs);
 		$this->applyInput();

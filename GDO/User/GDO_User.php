@@ -196,7 +196,7 @@ final class GDO_User extends GDO
 		return href('Admin', 'UserEdit', "&user={$this->getID()}");
 	}
 	
-	public function href_profile() : string
+	public function hrefProfile() : string
 	{
 		return href('User', 'Profile', "&for={$this->renderUserName()}");
 	}

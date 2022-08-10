@@ -15,9 +15,14 @@ use GDO\Core\WithVerb;
 use GDO\UI\GDT_SearchField;
 use GDO\Table\GDT_Order;
 use GDO\Core\WithGDO;
+use GDO\UI\WithPHPJQuery;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
+ * Can be styled, has a http verb, href and a GDO to operate on.
+ * It can be slim, ask for focus and validate it's fields.
+ * 
+ * Quite a biggy!
  * 
  * @author gizmore
  * @version 7.0.1
@@ -32,17 +37,18 @@ use GDO\Core\WithGDO;
  */
 final class GDT_Form extends GDT
 {
-	use WithGDO; # GDO
-	use WithName; # Id
-	use WithText; # form info
-	use WithVerb; # http request method
-	use WithInput; # need input
-	use WithTitle; # form title
-	use WithError; # form error
-	use WithFields; # container
-	use WithTarget; # html target
-	use WithAction; # html action
-	use WithActions; # menu
+	use WithGDO;
+	use WithName;
+	use WithText;
+	use WithVerb;
+	use WithInput;
+	use WithTitle;
+	use WithError;
+	use WithFields;
+	use WithTarget;
+	use WithAction;
+	use WithActions;
+	use WithPHPJQuery;
 	
 	const GET = 'GET';
 	const POST = 'POST';
@@ -56,20 +62,6 @@ final class GDT_Form extends GDT
 		parent::__construct();
 		$this->verb(self::POST);
 	}
-	
-// 	##############
-// 	### Inputs ###
-// 	##############
-// 	public function plugVars() : array
-// 	{
-// 		$back = [];
-// 		foreach ($this->actions()->getAllFields() as $gdt)
-// 		{
-// 			$name = $gdt->getName();
-// 			$back[$name] = '1';
-// 		}
-// 		return array_values($back);
-// 	}
 	
 	############
 	### Slim ###
@@ -106,7 +98,7 @@ final class GDT_Form extends GDT
 		return trim($title . ' ' . $text);
 	}
 
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		self::$CURRENT = $this;
 		$app = Application::$INSTANCE;
@@ -117,15 +109,6 @@ final class GDT_Form extends GDT
 		$app->mode($old);
 		return $html;
 	}
-	
-// 	public function htmlID() : string
-// 	{
-// 		if ($name = $this->getName())
-// 		{
-// 			return sprintf(' id="form_%s"', $name);
-// 		}
-// 		return '';
-// 	}
 	
 	/**
 	 * Render html hidden fields for mo/me.
@@ -150,7 +133,7 @@ final class GDT_Form extends GDT
 		$valid = true;
 		foreach ($this->getAllFields() as $gdt)
 		{
-			$gdt->inputs($this->inputs);
+// 			$gdt->inputs($this->inputs);
 			if (!$gdt->validated())
 			{
 				$valid = false;

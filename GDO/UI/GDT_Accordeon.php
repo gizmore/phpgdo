@@ -5,50 +5,52 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDT;
 
 /**
- * A panel that collapses on click.
- * 
+ * A panel that un/collapses on click to the title.
+ * Content is inherited via container.
+ *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class GDT_Accordeon extends GDT_Container
 {
 	use WithTitle;
-	
-	##############
-	### Render ###
-	##############
-	public function renderCell() : string
-    {
-		return $this->renderAccordeon(GDT::RENDER_CELL);
-    }
-    
-    public function renderForm() : string
-    {
-    	return $this->renderAccordeon(GDT::RENDER_FORM);
-    }
-    
-	protected function renderAccordeon(int $mode) : string
+
+	# #############
+	# ## Opened ###
+	# #############
+	public bool $opened = false;
+
+	public function opened(bool $opened = true): self
 	{
-        return GDT_Template::php('UI', 'accordeon_html.php', [
-        	'field' => $this,
-        	'mode' => $mode,
-        ]);
+		$this->opened = $opened;
+		return $this;
 	}
-	
-    ##############
-    ### Opened ###
-    ##############
-    public bool $opened = false;
-    public function opened(bool $opened=true) : self
-    {
-        $this->opened = $opened;
-        return $this;
-    }
-    
-    public function closed(bool $closed=true) : self
-    {
-    	return $this->opened(!$closed);
-    }
-    
+
+	public function closed(bool $closed = true): self
+	{
+		return $this->opened( !$closed);
+	}
+
+	# #############
+	# ## Render ###
+	# #############
+	public function renderHTML(): string
+	{
+		return $this->renderAccordeon(GDT::RENDER_CELL);
+	}
+
+	public function renderForm(): string
+	{
+		return $this->renderAccordeon(GDT::RENDER_FORM);
+	}
+
+	protected function renderAccordeon(int $mode): string
+	{
+		return GDT_Template::php('UI', 'accordeon_html.php', [
+			'field' => $this,
+			'mode' => $mode,
+		]);
+	}
+
 }

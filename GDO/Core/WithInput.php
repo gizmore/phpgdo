@@ -1,9 +1,9 @@
 <?php
 namespace GDO\Core;
 
-/**  ____________
- * (Need. input =])
- *  ` (c)gizmore_)
+/** ______________
+ * (Need. Input.=|
+ *  , (c)gizmore_)
  * [=]
  *°|.|´
  * / \
@@ -49,7 +49,7 @@ trait WithInput
 		return isset($this->inputs) ? $this->inputs : GDT::EMPTY_ARRAY;
 	}
 	
-	public function hasInput(string $key=null) : bool
+	public function hasInput() : bool
 	{
 		if ($name = $this->getName())
 		{

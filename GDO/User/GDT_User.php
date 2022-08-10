@@ -170,7 +170,7 @@ class GDT_User extends GDT_Object
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    if ($user = $this->getUser())
 	    {
@@ -181,7 +181,7 @@ class GDT_User extends GDT_Object
 	
 	public function renderJSON()
 	{
-	    return $this->renderCell();
+	    return $this->renderHTML();
 	}
 	
 	##############

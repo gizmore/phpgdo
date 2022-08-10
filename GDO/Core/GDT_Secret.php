@@ -18,6 +18,6 @@ class GDT_Secret extends GDT_String
 	
     public function isSerializable() : bool { return false; }
 
-	public function renderCell() : string { return '****'; }
+	public function renderHTML() : string { return '****'; }
 
 }

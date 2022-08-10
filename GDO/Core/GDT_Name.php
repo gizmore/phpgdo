@@ -30,7 +30,7 @@ class GDT_Name extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		if (isset($this->gdo))
 	    {
@@ -45,12 +45,12 @@ class GDT_Name extends GDT_String
 	
 	public function renderCLI() : string
 	{
-	    return $this->renderCell() . "\n";
+	    return $this->renderHTML() . "\n";
 	}
 	
 	public function renderJSON()
 	{
-	    return $this->renderCell();
+	    return $this->renderHTML();
 	}
 	
 }

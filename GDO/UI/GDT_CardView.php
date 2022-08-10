@@ -16,7 +16,7 @@ final class GDT_CardView extends GDT
 {
 	use WithGDO;
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return $this->gdo->renderCard();
 	}

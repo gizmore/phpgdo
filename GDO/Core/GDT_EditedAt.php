@@ -20,7 +20,7 @@ final class GDT_EditedAt extends GDT_Timestamp
 	public function defaultLabel() : self { return $this->label('edited_at'); }
 
 	public function isHidden() : bool { return true; }
-	public function isOrderDefaultAsc() : bool { return false; }
+	public function isDefaultAsc() : bool { return false; }
 	
 	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void
 	{

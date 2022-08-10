@@ -58,7 +58,7 @@ class GDT_ObjectSelect extends GDT_Select
 		return parent::renderForm();
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		if ($obj = $this->getValue())
 		{
@@ -189,7 +189,7 @@ class GDT_ObjectSelect extends GDT_Select
 	            $selected[] = array(
 	                'id' => $value->getID(),
 	                'text' => $value->renderName(),
-	                'display' => $value->renderChoice(),
+	                'display' => $value->renderOption(),
 	            );
 	        }
 	    }
@@ -200,7 +200,7 @@ class GDT_ObjectSelect extends GDT_Select
     	        $selected = array(
     	            'id' => $value->getID(),
     	            'text' => $value->renderName(),
-    	            'display' => $value->renderChoice(),
+    	            'display' => $value->renderOption(),
     	        );
 	        }
 	        else

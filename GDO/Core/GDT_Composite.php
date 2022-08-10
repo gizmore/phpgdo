@@ -18,6 +18,7 @@ class GDT_Composite extends GDT_Container
 	use WithLabel;
 	use WithValue;
 	use WithInput;
+	use WithError;
 	use WithFormAttributes;
 	
 	public function gdoCompositeFields() : array
@@ -82,9 +83,10 @@ class GDT_Composite extends GDT_Container
 	public function validated(bool $throw=false) : ?self
 	{
 		$valid = true;
+		$inputs = $this->getInputs();
 		foreach ($this->getAllFields() as $gdt)
 		{
-			if (!$gdt->inputs($this->inputs)->validated())
+			if (!$gdt->inputs($inputs)->validated())
 			{
 				$valid = false;
 				if ($throw)

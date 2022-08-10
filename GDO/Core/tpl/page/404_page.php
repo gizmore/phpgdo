@@ -7,4 +7,4 @@ use GDO\UI\GDT_Error;
  */
 $error = GDT_Error::make()->title('file_not_found');
 $error->text('err_file_not_found', [html($url->raw)]);
-echo $error->renderCell();
+echo $error->renderHTML();

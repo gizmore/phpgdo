@@ -16,8 +16,6 @@ use function PHPUnit\Framework\assertGreaterThanOrEqual;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertLessThan;
-use GDO\User\Method\Profile;
-use GDO\CLI\Method\Concat;
 
 /***
  * Test all GDOv7 with plugvar fuzzing.
@@ -165,7 +163,8 @@ final class AutomatedMethodTest extends TestCase
 		$response->renderMode(GDT::RENDER_PDF);
 		$response->renderMode(GDT::RENDER_XML);
 		$response->renderMode(GDT::RENDER_JSON);
-		$response->renderMode(GDT::RENDER_HTML);
+		$response->renderMode(GDT::RENDER_GTK);
+		$response->renderMode(GDT::RENDER_WEBSITE);
 		return true;
 	}
 	

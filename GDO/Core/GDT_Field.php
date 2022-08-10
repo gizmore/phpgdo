@@ -203,7 +203,7 @@ abstract class GDT_Field extends GDT
 	
 	public function renderCard() : string
 	{
-		return $this->displayCard($this->renderCell());
+		return $this->displayCard($this->renderHTML());
 	}
 	
 	public function displayCard($var) : string

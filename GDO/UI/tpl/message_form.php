@@ -5,7 +5,8 @@ namespace GDO\UI\tpl;
 <div class="gdt-container<?=$field->classError()?>">
 <label<?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
 <div class="<?=$field->classEditor()?>"<?=$field->htmlID()?>>
-<textarea rows="6"
+<textarea
+<?=$field->htmlRows()?>
 <?=$field->htmlFocus()?>
 <?=$field->htmlFormName()?>
 <?=$field->htmlRequired()?>

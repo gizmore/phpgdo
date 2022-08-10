@@ -35,7 +35,7 @@ class GDT_ComboBox extends GDT_String
 	        'selected' => [
 	            'id' => $this->getVar(),
 	            'text' => $this->getVar(),
-	            'display' => $this->renderChoice(),
+	            'display' => $this->renderOption(),
 	        ],
 	        'completionHref' => isset($this->completionHref) ? $this->completionHref : null,
 	        'combobox' => 1,

@@ -50,7 +50,7 @@ final class GDT_Tabs extends GDT
 		return GDT_Template::php('UI', 'cell/tabs.php', ['field' => $this, 'cell' => false]);
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		return GDT_Template::php('UI', 'cell/tabs.php', ['field' => $this, 'cell' => true]);
 	}

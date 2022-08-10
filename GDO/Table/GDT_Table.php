@@ -17,6 +17,7 @@ use GDO\Core\WithGDO;
 use GDO\Form\WithAction;
 use GDO\Core\WithName;
 use GDO\Core\WithInput;
+use GDO\UI\WithPHPJQuery;
 
 /**
  * A filterable, searchable, orderable, paginatable, sortable collection of GDT[] in headers.
@@ -54,6 +55,7 @@ class GDT_Table extends GDT
 	use WithAction;
 	use WithActions;
 	use WithHeaders;
+	use WithPHPJQuery;
 
 	public function getDefaultName() : string
 	{
@@ -174,7 +176,7 @@ class GDT_Table extends GDT
 	 * Render an order header for a gdt.
 	 * Table only rendering method.
 	 */
-	public function renderOrder(GDT $gdt) : string
+	public function renderTableOrder(GDT $gdt) : string
 	{
 		return GDT_Template::php('Table', 'table_order.php', [
 			'table' => $this,
@@ -370,8 +372,7 @@ class GDT_Table extends GDT
 	}
 
 	/**
-	 * Create the pagemenu
-	 * @return GDT_PageMenu
+	 * Create the pagemenu.
 	 */
 	private function getPageMenu() : GDT_PageMenu
 	{
@@ -427,7 +428,7 @@ class GDT_Table extends GDT
 
 	public function renderCard() : string
 	{
-		return $this->renderCell();
+		return $this->renderHTML();
 	}
 
 	public function renderJSON()
@@ -547,9 +548,6 @@ class GDT_Table extends GDT
 	 * Calculate the page for a gdo.
 	 * We do this by examin the order from our filtered query.
 	 * We count(*) the elements that are before or after orderby.
-	 *
-	 * @param GDO $gdo
-	 * @throws GDO_Exception
 	 */
 	public function getPageFor(GDO $gdo)
 	{

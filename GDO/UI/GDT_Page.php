@@ -10,7 +10,7 @@ use GDO\Session\GDO_Session;
 
 /**
  * A website page object.
- * Adds 4 sidebars and a top response box.
+ * Adds 4 sidebars and 1 top response box.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -31,11 +31,11 @@ final class GDT_Page extends GDT
 	 */
 	public function reset(bool $removeInput=false) : self
 	{
-		unset($this->topResponse);
 		unset($this->topBar);
 		unset($this->leftBar);
 		unset($this->rightBar);
 		unset($this->bottomBar);
+		unset($this->topResponse);
 		return $this;
 	}
 	
@@ -43,11 +43,12 @@ final class GDT_Page extends GDT
 	### Render ###
 	##############
 	/**
-	 * Render this page.
-	 * Include module scripts for html page.
+	 * Render this website page in html mode.
+	 * Include module scripts and sidebars for a full html page.
 	 */
 	public function renderHTML() : string
 	{
+		# we want a full html page.
 		if (!Application::$INSTANCE->isInstall())
 		{
 			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
@@ -59,9 +60,9 @@ final class GDT_Page extends GDT
 		return GDT_Template::php('UI', 'page_html.php', ['page' => $this]);
 	}
 	
-	############
-	### Bars ###
-	############
+	###########
+	### Top ###
+	###########
 	private GDT_Box $topResponse;
 	
 	public function topResponse() : GDT_Box
@@ -91,6 +92,9 @@ final class GDT_Page extends GDT
 		}
 	}
 	
+	###############
+	### Navbars ###
+	###############
 	private GDT_Bar $topBar;
 	private GDT_Bar $leftBar;
 	private GDT_Bar $rightBar;

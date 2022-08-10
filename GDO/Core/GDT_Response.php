@@ -6,7 +6,7 @@ use GDO\Util\Strings;
 
 /**
  * A response renders a GDT result.
- * If RENDER_HTML mode, we let GDT_Page do it's job.
+ * If RENDER_WEBSITE mode, we let GDT_Page do it's job.
  * If you add a response to a response, it will just steal it's fields. (unwrap)
  * 
  * @author gizmore
@@ -15,18 +15,21 @@ use GDO\Util\Strings;
  */
 final class GDT_Response extends GDT_Tuple
 {
-	public static function instanceWith(GDT...$gdts) : self
-	{
-		$instance = self::instance();
-		return $instance->addFields(...$gdts);
-	}
+// 	public static function instanceWith(GDT...$gdts) : self
+// 	{
+// 		$instance = self::instance();
+// 		return $instance->addFields(...$gdts);
+// 	}
 	
 	public function render() : string
 	{
 		switch (Application::$INSTANCE->mode)
 		{
-			case GDT::RENDER_HTML:
-				return Strings::shrinkHTML($this->renderPage());
+			case GDT::RENDER_WEBSITE:
+				return Strings::shrinkHTML($this->renderWebsite());
+			case GDT::RENDER_XML:
+				hdr('Content-Type: application/xml');
+				return $this->renderXML();
 			case GDT::RENDER_JSON:
 				hdr('Content-Type: application/json');
 				return json_encode($this->renderJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
@@ -39,15 +42,15 @@ final class GDT_Response extends GDT_Tuple
 	 * HTML Render this response via GDT_Page
 	 * @return string
 	 */
-	public function renderPage() : string
+	public function renderWebsite() : string
 	{
-		$content = $this->renderFields(GDT::RENDER_CELL);
+		$content = $this->renderFields(GDT::RENDER_HTML);
 		if (Application::$INSTANCE->isAjax())
 		{
 			return $content; # ajax is html without html boilerplate.
 		}
 		$page = GDT_Page::instance();
-		return $page->html($content)->renderHTML();
+		return $page->html($content)->renderMode(GDT::RENDER_HTML);
 	}
 	
 	public function code(int $code) : self

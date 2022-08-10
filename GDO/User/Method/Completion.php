@@ -44,7 +44,7 @@ class Completion extends MethodCompletion
 					'user_language' => $user->getLangISO(),
 				),
 				'text' => $user->renderUserName(),
-			    'display' => $user->renderChoice(),
+			    'display' => $user->renderOption(),
 			);
 		}
 	

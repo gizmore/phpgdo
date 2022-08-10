@@ -220,7 +220,7 @@ final class Trans
 				    catch (\Throwable $e)
 				    {
 				        self::$CACHE[$iso] = $trans;
-				        echo GDT_Error::make()->exception($e)->renderCell();
+				        echo GDT_Error::make()->exception($e)->renderHTML();
 				    }
 				}
 				else
@@ -236,7 +236,7 @@ final class Trans
 					catch (\Throwable $e)
 					{
 					    self::$CACHE[$iso] = $trans;
-					    echo GDT_Error::responseException($e)->renderCell();
+					    echo GDT_Error::responseException($e)->renderHTML();
 					    throw new GDO_Error('err_langfile_corrupt', [$pathEN]);
 					}
 				}

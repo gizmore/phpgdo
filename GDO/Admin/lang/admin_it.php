@@ -33,7 +33,7 @@ return [
 'version_available' =>'Versione disponibile',
 'form_div_config_vars' =>'Configurazione',
 'msg_module_saved' =>'Configurazione é stata memorizzata. %s',
-'msg_modulevar_changed' =>'%s é stata <i>%s</i> cambiata a <i>%s</i>.',
+'msg_modulevar_changed' => '`%s` é stata %s cambiata a %s.',
 'href_admin' =>'Area Admin',
 'confirm_wipe_module' =>'Desidera cancellare le seguenti tabelle dalla databanchi: %s?',
 ################################################################

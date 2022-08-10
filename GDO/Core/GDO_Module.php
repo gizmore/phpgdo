@@ -345,8 +345,7 @@ class GDO_Module extends GDO
 	{
 		switch (Application::$INSTANCE->modeDetected)
 		{
-			case GDT::RENDER_JSON: return $tVars; # @TODO here is the spot to enable json for genereic templates.
-			case GDT::RENDER_HTML:
+			case GDT::RENDER_JSON: return $tVars; # @TODO here is the spot to enable json for generic templates.
 			default: return GDT_Template::make()->template($this->getName(), $path, $tVars);
 		}
 	}
@@ -360,7 +359,7 @@ class GDO_Module extends GDO
 		switch (Application::$INSTANCE->modeDetected)
 		{
 			case GDT::RENDER_JSON: return GDT_JSON::make()->value(...$tVars);
-			case GDT::RENDER_HTML:
+			case GDT::RENDER_WEBSITE:
 			default: return $this->templatePHP($file, $tVars);
 		}
 	}
@@ -617,7 +616,7 @@ class GDO_Module extends GDO
 	    $entry->replace();
 	    $user->tempUnset('gdo_setting');
 	    $user->recache();
-	    return $gdt->initial($var);
+	    return $gdt->var($var);
 	}
 	
 	public function increaseSetting($key, $by=1)
@@ -675,6 +674,9 @@ class GDO_Module extends GDO
 	    return isset($this->userConfigCache[$key]);
 	}
 
+	/**
+	 * Get a setting var **without** user assign.
+	 */
 	private function getSetting(string $key) : GDT
 	{
 		$this->buildSettingsCache();

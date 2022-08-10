@@ -19,7 +19,7 @@ class GDT_Checkbox extends GDT_Select
     
     public function isSearchable() : bool { return false; }
     
-    public function isOrderDefaultAsc() : bool { return false; }
+    public function isDefaultAsc() : bool { return false; }
     
 	protected function __construct()
 	{
@@ -144,7 +144,7 @@ class GDT_Checkbox extends GDT_Select
 		return parent::htmlClass() . " gdt-checkbox-{$this->getVar()}";
 	}
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 	    return $this->displayVar($this->getVar());
 	}

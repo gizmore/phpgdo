@@ -14,7 +14,7 @@ final class GDT_Filesize extends GDT_UInt
 {
 	public function defaultLabel() : self { return $this->label('filesize'); }
 	
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
 		if ($size = $this->getValue())
 		{

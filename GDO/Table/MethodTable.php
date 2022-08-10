@@ -209,7 +209,7 @@ abstract class MethodTable extends Method
 	    {
 	        if ($gdt->isOrderable())
 	        {
-	            return $gdt->name . ($gdt->isOrderDefaultAsc() ? ' ASC' : ' DESC');
+	            return $gdt->name . ($gdt->isDefaultAsc() ? ' ASC' : ' DESC');
 	        }
 	    }
 	    return null;

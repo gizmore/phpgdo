@@ -48,7 +48,7 @@ final class TextStyle
 		{
 			case GDT::RENDER_CLI:
 				return call_user_func([CLI::class, $cliMethod], $s);
-			case GDT::RENDER_HTML:
+			case GDT::RENDER_WEBSITE:
 			case GDT::RENDER_CELL:
 				return "<{$tagStart}>{$s}</{$tagEnd}>";
 			default:

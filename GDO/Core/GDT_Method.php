@@ -54,7 +54,7 @@ class GDT_Method extends GDT
 				}
 			}
 
-			$method = $this->method->withAppliedInputs($inputs);
+			$method = $this->method->inputs($inputs);
 			$this->changeUser();
 			$this->result = $method->exec();
 		}

@@ -5,7 +5,6 @@ use GDO\Session\GDO_Session;
 use GDO\Util\Random;
 use GDO\Core\Application;
 use GDO\Core\GDT_Template;
-use GDO\User\GDO_User;
 use GDO\Core\GDT_String;
 
 /**
@@ -15,12 +14,11 @@ use GDO\Core\GDT_String;
  * 
  * - Configure $expire 
  * 
- * @see Cache
- * @see MethodForm
- * 
  * @author gizmore
  * @version 7.0.1
  * @since 1.0.0
+ * @see Cache
+ * @see MethodForm
  */
 class GDT_AntiCSRF extends GDT_String
 {
@@ -41,49 +39,47 @@ class GDT_AntiCSRF extends GDT_String
 	##############
 	### Expire ###
 	##############
-	public int $csrfExpire = 60 * 30; # 0.5 hours is a sensible default.
+	public int $csrfExpire = 60 * 60; # 1 hour is maybe sensible default.
 	public function csrfExpire(int $csrfExpire) : self
 	{
 		$this->csrfExpire = $csrfExpire;
 		return $this;
 	}
 	
-	#############
-	### Fixed ###
-	#############
-	public bool $fixed = false;
-	public function complex() : self { return $this->fixed(false); }
-	public function fixed(bool $fixed=true) : self
-	{
-	    $this->fixed = $fixed;
-	    return $this;
-	}
+// 	#############
+// 	### Fixed ###
+// 	#############
+// 	public bool $fixed = false;
+// 	public function complex() : self { return $this->fixed(false); }
+// 	public function fixed(bool $fixed=true) : self
+// 	{
+// 	    $this->fixed = $fixed;
+// 	    return $this;
+// 	}
 	
-	/**
-	 * Calculate a fixed static token for a user.
-	 * @TODO verify crypto
-	 * @return string
-	 */
-	public static function fixedToken(GDO_User $user=null)
-	{
-	    $user = $user ? $user : GDO_User::current();
-	    $time = 1337;
-	    $hash = sprintf('%s_%s_%s_%s_%s',
-	        GDO_SALT, $user->renderUserName(),
-            $user->gdoVar('user_email'),
-	        $user->gdoVar('user_password'), $time);
-	    return substr(sha1($hash), 0, self::KEYLEN);
-	}
+// 	/**
+// 	 * Calculate a fixed static token for a user.
+// 	 * @TODO verify crypto
+// 	 */
+// 	public static function fixedToken(GDO_User $user=null) : string
+// 	{
+// 	    $user = $user ? $user : GDO_User::current();
+// 	    $time = 1337;
+// 	    $hash = sprintf('%s_%s_%s_%s_%s',
+// 	        GDO_SALT, $user->renderUserName(),
+// 	    	GDO_SALT, $user->gdoVar('user_password'), $time);
+// 	    return substr(sha1($hash), 0, self::KEYLEN);
+// 	}
 	
 	#################
 	### Construct ###
 	#################
 	public function csrfToken()
 	{
-	    if ($this->fixed)
-	    {
-	        return self::fixedToken();
-	    }
+// 	    if ($this->fixed)
+// 	    {
+// 	        return self::fixedToken();
+// 	    }
 	    
 	    $token = '';
 	    if (module_enabled('Session'))
@@ -150,29 +146,37 @@ class GDT_AntiCSRF extends GDT_String
 // 			return $this->error('err_session_required');
 		}
 		
-		if ($this->fixed)
-		{
-		    if ($value === self::fixedToken())
-		    {
-		        return true;
-		    }
-		    return $this->error('err_csrf');
-		}
+// 		if ($this->fixed)
+// 		{
+// 		    if ($value === self::fixedToken())
+// 		    {
+// 		        return true;
+// 		    }
+// 		    return $this->error('err_csrf');
+// 		}
 
 		# Load tokens
 		$csrf = $this->loadCSRFTokens();
 		
 		# Remove expired
+		$needSave = false;
 		foreach ($csrf as $token => $time)
 		{
 		    if (Application::$TIME > ($time + $this->csrfExpire))
 		    {
 		        unset($csrf[$token]);
+		        $needSave = true;
 		    }
 		    else
 		    {
 		    	break;
 		    }
+		}
+		
+		# save tokens
+		if ($needSave)
+		{
+			$this->saveCSRFTokens($csrf);
 		}
 		
 		# Token not there
@@ -181,10 +185,6 @@ class GDT_AntiCSRF extends GDT_String
 			return $this->error('err_csrf');
 		}
 
-		# Remove used token
-		unset($csrf[$value]);
-		$this->saveCSRFTokens($csrf);
-		
 		# All fine
 		return true;
 	}
@@ -194,7 +194,21 @@ class GDT_AntiCSRF extends GDT_String
 	##############
 	public function renderForm() : string
 	{
-		return GDT_Template::php('Form', 'xsrf_html.php', ['field'=>$this]);
+		return GDT_Template::php('Form', 'xsrf_html.php', ['field' => $this]);
 	}
 
+	##############
+	### Events ###
+	##############
+	/**
+	 * After success submit, remove the token. 
+	 */
+	public function onSubmitted() : void
+	{
+		$csrf = $this->loadCSRFTokens();
+		$value = $this->getValue();
+		unset($csrf[$value]);
+		$this->saveCSRFTokens($csrf);
+	}
+	
 }

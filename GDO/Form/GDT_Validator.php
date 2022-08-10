@@ -23,7 +23,7 @@ class GDT_Validator extends GDT
 	 */
 	public function validator_func_dummy(GDT_Form $form, GDT $field, $value) {}
 
-	public function hasInputs() : bool
+	public function hasInput() : bool
 	{
 		return true; # this triggers validation code
 	}

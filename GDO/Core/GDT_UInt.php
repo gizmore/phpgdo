@@ -19,6 +19,6 @@ class GDT_UInt extends GDT_Int
     public ?float $min = 0;
     public bool $unsigned = true;
     
-    public function isOrderDefaultAsc() : bool { return false; }
+    public function isDefaultAsc() : bool { return false; }
     
 }

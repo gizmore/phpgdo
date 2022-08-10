@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * Adds icon handling to a GDT.
  * The templates have to echo $field->htmlIcon() to render them.
@@ -24,19 +26,20 @@ trait WithIcon
 	###########################
 	### Icon-Markup Factory ###
 	###########################
-	public static function iconS($icon, $iconText=null, $size=null, $color=null) : string
+	public static function iconS(string $icon, string $iconText=null, float $size=null, string $color=null) : string
 	{
 		$style = self::iconStyle($size, $color);
 		return call_user_func(GDT_Icon::$iconProvider, $icon, $iconText, $style);
 	}
 	
-	public static function rawIconS($icon, $iconText=null, $size=null, $color=null) : string
+	public static function rawIconS(string $icon, string $iconText=null, float $size=null, string $color=null) : string
 	{
 		$style = self::iconStyle($size, $color);
-		return sprintf('<i class="gdo-icon" title="%s"%s>%s</i>', html($iconText), $style, $icon);
+		$title = $iconText ? " title=\"{$iconText}\"" : GDT::EMPTY_STRING;
+		return sprintf('<i class="gdo-icon"%s%s>%s</i>', $title, $style, $icon);
 	}
 	
-	private static function iconStyle($size, $color) : string
+	private static function iconStyle(?float $size, ?string $color) : string
 	{
 		$size = $size === null ? '' : "font-size:{$size}px;";
 		$color = $color === null ? '' : "color:$color;";
@@ -104,6 +107,8 @@ trait WithIcon
 	public function tooltipRaw(string $tooltipText) : self
 	{
 		$this->iconTextRaw = $tooltipText;
+		unset($this->iconTextKey);
+		unset($this->iconTextArgs);
 		return $this;
 	}
 	
@@ -120,7 +125,7 @@ trait WithIcon
 		{
 			return $this->iconTextRaw;
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function htmlIcon() : string
@@ -135,7 +140,7 @@ trait WithIcon
 		{
 			return self::rawIconS($this->rawIcon, $text, $this->iconSize, $color);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 }

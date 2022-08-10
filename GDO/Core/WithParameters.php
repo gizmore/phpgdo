@@ -54,7 +54,7 @@ trait WithParameters
 		{
 			if ($validate)
 			{
-				$gdt->reset();
+// 				$gdt->reset();
 				if (!$gdt->validated())
 				{
 					if ($throw)

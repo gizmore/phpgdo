@@ -76,6 +76,6 @@ if ($field->headers)
     {
         $frm->actions()->addField(GDT_Submit::make());
         $accordeon = GDT_Accordeon::make()->addField($frm)->title($frm->displaySearchCriteria());
-        echo $accordeon->renderCell();
+        echo $accordeon->renderHTML();
     }
 }

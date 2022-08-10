@@ -1,17 +1,17 @@
 <?php
 namespace GDO\UI\tpl;
-/** @var $link \GDO\UI\GDT_Link **/
+/** @var $field \GDO\UI\GDT_Link **/
 ?>
-<span class="<?=$link->htmlClass()?>"><a
-<?=$link->htmlDisabled()?>
-<?=$link->htmlID()?>
-<?=$link->htmlAttributes()?>
-<?=$link->htmlTarget()?>
-<?=$link->htmlHREF()?>
-<?=$link->htmlRelation()?>><?=$link->htmlIcon()?>
-<?php if ($link->hasLabel()) : ?>
-<?=$link->renderLabel()?>
+<span class="<?=$field->htmlClass()?>"><a
+<?=$field->htmlDisabled()?>
+<?=$field->htmlID()?>
+<?=$field->htmlAttributes()?>
+<?=$field->htmlTarget()?>
+<?=$field->htmlHREF()?>
+<?=$field->htmlRelation()?>><?=$field->htmlIcon()?>
+<?php if ($field->hasLabel()) : ?>
+<?=$field->renderLabelText()?>
 <?php else : ?>
-<?=html(isset($link->href)?$link->href:'---')?>
+<?=html(isset($field->href)?$field->href:'---')?>
 <?php endif; ?>
 </a></span>

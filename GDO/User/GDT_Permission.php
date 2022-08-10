@@ -17,6 +17,7 @@ final class GDT_Permission extends GDT_ObjectSelect
 	protected function __construct()
 	{
 	    parent::__construct();
+	    $this->icon('medal');
 		$this->table(GDO_Permission::table());
 		$this->emptyLabel('none');
 	}

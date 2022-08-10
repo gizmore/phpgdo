@@ -82,7 +82,7 @@ class Application extends GDT
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
 	public function isAjax() : bool { return $this->ajax; }
-	public function isHTML() : bool { return $this->modeDetected === GDT::RENDER_HTML; }
+	public function isHTML() : bool { return $this->modeDetected === GDT::RENDER_WEBSITE; }
 	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
 	public function isXML() : bool { return $this->mode === GDT::RENDER_XML; }
 	public function isPDF() : bool { return $this->mode === GDT::RENDER_PDF; }
@@ -122,11 +122,12 @@ class Application extends GDT
 		switch (strtoupper($fmt))
 		{
 			case 'CLI': return GDT::RENDER_CLI;
-			case 'BWP': return GDT::RENDER_BINARY;
+			case 'WS': return GDT::RENDER_BINARY;
 			case 'PDF': return GDT::RENDER_PDF;
 			case 'JSON': return GDT::RENDER_JSON;
 			case 'XML': return GDT::RENDER_XML;
-			default: return GDT::RENDER_HTML;
+			case 'GTK': return GDT::RENDER_GTK;
+			default: return GDT::RENDER_WEBSITE;
 		}
 	}
 	
@@ -134,12 +135,12 @@ class Application extends GDT
 	 * Current global rendering mode.
 	 * For example switches from html to cell to form to table etc.
 	 */
-	public int $mode = GDT::RENDER_HTML;
+	public int $mode = GDT::RENDER_WEBSITE;
 	
 	/**
 	 * Detected rendering mode for invocation.
 	 */
-	public int $modeDetected = GDT::RENDER_HTML;
+	public int $modeDetected = GDT::RENDER_WEBSITE;
 
 	/**
 	 * Change current rendering mode.
@@ -181,8 +182,11 @@ class Application extends GDT
 	public bool $cli = false;
 	public function cli(bool $cli=true)
 	{
-		$this->cli = $cli;
-		return $this->mode(GDT::RENDER_CLI, true);
+		if ($this->cli = $cli)
+		{
+			return $this->mode(GDT::RENDER_CLI, true);
+		}
+		return $this;
 	}
 	
 	####################

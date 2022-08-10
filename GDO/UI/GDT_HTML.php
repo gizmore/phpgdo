@@ -21,7 +21,7 @@ final class GDT_HTML extends GDT_Container
 // 	{
 // 		$html = '';
 // 	    $this->withFields(function(GDT $gdt) use(&$html) {
-// 	    	$html .= $gdt->renderCell();
+// 	    	$html .= $gdt->renderHTML();
 // 	    });
 //     	return $html;
 // 	}
@@ -31,14 +31,14 @@ final class GDT_HTML extends GDT_Container
 		return self::make()->var($html);
 	}
 
-	public function renderCell() : string
+	public function renderHTML() : string
 	{
-		return $this->getVar() . parent::renderCell();
+		return $this->getVar() . parent::renderHTML();
 	}
 	
 	public function renderCard() : string
 	{
-	    return "<div class=\"gdt-html\">{$this->renderCell()}</div>";
+	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
 	}
 	
 }

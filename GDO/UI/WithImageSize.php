@@ -5,10 +5,8 @@ namespace GDO\UI;
  * Add image size attributes to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.2.0
- * @see GDO_File
- * @see GDT_File
  */
 trait WithImageSize
 {

@@ -20,7 +20,7 @@ use GDO\Util\Regex;
  * Offers static and non static versions.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see WithName
  */

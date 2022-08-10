@@ -7,7 +7,7 @@ $field instanceof GDT_Toolbar;
 <?php
 foreach ($field->getFields() as $gdt)
 {
-	echo $gdt->renderCell();
+	echo $gdt->renderHTML();
 }
 ?>
   </div>

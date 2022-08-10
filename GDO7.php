@@ -19,9 +19,10 @@ use GDO\Core\Method;
  */
 # Verbose error handling is default
 define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+error_reporting(E_ALL|E_ALL);
+ini_set('display_errors', 1); #
+#
+##
 ########################
 ### GDOv7 Autoloader ###
 ########################
@@ -145,6 +146,7 @@ function json_quote($s)
 
 /**
  * HTML escaping.
+ * In CLI mode, no escaping is done.
  * @see \htmlspecialchars()
  */
 function html(string $html=null) : string
@@ -160,13 +162,13 @@ function html(string $html=null) : string
 	[
 		'&',
 		'"',
-		"'",
+// 		"'",
 		'<',
 		'>'
 	], [
 		'&amp;',
 		'&quot;',
-		'&#39;',
+// 		'&#39;',
 		'&lt;',
 		'&gt;'
 	], $html) : $html;
@@ -204,9 +206,6 @@ function uridecode(string $url=null) : string
 
 /**
  * Check if a module is enabled.
- *
- * @param string $moduleName
- * @return boolean
  */
 function module_enabled(string $moduleName) : bool
 {
@@ -217,29 +216,29 @@ function module_enabled(string $moduleName) : bool
 	return false;
 }
 
-function module(string $moduleName, bool $enabled=true, bool $fileSystem=false, bool $throw=true) : ?GDO_Module
-{
-	if ($module = ModuleLoader::instance()->getModule($moduleName, $fileSystem, $throw))
-	{
-		if ($enabled)
-		{
-			return $module->isEnabled() ? $module : null;
-		}
-		return $module;
-	}
-	if ($throw)
-	{
-		throw new GDO_Error('err_module', [html($moduleName)]);
-	}
+// function module(string $moduleName, bool $enabled=true, bool $fileSystem=false, bool $throw=true) : ?GDO_Module
+// {
+// 	if ($module = ModuleLoader::instance()->getModule($moduleName, $fileSystem, $throw))
+// 	{
+// 		if ($enabled)
+// 		{
+// 			return $module->isEnabled() ? $module : null;
+// 		}
+// 		return $module;
+// 	}
+// 	if ($throw)
+// 	{
+// 		throw new GDO_Error('err_module', [html($moduleName)]);
+// 	}
 	
-	return null;
-}
+// 	return null;
+// }
 
-function method(string $moduleName, string $methodName) : Method
-{
-	$func = ["GDO\\{$moduleName}\\Method\\$methodName", 'make'];
-	return call_user_func($func);
-}
+// function method(string $moduleName, string $methodName) : Method
+// {
+// 	$func = ["GDO\\{$moduleName}\\Method\\$methodName", 'make'];
+// 	return call_user_func($func);
+// }
 
 # ######################
 # ## Translation API ###
