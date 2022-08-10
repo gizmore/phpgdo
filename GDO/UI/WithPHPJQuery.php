@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * Extend a GDT with an API similiar to jQuery.
  * Render with htmlAttributes().
@@ -25,7 +27,7 @@ trait WithPHPJQuery
 		if ($value === null)
 		{
 			return isset($this->htmlAttributes[$attribute]) ? 
-			    $this->htmlAttributes[$attribute] : '';
+			    $this->htmlAttributes[$attribute] : GDT::EMPTY_STRING;
 		}
 		$this->htmlAttributes[$attribute] = $value;
 		return $this;
@@ -44,10 +46,10 @@ trait WithPHPJQuery
 		return $html;
 	}
 
-	public function addClass($class)
+	public function addClass(string $class) : self
 	{
 		# Old classes
-		$classes = explode(" ", $this->attr('class'));
+		$classes = explode(" ", trim($this->attr('class')));
 		
 		# Merge new classes
 		$newclss = explode(" ", $class); # multiple possible

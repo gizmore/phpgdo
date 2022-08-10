@@ -16,16 +16,13 @@ trait WithLabel
 {
 	use WithName;
 	
-	##############
-	### Label ####
-	##############
-	public ?string $labelRaw = null;
-	public ?string $labelKey = null;
+	public string $labelRaw;
+	public string $labelKey;
 	public ?array $labelArgs = null;
 	
 	public function label(string $key, array $args = null) : self
 	{
-		$this->labelRaw = null;
+		unset($this->labelRaw);
 		$this->labelKey = $key;
 		$this->labelArgs = $args;
 		return $this;
@@ -34,19 +31,22 @@ trait WithLabel
 	public function labelRaw(string $label) : self
 	{
 		$this->labelRaw = $label;
-		$this->labelKey = null;
+		unset($this->labelKey);
 		$this->labelArgs = null;
 		return $this;
 	}
 	
 	public function noLabel() : self
 	{
-		return $this->labelRaw('');
+		unset($this->labelRaw);
+		unset($this->labelKey);
+		$this->labelArgs = null;
+		return $this;
 	}
 	
 	public function hasLabel() : bool
 	{
-		return $this->labelKey || $this->labelRaw;
+		return isset($this->labelKey) || isset($this->labelRaw);
 	}
 	
 	##############
@@ -62,22 +62,13 @@ trait WithLabel
 		return $text;
 	}
 	
-	private function charRequired() : string
-	{
-		if (isset($this->notNull) && $this->notNull)
-		{
-			return '<span class="gdt-required">*</span>';
-		}
-		return '';
-	}
-	
 	public function renderLabelText() : string
 	{
-		if ($this->labelKey)
+		if (isset($this->labelKey))
 		{
 			return t($this->labelKey, $this->labelArgs);
 		}
-		elseif ($this->labelRaw !== null)
+		elseif (isset($this->labelRaw))
 		{
 			return $this->labelRaw;
 		}
@@ -87,8 +78,20 @@ trait WithLabel
 		}
 		else
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
+	}
+	
+	/**
+	 * Display the required asterisk sign.
+	 */
+	private function charRequired() : string
+	{
+		if (isset($this->notNull) && $this->notNull)
+		{
+			return '<span class="gdt-required">*</span>';
+		}
+		return '';
 	}
 	
 	############

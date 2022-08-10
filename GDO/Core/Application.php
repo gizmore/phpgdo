@@ -31,7 +31,7 @@ class Application extends GDT
 		self::time(microtime(true));
 	}
 	
-	public static function runtime() : float
+	public static function getRuntime() : float
 	{
 		return microtime(true) - GDO_TIME_START;
 	}
@@ -47,9 +47,9 @@ class Application extends GDT
 	/**
 	 * Perf headers as cheap as possible.
 	 */
-	public static function timingHeader()
+	public function timingHeader()
 	{
-		hdr(sprintf('X-GDO-TIME: %.01fms', (microtime(true) - GDO_TIME_START) * 1000.0));
+		hdr(sprintf('X-GDO-TIME: %.01fms', $this->getRuntime() / 1000.0));
 		hdr(sprintf('X-GDO-MEMORY-MAX: %s', memory_get_peak_usage(false)));
 		hdr(sprintf('X-GDO-MEMORY-REAL: %s', memory_get_peak_usage(true)));
 	}
@@ -84,21 +84,38 @@ class Application extends GDT
 	public function isAjax() : bool { return $this->ajax; }
 	public function isHTML() : bool { return $this->modeDetected === GDT::RENDER_HTML; }
 	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
+	public function isXML() : bool { return $this->mode === GDT::RENDER_XML; }
+	public function isPDF() : bool { return $this->mode === GDT::RENDER_PDF; }
 	public function isCLI() : bool { return $this->cli; }
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
 	public function isWebsocket() : bool { return false; }
 	public function isWebserver() : bool { return !$this->cli; }
+	public function isAPI() : bool { return !$this->isWebserver(); }
+	
+	/**
+	 * Call when you create the next command in a loop.
+	 * Optionally remove all input, when a form was sent and wants to get cleared.
+	 */
+	public function reset(bool $removeInput=false) : self
+	{
+		self::$RESPONSE_CODE = 200;
+		GDT_Page::instance()->reset();
+		$this->mode = $this->modeDetected;
+		self::updateTime();
+		if ($removeInput)
+		{
+			self::$INSTANCE->inputs();
+		}
+		return $this;
+	}
 	
 	###################
 	### Render Mode ###
 	###################
 	/**
 	 * Detect the rendering output mode / format.
-	 * Try to append ?_fmt=json on any page.
-	 * 
-	 * @param string $fmt
-	 * @return int
+	 * GDO Applications currently support 6 formats, a 7th is planned: (GTK+App)
 	 */
 	public static function detectRenderMode(string $fmt) : int
 	{
@@ -114,23 +131,20 @@ class Application extends GDT
 	}
 	
 	/**
-	 * Call when you create the next command in a loop.
+	 * Current global rendering mode.
+	 * For example switches from html to cell to form to table etc.
 	 */
-	public function reset(bool $removeInput=false) : self
-	{
-		self::$RESPONSE_CODE = 200;
-		GDT_Page::instance()->reset();
-		$this->mode = $this->modeDetected;
-		self::updateTime();
-		if ($removeInput)
-		{
-			self::$INSTANCE->inputs();
-		}
-		return $this;
-	}
-	
 	public int $mode = GDT::RENDER_HTML;
+	
+	/**
+	 * Detected rendering mode for invocation.
+	 */
 	public int $modeDetected = GDT::RENDER_HTML;
+
+	/**
+	 * Change current rendering mode.
+	 * Optionally set detected mode to this.
+	 */
 	public function mode(int $mode, bool $detected=false) : self
 	{
 		$this->mode = $mode;
@@ -141,6 +155,9 @@ class Application extends GDT
 		return $this;
 	}
 	
+	############
+	### Ajax ###
+	############
 	public bool $ajax = false;
 	public function ajax(bool $ajax) : self
 	{
@@ -148,6 +165,9 @@ class Application extends GDT
 		return $this;
 	}
 	
+	###########
+	### SEO ###
+	###########
 	public bool $indexed = false;
 	public function indexed(bool $indexed=true)
 	{
@@ -155,6 +175,9 @@ class Application extends GDT
 		return $indexed;
 	}
 	
+	################
+	### CLI Mode ###
+	################
 	public bool $cli = false;
 	public function cli(bool $cli=true)
 	{
@@ -162,6 +185,9 @@ class Application extends GDT
 		return $this->mode(GDT::RENDER_CLI, true);
 	}
 	
+	####################
+	### Global Input ###
+	####################
 	public array $inputs;
 	public function inputs(array $inputs=null) : self
 	{
@@ -208,30 +234,38 @@ class Application extends GDT
 	#############
 	### Mo/Me ###
 	#############
-	public Method $method;
-	public function method(Method $method) : self
-	{
-		$this->method = $method;
-		return $this;
-	}
+// 	public Method $method;
+// 	public string $mo;
+// 	public string $me;
 	
-	public function mo() : string
-	{
-		return strtolower($this->method->getModuleName());
-	}
+// 	public function method(Method $method) : self
+// 	{
+// // 		$this->mo = $method->getModule()->getName();
+// // 		$this->me = $method->getName();
+// 		$this->method = $method;
+// 		return $this;
+// 	}
 	
-	public function me() : string
-	{
-		return strtolower($this->method->getMethodName());
-	}
+// 	public function mo(string $mo) : self
+// 	{
+// 		$this->mo = strtolower($mo);
+// 		return $this;
+// 	}
 	
-	public function mome() : string
-	{
-		$me = $this->mo();
-		$mo = $this->me();
-		return "{$mo}::{$me}";
-	}
+// 	public function me(string $me) : self
+// 	{
+// 		$this->me = strtolower($me);
+// 		return $this;
+// 	}
+	
+// 	public function getMoMe() : string
+// 	{
+// 		$me = $this->method->getMethodName();
+// 		$mo = $this->method->getModuleName();
+// 		return strtolower("{$mo}::{$me}");
+// 	}
 	
 }
 
+# Init
 Application::updateTime();

@@ -160,9 +160,8 @@ abstract class MethodTable extends Method
     /**
      * Override this.
      * Return true if this table shall be able to be ordered by headers.
-     * @return boolean
      */
-	public function isOrdered() { return true; }
+	public function isOrdered() : bool { return true; }
 
 	/**
 	 * Override this.
@@ -292,7 +291,6 @@ abstract class MethodTable extends Method
 	
 	protected function setupCollection(GDT_Table $table)
 	{
-// 	    $table->inputs($this->getInputs());
 	    $headers = $this->gdoHeaderCache();
 	    $this->table->addHeaderFields(...$headers);
 	    

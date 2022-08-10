@@ -56,19 +56,21 @@ final class Fileserver extends Method
 		hdr("Etag: $etag");
 		hdr("Expires: ".gmdate("D, d M Y H:i:s", $last_modified_time + Time::ONE_MONTH)." GMT");
 		
+		$app = Application::$INSTANCE;
+		
 		# cache hit
 		if (@strtotime(@$_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
 			trim((string)@$_SERVER['HTTP_IF_NONE_MATCH']) == $etag)
 		{
 			hdrc('HTTP/1.1 304 Not Modified');
-			Application::timingHeader();
+			$app->timingHeader();
 			die(0);
 		}
 		
 		# 200 - serve
 		hdr('Content-Type: '.$type);
 		hdr('Content-Size: '.filesize($url));
-		Application::timingHeader();
+		$app->timingHeader();
 		readfile($url);
 		die(0);
 	}

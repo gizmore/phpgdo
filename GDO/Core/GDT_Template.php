@@ -21,7 +21,6 @@ class GDT_Template extends GDT
 {
 	use WithGDO;
 	use WithLabel; # so you can use GDT_Template in GDT_Table
-// 	use WithFields;
 
 	public function isTestable() : bool { return false; } # skip this class in tests
 

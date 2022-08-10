@@ -1,10 +1,10 @@
 <?php
 namespace GDO\Core\tpl\page;
 use GDO\Net\URL;
+use GDO\UI\GDT_Error;
 /**
  * @var $url URL
  */
-?>
-<h2><?=t('file_not_found')?></h2>
-<p><?=t('err_file_not_found', [html($url->raw)])?></p>
-
+$error = GDT_Error::make()->title('file_not_found');
+$error->text('err_file_not_found', [html($url->raw)]);
+echo $error->renderCell();

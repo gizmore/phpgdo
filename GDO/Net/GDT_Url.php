@@ -3,10 +3,9 @@ namespace GDO\Net;
 
 use GDO\Core\GDT_String;
 use GDO\Util\Arrays;
-use GDO\Core\GDT_Template;
 use GDO\UI\WithAnchorRelation;
 use GDO\UI\WithTitle;
-use GDO\UI\GDT_Link;
+use GDO\Core\GDT;
 
 /**
  * URL field.
@@ -38,18 +37,18 @@ class GDT_Url extends GDT_String
     ##############
     ### Static ###
     ##############
-	public static function host() { return isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : GDO_DOMAIN; }
-	public static function port() { return defined('GDO_PORT') ? GDO_PORT : @$_SERVER['SERVER_PORT']; }
-	public static function hostWithPort()
+	public static function host() : string { return isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : GDO_DOMAIN; }
+	public static function port() : int { return defined('GDO_PORT') ? GDO_PORT : @$_SERVER['SERVER_PORT']; }
+	public static function hostWithPort() : string
 	{
 		$port = self::port();
 		if (GDO_PROTOCOL === 'https')
 		{
-			$port = $port == 443 ? '' : ":{$port}";
+			$port = $port == 443 ? GDT::EMPTY_STRING : ":{$port}";
 		}
 		else
 		{
-			$port = $port == 80 ? '' : ":{$port}";
+			$port = $port == 80 ? GDT::EMPTY_STRING : ":{$port}";
 		}
 		return self::host() . $port;
 	}

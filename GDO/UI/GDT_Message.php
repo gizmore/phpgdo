@@ -372,7 +372,7 @@ class GDT_Message extends GDT_Text
 
 	public function renderCard(): string
 	{
-		return '<div class="gdt-message-card">' . $this->getVarOutput() . "</div>\n";
+		return '<div class="gdt-card-message">' . $this->getVarOutput() . "</div>\n";
 	}
 
 	public function renderForm(): string

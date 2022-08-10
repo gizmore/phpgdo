@@ -163,7 +163,7 @@ class GDT_Card extends GDT
 	    
 	    # Add created by / at to subtitle
         $profileLink = GDT_ProfileLink::make()->user($user)->nickname()->level();
-	    $this->subtitle = GDT_Container::make()->horizontal();
+	    $this->subtitle = GDT_Container::make()->horizontal(true, true);
         $this->subtitle->addField($profileLink);
         $this->subtitle->addField(GDT_DateDisplay::make($atField->name)->gdo($this->gdo));
 	    

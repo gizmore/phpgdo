@@ -15,11 +15,8 @@ use GDO\Net\GDT_Url;
  */
 class GDT_Link extends GDT_Url
 {
-	use WithIcon;
 	use WithHREF;
-	use WithLabel;
 	use WithTarget;
-	use WithPHPJQuery;
 
 	protected function __construct()
 	{
@@ -52,15 +49,12 @@ class GDT_Link extends GDT_Url
 	
 	/**
 	 * Output a link / anchor.
-	 * @deprecated not the default GDT behaviour. Yet ok? NO!
-	 * @param string $href
-	 * @param string $label
-	 * @return string
+	 * @deprecated not the default GDT behaviour. Yet ok? NO?
 	 */
-	public static function anchor($href, $label=null)
+	public static function anchor(string $href, string $labelRaw=null) : string
 	{
-		$label = $label !== null ? $label : $href;
-		return self::make()->href($href)->labelRaw($label)->render();
+		$labelRaw = $labelRaw !== null ? $labelRaw : $href;
+		return self::make()->href($href)->labelRaw($labelRaw)->renderCell();
 	}
 	
 	##############
@@ -72,7 +66,7 @@ class GDT_Link extends GDT_Url
 	public function renderJSON()
 	{
 		$out = '';
-		if ($l = $this->renderLabel())
+		if ($l = $this->renderLabelText())
 		{
 			$out .= $l;
 			$out .= ': ';
@@ -88,6 +82,6 @@ class GDT_Link extends GDT_Url
 	###########
 	### URL ###
 	###########
-	public function getURL() { return new URL($this->href); }
+	public function getURL() : URL { return new URL($this->href); }
 	
 }

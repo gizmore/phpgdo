@@ -1,19 +1,13 @@
+/** GDOv7 normalizer **/
 * { margin: 0; padding: 0; box-sizing: border-box; list-style: none; }
 span, img, a, i, b, em { display: inline-block; }
 p { word-break: break-word; }
 *[background-image] { background-size: cover; }
 .cf:after { content: "."; clear: both; display: block; visibility: hidden; height: 0px; }
 .ce { text-align: center; margin: auto; }
-/* .gdo-exception { white-space: pre-line; font-family: monospace; word-break: break-all; text-align: left; } */
-.gdo-exception { text-align: left; }
-.gdo-exception em { font-style: normal; }
-.gdt-tblorder { display: inline-block; }
-img.gdo-country,
-img.gdo-language { width: 32px; border: 1px solid #555; }
 .b { display: block; }
 .ib { display: inline-block; }
 .n { display: none!important; }
-.cf:after { content: "."; clear: both; display: block; visibility: hidden; height: 0px; }
 .ce { text-align: center; margin: auto; }
 .cb { clear: both; }
 .dn { display: none; }
@@ -31,7 +25,6 @@ img.gdo-language { width: 32px; border: 1px solid #555; }
 .flx-col { flex-direction: column; }
 .flx > * { flex: 1 1 auto; }
 .flx.flx-shrink > * { flex: 0 1 auto; }
-.flx.noflx { display: block; }
 .flx-row > * { align-self: center; }
 
 /** Basic UI components **/
@@ -44,3 +37,12 @@ div.gdt-hr { height: 2px; width: 100%; background: #eee; margin: 8px 0; }
 
 /** Table **/
 div.gdt-table { flex: 1 1 auto; }
+
+/** Errors **/
+.gdo-exception { text-align: left; }
+.gdo-exception em { font-style: normal; }
+.gdt-tblorder { display: inline-block; }
+
+/** Flags **/
+img.gdo-country,
+img.gdo-language { width: 32px; border: 1px solid #555; }

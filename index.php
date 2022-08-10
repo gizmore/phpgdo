@@ -199,7 +199,7 @@ else
 $_GET = null; # from this point we have everything only in gdo.
 $_POST = null;
 $app->inputs($_REQUEST);
-$app->method($me);
+// $app->method($me);
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 
 #
@@ -243,7 +243,7 @@ if (isset($session))
 	$session->commit(); # setting headers sometimes
 }
 # The last thing we do before any output
-Application::timingHeader();
+$app->timingHeader();
 ##############
 ### Output ###
 ##############

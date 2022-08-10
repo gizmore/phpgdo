@@ -504,7 +504,8 @@ abstract class GDT
 	
 	public function htmlClass() : string
 	{
-		return strtolower($this->gdoShortName());
+		$class = strtolower($this->gdoShortName());
+		return str_replace('_', '-', $class);
 	}
 	
 	/**

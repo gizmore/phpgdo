@@ -92,7 +92,7 @@ if (!function_exists('xdebug_get_function_count'))
 	
 	function xdebug_time_index()
 	{
-		return Application::runtime();
+		return Application::getRuntime();
 	}
 	
 }

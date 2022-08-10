@@ -109,45 +109,6 @@ final class Strings
 	    return $back;
 	}
 	
-// 	###################
-// 	### Args parser ###
-// 	###################
-// 	/**
-// 	 * Parse a line into args.
-// 	 * 
-// 	 * @deprecated because unused
-// 	 * @see https://stackoverflow.com/a/18229461/13599483
-// 	 * @param string $line
-// 	 * @return string[]
-// 	 */
-// 	public static function args(string $line) : array
-// 	{
-// 	    $pattern = <<<REGEX
-// /(?:"((?:(?<=\\\\)"|[^"])*)"|'((?:(?<=\\\\)'|[^'])*)'|(\S+))/x
-// REGEX;
-// 	    /** @var $matches string[] **/
-// 	    preg_match_all($pattern, $line, $matches, PREG_SET_ORDER);
-	    
-// 	    # Choose right match
-// 	    $args = [];
-// 	    foreach ($matches as $match)
-// 	    {
-// 	        if (isset($match[3]))
-// 	        {
-// 	            $args[] = $match[3];
-// 	        }
-// 	        elseif (isset($match[2]))
-// 	        {
-// 	            $args[] = str_replace(['\\\'', '\\\\'], ["'", '\\'], $match[2]);
-// 	        }
-// 	        else
-// 	        {
-// 	            $args[] = str_replace(['\\"', '\\\\'], ['"', '\\'], $match[1]);
-// 	        }
-// 	    }
-// 	    return $args;
-// 	}
-	
 	###################
 	### Trim dotted ###
 	###################
@@ -156,7 +117,7 @@ final class Strings
 		$len = mb_strlen($text);
 		if ($len > $maxlen)
 		{
-			$text = mb_substr($text, 0, $maxlen-1);
+			$text = mb_substr($text, 0, $maxlen - 1);
 			$text .= $dots;
 		}
 		return $text;
@@ -166,14 +127,14 @@ final class Strings
 	### UTF8 strcmp ###
 	###################
 	/**
-	 * UTF8 supported string comparison
+	 * UTF8 capable string comparison.
 // 	 * @deprecated Slow.
 	 */
-	public static function compare(string $a, string $b) : int
+	public static function compare(string $a, string $b, bool $caseS=false) : int
 	{
 		$a = iconv('utf-8', 'ascii//TRANSLIT', $a);
 		$b = iconv('utf-8', 'ascii//TRANSLIT', $b);
-		return strcasecmp($a, $b);
+		return $caseS ? strnatcmp($a, $b) : strnatcasecmp($a, $b);
 	}
 	
 	#####################
@@ -181,7 +142,7 @@ final class Strings
 	#####################
 	/**
 	 * Remove uncessary whitespace from html output.
-	 * @deprecated slows down
+	 * @deprecated slow
 	 */
 	public static function shrinkHTML(string $html) : string
 	{

@@ -1,6 +1,9 @@
 <?php
 namespace GDO\Core;
 
+use GDO\UI\TextStyle;
+use GDO\Util\Strings;
+
 /**
  * A String is a database capable GDT_DBField, but you can also use it without a db.
  * 
@@ -19,7 +22,6 @@ class GDT_String extends GDT_DBField
 	/**
 	 * Get the HTML <input> type.
 	 * GDT_String template is re-used.
-	 * @return string
 	 */
 	public function getInputType() : string
 	{
@@ -58,15 +60,15 @@ class GDT_String extends GDT_DBField
 	public function ascii() : self { return $this->encoding(self::ASCII); }
 	public function binary() : self { return $this->encoding(self::BINARY); }
 
-// 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
-// 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
+	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
+	public function isASCII() : bool { return $this->encoding === self::ASCII; }
 	public function isBinary() : bool { return $this->encoding === self::BINARY; }
 	
 	#################
 	### Min / Max ###
 	#################
 	public int $min = 0;
-	public int $max = 192; # UTF8MB4 max length mysql :(
+	public int $max = 192; # utf8mb4 max length for keys
 
 	public function min(int $min) : self
 	{
@@ -103,9 +105,16 @@ class GDT_String extends GDT_DBField
 	### Pattern ###
 	###############
 	public string $pattern;
-	public function pattern(string $pattern) : self
+	public function pattern(string $pattern=null) : self
 	{
-		$this->pattern = $pattern;
+		if ($pattern === null)
+		{
+			unset($this->pattern);
+		}
+		else
+		{
+			$this->pattern = $pattern;
+		}
 		return $this;
 	}
 	
@@ -133,9 +142,9 @@ class GDT_String extends GDT_DBField
 		if (isset($this->pattern))
 		{
 			$pattern = trim(rtrim($this->pattern, 'iuDs'), $this->pattern[0].'^$');
-			return sprintf(' pattern="%s"', $pattern);
+			return " pattern=\"{$pattern}\"";
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	protected function errorPattern() : bool
@@ -175,7 +184,7 @@ class GDT_String extends GDT_DBField
 			case self::UTF8: return 'utf8mb4';
 			case self::ASCII: return 'ascii';
 			case self::BINARY: return 'binary';
-			default: throw new GDO_Error('err_invalid_string_encoding');
+// 			default: throw new GDO_Error('err_invalid_string_encoding');
 		}
 	}
 	
@@ -186,7 +195,7 @@ class GDT_String extends GDT_DBField
 			$append = $caseSensitive ? '_bin' : '_general_ci';
 			return ' COLLATE ' . $this->gdoCharsetDefine() . $append;
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	###########
@@ -196,12 +205,12 @@ class GDT_String extends GDT_DBField
 	{
 		$va = (string)$a->gdoVar($this->name);
 		$vb = (string)$b->gdoVar($this->name);
-		
 		switch ($this->encoding)
 		{
 			case self::ASCII:
-			case self::UTF8:
 				return $this->caseSensitive ? strnatcmp($va, $vb) : strnatcasecmp($va, $vb);
+			case self::UTF8:
+				return Strings::compare($va, $vb, $this->caseSensitive);
 			case self::BINARY:
 				return strcmp($va, $vb);
 		}
@@ -244,7 +253,9 @@ class GDT_String extends GDT_DBField
 	
 	public function plugVar() : string
 	{
-		return '<b><i>Test '.$this->getName().'</i></b>';
+		return TextStyle::bold(
+			TextStyle::italic(
+				$this->getName()));
 	}
 
 }

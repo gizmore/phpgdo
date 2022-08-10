@@ -1,8 +1,8 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\WithFields;
 use GDO\Core\WithInput;
+use GDO\Core\GDT_Template;
 
 /**
  * A popup menu
@@ -15,20 +15,17 @@ final class GDT_Menu extends GDT_Container
 {
 	use WithLabel;
 	use WithInput;
-	use WithFields;
+	
+	public bool $flex = true;
+	public bool $flexWrap = true;
+	public bool $flexShrink = true;
 	
 	public function getDefaultName() : string { return 'menu'; }
 	
-	protected function setupHTML(): void
+	public function renderCell() : string
 	{
-		$this->addClass('gdt-menu');
-		$this->flexDirection = self::HORIZONTAL;
-		parent::setupHTML();
+		$this->setupHTML();
+		return GDT_Template::php('UI', 'menu_html.php', ['field' => $this]);
 	}
-	
-// 	public function renderFields(int $renderMode) : string
-// 	{
-// 		return sprintf("<div class=\"gdt-menu\">%s</div>\n", parent::renderHTML());
-// 	}
 	
 }

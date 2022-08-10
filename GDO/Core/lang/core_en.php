@@ -211,6 +211,8 @@ return [
 	'lbl_search_criteria' => 'Search: %s',
 	'order_by' => 'Order By',
 	'order_dir' => 'Direction',
+	'asc' => 'Ascending',
+	'desc' => 'Descending',
 	
 	# User
 	'users' => 'Users',

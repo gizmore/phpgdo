@@ -45,15 +45,6 @@ trait WithFields
 		return $this;
 	}
 	
-	public function addFields(GDT...$gdts) : self
-	{
-		foreach ($gdts as $gdt)
-		{
-			$this->addField($gdt);
-		}
-		return $this;
-	}
-
 	public function addField(GDT $gdt, GDT $after=null, bool $last=true) : self
 	{
 		return $this->addFieldB($gdt, $after, $last);		
@@ -62,6 +53,31 @@ trait WithFields
 	public function addFieldFirst(GDT $gdt) : self
 	{
 		return $this->addFieldB($gdt, null, false);
+	}
+	
+	public function addFieldAfter(GDT $gdt, GDT $after) : self
+	{
+		return $this->addFieldB($gdt, $after, false);
+	}
+	
+	public function addFieldAfterNamed(GDT $gdt, string $afterName) : self
+	{
+		$after = $this->getField($afterName);
+		return $this->addFieldAfter($gdt, $after);
+	}
+	
+	public function addFieldLast(GDT $gdt) : self
+	{
+		return $this->addFieldB($gdt, null, true);
+	}
+	
+	public function addFields(GDT...$gdts) : self
+	{
+		foreach ($gdts as $gdt)
+		{
+			$this->addField($gdt);
+		}
+		return $this;
 	}
 	
 	protected function addFieldA(GDT $gdt, GDT $after=null, bool $last=true) : void
@@ -314,16 +330,13 @@ trait WithFields
 	{
 		$app = Application::$INSTANCE;
 		$rendered = '';
-		if (isset($this->fields))
+		$old = $app->mode;
+		$app->mode($renderMode);
+		foreach ($this->getFields() as $gdt)
 		{
-			$old = $app->mode;
-			$app->mode($renderMode);
-			foreach ($this->fields as $gdt)
-			{
-				$rendered .= $gdt->render();
-			}
-			$app->mode($old);
+			$rendered .= $gdt->render();
 		}
+		$app->mode($old);
 		return $rendered;
 	}
 	

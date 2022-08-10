@@ -17,7 +17,7 @@ use GDO\Table\GDT_List;
 if ($field->headers)
 {
     # The list search criteria form.
-    $frm = GDT_Form::make($field->headers->name)->slim()->verb('GET');
+    $frm = GDT_Form::make($field->headers->name)->verb('GET');
     
     # Searchable input
     if ($field->searched)

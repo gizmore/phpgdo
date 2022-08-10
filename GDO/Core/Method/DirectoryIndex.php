@@ -20,7 +20,7 @@ final class DirectoryIndex extends MethodTable
 {
 	public function isTrivial() : bool { return false; }
 	
-	public function isOrdered() { return false; }
+	public function isOrdered() : bool { return false; }
 	public function isFiltered() { return false; }
 	public function isSearched() { return false; }
 	public function isPaginated() { return false; }
