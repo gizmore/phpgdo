@@ -36,7 +36,7 @@ class GDT_Method extends GDT
 	 * 
 	 * @return GDT_Response
 	 */
-	public function execute(bool $changeLocale=false)
+	public function execute()
 	{
 		if (!isset($this->result))
 		{
@@ -55,7 +55,7 @@ class GDT_Method extends GDT
 			}
 
 			$method = $this->method->withAppliedInputs($inputs);
-			$this->changeUser($changeLocale);
+			$this->changeUser();
 			$this->result = $method->exec();
 		}
 		return $this->result;

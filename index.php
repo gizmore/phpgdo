@@ -123,7 +123,7 @@ $app->ajax($ajax);
 if (isset($me))
 {
 	# Patch all input to only the error!
-	$_REQUEST = ['url' => (string) $_SERVER['REQUEST_METHOD']];
+	$_REQUEST = ['error' => (string) $_SERVER['REQUEST_METHOD']];
 }
 #
 # index.php is called directly.

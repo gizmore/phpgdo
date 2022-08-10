@@ -22,11 +22,9 @@ trait WithEnvironment
 	### Run As ###
 	##############
 	public GDO_User $runAs;
+	
 	/**
 	 * Optional user for running the method. Default is GDO_User::current()
-	 * 
-	 * @param GDO_User $runAs
-	 * @return self
 	 */
 	public function runAs(GDO_User $runAs=null) : self
 	{
@@ -57,10 +55,10 @@ trait WithEnvironment
 	###############
 	### Execute ###
 	###############
-	protected function changeUser(bool $changeLocale=false) : self
+	protected function changeUser() : self
 	{
 		$user = isset($this->runAs) ? $this->runAs : GDO_User::current();
-		GDO_User::setCurrent($user, $changeLocale);
+		GDO_User::setCurrent($user);
 		return $this;
 	}
 	

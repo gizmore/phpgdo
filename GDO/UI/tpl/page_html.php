@@ -21,8 +21,8 @@ use GDO\Language\Trans;
   </head>
   <body>
     
-    <input type="checkbox" id="gdo-left-nav" class="gdo-nav" />
-    <input type="checkbox" id="gdo-right-nav" class="gdo-nav" />
+    <input type="checkbox" name="gdo-left-nav" id="gdo-left-nav" class="gdo-nav" />
+    <input type="checkbox" name="gdo-right-nav" id="gdo-right-nav" class="gdo-nav" />
 
     <nav id="gdo-left-bar" class="gdo-nav-bar"><?=$page->leftBar()->render()?></nav>
     <label for="gdo-left-nav"></label>

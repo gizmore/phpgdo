@@ -140,14 +140,14 @@ final class GDO_User extends GDO
 		return self::$CURRENT;
 	}
 	
-	public static function setCurrent(GDO_User $user, bool $switchLocale=true)
+	/**
+	 * Set the current user and their environment.
+	 */
+	public static function setCurrent(GDO_User $user) : self
 	{
 		self::$CURRENT = $user;
-		if ($switchLocale)
-		{
-			Time::setTimezone($user->getTimezone());
-			Trans::setISO($user->getLangISO());
-		}
+		Time::setTimezone($user->getTimezone());
+		Trans::setISO($user->getLangISO());
 		return $user;
 	}
 	

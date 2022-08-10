@@ -27,7 +27,7 @@ $result = $field->getResult();
 			<?php if ($field->isOrderable() && $gdt->isOrderable()) : ?>
 			<?=$field->renderOrder($gdt)?>
 			<?php else : ?>
-			<label><?=$gdt->renderLabel()?></label>
+			<label><?=$gdt->renderOrderLabel()?></label>
 			<?php endif; ?>
 		  <?php if ($field->filtered) : ?>
 			<?= $gdt->renderFilter($field->headers->name); ?>

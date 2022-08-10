@@ -372,7 +372,7 @@ class GDT_Message extends GDT_Text
 
 	public function renderCard(): string
 	{
-		return '<div class="gdt-message-card">' . $this->getVarOutput() . '</div>';
+		return '<div class="gdt-message-card">' . $this->getVarOutput() . "</div>\n";
 	}
 
 	public function renderForm(): string
@@ -400,7 +400,12 @@ class GDT_Message extends GDT_Text
 
 	public function classEditor(): string
 	{
-		return $this->nowysiwyg ? 'as-is' : 'wysiwyg';
+		return $this->nowysiwyg ? 'as-is' : ('wysiwyg gdt-editor-' . $this->getWantedEditorName());
 	}
 
+	protected function getWantedEditorName() : string
+	{
+		return strtolower(self::$EDITOR_NAME);
+	}
+	
 }

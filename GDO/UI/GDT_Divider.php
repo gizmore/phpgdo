@@ -21,12 +21,14 @@ class GDT_Divider extends GDT
 	
 	public function renderHTML() : string
 	{
-	    return '<div class="gdt-divider"><h5>'.$this->renderLabelText().'</h5></div>';
+		$text = $this->renderLabelText();
+		$text = $text ? "<h5>{$text}</h5>" : $text;
+	    return '<div class="gdt-divider">' . $text . '</div>';
 	}
 	
-	public function renderCell() : string
-	{
-		return '<div class="gdt-divider">'.$this->renderLabelText().'</div>';
-	}
+// 	public function renderCell() : string
+// 	{
+// 		return '<div class="gdt-divider">'.$this->renderLabelText().'</div>';
+// 	}
 	
 }

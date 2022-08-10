@@ -5,7 +5,7 @@ namespace GDO\Core;
  * An exception with translated error message.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDO_Error extends GDO_Exception

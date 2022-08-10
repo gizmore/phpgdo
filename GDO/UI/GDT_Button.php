@@ -55,6 +55,8 @@ class GDT_Button extends GDT
 	    return $this->renderCell();
 	}
 	
+	public function renderOrderLabel() : string { return ''; }
+	
 	public function renderJSON()
 	{
 	    return sprintf('<a href="%s">%s</a>', $this->gdoHREF(), $this->htmlIcon());

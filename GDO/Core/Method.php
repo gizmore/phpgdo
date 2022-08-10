@@ -173,7 +173,6 @@ abstract class Method #extends GDT
 	############
 	### Exec ###
 	############
-	
 	public function checkPermission(GDO_User $user)
 	{
 		if (!($this->isEnabled()))
@@ -346,6 +345,14 @@ abstract class Method #extends GDT
 			}
 			
 			return $response;
+		}
+		catch (GDO_ArgException $e)
+		{
+			if ($transactional)
+			{
+				$db->transactionRollback();
+			}
+			return $this->errorRaw($e->getMessage());
 		}
 		catch (GDO_PermissionException $e)
 		{

@@ -54,17 +54,17 @@ trait WithFields
 		return $this;
 	}
 
-	public function addField(GDT $gdt, bool $first=false) : self
+	public function addField(GDT $gdt, GDT $after=null, bool $last=true) : self
 	{
-		return $this->addFieldB($gdt, $first);		
+		return $this->addFieldB($gdt, $after, $last);		
 	}
 	
 	public function addFieldFirst(GDT $gdt) : self
 	{
-		return $this->addField($gdt, true);
+		return $this->addFieldB($gdt, null, false);
 	}
 	
-	protected function addFieldA(GDT $gdt, bool $first=false) : void
+	protected function addFieldA(GDT $gdt, GDT $after=null, bool $last=true) : void
 	{
 		# Init
 		if (!isset($this->fields))
@@ -72,29 +72,86 @@ trait WithFields
 			$this->fields = [];
 			$this->fieldsFlat = [];
 		}
+
+		# Check dup
+// 		$name = $gdt->getName();
+// 		if ($name && isset($this->fieldsFlat[$name]))
+// 		{
+// 			throw new GDO_Error('err_duplicate_field_name', [html($name)]);
+// 		}
 		
-		# Add the field
+		if ($last)
+		{
+			
+		}
+		
+		# Do the hard work
+		$this->fields = $this->getFieldsSlicy($this->fields, $gdt, $last, $after);
+		$this->fieldsFlat = $this->getFieldsSlicy($this->fieldsFlat, $gdt, $last, $after);
+	}
+	
+	private function getFieldsSlicy(array $fields, GDT $field, bool $last, ?GDT $after)
+	{
+		# Build 3 slices depending on first, after, last.
+		if ($last)
+		{
+			$begn = $fields;
+			$midl = [$field];
+			$aftr = GDT::EMPTY_ARRAY;
+		}
+		elseif ($after !== null)
+		{
+			$i = array_search($field, $fields, true);
+			$begn = array_slice($fields, 0, $i);
+			$midl = [$field];
+			$aftr = array_slice($fields, $i, count($fields) - $i);
+		}
+		else # first
+		{
+			$begn = [$field];
+			$midl = array_values($fields);
+			$aftr = GDT::EMPTY_ARRAY;
+		}
+		
+		# Build again
+		$newfields = [];
+		$all = array_merge($begn, $midl, $aftr);
+		foreach ($all as $gdt)
+		{
+			if ($name = $gdt->getName())
+			{
+				$newfields[$name] = $gdt;
+			}
+			else
+			{
+				$newfields[] = $gdt;
+			}
+		}
+		
+		# Done :)
+		return $newfields;
+	}
+	
+	protected function addFieldB(GDT $gdt, GDT $after=null, bool $last=true) : self
+	{
+		$this->addFieldA($gdt, $after, $last);
+
+		# Add to flatten
 		if ($name = $gdt->getName())
 		{
-			$this->fields[$name] = $gdt;
 			$this->fieldsFlat[$name] = $gdt;
 		}
 		else
 		{
-			$this->fields[] = $gdt;
 			$this->fieldsFlat[] = $gdt;
 		}
-	}
-	
-	protected function addFieldB(GDT $gdt, bool $first=false) : self
-	{
-		$this->addFieldA($gdt, $first);
 		
 		# Add children in flatten only
 		if ($gdt->hasFields())
 		{
 			$me = $this;
-			$gdt->withFields(function(GDT $gdt) use ($me) {
+			$gdt->withFields(function(GDT $gdt) use ($me)
+			{
 				if ($name = $gdt->getName())
 				{
 					$me->fieldsFlat[$name] = $gdt;
@@ -124,19 +181,10 @@ trait WithFields
 	
 	public function removeField(GDT $field) : self
 	{
-		if ($field->hasFields())
-		{
-			foreach ($field->getAllFields() as $gdt)
-			{
-				if ($name = $gdt->getName())
-				{
-					unset($this->fieldsFlat[$name]);
-				}
-			}
-		}
-		$name = $field->getName();
-		unset($this->fields[$name]);
-		unset($this->fieldsFlat[$name]);
+		$i = array_search($field, $this->fields, true);
+		unset($this->fields[$i]);
+		$i = array_search($field, $this->fieldsFlat, true);
+		unset($this->fieldsFlat[$i]);
 		return $this;
 	}
 	
@@ -258,6 +306,11 @@ trait WithFields
 	 * WithFields, we simply iterate over them and render current mode.
 	 */
 	public function renderFields(int $renderMode) : string
+	{
+		return $this->renderFieldsB($renderMode);
+	}
+	
+	protected function renderFieldsB(int $renderMode) : string
 	{
 		$app = Application::$INSTANCE;
 		$rendered = '';

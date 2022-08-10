@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\UI\TextStyle;
+
 /**
  * An HTML select.
  * Can autocomplete input, like `./gdo.sh mail.send giz <.....>`.
@@ -13,12 +15,6 @@ namespace GDO\Core;
 class GDT_Select extends GDT_ComboBox
 {
 	const SELECTED = ' selected="selected"'; # for options
-	
-// 	protected function __construct()
-// 	{
-// 		parent::__construct();
-// // 		$this->initial = $this->emptyVar;
-// 	}
 	
 	###################
 	### Var / Value ###
@@ -54,7 +50,7 @@ class GDT_Select extends GDT_ComboBox
 		$var = $this->getVar();
 		if ($var === null)
 		{
-			$value = $this->multiple ? [] : null;
+			$value = $this->multiple ? GDT::EMPTY_ARRAY : null;
 		}
 		else
 		{
@@ -491,7 +487,7 @@ class GDT_Select extends GDT_ComboBox
 	{
 		if ($var === null)
 		{
-			return "<i>" . t('none') . "</i>";
+			return TextStyle::italic(t('none'));
 		}
 		$this->initChoices();
 		
@@ -524,9 +520,8 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function plugVars() : array
 	{
-		$this->initChoices();
 		$result = [];
-		foreach (array_keys($this->choices) as $choice)
+		foreach (array_keys($this->initChoices()) as $choice)
 		{
 			$result[] = $choice;
 			if (count($result) >= 2)

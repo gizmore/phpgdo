@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Core\WithName;
 
 /**
  * Basic text panel.
@@ -10,12 +11,13 @@ use GDO\Core\GDT_Template;
  * @TODO document difference between display methods and render methods.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDT_Box
  */
 class GDT_Panel extends GDT
 {
+	use WithName;
 	use WithIcon;
 	use WithText;
 	use WithTitle;
@@ -36,5 +38,5 @@ class GDT_Panel extends GDT
 	{
 		return $this->renderText() . "\n";
 	}
-
+	
 }

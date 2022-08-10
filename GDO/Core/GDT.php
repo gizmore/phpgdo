@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
+use GDO\UI\TextStyle;
 
 /**
  * The base class for all GDT.
@@ -176,6 +177,7 @@ abstract class GDT
 	public function renderHeader() : string { return self::EMPTY_STRING; }
 	public function renderFilter($f) : string { return self::EMPTY_STRING; }
 // 	public function renderOrder(GDT_Table $t) : string { return $this->renderTableOrder($t); }
+	public function renderOrderLabel() : string { return $this->renderLabel(); }
 
 	public function renderVar() : string
 	{
@@ -187,7 +189,7 @@ abstract class GDT
 	 */
 	public function displayVar(string $var=null) : string
 	{
-		return $var === null ? sprintf("<i>%s</i>", t('none')) : html($var);
+		return $var === null ? TextStyle::italic(t('none')) : html($var);
 	}
 	
 	public function displayChoice($choice) : string

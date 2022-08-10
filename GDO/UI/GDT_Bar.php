@@ -1,26 +1,25 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT_Template;
 
 /**
  * A bar is a container without padding or margin.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 class GDT_Bar extends GDT_Container
 {
 	public bool $flex = true;
 	public int $flexDirection = self::HORIZONTAL;
+	public bool $flexWrap = true;
 	
-// 	public function renderCard() : string { return $this->renderHTML(); }
-// 	public function renderCell() : string { return $this->renderHTML(); }
-	public function renderForm() : string { return $this->renderHTML(); }
-	public function renderHTML() : string
+	protected function setupHTML(): void
 	{
-		return GDT_Template::php('UI', 'bar_html.php', ['field' => $this]);
+		$this->addClass('gdt-bar');
+		$this->css('text-align', 'center');
+		parent::setupHTML();
 	}
-	
+
 }

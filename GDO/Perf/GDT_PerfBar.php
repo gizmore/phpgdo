@@ -50,7 +50,7 @@ final class GDT_PerfBar extends GDT_Panel
 			
 			'memory_php' => $memphp,
 			'memory_real' => $memreal,
-			'memory_max' => max($memphp, $memreal), # Bug in PHP?
+			'memory_max' => max([$memphp, $memreal]), # Bug in PHP?
 			
 			'phpClasses' => count(get_declared_classes()),
 			

@@ -1,13 +1,24 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT_Template;
-
-class GDT_Box extends GDT_Bar
+/**
+ * 
+ * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 6.0.1
+ */
+class GDT_Box extends GDT_Container
 {
-	public function renderHTML() : string
+	public bool $flex = true;
+	public int $flexDirection = self::HORIZONTAL;
+	public bool $flexWrap = true;
+	public bool $flexShrink = false;
+	
+	protected function setupHTML(): void
 	{
-		return GDT_Template::php('UI', 'box_html.php', ['field' => $this]);
+		$this->addClass('gdt-box');
+		parent::setupHTML();
 	}
 	
 }

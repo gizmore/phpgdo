@@ -208,8 +208,8 @@ abstract class GDT_Field extends GDT
 	
 	public function displayCard($var) : string
 	{
-		return sprintf("<label>%s%s:</label><span>%s</span>\n",
-			$this->htmlIcon(), $this->renderLabel(), $var);
+		return sprintf("<label>%s%s:</label><div>%s</div>\n",
+			$this->htmlIcon(), $this->renderLabelText(), $var);
 	}
 
 }

@@ -6,6 +6,7 @@ p { word-break: break-word; }
 .ce { text-align: center; margin: auto; }
 /* .gdo-exception { white-space: pre-line; font-family: monospace; word-break: break-all; text-align: left; } */
 .gdo-exception { text-align: left; }
+.gdo-exception em { font-style: normal; }
 .gdt-tblorder { display: inline-block; }
 img.gdo-country,
 img.gdo-language { width: 32px; border: 1px solid #555; }
@@ -27,9 +28,9 @@ img.gdo-language { width: 32px; border: 1px solid #555; }
 .flx { display: flex;  }
 .flx-wrap { flex-wrap: wrap; }
 .flx-row { flex-direction: row; width: 100%; }
-.flx-column { flex-direction: column; }
+.flx-col { flex-direction: column; }
 .flx > * { flex: 1 1 auto; }
-.flx.flx-collapse > * { flex: 0 1 auto; }
+.flx.flx-shrink > * { flex: 0 1 auto; }
 .flx.noflx { display: block; }
 .flx-row > * { align-self: center; }
 

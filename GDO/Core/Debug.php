@@ -5,6 +5,7 @@ use GDO\Mail\Mail;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
 use GDO\UI\Color;
+use GDO\UI\TextStyle;
 
 /**
  * Debug backtrace and error handler.
@@ -341,7 +342,8 @@ final class Debug
 	{
 		$message = sprintf("%s: '%s' in %s line %s",
 			Color::red(get_class($ex)), $ex->getMessage(),
-			self::shortpath($ex->getFile()), $ex->getLine());
+			TextStyle::bold(self::shortpath($ex->getFile())),
+			TextStyle::bold($ex->getLine()));
 		return self::backtraceMessage($message, $html, $ex->getTrace(), $ex->getLine(), $ex->getFile());
 	}
 	

@@ -8,7 +8,7 @@ use GDO\UI\GDT_Repeat;
  * Override gdoParameters() in your methods.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see Method
  */
@@ -39,10 +39,10 @@ trait WithParameters
 // 		return $this->gdoParameters();
 // 	}
 	
-	public function gdoHasParameter(string $key) : bool
-	{
-		return isset($this->gdoParameterCache()[$key]);
-	}
+// 	public function gdoHasParameter(string $key) : bool
+// 	{
+// 		return isset($this->gdoParameterCache()[$key]);
+// 	}
 	
 	/**
 	 * Get a parameter by key.
@@ -50,7 +50,7 @@ trait WithParameters
 	 */
 	public function gdoParameter(string $key, bool $validate=true, bool $throw=true) : ?GDT
 	{
-		if ($gdt = $this->_gdoParameterB($key, $throw))
+		if ($gdt = $this->gdoParameterB($key, $throw))
 		{
 			if ($validate)
 			{
@@ -59,7 +59,7 @@ trait WithParameters
 				{
 					if ($throw)
 					{
-						throw new GDO_Error('err_parameter', [html($key), $gdt->renderError()]);
+						throw new GDO_ArgException($gdt);
 					}
 					return null;
 				}
@@ -68,7 +68,7 @@ trait WithParameters
 		return $gdt;
 	}
 	
-	private function _gdoParameterB(string $key, bool $throw=true) : ?GDT
+	private function gdoParameterB(string $key, bool $throw=true) : ?GDT
 	{
 		$cache = $this->gdoParameterCache();
 		$repeater = null;
@@ -160,10 +160,8 @@ trait WithParameters
 	{
 		foreach ($params as $gdt)
 		{
-			if ($name = $gdt->getName())
-			{
-				$this->parameterCache[$name] = $gdt;
-			}
+			$name = $gdt->getName(); # Has to supper getName()
+			$this->parameterCache[$name] = $gdt;
 		}
 	}
 	

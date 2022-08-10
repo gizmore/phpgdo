@@ -142,7 +142,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Is this GDO abstract? Required for inheritance hacks.
-	 * @return bool
 	 */
 	public function gdoAbstract() : bool { return false; }
 	
@@ -180,7 +179,7 @@ abstract class GDO extends GDT
 	public function isPersisted() : bool { return $this->persisted; }
 	public function setPersisted(bool $persisted=true) : self
 	{
-		unset($this->id);
+// 		unset($this->id);
 		$this->persisted = $persisted;
 		return $this;
 	}
@@ -358,7 +357,7 @@ abstract class GDO extends GDT
 	
 	public function setGDOVars(array $vars, bool $dirty=false) : self
 	{
-		unset($this->id);
+// 		unset($this->id);
 		$this->gdoVars = $vars;
 		return $this->dirty($dirty);
 	}
@@ -1212,18 +1211,20 @@ abstract class GDO extends GDT
 	##############
 	### Get ID ###
 	##############
-	private string $id;
-	
 	/**
 	 * Id cache
-	 * @var $id string
+	 */
+// 	private string $id;
+
+	/**
+	 * Get the ID for this entity.
 	 */
 	public function getID() : ?string
 	{
-		if (isset($this->id))
-		{
-			return $this->id;
-		}
+// 		if (isset($this->id))
+// 		{
+// 			return $this->id;
+// 		}
 		$id = '';
 		foreach ($this->gdoPrimaryKeyColumnNames() as $name)
 		{
@@ -1233,10 +1234,10 @@ abstract class GDO extends GDT
 				$id = $id ? "{$id}:{$id2}" : $id2;
 			}
 		}
-		if ($id)
-		{
-			$this->id = $id;
-		}
+// 		if ($id)
+// 		{
+// 			$this->id = $id;
+// 		}
 		return $id;
 	}
 	
@@ -1245,9 +1246,6 @@ abstract class GDO extends GDT
 	##############
 	/**
 	 * Get a row by a single arbritary column value.
-	 * @param string $key
-	 * @param string $value
-	 * @return self
 	 */
 	public static function getBy(string $key, string $var) : ?self
 	{
@@ -1318,7 +1316,8 @@ abstract class GDO extends GDT
 	
 	public static function notFoundException(string $id) : void
 	{
-		throw new GDO_Error('err_gdo_not_found', [self::table()->gdoHumanName(), html($id)]);
+		throw new GDO_Error('err_gdo_not_found', [
+			self::table()->gdoHumanName(), html($id)]);
 	}
 	
 	/**
@@ -1424,7 +1423,7 @@ abstract class GDO extends GDT
 	
 	public function clearCache() : self
 	{
-		unset($this->id);
+// 		unset($this->id);
 		if ($this->cached())
 		{
 			$cache = self::table()->cache;

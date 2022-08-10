@@ -32,18 +32,8 @@ use GDO\Core\WithInput;
  * Paginated enables pagination via GDT_Pagemenu.
  * Sorted enables drag and drop sorting via GDT_Sort and Table::Method::Sorting.
  *
- * The GDT that are used for this are stored via 'WithHeaders' trait.
- * The Header has a name that is used in $REQUEST vars.
- * $_REQUEST[$headerName][f] for filtering
- * $_REQUEST[$headerName][o][field]=1|0 for multordering in tables
- * $_REQUEST[$headerName][order_by] for single ordering in lists
- * $_REQUEST[$headerName][search] for searching
- * $_REQUEST[$headerName][page] for pagenum
- * $_REQUEST[$headerName][ipp] for items per page
- * $_REQUEST[$headerName][s][ID]=[ID] for sorting (planned)
- *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * @see GDO
  * @see GDT
@@ -67,7 +57,6 @@ class GDT_Table extends GDT
 
 	public function getDefaultName() : string
 	{
-// 		return strtolower($this->gdo->gdoShortName());
 		return 'table';
 	}
 
@@ -184,9 +173,6 @@ class GDT_Table extends GDT
 	/**
 	 * Render an order header for a gdt.
 	 * Table only rendering method.
-	 * 
-	 * @param GDT $gdt
-	 * @return string
 	 */
 	public function renderOrder(GDT $gdt) : string
 	{

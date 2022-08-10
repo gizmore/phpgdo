@@ -163,7 +163,7 @@ class Configure extends MethodForm
 		$form->addField(
 			GDT_String::make('module_path')->writeable(false)
 				->initial($mod->filePath()));
-		$c = GDT_Container::make('versions')->horizontal(false);
+		$c = GDT_Container::make('versions')->horizontal();
 		$c->addField(
 			GDT_Version::make('module_version')->gdoInitial($mod)->writeable(
 				false));
@@ -171,7 +171,7 @@ class Configure extends MethodForm
 			GDT_Version::make('version_available')->writeable(
 				false)
 				->initial($mod->version));
-		$form->addField($c->flex());
+		$form->addField($c);
 		$form->inputs($this->configModule->getGDOVars());
 		if ($config = $mod->getConfigCache())
 		{

@@ -6,7 +6,7 @@ namespace GDO\Core;
  * This is rarely needed meanwhile, as GDT are filled correctly.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  * @see GDT
  * @see GDO
@@ -34,7 +34,6 @@ trait WithGDO
 		else
 		{
 			unset($this->gdo);
-// 			$this->reset();
 		}
 		return $this;
 	}

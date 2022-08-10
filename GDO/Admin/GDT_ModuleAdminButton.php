@@ -3,21 +3,19 @@ namespace GDO\Admin;
 
 use GDO\UI\GDT_Button;
 use GDO\Core\GDO_Module;
-use GDO\Core\WithGDO;
+use GDO\Core\GDT;
 
 /**
  * Admin section button. Only visible if module has href_admin.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.1
  * @see GDT_Button
  * @see Module_Admin
  */
 class GDT_ModuleAdminButton extends GDT_Button
 {
-	use WithGDO;
-	
 	public function getConfigModule() : ?GDO_Module
 	{
 		return isset($this->gdo) ? $this->gdo : null;
@@ -27,22 +25,13 @@ class GDT_ModuleAdminButton extends GDT_Button
 	{
 		if ($module = $this->getConfigModule())
 		{
-		    if ($href = $module->href_administrate_module())
+		    if ($href = $module->hrefAdministration())
 			{
 			    $this->href($href);
 				return parent::renderCell();
 			}
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
-	
-// 	public function renderJSON()
-// 	{
-// 	    if ($href = $this->getModule()->href_administrate_module())
-// 	    {
-// 	        $this->href($href);
-//     	    return sprintf('<a href="%s">%s</a>', $href, $this->renderLabel());
-// 	    }
-// 	}
 	
 }

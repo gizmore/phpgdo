@@ -263,7 +263,7 @@ class GDO_Module extends GDO
 	
 	public function href_install_module() : string { return href('Admin', 'Install', '&module='.$this->getName()); }
 	public function href_configure_module() : string { return href('Admin', 'Configure', '&module='.$this->getName()); }
-	public function href_administrate_module() : ?string { return null; }
+	public function hrefAdministration() : ?string { return null; }
 	
 	#############
 	### Hooks ###
@@ -474,7 +474,7 @@ class GDO_Module extends GDO
 	{
 	    if ($gdt = $this->getConfigColumn($key))
 	    {
-	        return $gdt->var;
+	        return $gdt->getVar();
 	    }
 	    return null;
 	}
@@ -776,7 +776,7 @@ class GDO_Module extends GDO
 		$this->userConfigCache[$permission->name] = $permission;
 		
 		# we add the GDT + a container with 3 acl fields to the container cache.
-		$cont = GDT_Container::make()->horizontal();#->wrap();
+		$cont = GDT_Container::make()->horizontal();
 		$cont->addFields($relation, $level, $permission);
 		$this->userConfigCacheContainers[] = $cont;
 	}

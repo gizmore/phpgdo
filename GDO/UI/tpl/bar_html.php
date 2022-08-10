@@ -2,9 +2,9 @@
 namespace GDO\UI\tpl;
 use GDO\UI\GDT_Bar;
 /** @var GDT_Bar $field  **/
-$field->addClass("gdt-bar {$field->flexClass()}");
+$field->addClass("gdt-bar");# {$field->flexClass()}");
 ?>
-<div <?=$field->htmlAttributes()?>>
+<div<?=$field->htmlAttributes()?>>
 <?php
 foreach ($field->getFields() as $gdt)
 {

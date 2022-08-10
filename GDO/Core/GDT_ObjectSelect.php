@@ -19,7 +19,7 @@ class GDT_ObjectSelect extends GDT_Select
 	
 	public function getChoices()
 	{
-		return isset($this->table) ? $this->table->allCached() : [];
+		return isset($this->table) ? $this->table->allCached() : GDT::EMPTY_ARRAY;
 	}
 	
 	public function validate($value) : bool

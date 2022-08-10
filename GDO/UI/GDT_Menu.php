@@ -11,7 +11,7 @@ use GDO\Core\WithInput;
  * @version 7.0.1
  * @since 6.4.0
  */
-final class GDT_Menu extends GDT_Bar
+final class GDT_Menu extends GDT_Container
 {
 	use WithLabel;
 	use WithInput;
@@ -19,9 +19,16 @@ final class GDT_Menu extends GDT_Bar
 	
 	public function getDefaultName() : string { return 'menu'; }
 	
-	public function renderFields(int $renderMode) : string
+	protected function setupHTML(): void
 	{
-		return sprintf("<div class=\"gdt-menu\">%s</div>\n", parent::renderHTML());
+		$this->addClass('gdt-menu');
+		$this->flexDirection = self::HORIZONTAL;
+		parent::setupHTML();
 	}
+	
+// 	public function renderFields(int $renderMode) : string
+// 	{
+// 		return sprintf("<div class=\"gdt-menu\">%s</div>\n", parent::renderHTML());
+// 	}
 	
 }

@@ -23,9 +23,9 @@ img.gdo-language { width: 32px; xheight: 17px; position: relative; top: 0px; bor
 .flx { display: flex;  }
 .flx-wrap { flex-wrap: wrap; }
 .flx-row { flex-direction: row; width: 100%; }
-.flx-column { flex-direction: column; }
+.flx-col { flex-direction: column; }
 .flx > * { flex: 1 1 auto; }
-.flx.flx-collapse > * { flex: 0 1 auto; }
+.flx.flx-shrink > * { flex: 0 1 auto; }
 .flx.noflx { display: block; }
 .flx-row > * { align-self: center; }
 div.gdt-hr { height: 2px; width: 100%; background: #eee; margin: 8px 0; }
@@ -49,7 +49,7 @@ div.gdo-body { padding: 64px 0px 0px; min-height: 100%; }
 .gdt-bar > * { flex-grow: 1; text-align: center; }
 .gdo-body .gdt-bar-row { border-bottom: 1px solid #fff; }
 
-.gdt-container.flx.flx-row.flx-collapse > * { margin-right: 8px; }
+.gdt-container.flx.flx-row.flx-shrink > * { margin-right: 8px; }
  
 /** Sidebar **/
 #gdo-left-bar .gdt-divider, #gdo-right-bar .gdt-divider { background: #333; height: 1px; width: 100%; margin-top: 6px; }

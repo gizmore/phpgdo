@@ -21,17 +21,17 @@ $field->addClass('gdt-card');
 <?php if ($field->hasSubTitle()) : ?>
     <div class="gdt-card-subtitle"><?=$field->renderSubTitle()?></div>
 <?php endif; ?>
-    </div>
+   </div>
 <?php endif; ?>
   </div>
 <?php endif; ?>
 <?php if (isset($field->image) || isset($field->content) || $field->getAllFields()) : ?>
   <div class="gdt-card-middle">
 <?php if (isset($field->image)) : ?>
-    <div class="gdt-card-image"><?=$field->image->renderCard()?></div>
+    <div class="gdt-card-image"><?=$field->image->renderCell()?></div>
 <?php endif; ?>
 <?php if (isset($field->content)) : ?>
-    <div class="gdt-card-content"><?=$field->content->renderCard()?></div>
+    <div class="gdt-card-content"><?=$field->content->renderCell()?></div>
 <?php endif; ?>
 <?php if ($field->getAllFields()) : ?>
     <div class="gdt-card-fields">

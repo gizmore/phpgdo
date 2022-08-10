@@ -57,7 +57,7 @@ final class Module_User extends GDO_Module
 	public function isCoreModule() : bool { return true; }
 	public function onInstall() : void { OnInstall::onInstall(); }
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/user'); }
-// 	public function href_administrate_module() : ?string { return href('User', 'Admin'); }
+// 	public function hrefAdministration() : ?string { return href('User', 'Admin'); }
 
 	public function onInitSidebar() : void
 	{
