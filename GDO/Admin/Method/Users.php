@@ -46,7 +46,7 @@ class Users extends MethodQueryTable
 	{
 		$gdo = $this->gdoTable();
 		return [
-			GDT_EditButton::make()->noLabel(),
+			GDT_EditButton::make()->labelNone(),
 			$gdo->gdoColumn('user_id'),
 			$gdo->gdoColumn('user_type'),
 			$gdo->gdoColumn('user_name'),

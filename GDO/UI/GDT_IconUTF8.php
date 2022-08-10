@@ -82,6 +82,7 @@ final class GDT_IconUTF8
         'quote' => '↶',
         'remove' => '✕',
         'reply' => '☞',
+    	'required' => '❋',
         'schedule' => '☷',
         'search' => '🔍',
         'settings' => '⚙',

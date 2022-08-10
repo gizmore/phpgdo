@@ -16,7 +16,7 @@ final class Ekko extends Method
 	public function gdoParameters() : array
 	{
 		return [
-			GDT_String::make('text')->notNull()->noLabel(),
+			GDT_String::make('text')->notNull()->labelNone(),
 		];
 	}
 	

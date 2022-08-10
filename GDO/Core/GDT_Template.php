@@ -45,7 +45,7 @@ class GDT_Template extends GDT
 	# ###########
 	public function defaultLabel(): self
 	{
-		return $this->noLabel();
+		return $this->labelNone();
 	}
 
 	public function htmlClass(): string

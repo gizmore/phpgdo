@@ -16,16 +16,45 @@ trait WithLabel
 {
 	use WithName;
 	
+	############
+	### Star ###
+	############
+	private static string $requiredIcon;
+	public static function renderRequiredIcon() : string
+	{
+		if (!isset(self::$requiredIcon))
+		{
+			self::$requiredIcon = '<span class="gdt-required">'.GDT_Icon::iconS('required').'</span>';
+		}
+		return self::$requiredIcon;
+	}
+	
+	#############
+	### Label ###
+	#############
+	public bool   $labelNone = false;
 	public string $labelRaw;
 	public string $labelKey;
 	public ?array $labelArgs = null;
+	
+	public function labelNone(bool $none = true) : self
+	{
+		$this->labelNone = $none;
+		if ($none)
+		{
+			unset($this->labelRaw);
+			unset($this->labelKey);
+			$this->labelArgs = null;
+		}
+		return $this;
+	}
 	
 	public function label(string $key, array $args = null) : self
 	{
 		unset($this->labelRaw);
 		$this->labelKey = $key;
 		$this->labelArgs = $args;
-		return $this;
+		return $this->labelNone(false);
 	}
 	
 	public function labelRaw(string $label) : self
@@ -33,25 +62,20 @@ trait WithLabel
 		$this->labelRaw = $label;
 		unset($this->labelKey);
 		$this->labelArgs = null;
-		return $this;
-	}
-	
-	public function noLabel() : self
-	{
-		unset($this->labelRaw);
-		unset($this->labelKey);
-		$this->labelArgs = null;
-		return $this;
+		return $this->labelNone(false);
 	}
 	
 	public function hasLabel() : bool
 	{
-		return isset($this->labelKey) || isset($this->labelRaw);
+		return !$this->labelNone;
 	}
 	
 	##############
 	### Render ###
 	##############
+	/**
+	 * The label is the label text with the required star asterisk.
+	 */
 	public function renderLabel() : string
 	{
 		$text = $this->renderLabelText();
@@ -62,36 +86,37 @@ trait WithLabel
 		return $text;
 	}
 	
+	/**
+	 */
 	public function renderLabelText() : string
 	{
+		if ($this->labelNone)
+		{
+			return GDT::EMPTY_STRING;
+		}
 		if (isset($this->labelKey))
 		{
 			return t($this->labelKey, $this->labelArgs);
 		}
-		elseif (isset($this->labelRaw))
+		if (isset($this->labelRaw))
 		{
 			return $this->labelRaw;
 		}
-		elseif (isset($this->name))
+		if (isset($this->name))
 		{
 			return t($this->name);
 		}
-		else
-		{
-			return GDT::EMPTY_STRING;
-		}
+		return GDT::EMPTY_STRING;
+// 		return $this->gdoHumanName();
 	}
 	
 	/**
-	 * Display the required asterisk sign.
+	 * Display the *required* asterisk sign.
 	 */
 	private function charRequired() : string
 	{
-		if (isset($this->notNull) && $this->notNull)
-		{
-			return '<span class="gdt-required">*</span>';
-		}
-		return '';
+		return (isset($this->notNull) && ($this->notNull)) ?
+			self::renderRequiredIcon() : GDT::EMPTY_STRING;
 	}
 	
 	############
@@ -102,7 +127,7 @@ trait WithLabel
 	 */
 	public function htmlForID() : string
 	{
-		return " for=\"{$this->name}\"";
+		return " for=\"{$this->getName()}\"";
 	}
 
 }

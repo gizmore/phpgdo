@@ -147,7 +147,10 @@ abstract class GDT
 // 	];
 	
 	/**
-	 * Call the applications mode rendering method. 
+	 * Call the applications mode rendering method.
+	 * Returns an array for JSON.
+	 * retuns a string for everything else at the moment.
+	 *  
 	 * @return string|array
 	 */
 	protected function renderGDT()
@@ -699,9 +702,6 @@ abstract class GDT
 // 	##################
 // 	### DEPRECATED ### backwards compat :(
 // 	##################
-// 	/**
-// 	 * @deprecated I don't like this method anymore. it is all input now.
-// 	 */
 // 	public function getRequestVar(string $name=null, $default=null, $bla=null) : string
 // 	{
 // 		if ($input = $this->getInput($name))

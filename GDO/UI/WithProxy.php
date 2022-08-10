@@ -58,7 +58,7 @@ trait WithProxy
 	public function renderForm() : string { return $this->proxy->renderForm(); }
 	public function renderCard() : string { return $this->proxy->renderCard(); }
 	# html table rendering
-	public function renderHTML() : string { return $this->proxy->renderHTML(); }
+	public function renderCell() : string { return $this->proxy->renderCell(); }
 	public function renderHeader() : string { return $this->proxy->renderHeader(); }
 	public function renderFilter($f) : string { return $this->proxy->renderFilter($f); }
 	public function renderOrder(GDT_Table $table) : string { return $this->proxy->renderOrder($table); }

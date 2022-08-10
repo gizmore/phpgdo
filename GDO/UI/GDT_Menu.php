@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\WithInput;
 use GDO\Core\GDT_Template;
+use GDO\Core\GDT;
 
 /**
  * A popup menu
@@ -23,6 +24,12 @@ final class GDT_Menu extends GDT_Container
 	public function getDefaultName() : string
 	{
 		return 'menu';
+	}
+	
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->labelNone();
 	}
 	
 	##############
