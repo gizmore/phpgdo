@@ -240,7 +240,7 @@ if (!($result instanceof GDT_Response))
 }
 
 # Render the response.
-$content = $result->renderMode();
+$content = $result->render();
 
 ##############
 ### Finish ###

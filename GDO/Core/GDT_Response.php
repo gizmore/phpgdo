@@ -15,12 +15,6 @@ use GDO\Util\Strings;
  */
 final class GDT_Response extends GDT_Tuple
 {
-// 	public static function instanceWith(GDT...$gdts) : self
-// 	{
-// 		$instance = self::instance();
-// 		return $instance->addFields(...$gdts);
-// 	}
-	
 	public function render() : string
 	{
 		switch (Application::$INSTANCE->mode)
