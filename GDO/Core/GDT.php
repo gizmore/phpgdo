@@ -446,14 +446,10 @@ abstract class GDT
 	#########################
 	### Bridge for traits ###
 	#########################
-// 	/**
-// 	 * @deprecated
-// 	 * @return bool
-// 	 */
-// 	public function hasName() : bool
-// 	{
-// 		return false;
-// 	}
+	public function hasName() : bool
+	{
+		return false;
+	}
 	
 	public function getName() : ?string
 	{

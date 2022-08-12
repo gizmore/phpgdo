@@ -9,8 +9,6 @@ use GDO\Util\Permutations;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Core\Debug;
 use GDO\Core\ModuleLoader;
-use GDO\Date\GDT_DateDisplay;
-use GDO\Language\GDT_LangSwitch;
 
 /**
  * Test all rendering methods on all GDO + GDT.
@@ -202,7 +200,7 @@ final class AutomatedRenderingTest extends TestCase
 		$gdt->renderXML();
 		$gdt->renderJSON();
 		$gdt->renderGTK();
-		$gdt->renderPage();
+		$gdt->renderWebsite();
 		# html rendering
 		$gdt->renderHTML();
 		$gdt->renderOption();
@@ -210,9 +208,6 @@ final class AutomatedRenderingTest extends TestCase
 		$gdt->renderForm();
 		$gdt->renderCard();
 		# html table rendering
-		$gdt->renderHTML();
-// 		$gdt->renderHeader();
-// 		$gdt->renderFilter('');
 		return true;
 	}
 

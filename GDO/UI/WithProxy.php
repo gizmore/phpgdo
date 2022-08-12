@@ -61,7 +61,7 @@ trait WithProxy
 	public function renderCell() : string { return $this->proxy->renderCell(); }
 	public function renderHeader() : string { return $this->proxy->renderHeader(); }
 	public function renderFilter($f) : string { return $this->proxy->renderFilter($f); }
-	public function renderOrder(GDT_Table $table) : string { return $this->proxy->renderOrder($table); }
+	public function renderOrder() : string { return $this->proxy->renderOrder(); }
 
 	public function getName() : ?string
 	{

@@ -16,6 +16,8 @@ final class GDT_CardView extends GDT
 {
 	use WithGDO;
 	
+	public function isTestable() : bool { return false; }
+	
 	public function renderHTML() : string
 	{
 		return $this->gdo->renderCard();

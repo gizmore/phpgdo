@@ -14,7 +14,7 @@ use GDO\Core\GDT;
 class GDT_Icon extends GDT
 {
 	use WithIcon;
-// 	use WithLabel;
+	use WithLabel;
 	use WithPHPJQuery;
 
 	/**
