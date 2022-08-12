@@ -77,27 +77,21 @@ final class ModuleProviders
 		return null;
 	}
 
-	public static $PROVIDERS = [
-		'Captcha' => [
-			'phpgdo-captcha',
-			'phpgdo-recaptcha2'
-		],
-		'DBMS' => [
-			'phpgdo-mysql',
-			'phpgdo-postgres',
-			'phpgdo-sqlite'
-		],
-		'Mailer' => [
-			'phpgdo-mailer-gdo',
-			'phpgdo-mailer-symfony'
-		],
-		'Session' => [
-			'phpgdo-session-db',
-			'phpgdo-session-cookie'
-		],
+	/**
+	 * Provider packages.
+	 * Multi-Provided is first
+	 */
+	public static array $PROVIDERS = [
+		# Multiple choices
+		'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],
+		'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],
+		'Mailer' => ['phpgdo-mailer-gdo', 'phpgdo-mailer-symfony'],
+		'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],
+		# Only one provider
 		'Account' => 'phpgdo-account',
 		'ActivationAlert' => 'phpgdo-activation-alert',
 		'Address' => 'phpgdo-address',
+		'Aprilfools' => 'phpgdo-aprilfools',
 		'Avatar' => 'phpgdo-avatar',
 		'Backup' => 'phpgdo-backup',
 		'BasicAuth' => 'phpgdo-basic-auth',
@@ -132,15 +126,18 @@ final class ModuleProviders
 		'File' => 'phpgdo-file',
 		'Follower' => 'phpgdo-follower',
 		'FontAwesome' => 'phpgdo-font-awesome',
+		'Forum' => 'phpgdo-forum',
 		'Friends' => 'phpgdo-friends',
 		'Gallery' => 'phpgdo-gallery',
 		'Geo2Country' => 'phpgdo-geo2country',
 		'Guestbook' => 'phpgdo-guestbook',
+		'Hash' => 'phpgdo-hash',
 		'Helpdesk' => 'phpgdo-helpdesk',
 		'Instagram' => 'phpgdo-instagram',
 		'Invite' => 'phpgdo-invite',
 		'IP2Country' => 'phpgdo-ip2country',
 		'Javascript' => 'phpgdo-javascript',
+		'JPGraph' => 'phpgdo-jpgraph',
 		'JQuery' => 'phpgdo-jquery',
 		'JQueryAutocomplete' => 'phpgdo-jquery-autocomplete',
 		'Licenses' => 'phpgdo-licenses',
@@ -151,6 +148,7 @@ final class ModuleProviders
 		'Mailer' => 'phpgdo-mailer-gdo',
 		'Maps' => 'phpgdo-maps',
 		'Markdown' => 'phpgdo-markdown',
+		'Math' => 'phpgdo-math',
 		'Moment' => 'phpgdo-moment',
 		'News' => 'phpgdo-news',
 		'OnlineUsers' => 'phpgdo-online-users',
@@ -168,6 +166,7 @@ final class ModuleProviders
 		'Register' => 'phpgdo-register',
 		'Security' => 'phpgdo-security',
 		'Shoutbox' => 'phpgdo-shoutbox',
+		'SimpleMDE' => 'phpgdo-simple-mde',
 		'Sitemap' => 'phpgdo-sitemap',
 		'Tags' => 'phpgdo-tags',
 		'Todo' => 'phpgdo-todo',
@@ -177,10 +176,11 @@ final class ModuleProviders
 	];
 
 	public static $DEPENDENCIES = [
-		'Account' => [],
+		'Account' => ['Login'],
 		'ActivationAlert' => [],
 		'Address' => [],
 		'Admin' => ['Table'],
+		'Aprilfools' => [],
 		'Avatar' => ['File'],
 		'Backup' => ['ZIP', 'Cronjob'],
 		'BasicAuth' => [],
@@ -197,7 +197,7 @@ final class ModuleProviders
 		'Core' => ['Language', 'Date', 'UI', 'User'],
 		'CORS' => [],
 		'Country' => [],
-		'CountryCoordinates' => [],
+		'CountryCoordinates' => ['Country', 'Maps'],
 		'Cronjob' => [],
 		'Crypto' => [],
 		'CSS' => [],
@@ -213,7 +213,7 @@ final class ModuleProviders
 		'DogShadowdogs' => ['DogAuth'],
 		'DogTick' => ['Dog', 'DogIRC'],
 		'DogWebsite' => ['Bootstrap5Theme', 'JQuery', 'Avatar', 'Dog', 'DogAuth', 'Login', 'Register', 'Admin', 'DogIRC', 'DogTick', 'DogShadowdogs', 'DogIRCAutologin', 'DogIRCSpider', 'Do
-gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links', 'Download', 'Math', 'Contact', 'Todo', 'Perf', 'Website', 'Markdown'],
+gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links', 'Download', 'Math', 'Contact', 'Todo', 'Perf', 'Markdown'],
 		'DOMPDF' => ['File'],
 		'Download' => ['Payment'],
 		'DSGVO' => [],
@@ -222,31 +222,35 @@ gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links
 		'File' => [],
 		'Follower' => [],
 		'FontAwesome' => [],
+		'Forum' => ['File'],
 		'Friends' => [],
 		'Gallery' => ['File'],
 		'GDO7Landing' => [],
-		'Geo2Country' => ['CountryCoordinates', 'Material', 'News'],
+		'Geo2Country' => ['Account', 'Admin', 'Classic', 'CountryCoordinates', 'FontAwesome', 'Login', 'News', 'Perf', 'Recovery', 'Register'],
 		'Git' => [],
 		'Gitwatch' => ['Git', 'Bootstrap5Theme', 'Session'],
 		'Guestbook' => ['Admin'],
+		'Hash' => [],
 		'Helpdesk' => ['Comments'],
 		'Instagram' => [],
 		'Install' => [],
 		'Invite' => [],
-		'IP2Country' => [],
+		'IP2Country' => ['Country'],
 		'Javascript' => [],
+		'JPGraph' => [],
 		'JQuery' => [],
 		'JQueryAutocomplete' => ['JQuery'],
 		'Language' => [],
 		'Licenses' => [],
 		'Links' => ['Vote', 'Tag', 'Cronjob'],
-		'LinkUUp' => ['Account', 'Websocket', 'Comments', 'Login', 'Recovery', 'Register', 'Avatar', 'Gallery', 'Admin', 'Contact', 'JPGraph', 'Facebook', 'Instagram', 'OpenTimes', 'Friend
-s', 'Address', 'Maps', 'QRCode', 'Bootstrap5Theme', 'CORS', 'JPGraph', 'Markdown', 'News', 'ActivationAlert', 'Perf', 'Birthday', 'Backup'],
+		'LinkUUp' => ['Account', 'Websocket', 'Comments', 'Login', 'Recovery', 'Register', 'Avatar', 'Gallery', 'Admin', 'Contact', 'Facebook', 'Instagram', 'OpenTimes', 'Friends', 'Addres
+s', 'Maps', 'QRCode', 'Bootstrap5Theme', 'CORS', 'JPGraph', 'Markdown', 'News', 'ActivationAlert', 'Perf', 'Birthday', 'Backup'],
 		'Login' => ['Session'],
-		'Mail' => ['User', 'Mailer'],
+		'Mail' => ['Mailer'],
 		'Mailer' => [],
 		'Maps' => [],
 		'Markdown' => ['JQuery', 'FontAwesome'],
+		'Math' => [],
 		'Moment' => [],
 		'Net' => [],
 		'News' => ['Comments', 'Category', 'Mail'],
@@ -262,13 +266,14 @@ s', 'Address', 'Maps', 'QRCode', 'Bootstrap5Theme', 'CORS', 'JPGraph', 'Markdown
 		'Poll' => [],
 		'Prism' => [],
 		'QRCode' => [],
-		'Quotes' => ['Vote'],
+		'Quotes' => ['Vote', 'Realname'],
 		'Realname' => [],
 		'Recovery' => ['Captcha'],
 		'Register' => [],
-		'Security' => [],
+		'Security' => ['Hash'],
 		'Session' => [],
 		'Shoutbox' => [],
+		'SimpleMDE' => ['Core'],
 		'Sitemap' => [],
 		'Table' => [],
 		'Tests' => [],
