@@ -53,7 +53,7 @@ final class ModuleProviders
 		}
 	}
 
-	public static function getDependencies(string $moduleName): ?array
+	public static function getDependencies(string $moduleName): array
 	{
 		foreach (self::$DEPENDENCIES as $modname => $depNames)
 		{
@@ -62,10 +62,10 @@ final class ModuleProviders
 				return $depNames;
 			}
 		}
-		return null;
+		return GDT::EMPTY_ARRAY;
 	}
 
-	public static function getProviders(string $moduleName)
+	public static function getProviders(string $moduleName) : array
 	{
 		foreach (self::$PROVIDERS as $modname => $providers)
 		{
@@ -74,7 +74,7 @@ final class ModuleProviders
 				return $providers;
 			}
 		}
-		return null;
+		return GDT::EMPTY_ARRAY;
 	}
 
 	public static $PROVIDERS = [
