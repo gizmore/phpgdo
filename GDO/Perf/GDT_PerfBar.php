@@ -13,6 +13,7 @@ use GDO\Core\GDT_Hook;
 use GDO\UI\GDT_Panel;
 use GDO\Mail\Mail;
 use GDO\CLI\CLI;
+use GDO\Core\GDT_UInt;
 
 /**
  * Performance statistics panel.
@@ -53,13 +54,13 @@ final class GDT_PerfBar extends GDT_Panel
 			'memory_max' => max([$memphp, $memreal]), # Bug in PHP?
 			
 			'phpClasses' => count(get_declared_classes()),
+			'allocs' => (spl_object_id(GDT_UInt::make())),
 			
 			'gdoFiles' => $GDT_LOADED,
 			'gdoCount' => GDO::$GDO_COUNT,
 			'gdoPeakCount' => GDO::$GDO_PEAKS,
 			'gdtCount' => GDT::$GDT_COUNT,
 			'gdtPeakCount' => GDT::$GDT_PEAKS,
-			'allocs' => 100,
 			'funcCount' => xdebug_get_function_count(),
 		    'gdoModules' => count(ModuleLoader::instance()->getEnabledModules()),
 			'gdoLangFiles' => Trans::numFiles(),
