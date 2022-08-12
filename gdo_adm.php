@@ -711,6 +711,12 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
 			{
 				$providers = ModuleProviders::getProviders(
 					$module);
+				
+				if (!$providers)
+				{
+					echo "No provider for $module\n";
+					die(1);
+				}
 				$n = 1;
 				if (is_array($providers))
 				{
