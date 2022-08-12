@@ -281,14 +281,19 @@ abstract class Method #extends GDT
 		{
 			# 0) Init
 			$this->applyInput();
+// 			if (Application::isError())
+// 			{
+// 				throw new GDO_Error('err_init_apply_input');
+// 			}
+			
 			if ($result = $this->onInit())
 			{
 				$response->addField($result);
 			}
-			if (Application::isError())
-			{
-				return $response;
-			}
+// 			if (Application::isError())
+// 			{
+// 				return $response;
+// 			}
 			
 			# 1) Start the transaction
 			$transactional = $this->transactional();
@@ -298,7 +303,7 @@ abstract class Method #extends GDT
 			}
 
 			# 2) Before execute
-			$this->applyInput();
+// 			$this->applyInput();
 			$this->beforeExecute();
 			$result = GDT_Hook::callHook('BeforeExecute', $this, $response);
 			$response->addField($result);

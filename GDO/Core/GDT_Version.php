@@ -10,7 +10,7 @@ namespace GDO\Core;
  * Validation via GDT_String::$pattern
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  * @see Version
  * @see GDT_String
@@ -23,6 +23,9 @@ class GDT_Version extends GDT_String
 	public bool $caseSensitive = true;
 	public string $pattern = "/^\\d+\\.\\d+\\.\\d+$/iD";
 	
+	###################
+	### Var / Value ###
+	###################
 	/**
 	 * @param Version $value
 	 */
@@ -41,4 +44,13 @@ class GDT_Version extends GDT_String
 		return ["7.0.0"];
 	}
 
+	##############
+	### Render ###
+	##############
+	public function renderCell() : string
+	{
+		$var = $this->getVar();
+		return $var === null ? GDT::EMPTY_STRING : $var;
+	}
+	
 }

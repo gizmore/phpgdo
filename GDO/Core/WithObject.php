@@ -366,6 +366,8 @@ trait WithObject
 	# #############
 	# ## Filter ###
 	# #############
+	public string $filterField;
+	
 	public function filterVar(string $key = null)
 	{
 		return '';
@@ -390,9 +392,9 @@ trait WithObject
 	 */
 	public function filterQuery(Query $query, $rq = null): self
 	{
-		if ($field = $this->filterField)
+		if (isset($this->filterField))
 		{
-			$this->table->gdoColumn($field)->filterQuery($query, $rq);
+			$this->table->gdoColumn($this->filterField)->filterQuery($query, $rq);
 			return $this;
 		}
 		else

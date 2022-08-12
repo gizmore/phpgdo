@@ -1454,7 +1454,7 @@ abstract class GDO extends GDT
 	
 	public function uncacheAll() : self
 	{
-		$this->table()->cache->all = null;
+		unset($this->table()->cache->all);
 		Cache::remove($this->cacheAllKey());
 		return $this;
 	}

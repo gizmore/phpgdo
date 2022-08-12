@@ -29,27 +29,14 @@ abstract class MethodCrud extends MethodForm
 	const EDITED = 3;
 	const DELETED = 4;
 	
-	/**
-	 * The gdo to edit
-	 * @var GDO
-	 */
-	protected $gdo;
+	protected int $crudMode = self::ERROR;
+
+	protected GDO $gdo;
+
+	public abstract function gdoTable() : GDO;
 	
 	/**
-	 * mode
-	 * @var int
-	 */
-	protected $crudMode = self::ERROR;
-	
-	/**
-	 * The GDO table to operate on.
-	 * @return GDO
-	 */
-	public abstract function gdoTable();
-	
-	/**
-	 * @return string href
-	 * @see href()
+	 * Where to redirect back?
 	 */
 	public abstract function hrefList() : string;
 	
@@ -204,22 +191,24 @@ abstract class MethodCrud extends MethodForm
 	{
 		$form->addField(GDT_AntiCSRF::make());
 		
-		if (!$this->gdo)
+		$gdo = isset($this->gdo) ? $this->gdo : null;
+		
+		if (!$gdo)
 		{
 		    $form->actions()->addField(GDT_Submit::make('create')->label('btn_create')->icon('create'));
 		}
 
-		if ($this->gdo && $this->canUpdate($this->gdo))
+		if ($gdo && $this->canUpdate($this->gdo))
 		{
     		$form->actions()->addField(GDT_Submit::make('edit')->label('btn_edit')->icon('edit'));
 		}
 
-		if ($this->gdo && $this->canDelete($this->gdo))
+		if ($gdo && $this->canDelete($this->gdo))
 		{
 			$form->actions()->addField(GDT_DeleteButton::make());
 		}
 
-// 		if ($this->gdo)
+// 		if ($gdo)
 // 		{
 //     	    $form->withGDOValuesFrom($this->gdo);
 // 		}

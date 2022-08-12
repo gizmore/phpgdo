@@ -50,9 +50,10 @@ class Cache
 	### Memcached ###
 	#################
     /**
-     * @var $all GDO[] All rows. @see GDO->allCached()
+     * @var GDO[] All rows.
+     * @see GDO::allCached()
      */
-    public array $all;       # 
+    public array $all;
     public int $allExpire; # Expiration time for allCached()
     
     /**

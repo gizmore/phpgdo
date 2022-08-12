@@ -112,7 +112,7 @@ abstract class MethodForm extends Method
 			$this->form->inputs($inputs);
 			$this->form->actions()->inputs($inputs);
 			$this->form->titleRaw($this->getMethodTitle());
-			$this->applyInput();
+// 			$this->applyInput();
 			$this->createForm($this->form);
 		}
 // 		else
@@ -192,7 +192,7 @@ abstract class MethodForm extends Method
 					}
 					else
 					{
-						throw new GDO_Error('err_submit_without_click_handler');
+						throw new GDO_Error('err_submit_without_click_handler', [$this->renderMoMe(), $gdt->getName()]);
 					}
 					
 					$this->resetForm();
@@ -207,6 +207,13 @@ abstract class MethodForm extends Method
 			}
 		}
 		return $this->renderPage();
+	}
+	
+	protected function renderMoMe() : string
+	{
+		$mo = $this->getModuleName();
+		$me = $this->getMethodName();
+		return "{$mo}::{$me}";
 	}
 	
 	private function onSubmitted() : void

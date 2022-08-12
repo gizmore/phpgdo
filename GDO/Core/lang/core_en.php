@@ -66,7 +66,7 @@ return [
 	'err_only_friend_access' => 'Only their friends are allowed to access this.',
 	'err_only_private_access' => 'Only the user theyself is allowed to access this.',
 	'err_unknown_acl_setting' => 'Unknown ACL Setting: `%s`.',
-	'err_submit_without_click_handler' => 'A submit button is missing a click handler.',
+	'err_submit_without_click_handler' => 'Method `%s`s submit button `%s` is missing a click handler.',
 // 	'err_duplicate_field_name' => 'A field has been added twice: `%s`.',
 	
 	# Messages
@@ -172,6 +172,7 @@ return [
 	'quote_at' => 'At %s',
 	'not_specified' => 'Not Specified',
 	'email' => 'E-Mail',
+	'object_filter' => 'Filter',
 	
 	# CBX
 	'sel_all' => 'Select All',
@@ -267,5 +268,4 @@ The %2$s System',
 	'mt_sort' => 'Sort %s Database',
 	
 	'mt_crud_create' => 'New %s',
-	
 ];

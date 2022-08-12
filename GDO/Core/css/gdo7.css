@@ -39,7 +39,7 @@ div.gdt-hr { height: 2px; width: 100%; background: #eee; margin: 8px 0; }
 div.gdt-table { flex: 1 1 auto; }
 
 /** Errors **/
-.gdo-exception { text-align: left; }
+.gdo-exception { text-align: left; word-break: break-all; }
 .gdo-exception em { font-style: normal; }
 .gdt-tblorder { display: inline-block; }
 
