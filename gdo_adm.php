@@ -808,6 +808,7 @@ elseif ($argv[1] === 'secure')
 
 elseif ($argv[1] === 'update')
 {
+	echo "Did you mean ./gdo_update.sh\n";
 	$modules = ModuleLoader::instance()->getEnabledModules();
 	foreach ($modules as $module)
 	{

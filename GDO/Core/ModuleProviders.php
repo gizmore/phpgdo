@@ -65,7 +65,7 @@ final class ModuleProviders
 		return GDT::EMPTY_ARRAY;
 	}
 
-	public static function getProviders(string $moduleName) : array
+	public static function getProviders(string $moduleName)
 	{
 		foreach (self::$PROVIDERS as $modname => $providers)
 		{
@@ -74,7 +74,7 @@ final class ModuleProviders
 				return $providers;
 			}
 		}
-		return GDT::EMPTY_ARRAY;
+		return null;
 	}
 
 	public static $PROVIDERS = [
