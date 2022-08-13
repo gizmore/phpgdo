@@ -4,8 +4,8 @@ return [
 'language' => 'Dil',
 'msg_language_set' => 'Diliniz %s olarak ayarlandı.',
 'cfg_languages' => 'Desteklenen diller',
-'md_language_switchlanguage' => 'Dilinizi %s olarak değiştirin.',
-'md_language_switchlanguage2' => 'Dilinizi değiştirin.',
+'md_switch_language' => 'Dilinizi %s olarak değiştirin.',
+'md_switch_language2' => 'Dilinizi değiştirin.',
 
 'cfg_use_in_javascript' => 'Çeviri verileri JavaScript istemcisine kopyalansın mı?',
 'tt_cfg_use_in_javascript' => 'Bu, çeviri javascript dosyasını yükleyecektir.',

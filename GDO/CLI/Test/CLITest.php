@@ -5,15 +5,17 @@ use GDO\Tests\TestCase;
 use GDO\Core\GDT_Expression;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertEquals;
+use GDO\Core\Expression\Parser;
 
-final class TestCLI extends TestCase
+final class CLITest extends TestCase
 {
-	public function testMostBasicExpressions()
+	public function testBasicExpressions()
 	{
-		$exp = GDT_Expression::fromLine("cli.concat a;b");
+		$sep = Parser::ARG_SEPARATOR;
+		$exp = GDT_Expression::fromLine("cli.concat a{$sep}b");
 		$gdt = $exp->execute();
 		$res = $gdt->renderCLI();
-		assertEquals('ab', $res, 'Test if \'concat a;b\' works');
+		assertEquals('ab', $res, 'Test if concat a,b works');
 	}
 	
 	public function testEcho()
@@ -23,15 +25,15 @@ final class TestCLI extends TestCase
 		$content = $response->renderCLI();
 		assertStringContainsString("123", $content, 'Test if core.ekko command works.');
 		
-		$expression = GDT_Expression::fromLine("echo 123");
+		$expression = GDT_Expression::fromLine("cli.ekko 123");
 		$response = $expression->execute();
 		$content = $response->renderCLI();
-		assertStringContainsString("123", $content, 'Test if echo command alias works.');
+		assertEquals("123", $content, 'Test if echo command alias works.');
 	}
 	
 	public function testNestedConcat()
 	{
-		$result = $this->cli("concat --glue=,, ,a,b,(concat c,d),e");
+		$result = $this->cli("cli.concat --glue=,, ,a,b,(cli.concat c,d),e");
 		assertEquals("a, b, c, d, e", $result, 'Test if nested concat with a weird ,, glue works.');
 	}
 	

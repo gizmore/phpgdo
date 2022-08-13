@@ -50,11 +50,25 @@ class GDT_Button extends GDT
 	##############
 	public function renderHTML() : string
 	{
+		return $this->renderHTMLCell(false);
+	}
+	
+	public function renderCell() : string
+	{
+		return $this->renderHTMLCell(true);
+	}
+	
+	private function renderHTMLCell(bool $cell) : string
+	{
 		if (isset($this->checkEnabled))
-	    {
-    	    $this->writeable(call_user_func($this->checkEnabled, $this));
-	    }
-	    $args = ['field' => $this, 'href' => $this->gdoHREF()];
+		{
+			$this->writeable(call_user_func($this->checkEnabled, $this));
+		}
+		$args = [
+			'field' => $this,
+			'href' => $this->gdoHREF(),
+			'cell' => $cell,
+		];
 		return GDT_Template::php('UI', 'button_html.php', $args);
 	}
 	
@@ -71,6 +85,15 @@ class GDT_Button extends GDT
 	public function renderJSON()
 	{
 	    return sprintf('<a href="%s">%s</a>', $this->gdoHREF(), $this->htmlIcon());
+	}
+	
+	public function renderLabel() : string
+	{
+		if (!($label = $this->renderLabelText()))
+		{
+			$label = $this->htmlGDOHREF();
+		}
+		return $label;
 	}
 
 	#############

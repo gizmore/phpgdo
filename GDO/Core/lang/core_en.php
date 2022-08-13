@@ -82,6 +82,11 @@ return [
 	'enum_all' => 'All',
 	'enum_staff' => 'Staff',
 	
+	# E-Mail
+	'enum_html' => 'HTML',
+	'enum_text' => 'Text',
+	'email_fmt' => 'Format',
+	
 	# Permissions
 	'perm_admin' => 'Admin',
 	'perm_staff' => 'Staff',
@@ -268,4 +273,8 @@ The %2$s System',
 	'mt_sort' => 'Sort %s Database',
 	
 	'mt_crud_create' => 'New %s',
+	
+	'cronjob_method' => 'Cronjob Method',
+	'method' => 'Method',
+	
 ];

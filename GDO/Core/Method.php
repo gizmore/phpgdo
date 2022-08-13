@@ -457,6 +457,12 @@ abstract class Method #extends GDT
 	###################
 	### Apply Input ###
 	###################
+	public function addInput(?string $key, $var) : self
+	{
+		$gdt = $this->gdoParameter($key, false);
+		xdebug_break();
+	}
+	
 	/**
 	 * Get plug variables.
 	 * @return string[string]

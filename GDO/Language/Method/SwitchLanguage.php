@@ -18,6 +18,7 @@ use GDO\UI\GDT_Link;
  * @author gizmore
  * @version 7.0.1
  * @since 6.9.0
+ * @see GDO_Language
  * @see Module_Language
  */
 final class SwitchLanguage extends MethodAjax

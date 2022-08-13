@@ -7,6 +7,7 @@ use GDO\Util\Filewalker;
 use GDO\Language\Trans;
 use GDO\User\GDO_User;
 use GDO\Form\GDT_Form;
+use GDO\UI\GDT_Repeat;
 
 /**
  * A GDT_Method holds a Method and inputs to bind.
@@ -176,6 +177,61 @@ class GDT_Method extends GDT
 			$this->execute(false);
 		}
 		return $this->result->render();
+	}
+	
+	public function addInput(?string $key, $var) : self
+	{
+		if (!isset($this->inputs))
+		{
+			$this->inputs = [];
+		}
+		
+		$gdt = $this->getGDTForInputKey($key);
+		if (!$gdt)
+		{
+			return $this;
+		}
+		
+		$key = $gdt->getName();
+		if ($gdt instanceof GDT_Repeat)
+		{
+			if (!isset($this->inputs[$key]))
+			{
+				$this->inputs[$key] = [];
+			}
+			$this->inputs[$key][] = $var;
+		}
+		else
+		{
+			$this->inputs[$key] = $var;
+		}
+		return $this;
+	}
+		
+	private int $positionalPosition = 0;
+	
+	private function getGDTForInputKey(?string $key) : ?GDT
+	{
+		if ($key !== null)
+		{
+			return $this->method->gdoParameter($key, false);
+		}
+		
+		$last = null;
+		$i = 0;
+		foreach ($this->method->gdoParameterCache() as $gdt)
+		{
+			if ($gdt->isPositional())
+			{
+				if ($i === $this->positionalPosition)
+				{
+					return $gdt;
+				}
+				$last = $gdt;
+				$i++;
+			}
+		}
+		return $last;
 	}
 	
 }

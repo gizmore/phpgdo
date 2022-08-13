@@ -70,4 +70,6 @@ return [
 'mt_admin_clearcache' => 'Clear Cache',
 ################################################################
 'list_admin_viewpermission' => '%s Users got this permission',
+'perm_add' => 'Add Permission',
+	
 ];

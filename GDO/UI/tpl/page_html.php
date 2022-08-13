@@ -37,8 +37,8 @@ use GDO\Language\Trans;
 	  <div class="gdo-body">
 		<label for="gdo-left-nav" id="gdo-left-nav2"></label>
 		<label for="gdo-right-nav" id="gdo-right-nav2"></label>
-        <?=$page->topResponse()->render()?>
 		<div class="gdo-main">
+          <?=$page->topResponse()->render()?>
 		  <?=isset($page->html)?$page->html:''?>
 		</div>
 	  </div>

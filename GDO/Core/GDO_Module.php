@@ -880,7 +880,7 @@ class GDO_Module extends GDO
 	/**
 	 * Get a method by name. Case insensitive.
 	 */
-	public function getMethodByName(string $methodName) : Method
+	public function getMethodByName(string $methodName, bool $throw=true) : ?Method
 	{
 	    $files = scandir($this->filePath('Method'));
 	    foreach ($files as $file)
@@ -893,6 +893,11 @@ class GDO_Module extends GDO
 	            return $method;
 	        }
 	    }
+	    if ($throw)
+	    {
+	    	throw new GDO_Error('err_unknown_method', [$this->renderName(), html($methodName)]);
+	    }
+	    return null;
 	}
 	
 	public function getMethodNames(bool $withPermission=true) : array

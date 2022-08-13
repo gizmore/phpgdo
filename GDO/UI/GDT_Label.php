@@ -22,7 +22,7 @@ class GDT_Label extends GDT
 	public function renderCLI() : string { return $this->renderLabelText(); }
 	public function renderXML() : string { return "<label>" . $this->renderLabelText() . "</label>"; }
 	public function renderJSON() { return $this->renderLabelText(); }
-	public function renderHTML() : string { return $this->renderLabel(); }
+	public function renderHTML() : string { return "<label>{$this->renderLabelText()}</label>"; }
 	public function renderCard() : string { return "<div class=\"gdt-card-label\">{$this->renderLabelText()}</div>"; }
 	
 }

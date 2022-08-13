@@ -4,8 +4,8 @@ return [
     'language' => 'Langue',
     'msg_language_set' => 'Votre langue a été définie sur %s.',
     'cfg_languages' => 'Langues supportées',
-    'md_language_switchlanguage' => 'Modifier votre langue vers %s.',
-    'md_language_switchlanguage2' => 'Modifier votre langue.',
+    'md_switch_language' => 'Modifier votre langue vers %s.',
+    'md_switch_language2' => 'Modifier votre langue.',
     
     'cfg_use_in_javascript' => 'Copier les données de traduction vers le client Javascript?',
     'tt_cfg_use_in_javascript' => 'Cela chargera le fichier javascript de traduction.',

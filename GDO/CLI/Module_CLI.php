@@ -1,7 +1,9 @@
 <?php
 namespace GDO\CLI;
 
+use GDO\CLI\Method\Ekko;
 use GDO\Core\GDO_Module;
+use GDO\Core\Method;
 
 /**
  * CLI Specific code.
@@ -19,9 +21,9 @@ final class Module_CLI extends GDO_Module
         $this->loadLanguage('lang/cli');
     }
     
-//     public function onInitCLI() : void
-//     {
-//     	Method::addCLIAlias('echo', Ekko::class);
-//     }
+    public function onInitCLI() : void
+    {
+    	Method::addCLIAlias('echo', Ekko::class);
+    }
 
 }

@@ -55,12 +55,25 @@ final class GDO_Language extends GDO
 	##############
 	### Render ###
 	##############
-	public function renderName() : string { return t('lang_'.$this->getISO()); }
-	public function renderNameISO(string $iso) : string { return tiso($iso, 'lang_'.$this->getISO()); }
+	public function renderName() : string
+	{
+		return $this->isValid() ? 
+			t('lang_'.$this->getISO()) : 
+			t('language');
+	}
+	
+	public function renderNameISO(string $iso) : string
+	{
+		return $this->isValid() ?
+			tiso($iso, 'lang_'.$this->getISO()) :
+			t('language');
+	}
+	
 	public function renderHTML() : string
 	{
 		return GDT_Template::php('Language', 'language_html.php', ['language' => $this]);
 	}
+	
 	public function renderOption() : string
 	{
 		return GDT_Template::php('Language', 'language_option.php', ['language' => $this]);

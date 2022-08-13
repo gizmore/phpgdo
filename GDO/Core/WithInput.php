@@ -38,9 +38,16 @@ trait WithInput
 		return $this;
 	}
 	
-	public function addInput(string $key, $var) : self
+	public function addInput(?string $key, $var) : self
 	{
-		$this->inputs[$key] = $var;
+		if ($key)
+		{
+			$this->inputs[$key] = $var;
+		}
+		else
+		{
+			$this->inputs[] = $var;
+		}
 		return $this;
 	}
 	

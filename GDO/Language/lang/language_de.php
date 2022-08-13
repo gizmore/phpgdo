@@ -4,8 +4,8 @@ return [
 'language' => 'Sprache',
 'msg_language_set' => 'Ihre Sprache wurde auf %s geändert.',
 'cfg_languages' => 'Unterstützte Sprachen',
-'md_language_switchlanguage' => 'Sprache auf %s wechseln',
-'md_language_switchlanguage2' => 'Wechseln Sie Ihre Sprache.',
+'md_switch_language' => 'Sprache auf %s wechseln',
+'md_switch_language2' => 'Wechseln Sie Ihre Sprache.',
     
 'cfg_use_in_javascript' => 'Kopiere Übersetzungen zum Javascript Client?',
 'tt_cfg_use_in_javascript' => 'Dies lädt die Übersetzungsdateien in den WebBrowser, auf die Client Seite.',

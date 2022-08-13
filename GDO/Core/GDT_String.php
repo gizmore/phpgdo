@@ -219,16 +219,16 @@ class GDT_String extends GDT_DBField
 	##############
 	### Render ###
 	##############
-	public function renderCLI() : string
-	{
-		$out = '';
-		if ($this->hasLabel())
-		{
-			$out .= $this->renderLabel() . ': ';
-		}
-		$out .= $this->getVar();
-		return $out;
-	}
+// 	public function renderCLI() : string
+// 	{
+// 		$out = '';
+// 		if ($this->hasLabel())
+// 		{
+// 			$out .= $this->renderLabel() . ': ';
+// 		}
+// 		$out .= $this->getVar();
+// 		return $out;
+// 	}
 	
 // 	public function renderHTML() : string
 // 	{
