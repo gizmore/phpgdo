@@ -20,7 +20,7 @@ final class CLITest extends TestCase
 	
 	public function testEcho()
 	{
-		$expression = GDT_Expression::fromLine("core.ekko 123");
+		$expression = GDT_Expression::fromLine("cli.ekko 123");
 		$response = $expression->execute();
 		$content = $response->renderCLI();
 		assertStringContainsString("123", $content, 'Test if core.ekko command works.');
@@ -34,7 +34,7 @@ final class CLITest extends TestCase
 	public function testNestedConcat()
 	{
 		$result = $this->cli("cli.concat --glue=,, ,a,b,(cli.concat c,d),e");
-		assertEquals("a, b, c, d, e", $result, 'Test if nested concat with a weird ,, glue works.');
+		assertEquals("a, b, cd, e", $result, 'Test if nested concat with a weird ,, glue works.');
 	}
 	
 }

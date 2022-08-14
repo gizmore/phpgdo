@@ -11,7 +11,6 @@ use GDO\DB\Database;
 use GDO\Language\Trans;
 use GDO\Core\Application;
 use GDO\Core\GDT;
-use GDO\UI\GDT_Page;
 
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');

@@ -110,7 +110,7 @@ abstract class GDT_Field extends GDT
 	{
 		if (is_string($input))
 		{
-			$input = trim($input);
+// 			$input = trim($input);
 			return $input === '' ? $this->initial : $input;
 		}
 		if ($input instanceof GDT_Method)
