@@ -18,6 +18,7 @@ use GDO\Core\GDT_Template;
 use GDO\Core\Logger;
 use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_TinyInt;
+use GDO\Core\GDT_EnumNoI18n;
 
 /**
  * Configuration helper during install wizard.
@@ -208,7 +209,7 @@ class Config
 			GDT_Checkbox::make('sess_js')->initialValue(GDO_SESS_JS),
 			GDT_Checkbox::make('sess_https')->initialValue(GDO_SESS_HTTPS),
 			GDT_Checkbox::make('sess_lock')->initialValue(GDO_SESS_LOCK),
-			GDT_Checkbox::make('sess_samesite')->initialValue(GDO_SESS_SAMESITE),
+			GDT_EnumNoI18n::make('sess_samesite')->enumValues('lax', 'none', 'strict')->initialValue(GDO_SESS_SAMESITE),
 			# Email
 			GDT_Divider::make()->label('install_config_section_email'),
 			GDT_Checkbox::make('enable_email')->initialValue(GDO_ENABLE_EMAIL),
