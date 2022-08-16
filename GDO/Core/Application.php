@@ -92,6 +92,11 @@ class Application extends GDT
 	public function isWebsocket() : bool { return false; }
 	public function isWebserver() : bool { return !$this->cli; }
 	public function isAPI() : bool { return !$this->isWebserver(); }
+
+	/**
+	 * Is a session handler supported?
+	 */
+	public function hasSession() : bool { return module_enabled('Session'); }
 	
 	/**
 	 * Call when you create the next command in a loop.
