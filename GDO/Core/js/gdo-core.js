@@ -33,10 +33,11 @@ window.GDO.enterForm = function(form, event) {
 	}
 };
 
-window.GDO.triggerResize = function() {
+window.GDO.triggerResize = function(time) {
+	time = time ? time : 2000;
 	setTimeout(
 		GDO.triggerEvent.bind(window, 'resize')
-		, 1000);
+		, time);
 };
 
 window.GDO.triggerEvent = function(name) {
