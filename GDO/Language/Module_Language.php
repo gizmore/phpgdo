@@ -11,6 +11,7 @@ use GDO\Core\GDT_Checkbox;
 use GDO\Core\Javascript;
 use GDO\UI\GDT_Page;
 use GDO\Net\GDT_Url;
+use GDO\Core\Application;
 
 /**
  * Selfmade cheap Internationalization Module.
@@ -159,9 +160,12 @@ final class Module_Language extends GDO_Module
 			unset($_REQUEST['_lang']);
 			return $iso;
 		}
-		if ($iso = GDO_Session::get('gdo-language'))
+		if (Application::instance()->hasSession())
 		{
-			return $iso;
+			if ($iso = GDO_Session::get('gdo-language'))
+			{
+				return $iso;
+			}
 		}
 		if ($iso = GDO_User::current()->getLangISO())
 		{
