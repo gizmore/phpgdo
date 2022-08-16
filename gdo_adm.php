@@ -160,7 +160,7 @@ elseif ($argv[1] === 'configure')
 		$argv[2] = 'config.php'; # default config filename
 	}
 
-	$line = "install.configure --filename={$argv[2]} --save_config";
+	$line = "install.configure --filename={$argv[2]},--save_config";
 	$expr = GDT_Expression::fromLine($line);
 	$response = $expr->execute();
 	echo $response->renderCLI();
