@@ -22,6 +22,7 @@ use GDO\Core\GDO_Module;
 final class Module_UI extends GDO_Module
 {
     public int $priority = 20;
+    public string $license = 'LGPL2.1';
     
     public function isCoreModule() : bool
     {
@@ -31,6 +32,13 @@ final class Module_UI extends GDO_Module
     public function thirdPartyFolders() : array
     {
     	return ['/htmlpurifier/'];
+    }
+    
+    public function getLicenseFilenames() : array
+    {
+    	return [
+    		'htmlpurifier/LICENSE',
+    	];
     }
     
 //     public function getUserSettings() : array

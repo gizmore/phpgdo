@@ -24,4 +24,14 @@ final class GDO_DirectoryIndex extends GDO
         ];
     }
     
+    public function getFileName() : string
+    {
+    	return $this->gdoVar('file_name');
+    }
+    
+    public function href_file_name()
+    {
+    	return $_REQUEST['url'] . '/' . $this->getName();
+    }
+    
 }

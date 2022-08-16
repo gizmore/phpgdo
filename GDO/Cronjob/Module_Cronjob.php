@@ -52,7 +52,7 @@ class Module_Cronjob extends GDO_Module
 	    $this->loadLanguage('lang/cronjob');
 	}
 
-	public function hrefAdministration() : ?string
+	public function href_administrate_module() : ?string
 	{
 		return href('Cronjob', 'Cronjob');
 	}

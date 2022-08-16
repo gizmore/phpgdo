@@ -363,6 +363,10 @@ abstract class Method #extends GDT
 			}
 			return $this->errorRaw($e->getMessage());
 		}
+		catch (GDO_RedirectError $e)
+		{
+			return GDT_Redirect::make()->redirectErrorRaw($e->getMessage())->href($e->href);
+		}
 		catch (GDO_PermissionException $e)
 		{
 			if ($transactional)

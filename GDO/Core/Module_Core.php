@@ -31,7 +31,7 @@ use GDO\Language\Module_Language;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.1-r1427';
+	const GDO_REVISION = '7.0.1-r1502';
 	
 	##############
 	### Module ###
@@ -106,6 +106,7 @@ final class Module_Core extends GDO_Module
 // 			GDT_Checkbox::make('load_sidebars')->initial('1'),
 			GDT_Checkbox::make('directory_indexing')->initial('1'),
 			GDT_Checkbox::make('module_assets')->initial('1'),
+			GDT_Checkbox::make('dotfiles')->initial('0'),
 		];
 	}
 	public function cfgSystemUser() : GDO_User { return $this->getConfigValue('system_user'); }
@@ -120,6 +121,7 @@ final class Module_Core extends GDO_Module
 // 	public function cfgLoadSidebars() : string { return $this->getConfigVar('load_sidebars'); }
 	public function cfgDirectoryIndex() : string { return $this->getConfigVar('directory_indexing'); }
 	public function cfgModuleAssets() : string { return $this->getConfigVar('module_assets'); }
+	public function cfgDotfiles() : bool { return $this->getConfigValue('dotfiles'); }
 	
 	#############
 	### Hooks ###

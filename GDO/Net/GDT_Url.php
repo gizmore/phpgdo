@@ -6,6 +6,7 @@ use GDO\Util\Arrays;
 use GDO\UI\WithAnchorRelation;
 use GDO\UI\WithTitle;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Template;
 
 /**
  * URL field.
@@ -31,7 +32,7 @@ class GDT_Url extends GDT_String
     	parent::__construct();
     	$this->icon = 'url';
     	$this->ascii()->caseS();
-    	$this->min(10)->max(767);
+    	$this->min(1)->max(767);
     }
     
     ##############
@@ -81,7 +82,7 @@ class GDT_Url extends GDT_String
 	##############
 	### Render ###
 	##############
-// 	public function renderHTML() : string { return GDT_Template::php('Net', 'cell/url.php', ['field' => $this]); }
+	public function renderHTML() : string { return GDT_Template::php('Net', 'cell/url.php', ['field' => $this]); }
 // 	public function displayValue($value) { return GDT_Link::anchor($value->raw, $this->renderLabel()); }
 	
 	###############

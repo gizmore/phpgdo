@@ -276,10 +276,10 @@ trait WithFields
 						return $result;
 					}
 				}
-				if ($gdt->hasFields())
-				{
-					$gdt->withFields($callback);
-				}
+// 				if ($gdt->hasFields())
+// 				{
+// 					$gdt->withFields($callback);
+// 				}
 			}
 		}
 	}

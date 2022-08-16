@@ -10,14 +10,15 @@ use GDO\Core\GDT;
  <div class="title uncollapse-bar"><?=GDT_Icon::iconS('minus')?><?=$field->renderTitle()?></div>
  <div class="collapse-content">
 <?php
-switch ($mode)
-{
-	case GDT::RENDER_FORM: $method = 'renderForm'; break;
-	default: $method = 'renderHTML'; break;
-}
+// switch ($mode)
+// {
+// 	case GDT::RENDER_FORM: $method = 'renderForm'; break;
+// 	default: $method = 'renderHTML'; break;
+// }
 ?>
 <?php foreach ($field->getFields() as $gdt) : ?>
- <?=call_user_func([$gdt, $method])?>
+<?=$gdt->render()?>
+ <?php #call_user_func([$gdt, $method])?>
 <?php endforeach; ?>
  </div>
 </div>

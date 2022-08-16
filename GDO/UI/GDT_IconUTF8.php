@@ -40,6 +40,7 @@ final class GDT_IconUTF8
     	'close' => '✖',
         'country' => '⚑',
         'check' => '✔',
+    	'color' => '🎡',
         'create' => '✚',
         'credits' => '¢',
         'cut' => '✂',

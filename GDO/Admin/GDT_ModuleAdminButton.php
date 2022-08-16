@@ -25,7 +25,7 @@ class GDT_ModuleAdminButton extends GDT_Button
 	{
 		if ($module = $this->getConfigModule())
 		{
-		    if ($href = $module->hrefAdministration())
+		    if ($href = $module->href_administrate_module())
 			{
 			    $this->href($href);
 				return parent::renderHTML();

@@ -38,14 +38,14 @@ final class Fileserver extends Method
 		# Deny by asset rule?
 		if (!Module_Core::instance()->checkAssetAllowed($url))
 		{
-			return NotAllowed::make()->inputs($this->inputs)->execute();
+			return NotAllowed::make()->executeWithInputs($this->inputs);
 		}
 
 		# Deny PHP source
 		$type = FileUtil::mimetype($url);
 		if ($type === 'text/x-php')
 		{
-			return NotAllowed::make()->inputs($this->inputs)->execute();
+			return NotAllowed::make()->executeWithInputs($this->inputs);
 		}
 		
 		# Try cached or serve

@@ -192,7 +192,7 @@ else
 	}
 	elseif (GDO_SEO_URLS)
 	{
-		unset($_REQUEST['url']);
+// 		unset($_REQUEST['url']);
 		$me = SeoProxy::makeProxied($url);
 	}
 	else

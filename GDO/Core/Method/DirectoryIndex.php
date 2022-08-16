@@ -8,6 +8,7 @@ use GDO\Table\MethodTable;
 use GDO\Util\FileUtil;
 use GDO\Core\GDO_DirectoryIndex;
 use GDO\Net\GDT_Url;
+use GDO\Util\Strings;
 
 /**
  * Render a directory from the servers filesystem.
@@ -39,9 +40,39 @@ final class DirectoryIndex extends MethodTable
 		];
 	}
 	
-	public function isAllowed()
+	public function getUrl() : string
 	{
-		return Module_Core::instance()->cfgDirectoryIndex();
+		$var = $this->gdoParameterVar('url');
+		$var = ltrim($var, '/ ');
+		return $var;
+	}
+	
+	public function isAllowed() : bool
+	{
+		if (!Module_Core::instance()->cfgDirectoryIndex())
+		{
+			return false;
+		}
+		return $this->checkDotfile();
+	}
+	
+	private function checkDotfile() : bool
+	{
+		if (Module_Core::instance()->cfgDotfiles())
+		{
+			return true;
+		}
+		return !$this->isDotFile($this->getUrl());
+	}
+	
+	private function isDotFile(string $url) : bool
+	{
+		$filename = Strings::rsubstrFrom($url, '/', $url);
+		if ($filename === '.well-known')
+		{
+			return false;
+		}
+		return $filename[0] === '.';
 	}
 	
 	public function execute()
@@ -60,20 +91,13 @@ final class DirectoryIndex extends MethodTable
 	
 	public function getTableTitle()
 	{
-		$count = $this->table->countItems();
+		$count = $this->getResult()->numRows();
 		return t('mt_dir_index', [html($this->getUrl()), $count]);
 	}
 	
 	public function getMethodTitle() : string
 	{
 		return $this->getTableTitle();
-	}
-	
-	public function getUrl() : string
-	{
-		$var = $this->gdoParameterVar('url');
-		$var = ltrim($var, '/ ');
-		return $var;
 	}
 	
 	public function getResult() : ArrayResult
@@ -102,6 +126,7 @@ final class DirectoryIndex extends MethodTable
 				'file_icon' => 'folder',
 				'file_name' => $filename,
 				'file_type' => 'directory',
+				'file_size' => null, # @TODO Feature directory filesize in directory index.
 			]);
 		}
 		else

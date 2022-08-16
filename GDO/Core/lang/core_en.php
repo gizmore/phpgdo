@@ -180,6 +180,7 @@ return [
 	'email' => 'E-Mail',
 	'size' => 'Size',
 	'object_filter' => 'Filter',
+	'directory' => 'Directory',
 	
 	# CBX
 	'sel_all' => 'Select All',
@@ -241,6 +242,7 @@ return [
 	'cfg_mail_404' => 'Send mail on 404 errors?',
 	'cfg_directory_indexing' => 'Enable Directory Indexing?',
 	'cfg_module_assets' => 'Allow assets to be loaded from the GDO source directory?',
+	'cfg_dotfiles' => 'Allow to read and index hidden dotfiles?',
 	
 	### 403 ###
 	'mail_title_403' => '%s: 403 (%s)',

@@ -154,10 +154,13 @@ abstract class MethodCrud extends MethodForm
 	public function createForm(GDT_Form $form) : void
 	{
 	    $table = $this->gdoTable();
-	    $form->gdo($this->gdo);
+	    if (isset($this->gdo))
+	    {
+	    	$form->gdo($this->gdo);
+	    }
 	    foreach ($table->gdoColumnsCache() as $gdt)
 	    {
-		    $gdo = $this->gdo ? $this->gdo : $table;
+		    $gdo = isset($this->gdo) ? $this->gdo : $table;
 	        $this->createFormRec($form, $gdt->gdo($gdo));
 		}
 // 		$this->createCaptcha($form);
@@ -220,7 +223,7 @@ abstract class MethodCrud extends MethodForm
 	
 	public function getMethodTitle() : string
 	{
-	    return $this->gdo ? $this->getUpdateTitle() : $this->getCreateTitle();
+		return isset($this->gdo) ? $this->getUpdateTitle() : $this->getCreateTitle();
 	}
 	
 	protected function getCreateTitle()

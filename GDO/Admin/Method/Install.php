@@ -116,7 +116,7 @@ class Install extends MethodForm
 				$form->actions()->addField(GDT_Submit::make('enable')->label('btn_enable'));
 			}
 			
-			if ($adminHREF = $this->configModule->hrefAdministration())
+			if ($adminHREF = $this->configModule->href_administrate_module())
 			{
 			    $form->actions()->addField(GDT_Button::make('href_admin')->href($adminHREF));
 			}

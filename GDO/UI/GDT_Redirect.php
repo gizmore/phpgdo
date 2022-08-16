@@ -20,6 +20,7 @@ use GDO\Core\Logger;
 final class GDT_Redirect extends GDT
 {
 	use WithHREF;
+	use WithText;
 	
 	public static bool $REDIRECTED = false; # Only once
 	
