@@ -241,8 +241,12 @@ abstract class Method #extends GDT
 		return $this->execWrap();
 	}
 	
-	public function transactional()
+	public function transactional() : bool
 	{
+		if (Application::instance()->isInstall())
+		{
+			return false;
+		}
 		return
 			($this->isAlwaysTransactional()) ||
 			($this->isTransactional() &&
@@ -454,14 +458,14 @@ abstract class Method #extends GDT
 	}
 	
 	
-	###################
-	### Apply Input ###
-	###################
-	public function addInput(?string $key, $var) : self
-	{
-		$gdt = $this->gdoParameter($key, false);
-		xdebug_break();
-	}
+// 	###################
+// 	### Apply Input ###
+// 	###################
+// 	public function addInput(?string $key, $var) : self
+// 	{
+// 		$gdt = $this->gdoParameter($key, false);
+// 		xdebug_break();
+// 	}
 	
 	/**
 	 * Get plug variables.
