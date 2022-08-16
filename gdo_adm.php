@@ -117,7 +117,7 @@ final class gdo_adm extends Application
 	public function isInstall() : bool { return true; }
 }
 
-$app = new gdo_adm();
+$app = gdo_adm::make();
 $app->cli(true)->verb(GDT_Form::POST);
 
 # Load config defaults
