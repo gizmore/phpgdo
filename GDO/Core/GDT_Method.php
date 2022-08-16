@@ -57,7 +57,15 @@ class GDT_Method extends GDT
 
 			$method = $this->method->inputs($inputs);
 			$this->changeUser();
-			$this->result = $method->exec();
+			
+			if ($this->withPermissionCheck)
+			{
+				$this->result = $method->exec();
+			}
+			else
+			{
+				$this->result = $method->executeWithInit();
+			}
 		}
 		return $this->result;
 	}
@@ -73,6 +81,16 @@ class GDT_Method extends GDT
 	public function clibutton(bool $clibutton = true) : self
 	{
 		$this->clibutton = $clibutton;
+		return $this;
+	}
+	
+	############
+	### Perm ###
+	############
+	public bool $withPermissionCheck = true;
+	public function noChecks(bool $noChecks=true) : self
+	{
+		$this->withPermissionCheck = !$noChecks;
 		return $this;
 	}
 	

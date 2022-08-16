@@ -28,6 +28,7 @@ use GDO\UI\GDT_Error;
 use GDO\Core\GDT_Expression;
 use GDO\Util\Arrays;
 use GDO\Form\GDT_Form;
+use GDO\Core\GDT_Method;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -810,11 +811,8 @@ elseif ($argv[1] === 'cronjob')
 elseif ($argv[1] === 'secure')
 {
 	$module = Module_Install::instance();
-	$method = Security::make();
-	$_REQUEST['form'] = [
-		'submit' => 'submit'
-	];
-	$result = $method->executeWithInit();
+	$method = GDT_Method::make()->method(Security::make());
+	$result = $method->clibutton()->noChecks()->execute();
 	echo $result->renderCLI();
 }
 
