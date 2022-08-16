@@ -58,21 +58,7 @@ final class DirectoryIndex extends MethodTable
 	
 	private function checkDotfile() : bool
 	{
-		if (Module_Core::instance()->cfgDotfiles())
-		{
-			return true;
-		}
-		return !$this->isDotFile($this->getUrl());
-	}
-	
-	private function isDotFile(string $url) : bool
-	{
-		$filename = Strings::rsubstrFrom($url, '/', $url);
-		if ($filename === '.well-known')
-		{
-			return false;
-		}
-		return $filename[0] === '.';
+		return Module_Core::instance()->checkDotfileAllowed($this->getUrl());
 	}
 	
 	public function execute()

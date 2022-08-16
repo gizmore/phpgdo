@@ -14,6 +14,7 @@ use GDO\Net\GDT_Url;
 use GDO\Language\GDO_Language;
 use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
+use GDO\Util\Strings;
 
 /**
  * The core module holds some generic config as well as the global revision string.
@@ -204,4 +205,18 @@ final class Module_Core extends GDO_Module
 		return (strpos($url, 'GDO/') !== 0);
 	}
 	
+	public function checkDotfileAllowed(string $url) : bool
+	{
+		if ($this->cfgDotfiles())
+		{
+			return true;
+		}
+		$filename = Strings::rsubstrFrom($url, '/', $url);
+		if ($filename === '.well-known')
+		{
+			return false;
+		}
+		return $filename[0] !== '.';
+	}
+
 }

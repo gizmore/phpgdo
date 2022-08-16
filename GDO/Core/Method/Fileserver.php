@@ -40,6 +40,11 @@ final class Fileserver extends Method
 		{
 			return NotAllowed::make()->executeWithInputs($this->inputs);
 		}
+		
+		if (!Module_Core::instance()->checkDotfileAllowed($url))
+		{
+			return NotAllowed::make()->executeWithInputs($this->inputs);
+		}
 
 		# Deny PHP source
 		$type = FileUtil::mimetype($url);
