@@ -112,7 +112,13 @@ else # try :]
 	@include 'protected/config.php';
 }
 
-Application::instance()->cli(true)->verb(GDT_Form::POST);
+final class gdo_adm extends Application
+{
+	public function isInstall() : bool { return true; }
+}
+
+$app = new gdo_adm();
+$app->cli(true)->verb(GDT_Form::POST);
 
 # Load config defaults
 if ( !defined('GDO_CONFIGURED'))
