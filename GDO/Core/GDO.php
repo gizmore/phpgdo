@@ -7,7 +7,6 @@ use GDO\DB\Query;
 use GDO\DB\Result;
 use GDO\Date\Time;
 use GDO\User\GDO_User;
-use GDO\Language\GDO_Language;
 
 /**
  * A data exchange object, and...
@@ -888,8 +887,8 @@ abstract class GDO extends GDT
 	public function insert(bool $withHooks=true) : self
 	{
 		$query = $this->query()->
-		insert($this->gdoTableIdentifier())->
-		values($this->getDirtyVars());
+			insert($this->gdoTableIdentifier())->
+			values($this->getDirtyVars());
 		return $this->insertOrReplace($query, $withHooks);
 	}
 	
@@ -1226,7 +1225,7 @@ abstract class GDO extends GDT
 		$id = '';
 		foreach ($this->gdoPrimaryKeyColumnNames() as $name)
 		{
-			if ($name)
+// 			if ($name)
 			{
 				$id2 = $this->gdoVar($name);
 				$id = $id ? "{$id}:{$id2}" : $id2;

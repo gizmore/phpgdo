@@ -3,14 +3,14 @@
 Performance shall be O(N)! :D
 
 Of course performance is one of the main reasons i lost interest in many other frameworks.
-Well, GDOv7 is currently disappointing slow with around 200ms per page,
+The performance of GDOv7 is quite good already,
 but I do not want to start optimizing too early.
 
 
 ## GDOv7 Performance: Headers
 
 Watch out for the X-GDO-TIME and X-GDO-MEM headers.
-I am aiming for 30ms pages and 4MB ram on modest complex projects.
+I am aiming for 5ms pages and 2MB ram on modest complex projects/pages.
 
 
 ## GDOv7 Performance: [GDT_PerfBar](../GDO/Perf/GDT_PerfBar.php)

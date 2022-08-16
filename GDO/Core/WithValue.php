@@ -140,6 +140,12 @@ trait WithValue
 		return $this;
 	}
 	
+// 	public function getGDOData() : ?array
+// 	{
+// 		return [$this->name => $this->getVar()];
+// 	}
+	
+	
 	##################
 	### Positional ###
 	##################
