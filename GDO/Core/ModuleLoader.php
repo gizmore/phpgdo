@@ -199,7 +199,7 @@ final class ModuleLoader
 		$this->initModulesB();
 	}
 		
-	public function initModulesB() : void
+	private function initModulesB() : void
 	{
 		# Init modules
 		$app = Application::$INSTANCE;

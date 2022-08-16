@@ -137,8 +137,11 @@ Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
-ModuleLoader::instance()->loadModules(GDO_DB_ENABLED ? true : false,
-	true);
+$loader = ModuleLoader::instance();
+$loader->loadModules(GDO_DB_ENABLED ? true : false,	true);
+$loader->initModules();
+
+
 
 define('GDO_CORE_STABLE', true);
 
@@ -541,7 +544,7 @@ elseif ($argv[1] === 'config')
 			$argv[2], false, true);
 		if (( !$module) || ( !$module->isPersisted()))
 		{
-			echo t('err_module_disabled', [
+			echo t('err_module', [
 				html($argv[2])
 			]) . "\n";
 			die( -1);
@@ -619,8 +622,8 @@ elseif ($argv[1] === 'config')
 			[
 				$gdt->renderLabel(),
 				$module->getName(),
-				$gdt->initial,
-				$moduleVar->getVarValue()
+				$gdt->displayVar($gdt->initial),
+				$gdt->displayVar($gdt->var),
 			]);
 		echo PHP_EOL;
 		Cache::flush();

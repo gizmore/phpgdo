@@ -8,7 +8,7 @@ use GDO\DB\WithNullable;
  * The very base GDT do not even have this.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 trait WithValue
@@ -20,8 +20,6 @@ trait WithValue
 	################
 	/**
 	 * @deprecated use notNull().
-	 * @param bool $required
-	 * @return self
 	 */
 	public function required(bool $required = true) : self
 	{

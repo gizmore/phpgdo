@@ -16,31 +16,6 @@ final class GDT_HTML extends GDT
 {
 	use WithValue;
 	
-// 	##############
-// 	### Render ###
-// 	##############
-// 	public function renderHTML() : string
-// 	{
-// 		$html = '';
-// 	    $this->withFields(function(GDT $gdt) use(&$html) {
-// 	    	$html .= $gdt->renderHTML();
-// 	    });
-//     	return $html;
-// 	}
-
-// 	public static function withHTML(?string $html) : self
-// 	{
-// 		return self::make()->var($html);
-// 	}
-
-// 	public function render() : string
-// 	{
-// 		return $this->getVar() . parent::renderHTML();
-// 	}
-	
-// 	public function renderCard() : string
-// 	{
-// 	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
-// 	}
+	public function renderHTML() : string { return $this->var; }
 	
 }

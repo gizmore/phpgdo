@@ -2,10 +2,10 @@
 namespace GDO\DB;
 
 /**
- * Add nullable option for GDT.
+ * Add nullable option to a GDT.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 trait WithNullable
 {
@@ -16,9 +16,6 @@ trait WithNullable
 	
 	/**
 	 * Change nullable setting.
-	 * 
-	 * @param bool $notNull
-	 * @return self
 	 */
 	public function notNull(bool $notNull = true) : self
 	{

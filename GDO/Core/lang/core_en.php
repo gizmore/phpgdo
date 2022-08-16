@@ -281,4 +281,5 @@ The %2$s System',
 	'cronjob_method' => 'Cronjob Method',
 	'method' => 'Method',
 	
+	'msg_installed_modules' => 'Installed modules: %s.',
 ];
