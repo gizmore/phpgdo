@@ -55,7 +55,7 @@ if (!module_enabled('Core'))
 {
 	require 'index_install.php';
 }
-if (@class_exists('\\GDO\\Session\\GDO_Session', true))
+if (@is_file('GDO/Session/GDO_Session.php'))
 {
 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 	$session = GDO_Session::instance();
