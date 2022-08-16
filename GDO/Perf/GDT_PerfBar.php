@@ -68,8 +68,14 @@ final class GDT_PerfBar extends GDT_Panel
 			'gdoHooks' => GDT_Hook::$CALLS,
 // 		    'gdoHookNames' => GDT_Hook::$CALL_NAMES,
 			'gdoIPC' => GDT_Hook::$IPC_CALLS,
-			'gdoMails' => Mail::$SENT,
+			'gdoMails' => getMailCount(),
 		];
+	}
+	
+	private static function getMailCount() : int
+	{
+		return module_enabled('Mail') ?
+			Mail::$SENT : 0;
 	}
 
 	public function renderCLI() : string
