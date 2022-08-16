@@ -438,7 +438,6 @@ final class ModuleLoader
 		if (class_exists($klass))
 		{
     		$instance = new $klass();
-    		$instance->isTable = false;
     		$moduleData['module_priority'] = $instance->priority;
     		$instance->setGDOVars($moduleData, $dirty);
     		return $instance;
