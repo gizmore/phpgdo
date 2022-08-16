@@ -2,7 +2,6 @@
 namespace GDO\Core\Method;
 
 use GDO\UI\MethodPage;
-use GDO\Core\WithFileCache;
 
 /**
  * Show the impressum informational page.
@@ -15,8 +14,6 @@ use GDO\Core\WithFileCache;
  */
 final class Impressum extends MethodPage
 {
-	use WithFileCache;
-	
 	public function getMethodTitle() : string
 	{
 		return t('impressum');

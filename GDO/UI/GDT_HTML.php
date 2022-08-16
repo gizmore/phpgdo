@@ -1,6 +1,7 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
 use GDO\Core\WithValue;
 
 /**
@@ -10,7 +11,8 @@ use GDO\Core\WithValue;
  * @version 7.0.1
  * @since 6.7.0
  */
-final class GDT_HTML extends GDT_Container
+// final class GDT_HTML extends GDT_Container
+final class GDT_HTML extends GDT
 {
 	use WithValue;
 	
@@ -26,19 +28,19 @@ final class GDT_HTML extends GDT_Container
 //     	return $html;
 // 	}
 
-	public static function withHTML(?string $html) : self
-	{
-		return self::make()->var($html);
-	}
+// 	public static function withHTML(?string $html) : self
+// 	{
+// 		return self::make()->var($html);
+// 	}
 
-	public function renderHTML() : string
-	{
-		return $this->getVar() . parent::renderHTML();
-	}
+// 	public function render() : string
+// 	{
+// 		return $this->getVar() . parent::renderHTML();
+// 	}
 	
-	public function renderCard() : string
-	{
-	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
-	}
+// 	public function renderCard() : string
+// 	{
+// 	    return "<div class=\"gdt-html\">{$this->renderHTML()}</div>";
+// 	}
 	
 }

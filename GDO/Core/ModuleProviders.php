@@ -82,12 +82,10 @@ final class ModuleProviders
 	 * Multi-Provided is first
 	 */
 	public static array $PROVIDERS = [
-		# Multiple choices
 		'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],
 		'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],
 		'Mailer' => ['phpgdo-mailer-gdo', 'phpgdo-mailer-symfony'],
 		'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],
-		# Only one provider
 		'Account' => 'phpgdo-account',
 		'ActivationAlert' => 'phpgdo-activation-alert',
 		'Address' => 'phpgdo-address',
@@ -124,6 +122,7 @@ final class ModuleProviders
 		'Facebook' => 'phpgdo-facebook',
 		'Favicon' => 'phpgdo-favicon',
 		'File' => 'phpgdo-file',
+		'Fineprint' => 'phpgdo-fineprint',
 		'Follower' => 'phpgdo-follower',
 		'FontAwesome' => 'phpgdo-font-awesome',
 		'Forum' => 'phpgdo-forum',
@@ -176,6 +175,7 @@ final class ModuleProviders
 	];
 
 	public static $DEPENDENCIES = [
+		
 		'Account' => ['Login'],
 		'ActivationAlert' => [],
 		'Address' => [],
@@ -220,6 +220,7 @@ gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links
 		'Facebook' => [],
 		'Favicon' => [],
 		'File' => [],
+		'Fineprint' => ['Classic', 'DOMPDF', 'JQueryAutocomplete'],
 		'Follower' => [],
 		'FontAwesome' => [],
 		'Forum' => ['File'],

@@ -119,6 +119,7 @@ return [
 	'enum_bot' => 'Bot',
 	
 	# GDTs
+	'format' => 'Format',
 	'ghost' => 'Ghost',
 	'guest' => 'Guest',
 	'last_url' => 'Last URL',
@@ -177,6 +178,7 @@ return [
 	'quote_at' => 'At %s',
 	'not_specified' => 'Not Specified',
 	'email' => 'E-Mail',
+	'size' => 'Size',
 	'object_filter' => 'Filter',
 	
 	# CBX
@@ -189,6 +191,8 @@ return [
 	'md_privacy' => 'Privacy and Dataflow information for %s.',
 	'impressum' => 'Impressum',
 	'md_impressum' => 'The impressum for the %s service website.',
+	'landscape' => 'Landscape',
+	'portrait' => 'Portrait',
 	
 	# Util
 	'and' => ' and ',

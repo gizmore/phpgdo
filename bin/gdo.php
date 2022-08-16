@@ -34,6 +34,7 @@ Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # init without username
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
+$loader->initModules();
 define('GDO_CORE_STABLE', 1);
 CLI::setupUser();
 # Shell

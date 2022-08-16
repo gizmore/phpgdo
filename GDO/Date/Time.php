@@ -25,9 +25,8 @@ use GDO\Core\GDO_Exception;
  * @TODO: Sometimes functions take a formatstring sometimes a formatname t(df_). Always use formatstring. fix all bugs.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 2.0.0
- * 
  * @see GDT_Week
  * @see GDT_Date
  * @see GDT_DateTime
