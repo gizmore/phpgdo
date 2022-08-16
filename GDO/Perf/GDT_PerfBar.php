@@ -68,7 +68,7 @@ final class GDT_PerfBar extends GDT_Panel
 			'gdoHooks' => GDT_Hook::$CALLS,
 // 		    'gdoHookNames' => GDT_Hook::$CALL_NAMES,
 			'gdoIPC' => GDT_Hook::$IPC_CALLS,
-			'gdoMails' => getMailCount(),
+			'gdoMails' => self::getMailCount(),
 		];
 	}
 	
