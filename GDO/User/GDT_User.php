@@ -27,7 +27,7 @@ class GDT_User extends GDT_Object
 	protected function __construct()
 	{
 	    parent::__construct();
-		$this->orderField = 'user_name';
+// 		$this->orderField = 'user_name';
 		$this->table(GDO_User::table());
 		$this->icon('face');
         $this->withCompletion();
