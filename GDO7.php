@@ -16,8 +16,6 @@ use GDO\Util\Regex;
  */
 # Verbose error handling is default
 define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
-error_reporting(E_ALL|E_ALL);
-ini_set('display_errors', 1); #
 #
 ##
 ########################

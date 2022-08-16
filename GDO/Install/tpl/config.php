@@ -16,6 +16,9 @@ echo '<';echo '?';echo "php\n";
 ################################
 if (defined('GDO_CONFIGURED')) return; // double include
 
+error_reporting(E_ALL|E_ALL);
+ini_set('display_errors', 1);
+
 /**
  * Please work down each section carefully.
  * Common pitfall is that there are 2 domains to set: GDO_DOMAIN and GDO_SESS_DOMAIN.
