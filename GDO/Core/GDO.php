@@ -1243,6 +1243,7 @@ abstract class GDO extends GDT
 	##############
 	/**
 	 * Get a row by a single arbritary column value.
+	 * Try caches first.
 	 */
 	public static function getBy(string $key, string $var) : ?self
 	{

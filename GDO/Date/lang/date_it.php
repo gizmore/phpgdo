@@ -45,4 +45,6 @@ return [
 	'duration' => 'Durata',
 	'err_min_duration' => 'La durata deve essere almeno % s secondi.',
 	
+	# Clock
+	'cfg_clock_sidebar' => 'Mostra l\'orologio nella navigazione?',
 ];

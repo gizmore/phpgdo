@@ -83,11 +83,17 @@ return [
 	'enum_none' => '-None-',
 	'enum_all' => 'All',
 	'enum_staff' => 'Staff',
+	'enum_unknown' => 'unknown',
 	
 	# E-Mail
 	'enum_html' => 'HTML',
 	'enum_text' => 'Text',
 	'email_fmt' => 'Format',
+	
+	# Navpos
+	'enum_left' => 'Left',
+	'enum_right' => 'Right',
+	'enum_bottom' => 'Bottom',
 	
 	# Permissions
 	'perm_admin' => 'Admin',
@@ -123,6 +129,7 @@ return [
 	'enum_bot' => 'Bot',
 	
 	# GDTs
+	'edited_by' => 'Edited by',
 	'html' => 'HTML',
 	'format' => 'Format',
 	'ghost' => 'Ghost',

@@ -58,17 +58,20 @@ class GDT_Composite extends GDT_Container
 	###################
 	### Var / Value ###
 	###################
-	public function getGDOData() : array
+	public function getGDOData() : ?array
 	{
-		$data = [];
+		$gdodata = [];
 		foreach ($this->getAllFields() as $gdt)
 		{
-			foreach ($gdt->getGDOData() as $key => $var)
+			if ($data = $gdt->getGDOData())
 			{
-				$data[$key] = $var;
+				foreach ($data as $key => $var)
+				{
+					$gdodata[$key] = $var;
+				}
 			}
 		}
-		return $data;
+		return $gdodata;
 	}
 	
 	public function setGDOData(array $data) : self

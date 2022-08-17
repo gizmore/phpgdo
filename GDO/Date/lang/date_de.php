@@ -44,4 +44,8 @@ return [
 	# Duration
 	'duration' => 'Dauer',
 	'err_min_duration' => 'Die Dauer muss mindestens %s Sekunden betragen.',
+
+	# Clock
+	'cfg_clock_sidebar' => 'Uhr in der Navigation anzeigen?',
+	
 ];

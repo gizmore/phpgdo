@@ -28,7 +28,9 @@ final class Cronjob
 	{
 		self::$FORCE = $force;
 	    GDO_User::setCurrent(GDO_User::system());
-		$modules = ModuleLoader::instance()->loadModulesCache();
+	    $loader = ModuleLoader::instance();
+		$modules = $loader->loadModulesCache();
+		$loader->initModules();
 		foreach ($modules as $module)
 		{
 			if ($module->isEnabled())

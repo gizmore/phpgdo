@@ -11,6 +11,7 @@ use GDO\Core\WithInput;
 
 /**
  * Display a date either as age or date
+ *
  * @author gizmore
  */
 final class GDT_DateDisplay extends GDT
@@ -19,49 +20,76 @@ final class GDT_DateDisplay extends GDT
 	use WithValue;
 	use WithInput;
 	use WithPHPJQuery;
-	
-    public int $showDateAfterSeconds = 172800; # 2 days
-    
-    public string $dateformat = 'short';
-    public function dateformat(string $dateformat) : self
-    {
-    	$this->dateformat = $dateformat;
-    	return $this;
-    }
-    
-    public function renderHTML() : string
-    {
-        $date = $this->getVar();
-        if ($date === null)
-        {
-        	echo 1;
-        	$date = $this->getVar();
-        }
-        $diff = Time::getDiff($date);
-        if ($diff === null)
-        {
-        	echo 2;
-        }
-        if ($diff > $this->showDateAfterSeconds)
-        {
-            $display = Time::displayDate($date, $this->dateformat);
-        }
-        else
-        {
-            $display = t('ago', [Time::displayAge($date)]);
-        }
-        return GDT_Template::php('Date', 'date_html.php', ['field' => $this, 'display' => $display]);
-    }
-    
-    public function gdo(GDO $gdo = null) : self
-    {
-    	$date = $gdo->gdoVar($this->getName());
-    	return $this->var($date);
-    }
 
-    public function plugVar() : string
-    {
-    	return '2022-07-19 13:37:42';
-    }
+	#####################
+	### Render Switch ###
+	#####################
+	public int $showDateAfterSeconds = 172800;
+	public function onlyAgo() : self
+	{
+		$this->showDateAfterSeconds = PHP_INT_MAX;
+		return $this;
+	}
+	
+	public function onlyDate() : self
+	{
+		$this->showDateAfterSeconds = -1;
+		return $this;
+	}
+	
+	##############
+	### Format ###
+	##############
+	public string $dateformat = 'short';
+	public function dateformat(string $dateformat): self
+	{
+		$this->dateformat = $dateformat;
+		return $this;
+	}
+
+	# ##########
+	# ## Now ###
+	# ##########
+	public function initialNow(): self
+	{
+		return $this->initial(Time::getDate());
+	}
+
+	# #############
+	# ## Render ###
+	# #############
+	public function renderHTML(): string
+	{
+		$date = $this->getVar();
+		if ( !$date)
+		{
+			return '---';
+		}
+		$diff = Time::getDiff($date);
+		if ($diff > $this->showDateAfterSeconds)
+		{
+			$display = Time::displayDate($date, $this->dateformat);
+		}
+		else
+		{
+			$display = t('ago', [
+				Time::displayAge($date)
+			]);
+		}
+		return GDT_Template::php('Date', 'date_html.php', [
+			'field' => $this,
+			'display' => $display
+		]);
+	}
+
+	// public function gdo(GDO $gdo = null) : self
+	// {
+	// $date = $gdo->gdoVar($this->getName());
+	// return $this->var($date);
+	// }
+	public function plugVar(): string
+	{
+		return '2022-07-19 13:37:42';
+	}
 
 }

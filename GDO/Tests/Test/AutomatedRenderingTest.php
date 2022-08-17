@@ -159,6 +159,10 @@ final class AutomatedRenderingTest extends TestCase
 	
 	private function fieldTestGDO(GDO $gdo) : bool
 	{
+		if ($gdo->gdoAbstract())
+		{
+			return false; # true? not used
+		}
 // 		$this->renderAllUnplugged($gdo);
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{

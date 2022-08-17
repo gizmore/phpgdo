@@ -35,10 +35,12 @@ final class Module_Date extends GDO_Module
     public function getConfig() : array
     {
         return [
-            GDT_Checkbox::make('tz_probe_js')->initial('1'),
-            GDT_Checkbox::make('tz_sidebar_select')->initial('1'),
+        	GDT_Checkbox::make('clock_sidebar')->initial('0'),
+        	GDT_Checkbox::make('tz_probe_js')->initial('1'),
+        	GDT_Checkbox::make('tz_sidebar_select')->initial('1'),
         ];
     }
+    public function cfgClock() : string { return $this->getConfigVar('clock_sidebar'); }
     public function cfgProbeJS() : string { return $this->getConfigVar('tz_probe_js'); }
     public function cfgSidebarSelect() : string { return $this->getConfigVar('tz_sidebar_select'); }
  
@@ -105,6 +107,11 @@ final class Module_Date extends GDO_Module
 	                    Timezone::make()->getForm()->slim());
             	}
             }
+        }
+        if ($this->cfgClock())
+        {
+        	$clock = GDT_DateDisplay::make('clock')->onlyDate()->initialNow();
+        	GDT_Page::instance()->leftBar()->addField($clock);
         }
     }
     

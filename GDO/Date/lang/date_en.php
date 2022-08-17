@@ -3,6 +3,7 @@ namespace GDO\Date\lang;
 return [
 	'gdo_timezone' => 'Timezone',
     'ago' => '%s ago',
+	
     'err_min_date' => 'This date has to be after %s.',
     'err_max_date' => 'This date has to be before %s.',
     'err_invalid_date' => 'Invalid Time: %s does not match the format of %s. Please make sure to setup your language and timezone.',
@@ -44,4 +45,8 @@ return [
 	# Duration
 	'duration' => 'Duration',
 	'err_min_duration' => 'The duration has to be at least %s seconds.',
+	
+	# Clock
+	'cfg_clock_sidebar' => 'Show clock in sidebar?',
+	
 ];
