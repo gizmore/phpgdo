@@ -24,11 +24,12 @@ final class ModuleProviders
 	 * @param number $which
 	 * @return string
 	 */
-	public static function getGitUrl($moduleName, $which = 1)
+	public static function getGitUrl(string $moduleName, int $which = 1, bool $ssh=false)
 	{
 		$git = self::GIT_PROVIDER;
 		$which = (int) $which;
 		$providers = self::getProviders($moduleName);
+		$url = '';
 		if (is_array($providers))
 		{
 			if (($which < 1) || ($which > count($providers)))
@@ -36,13 +37,22 @@ final class ModuleProviders
 				throw new GDO_Exception(
 					"Invalid provider choice!");
 			}
-			return $git . $providers[$which - 1];
+			$url = $git . $providers[$which - 1];
 		}
-		return $git . $providers;
+		else
+		{
+			$url = $git . $providers;
+		}
+		
+		if ($ssh)
+		{
+			$url = str_replace('https://', 'ssh://git@', $url);
+		}
+
+		return $url;
 	}
 
-	public static function getCleanModuleName(
-		string $moduleName): string
+	public static function getCleanModuleName(string $moduleName): string
 	{
 		foreach (array_keys(self::$DEPENDENCIES) as $modname)
 		{
@@ -75,6 +85,19 @@ final class ModuleProviders
 			}
 		}
 		return null;
+	}
+	
+	public static function getMultiProviders() : array
+	{
+		$back = [];
+		foreach (self::$PROVIDERS as $modname => $providers)
+		{
+			if (is_array($providers))
+			{
+				$back[] = $providers;
+			}
+		}
+		return $back;
 	}
 
 	/**

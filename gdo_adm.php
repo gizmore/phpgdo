@@ -29,6 +29,7 @@ use GDO\Core\GDT_Expression;
 use GDO\Util\Arrays;
 use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Method;
+use GDO\CLI\Process;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -115,7 +116,12 @@ else # try :]
 
 final class gdo_adm extends Application
 {
-	public function isInstall() : bool { return true; }
+
+	public function isInstall(): bool
+	{
+		return true;
+	}
+
 }
 
 $app = gdo_adm::instance();
@@ -138,10 +144,8 @@ Trans::$ISO = GDO_LANGUAGE;
 Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
 $loader = ModuleLoader::instance();
-$loader->loadModules(GDO_DB_ENABLED ? true : false,	true);
+$loader->loadModules(GDO_DB_ENABLED ? true : false, true);
 $loader->initModules();
-
-
 
 define('GDO_CORE_STABLE', true);
 
@@ -208,17 +212,14 @@ elseif ($argv[1] === 'modules')
 				];
 			foreach ($p as $provider)
 			{
-				printf(
-					"%32s: cd GDO; git clone --recursive {$git}{$provider} {$moduleName}; cd ..\n",
-					$moduleName);
+				printf("%32s: cd GDO; git clone --recursive {$git}{$provider} {$moduleName}; cd ..\n", $moduleName);
 			}
 		}
 	}
 	elseif ($argc == 3)
 	{
 		$moduleName = $argv[2];
-		$module = ModuleLoader::instance()->getModule(
-			$moduleName, true);
+		$module = ModuleLoader::instance()->getModule($moduleName, true);
 		if ( !$module)
 		{
 			echo "Module not found.\n";
@@ -235,16 +236,12 @@ elseif ($argv[1] === 'modules')
 				echo "{$moduleName}: Choose between multiple possible providers:\n";
 				foreach ($providers as $provider)
 				{
-					printf(
-						"%20s: cd GDO; git clone --recursive {$git}{$provider} {$moduleName}; cd ..\n",
-						$moduleName);
+					printf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$moduleName}; cd ..\n", $moduleName);
 				}
 			}
 			else
 			{
-				printf(
-					"%20s: cd GDO; git clone --recursive {$git}{$providers} {$moduleName}; cd ..\n",
-					$moduleName);
+				printf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$moduleName}; cd ..\n", $moduleName);
 			}
 		}
 		else
@@ -293,8 +290,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 		}
 	}
 
-	ModuleLoader::instance()->reset()->loadModules(true, true,
-		true);
+	ModuleLoader::instance()->reset()->loadModules(true, true, true);
 	$git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 
 	if ($mode === 1)
@@ -303,33 +299,28 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 		$moduleNames = explode(',', $argv[2]);
 		foreach ($moduleNames as $moduleName)
 		{
-			$module = ModuleLoader::instance()->loadModuleFS(
-				$moduleName);
+			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
 			$deps[] = $module->getName();
 			if ( !$module)
 			{
 				echo "Unknown module. Try {$argv[0]} modules.\n";
 				die(1);
 			}
-			$deps = array_merge($deps,
-				$module->getDependencies());
+			$deps = array_merge($deps, $module->getDependencies());
 		}
 		$deps = array_unique($deps);
 	}
 	elseif ($mode === 2)
 	{
-		$modules = ModuleLoader::instance()->loadModules(true,
-			true, true);
-		$modules = array_filter($modules,
-			function (GDO_Module $module)
-			{
-				return $module->isInstallable();
-			});
-		$deps = array_map(
-			function (GDO_Module $mod)
-			{
-				return $mod->getName();
-			}, $modules);
+		$modules = ModuleLoader::instance()->loadModules(true, true, true);
+		$modules = array_filter($modules, function (GDO_Module $module)
+		{
+			return $module->isInstallable();
+		});
+		$deps = array_map(function (GDO_Module $mod)
+		{
+			return $mod->getName();
+		}, $modules);
 
 		$cnt = count($deps);
 		echo "Installing all {$cnt} modules.\n";
@@ -345,8 +336,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 		$cnt = count($deps);
 		foreach ($deps as $dep)
 		{
-			$depmod = ModuleLoader::instance()->getModule($dep,
-				true);
+			$depmod = ModuleLoader::instance()->getModule($dep, true);
 
 			if ( !$depmod)
 			{
@@ -366,23 +356,18 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 					echo "{$dep}: Choose between multiple possible providers.\n";
 					foreach ($providers as $provider)
 					{
-						printf(
-							"%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n",
-							$dep);
+						printf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n", $dep);
 					}
 				}
 				else
 				{
-					printf(
-						"%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n",
-						$dep);
+					printf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n", $dep);
 				}
 
 				continue;
 			}
 
-			$deps = array_unique(
-				array_merge($depmod->getDependencies(), $deps));
+			$deps = array_unique(array_merge($depmod->getDependencies(), $deps));
 		}
 	}
 
@@ -404,17 +389,14 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 	}
 	asort($deps2);
 
-	echo t('msg_installing_modules',
-		[
-			implode(', ', array_keys($deps2))
-		]) . "\n";
+	echo t('msg_installing_modules', [
+		implode(', ', array_keys($deps2))
+	]) . "\n";
 
-	$modules = array_map(
-		function (string $moduleName)
-		{
-			return ModuleLoader::instance()->getModule(
-				$moduleName);
-		}, array_keys($deps2));
+	$modules = array_map(function (string $moduleName)
+	{
+		return ModuleLoader::instance()->getModule($moduleName);
+	}, array_keys($deps2));
 
 	$deps2 = Arrays::implodeHuman(array_keys($deps2));
 	echo "Installing modules {$deps2}.\n";
@@ -428,21 +410,19 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 
 elseif ($argv[1] === 'admin')
 {
-	if ( ($argc !== 4) && ($argc !== 5) )
+	if (($argc !== 4) && ($argc !== 5))
 	{
 		printUsage();
 	}
 	if ( !($user = GDO_User::getByName($argv[2])))
 	{
-		$user = GDO_User::blank(
-			[
-				'user_name' => $argv[2],
-				'user_type' => GDT_UserType::MEMBER,
-			])->insert();
+		$user = GDO_User::blank([
+			'user_name' => $argv[2],
+			'user_type' => GDT_UserType::MEMBER,
+		])->insert();
 		GDT_Hook::callWithIPC('UserActivated', $user, null);
 	}
-	$user->saveVar('user_password',
-		BCrypt::create($argv[3])->__toString());
+	$user->saveVar('user_password', BCrypt::create($argv[3])->__toString());
 	if ($argc === 5)
 	{
 		$user->saveVar('user_email', $argv[4]);
@@ -465,12 +445,9 @@ elseif ($argv[1] === 'wipe_all')
 	{
 		printUsage();
 	}
-	Database::instance()->queryWrite(
-		"DROP DATABASE " . GDO_DB_NAME);
-	Database::instance()->queryWrite(
-		"CREATE DATABASE " . GDO_DB_NAME);
-	printf(
-		"The database has been killed completely and created empty.\n");
+	Database::instance()->queryWrite("DROP DATABASE " . GDO_DB_NAME);
+	Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
+	printf("The database has been killed completely and created empty.\n");
 }
 
 elseif ($argv[1] === 'wipe')
@@ -482,11 +459,10 @@ elseif ($argv[1] === 'wipe')
 
 	$module = ModuleLoader::instance()->loadModuleFS($argv[2]);
 
-	$response = Install::make()->withAppliedInputs(
-		[
-			'module' => $module->getName(),
-			'uninstall' => '1'
-		])
+	$response = Install::make()->withAppliedInputs([
+		'module' => $module->getName(),
+		'uninstall' => '1'
+	])
 		->executeWithInit();
 
 	if (Application::isError())
@@ -497,23 +473,19 @@ elseif ($argv[1] === 'wipe')
 	{
 		if ($classes = $module->getClasses())
 		{
-			$classes = array_map(
-				function ($class)
-				{
-					return Strings::rsubstrFrom($class, '\\');
-				}, $classes);
+			$classes = array_map(function ($class)
+			{
+				return Strings::rsubstrFrom($class, '\\');
+			}, $classes);
 		}
 		else
 		{
 			$classes = [];
 		}
-		printf(
-			"The %s module has been wiped from the database.\n",
-			$module->getName());
+		printf("The %s module has been wiped from the database.\n", $module->getName());
 		if ($classes)
 		{
-			printf("The following GDOs have been wiped: %s.\n",
-				implode(', ', $classes));
+			printf("The following GDOs have been wiped: %s.\n", implode(', ', $classes));
 		}
 	}
 }
@@ -528,11 +500,10 @@ elseif ($argv[1] === 'config')
 	if ($argc === 2)
 	{
 		$modules = ModuleLoader::instance()->getEnabledModules();
-		$names = array_map(
-			function (GDO_Module $module)
-			{
-				return $module->getName();
-			}, $modules);
+		$names = array_map(function (GDO_Module $module)
+		{
+			return $module->getName();
+		}, $modules);
 		echo t('msg_installed_modules', [
 			implode(', ', $names)
 		]) . "";
@@ -540,8 +511,7 @@ elseif ($argv[1] === 'config')
 	}
 	if ($argc === 3)
 	{
-		$module = ModuleLoader::instance()->loadModuleFS(
-			$argv[2], false, true);
+		$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
 		if (( !$module) || ( !$module->isPersisted()))
 		{
 			echo t('err_module', [
@@ -558,11 +528,10 @@ elseif ($argv[1] === 'config')
 			}
 			$keys = implode(', ', $vars);
 			$keys = $keys ? $keys : t('none');
-			echo t('msg_available_config',
-				[
-					$module->getName(),
-					$keys
-				]);
+			echo t('msg_available_config', [
+				$module->getName(),
+				$keys
+			]);
 			echo PHP_EOL;
 			die(0);
 		}
@@ -576,8 +545,7 @@ elseif ($argv[1] === 'config')
 	$key = $argv[3];
 	if ($argc === 4)
 	{
-		$module = ModuleLoader::instance()->loadModuleFS(
-			$argv[2], false, true);
+		$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
 		if (( !$module) || ( !$module->isPersisted()))
 		{
 			echo t('err_module_disabled', [
@@ -586,13 +554,12 @@ elseif ($argv[1] === 'config')
 			die( -1);
 		}
 		$config = $module->getConfigColumn($key);
-		echo t('msg_set_config',
-			[
-				$key,
-				$module->getName(),
-				$config->initial,
-				$config->gdoExampleVars()
-			]);
+		echo t('msg_set_config', [
+			$key,
+			$module->getName(),
+			$config->initial,
+			$config->gdoExampleVars()
+		]);
 		echo PHP_EOL;
 		die(0);
 	}
@@ -600,8 +567,7 @@ elseif ($argv[1] === 'config')
 	$var = $argv[4];
 	if ($argc === 5)
 	{
-		$module = ModuleLoader::instance()->loadModuleFS(
-			$argv[2], false, true);
+		$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
 		if (( !$module) || ( !$module->isPersisted()))
 		{
 			echo t('err_module_disabled', [
@@ -616,8 +582,7 @@ elseif ($argv[1] === 'config')
 			echo PHP_EOL;
 			die(1);
 		}
-		$moduleVar = GDO_ModuleVar::createModuleVar($module,
-			$gdt);
+		$moduleVar = GDO_ModuleVar::createModuleVar($module, $gdt);
 		echo t('msg_changed_config',
 			[
 				$gdt->renderLabel(),
@@ -631,12 +596,12 @@ elseif ($argv[1] === 'config')
 	}
 }
 
-elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
-	($argv[1] === 'provide_ssh'))
+elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] === 'provide_ssh') ||
+	($argv[1] === 'provide_all_ssh'))
 {
 	if (($argc !== 3) && ($argc !== 2))
 	{
-		if (($argc !== 2) || ($argv[1] !== 'provide_all'))
+		if (($argc !== 2) || (($argv[1] !== 'provide_all') && ($argv[1] !== 'provide_all_ssh')))
 		{
 			printUsage( -1);
 		}
@@ -676,18 +641,15 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
 			$cd = count($deps);
 			foreach ($deps as $dep)
 			{
-				if ($module = $loader->getModule($dep, true,
-					false))
+				if ($module = $loader->getModule($dep, true, false))
 				{
 					$moreDeps = $module->getDependencies();
 				}
 				else
 				{
-					$moreDeps = ModuleProviders::getDependencies(
-						$dep);
+					$moreDeps = ModuleProviders::getDependencies($dep);
 				}
-				$deps = array_unique(
-					array_merge($deps, $moreDeps));
+				$deps = array_unique(array_merge($deps, $moreDeps));
 			}
 		}
 	}
@@ -719,10 +681,9 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
 			echo "Cloning " . count($missing) . " modules...\n";
 			foreach ($missing as $module)
 			{
-				$providers = ModuleProviders::getProviders(
-					$module);
-				
-				if (!$providers)
+				$providers = ModuleProviders::getProviders($module);
+
+				if ( !$providers)
 				{
 					echo "No provider for $module\n";
 					die(1);
@@ -745,15 +706,8 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
 						die(1);
 					}
 				}
-
-				$url = ModuleProviders::getGitUrl($module, $n);
-				if ($argv[1] === 'provide_ssh')
-				{
-					$url = str_replace('https://', 'ssh://git@',
-						$url);
-				}
-				$module = ModuleProviders::getCleanModuleName(
-					$module);
+				$url = ModuleProviders::getGitUrl($module, $n, stripos(argv[1], '_ssh') !== false);
+				$module = ModuleProviders::getCleanModuleName($module);
 				$cmd = "cd GDO && git clone --recursive {$url} {$module}";
 				echo $cmd . "\n";
 				$output = [];
@@ -779,7 +733,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
 	}
 	else
 	{
-		if ($argv[1] === 'provide_all')
+		if (($argv[1] === 'provide_all') || ($argv[1] === 'provide_all_ssh'))
 		{
 			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install_all\n";
 		}
@@ -791,7 +745,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') ||
 		$r = $r ? $r : 'y';
 		if (($r[0] === 'y') || ($r[0] === 'Y'))
 		{
-			if ($argv[1] === 'provide_all')
+			if (($argv[1] === 'provide_all') || ($argv[1] === 'provide_all_ssh'))
 			{
 				system("php gdo_adm.php install_all");
 			}
@@ -815,7 +769,9 @@ elseif ($argv[1] === 'secure')
 {
 	$module = Module_Install::instance();
 	$method = GDT_Method::make()->method(Security::make());
-	$result = $method->clibutton()->noChecks()->execute();
+	$result = $method->clibutton()
+		->noChecks()
+		->execute();
 	echo $result->renderCLI();
 }
 
@@ -836,21 +792,18 @@ elseif ($argv[1] === 'migrate')
 	{
 		GDT_Error::make()->text('err_gdoadm_migrate');
 	}
-	else if ( !($module = ModuleLoader::instance()->getModule(
-		$argv[2], true, false)))
+	else if ( !($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
 	{
-		echo GDT_Error::make()->text('err_module',
-			[
-				html($argv[2])
-			])->renderCLI();
+		echo GDT_Error::make()->text('err_module', [
+			html($argv[2])
+		])->renderCLI();
 	}
 	else
 	{
 		Installer::installModule($module, true);
-		GDT_Success::make()->text('msg_gdoadm_migrated',
-			[
-				$module->renderName()
-			]);
+		GDT_Success::make()->text('msg_gdoadm_migrated', [
+			$module->renderName()
+		]);
 	}
 }
 
@@ -862,6 +815,29 @@ elseif ($argv[1] === 'migrate_all')
 		Installer::installModule($module, true);
 	}
 	echo GDT_Success::make()->text('msg_gdoadm_migrated_all')->renderCLI();
+}
+
+elseif ($argv[1] === 'gizmore_setup')
+{
+	$special = ModuleProviders::getMultiProviders();
+	foreach ($special as $moduleName => $providers)
+	{
+		echo "Cloning especially {$moduleName}.\n";
+		foreach ($providers as $i => $provider)
+		{
+			echo "Cloning provider {$provider}.\n";
+			$url = ModuleProviders::getGitUrl($moduleName, $i + 1, true);
+			$cmd = "cd GDO && git clone --recursive {$url}";
+// 			$lines = Process::exec($cmd);
+			echo "$cmd\n";
+// 			var_dump($lines);
+		}
+
+		$dir = GDO_PATH . "GDO/{$moduleName}/.git";
+		echo "Cleaning provider choice in use: {$dir}.\n";
+		FileUtil::removeDir($dir);
+	}
+	echo "All done, gizmore sire! =)\n";
 }
 
 else
