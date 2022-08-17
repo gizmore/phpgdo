@@ -524,7 +524,7 @@ class Cache
 	/**
 	 * Flush the whole or part of the filecache.
 	 */
-	public static function fileFlush(string $key = null): bool
+	public static function fileFlush(string $key = null) : bool
 	{
 		if ($key === null)
 		{
@@ -532,8 +532,13 @@ class Cache
 		}
 		else
 		{
-			return unlink(self::filePath($key));
+			$filename = self::filePath($key);
+			if (FileUtil::isFile($filename))
+			{
+				return unlink($filename);
+			}
 		}
+		return true; 
 	}
 
 	/**

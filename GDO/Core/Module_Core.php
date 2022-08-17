@@ -32,7 +32,7 @@ use GDO\Util\Strings;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.1-r1512';
+	const GDO_REVISION = '7.0.1-r1513';
 	
 	##############
 	### Module ###
