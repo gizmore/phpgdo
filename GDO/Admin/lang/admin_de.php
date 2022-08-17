@@ -55,8 +55,6 @@ return [
 'choose_permission' => 'Berechtigung auswählen',
 'msg_perm_granted' => 'Sie haben die Berechtigung %s dem Nutzer %s zugewiesen.',
 ################################################################
-'msg_cache_flushed' => 'Alle Caches wurden gelöscht. Z.B. rm -rf temp/minify, Cache::flush().',
-################################################################
 'link_create_user' => 'Neuen Nutzer anlegen',
 'mt_admin_usercreate' => 'Neuen Nutzer anlegen',
 ################################################################

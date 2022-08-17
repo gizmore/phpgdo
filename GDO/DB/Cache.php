@@ -544,7 +544,7 @@ class Cache
 		$domain = GDO_DOMAIN;
 		$version = Module_Core::GDO_REVISION;
 		$key = self::fileKey($key);
-		return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}";
+		return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}.gdo";
 	}
 
 	private static function fileKey(string $key): string

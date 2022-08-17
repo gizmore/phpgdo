@@ -55,8 +55,6 @@ return [
 'choose_permission' => 'Choose permission',
 'msg_perm_granted' => 'You have granted %s permissions to %s.',
 ################################################################
-'msg_cache_flushed' => 'Caches have been flushed. E.g; rm -rf temp/minify, Cache::flush().',
-################################################################
 'link_create_user' => 'Create new user',
 'mt_admin_usercreate' => 'Create a new user',
 ################################################################

@@ -2,7 +2,7 @@
 namespace GDO\Install;
 
 use GDO\Core\GDO_Module;
-use GDO\Admin\Method\ClearCache;
+use GDO\Core\Method\ClearCache;
 
 /**
  * Installer module.

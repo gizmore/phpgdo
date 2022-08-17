@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Admin\Method;
+namespace GDO\Core\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
@@ -17,10 +17,8 @@ use GDO\UI\GDT_Redirect;
  * 
  * Does not save last url. Calls last url.
  * 
- * @TODO move Admin::ClearCache to Module_Core.
- * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.1
  * @see GDO
  * @see Cache

@@ -62,6 +62,18 @@ function hrefDefault() : string
 
 function href(string $module, string $method, string $append = null, bool $lang = true) : string
 {
+// 	if ($lang)
+// 	{
+// 		$lang = false;
+// 		if (!GDO_User::current()->isPersisted())
+// 		{
+// 			if (GDO_User::current()->getLangISO() !== GDO_LANGUAGE)
+// 			{
+// 				$lang = true;
+// 			}
+// 		}
+// 	}
+	
 	if (GDO_SEO_URLS)
 	{
 		$module = strtolower($module);
@@ -95,12 +107,12 @@ function href(string $module, string $method, string $append = null, bool $lang 
 				$href .= '?' . implode('&', $q);
 				if ($lang)
 				{
-// 					$href .= '&_lang=' . Trans::$ISO;
+					$href .= '&_lang=' . Trans::$ISO;
 				}
 			}
 			elseif ($lang)
 			{
-// 				$href .= '?_lang=' . Trans::$ISO;
+				$href .= '?_lang=' . Trans::$ISO;
 			}
 			else
 			{
@@ -117,7 +129,7 @@ function href(string $module, string $method, string $append = null, bool $lang 
 		$href = GDO_WEB_ROOT . "index.php?_mo={$module}&_me={$method}";
 		if ($lang)
 		{
-// 			$href .= '&_lang=' . Trans::$ISO;
+			$href .= '&_lang=' . Trans::$ISO;
 		}
 		$href .= $append;
 	}

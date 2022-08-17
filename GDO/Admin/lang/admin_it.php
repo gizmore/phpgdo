@@ -55,8 +55,6 @@ return [
 'choose_permission' =>'Selezionare autorizzazione',
 'msg_perm_granted' =>'Avete concesso l´autorizzazione %s al utente %s.',
 ################################################################
-'msg_cache_flushed' =>'Tutti Caches sono cancellati. Ad esempio rm -rf temp/minify, Cache::flush().',
-################################################################
 'link_create_user' =>'Crea nuovo utente',
 'mt_admin_usercreate' =>'Crea nuovo utente',
 ################################################################

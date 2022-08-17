@@ -11,7 +11,7 @@ final class GDT_AdminBar extends GDT_Bar
 		parent::__construct();
 		$this->addFields(
 			GDT_Link::make()->label('btn_clearcache')->href(
-				href('Admin', 'ClearCache')),
+				href('Core', 'ClearCache')),
 			GDT_Link::make()->label('btn_modules')->href(
 				href('Admin', 'Modules')),
 			GDT_Link::make()->label('users')->href(

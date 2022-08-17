@@ -71,6 +71,7 @@ return [
 	
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
+	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',
