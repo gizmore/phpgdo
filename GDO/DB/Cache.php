@@ -600,4 +600,4 @@ if ( !defined('GDO_MEMCACHE'))
 #
 # Cache writes to temp path.
 #
-define('GDO_TEMP_PATH', GDO_PATH . (Application::$INSTANCE->isUnitTests() ? 'temp_test/' : 'temp/'));
+define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));

@@ -19,19 +19,19 @@ if (php_sapi_name() !== 'cli')
 require 'GDO7.php';
 require 'protected/config.php';
 
+final class gdo_cronjob extends Application
+{
+	public function isCLI() { return true; }
+	public function isCronjob() { return true; }
+}
+
+new gdo_cronjob();
 CLI::setServerVars();
 Debug::init();
 Logger::init();
 Database::init();
 Trans::setISO('en');
 
-final class gdo_cronjob extends Application
-{
-    public function isCLI() { return true; }
-    public function isCronjob() { return true; }
-}
-
-new gdo_cronjob();
 /** @var $argv string[] **/
 $force = in_array('--force', $argv, true);
 Cronjob::run($force);
