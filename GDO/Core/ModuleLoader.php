@@ -20,16 +20,13 @@ final class ModuleLoader
 {
 	private static self $INSTANCE;
 
-	/**
-	 * @return ModuleLoader
-	 */
 	public static function instance() : self { return self::$INSTANCE; }
 	
 	/**
 	 * Base modules path, the modules folder.
-	 * @var string
 	 */
 	private string $path;
+	
 	public function __construct(string $path)
 	{
 		self::$INSTANCE = $this;
@@ -427,12 +424,8 @@ final class ModuleLoader
 	
 	/**
 	 * Instanciate a module from gdoVars/loaded data.
-	 * @param array $moduleData
-	 * @param bool $dirty
-	 * @throws GDO_Error
-	 * @return \GDO\Core\GDO_Module
 	 */
-	public static function instanciate(array $moduleData, bool $dirty = false) : GDO_Module
+	private static function instanciate(array $moduleData, bool $dirty = false) : GDO_Module
 	{
 		$name = $moduleData['module_name'];
 		$klass = "GDO\\$name\\Module_$name";
@@ -441,6 +434,7 @@ final class ModuleLoader
 		{
     		$instance = new $klass();
     		$moduleData['module_priority'] = $instance->priority;
+    		$moduleData['module_enabled'] = $dirty ? '0' : '1';
     		$instance->setGDOVars($moduleData, $dirty);
     		return $instance;
 		}
