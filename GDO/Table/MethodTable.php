@@ -8,6 +8,9 @@ use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_SearchField;
 use GDO\Core\GDT_Tuple;
+use GDO\Admin\Method\Users;
+use GDO\Admin\Method\Permissions;
+use GDO\Admin\Method\ViewPermission;
 
 /**
  * A method that displays a table from memory via ArrayResult.

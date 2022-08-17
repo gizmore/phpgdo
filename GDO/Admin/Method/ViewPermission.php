@@ -19,7 +19,7 @@ use GDO\UI\GDT_Button;
 /**
  * View all users with a permission.
  * 
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.2
  * @author gizmore
  */
@@ -28,6 +28,11 @@ class ViewPermission extends MethodQueryTable
 	use MethodAdmin;
 	
 	private GDO_Permission $permission;
+	
+	public function getMethodTitle() : string
+	{
+		return t('btn_permissions');
+	}
 	
 	public function getPermission() : ?string { return 'staff'; }
 

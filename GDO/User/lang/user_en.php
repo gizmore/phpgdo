@@ -5,7 +5,8 @@ return [
 	'gdo_session' => 'Session',
 	'gender' => 'Gender',
 	'profile_views' => 'Profile Views',
-	'about_me' => 'About Me',
+	'cfg_about_me' => 'About Me',
+	
 	
 	'enum_none' => 'not specified',
 	'enum_male' => 'male',

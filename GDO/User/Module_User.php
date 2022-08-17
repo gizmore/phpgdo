@@ -121,7 +121,7 @@ final class Module_User extends GDO_Module
 		$settings = [];
 		if ($this->cfgAboutMe())
 		{
-			$settings[] = GDT_Message::make('about_me')->label('about_me')->max(2048);
+			$settings[] = GDT_Message::make('about_me')->label('cfg_about_me')->max(2048);
 		}
 		return $settings;
 	}

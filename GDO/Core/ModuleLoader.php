@@ -492,6 +492,10 @@ final class ModuleLoader
 		    	{
 		    		echo "No database available yet...\n";
 		    	}
+		    	else
+		    	{
+		    		Application::$RESPONSE_CODE = 200;
+		    	}
 		    }
 		}
 		catch (\Throwable $e)

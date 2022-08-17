@@ -29,8 +29,10 @@ class Installer
 	 */
 	public static function installModules(array $modules) : bool
 	{
-		$isCLI = Application::$INSTANCE->isCLI();
-		$isInstall = Application::$INSTANCE->isInstall();
+		$app = Application::$INSTANCE;
+		$isCLI = $app->isCLI();
+		$isTest = $app->isUnitTests();
+		$isInstall = $app->isInstall();
 		
 		if ($isInstall && $isCLI)
 		{
@@ -62,7 +64,7 @@ class Installer
 			}
 			try
 			{
-				if ($isInstall && $isCLI)
+				if ( ($isInstall && $isCLI) || ($isTest) )
 				{
 					echo "Installing {$module->getName()}\n";
 					flush();
@@ -72,7 +74,7 @@ class Installer
 			catch (\Throwable $e)
 			{
 				$app = Application::$INSTANCE;
-				if ($app->isCLI())
+				if ( ($app->isCLI()) || ($app->isUnitTests()) )
 				{
 					echo Debug::backtraceException($e, false, "Cannot install {$module->getName()}");
 				}

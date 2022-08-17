@@ -5,7 +5,7 @@ return [
 	'gdo_session' => 'Sitzung',
 	'gender' => 'Geschlecht',
 	'profile_views' => 'Profiltreffer',
-	'about_me' => 'Über Mich',
+	'cfg_about_me' => 'Über Mich',
 	
 	'enum_none' => 'keine Angabe',
 	'enum_male' => 'Männlich',

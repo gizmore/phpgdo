@@ -179,6 +179,7 @@ final class Trans
 	{
 		if ($key !== 'err_db')
 		{
+			xdebug_break();
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
 		}

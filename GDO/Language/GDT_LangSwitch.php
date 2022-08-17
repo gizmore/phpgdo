@@ -16,6 +16,8 @@ final class GDT_LangSwitch extends GDT_Select
 {
     public function getDefaultName() : string { return '_lang'; }
     
+    public function defaultLabel() : self { return $this->label('language'); }
+    
     protected function __construct()
     {
         parent::__construct();

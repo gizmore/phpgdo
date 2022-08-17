@@ -29,6 +29,8 @@ class UserEdit extends MethodForm
 {
 	use MethodAdmin; # admin protection
 	
+	public function isTrivial() : bool { return false; }
+	
 	public function getMethodTitle() : string
 	{
 		return t('mt_admin_useredit', [$this->getUser()->renderUserName()]);

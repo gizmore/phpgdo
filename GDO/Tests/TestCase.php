@@ -114,20 +114,24 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
     
     /**
-     * @var GDO_Session[]
+     * @var GDO_Session[string]
      */
     protected array $sessions = [];
     
-    protected function session(GDO_User $user) : GDO_Session
+    protected function session(GDO_User $user) : ?GDO_Session
     {
-        $uid = $user->getID();
-        if (!isset($this->sessions[$uid]))
-        {
-            $this->sessions[$uid] = GDO_Session::blank();
-            $this->sessions[$uid]->setVar('sess_user', $user->getID());
-        }
-        GDO_Session::$INSTANCE = $this->sessions[$uid];
-        return $this->sessions[$uid];
+    	if (module_enabled('Session'))
+    	{
+	        $uid = $user->getID();
+	        if (!isset($this->sessions[$uid]))
+	        {
+	            $this->sessions[$uid] = GDO_Session::blank();
+	            $this->sessions[$uid]->setVar('sess_user', $user->getID());
+	        }
+	        GDO_Session::$INSTANCE = $this->sessions[$uid];
+	        return $this->sessions[$uid];
+    	}
+    	return null;
     }
 
     ###################

@@ -143,7 +143,11 @@ final class GDT_Redirect extends GDT
 	##############
 	public function renderCLI() : string
 	{
-		return t('gdt_redirect_to', [$this->href]);
+		if (isset($this->href))
+		{
+			return t('gdt_redirect_to', [$this->href]);
+		}
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function renderHTML() : string

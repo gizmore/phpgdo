@@ -8,6 +8,7 @@ use GDO\DB\Database;
 use function PHPUnit\Framework\assertTrue;
 use GDO\Admin\Method\ClearCache;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
+use GDO\Core\Application;
 
 /**
  * Install all available modules.
@@ -20,13 +21,16 @@ final class InstallAllModulesTest extends TestCase
 {
 	public function testInstallAllModules()
 	{
+		$code = Application::$RESPONSE_CODE;
 		$loader = ModuleLoader::instance();
 		$loader->loadModules(false, true, true);
 		$modules = $loader->getInstallableModules();
+		$code = Application::$RESPONSE_CODE;
 		Installer::installModules($modules);
+		$code = Application::$RESPONSE_CODE;
 		$this->assert200('Check if all modules can be installed.');
 		$installed = $loader->getEnabledModules();
-		assertGreaterThanOrEqual(7, count($installed), 'Test if installer utility works.');
+		assertGreaterThanOrEqual(4, count($installed), 'Test if installer utility works.');
 	}
 	
 	public function testWipeAllModules()

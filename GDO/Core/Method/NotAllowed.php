@@ -38,7 +38,10 @@ final class NotAllowed extends MethodPage
 	{
 		if (Module_Core::instance()->cfgMail403())
 		{
-			$this->send403Mails();
+			if (module_enabled('Mail'))
+			{
+				$this->send403Mails();
+			}
 		}
 	}
 	

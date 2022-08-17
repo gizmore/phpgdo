@@ -39,7 +39,10 @@ final class FileNotFound extends MethodPage
 	{
 		if (Module_Core::instance()->cfgMail404())
 		{
-			$this->send404Mails();
+			if (module_enabled('Mail'))
+			{
+				$this->send404Mails();
+			}
 		}
 	}
 	

@@ -140,7 +140,7 @@ class GDT_AntiCSRF extends GDT_String
 	    }
 	    
 	    # No session, no token
-	    if (!class_exists('GDO\\Session\\GDO_Session', false))
+	    if (!module_enabled('Session'))
 		{
 			return true;
 // 			return $this->error('err_session_required');
@@ -205,10 +205,13 @@ class GDT_AntiCSRF extends GDT_String
 	 */
 	public function onSubmitted() : void
 	{
-		$csrf = $this->loadCSRFTokens();
-		$value = $this->getValue();
-		unset($csrf[$value]);
-		$this->saveCSRFTokens($csrf);
+		if (module_enabled('Session'))
+		{
+			$csrf = $this->loadCSRFTokens();
+			$value = $this->getValue();
+			unset($csrf[$value]);
+			$this->saveCSRFTokens($csrf);
+		}
 	}
 	
 }
