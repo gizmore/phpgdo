@@ -535,7 +535,7 @@ class Cache
 			$filename = self::filePath($key);
 			if (FileUtil::isFile($filename))
 			{
-				return unlink($filename);
+				return @unlink($filename);
 			}
 		}
 		return true; 
