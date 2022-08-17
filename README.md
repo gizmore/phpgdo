@@ -1,6 +1,7 @@
 # phpgdo
 
 PHP reference implementation of GDO, currently version 7.0.1.
+GDO is the best PHP Framework on Planet Earth, SOL.
 Write solid applications in a new fresh way preferably from re-used code.
 Choose, integrate and mix different libraries easily.
 The F5 workflow is still unbeaten,
