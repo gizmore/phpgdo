@@ -16,6 +16,15 @@ class Application extends GDT
 {
 	use WithVerb;
 	use WithInstance;
+	
+	protected function __destruct()
+	{
+		parent::__destruct();
+		if (class_exists('GDO\\Core\\Logger', false))
+		{
+			Logger::flush();
+		}
+	}
 
 	################
 	### App Time ###

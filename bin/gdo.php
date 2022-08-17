@@ -11,6 +11,7 @@ use GDO\DB\Database;
 use GDO\Language\Trans;
 use GDO\Core\Application;
 use GDO\Core\GDT;
+use GDO\User\GDO_User;
 
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
@@ -37,6 +38,7 @@ $loader->loadModulesCache();
 $loader->initModules();
 define('GDO_CORE_STABLE', 1);
 CLI::setupUser();
+Logger::init(GDO_User::current()->renderUserName(), GDO_ERROR_LEVEL);
 # Shell
 if (!CLI::isCLI())
 {

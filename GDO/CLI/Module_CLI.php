@@ -9,7 +9,7 @@ use GDO\Core\Method;
  * CLI Specific code.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.4
  */
 final class Module_CLI extends GDO_Module

@@ -1,14 +1,16 @@
 # phpgdo
 
 PHP reference implementation of GDO, currently version 7.0.1.
-Write solid applications in a new fresh way from code.
+Write solid applications in a new fresh way preferably from re-used code.
 Choose, integrate and mix different libraries easily.
 The F5 workflow is still unbeaten,
 and coding can be fun again.
 Great production builds are done on the fly.
-Development mode always integrates the source from *all* libraries.
-Read more in the docs and
-[changelogs](./DOCS/GDO7_CHANGELOG.md).
+Development mode always includes the dev source from *all*  included libraries.
+Read more in the
+[DOCS](./DOCS)
+and
+[Changelog](./DOCS/GDO7_CHANGELOG.md).
 
 
 ## phpgdo: Installation
