@@ -290,6 +290,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 	}
 
 	ModuleLoader::instance()->reset()->loadModules(true, true, true);
+	ModuleLoader::instance()->initModules();
 	$git = \GDO\Core\ModuleProviders::GIT_PROVIDER;
 
 	if ($mode === 1)

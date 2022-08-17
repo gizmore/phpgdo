@@ -177,9 +177,9 @@ final class Trans
 	
 	private static function missing(string $key) : void
 	{
-		if ($key !== 'err_db')
+		if ($key !== 'err_db') # unit test init without lang
 		{
-			xdebug_break();
+// 			xdebug_break();
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
 		}
