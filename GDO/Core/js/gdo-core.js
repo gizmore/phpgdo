@@ -34,7 +34,7 @@ window.GDO.enterForm = function(form, event) {
 };
 
 window.GDO.triggerResize = function(time) {
-	time = time ? time : 2000;
+	time = time ? time : 1000;
 	setTimeout(
 		GDO.triggerEvent.bind(window, 'resize')
 		, time);
