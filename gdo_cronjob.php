@@ -21,8 +21,9 @@ require 'protected/config.php';
 
 final class gdo_cronjob extends Application
 {
-	public function isCLI() { return true; }
-	public function isCronjob() { return true; }
+	public function isCLI() : bool { return true; }
+	public function isCronjob() : bool { return true; }
+	
 }
 
 new gdo_cronjob();
