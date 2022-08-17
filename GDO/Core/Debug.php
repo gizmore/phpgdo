@@ -200,7 +200,7 @@ final class Debug
 	
 	public static function debugException(\Throwable $ex, bool $render=true) : string
 	{
-	    $app = Application::$INSTANCE;
+	    $app = Application::instance();
 	    $is_html = $app->isHTML() && (!$app->isUnitTests());
 	    $firstLine = sprintf("%s in %s Line %s",
 	    	$ex->getMessage(), $ex->getFile(), $ex->getLine());
