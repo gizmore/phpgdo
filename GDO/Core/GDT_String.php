@@ -251,6 +251,11 @@ class GDT_String extends GDT_DBField
 		return GDT_Template::php('Core', 'string_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
+	public function displayVar(string $var=null) : string
+	{
+		return $var === null ? GDT::EMPTY_STRING : html($var);
+	}
+	
 	public function plugVar() : string
 	{
 		return TextStyle::bold(

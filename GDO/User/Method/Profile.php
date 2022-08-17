@@ -10,6 +10,7 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
 use GDO\User\Module_User;
 use GDO\UI\GDT_Tooltip;
+use GDO\Core\GDT_String;
 
 /**
  * Show a user's profile.
@@ -61,6 +62,7 @@ final class Profile extends MethodCard
 		$card->creatorHeader('profile_user', 'profile_activity');
 		$card->title('mt_user_profile', [$user->renderUserName()]);
 		$modules = ModuleLoader::instance()->getEnabledModules();
+		$card->subtitle(GDT_String::make()->labelNone());
 		foreach ($modules as $module)
 		{
 			$this->createCardB($card, $module);
