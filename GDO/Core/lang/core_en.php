@@ -119,6 +119,7 @@ return [
 	'enum_bot' => 'Bot',
 	
 	# GDTs
+	'html' => 'HTML',
 	'format' => 'Format',
 	'ghost' => 'Ghost',
 	'guest' => 'Guest',

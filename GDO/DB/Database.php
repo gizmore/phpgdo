@@ -129,10 +129,10 @@ class Database
 				# This is more like a read because nothing is written to the disk.
 				$this->queryRead("SET NAMES UTF8");
 				$this->queryRead("SET time_zone = '+00:00'");
-				if (isset($this->db))
-				{
-					$this->useDatabase($this->db);
-				}
+// 				if (isset($this->db))
+// 				{
+// 					$this->useDatabase($this->db);
+// 				}
 				return $this->link;
 			}
 		}
@@ -247,10 +247,6 @@ class Database
 	###################
 	### Table cache ###
 	###################
-	/**
-	 * @param string $classname
-	 * @return GDO
-	 */
 	public static function tableS(string $classname, bool $initCache=true) : ?GDO
 	{
 		if (!isset(self::$TABLES[$classname]))
@@ -267,7 +263,6 @@ class Database
 
 		    # Always init a cache item.
 			$gdo->initCache();
-			
 // 			$gdo->setInited();
 		}
 		return self::$TABLES[$classname];

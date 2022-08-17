@@ -398,8 +398,8 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 		return ModuleLoader::instance()->getModule($moduleName);
 	}, array_keys($deps2));
 
-	$deps2 = Arrays::implodeHuman(array_keys($deps2));
-	echo "Installing modules {$deps2}.\n";
+// 	$deps2 = Arrays::implodeHuman(array_keys($deps2));
+// 	echo "Installing modules {$deps2}.\n";
 	Installer::installModules($modules);
 
 	Cache::flush();
@@ -846,6 +846,7 @@ elseif ($argv[1] === 'gizmore_setup')
 			$cmd = "cd GDO && git clone --recursive {$url}";
 			$output = [];
 			$return_var = 0;
+			echo "$cmd\n";
 			$result = exec($cmd, $output, $return_var);
 			if ($return_var !== 0)
 			{
@@ -854,9 +855,6 @@ elseif ($argv[1] === 'gizmore_setup')
 				]));
 				die(1);
 			}
-			// $lines = Process::exec($cmd);
-			echo "$cmd\n";
-			// var_dump($lines);
 		}
 
 		$dir = GDO_PATH . "GDO/{$moduleName}/.git";

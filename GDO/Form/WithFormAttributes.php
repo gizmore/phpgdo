@@ -31,6 +31,12 @@ trait WithFormAttributes
 	################
 	### Disabled ###
 	################
+	public function enabled(bool $enabled=true) : self
+	{
+		$this->writeable = $enabled;
+		return $this;
+	}
+	
 	public function disabled(bool $disabled=true) : self
 	{
 		$this->writeable = !$disabled;

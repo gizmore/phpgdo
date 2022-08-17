@@ -207,11 +207,9 @@ final class Logger
 	 * Log a message.
 	 * The core logging function.
 	 * Raw mode will not write any datestamps or IP/username.
-	 * @param string $filename short logname
-	 * @param string $message the message
 	 * format: $time, $ip, $username, $message
 	 */
-	public static function log($filename, $message, $logmode=0)
+	public static function log(string $filename, string $message, int $logmode=0)
 	{
 		# log it?
 		if (self::isEnabled($logmode))

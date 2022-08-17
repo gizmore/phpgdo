@@ -6,7 +6,7 @@ namespace GDO\Form\tpl;
 <?php if ($field->hasError()) : ?>
 <?=$field->renderError()?>
 <?php endif;?>
-<form<?=$field->htmlVerb()?><?=$field->htmlAction()?>>
+<form<?=$field->htmlVerb()?><?=$field->htmlAction()?><?=$field->htmlTarget()?>>
  <div class="gdt-form-inner">
 <?php if ($field->hasTitle() || $field->hasText()) : ?>
    <div class="gdt-form-text">

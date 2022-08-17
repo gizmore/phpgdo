@@ -259,4 +259,5 @@ echo $content; # asap
 #########################
 ### fire IPC recaches ###
 #########################
+Logger::flush();
 Cache::recacheHooks(); # we have time to recache now.
