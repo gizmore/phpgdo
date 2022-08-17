@@ -70,7 +70,7 @@ class GDT_Card extends GDT
 	public function render() : string
 	{
 	    $app = Application::$INSTANCE;
-	    if ($app->isCLI())
+	    if ($app->mode === GDT::RENDER_CLI)
 	    {
 	        return $this->renderCLI();
 	    }

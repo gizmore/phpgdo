@@ -12,6 +12,16 @@ use GDO\Core\GDT_CreatedAt;
  */
 final class GDO_Profile extends GDO
 {
+	public function gdoDTO() : bool
+	{
+		return true;
+	}
+	
+	public function isTestable() : bool
+	{
+		return false;
+	}
+	
 	public function gdoColumns(): array
 	{
 		return [

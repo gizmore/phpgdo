@@ -142,6 +142,12 @@ abstract class GDO extends GDT
 	 */
 	public function gdoAbstract() : bool { return false; }
 	
+	/**
+	 * Indicate that this GDO is only to transfer structured data.
+	 * It is not abstract, yet still not persisted.
+	 */
+	public function gdoDTO() : bool { return false; }
+	
 	################
 	### Escaping ###
 	################
@@ -1152,6 +1158,7 @@ abstract class GDO extends GDT
 	public static function getBlankData(array $initial = null) : array
 	{
 		$table = self::table();
+		
 		$gdoVars = [];
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{

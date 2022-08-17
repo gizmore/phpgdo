@@ -19,11 +19,16 @@ use GDO\Session\GDO_Session;
 
 /**
  * Abstract baseclass for all methods.
+ * Checks permission.
+ * Sets up SEO method meta data.
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.1
+ * @see GDT
+ * @see GDO
  * @see WithParameters
+ * @see WithEnvironment
  */
 abstract class Method #extends GDT
 {
