@@ -26,7 +26,7 @@ final class gdo_cronjob extends Application
 	
 }
 
-new gdo_cronjob();
+gdo_cronjob::instance();
 CLI::setServerVars();
 Debug::init();
 Logger::init();
