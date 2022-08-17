@@ -72,7 +72,7 @@ final class Timezone extends MethodForm
             }
             else
             {
-                if (class_exists('\\GDO\\Session\\GDO_Session', false))
+                if (module_enabled('Session'))
                 {
                     GDO_Session::set('timezone', $new);
                 }

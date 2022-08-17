@@ -464,16 +464,22 @@ final class ModuleLoader
 		{
 		    if (GDO_DB_ENABLED)
 		    {
-    		    $query = GDO_ModuleVar::table()->select('module_name, mv_name, mv_value')->joinObject('mv_module');
-        		if ($singleModuleName)
-        		{
-        			$query->where('module_name='.quote($singleModuleName));
-        		}
-    		    $result = $query->exec();
-    		    
+		    	if (!($data = Cache::fileGetSerialized('gdo_modulevars')))
+		    	{
+		    		$query = GDO_ModuleVar::table()->select('module_name, mv_name, mv_value')->joinObject('mv_module');
+		    		if ($singleModuleName)
+		    		{
+		    			$query->where('module_name='.quote($singleModuleName));
+		    		}
+		    		$data = $query->exec()->fetchAllRows();
+		    		Cache::fileSetSerialized('gdo_modulevars', $data);
+		    	}
+		    	
         		# Assign them to the modules
-        		while ($row = $result->fetchRow())
-        		{
+		    	foreach ($data as $row)
+		    	{
+//         		while ($row = $result->fetchRow())
+//         		{
         		    /** @var $module \GDO\Core\GDO_Module **/
         			if ($module = @$this->modules[strtolower($row[0])])
         			{

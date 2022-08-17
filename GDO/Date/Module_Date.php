@@ -96,10 +96,14 @@ final class Module_Date extends GDO_Module
     {
         if ($this->cfgSidebarSelect())
         {
-            if (!GDO_User::current()->hasTimezone())
+        	$user = GDO_User::current();
+            if (!$user->hasTimezone())
             {
-                GDT_Page::instance()->leftBar()->addField(
-                    Timezone::make()->getForm()->slim());
+            	if ($user->isPersisted() || module_enabled('Session'))
+            	{
+	                GDT_Page::instance()->leftBar()->addField(
+	                    Timezone::make()->getForm()->slim());
+            	}
             }
         }
     }
