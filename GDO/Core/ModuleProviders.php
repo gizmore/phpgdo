@@ -266,7 +266,7 @@ gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links
 		'JQueryAutocomplete' => ['JQuery'],
 		'Language' => [],
 		'Licenses' => [],
-		'Links' => ['Votes', 'Tag', 'Cronjob'],
+		'Links' => ['Votes', 'Tags', 'Cronjob'],
 		'LinkUUp' => ['Account', 'Websocket', 'Comments', 'Login', 'Recovery', 'Register', 'Avatar', 'Gallery', 'Admin', 'Contact', 'Facebook', 'Instagram', 'OpenTimes', 'Friends', 'Addres
 s', 'Maps', 'QRCode', 'Bootstrap5Theme', 'CORS', 'JPGraph', 'Markdown', 'News', 'ActivationAlert', 'Perf', 'Birthday', 'Backup'],
 		'Login' => ['Session'],
