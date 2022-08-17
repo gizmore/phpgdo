@@ -442,7 +442,7 @@ class GDO_Module extends GDO
 	public function getConfigMemcache() : array
 	{
 	    $key = $this->configCacheKey();
-	    if (false === ($cache = Cache::get($key)))
+	    if (null === ($cache = Cache::get($key)))
 	    {
 	        $cache = $this->buildConfigCache();
 	        Cache::set($key, $cache);

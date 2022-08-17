@@ -138,7 +138,7 @@ class Config
 		if (!defined('GDO_DB_DEBUG')) define('GDO_DB_DEBUG', 0);
 		# Cache
 		if (!defined('GDO_FILECACHE')) define('GDO_FILECACHE', false);
-		if (!defined('GDO_MEMCACHE')) define('GDO_MEMCACHE', false);
+		if (!defined('GDO_MEMCACHE')) define('GDO_MEMCACHE', 2);
 		if (!defined('GDO_MEMCACHE_HOST')) define('GDO_MEMCACHE_HOST', '127.0.0.1');
 		if (!defined('GDO_MEMCACHE_PORT')) define('GDO_MEMCACHE_PORT', 61221);
 		if (!defined('GDO_MEMCACHE_TTL')) define('GDO_MEMCACHE_TTL', 1800);
@@ -209,7 +209,7 @@ class Config
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
 			GDT_Checkbox::make('filecache')->initialValue(GDO_FILECACHE),
-			GDT_Checkbox::make('memcache')->initialValue(GDO_MEMCACHE),
+			GDT_TinyInt::make('memcache')->unsigned()->min(0)->max(2)->initialValue(GDO_MEMCACHE),
 			GDT_String::make('memcache_host')->initialValue(GDO_MEMCACHE_HOST)->notNull(),
 			GDT_Port::make('memcache_port')->initialValue(GDO_MEMCACHE_PORT)->notNull(),
 			GDT_Int::make('memcache_ttl')->unsigned()->initialValue(GDO_MEMCACHE_TTL)->notNull(),

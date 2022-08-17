@@ -2,6 +2,8 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Page;
+use function GDO\Perf\xdebug_get_function_count;
+use GDO\DB\Database;
 
 /**
  * Application runtime data.
@@ -46,12 +48,19 @@ class Application extends GDT
 
 	/**
 	 * Perf headers as cheap as possible.
+	 * Query count, memory usage, timing and call count.
 	 */
 	public function timingHeader()
 	{
-		hdr(sprintf('X-GDO-TIME: %.01fms', $this->getRuntime() / 1000.0));
-		hdr(sprintf('X-GDO-MEMORY-MAX: %s', memory_get_peak_usage(false)));
-		hdr(sprintf('X-GDO-MEMORY-REAL: %s', memory_get_peak_usage(true)));
+		$m1 = memory_get_peak_usage(true);
+		$m2 = memory_get_peak_usage(false);
+		hdr(sprintf('X-GDO-DB: %d', Database::$QUERIES));
+		hdr(sprintf('X-GDO-MEM: %s', max([$m1, $m2])));
+		hdr(sprintf('X-GDO-TIME: %.01fms', $this->getRuntime() * 1000.0));
+		if (function_exists('xdebug_get_function_count'))
+		{
+			hdr(sprintf('X-GDO-FUNC: %d', \xdebug_get_function_count()));
+		}
 	}
 	
 	#################

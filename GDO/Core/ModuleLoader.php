@@ -166,7 +166,7 @@ final class ModuleLoader
 	 */
 	public function loadModulesCache() : array
 	{
-		if (false === ($cache = Cache::get('gdo_modules')))
+		if (null === ($cache = Cache::get('gdo_modules')))
 		{
 			$cache = $this->loadModulesA();
 			Cache::set('gdo_modules', $cache);

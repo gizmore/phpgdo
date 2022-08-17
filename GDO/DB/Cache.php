@@ -13,71 +13,144 @@ use GDO\Core\Application;
  * It also saves a bit mem.
  * Of course this comes with a slight overhead.
  * As GDOv7 was written from scratch with this in mind, the overhead is quite small.
- * 
+ *
  * Suprising is the additional use of memcached (did not plan this) which adds a second layer of caching.
- * 
+ *
  * There are a few global memcached keys scattered across the application, fetching all rows or similiar stuff.
  * Those GDOs usually dont use memcached on a per row basis and gdoMemcached is false.
- * 
+ *
  * gdo_modules
  * gdo_country
  * gdo_language
- * 
+ *
  * The other memcached keys work on a per row basis with table_name_id as key.
- * 
+ *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  */
 class Cache
 {
-	#################
-	### Memcached ###
-	#################
-	private static \Memcached $MEMCACHED; # Memcached server
-	
+	# ################
+	# ## Memcached ###
+	# ################
+	private static \Memcached $MEMCACHED;
+
 	/**
 	 * This holds the GDO that need a recache after the method has been executed.
 	 * @var GDO[]
 	 */
 	private static array $RECACHING = [];
 
-	public array $pkNames;   # Primary Key Column Names
-    public array $pkColumns; # Primary Key Columns
-    public string $tableName; # Cached transformed table name
+	# Primary Key Column Names
+	public array $pkNames;
 
-	#################
-	### Memcached ###
-	#################
-    /**
-     * @var GDO[] All rows.
-     * @see GDO::allCached()
-     */
-    public array $all;
-    public int $allExpire; # Expiration time for allCached()
-    
-    /**
-	 * @TODO no result should return null?
-	 * @param string $key
-	 * @return boolean
+	# Primary Key Columns
+	public array $pkColumns;
+
+	# Cached transformed table name
+	public string $tableName;
+
+
+	# ################
+	# ## Memcached ###
+	# ################
+	/**
+	 *
+	 * @var GDO[] All rows.
+	 * @see GDO::allCached()
 	 */
-    public static function get($key)
-    {
-    	return GDO_MEMCACHE ? 
-    		self::$MEMCACHED->get(MEMCACHEPREFIX.$key) :
-    		false;
-    }
+	public array $all;
 
-    /**
-     * Set a memcached item.
-     * @param string $key
-     * @param mixed $value
-     * @param integer $expire
-     */
-    public static function set($key, $value, $expire=GDO_MEMCACHE_TTL) { if (GDO_MEMCACHE) self::$MEMCACHED->set(MEMCACHEPREFIX.$key, $value, $expire); }
-    public static function replace($key, $value, $expire=null) { if (GDO_MEMCACHE) self::$MEMCACHED->replace(MEMCACHEPREFIX.$key, $value, $expire); }
-    public static function remove($key) { if (GDO_MEMCACHE) self::$MEMCACHED->delete(MEMCACHEPREFIX.$key); }
-	public static function flush() { if (GDO_MEMCACHE) self::$MEMCACHED->flush(); }
+	/**
+	 * Expire time in seconds for allCached().
+	 */
+	public int $allExpire;
+
+	public static function get(string $key)
+	{
+		switch (GDO_MEMCACHE)
+		{
+			case 1:
+				return defined('GDO_MEMCACHED_FALLBACK') ? null : self::$MEMCACHED->get(MEMCACHEPREFIX . $key);
+			case 2:
+				return self::fileGetSerialized($key);
+		}
+	}
+
+	/**
+	 * Set a memcached item.
+	 */
+	public static function set(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
+	{
+		switch (GDO_MEMCACHE)
+		{
+			case 1:
+				if ( !defined('GDO_MEMCACHED_FALLBACK'))
+				{
+					self::$MEMCACHED->set(MEMCACHEPREFIX . $key, $value, $expire);
+				}
+				break;
+			case 2:
+				self::fileSetSerialized($key, $value);
+				break;
+		}
+	}
+
+	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL)
+	{
+		switch (GDO_MEMCACHE)
+		{
+			case 1:
+				if ( !defined('GDO_MEMCACHED_FALLBACK'))
+				{
+					self::$MEMCACHED->replace(MEMCACHEPREFIX . $key, $value, $expire);
+				}
+				break;
+			case 2:
+				self::fileSetSerialized($key, $value);
+				break;
+		}
+	}
+
+	/**
+	 * Remove a single memcached variable.
+	 */
+	public static function remove(string $key): void
+	{
+		switch (GDO_MEMCACHE)
+		{
+			case 1:
+				if ( !defined('GDO_MEMCACHED_FALLBACK'))
+				{
+					self::$MEMCACHED->delete(MEMCACHEPREFIX . $key);
+				}
+				break;
+			case 2:
+				self::fileFlush($key);
+				break;
+		}
+	}
+
+	/**
+	 * Clear whole cache.
+	 */
+	public static function flush(): void
+	{
+		switch (GDO_MEMCACHE)
+		{
+			case 1:
+				if ( !defined('GDO_MEMCACHED_FALLBACK'))
+				{
+					self::$MEMCACHED->flush();
+				}
+				break;
+			case 2:
+				self::fileFlush();
+				break;
+		}
+	}
+
 	public static function init()
 	{
 		if (GDO_MEMCACHE)
@@ -87,31 +160,32 @@ class Cache
 		}
 		if (GDO_FILECACHE)
 		{
-		    FileUtil::createDir(self::filePath());
+			FileUtil::createDir(self::filePath());
 		}
 	}
-	
-	#########################
-	### GDO Process Cache ###
-	#########################
+
+	# ########################
+	# ## GDO Process Cache ###
+	# ########################
 	/**
 	 * The table object is fine to keep clean?
 	 */
 	private GDO $table;
-	
+
 	/**
-	 * @var GDO
+	 * Always have a spare copy for analyzing.
+	 * Create a new dummy when a row is fetched as object.
 	 */
 	private GDO $dummy;
-	
+
 	/**
 	 * Full classname
-	 * @var string
 	 */
 	private string $klass;
-	
+
 	/**
 	 * The single identity GDO cache
+	 *
 	 * @var GDO[]
 	 */
 	public array $cache = [];
@@ -122,41 +196,44 @@ class Cache
 		$this->klass = get_class($gdo);
 		$this->tableName = strtolower($gdo->gdoShortName());
 	}
-	
-	public static function recacheHooks()
+
+	public static function recacheHooks(): void
 	{
 		if (GDO_IPC && Application::$INSTANCE->isWebServer())
 		{
-            foreach (self::$RECACHING as $gdo)
-            {
-                GDT_Hook::callWithIPC('CacheInvalidate', $gdo->table()->cache->klass, $gdo->getID());
-            }
+			foreach (self::$RECACHING as $gdo)
+			{
+				GDT_Hook::callWithIPC('CacheInvalidate', $gdo->table()->cache->klass, $gdo->getID());
+			}
 		}
 	}
 
-	public function getDummy() : GDO
+	public function getDummy(): GDO
 	{
-	    return isset($this->dummy) ? $this->dummy : $this->newDummy();
+		return isset($this->dummy) ? $this->dummy : $this->newDummy();
 	}
-	
-	public function getNewDummy(array $blankVars=null) : GDO
+
+	public function getNewDummy(array $blankVars = null): GDO
 	{
-		return call_user_func([$this->klass, 'blank'], $blankVars);
+		return call_user_func([
+			$this->klass,
+			'blank'
+		], $blankVars);
 	}
-	
-	private function newDummy()
+
+	private function newDummy(): GDO
 	{
 		$this->dummy = new $this->klass();
 		return $this->dummy;
 	}
-	
+
 	/**
 	 * Try GDO Cache and Memcached.
 	 */
-	public function findCached(string...$ids) : ?GDO
+	public function findCached(string ...$ids): ?GDO
 	{
 		$id = implode(':', $ids);
-		if (!isset($this->cache[$id]))
+		if ( !isset($this->cache[$id]))
 		{
 			if ($mcached = self::get($this->tableName . $id))
 			{
@@ -164,27 +241,59 @@ class Cache
 			}
 			else
 			{
-			    return null;
+				return null;
 			}
 		}
 		return $this->cache[$id];
 	}
-	
-	public function hasID($id) : bool
+
+	/**
+	 * Try GDO ALL Cache for getBy().
+	 * Try GDO Process Cache for getBy().
+	 *
+	 * @since 7.0.1
+	 */
+	public function getCachedBy(string $key, string $var): ?GDO
+	{
+		if (isset($this->all))
+		{
+			foreach ($this->all as $gdo)
+			{
+				if ($gdo->gdoVar($key) === $var)
+				{
+					return $gdo;
+				}
+			}
+		}
+		if (isset($this->cache))
+		{
+			foreach ($this->cache as $gdo)
+			{
+				if ($gdo->gdoVar($key) === $var)
+				{
+					return $gdo;
+				}
+			}
+		}
+		return null;
+	}
+
+	public function hasID(string $id): bool
 	{
 		return isset($this->cache[$id]);
 	}
-	
+
 	/**
 	 * Only GDO Cache / No memcached initializer.
+	 *
 	 * @param array $assoc
 	 * @return GDO
 	 */
-	public function initCached(array $assoc, bool $useCache=true) : GDO
+	public function initCached(array $assoc, bool $useCache = true): GDO
 	{
 		$this->getDummy()->setGDOVars($assoc);
 		$key = $this->dummy->getID();
-		if (!isset($this->cache[$key]))
+		if ( !isset($this->cache[$key]))
 		{
 			$this->cache[$key] = (new $this->klass())->setGDOVars($assoc)->setPersisted();
 		}
@@ -194,29 +303,29 @@ class Cache
 		}
 		return $this->cache[$key];
 	}
-	
-	public function clearCache() : void
+
+	public function clearCache(): void
 	{
-	    unset($this->all);
-	    $this->cache = [];
-	    $this->flush();
+		unset($this->all);
+		$this->cache = [];
+		$this->flush();
 	}
-	
-	public function recache(GDO $object) : GDO
+
+	public function recache(GDO $object): GDO
 	{
-		if (!$object->isPersisted())
+		if ( !$object->isPersisted())
 		{
 			return $object;
 		}
-			
+
 		$back = $object;
-		
+
 		# GDO cache
 		if ($back->gdoCached())
 		{
-    		$id = $object->getID();
+			$id = $object->getID();
 
-    		# GDO single cache
+			# GDO single cache
 			if (isset($this->cache[$id]))
 			{
 				$old = $this->cache[$id];
@@ -228,64 +337,62 @@ class Cache
 				$this->cache[$id] = $back;
 			}
 		}
-		
+
 		# Memcached
 		if (GDO_MEMCACHE && $back->memCached())
 		{
-		    self::replace($back->gkey(), $back, GDO_MEMCACHE_TTL);
+			self::replace($back->gkey(), $back, GDO_MEMCACHE_TTL);
 		}
 
-	    # Mark for recache
+		# Mark for recache
 		if ($back->gdoCached())
 		{
-		    if (isset($back->recache))
-    	    {
-    	        self::$RECACHING[] = $back->recaching();
-    	    }
+			if (isset($back->recache))
+			{
+				self::$RECACHING[] = $back->recaching();
+			}
 		}
-		
+
 		$back->tempReset();
-		
+
 		return $back;
 	}
-	
+
 	public function uncache(GDO $object)
 	{
-	    # Mark for recache
-	    if ( (!isset($object->recache)) && ($object->gdoCached()) )
-	    {
-	        self::$RECACHING[] = $object->recaching();
-	    }
-	    
-	    $id = $object->getID();
-	    unset($this->cache[$id]);
+		# Mark for recache
+		if (( !isset($object->recache)) && ($object->gdoCached()))
+		{
+			self::$RECACHING[] = $object->recaching();
+		}
+
+		$id = $object->getID();
+		unset($this->cache[$id]);
 
 		if (GDO_MEMCACHE && $object->memCached())
 		{
-    		self::remove($object->gkey());
+			self::remove($object->gkey());
 		}
 	}
-	
+
 	/**
 	 * memcached + gdo cache initializer
-	 * @param array $assoc
-	 * @return GDO
 	 */
-	public function initGDOMemcached(array $assoc, $useCache=true)
+	public function initGDOMemcached(array $assoc, bool $useCache = true): GDO
 	{
 		$this->getDummy()->setGDOVars($assoc);
 		$key = $this->dummy->getID();
-		if (!isset($this->cache[$key]))
+		if ( !isset($this->cache[$key]))
 		{
 			$gkey = $this->dummy->gkey();
-			if (false === ($mcached = self::get($gkey)))
+			if (null === ($mcached = self::get($gkey)))
 			{
 				$mcached = $this->dummy->setGDOVars($assoc)->setPersisted();
 				if (GDO_MEMCACHE)
 				{
 					self::set($gkey, $mcached, GDO_MEMCACHE_TTL);
 				}
-    			$this->newDummy();
+				$this->newDummy();
 			}
 			$this->cache[$key] = $mcached;
 		}
@@ -295,26 +402,23 @@ class Cache
 		}
 		return $this->cache[$key];
 	}
-	
+
 	/**
 	 * Check if the parameter is the GDO table object.
 	 */
-	public function isTable(GDO $gdo) : bool
+	public function isTable(GDO $gdo): bool
 	{
 		return $gdo === $this->table;
 	}
-	
-	##################
-	### File cache ###
-	##################
+
+	# #################
+	# ## File cache ###
+	# #################
 	/**
 	 * Store an item in a file cash.
-	 * You can use self::fileSet() instead, if you only want to cache a single string.
-	 * @param string $key
-	 * @param mixed $value
-	 * @return boolean
+	 * You can use self::fileSet() instead, if you only want to cache a string.
 	 */
-	public static function fileSetSerialized($key, $value)
+	public static function fileSetSerialized(string $key, $value): bool
 	{
 		if (GDO_FILECACHE)
 		{
@@ -323,124 +427,135 @@ class Cache
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Put cached content on the file system.
-	 * @param string $key
-	 * @param string $content
-	 * @return boolean
 	 */
-	public static function fileSet($key, $content)
+	public static function fileSet(string $key, string $content): bool
 	{
-	    if (GDO_FILECACHE)
-	    {
-		    $path = self::filePath($key);
-		    FileUtil::createDir(dirname($path));
-		    return file_put_contents($path, $content);
-	    }
-        return false;
+		if (GDO_FILECACHE)
+		{
+			$path = self::filePath($key);
+			FileUtil::createDir(dirname($path));
+			return file_put_contents($path, $content) !== false;
+		}
+		return false;
 	}
-	
+
 	/**
 	 * Check if we have a recent cache for a key.
 	 */
-	public static function fileHas(string $key, int $expire=GDO_MEMCACHE_TTL) : bool
+	public static function fileHas(string $key, int $expire = GDO_MEMCACHE_TTL): bool
 	{
-	    if (!GDO_FILECACHE)
-	    {
-	        return false;
-	    }
-	    $path = self::filePath($key);
-	    if (!file_exists($path))
-	    {
-	        return false;
-	    }
-	    $time = filemtime($path);
-	    if ( (Application::$TIME - $time) > $expire)
-	    {
-	        unlink($path);
-	        return false;
-	    }
-	    return true;
+		if ( !GDO_FILECACHE)
+		{
+			return false;
+		}
+		$path = self::filePath($key);
+		if ( !file_exists($path))
+		{
+			return false;
+		}
+		$time = filemtime($path);
+		if ((Application::$TIME - $time) > $expire)
+		{
+			unlink($path);
+			return false;
+		}
+		return true;
 	}
 
 	/**
 	 * Get a value from file cache and de-serialize.
-	 * @param string $key
-	 * @param string $expire
-	 * @return array
 	 */
-	public static function fileGetSerialized($key, $expire=GDO_MEMCACHE_TTL)
+	public static function fileGetSerialized(string $key, int $expire = GDO_MEMCACHE_TTL)
 	{
 		if ($str = self::fileGet($key, $expire))
 		{
 			return unserialize($str);
 		}
-		return false;
+		return null;
 	}
-	
+
 	/**
 	 * Get cached content from the file system.
-	 * @param string $key
-	 * @param int $expire
-	 * @return string|boolean
 	 */
-	public static function fileGet(string $key, int $expire=GDO_MEMCACHE_TTL) : ?string
+	public static function fileGet(string $key, int $expire = GDO_MEMCACHE_TTL): ?string
 	{
-	    if (self::fileHas($key, $expire))
-	    {
-		    $path = self::filePath($key);
-	    	return file_get_contents($path);;
-	    }
-	    return null;
+		if (self::fileHas($key, $expire))
+		{
+			$path = self::filePath($key);
+			return file_get_contents($path);
+			;
+		}
+		return null;
 	}
-	
+
 	/**
 	 * Flush the whole or part of the filecache.
-	 * @param string|null $key
-	 * @return boolean
 	 */
-	public static function fileFlush(string $key=null) : bool
+	public static function fileFlush(string $key = null): bool
 	{
-	    if ($key === null)
-	    {
-	    	return
-	    		FileUtil::removeDir(GDO_TEMP_PATH.'cache/') &&
-	    		FileUtil::createDir(GDO_TEMP_PATH.'cache/');
-	    }
-	    else
-	    {
-	        return unlink(self::filePath($key));
-	    }
+		if ($key === null)
+		{
+			return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/') && FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
+		}
+		else
+		{
+			return unlink(self::filePath($key));
+		}
 	}
-	
+
 	/**
 	 * Get the path of a filecache entry.
-	 * @param string $key
-	 * @return string
 	 */
-	public static function filePath(string $key='') : string
+	public static function filePath(string $key = ''): string
 	{
-	    $domain = GDO_DOMAIN;
-	    $version = Module_Core::GDO_REVISION;
-	    return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}";
+		$domain = GDO_DOMAIN;
+		$version = Module_Core::GDO_REVISION;
+		$key = self::fileKey($key);
+		return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}";
 	}
-	
+
+	private static function fileKey(string $key): string
+	{
+		return str_replace([
+			'"',
+			'/'
+		], [
+			'_',
+			'_'
+		], $key);
+	}
+
 }
 
-# No memcached stub shim so it won't crash.
-if (!class_exists('Memcached', false))
+# ###########
+# ## SHIM ###
+# ###########
+#
+# Indicate fallback required.
+#
+if ( !class_exists('Memcached', false))
 {
-	require 'Memcached.php';
+	define('GDO_MEMCACHE_FALLBACK', true);
 }
 
-# Dynamic poisonable prefix
-define('MEMCACHEPREFIX', GDO_DOMAIN.Module_Core::GDO_REVISION);
+#
+# Dynamic poisonable prefix.
+#
+define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
 
-# Default filecache config
-if (!defined('GDO_FILECACHE'))
+#
+# Default Cache config.
+#
+if ( !defined('GDO_FILECACHE'))
 {
-    define('GDO_FILECACHE', 1);
+	define('GDO_FILECACHE', 1);
+}
+if ( !defined('GDO_MEMCACHE'))
+{
+	define('GDO_MEMCACHE', 2);
 }
 
 define('GDO_TEMP_PATH', GDO_PATH . (Application::$INSTANCE->isUnitTests() ? 'temp_test/' : 'temp/'));

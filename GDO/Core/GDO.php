@@ -1246,7 +1246,16 @@ abstract class GDO extends GDT
 	 */
 	public static function getBy(string $key, string $var) : ?self
 	{
+		if ($gdo = self::getCachedBy($key, $var))
+		{
+			return $gdo;
+		}
 		return self::table()->getWhere($key . '=' . self::quoteS($var));
+	}
+	
+	private static function getCachedBy(string $key, string $var) : ?self
+	{
+		return self::table()->cache->getCachedBy($key, $var);
 	}
 	
 	/**
@@ -1501,7 +1510,7 @@ abstract class GDO extends GDT
 		{
 			# Memcached
 			$key = $this->cacheAllKey();
-			if (false === ($all = Cache::get($key)))
+			if (null === ($all = Cache::get($key)))
 			{
 				$all = $this->select()->order($order)->exec()->fetchAllArray2dObject(null, $json);
 				Cache::set($key, $all);

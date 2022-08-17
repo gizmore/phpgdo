@@ -61,6 +61,8 @@ Just kidding *:)*
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
+ - Memcached now does a fallback to filecache API, if config.php GDO_MEMCACHED ist set to 2. GDO_MEMCACHED is now an INT from 0-2.
+
  - New Account settings with all module settings on one page.
 
  - New [GDT_UserType](../GDO/User/GDT_UserType.php), "link", to link various input sources together.

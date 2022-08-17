@@ -32,17 +32,20 @@ final class FileUtil
      */
     public static function isFile(string $filename) : bool
     {
-    	return is_file($filename); # && is_readable($filename);
+    	return is_file($filename) && is_readable($filename);
 #    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
     }
 
-	public static function createDir(string $path) : bool
+	public static function createDir(string $path, bool $throw=true) : bool
 	{
 		if (self::isDir($path))
 		{
 			if (!is_writeable($path))
 			{
-				throw new GDO_Error('err_cannot_write', [html($path)]);
+				if ($throw)
+				{
+					throw new GDO_Error('err_cannot_write', [html($path)]);
+				}
 				return false;
 			}
 			return true;
