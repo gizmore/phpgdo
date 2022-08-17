@@ -39,7 +39,7 @@ final class SeoProxy extends Method
 		
 		# Method
 		$me = array_shift($args);
-		$method = $module->getMethodByName($me);
+		$method = $module->getMethodByName($me, false);
 		if (!$method)
 		{
 // 			$_REQUEST['url'] = $url; # and a step back for 404 url :)
