@@ -29,7 +29,6 @@ use GDO\Core\GDT_Expression;
 use GDO\Util\Arrays;
 use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Method;
-use GDO\CLI\Process;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -74,7 +73,7 @@ function printUsage(int $code = 1)
 	echo "php $exe systemtest - To run the installer system test.\n";
 	echo "php $exe configure [<config.php>] - To generate a protected/config.php.\n";
 	echo "php $exe test [<config.php>] - To test your protected/config.php\n";
-	echo "php $exe admin <username> <password> [<email>] - to (re)set an admin account\n";
+	echo "php $exe admin <username> <password> - to (re)set an admin account\n";
 	echo "php $exe cronjob - To print cronjob instructions\n";
 	echo "php $exe secure - To secure your installation after install.\n";
 	echo "\n--- Modules ---\n";
@@ -410,7 +409,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 
 elseif ($argv[1] === 'admin')
 {
-	if (($argc !== 4) && ($argc !== 5))
+	if ($argc !== 4)
 	{
 		printUsage();
 	}
@@ -423,17 +422,12 @@ elseif ($argv[1] === 'admin')
 		GDT_Hook::callWithIPC('UserActivated', $user, null);
 	}
 	$user->saveVar('user_password', BCrypt::create($argv[3])->__toString());
-	if ($argc === 5)
-	{
-		$user->saveVar('user_email', $argv[4]);
-	}
 	$user->saveVar('user_deleted', null);
 	$user->saveVar('user_deletor', null);
 	GDO_UserPermission::grant($user, 'admin');
 	GDO_UserPermission::grant($user, 'staff');
 	GDO_UserPermission::grant($user, 'cronjob');
 	$user->changedPermissions();
-	$user->recache();
 	echo t('msg_admin_created', [
 		$argv[2]
 	]) . "\n";
@@ -582,7 +576,7 @@ elseif ($argv[1] === 'config')
 			echo PHP_EOL;
 			die(1);
 		}
-		$moduleVar = GDO_ModuleVar::createModuleVar($module, $gdt);
+		GDO_ModuleVar::createModuleVar($module, $gdt);
 		echo t('msg_changed_config',
 			[
 				$gdt->renderLabel(),
@@ -607,13 +601,16 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 		}
 	}
 
+	$isall = strpos($argv[1], '_all') !== false;
+	$isssh = strpos($argv[1], '_ssh') !== false;
+
 	$loader = ModuleLoader::instance();
 
 	$loader->loadModules(false, true, true);
 
 	# Get all dependencies
 	$cd = 0;
-	if ($argv[1] === 'provide_all')
+	if ($isall)
 	{
 		$deps = [
 			'Core'
@@ -706,7 +703,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 						die(1);
 					}
 				}
-				$url = ModuleProviders::getGitUrl($module, $n, stripos(argv[1], '_ssh') !== false);
+				$url = ModuleProviders::getGitUrl($module, $n, $isssh);
 				$module = ModuleProviders::getCleanModuleName($module);
 				$cmd = "cd GDO && git clone --recursive {$url} {$module}";
 				echo $cmd . "\n";
@@ -745,7 +742,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 		$r = $r ? $r : 'y';
 		if (($r[0] === 'y') || ($r[0] === 'Y'))
 		{
-			if (($argv[1] === 'provide_all') || ($argv[1] === 'provide_all_ssh'))
+			if ($isall)
 			{
 				system("php gdo_adm.php install_all");
 			}
@@ -828,9 +825,19 @@ elseif ($argv[1] === 'gizmore_setup')
 			echo "Cloning provider {$provider}.\n";
 			$url = ModuleProviders::getGitUrl($moduleName, $i + 1, true);
 			$cmd = "cd GDO && git clone --recursive {$url}";
-// 			$lines = Process::exec($cmd);
+			$output = [];
+			$return_var = 0;
+			$result = exec($cmd, $output, $return_var);
+			if ($return_var !== 0)
+			{
+				CLI::error(t('err_clone_url', [
+					$url
+				]));
+				die(1);
+			}
+			// $lines = Process::exec($cmd);
 			echo "$cmd\n";
-// 			var_dump($lines);
+			// var_dump($lines);
 		}
 
 		$dir = GDO_PATH . "GDO/{$moduleName}/.git";

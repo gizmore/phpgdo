@@ -95,6 +95,11 @@ final class CLI
     	return $html;
     }
     
+    public static function error(string $s) : void
+    {
+    	echo self::red(self::bold($s)) . "\n";
+    }
+    
     public static function red(string $s) : string { return Color::red($s); }
     public static function green(string $s) : string { return Color::green($s); }
     public static function bold(string $s) : string { return self::typemode($s, '1'); }

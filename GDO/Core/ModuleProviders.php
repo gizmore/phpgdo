@@ -94,7 +94,7 @@ final class ModuleProviders
 		{
 			if (is_array($providers))
 			{
-				$back[] = $providers;
+				$back[$modname] = $providers;
 			}
 		}
 		return $back;
