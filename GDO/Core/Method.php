@@ -310,7 +310,10 @@ abstract class Method #extends GDT
 // 			$this->applyInput();
 			$this->beforeExecute();
 			$result = GDT_Hook::callHook('BeforeExecute', $this, $response);
-			$response->addField($result);
+			if ($result)
+			{
+				$response->addField($result);
+			}
 			if ($response->hasError())
 			{
 				if ($transactional)
@@ -337,7 +340,10 @@ abstract class Method #extends GDT
 			# 4) After execute
 			$this->afterExecute();
 			$result = GDT_Hook::callHook('AfterExecute', $this, $response);
-			$response->addField($result);
+			if ($result)
+			{
+				$response->addField($result);
+			}
 			if ($response->hasError())
 			{
 				if ($transactional)

@@ -97,11 +97,8 @@ final class GDT_Hook extends GDT
     /**
 	 * Call a hook.
 	 * Only registered modules are called since 6.10.6
-	 * @param string $event
-	 * @param boolean $ipc
-	 * @param array $args
 	 */
-	private static function call(string $event, bool $ipc, array $args)
+	private static function call(string $event, bool $ipc, array $args) : ?GDT_Response
 	{
 		self::init();
 		
@@ -111,6 +108,10 @@ final class GDT_Hook extends GDT
 		{
 			if ($r2 = self::callIPCHooks($event, $args))
 			{
+				if ($response === null)
+				{
+					$response = GDT_Response::make();
+				}
 				$response->addField($r2);
 			}
 		}
@@ -123,13 +124,12 @@ final class GDT_Hook extends GDT
 	 * @param array $args
 	 * @return GDT_Response
 	 */
-	private static function callWebHooks(string $event, array $args)
+	private static function callWebHooks(string $event, array $args) : ?GDT_Response
 	{
 		# Count num calls up.
 		self::$CALLS++;
 
-		# Add to global response
-		$response = GDT_Response::make();
+		$response = null;
 		
 		# Call hooks for this HTTP/www process.
 		if ($moduleNames = self::getHookModuleNames($event))
@@ -145,6 +145,10 @@ final class GDT_Hook extends GDT
 						$callable = [$module, $method_name];
 						if ($result = call_user_func_array($callable, $args))
 						{
+							if ($response === null)
+							{
+								$response = GDT_Response::make();
+							}
 							$response->addField($result);
 						}
 					}

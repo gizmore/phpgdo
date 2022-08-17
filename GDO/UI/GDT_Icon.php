@@ -5,11 +5,12 @@ use GDO\Core\GDT;
 
 /**
  * Just a single icon.
+ * CLI always renders UTF8 icon set.
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 6.0.0
- * @see WithIcon
+ * @see WithIcon for rendering
  */
 class GDT_Icon extends GDT
 {
@@ -33,7 +34,7 @@ class GDT_Icon extends GDT
 	
 	public function renderCLI() : string
 	{
-		return isset($this->icon) ? GDT_IconUTF8::$MAP[$this->icon] : '';
+		return $this->cliIcon();
 	}
 	
 	public function renderJSON()

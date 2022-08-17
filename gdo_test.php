@@ -159,6 +159,7 @@ else # All!
 {
 	echo "Loading and install all modules from filesystem again...\n";
 	$modules = $loader->loadModules(false, true, true);
+	$loader->initModules();
 	if (Installer::installModules($modules))
 	{
 		echo "Running tests for all modules.\n";

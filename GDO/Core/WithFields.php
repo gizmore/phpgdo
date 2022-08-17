@@ -189,18 +189,25 @@ trait WithFields
 		return $this;
 	}
 	
-	public function removeFieldNamed(string $key) : self
+	public function removeFieldNamed(string $key, bool $throw=false) : self
 	{
-		$field = $this->getField($key);
-		return $this->removeField($field);
+		if ($field = $this->getField($key, $throw))
+		{
+			return $this->removeField($field);
+		}
+		return $this;
 	}
 	
 	public function removeField(GDT $field) : self
 	{
-		$i = array_search($field, $this->fields, true);
-		unset($this->fields[$i]);
-		$i = array_search($field, $this->fieldsFlat, true);
-		unset($this->fieldsFlat[$i]);
+		if (false !== ($i = array_search($field, $this->fields, true)))
+		{
+			unset($this->fields[$i]);
+		}
+		if (false !== ($i = array_search($field, $this->fieldsFlat, true)))
+		{
+			unset($this->fieldsFlat[$i]);
+		}
 		return $this;
 	}
 	

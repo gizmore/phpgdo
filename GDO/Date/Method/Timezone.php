@@ -79,6 +79,7 @@ final class Timezone extends MethodForm
                 else
                 {
                     $user->tempSet('timezone', $new);
+                    $user->recache();
                 }
             }
             if ($redirect)

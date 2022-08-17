@@ -41,6 +41,7 @@ final class GDT_IconUTF8
         'country' => '⚑',
         'check' => '✔',
     	'color' => '🎡',
+    	'copyright' => '',
         'create' => '✚',
         'credits' => '¢',
         'cut' => '✂',

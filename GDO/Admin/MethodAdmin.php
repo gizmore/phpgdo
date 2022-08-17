@@ -45,10 +45,10 @@ trait MethodAdmin
 				));
 	}
 	
-	public function getMethodTitle() : string
-	{
-		$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
-		return t($key);
-	}
+// 	public function getMethodTitle() : string
+// 	{
+// 		$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
+// 		return t($key);
+// 	}
 
 }

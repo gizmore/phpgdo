@@ -105,7 +105,11 @@ class GDT_Card extends GDT
 	    }
 	    foreach ($this->getAllFields() as $gdt)
 	    {
-	        $back[] = $gdt->renderCLI();
+	    	if ($label = $gdt->renderLabel())
+	    	{
+	    		$label .= ': ';
+	    	}
+	    	$back[] = $gdt->cliIcon() . $label . $gdt->renderCLI();
 	    }
 	    if (isset($this->footer))
 	    {

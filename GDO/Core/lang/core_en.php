@@ -72,6 +72,7 @@ return [
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',
+	'msg_crud_created' => 'Your %s has been created successfully.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',
@@ -105,6 +106,8 @@ return [
 	'btn_set' => 'Set',
 	'btn_upload' => 'Upload',
 	'btn_view' => 'View',
+	'btn_modules' => 'Modules',
+	'btn_clearcache' => 'Clear Cache',
 	'submit' => 'Submit',
 	
 	# Float

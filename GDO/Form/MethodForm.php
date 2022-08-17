@@ -112,14 +112,8 @@ abstract class MethodForm extends Method
 			$this->form->inputs($inputs);
 			$this->form->actions()->inputs($inputs);
 			$this->form->titleRaw($this->getMethodTitle());
-// 			$this->applyInput();
 			$this->createForm($this->form);
 		}
-// 		else
-// 		{
-// 			$this->form->inputs($inputs);
-// 			$this->form->actions()->inputs($inputs);
-// 		}
 		return $this->form;
 	}
 	
@@ -184,7 +178,7 @@ abstract class MethodForm extends Method
 					# Click it
 					if ($gdt->onclick)
 					{
-						$result = $gdt->click();
+						$result = $gdt->click($form);
 					}
 					elseif ($this->pressedButton === 'submit')
 					{

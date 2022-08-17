@@ -143,4 +143,15 @@ trait WithIcon
 		return GDT::EMPTY_STRING;
 	}
 	
+	public function cliIcon() : string
+	{
+		if (isset($this->icon))
+		{
+			return isset(GDT_IconUTF8::$MAP[$this->icon]) ?
+				GDT_IconUTF8::$MAP[$this->icon] :
+				TextStyle::italic($this->icon);
+		}
+		return GDT::EMPTY_STRING;
+	}
+	
 }

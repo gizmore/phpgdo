@@ -12,6 +12,7 @@ use GDO\Core\GDT_DeletedBy;
 use GDO\Date\Time;
 use GDO\Util\Common;
 use GDO\Core\GDT_CreatedBy;
+use GDO\UI\GDT_EditButton;
 
 /**
  * Abstract Create|Update|Delete for a GDO using MethodForm.
@@ -124,7 +125,7 @@ abstract class MethodCrud extends MethodForm
 	    $table = $this->gdoTable();
 	    if ($id = $this->getCRUDID())
 	    {
-	        $this->gdo = $table->find($id);
+	        $this->gdo = $table->find($id); # throws
 	        $this->crudMode = self::EDITED;
 	        if (!$this->canRead($this->gdo))
 	        {
@@ -141,7 +142,7 @@ abstract class MethodCrud extends MethodForm
 	    }
 	    elseif (!$this->canCreate($table))
 	    {
-	    	return $this->error('err_permission');
+	    	return $this->error('err_permission_create,' [$table->gdoHumanName()]);
 // 	        throw new GDO_PermissionException('err_permission_create', $this, $);
 	    }
 	    
@@ -192,23 +193,26 @@ abstract class MethodCrud extends MethodForm
 	
 	public function createFormButtons(GDT_Form $form) : void
 	{
-		$form->addField(GDT_AntiCSRF::make());
+// 		$form->addField(GDT_AntiCSRF::make());
 		
 		$gdo = isset($this->gdo) ? $this->gdo : null;
 		
 		if (!$gdo)
 		{
-		    $form->actions()->addField(GDT_Submit::make('create')->label('btn_create')->icon('create'));
+			$c = GDT_Submit::make('create')->label('btn_create')->icon('create')->onclick([$this, 'onCreate']);
+		    $form->actions()->addField($c);
 		}
 
 		if ($gdo && $this->canUpdate($this->gdo))
 		{
-    		$form->actions()->addField(GDT_Submit::make('edit')->label('btn_edit')->icon('edit'));
+			$u = GDT_EditButton::make('edit')->label('btn_edit')->icon('edit')->onclick([$this, 'onUpdate']);
+    		$form->actions()->addField($u);
 		}
 
 		if ($gdo && $this->canDelete($this->gdo))
 		{
-			$form->actions()->addField(GDT_DeleteButton::make());
+			$d = GDT_DeleteButton::make()->onclick([$this, 'onDelete']);
+			$form->actions()->addField($d);
 		}
 
 // 		if ($gdo)
