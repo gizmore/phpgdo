@@ -61,8 +61,11 @@ gdo_test::instance()->mode(GDT::RENDER_CLI, true)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Database::init(null);
-GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME,
-	 !GDO_SESS_JS, GDO_SESS_HTTPS);
+
+if (FileUtil::isFile('GDO/Session/GDO_Session.php'))
+{
+	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
+}
 
 # ##########################
 # Simulate HTTP env a bit #

@@ -76,5 +76,15 @@ final class Process
         }
         return null;
     }
+    
+    /**
+     * Execute a shell command.
+     */
+    public static function exec(string $cmd) : ?array
+    {
+    	$output = null;
+    	$result = exec($cmd, $output);
+    	return $result === 0 ? $output : null;
+    }
 
 }

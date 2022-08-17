@@ -379,7 +379,12 @@ class GDT_Select extends GDT_ComboBox
 	##############
 	public function renderCLI() : string
 	{
-		return $this->gdoHumanName() . ': ' . $this->displayVar($this->getVar());
+		$rendered = $this->displayVar($this->getVar());
+		if ($label = $this->renderLabel())
+		{
+			return "{$label}: {$rendered}";
+		}
+		return $rendered;
 	}
 	
 	public function renderHTML() : string

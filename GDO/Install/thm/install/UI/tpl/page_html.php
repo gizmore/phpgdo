@@ -1,8 +1,6 @@
 <?phpnamespace GDO\Install\thm\install\UI\tpl;use GDO\UI\GDT_Page;use GDO\Core\GDT_Template;
-use GDO\UI\GDT_Divider;
 use GDO\Perf\GDT_PerfBar;
-use GDO\Mail\GDT_Email;
-use GDO\Language\Trans;
+use GDO\Language\Trans;use GDO\Core\Module_Core;
 /** @var $page GDT_Page **/ 
 ?>
 <!DOCTYPE html>
@@ -12,7 +10,7 @@ use GDO\Language\Trans;
 </head>
 <body>
   <header>
-	<h1>GDOv7 Setup</h1>
+	<h1>GDOv7 Install Wizard (Rev.<?=Module_Core::GDO_REVISION?>)</h1>
 	<?=GDT_Template::php('Install', 'crumb/progress.php')?>
   </header>
   <div class="gdo-body">
@@ -23,8 +21,7 @@ use GDO\Language\Trans;
   </div>
   <footer>
 	&copy;2022-2023 <a href="mailto: gizmore@wechall.net">gizmore@wechall.net</a> 
-	<?=GDT_Divider::make()->render()?>
-	<?=GDT_PerfBar::make()->render()?>
+	<hr/>	<?=GDT_PerfBar::make()->render()?>
   </footer>
 </body>
 </html>

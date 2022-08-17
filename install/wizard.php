@@ -43,11 +43,11 @@ try
     $steps = Config::steps();
     $step = Math::clampInt(Common::getGetInt('step'), 1, count($steps));
     $method = $install->getMethod($steps[$step-1]);
-    $result = $method->withAppliedInputs($_REQUEST)->execute();
+    $result = $method->appliedInputs($_REQUEST)->execute();
 }
 catch (\Throwable $ex)
 {
-    $result = GDT_Error::make()->exception($ex);
+    $result = GDT_Error::fromException($ex);
 }
 $response = GDT_Response::make()->addField($result);
 echo $response->render();

@@ -59,7 +59,7 @@ class Configure extends MethodForm
 		$content = GDT_Template::php('Install', 'config.php', ['form' => $form]);
 		FileUtil::createDir(dirname($this->configPath()));
 		file_put_contents($this->configPath(), $content);
-		return GDT_Redirect::make()->redirectTime(10)->back()->redirectMessage('msg_config_written', [html($this->cfgConfigName())], Config::hrefStep(3));
+		return GDT_Redirect::make()->redirectTime(2)->back()->redirectMessage('msg_config_written', [html($this->cfgConfigName())], Config::hrefStep(3));
 	}
 	
 	public function onTestConfig()
@@ -76,7 +76,9 @@ class Configure extends MethodForm
     			return $this->error('err_db_connect')->addField($this->renderPage());
     		}
 	    }
-	    return $this->message('install_config_boxinfo_success', [Config::linkStep(4)]);
+	    
+	    $link = Config::linkStep(4);
+	    return $this->message('install_config_boxinfo_success', [$link]);
 	}
 	
 }

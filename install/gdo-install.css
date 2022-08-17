@@ -1,5 +1,6 @@
 /** core **/
 * { margin: 0; padding: 0; box-sizing: border-box; list-style: none; }
+.gdo-body { padding: 1em;}
 span, img, a, i, b, em { display: inline-block; }
 .cf:after { content: "."; clear: both; display: block; visibility: hidden; height: 0px; }
 .ce { text-align: center; margin: auto; }
@@ -33,17 +34,23 @@ div.gdt-hr { height: 2px; width: 100%; background: #eee; margin: 8px 0; }
 .gdo-dialog-inner { display: flex; flex-direction: column; }
 .gdo-dialog-fields { flex: 1 1 auto; }
 
-
 /** classic **/
 /** Basic layout **/
 * { font-family: Helvetica Neue,sans-serif; }
+/* span.gdt-link, .gdt-link a { width: 100%; height: 100%; } */
+.gdt-link a { font-weight: bold; color: #112; }
+.gdt-link a:hover { color: #008; text-decoration: none; }
 
-#gdo-header { position: fixed; width: 100%; background: #eee; border-bottom: 1px solid #fff; padding: 0px 32px; }
+header { position: static; width: 100%; background: #eee; border-bottom: 1px solid #fff; padding: 0px; }
+header .gdt-bar { border: 1px solid rgba(255, 0, 0, 0.3); }
+header h1 { padding: 1rem; }
 div.gdo-body { padding: 64px 0px 0px; min-height: 100%; }
-#gdo-footer { background: #eee; }
+#gdo-footer { background: #eee; padding: 8px; }
+footer { padding: 1rem; border-top: 2px solid #00f; }
+.gdo-main { padding: 1rem; }
 
 /** Bar **/
-.gdt-bar { display: flex; padding: 8px; background: #eee; flex-wrap: wrap; }
+.gdt-bar { display: flex; padding: 8px; background: rgba(255, 0, 255, 0.2); flex-wrap: wrap; }
 .gdt-bar-row { flex-direction: row; }
 .gdt-bar-column { flex-direction: column; }
 .gdt-bar > * { flex-grow: 1; text-align: center; }
@@ -159,8 +166,7 @@ div.gdt-form-fields div.gdt-divider > *{ column-span: all; }
 
 /** Message **/
 .gdo-error-box,
-.gdo-error.gdt-panel,
-.gdo-exception { background: #f44; padding: 12px; border: 1px dotted #111; border-radius: 4px; margin: 4px 8px; }
+.gdt-error.gdt-panel { background: #f44; padding: 12px; border: 1px dotted #111; border-radius: 4px; margin: 4px 8px; }
 .gdo-message-box,
 .gdo-success.gdt-panel { background: #cfc; padding: 12px; border: 1px dotted #111; border-radius: 4px; margin: 4px 8px; }
 .gdo-error .gdo-exception { border: none; margin: 0; padding: 0; }
@@ -227,7 +233,7 @@ a {
 }
 
 /** install **/
-header { height: 140px; background: red; vertical-align: bottom; }
+header { min-height: 108px; background: rgba(0,0,100,0.25); vertical-align: bottom; }
 .gdo-bar-column, .gdo-bar-column > *,
 .gdo-bar-row, .gdo-bar-row > * { display: flex; flex-grow: 1; justify-content: center; }
 .gdo-bar-column { flex-direction: column; }

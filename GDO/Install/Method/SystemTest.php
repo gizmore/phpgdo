@@ -3,6 +3,7 @@ namespace GDO\Install\Method;
 
 use GDO\Core\Method;
 use GDO\Util\FileUtil;
+use GDO\CLI\Process;
 
 /**
  * Do some tests and output in page.
@@ -26,9 +27,9 @@ final class SystemTest extends Method
 			'tests' => array(
 				$this->testPHPVersion(),
 				FileUtil::createDir(GDO_PATH . 'protected'),
+				FileUtil::createDir(GDO_PATH . 'files'),
 				FileUtil::createDir(GDO_PATH . 'temp'),
 			    FileUtil::createDir(GDO_PATH . 'assets'),
-				$this->testYarn(),
 				function_exists('mb_strlen'),
 			    function_exists('mime_content_type'),
 				function_exists('bcadd'),
@@ -38,6 +39,7 @@ final class SystemTest extends Method
 			    function_exists('imagecreate'),
 			    class_exists('\\Memcached', false),
 				function_exists('openssl_cipher_iv_length'),
+				$this->testYarn(),
 			),
 		);
 		return $this->templatePHP('page/systemtest.php', $tVars);
@@ -51,7 +53,8 @@ final class SystemTest extends Method
 
 	private function testYarn() : bool
 	{
-		return true;
+		$lines = Process::exec("yarn --version");
+		return !!$lines;
 	}
 	
 }

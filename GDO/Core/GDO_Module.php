@@ -7,7 +7,6 @@ use GDO\Language\Trans;
 use GDO\User\GDO_UserSetting;
 use GDO\User\GDO_UserSettingBlob;
 use GDO\User\GDO_User;
-use GDO\Tests\Module_Tests;
 use GDO\Util\FileUtil;
 use GDO\Util\Strings;
 use GDO\Table\GDT_Sort;
@@ -79,7 +78,6 @@ class GDO_Module extends GDO
 	
     /**
 	 * Skip these folders in unit tests using strpos.
-	 * @see Module_Tests
 	 * @return string[]
 	 */
 	public function thirdPartyFolders() : array
