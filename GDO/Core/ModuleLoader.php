@@ -186,6 +186,8 @@ final class ModuleLoader
 	
 	public function initModules() : void
 	{
+		$this->initModuleVars();
+		
 		# Register themes and load language
 		foreach ($this->getEnabledModules() as $module)
 		{
@@ -275,7 +277,7 @@ final class ModuleLoader
 		# Loaded one?
 		if ($loaded)
 		{
-   			$this->initModuleVars();
+//    			$this->initModuleVars();
 			$order = 'module_priority ASC, module_name ASC';
 			$this->modules = $this->sortModules($order);
 // 			$this->initModules();

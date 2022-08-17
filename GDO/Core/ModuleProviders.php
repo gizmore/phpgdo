@@ -54,7 +54,7 @@ final class ModuleProviders
 
 	public static function getCleanModuleName(string $moduleName): string
 	{
-		foreach (array_keys(self::$DEPENDENCIES) as $modname)
+		foreach (array_keys(self::$PROVIDERS) as $modname)
 		{
 			if (strcasecmp($moduleName, $modname) === 0)
 			{

@@ -144,7 +144,7 @@ Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
 $loader = ModuleLoader::instance();
 $loader->loadModules(GDO_DB_ENABLED ? true : false, true);
-$loader->initModules();
+// $loader->initModules();
 
 define('GDO_CORE_STABLE', true);
 
@@ -490,6 +490,8 @@ elseif ($argv[1] === 'config')
 	{
 		printUsage();
 	}
+	
+	$loader->initModules();
 
 	if ($argc === 2)
 	{
@@ -719,18 +721,34 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 				}
 			}
 			echo "You should now have all dependencies cloned in your GDO/ folder.\n";
-			echo "You can now:\n./gdoadm.sh install {$argv[2]}\n";
+			
+			if ($isall)
+			{
+				echo "You can now:\n./gdoadm.sh install_all\n";
+			}
+			else
+			{
+				echo "You can now:\n./gdoadm.sh install {$argv[2]}\n";
+			}
 			$r = readline("Shall i do this now? [Y/n]");
 			$r = $r ? $r : 'y';
 			if (($r[0] === 'y') || ($r[0] === 'Y'))
 			{
-				system("php gdo_adm.php install {$argv[2]}");
+				
+				if ($isall)
+				{
+					system("php gdo_adm.php install_all");
+				}
+				else 
+				{
+					system("php gdo_adm.php install {$argv[2]}");
+				}
 			}
 		}
 	}
 	else
 	{
-		if (($argv[1] === 'provide_all') || ($argv[1] === 'provide_all_ssh'))
+		if ($isall)
 		{
 			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install_all\n";
 		}
