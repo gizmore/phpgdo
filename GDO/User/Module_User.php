@@ -9,6 +9,7 @@ use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Message;
 use GDO\Net\GDT_Url;
 use GDO\Date\GDT_Date;
+use GDO\UI\GDT_Color;
 
 /**
  * GDO_User related types and plugins.
@@ -113,6 +114,7 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			GDT_Gender::make('gender'),
+// 			GDT_Color::make('favorite_color'),
 		];
 	}
 	

@@ -85,13 +85,14 @@ if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 #
 if (isset($_REQUEST['_lang']))
 {
-	Trans::setISO((string) @$_REQUEST['_lang']);
+	$iso = (string)$_REQUEST['_lang'];
 	unset($_REQUEST['_lang']);
 }
 else
 {
-	Trans::$ISO = Module_Language::instance()->detectISO();
+	$iso = Module_Language::instance()->detectISO();
 }
+Trans::setISO($iso);
 
 #
 # Remember GET/POST HTTP verb.

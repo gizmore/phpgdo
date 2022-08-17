@@ -169,7 +169,7 @@ abstract class GDT
 			case self::RENDER_JSON: return $this->renderJSON();
 			case self::RENDER_GTK: return $this->renderGTK();
 			# Reserved 1-3
-			case self::RENDER_WEBSITE: return $this->renderWebsite(); # HTML start mode
+			case self::RENDER_WEBSITE: return $this->renderHTML(); # HTML start mode
 			# HTML submodes
 			case self::RENDER_HTML: return $this->renderHTML();
 			case self::RENDER_CARD: return $this->renderCard();

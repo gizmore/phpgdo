@@ -58,7 +58,7 @@ trait WithFileCache
 			{
 				$content = $result->renderMode($app->modeDetected);
 				Cache::fileSet($key, $content);
-				return GDT_HTML::withHTML($content);
+				return GDT_HTML::make()->var($content);
 			}
 			return $result;
 		}

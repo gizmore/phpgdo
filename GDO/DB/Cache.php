@@ -6,6 +6,8 @@ use GDO\Core\GDT_Hook;
 use GDO\Util\FileUtil;
 use GDO\Core\Module_Core;
 use GDO\Core\Application;
+use GDO\Core\Logger;
+use GDO\Core\Debug;
 
 /**
  * Cache is a global object cache, where each fetched object (with the same key) from the database results in the same instance.
@@ -31,6 +33,12 @@ use GDO\Core\Application;
  */
 class Cache
 {
+	############
+	### Perf ###
+	############
+	public static int $FILE_HITS = 0;
+	public static int $FILE_MISSES = 0;
+	
 	# ################
 	# ## Memcached ###
 	# ################
@@ -83,6 +91,11 @@ class Cache
 	 */
 	public static function set(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
 	{
+		if (GDO_CACHE_DEBUG)
+		{
+			self::debug('set', $key, $value);
+		}
+		
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
@@ -94,6 +107,16 @@ class Cache
 			case 2:
 				self::fileSetSerialized($key, $value);
 				break;
+		}
+	}
+	
+	private static function debug(string $event, string $key, $value)
+	{
+		Logger::log('cache', sprintf('%s %s'));
+		if (GDO_CACHE_DEBUG >= 2)
+		{
+			$isHTML = Application::instance()->isHTML();
+			Logger::log('cache', Debug::backtrace('Backtrace', $isHTML));
 		}
 	}
 
@@ -261,6 +284,7 @@ class Cache
 			{
 				if ($gdo->gdoVar($key) === $var)
 				{
+					self::$FILE_HITS++;
 					return $gdo;
 				}
 			}
@@ -271,10 +295,12 @@ class Cache
 			{
 				if ($gdo->gdoVar($key) === $var)
 				{
+					self::$FILE_HITS++;
 					return $gdo;
 				}
 			}
 		}
+		self::$FILE_MISSES++;
 		return null;
 	}
 
@@ -452,7 +478,7 @@ class Cache
 			return false;
 		}
 		$path = self::filePath($key);
-		if ( !file_exists($path))
+		if ( !FileUtil::isFile($path))
 		{
 			return false;
 		}
@@ -484,9 +510,13 @@ class Cache
 	{
 		if (self::fileHas($key, $expire))
 		{
+			self::$FILE_HITS++;
 			$path = self::filePath($key);
 			return file_get_contents($path);
-			;
+		}
+		else
+		{
+			self::$FILE_MISSES++;
 		}
 		return null;
 	}
@@ -547,8 +577,12 @@ if ( !class_exists('Memcached', false))
 define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
 
 #
-# Default Cache config.
+# Default Cache config; Filecache only, no debug.
 #
+if ( !defined('GDO_CACHE_DEBUG'))
+{
+	define('GDO_CACHE_DEBUG', 0);
+}
 if ( !defined('GDO_FILECACHE'))
 {
 	define('GDO_FILECACHE', 1);
@@ -558,4 +592,7 @@ if ( !defined('GDO_MEMCACHE'))
 	define('GDO_MEMCACHE', 2);
 }
 
+#
+# Cache writes to temp path.
+#
 define('GDO_TEMP_PATH', GDO_PATH . (Application::$INSTANCE->isUnitTests() ? 'temp_test/' : 'temp/'));

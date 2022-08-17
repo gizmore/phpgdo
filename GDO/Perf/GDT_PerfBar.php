@@ -14,6 +14,7 @@ use GDO\UI\GDT_Panel;
 use GDO\Mail\Mail;
 use GDO\CLI\CLI;
 use GDO\Core\GDT_UInt;
+use GDO\DB\Cache;
 
 /**
  * Performance statistics panel.
@@ -55,6 +56,10 @@ final class GDT_PerfBar extends GDT_Panel
 			
 			'phpClasses' => count(get_declared_classes()),
 			'allocs' => (spl_object_id(GDT_UInt::make())),
+			
+			'fileCacheHits' => Cache::$FILE_HITS,
+			'fileCacheMiss' => Cache::$FILE_MISSES,
+			'fileCacheRq' => Cache::$FILE_HITS + Cache::$FILE_MISSES,
 			
 			'gdoFiles' => $GDT_LOADED,
 			'gdoCount' => GDO::$GDO_COUNT,

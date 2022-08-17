@@ -58,7 +58,6 @@ GDO/*
 !GDO/Language/
 !GDO/Net/
 !GDO/Perf/
-!GDO/PHPInfo/
 !GDO/Table/
 !GDO/Tests/
 !GDO/UI/

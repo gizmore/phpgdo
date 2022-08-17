@@ -24,7 +24,7 @@ final class FileUtil
      */
     public static function isDir(string $filename) : bool
     {
-    	return is_dir($filename) && is_readable($filename);
+    	return is_dir($filename); # && is_readable($filename);
     }
 
     /**
@@ -32,7 +32,7 @@ final class FileUtil
      */
     public static function isFile(string $filename) : bool
     {
-    	return is_file($filename) && is_readable($filename);
+    	return is_file($filename); # && is_readable($filename);
 #    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
     }
 
@@ -101,7 +101,7 @@ final class FileUtil
 	###############
 	/**
 	 * Get the size of a folder recursively.
-	 * @deprecated too slow!
+	 * @deprecated too slow! @TODO Maybe use cached in Core/Fileserver GDO_FileCache?
 	 */
 	public static function dirsize(string $path) : int
 	{

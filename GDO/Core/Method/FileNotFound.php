@@ -12,7 +12,7 @@ use GDO\User\GDO_User;
  * Send mails on this 404 event, if enabled.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class FileNotFound extends MethodPage
 {

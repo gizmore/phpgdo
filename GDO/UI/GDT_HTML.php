@@ -11,11 +11,21 @@ use GDO\Core\WithValue;
  * @version 7.0.1
  * @since 6.7.0
  */
-// final class GDT_HTML extends GDT_Container
 final class GDT_HTML extends GDT
 {
 	use WithValue;
 	
-	public function renderHTML() : string { return $this->var; }
-	
+	public function renderHTML() : string
+	{
+		return isset($this->var) ? $this->var : GDT::EMPTY_STRING;
+	}
+
+	/**
+	 * UnitTest default value.
+	 */
+	public function plugVar() : string
+	{
+		return '<strike>HTML</strike>';
+	}
+
 }

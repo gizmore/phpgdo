@@ -328,10 +328,6 @@ final class Debug
 	 * You should use monospace font for html style rendering / pre tags.
 	 * HTML means (x)html(5) and <pre> style.
 	 * Plaintext means nice for logfiles.
-	 * 
-	 * @param string $message			
-	 * @param boolean $html			
-	 * @return string
 	 */
 	public static function backtrace(string $message = '', bool $html = true)
 	{

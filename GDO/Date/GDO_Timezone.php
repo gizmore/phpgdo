@@ -18,6 +18,8 @@ final class GDO_Timezone extends GDO
 {
 	public function isTestable() : bool { return false; }
 	
+	public function gdoCached() : bool { return false; }
+	
 	###############
 	### Factory ###
 	###############
