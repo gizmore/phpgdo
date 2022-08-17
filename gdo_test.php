@@ -62,7 +62,7 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Database::init(null);
 
-if (FileUtil::isFile('GDO/Session/GDO_Session.php'))
+if (module_enabled('Session'))
 {
 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
 }

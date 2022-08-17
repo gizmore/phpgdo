@@ -16,7 +16,7 @@ final class AutomatedModuleConfigTest extends TestCase
 {
 	public function testModulesConfigDefaults() : void
 	{
-		foreach (ModuleLoader::instance()->getModules() as $module)
+		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
 		{
 			$this->singleModuleTest($module);
 		}
