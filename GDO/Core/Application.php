@@ -17,7 +17,7 @@ class Application extends GDT
 	use WithVerb;
 	use WithInstance;
 	
-	protected function __destruct()
+	public function __destruct()
 	{
 		parent::__destruct();
 		if (class_exists('GDO\\Core\\Logger', false))
