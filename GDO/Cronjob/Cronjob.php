@@ -24,24 +24,32 @@ final class Cronjob
 	 * Cronjobs main.
 	 * Loop over all enabled modules to run cronjob.
 	 */
-	public static function run($force=false)
+	public static function run(bool $force=false) : void
 	{
 		self::$FORCE = $force;
 	    GDO_User::setCurrent(GDO_User::system());
 	    $loader = ModuleLoader::instance();
 		$modules = $loader->loadModulesCache();
 		$loader->initModules();
-		foreach ($modules as $module)
+		
+		if (module_enabled('Cronjob'))
 		{
-			if ($module->isEnabled())
+			foreach ($modules as $module)
 			{
-				Installer::loopMethods($module, [
-					__CLASS__,
-					'runCronjob'
-				]);
+				if ($module->isEnabled())
+				{
+					Installer::loopMethods($module, [
+						__CLASS__,
+						'runCronjob'
+					]);
+				}
 			}
+			Module_Cronjob::instance()->setLastRun();
 		}
-		Module_Cronjob::instance()->setLastRun();
+		else
+		{
+			echo "Module_Cronjob is deactivated.\n";
+		}
 	}
 
 	/**

@@ -28,8 +28,8 @@ final class gdo_cronjob extends Application
 
 gdo_cronjob::instance();
 CLI::setServerVars();
-Debug::init();
-Logger::init();
+Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
+Logger::init('system');
 Database::init();
 Trans::setISO('en');
 
