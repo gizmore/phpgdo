@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Core;
 
-use GDO\UI\TextStyle;
 use GDO\Util\Strings;
 
 /**
@@ -203,8 +202,8 @@ class GDT_String extends GDT_DBField
 	###########
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
-		$va = (string)$a->gdoVar($this->name);
-		$vb = (string)$b->gdoVar($this->name);
+		$va = (string) $a->gdoVar($this->name);
+		$vb = (string) $b->gdoVar($this->name);
 		switch ($this->encoding)
 		{
 			case self::ASCII:
@@ -258,9 +257,7 @@ class GDT_String extends GDT_DBField
 	
 	public function plugVar() : string
 	{
-		return TextStyle::bold(
-			TextStyle::italic(
-				$this->getName()));
+		return $this->getName() . '#' . GDT::$GDT_COUNT;
 	}
 
 }

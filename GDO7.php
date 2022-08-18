@@ -27,6 +27,10 @@ spl_autoload_register(function(string $name) : void
 {
 	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
 	{ # 2 lines path
+		if (strpos($name, 'GDO_Guestbook'))
+		{
+			xdebug_break();
+		}
 		$name = str_replace('\\', '/', $name) . '.php';
 		require GDO_PATH . $name;
 		global $GDT_LOADED; # 2 lines perf

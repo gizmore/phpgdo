@@ -261,13 +261,27 @@ class Cache
 			if ($mcached = self::get($this->tableName . $id))
 			{
 				$this->cache[$id] = $mcached;
+				return $mcached;
 			}
-			else
+// 			else
+// 			{
+// 				return null;
+// 			}
+		}
+		
+		if (isset($this->all))
+		{
+			foreach ($this->all as $gdo)
 			{
-				return null;
+				if ($gdo->getID() === $id)
+				{
+					$this->cache[$id] = $gdo;
+					return $gdo;
+				}
 			}
 		}
-		return $this->cache[$id];
+		
+		return null;
 	}
 
 	/**

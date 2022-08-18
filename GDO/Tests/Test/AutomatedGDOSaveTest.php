@@ -51,7 +51,7 @@ final class AutomatedGDOSaveTest extends TestCase
 					continue;
 				}
 				
-				if (!$gdo->isTestable())
+				if ( (!$gdo->isTestable()) || ($gdo->gdoDTO()) )
 				{
 					$this->gdoNonTestable++;
 					continue;
@@ -139,8 +139,9 @@ final class AutomatedGDOSaveTest extends TestCase
 		}
 		
 		$permutations = new Permutations($this->plugVariants);
-		foreach ($permutations->generate() as $inputs)
+		foreach ($permutations->generate() as $i => $inputs)
 		{
+			echo "$i\n";
 			$new = $gdo->table()->cache->getNewDummy();
 			$new->setVars($inputs);
 			if ($new->isValid())

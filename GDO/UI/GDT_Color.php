@@ -31,6 +31,11 @@ class GDT_Color extends GDT_String
 		return 'color';
 	}
 	
+	public function plugVar() : string
+	{
+		return '#ff0000';
+	}
+	
 	##############
 	### Render ###
 	##############
@@ -53,5 +58,5 @@ class GDT_Color extends GDT_String
 			hexdec(substr($input, 4, 2))
 		];
 	}
-
+	
 }

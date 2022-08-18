@@ -448,7 +448,7 @@ final class ModuleLoader
 	 */
 	public function initModuleVars(string $singleModuleName=null)
 	{
-	    foreach ($this->modules as $module)
+	    foreach ($this->getEnabledModules() as $module)
 	    {
 	        $module->buildConfigCache();
 	    }
@@ -505,7 +505,7 @@ final class ModuleLoader
 		    Logger::logException($e);
 		}
 		
-		foreach ($this->modules as $module)
+		foreach ($this->getEnabledModules() as $module)
 		{
     		$module->buildSettingsCache();
 		}

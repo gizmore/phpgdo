@@ -185,7 +185,7 @@ final class GDT_ACL extends GDT
 	public function renderHTML() : string
 	{
 		$this->setupOwnLabels();
-		return GDT_Container::makeWith($this->aclRelation, $this->aclLevel, $this->aclPermission)->horizontal()->render();
+		return GDT_Container::makeWith($this->aclRelation, $this->aclLevel, $this->aclPermission)->horizontal()->renderHTML();
 	}
 	
 	###############

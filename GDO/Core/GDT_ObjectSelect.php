@@ -168,7 +168,7 @@ class GDT_ObjectSelect extends GDT_Select
 		
 		foreach ($var as $id)
 		{
-		    if ($object = $this->table->find($id, false))
+		    if ($object = $this->table->getById($id))
 			{
 				$back[$id] = $object;
 			}
