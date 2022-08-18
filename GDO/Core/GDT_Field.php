@@ -111,7 +111,7 @@ abstract class GDT_Field extends GDT
 		if (is_string($input))
 		{
 // 			$input = trim($input);
-			return $input === '' ? $this->initial : $input;
+			return $input === '' ? null : $input;
 		}
 		if ($input instanceof GDT_Method)
 		{
@@ -121,7 +121,8 @@ abstract class GDT_Field extends GDT
 		{
 			return json_encode($input);
 		}
-		return $this->initial;
+		return null;
+// 		return $this->initial;
 	}
 	
 	public function getVar()

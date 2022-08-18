@@ -50,3 +50,5 @@ Your playlists are ACL sharable.
  
  - RockPaperScissors: You only play against Dog. Dog challenges a random user from the channel.
  
+ - new GDT_GuestACL. A checkbox that is false when global guest support is dropped.
+ 

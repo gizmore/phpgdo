@@ -6,6 +6,7 @@ use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
 use GDO\Core\GDT_Index;
 use GDO\Core\GDT_Hook;
+use GDO\Core\GDT;
 
 /**
  * Table for user<=>permission relation.
@@ -13,7 +14,7 @@ use GDO\Core\GDT_Hook;
  * @see GDO_Permission
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.0.0
  * @see GDO_Permission
  */
@@ -32,31 +33,24 @@ final class GDO_UserPermission extends GDO
 		];
 	}
 	
-	/**
-	 * @return GDO_User
-	 */
 	public function getUser() : GDO_User { return $this->gdoValue('perm_user_id'); }
 	public function getUserID() : string { return $this->gdoVar('perm_user_id'); }
 	
-	/**
-	 * @return GDO_Permission
-	 */
 	public function getPermission() : GDO_Permission { return $this->gdoValue('perm_perm_id'); }
 	public function getPermissionID() : string { return $this->gdoVar('perm_perm_id'); }
 
 	##############
 	### Static ###
 	##############
-	public static function load(GDO_User $user)
+	public static function load(GDO_User $user) : array
 	{
 		if (!$user->isPersisted())
 		{
-			return [];
+			return GDT::EMPTY_ARRAY;
 		}
 		return self::table()->select('perm_name, perm_level')->
-// 		joinObject('perm_perm_id', 'JOIN', 'gdo_permission')->
-		joinObject('perm_perm_id')->
-		where("perm_user_id={$user->getID()}")->
+			joinObject('perm_perm_id')->
+			where("perm_user_id={$user->getID()}")->
             exec()->fetchAllArray2dPair();
 	}
 	
@@ -80,9 +74,6 @@ final class GDO_UserPermission extends GDO
 	
 	/**
 	 * Grant via name.
-	 * @param GDO_User $user
-	 * @param string $permission
-	 * @return self
 	 */
 	public static function grant(GDO_User $user, string $permission)
 	{

@@ -22,7 +22,7 @@ use GDO\Date\Method\Timezone;
  */
 final class Module_Date extends GDO_Module
 {
-    public int $priority = 2;
+    public int $priority = 4;
  
     public function isCoreModule() : bool { return true; }
     public function onLoadLanguage() : void { $this->loadLanguage('lang/date'); }
@@ -30,7 +30,7 @@ final class Module_Date extends GDO_Module
     ##############
     ### Config ###
     ##############
-    public string $timezone = '1';
+//     public string $timezone = '1';
 
     public function getConfig() : array
     {

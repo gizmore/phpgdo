@@ -55,10 +55,9 @@ final class Module_User extends GDO_Module
 		return $classes;
 	}
 	
-	public function isCoreModule() : bool { return true; }
 	public function onInstall() : void { OnInstall::onInstall(); }
+	public function isCoreModule() : bool { return true; }
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/user'); }
-// 	public function href_administrate_module() : ?string { return href('User', 'Admin'); }
 
 	public function onInitSidebar() : void
 	{
@@ -95,6 +94,7 @@ final class Module_User extends GDO_Module
 	public function getACLDefaults() : ?array
 	{
 		return [
+			'color' => [GDT_ACLRelation::GUESTS, 0, null],
 			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'about_me' => [GDT_ACLRelation::MEMBERS, 0, null],
 			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
@@ -113,8 +113,8 @@ final class Module_User extends GDO_Module
 	public function getUserSettings() : array
 	{
 		return [
+			GDT_Color::make('color'),
 			GDT_Gender::make('gender'),
-// 			GDT_Color::make('favorite_color'),
 		];
 	}
 	

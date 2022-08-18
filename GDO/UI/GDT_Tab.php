@@ -9,7 +9,7 @@ use GDO\Core\WithFields;
  * A tab panel.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.2
  */
 final class GDT_Tab extends GDT
@@ -29,12 +29,14 @@ final class GDT_Tab extends GDT
 	##############
 	public function renderForm() : string
 	{
-		return GDT_Template::php('UI', 'cell/tab.php', ['field' => $this, 'cell' => false]);
+		return GDT_Template::php('UI', 'tab_html.php', [
+			'field' => $this, 'cell' => false]);
 	}
 	
 	public function renderHTML() : string
 	{
-		return GDT_Template::php('UI', 'cell/tab.php', ['field' => $this, 'cell' => true]);
+		return GDT_Template::php('UI', 'tab_html.php', [
+			'field' => $this, 'cell' => true]);
 	}
 
 }

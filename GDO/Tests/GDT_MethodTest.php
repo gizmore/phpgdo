@@ -50,7 +50,7 @@ final class GDT_MethodTest extends GDT_Method
     	}
     	else
     	{
-    		$this->addInput($button, '1');
+    		$this->inputs[$button] = '1';
     	}
     	return parent::execute();
     }

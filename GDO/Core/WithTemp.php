@@ -31,7 +31,7 @@ trait WithTemp
 	 */
 	public function tempGet(string $key, $default=null)
 	{
-		return isset($this->temp) ? @$this->temp[$key] : $default;
+		return isset($this->temp[$key]) ? $this->temp[$key] : $default;
 	}
 	
 	/**

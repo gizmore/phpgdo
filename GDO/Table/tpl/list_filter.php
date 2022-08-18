@@ -75,7 +75,7 @@ if ($field->headers)
     if (count($frm->getFields()))
     {
         $frm->actions()->addField(GDT_Submit::make());
-        $accordeon = GDT_Accordeon::make()->addField($frm)->title($frm->displaySearchCriteria());
+        $accordeon = GDT_Accordeon::make()->addField($frm)->titleRaw($frm->displaySearchCriteria());
         echo $accordeon->renderHTML();
     }
 }

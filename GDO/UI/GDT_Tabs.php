@@ -9,7 +9,7 @@ use GDO\Core\WithFields;
  * A navigation tab menu with tabs.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.2.0
  */
 final class GDT_Tabs extends GDT
@@ -21,16 +21,19 @@ final class GDT_Tabs extends GDT
 		return 'tabs';
 	}
 	
-	/**
-	 * @var GDT_Tab[]
-	 */
+// 	/**
+// 	 * @var GDT_Tab[]
+// 	 */
 // 	private $tabs = [];
+	/**
+	 * @return GDT_Tab[]
+	 */
 	public function getTabs() : array
 	{
 		return $this->getFields();
 	}
 
-	public function tab(GDT_Tab $tab)
+	public function addTab(GDT_Tab $tab) : self
 	{
 		return $this->addField($tab);
 // 		$this->tabs[] = $tab;
@@ -47,12 +50,14 @@ final class GDT_Tabs extends GDT
 	##############
 	public function renderForm() : string
 	{
-		return GDT_Template::php('UI', 'cell/tabs.php', ['field' => $this, 'cell' => false]);
+		return GDT_Template::php('UI', 'tabs_html.php', [
+			'field' => $this, 'cell' => false]);
 	}
 	
 	public function renderHTML() : string
 	{
-		return GDT_Template::php('UI', 'cell/tabs.php', ['field' => $this, 'cell' => true]);
+		return GDT_Template::php('UI', 'tabs_html.php', [
+			'field' => $this, 'cell' => true]);
 	}
 
 }

@@ -12,7 +12,7 @@ use GDO\Core\GDO_Module;
  */
 final class Module_Net extends GDO_Module
 {
-	public int $priority = 10;
+	public int $priority = 9;
 	
 	public function onLoadLanguage() : void
 	{

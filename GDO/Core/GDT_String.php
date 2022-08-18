@@ -59,8 +59,8 @@ class GDT_String extends GDT_DBField
 	public function ascii() : self { return $this->encoding(self::ASCII); }
 	public function binary() : self { return $this->encoding(self::BINARY); }
 
-	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
-	public function isASCII() : bool { return $this->encoding === self::ASCII; }
+// 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
+// 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
 	public function isBinary() : bool { return $this->encoding === self::BINARY; }
 	
 	#################

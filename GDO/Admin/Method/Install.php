@@ -89,8 +89,6 @@ class Install extends MethodForm
 	
 	/**
 	 * The 4 button install form.
-	 * {@inheritDoc}
-	 * @see \GDO\Form\MethodForm::createForm()
 	 */
 	public function createForm(GDT_Form $form) : void
 	{
@@ -134,11 +132,6 @@ class Install extends MethodForm
 	###############
 	public function executeButton($button)
 	{
-// 		$form = $this->getForm();
-// 		if (!$form->validate(null))
-// 		{
-// 			return parent::formInvalid($form);
-// 		}
 		$response = call_user_func([$this, "execute_$button"]);
 		Cache::flush();
 		Cache::fileFlush();

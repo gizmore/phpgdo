@@ -10,6 +10,7 @@ use GDO\Core\GDT;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Date\GDO_Timezone;
 use function PHPUnit\Framework\assertNotEquals;
+use GDO\Language\Trans;
 
 /**
  * Test date and time.
@@ -85,8 +86,8 @@ final class DateTest extends TestCase
 
     public function testDisplayDate()
     {
-        $this->lang('de');
-        $this->timezone('Europe/Berlin');
+    	$this->lang('de');
+    	$this->timezone('Europe/Berlin');
         $dbdate = '2021-11-09 08:00:59.123';
         $result = Time::displayDate($dbdate);
         assertEquals('09.11.2021 09:00', $result);

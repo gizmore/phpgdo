@@ -139,6 +139,9 @@ abstract class MethodForm extends Method
 	############
 	### Exec ###
 	############
+	protected function beforeValidation() : void {}
+	protected function afterValidation() : void {}
+
 	public function execute()
 	{
 // 		### validation result 
@@ -168,6 +171,9 @@ abstract class MethodForm extends Method
 			{
 				$this->submitted = true;
 				$this->pressedButton = $gdt->name;
+				
+				$this->beforeValidation();
+				
 				if ($form->validate(null))
 				{
 					$this->validated = true;
@@ -189,7 +195,8 @@ abstract class MethodForm extends Method
 						throw new GDO_Error('err_submit_without_click_handler', [$this->renderMoMe(), $gdt->getName()]);
 					}
 					
-					$this->resetForm();
+					$this->afterValidation();
+// 					$this->resetForm();
 					
 					return $result;
 				}

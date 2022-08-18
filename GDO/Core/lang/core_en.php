@@ -102,9 +102,11 @@ return [
 	
 	# Buttons
 	'btn_back' => 'Back',
+	'btn_clearcache' => 'Clear Cache',
 	'btn_create' => 'Create',
 	'btn_delete' => 'Delete',
 	'btn_edit' => 'Edit',
+	'btn_modules' => 'Modules',
 	'btn_overview' => 'Overview',
 	'btn_preview' => 'Preview',
 	'btn_save' => 'Save',
@@ -112,8 +114,7 @@ return [
 	'btn_set' => 'Set',
 	'btn_upload' => 'Upload',
 	'btn_view' => 'View',
-	'btn_modules' => 'Modules',
-	'btn_clearcache' => 'Clear Cache',
+	'btn_visible' => 'Visible',
 	'submit' => 'Submit',
 	
 	# Float
@@ -129,6 +130,7 @@ return [
 	'enum_bot' => 'Bot',
 	
 	# GDTs
+	'attachment' => 'Attachment',
 	'edited_by' => 'Edited by',
 	'html' => 'HTML',
 	'format' => 'Format',
@@ -193,6 +195,7 @@ return [
 	'size' => 'Size',
 	'object_filter' => 'Filter',
 	'directory' => 'Directory',
+	
 	
 	# CBX
 	'sel_all' => 'Select All',

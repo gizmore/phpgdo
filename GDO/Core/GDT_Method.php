@@ -29,7 +29,7 @@ class GDT_Method extends GDT
 	
 	private function getCLIAutoButton(array $inputs) : ?string
 	{
-		return $this->method->getAutoButton(array_keys($inputs));
+		return $this->method->appliedInputs($inputs)->getAutoButton(array_keys($inputs));
 	}
 	
 	/**
@@ -41,7 +41,11 @@ class GDT_Method extends GDT
 	{
 		if (!isset($this->result))
 		{
+			$this->changeUser();
 			$inputs = $this->getInputs();
+// 			$method = $this->method->inputs($inputs);
+// 			$
+// 			$method->appliedInputs($inputs);
 			if ($this->clibutton)
 			{
 				if ($button = $this->getCLIAutoButton($inputs))
@@ -56,7 +60,6 @@ class GDT_Method extends GDT
 			}
 
 			$method = $this->method->inputs($inputs);
-			$this->changeUser();
 			
 			if ($this->withPermissionCheck)
 			{

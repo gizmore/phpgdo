@@ -39,6 +39,8 @@ use GDO\User\GDO_User;
  */
 abstract class GDO extends GDT
 {
+	use WithTemp;
+	
 	#################
 	### Constants ###
 	#################
@@ -132,7 +134,7 @@ abstract class GDO extends GDT
 	/**
 	 * Return the mysql storage engine for this gdo.
 	 */
-	public function gdoEngine() : string { return self::INNODB; } # @see self::MYISAM
+	public function gdoEngine() : string { return GDO_DB_ENGINE; } # @see self::MYISAM
 	
 	/**
 	 * Is this GDO abstract? Required for inheritance hacks.
@@ -1109,7 +1111,6 @@ abstract class GDO extends GDT
 	####################
 	/**
 	 * Get the primary key where condition for this row.
-	 * @return string
 	 */
 	public function getPKWhere() : string
 	{
@@ -1195,7 +1196,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Create a new entity instance.
-	 * @return self
 	 */
 	public static function blank(array $initial = null) : self
 	{

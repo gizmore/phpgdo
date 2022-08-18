@@ -62,27 +62,27 @@ class Installer
 			{
 				continue;
 			}
-			try
-			{
+// 			try
+// 			{
 				if ( ($isInstall && $isCLI) || ($isTest) )
 				{
 					echo "Installing {$module->getName()}\n";
 					flush();
 				}
 				self::installModule($module);
-			}
-			catch (\Throwable $e)
-			{
-				$app = Application::$INSTANCE;
-				if ( ($app->isCLI()) || ($app->isUnitTests()) )
-				{
-					echo Debug::backtraceException($e, false, "Cannot install {$module->getName()}");
-				}
-				else
-				{
-					throw $e;
-				}
-			}
+// 			}
+// 			catch (\Throwable $e)
+// 			{
+// 				$app = Application::$INSTANCE;
+// 				if ( ($app->isCLI()) || ($app->isUnitTests()) )
+// 				{
+// 					echo Debug::backtraceException($e, false, "Cannot install {$module->getName()}");
+// 				}
+// 				else
+// 				{
+// 					throw $e;
+// 				}
+// 			}
 		}
 		return true;
 	}

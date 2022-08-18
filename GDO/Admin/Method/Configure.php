@@ -79,6 +79,9 @@ class Configure extends MethodForm
 		# Response for install panel
 		$install = Install::make()->inputs($this->inputs);
 		$response->addField($install->executeWithInit());
+		
+		$this->resetForm();
+		unset($this->configModule);
 
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())

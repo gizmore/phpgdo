@@ -77,6 +77,12 @@ final class Time
 	    return self::$TIMEZONE_OBJECTS[$timezone];
 	}
 	
+	public static function setTimezoneNamed(string $timezoneName) : void
+	{
+		$tz = self::getTimezoneObject($timezoneName);
+		self::setTimezone($tz);
+	}
+	
 	public static function setTimezone(string $timezone)
 	{
 	    self::$TIMEZONE = $timezone;

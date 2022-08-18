@@ -27,7 +27,7 @@ use function PHPUnit\Framework\assertLessThan;
  * Trivial methods only have parameters that can be plugged.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class AutomatedTest extends TestCase
@@ -113,7 +113,7 @@ final class AutomatedTest extends TestCase
 			{
 //				echo "Checking GDO $klass\n"; ob_flush();
 				$table = GDO::tableFor($klass, false);
-				if (!$table->gdoAbstract())
+				if (($table) && (!$table->gdoAbstract()))
 				{
 					$count++;
 					# Test GDO creation.

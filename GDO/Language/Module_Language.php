@@ -74,12 +74,8 @@ final class Module_Language extends GDO_Module
 		];
 	}
 	
-	public function cfgUserLangID(GDO_User $user = null) : string
+	public function cfgUserLangID(GDO_User $user) : string
 	{
-		if ($user === null)
-		{
-			return Trans::$ISO;
-		}
 		return $this->userSettingVar($user, 'language');
 	}
 	

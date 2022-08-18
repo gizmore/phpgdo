@@ -4,7 +4,6 @@ namespace GDO\User;
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_DeletedBy;
-use GDO\Core\WithTemp;
 use GDO\Crypto\GDT_PasswordHash;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
@@ -34,8 +33,6 @@ use GDO\Core\ModuleLoader;
  */
 final class GDO_User extends GDO
 {
-	use WithTemp;
-	
 	const GUEST_NAME_PREFIX = '~';
 	
 	#############
@@ -188,7 +185,7 @@ final class GDO_User extends GDO
 	public function getID() : ?string { return $this->gdoVar('user_id'); }
 	public function getName() : ?string { return $this->gdoVar('user_name'); }
 	public function getType() : string { return $this->gdoVar('user_type'); }
-	public function getLangISO() : string { return Module_Language::instance()->cfgUserLangID(); }
+	public function getLangISO() : string { return Module_Language::instance()->cfgUserLangID($this); }
 	public function getUserName() : ?string { return $this->gdoVar('user_name'); }
 	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
 	
@@ -256,7 +253,7 @@ final class GDO_User extends GDO
 		{
 			return $tz;
 		}
-		if (class_exists('GDO\\Session\\GDO_Session', false))
+		if (module_enabled('Session'))
 		{
 			return GDO_Session::get('timezone', '1');
 		}
@@ -284,21 +281,22 @@ final class GDO_User extends GDO
 		return $this->getGuestName() || $this->getUserName();
 	}
 	
+	/**
+	 * Load user permissions from cache if possible.
+	 */
 	public function loadPermissions() : array
 	{
 		if ($this->isPersisted())
 		{
 			if (null === ($cache = $this->tempGet('gdo_permission')))
 			{
-				if ($cache = GDO_UserPermission::load($this))
-				{
-					$this->tempSet('gdo_permission', $cache);
-					$this->recache();
-				}
+				$cache = GDO_UserPermission::load($this);
+				$this->tempSet('gdo_permission', $cache);
+				$this->recache();
 			}
 			return $cache;
 		}
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public function hasPermissionID(string $permissionId=null) : bool
@@ -362,7 +360,7 @@ final class GDO_User extends GDO
 	{
 		if (!$this->isPersisted())
 		{
-			if (class_exists('GDO\\Session\\GDO_Session', false))
+			if (module_enabled('Session'))
 			{
 				if ($session = GDO_Session::instance())
 				{

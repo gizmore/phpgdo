@@ -19,6 +19,7 @@ use GDO\Core\Logger;
 use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_TinyInt;
 use GDO\Core\GDT_EnumNoI18n;
+use GDO\Core\GDO;
 
 /**
  * Configuration helper during install wizard.
@@ -135,6 +136,7 @@ class Config
 		if (!defined('GDO_DB_USER')) define('GDO_DB_USER', '');
 		if (!defined('GDO_DB_PASS')) define('GDO_DB_PASS', '');
 		if (!defined('GDO_DB_NAME')) define('GDO_DB_NAME', '');
+		if (!defined('GDO_DB_ENGINE')) define('GDO_DB_ENGINE', GDO::INNODB);
 		if (!defined('GDO_DB_DEBUG')) define('GDO_DB_DEBUG', 0);
 		# Cache
 		if (!defined('GDO_CACHE_DEBUG')) define('GDO_CACHE_DEBUG', 0);
@@ -206,6 +208,7 @@ class Config
 			GDT_String::make('db_user')->initialValue(GDO_DB_USER),
 			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS),
 			GDT_String::make('db_name')->initialValue(GDO_DB_NAME),
+			GDT_EnumNoI18n::make('db_engine')->initialValue(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM),
 			GDT_TinyInt::make('db_debug')->unsigned()->initialValue(GDO_DB_DEBUG)->min(0)->max(2),
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
