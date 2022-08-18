@@ -49,4 +49,8 @@ return [
 	# Clock
 	'cfg_clock_sidebar' => 'Show clock in sidebar?',
 	
+	# Activity Accuracy
+	'activity_accuracy' => 'Activity Accuracy',
+	'tt_activity_accuracy' => 'Control how exact your online activity is shown / last seen on...',
+
 ];

@@ -10,14 +10,13 @@ use GDO\Core\GDT;
 use function PHPUnit\Framework\assertStringContainsString;
 use GDO\Date\GDO_Timezone;
 use function PHPUnit\Framework\assertNotEquals;
-use GDO\Language\Trans;
 
 /**
  * Test date and time.
  * 
  * @see Einstein.A
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.4
  */
 final class DateTest extends TestCase

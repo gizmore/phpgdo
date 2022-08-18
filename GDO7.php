@@ -196,6 +196,15 @@ function def(string $key, $default = null)
 	return defined($key) ? constant($key) : $default;
 }
 
+function deff(string $key, $value)
+{
+	if (!defined($key))
+	{
+		define($key, $value);
+	}
+	return constant($key);
+}
+
 function hdrc(string $header, bool $replace = true)
 {
 	hdr($header, $replace);

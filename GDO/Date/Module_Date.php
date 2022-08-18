@@ -51,6 +51,7 @@ final class Module_Date extends GDO_Module
     {
     	return [
     		'timezone' => ['acl_all', 0, null],
+    		'activity_accuracy' => ['friend_friends', 0, null],
     	];
     }
     
@@ -58,6 +59,7 @@ final class Module_Date extends GDO_Module
     {
     	return [
     		GDT_Timezone::make('timezone')->initial('1')->notNull(),
+    		GDT_Duration::make('activity_accuracy')->initial('10m')->min(60)->max(Time::ONE_DAY * 2)->notNull(),
     	];
     }
     

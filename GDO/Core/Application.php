@@ -33,7 +33,7 @@ class Application extends GDT
 	################################
 	### HREF COLLECTOR FOR TESTS ###
 	################################
-// 	public static array $HREFS = []; 
+// 	public static array $HREFS = []; # @TODO In UnitTest, collect all calls to href(). Click every generated link :)
 
 	################
 	### App Time ###
@@ -109,17 +109,19 @@ class Application extends GDT
 	### Application state ###
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
+	# render modes
+	public function isWebsocket() : bool { return false; }
 	public function isAjax() : bool { return $this->ajax; }
-	public function isHTML() : bool { return $this->modeDetected === GDT::RENDER_WEBSITE; }
+	public function isHTML() : bool { return $this->mode >= 10; }
 	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
 	public function isXML() : bool { return $this->mode === GDT::RENDER_XML; }
 	public function isPDF() : bool { return $this->mode === GDT::RENDER_PDF; }
 	public function isCLI() : bool { return $this->cli; }
+	# 
+	public function isAPI() : bool { return !$this->isWebserver(); }
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
-	public function isWebsocket() : bool { return false; }
 	public function isWebserver() : bool { return !$this->cli; }
-	public function isAPI() : bool { return !$this->isWebserver(); }
 
 	/**
 	 * Is a session handler supported?

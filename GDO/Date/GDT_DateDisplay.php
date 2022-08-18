@@ -4,7 +4,6 @@ namespace GDO\Date;
 use GDO\Core\GDT;
 use GDO\UI\WithPHPJQuery;
 use GDO\Core\GDT_Template;
-use GDO\Core\GDO;
 use GDO\Core\WithName;
 use GDO\Core\WithValue;
 use GDO\Core\WithInput;

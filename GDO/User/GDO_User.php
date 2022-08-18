@@ -71,7 +71,7 @@ final class GDO_User extends GDO
 			GDT_Username::make('user_name')->unique(),
 			GDT_Username::make('user_guest_name')->unique()->notNull(false)->label('user_guest_name'),
 			GDT_Level::make('user_level'),
-			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
+// 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
 			GDT_DeletedAt::make('user_deleted'),
 			GDT_DeletedBy::make('user_deletor'),
 			GDT_PasswordHash::make('user_password'),

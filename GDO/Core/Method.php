@@ -16,6 +16,7 @@ use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Form;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
+use GDO\Util\Arrays;
 
 /**
  * Abstract baseclass for all methods.
@@ -209,7 +210,7 @@ abstract class Method #extends GDT
 			$ut = $user->getType();
 			if (!in_array($ut, $mt, true))
 			{
-				return $this->error('err_user_type', [$this->getUserType()]);
+				return $this->error('err_user_type', [Arrays::implodeHuman($mt)]);
 			}
 		}
 		
@@ -246,6 +247,12 @@ abstract class Method #extends GDT
 		return $this->execWrap();
 	}
 	
+	/**
+	 * Detect if we should start a transaction. # @TODO only mark DB transaction ready / lazily
+	 * This happens when it's generally transaction worthy method (isTransactional())
+	 * And if the REQUEST VERB is POST.
+	 * Another option is: isAlwaysTransactional()
+	 */
 	public function transactional() : bool
 	{
 		if (Application::instance()->isInstall())
@@ -280,6 +287,7 @@ abstract class Method #extends GDT
 	
 	/**
 	 * Execute this method with all hooks.
+	 * Quite a long method.
 	 */
 	public function executeWithInit()
 	{
@@ -449,8 +457,9 @@ abstract class Method #extends GDT
 	public function storeLastURL() : void
 	{
 // 		$user = GDO_User::current();
-		if (class_exists('GDO\\Session\\GDO_Session', false))
+		if (module_enabled('Session'))
 		{
+			# Without session we do not care over referrer.
 			GDO_Session::set('sess_last_url', $_SERVER['REQUEST_URI']);
 		}
 // 		->saveSettingVar('User', 'last_url', $var)
@@ -465,9 +474,9 @@ abstract class Method #extends GDT
 		if ($user->isPersisted())
 		{
 			$time = Application::$TIME;
-			$time -= $time % 60;
+			$time -= $time % $user->settingValue('Date', 'activity_accuracy');
 			$date = Time::getDate($time);
-			$user->saveVar('user_last_activity', $date);
+// 			$user->saveVar('user_last_activity', $date);
 			$user->saveSettingVar('User', 'last_activity', $date);
 		}
 	}

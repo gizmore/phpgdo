@@ -13,7 +13,7 @@ use GDO\Util\Filewalker;
 use GDO\User\GDO_Permission;
 use GDO\Util\Strings;
 use GDO\Core\Application;
-use GDO\Core\Debug;
+use GDO\Install\Method\Configure;
 
 /**
  * Install helper.
@@ -213,6 +213,9 @@ class Installer
 	/**
 	 * Recreate a database schema.
 	 * I call this "automigration".
+	 * COPY table. DROP table. CREATE table. RE-IMPORT table. Works :)
+	 * 
+	 * @version 7.0.1
 	 * @since 6.11.5
 	 */
 	public static function recreateDatabaseSchema(GDO_Module $module) : void
@@ -279,7 +282,6 @@ class Installer
 	
 	/**
 	 * Get intersecting columns of old and new table creatoin schema.
-	 * 
 	 * @return string[]
 	 */
 	private static function getColumnNames(GDO $gdo, string $temptable) : array
@@ -407,6 +409,20 @@ class Installer
 	        return ModuleLoader::instance()->getModule($dep, true, true);
 	    }, $deps));
 	    return $back;
+	}
+	
+	########################
+	### Config Refresher ###
+	########################
+	/**
+	 * In case a new config.php variable is introduced, this method can upgrade your config.
+	 */
+	public static function refreshConfig(string $path) : bool
+	{
+		copy($path, $path . '.backup.php');
+		Config::configure();
+		Configure::make()->writeConfig($path);
+		return true;
 	}
 	
 }

@@ -63,7 +63,7 @@ use GDO\Core\GDT_Method;
  * @example gdoadm.sh install MailGPG
  * @example bin/gdo mail.send giz Hi there, you wanker;This is the mail body. Parameters are separated via semicolon.
  */
-function printUsage(int $code = 1)
+function printUsage(int $code = -1)
 {
 	global $argv;
 	$exe = $argv[0];
@@ -84,6 +84,7 @@ function printUsage(int $code = 1)
 	echo "php $exe wipe <module> - To uninstall modules\n";
 	echo "php $exe wipe_all - To erase the whole database\n";
 	echo "php $exe update - Is automatically called after gdo_update.sh - it re-installs all installed modules.\n";
+	echo "php $exe confgrade - Upgrade your config.php with new config vars.\n";
 	echo "php $exe migrate <module> - To force-migrate gdo tables for an installed module. Handle with care.\n";
 	echo "php $exe migrate_all> - To force-migrate all gdo tables for all installed modules. Handle with special care.\n";
 	echo "\n--- Module config ---\n";
@@ -861,6 +862,23 @@ elseif ($argv[1] === 'gizmore_setup')
 		FileUtil::removeDir($dir);
 	}
 	echo "All done, gizmore sire! =)\n";
+}
+
+elseif ($argv[1] === 'confgrade')
+{
+	switch ($argc)
+	{
+		default: # fallthrough chaoz?
+			printUsage();
+		case 2:
+			$argv[2] = 'config.php';
+		case 3:
+			$path = $argv[2];
+	}
+	
+	Installer::refreshConfig($path);
+	
+	echo "All done!\n";
 }
 
 else

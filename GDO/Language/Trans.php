@@ -5,6 +5,7 @@ use GDO\Util\FileUtil;
 use GDO\UI\GDT_Error;
 use GDO\DB\Cache;
 use GDO\Core\GDO_Error;
+use GDO\Core\Logger;
 
 /**
  * Trans; a very cheap I18n API.
@@ -45,14 +46,12 @@ final class Trans
 	private static bool $INITED = false;
 	
 	/**
-	 * @TODO move Shall sitename be appended to seo titles? Implement it?
-	 * @var boolean
+	 * @TODO Shall sitename be appended to seo titles? Implement it? Shall be an option in module UI or Core.
 	 */
 	public static bool $NO_SITENAME = false;
 	
 	/**
 	 * Number of missing translation keys for stats and testing.
-	 * @var integer
 	 */
 	public static int $MISS = 0;
 	
@@ -63,7 +62,7 @@ final class Trans
 	public static array $MISSING = [];
 	
 	/**
-	 * Set the current ISO
+	 * Set the current ISO.
 	 */
 	public static function setISO(string $iso) : void
 	{
@@ -80,7 +79,6 @@ final class Trans
 	/**
 	 * Show number of registered translation data base pathes.
 	 * In case we used the filecache this is set to 1.
-	 * @return int
 	 */
 	public static function numFiles() : int
 	{
@@ -142,7 +140,6 @@ final class Trans
 	
 	/**
 	 * Translate key into a language.
-	 * 
 	 * @return string|string[]
 	 */
 	public static function tiso(string $iso, string $key, array $args=null)
@@ -168,20 +165,23 @@ final class Trans
 		    $text = $key;
 			if ($args)
 			{
-				$text .= ": ";
+				$text .= ': ';
 				$text .= json_encode($args);
 			}
 		}
 		return $text;
 	}
-	
+
+	/**
+	 * When a key is missing, log it.
+	 */
 	private static function missing(string $key) : void
 	{
 		if (self::$INITED)
 		{
-// 			xdebug_break();
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
+			Logger::log('i18n', $key);
 		}
 	}
 
@@ -260,8 +260,6 @@ final class Trans
 	
 	/**
 	 * Check if a translation key exists.
-	 * @param string $key
-	 * @return boolean
 	 */
 	public static function hasKey(string $key, bool $withMiss=false) : bool
 	{
@@ -275,9 +273,6 @@ final class Trans
 
 	/**
 	 * Check if a translation key exists for an ISO.
-	 * @param string $iso
-	 * @param string $key
-	 * @return boolean
 	 */
 	public static function hasKeyIso(string $iso, string $key) : bool
 	{
@@ -289,14 +284,6 @@ final class Trans
 #############
 ### Setup ###
 #############
-if (!defined('GDO_LANGUAGE'))
-{
-	define('GDO_LANGUAGE', 'en');
-}
-
-if (!defined('GDO_FILECACHE'))
-{
-	define('GDO_FILECACHE', false);
-}
-
+deff('GDO_LANGUAGE', 'en');
+deff('GDO_FILECACHE', false);
 Trans::$FILE_CACHE = (bool) GDO_FILECACHE;

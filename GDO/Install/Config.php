@@ -10,7 +10,6 @@ use GDO\Util\Strings;
 use GDO\Date\Time;
 use GDO\Core\GDT_Checkbox;
 use GDO\Util\Random;
-use GDO\Core\GDT_Int;
 use GDO\Net\GDT_Port;
 use GDO\Core\Application;
 use GDO\Core\GDT_String;
@@ -70,99 +69,78 @@ class Config
 	#############################
 	### Config File Generator ###
 	#############################
-	private static function detectServerSoftware() : string
-	{
-	    if (!isset($_SERVER['SERVER_SOFTWARE']))
-	    {
-	        return 'none';
-	    }
-	    
-		$software = $_SERVER['SERVER_SOFTWARE'];
-		if (stripos($software, 'Apache') !== false)
-		{
-			if (strpos($software, '2.4') !== false)
-			{
-				return 'apache2.4';
-			}
-			if (strpos($software, '2.2') !== false)
-			{
-				return 'apache2.2';
-			}
-			return 'apache2.4';
-		}
-		if (stripos($software, 'nginx') !== false)
-		{
-			return 'nginx';
-		}
-		return 'other';
-	}
-	
+	/**
+	 * Auto-configure GDOv7.
+	 */
 	public static function configure() : void
 	{
 		# Site
-		if (!defined('GDO_SITENAME')) define('GDO_SITENAME', 'GDOv7');
-		if (!defined('GDO_SITECREATED')) define('GDO_SITECREATED', Time::getDate(microtime(true)));
-		if (!defined('GDO_LANGUAGE')) define('GDO_LANGUAGE', 'en');
-// 		if (!defined('GDO_TIMEZONE')) define('GDO_TIMEZONE', ini_get('date.timezone'));
-		if (!defined('GDO_THEMES')) define('GDO_THEMES', '[default]');
-		if (!defined('GDO_MODULE')) define('GDO_MODULE', 'Core');
-		if (!defined('GDO_METHOD')) define('GDO_METHOD', 'Welcome');
-		if (!defined('GDO_SEO_URLS')) define('GDO_SEO_URLS', false);
-		if (!defined('GDO_IPC')) define('GDO_IPC', 'none');
-		if (!defined('GDO_IPC_DEBUG')) define('GDO_IPC_DEBUG', false);
-		if (!defined('GDO_GDT_DEBUG')) define('GDO_GDT_DEBUG', 0);
-		if (!defined('GDO_JSON_DEBUG')) define('GDO_JSON_DEBUG', false);
+		deff('GDO_SITENAME', 'GDOv7');
+		deff('GDO_SITECREATED', Time::getDate());
+		deff('GDO_LANGUAGE', 'en');
+		deff('GDO_TIMEZONE', ini_get('date.timezone')); # @TODO use the full timezone name here for the default timezone in module date.
+		deff('GDO_THEMES', 'classic,default');
+		deff('GDO_MODULE', 'Core');
+		deff('GDO_METHOD', 'Welcome');
+		deff('GDO_SEO_URLS', false);
+		deff('GDO_IPC', 'none');
+		deff('GDO_IPC_DEBUG', false);
+		deff('GDO_GDT_DEBUG', 0);
+		deff('GDO_JSON_DEBUG', false);
 		# HTTP
-		if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
-		if (!defined('GDO_SERVER')) define('GDO_SERVER', self::detectServerSoftware());
-		if (!defined('GDO_PROTOCOL')) define('GDO_PROTOCOL', @$_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
-		if (!defined('GDO_PORT')) define('GDO_PORT', @$_SERVER['SERVER_PORT'] ? $_SERVER['SERVER_PORT'] : (GDO_PROTOCOL === 'https' ? 443 : 80));
-		if (!defined('GDO_WEB_ROOT')) define('GDO_WEB_ROOT', Strings::substrTo($_SERVER['SCRIPT_NAME'], 'install/wizard.php'));
+		deff('GDO_DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+		deff('GDO_SERVER', self::detectServerSoftware());
+		deff('GDO_PROTOCOL', @$_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
+		deff('GDO_PORT', @$_SERVER['SERVER_PORT'] ? $_SERVER['SERVER_PORT'] : (GDO_PROTOCOL === 'https' ? 443 : 80));
+		deff('GDO_WEB_ROOT', Strings::substrTo($_SERVER['SCRIPT_NAME'], 'install/wizard.php'));
 		# Files
-		if (!defined('GDO_CHMOD')) define('GDO_CHMOD', 0770);
+		deff('GDO_CHMOD', 0770);
 		# Logging
-		if (!defined('GDO_LOG_REQUEST')) define('GDO_LOG_REQUEST', false);
-// 		if (!defined('GDO_CONSOLE_VERBOSE')) define('GDO_CONSOLE_VERBOSE', false);
-		if (!defined('GDO_ERROR_LEVEL')) define('GDO_ERROR_LEVEL', Logger::_DEFAULT);
-		if (!defined('GDO_ERROR_STACKTRACE')) define('GDO_ERROR_STACKTRACE', true);
-		if (!defined('GDO_ERROR_DIE')) define('GDO_ERROR_DIE', true);
-		if (!defined('GDO_ERROR_MAIL')) define('GDO_ERROR_MAIL', false);
-		if (!defined('GDO_ERROR_TIMEZONE')) define('GDO_ERROR_TIMEZONE', 'UTC');
+		deff('GDO_LOG_REQUEST', false);
+// 		deff('GDO_CONSOLE_VERBOSE', false);
+		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
+		deff('GDO_ERROR_STACKTRACE', true);
+		deff('GDO_ERROR_DIE', true);
+		deff('GDO_ERROR_MAIL', false);
+		deff('GDO_ERROR_TIMEZONE', 'UTC');
 
 		# Database
-		if (!defined('GDO_SALT')) define('GDO_SALT', Random::randomKey(16));
-		if (!defined('GDO_DB_ENABLED')) define('GDO_DB_ENABLED', true);
-		if (!defined('GDO_DB_HOST')) define('GDO_DB_HOST', 'localhost');
-		if (!defined('GDO_DB_USER')) define('GDO_DB_USER', '');
-		if (!defined('GDO_DB_PASS')) define('GDO_DB_PASS', '');
-		if (!defined('GDO_DB_NAME')) define('GDO_DB_NAME', '');
-		if (!defined('GDO_DB_ENGINE')) define('GDO_DB_ENGINE', GDO::INNODB);
-		if (!defined('GDO_DB_DEBUG')) define('GDO_DB_DEBUG', 0);
+		deff('GDO_SALT', Random::randomKey(16));
+		deff('GDO_DB_ENABLED', true);
+		deff('GDO_DB_HOST', 'localhost');
+		deff('GDO_DB_USER', '');
+		deff('GDO_DB_PASS', '');
+		deff('GDO_DB_NAME', '');
+		deff('GDO_DB_ENGINE', GDO::INNODB);
+		deff('GDO_DB_DEBUG', 0);
 		# Cache
-		if (!defined('GDO_CACHE_DEBUG')) define('GDO_CACHE_DEBUG', 0);
-		if (!defined('GDO_FILECACHE')) define('GDO_FILECACHE', false);
-		if (!defined('GDO_MEMCACHE')) define('GDO_MEMCACHE', 2);
-		if (!defined('GDO_MEMCACHE_HOST')) define('GDO_MEMCACHE_HOST', '127.0.0.1');
-		if (!defined('GDO_MEMCACHE_PORT')) define('GDO_MEMCACHE_PORT', 61221);
-		if (!defined('GDO_MEMCACHE_TTL')) define('GDO_MEMCACHE_TTL', 1800);
+		deff('GDO_CACHE_DEBUG', 0);
+		deff('GDO_FILECACHE', false);
+		deff('GDO_MEMCACHE', 2);
+		deff('GDO_MEMCACHE_HOST', '127.0.0.1');
+		deff('GDO_MEMCACHE_PORT', 61221);
+		deff('GDO_MEMCACHE_TTL', 1800);
 		# Cookies
-		if (!defined('GDO_SESS_NAME')) define('GDO_SESS_NAME', 'GDO7');
-		if (!defined('GDO_SESS_DOMAIN')) define('GDO_SESS_DOMAIN', GDO_DOMAIN);
-		if (!defined('GDO_SESS_TIME')) define('GDO_SESS_TIME', Time::ONE_DAY*2);
-		if (!defined('GDO_SESS_JS')) define('GDO_SESS_JS', false);
-		if (!defined('GDO_SESS_HTTPS')) define('GDO_SESS_HTTPS', Application::$INSTANCE->isTLS());
-		if (!defined('GDO_SESS_SAMESITE')) define('GDO_SESS_SAMESITE', 'Lax');
-		if (!defined('GDO_SESS_LOCK')) define('GDO_SESS_LOCK', GDO_DB_ENABLED);
+		deff('GDO_SESS_NAME', 'GDO7');
+		deff('GDO_SESS_DOMAIN', GDO_DOMAIN);
+		deff('GDO_SESS_TIME', Time::ONE_DAY*2);
+		deff('GDO_SESS_JS', false);
+		deff('GDO_SESS_HTTPS', Application::$INSTANCE->isTLS());
+		deff('GDO_SESS_SAMESITE', 'lax');
+		deff('GDO_SESS_LOCK', GDO_DB_ENABLED);
 		
 		# Email
-		if (!defined('GDO_ENABLE_EMAIL')) define('GDO_ENABLE_EMAIL', false);
-		if (!defined('GDO_BOT_NAME')) define('GDO_BOT_NAME', GDO_SITENAME . ' support');
-		if (!defined('GDO_BOT_EMAIL')) define('GDO_BOT_EMAIL', 'support@'.GDO_DOMAIN);
-		if (!defined('GDO_ADMIN_EMAIL')) define('GDO_ADMIN_EMAIL', 'administrator@'.GDO_DOMAIN);
-		if (!defined('GDO_ERROR_EMAIL')) define('GDO_ERROR_EMAIL', 'administrator@'.GDO_DOMAIN);
-		if (!defined('GDO_DEBUG_EMAIL')) define('GDO_DEBUG_EMAIL', true);
+		deff('GDO_ENABLE_EMAIL', false);
+		deff('GDO_BOT_NAME', GDO_SITENAME . ' support');
+		deff('GDO_BOT_EMAIL', 'support@'.GDO_DOMAIN);
+		deff('GDO_ADMIN_EMAIL', 'administrator@'.GDO_DOMAIN);
+		deff('GDO_ERROR_EMAIL', 'administrator@'.GDO_DOMAIN);
+		deff('GDO_DEBUG_EMAIL', true);
 	}
 	
+	/**
+	 * GDT for the config file.
+	 */
 	public static function fields() : array
 	{
 		$themes = GDT_Template::themeNames();
@@ -175,7 +153,7 @@ class Config
 			GDT_Checkbox::make('seo_urls')->initialValue(GDO_SEO_URLS?true:false),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED),
 			GDT_Enum::make('language')->enumValues('en', 'de')->initialValue(GDO_LANGUAGE)->notNull(),
-			// 		    GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull(),
+			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull(),
 			GDT_Select::make('themes')->multiple()->choices(array_combine($themes, $themes))->notNull()->initialValue(array('default')),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE),
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD),
@@ -195,7 +173,6 @@ class Config
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
 			GDT_Checkbox::make('log_request')->initialValue(GDO_LOG_REQUEST?true:false),
-// 			GDT_Checkbox::make('console_verbose')->initialValue(GDO_CONSOLE_VERBOSE),
 			GDT_Hidden::make('error_level')->initialValue(GDO_ERROR_LEVEL),
 			GDT_Checkbox::make('error_stacktrace')->initialValue(GDO_ERROR_STACKTRACE?true:false),
 			GDT_Checkbox::make('error_die')->initialValue(GDO_ERROR_DIE?true:false),
@@ -236,6 +213,33 @@ class Config
 			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail'),
 			GDT_Checkbox::make('debug_email')->initialValue(GDO_DEBUG_EMAIL),
 		];
+	}
+	
+	private static function detectServerSoftware() : string
+	{
+		if (!isset($_SERVER['SERVER_SOFTWARE']))
+		{
+			return 'none';
+		}
+		
+		$software = $_SERVER['SERVER_SOFTWARE'];
+		if (stripos($software, 'Apache') !== false)
+		{
+			if (strpos($software, '2.4') !== false)
+			{
+				return 'apache2.4';
+			}
+			if (strpos($software, '2.2') !== false)
+			{
+				return 'apache2.2';
+			}
+			return 'apache2.4';
+		}
+		if (stripos($software, 'nginx') !== false)
+		{
+			return 'nginx';
+		}
+		return 'other';
 	}
 	
 }

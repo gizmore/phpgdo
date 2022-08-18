@@ -11,6 +11,8 @@ use GDO\CLI\CLI;
  * CLI does use bash stuff, HTML uses CSS style.
  * For coloring text, see the UI Color class.
  * 
+ * @TODO What about IRC and co?
+ * 
  * @author gizmore
  * @version 7.0.1
  * @since 7.0.1
@@ -33,6 +35,11 @@ final class TextStyle
 		return self::display($s, 'i', 'i', 'italic');
 	}
 	
+	public static function boldi(string $s) : string
+	{
+		return self::bold(self::italic($s));
+	}
+	
 	public static function underline(string $s) : string
 	{
 		return self::display($s, 'span style="text-decoration: underline;"', 'span', 'underline');
@@ -48,11 +55,8 @@ final class TextStyle
 		{
 			case GDT::RENDER_CLI:
 				return call_user_func([CLI::class, $cliMethod], $s);
-			case GDT::RENDER_WEBSITE:
-			case GDT::RENDER_CELL:
-				return "<{$tagStart}>{$s}</{$tagEnd}>";
 			default:
-				return $s;
+				return $app->isHTML() ? "<{$tagStart}>{$s}</{$tagEnd}>" : $s;
 		}
 	}
 	
