@@ -64,6 +64,13 @@ function hrefDefault() : string
 	return href(GDO_MODULE, GDO_METHOD);
 }
 
+/**
+ * Create a GDOv7 href.
+ * SEO: Turn an url like " Forum, Board, &id=3 " into " /forum/board/id/3 ".
+ * Paramters with a dash or [] are not SEO converted.
+ * Append timezone and language to an url via dash paramter.
+ * @see urlenc
+ */
 function href(string $module, string $method, string $append = null, bool $lang = true) : string
 {
 // 	if ($lang)

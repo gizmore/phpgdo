@@ -14,6 +14,11 @@ and
 [Changelog](./DOCS/GDO7_CHANGELOG.md).
 
 
+## phpgdo: Demo Sites
+
+ - [Fineprint](https://fineprint.phpgdo.com) is a hacking challenge with a known vulnerability. It also serves as a demo site for the classic theme.
+
+
 ## phpgdo: Installation
 
 Please refer to the [DOCS](./DOCS/GDO7_INSTALLATION.md) for installation and documentation.
