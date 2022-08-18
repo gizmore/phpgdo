@@ -57,9 +57,9 @@ final class GDT_PerfBar extends GDT_Panel
 			'phpClasses' => count(get_declared_classes()),
 			'allocs' => (spl_object_id(GDT_UInt::make())),
 			
-			'fileCacheHits' => Cache::$FILE_HITS,
-			'fileCacheMiss' => Cache::$FILE_MISSES,
-			'fileCacheRq' => Cache::$FILE_HITS + Cache::$FILE_MISSES,
+			'fileCacheHits' => Cache::$CACHE_HITS,
+			'fileCacheMiss' => Cache::$CACHE_MISSES,
+			'fileCacheRq' => Cache::$CACHE_HITS + Cache::$CACHE_MISSES,
 			
 			'gdoFiles' => $GDT_LOADED,
 			'gdoCount' => GDO::$GDO_COUNT,

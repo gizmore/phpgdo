@@ -36,8 +36,8 @@ class Cache
 	############
 	### Perf ###
 	############
-	public static int $FILE_HITS = 0;
-	public static int $FILE_MISSES = 0;
+	public static int $CACHE_HITS = 0;
+	public static int $CACHE_MISSES = 0;
 	
 	# ################
 	# ## Memcached ###
@@ -261,12 +261,14 @@ class Cache
 			if ($mcached = self::get($this->tableName . $id))
 			{
 				$this->cache[$id] = $mcached;
+				self::$CACHE_HITS++;
 				return $mcached;
 			}
-// 			else
-// 			{
-// 				return null;
-// 			}
+		}
+		else
+		{
+			self::$CACHE_HITS++;
+			return $this->cache[$id];
 		}
 		
 		if (isset($this->all))
@@ -275,12 +277,14 @@ class Cache
 			{
 				if ($gdo->getID() === $id)
 				{
+					self::$CACHE_HITS++;
 					$this->cache[$id] = $gdo;
 					return $gdo;
 				}
 			}
 		}
 		
+		self::$CACHE_MISSES++;
 		return null;
 	}
 
@@ -298,7 +302,7 @@ class Cache
 			{
 				if ($gdo->gdoVar($key) === $var)
 				{
-					self::$FILE_HITS++;
+					self::$CACHE_HITS++;
 					return $gdo;
 				}
 			}
@@ -309,12 +313,12 @@ class Cache
 			{
 				if ($gdo->gdoVar($key) === $var)
 				{
-					self::$FILE_HITS++;
+					self::$CACHE_HITS++;
 					return $gdo;
 				}
 			}
 		}
-		self::$FILE_MISSES++;
+		self::$CACHE_MISSES++;
 		return null;
 	}
 
@@ -524,13 +528,13 @@ class Cache
 	{
 		if (self::fileHas($key, $expire))
 		{
-			self::$FILE_HITS++;
+			self::$CACHE_HITS++;
 			$path = self::filePath($key);
 			return file_get_contents($path);
 		}
 		else
 		{
-			self::$FILE_MISSES++;
+			self::$CACHE_MISSES++;
 		}
 		return null;
 	}
