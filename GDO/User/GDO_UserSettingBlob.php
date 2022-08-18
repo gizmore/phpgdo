@@ -7,11 +7,11 @@ use GDO\Core\GDT_Text;
 use GDO\Core\GDT_Index;
 
 /**
- * User settings for larger blob values, e.g. PMSignature.
+ * User settings for larger blob values, e.g. signature.
  * 
  * @author gizmore
- * @version 6.10
- * @since 6.02
+ * @version 7.0.1
+ * @since 6.2.0
  */
 final class GDO_UserSettingBlob extends GDO
 {
@@ -19,15 +19,14 @@ final class GDO_UserSettingBlob extends GDO
 	### GDO ###
 	###########
 	public function gdoCached() : bool { return false; }
-	public function gdoDependencies() { return ['GDO\User\GDO_User', 'GDO\Core\GDO_Module']; }
 	public function gdoColumns() : array
 	{
-		return array(
+		return [
 			GDT_User::make('uset_user')->primary(),
 			GDT_Name::make('uset_name')->primary()->unique(false),
 			GDT_Text::make('uset_value')->max(65535),
 		    GDT_Index::make('uset_user_index')->indexColumns('uset_user')->hash(),
-		);
+		];
 	}
 	
 }

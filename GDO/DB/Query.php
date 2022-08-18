@@ -59,6 +59,7 @@ final class Query
 	private bool $cached = true;
 	public  bool $buffered = true;
 	public  bool $debug = false;
+	public  ?self $union = null;
 	
 	public function __construct(GDO $table)
 	{
@@ -476,15 +477,31 @@ final class Query
 	    $this->raw = $raw;
 	    return $this;
 	}
+	
+	#############
+	### Union ###
+	#############
+	public function union(self $query) : self
+	{
+		$this->union = $query;
+		return $this;
+	}
+	
+	public function getUnion() : ?string
+	{
+		return $this->union ?
+			(' UNION ' . $this->union->buildQuery()) :
+			null;
+	}
 
 	/**
 	 * Build the query string.
-	 * @return string
 	 */
 	public function buildQuery() : string
 	{
 	    return isset($this->raw) ?
     	    $this->raw :
+    	    
     	    $this->type .
     	    $this->getSelect() .
     	    $this->getFrom() .
@@ -495,7 +512,9 @@ final class Query
     	    $this->getGroup() .
     	    $this->getHaving() .
     	    $this->getOrderBy() .
-    	    $this->getLimit();
+    	    $this->getLimit() .
+    	    
+	    	$this->getUnion();
 	}
 	
 	/**

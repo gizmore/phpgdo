@@ -798,12 +798,15 @@ class GDO_Module extends GDO
 	    {
 	        return GDT::EMPTY_ARRAY;
 	    }
-	    return array_merge(
-	        GDO_UserSetting::table()->select('uset_name, uset_value')->
-	           where("uset_user={$user->getID()}")->exec()->fetchAllArray2dPair(),
-	        GDO_UserSettingBlob::table()->select('uset_name, uset_value')->
-	           where("uset_user={$user->getID()}")->exec()->fetchAllArray2dPair()
-	    );
+	    $settings = GDO_UserSetting::table()->select('uset_name, uset_value')->where("uset_user={$user->getID()}");
+	    $blobs = GDO_UserSettingBlob::table()->select('uset_name, uset_value')->where("uset_user={$user->getID()}");
+	    return $settings->union($blobs)->exec()->fetchAllArray2dPair();
+// 	    return array_merge(
+// 	        GDO_UserSetting::table()->select('uset_name, uset_value')->
+// 	           where("uset_user={$user->getID()}")->exec()->1fetchAllArray2dPair(),
+// 	        GDO_UserSettingBlob::table()->select('uset_name, uset_value')->
+// 	           where("uset_user={$user->getID()}")->exec()->fetchAllArray2dPair()
+// 	    );
 	}
 	
 	###########
