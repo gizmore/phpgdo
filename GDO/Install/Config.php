@@ -97,13 +97,11 @@ class Config
 		deff('GDO_CHMOD', 0770);
 		# Logging
 		deff('GDO_LOG_REQUEST', false);
-// 		deff('GDO_CONSOLE_VERBOSE', false);
 		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
 		deff('GDO_ERROR_STACKTRACE', true);
 		deff('GDO_ERROR_DIE', true);
 		deff('GDO_ERROR_MAIL', false);
 		deff('GDO_ERROR_TIMEZONE', 'UTC');
-
 		# Database
 		deff('GDO_SALT', Random::randomKey(16));
 		deff('GDO_DB_ENABLED', true);
@@ -115,7 +113,7 @@ class Config
 		deff('GDO_DB_DEBUG', 0);
 		# Cache
 		deff('GDO_CACHE_DEBUG', 0);
-		deff('GDO_FILECACHE', false);
+		deff('GDO_FILECACHE', true);
 		deff('GDO_MEMCACHE', 2);
 		deff('GDO_MEMCACHE_HOST', '127.0.0.1');
 		deff('GDO_MEMCACHE_PORT', 61221);
@@ -123,18 +121,17 @@ class Config
 		# Cookies
 		deff('GDO_SESS_NAME', 'GDO7');
 		deff('GDO_SESS_DOMAIN', GDO_DOMAIN);
-		deff('GDO_SESS_TIME', Time::ONE_DAY*2);
+		deff('GDO_SESS_TIME', Time::ONE_DAY*7);
 		deff('GDO_SESS_JS', false);
 		deff('GDO_SESS_HTTPS', Application::$INSTANCE->isTLS());
 		deff('GDO_SESS_SAMESITE', 'lax');
 		deff('GDO_SESS_LOCK', GDO_DB_ENABLED);
-		
 		# Email
 		deff('GDO_ENABLE_EMAIL', false);
-		deff('GDO_BOT_NAME', GDO_SITENAME . ' support');
+		deff('GDO_BOT_NAME', GDO_SITENAME . ' Support Robot');
 		deff('GDO_BOT_EMAIL', 'support@'.GDO_DOMAIN);
 		deff('GDO_ADMIN_EMAIL', 'administrator@'.GDO_DOMAIN);
-		deff('GDO_ERROR_EMAIL', 'administrator@'.GDO_DOMAIN);
+		deff('GDO_ERROR_EMAIL', 'errors@'.GDO_DOMAIN);
 		deff('GDO_DEBUG_EMAIL', true);
 	}
 	

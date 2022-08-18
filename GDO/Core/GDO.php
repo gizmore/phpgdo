@@ -186,6 +186,19 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
+	/**
+	 * @TODO: Reset this GDO like it came from the cache (initial/var/dirty)
+	 */
+// 	public function reset(bool $removeInput=false) : self
+// 	{
+// 		$this->dirty = false;
+// 		foreach ($this->gdoColumnsCache() as $gdt)
+// 		{
+			
+// 		}
+// 		parent::reset($removeInput);
+// 	}
+	
 	##############
 	### Render ###
 	##############
@@ -959,7 +972,6 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Save this entity.
-	 * @return self
 	 */
 	public function save(bool $withHooks=true) : self
 	{
@@ -986,6 +998,12 @@ abstract class GDO extends GDT
 				$this->recache(); # save is the only action where we recache!
 			}
 		}
+		
+// 		foreach ($this->gdoColumnsCache() as $gdt)
+// 		{
+			
+// 		}
+		
 		return $this;
 	}
 	

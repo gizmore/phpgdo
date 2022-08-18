@@ -40,7 +40,7 @@ abstract class MethodForm extends Method
 	############
 	### Form ###
 	############
-	private GDT_Form $form;
+	protected GDT_Form $form;
 	
 	public function getFormName() : string
 	{
@@ -144,7 +144,7 @@ abstract class MethodForm extends Method
 
 	public function execute()
 	{
-// 		### validation result 
+		### validation result 
 		$this->submitted = false;
 		$this->validated = false;
 		$this->pressedButton = null;
@@ -192,12 +192,11 @@ abstract class MethodForm extends Method
 					}
 					else
 					{
-						throw new GDO_Error('err_submit_without_click_handler', [$this->renderMoMe(), $gdt->getName()]);
+						throw new GDO_Error('err_submit_without_click_handler', [
+							$this->renderMoMe(), $gdt->getName()]);
 					}
-					
+
 					$this->afterValidation();
-// 					$this->resetForm();
-					
 					return $result;
 				}
 				else

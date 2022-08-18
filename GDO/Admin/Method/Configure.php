@@ -80,9 +80,9 @@ class Configure extends MethodForm
 		$install = Install::make()->inputs($this->inputs);
 		$response->addField($install->executeWithInit());
 		
-		$this->resetForm();
-		unset($this->configModule);
-
+		# build form new from updated values.
+// 		unset($this->formy);
+		
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())
 		{
@@ -162,14 +162,12 @@ class Configure extends MethodForm
 		}
 
 		$form->addField(
-			GDT_Name::make('module_name')->initial($mod->getName())->writeable(false));
+			GDT_Name::make('module_name')->initial($mod->gdoHumanName())->writeable(false));
 		$form->addField(
 			GDT_String::make('module_path')->writeable(false)
 				->initial($mod->filePath()));
 		$c = GDT_Container::make('versions')->horizontal();
-		$c->addField(
-			GDT_Version::make('module_version')->gdoInitial($mod)->writeable(
-				false));
+		$c->addField($mod->gdoColumn('module_version')->writeable(false));
 		$c->addField(
 			GDT_Version::make('version_available')->writeable(
 				false)

@@ -5,4 +5,6 @@ namespace GDO\Core\tpl\page;
 
 <p>Haxor haben hier nix verloren!.</p>
 
+<p>In case you think this is an error. It is not.</p>
+
 <!-- giz -->
