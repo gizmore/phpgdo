@@ -676,36 +676,12 @@ abstract class GDT
 	}
 	
 	/**
-	 * This is the default input for automagical unit tests.
-	 */
-	public function plugVar() : string
-	{
-		return self::EMPTY_STRING;
-	}
-	
-	/**
 	 * Get multiple variants of a plug var.
 	 */
 	public function plugVars() : array
 	{
-		if ($plug = $this->plugVar())
-		{
-			return [$plug];
-		}
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
-	
-// 	##################
-// 	### DEPRECATED ### backwards compat :(
-// 	##################
-// 	public function getRequestVar(string $name=null, $default=null, $bla=null) : string
-// 	{
-// 		if ($input = $this->getInput($name))
-// 		{
-// 			return $this->inputToVar($input);
-// 		}
-// 		return $this->getVar();
-// 	}
 	
 	###########
 	### CLI ###

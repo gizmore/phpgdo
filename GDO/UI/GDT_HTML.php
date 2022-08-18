@@ -23,9 +23,11 @@ final class GDT_HTML extends GDT
 	/**
 	 * UnitTest default value.
 	 */
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return '<strike>HTML</strike>';
+		return [
+			[$this->getName() => '<strike>HTML</strike>'],
+		];
 	}
-
+	
 }

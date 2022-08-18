@@ -4,6 +4,7 @@ namespace GDO\User;
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_DeletedBy;
+use GDO\Core\WithTemp;
 use GDO\Crypto\GDT_PasswordHash;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
@@ -27,11 +28,14 @@ use GDO\Core\ModuleLoader;
  * @version 7.0.1
  * @since 1.0.0
  * @see GDO
+ * @see GDT_User
  * @see Module_Date
  * @see Module_Language
  */
 final class GDO_User extends GDO
 {
+	use WithTemp;
+	
 	const GUEST_NAME_PREFIX = '~';
 	
 	#############

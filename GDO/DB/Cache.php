@@ -393,7 +393,7 @@ class Cache
 			}
 		}
 
-		$back->tempReset();
+// 		$back->tempReset();
 
 		return $back;
 	}

@@ -88,9 +88,11 @@ class GDT_Username extends GDT_Name
 		return true;
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-	    return 'Lazer'; # new created user in unit tests.
+		return [
+			[$this->getName() => 'Lazer'],
+		];
 	}
 	
 }

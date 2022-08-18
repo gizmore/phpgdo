@@ -1,85 +1,55 @@
 <?php
 namespace GDO\Tests\Test;
 
-use GDO\Tests\TestCase;
+use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
-use GDO\Core\Method;
-use GDO\CLI\CLI;
-use GDO\Core\Debug;
+use GDO\Tests\AutomatedTestCase;
+use function PHPUnit\Framework\assertNotEquals;
 
 /**
  * Test if all methods have a title and description.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
-final class SEOTest extends TestCase
+final class SEOTest extends AutomatedTestCase
 {
-	private int $methodsTested = 0;
-	private int $methodsFailed = 0;
-	private int $methodsAbstract = 0;
-	private int $methodsNonTestable = 0;
-
 	public function testIfKeywordsAreThere()
 	{
 		assertNotEmpty(t('keywords'), 'Test if keywords are set.');
 	}
 	
-	public function testIfAllMethodsHavePageTitleAndDescription()
+	public function testAllMethods(): void
 	{
-		foreach (get_declared_classes() as $klass)
-		{
-			$parents = class_parents($klass);
-			if (in_array('GDO\\Core\\Method', $parents, true))
-			{
-				$n = ++$this->methodsTested;
-				/** @var $method \GDO\Core\Method **/
-				$k = new \ReflectionClass($klass);
-				if ($k->isAbstract())
-				{
-					$this->methodsAbstract++;
-					continue;
-				}
-				$method = call_user_func([
-					$klass,
-					'make'
-				], 'autorender_'.$n);
-				if (!$method->isTrivial())
-				{
-					$this->methodsNonTestable++;
-					continue;
-				}
-				try
-				{
-					$this->methodSEOTest($method);
-					$this->message("%s: %s",
-						CLI::green(CLI::bold("SUCCESS")),
-						$method->gdoClassName());
-				}
-				catch (\Throwable $t)
-				{
-					$this->methodsFailed++;
-					$this->error("%s: %s: %s",
-						CLI::red(CLI::bold("FAILURE")),
-						$method->gdoClassName(),
-						$t->getMessage());
-					Debug::exception_handler($t);
-				}
-			}
-		}
+		$this->automatedMethods();
 	}
 	
-	private function methodSEOTest(Method $method)
+	protected function runMethodTest(GDT_MethodTest $mt): void
+	{
+		$this->methodSEOTest($mt);
+	}
+	
+	protected function getTestName(): string
+	{
+		return "SEO Test";
+	}
+	
+	private function methodSEOTest(GDT_MethodTest $mt)
 	{
 		$plugged = [];
+		
+		$method = $mt->method;
 		
 		foreach ($method->gdoParameters() as $gdt)
 		{
 			if ($name = $gdt->getName())
 			{
-				if ($plugs = $gdt->plugVars())
+				if ($plugs = @$gdt->plugVars()[0])
 				{
-					$plugged[$name] = $plugs[0];
+					foreach ($plugs as $name => $var)
+					{
+						$plugged[$name] = $var;
+					}
 				}
 			}
 		}
@@ -91,17 +61,23 @@ final class SEOTest extends TestCase
 		{
 			if ($name = $gdt->getName())
 			{
-				if ($plugs = $gdt->plugVars())
+				if ($plugs = @$gdt->plugVars()[0])
 				{
-					$plugged[$name] = $plugs[0];
+					foreach ($plugs as $name => $var)
+					{
+						$plugged[$name] = $var;
+					}
 				}
 			}
 		}
-		$method->inputs($plugged);
-
 		
-		assertNotEmpty($method->getMethodTitle(), "Test if {$method->gdoClassName()} has a method title.");
-		assertNotEmpty($method->getMethodDescription(), "Test if {$method->gdoClassName()} has a method description.");
+		$method->inputs($plugged);
+		$title = $method->getMethodTitle();
+		$descr = $method->getMethodDescription();
+		assertNotEmpty($title, "Test if {$method->gdoClassName()} has a method title.");
+		assertNotEmpty($descr, "Test if {$method->gdoClassName()} has a method description.");
+// 		assertNotEquals($title, $descr, "Test if {$method->gdoClassName()} title differs from description.");
 	}
+
 	
 }

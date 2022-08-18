@@ -37,9 +37,11 @@ class GDT_Serialize extends GDT_Text
 		return $var === null ? null : self::unserialize($var);
 	}
 
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return self::serialize(['a' => '1']);
+		return [
+			[$this->getName() => self::serialize(['a' => '1'])],
+		];
 	}
 	
 	public function validate($value) : bool

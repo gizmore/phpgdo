@@ -209,16 +209,18 @@ class GDT_Url extends GDT_String
 	#############
 	### Tests ###
 	#############
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-	    if ($this->allowExternal)
-	    {
-	        return "https://www.wechall.net";
-	    }
-	    else
-	    {
-	        return hrefDefault();
-	    }
+		$plugs = [];
+		if ($this->allowInternal)
+		{
+			$plugs[] = [$this->getName() => hrefDefault()];
+		}
+		if ($this->allowExternal)
+		{
+			$plugs[] = [$this->getName() => 'https://www.wechall.net'];
+		}
+		return $plugs;
 	}
 
 }

@@ -27,10 +27,6 @@ spl_autoload_register(function(string $name) : void
 {
 	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
 	{ # 2 lines path
-		if (strpos($name, 'GDO_Guestbook'))
-		{
-			xdebug_break();
-		}
 		$name = str_replace('\\', '/', $name) . '.php';
 		require GDO_PATH . $name;
 		global $GDT_LOADED; # 2 lines perf
@@ -69,7 +65,7 @@ function hrefDefault() : string
  * SEO: Turn an url like " Forum, Board, &id=3 " into " /forum/board/id/3 ".
  * Paramters with a dash or [] are not SEO converted.
  * Append timezone and language to an url via dash paramter.
- * @see urlenc
+ * @see seo()
  */
 function href(string $module, string $method, string $append = null, bool $lang = true) : string
 {
@@ -144,6 +140,9 @@ function href(string $module, string $method, string $append = null, bool $lang 
 		}
 		$href .= $append;
 	}
+	
+// 	Application::$HREFS[] = $href;
+	
 	return $href;
 }
 

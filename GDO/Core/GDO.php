@@ -39,9 +39,6 @@ use GDO\User\GDO_User;
  */
 abstract class GDO extends GDT
 {
-	use WithTemp;
-	use WithModule;
-	
 	#################
 	### Constants ###
 	#################
@@ -1136,7 +1133,6 @@ abstract class GDO extends GDT
 	public static function make(string $name=null) : GDT
 	{
 		return new static();
-// 		throw new GDO_Error('err_gdo_no_gdt', ['make', self::class]);
 	}
 	
 	/**

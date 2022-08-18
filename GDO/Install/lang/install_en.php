@@ -17,6 +17,7 @@ return [
 'install_test_5' => 'Is PHP mbstring installed?',
 'install_test_6' => 'Is fileinfo extension available?',
 'install_test_7' => 'Is bcmath extension installed?',
+'install_test_8' => 'Is the iconv extension installed?',
 'install_title_2_optionals' => 'Optional Features',
 'install_optional_0' => 'Is PHP curl installed?',
 'install_optional_1' => 'Is PHP gd installed?',

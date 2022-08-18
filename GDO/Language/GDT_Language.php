@@ -44,7 +44,11 @@ final class GDT_Language extends GDT_ObjectSelect
 	############
 	public function plugVars() : array
 	{
-		return ['de', 'en'];
+		$name = $this->getName();
+		return [
+			[$name => 'en'],
+			[$name => 'de'],
+		];
 	}
 	
 	###############

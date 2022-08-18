@@ -183,7 +183,6 @@ class GDT_String extends GDT_DBField
 			case self::UTF8: return 'utf8mb4';
 			case self::ASCII: return 'ascii';
 			case self::BINARY: return 'binary';
-// 			default: throw new GDO_Error('err_invalid_string_encoding');
 		}
 	}
 	
@@ -218,28 +217,6 @@ class GDT_String extends GDT_DBField
 	##############
 	### Render ###
 	##############
-// 	public function renderCLI() : string
-// 	{
-// 		$out = '';
-// 		if ($this->hasLabel())
-// 		{
-// 			$out .= $this->renderLabel() . ': ';
-// 		}
-// 		$out .= $this->getVar();
-// 		return $out;
-// 	}
-	
-// 	public function renderHTML() : string
-// 	{
-// 		$text = $this->renderCLI();
-// 		return "<div>{$text}</div>";
-// 	}
-	
-// 	public function renderCell() : string
-// 	{
-// 		return (string) $this->getVar();
-// 	}
-	
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
@@ -255,9 +232,11 @@ class GDT_String extends GDT_DBField
 		return $var === null ? GDT::EMPTY_STRING : html($var);
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return $this->getName() . '#' . GDT::$GDT_COUNT;
+		return [
+			[$this->getName() => '<b>string</b>'],
+		];
 	}
 
 }

@@ -42,9 +42,10 @@ class GDT_Submit extends GDT_Button
 	
 	public function plugVars() : array
 	{
+		$name = $this->getName();
 		return [
-			null, # Test method unclicked.
-			'1', # Test method clicked.
+			[$name => null],
+			[$name => '1'],
 		];
 	}
 	

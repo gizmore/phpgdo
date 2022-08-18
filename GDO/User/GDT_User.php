@@ -162,9 +162,11 @@ class GDT_User extends GDT_Object
 	    return true;
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-	    return '2'; # gizmore in unit tests.
+		return [
+			[$this->getName() => '4'], # monika
+		];
 	}
 	
 	##############

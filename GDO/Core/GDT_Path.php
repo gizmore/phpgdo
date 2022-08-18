@@ -63,9 +63,11 @@ final class GDT_Path extends GDT_String
 	/**
 	 * The GDOv7-LICENSE file should exist. Good default plug.
 	 */
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return GDO_PATH . 'LICENSE';
+		return [
+			[$this->getName() => (GDO_PATH . 'LICENSE')],
+		];
 	}
-
+	
 }

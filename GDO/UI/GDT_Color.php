@@ -31,9 +31,11 @@ class GDT_Color extends GDT_String
 		return 'color';
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return '#ff0000';
+		return [
+			[$this->getName() => '#fF0000'],
+		];
 	}
 	
 	##############

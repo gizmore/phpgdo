@@ -1,8 +1,8 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\GDO;
 use GDO\Core\GDT_CreatedAt;
+use GDO\Core\DTO;
 
 /**
  * Profile generated from all module user settings.
@@ -10,18 +10,8 @@ use GDO\Core\GDT_CreatedAt;
  * @author gizmore
  * @version 7.0.1
  */
-final class GDO_Profile extends GDO
+final class GDO_Profile extends DTO
 {
-	public function gdoDTO() : bool
-	{
-		return true;
-	}
-	
-	public function isTestable() : bool
-	{
-		return false;
-	}
-	
 	public function gdoColumns(): array
 	{
 		return [

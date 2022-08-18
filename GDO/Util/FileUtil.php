@@ -6,6 +6,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use GDO\Core\GDT_Float;
 use GDO\Core\GDO_Error;
+use GDO\Core\Logger;
 
 /**
  * File system utilities which are too common for the bigger file handling module.
@@ -24,7 +25,7 @@ final class FileUtil
      */
     public static function isDir(string $filename) : bool
     {
-    	return is_dir($filename); # && is_readable($filename);
+    	return is_dir($filename) && is_readable($filename);
     }
 
     /**
@@ -32,7 +33,7 @@ final class FileUtil
      */
     public static function isFile(string $filename) : bool
     {
-    	return is_file($filename); # && is_readable($filename);
+    	return is_file($filename) && is_readable($filename);
 #    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
     }
 
@@ -57,7 +58,7 @@ final class FileUtil
 	{
 	    if (!self::isFile($path))
 	    {
-	        if (!@touch($path))
+	        if (!touch($path))
 	        {
 	            return false;
 	        }
@@ -66,7 +67,8 @@ final class FileUtil
 	}
 	
 	/**
-	 * Copy a file.
+	 * Copy a file. ???
+	 * @deprecated
 	 */
 	public static function copy(string $src, string $dest) : bool
 	{
@@ -83,6 +85,7 @@ final class FileUtil
 	################
 	/**
 	 * Convert a unix path to a windows path or vice versa.
+	 * Just use Linux everywhere.
 	 */
 	public static function path(string $path) : string
 	{
@@ -119,7 +122,6 @@ final class FileUtil
 	
     /**
 	 * Scandir without '.' and '..'. 
-	 * @param string $dir
 	 * @return string[] pathes
 	 */
 	public static function scandir(string $dir) : array
@@ -127,12 +129,33 @@ final class FileUtil
 		return array_slice(scandir($dir), 2);
 	}
 	
+	##############
+	### Remove ###
+	##############
+	/**
+	 * Delete a single file.
+	 */
+	public static function removeFile(string $path) : bool
+	{
+		if (is_file($path))
+		{
+			return unlink($path);
+		}
+		elseif (is_dir($path))
+		{
+			throw new GDO_Error('err_delete_file', [html($path)]);
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	/**
 	 * Remove a dir recursively, file by file.
-	 * 
-	 * @deprecated use system(rm -rf)
+	 * @deprecated use system(rm -rf) because this is slow.
 	 */
-	public static function removeDir(string $dir) : bool
+	public static function removeDir(string $dir, bool $throw=true) : bool
 	{
 		if (is_dir($dir))
 		{
@@ -150,13 +173,21 @@ final class FileUtil
 					{
 					    if (!unlink($obj))
 					    {
-					    	echo "cannot unlink $obj\n";
+					    	if ($throw)
+					    	{
+					    		throw new GDO_Error('err_delete_file', [html($obj)]);
+					    	}
+					    	Logger::logError(ten('err_delete_file', [html($obj)]));
 					        return false;
 					    }
 					}
 				}
 			}
-			return @rmdir($dir);
+			return rmdir($dir);
+		}
+		elseif (is_file($dir))
+		{
+			throw new GDO_Error('err_delete_file', [html($dir)]);
 		}
 		return true;
 	}

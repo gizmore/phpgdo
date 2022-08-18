@@ -33,6 +33,7 @@ final class SystemTest extends Method
 				function_exists('mb_strlen'),
 			    function_exists('mime_content_type'),
 				function_exists('bcadd'),
+				function_exists('iconv'),
 			),
 			'optional' => array(
 			    function_exists('curl_init'),

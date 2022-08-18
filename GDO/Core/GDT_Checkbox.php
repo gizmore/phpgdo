@@ -180,9 +180,10 @@ class GDT_Checkbox extends GDT_Select
 
 	public function plugVars() : array
 	{
+		$name = $this->getName();
 		return [
-			'0',
-			'1',
+			[$name => '0'],
+			[$name => '1'],
 		];
 	}
 	

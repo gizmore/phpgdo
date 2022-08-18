@@ -120,8 +120,7 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 
 		foreach ($modules as $moduleName)
 		{
-			$module = $loader->loadModuleFS($moduleName, true,
-				true);
+			$module = $loader->loadModuleFS($moduleName, true, true);
 			$more = Installer::getDependencyModules($moduleName);
 			$more = array_map(
 				function ($m)

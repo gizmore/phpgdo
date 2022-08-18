@@ -534,7 +534,12 @@ class GDT_Select extends GDT_ComboBox
 				break;
 			}
 		}
-		return $result;
+		$back = [];
+		foreach ($result as $plug)
+		{
+			$back[] = [$this->getName() => $plug];
+		}
+		return $back;
 	}
 	
 }

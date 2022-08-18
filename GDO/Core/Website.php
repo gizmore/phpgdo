@@ -2,15 +2,19 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Error;
+use GDO\UI\TextStyle;
+use GDO\UI\Color;
+use GDO\UI\GDT_Success;
 
 /**
  * General Website utility and storage for header and javascript elements.
  * Keeps lists of assets and feeds them to minifiers.
  * Features redirects and alerts.
  * 
- * @deprecated It is not nice to have a class Website in core.
+ * @deprecated It is not nice to have a class Website in core somehow... or is it?
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.5
  * @see Module_Website
  * @see Minifier
@@ -353,5 +357,47 @@ final class Website
 	    }
 	    return $title;
 	}
-
+	
+	#############
+	### Error ###
+	#############
+	public static function message(string $key, array $args = null, bool $log = true, int $code = 200)
+	{
+		$app = Application::$INSTANCE;
+		Application::setResponseCode($code);
+		if ($log)
+		{
+			Logger::logMessage(ten($key, $args));
+		}
+		if ($app->isCLI())
+		{
+			$text = TextStyle::bold(Color::green(t($key, $args)));
+			echo "{$text}\n";
+		}
+		else
+		{
+			$message = GDT_Success::make()->text($key, $args);
+			GDT_Page::instance()->topResponse()->addField($message);
+		}
+	}
+	
+	public static function error(string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
+	{
+		Application::setResponseCode($code);
+		if ($log)
+		{
+			Logger::logError(ten($key, $args));
+		}
+		if (Application::$INSTANCE->isCLI())
+		{
+			$text = TextStyle::bold(Color::red(t($key, $args)));
+			echo "{$text}\n";
+		}
+		else
+		{
+			$error = GDT_Error::make()->text($key, $args);
+			GDT_Page::instance()->topResponse()->addField($error);
+		}
+	}
+	
 }

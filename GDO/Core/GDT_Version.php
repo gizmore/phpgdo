@@ -41,7 +41,9 @@ class GDT_Version extends GDT_String
 	
 	public function plugVars() : array
 	{
-		return ["7.0.0"];
+		return [
+			[$this->getName() => Module_Core::GDO_VERSION],
+		];
 	}
 
 	##############

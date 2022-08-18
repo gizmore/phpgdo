@@ -24,7 +24,7 @@ use GDO\Util\Strings;
  * Also this module provides the default theme,
  * which is almost empty and is using the default tpl of the modules.
  *
- * Very basic vanilla JS is loaded.
+ * Very basic vanilla JS can be loaded.
  *
  * @author gizmore
  * @version 7.0.1
@@ -32,8 +32,9 @@ use GDO\Util\Strings;
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_REVISION = '7.0.1-r1520';
-	const GDO_CODENAME = 'Ordered Odeuvre';
+	const GDO_VERSION = '7.0.1';
+	const GDO_REVISION = '7.0.1-r1523';
+	const GDO_CODENAME = 'Ordered-Odeuvre';
 	
 	##############
 	### Module ###
@@ -68,10 +69,10 @@ final class Module_Core extends GDO_Module
 	
 	public function onInstall() : void
 	{
-		FileUtil::createDir(GDO_PATH.'assets');
+		FileUtil::createDir(GDO_PATH . 'assets');
 		FileUtil::createDir(GDO_TEMP_PATH);
-		FileUtil::createDir(GDO_TEMP_PATH.'cache');
-		FileUtil::createFile(GDO_TEMP_PATH.'ipc.socket');
+		FileUtil::createDir(GDO_TEMP_PATH . 'cache');
+		FileUtil::createFile(GDO_TEMP_PATH . 'ipc.socket');
 	}
 	
 	public function checkSystemDependencies() : bool
@@ -212,6 +213,7 @@ final class Module_Core extends GDO_Module
 		{
 			return true;
 		}
+		$url = rtrim($url, '/');
 		$filename = Strings::rsubstrFrom($url, '/', $url);
 		if ($filename === '.well-known')
 		{

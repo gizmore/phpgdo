@@ -17,15 +17,16 @@ use GDO\Core\GDT_Method;
  */
 final class GDT_MethodTest extends GDT_Method
 {
-    # 0 - gizmore (admin)
-    # 1 - Peter (staff)
-    # 2 - Monica (member)
-    # 3 - Gaston (guest)
-    # 4 - Sven (staff)
+    # 0) 2-gizmore (admin)
+    # 1) 3-Peter   (staff)
+    # 2) 4-Monica  (member)
+    # 3) 5-Gaston  (guest)
+    # 4) 6-Sven    (staff)
     /**
+     * Store some users here for testing.
      * @var GDO_User[]
      */
-    public static array $TEST_USERS = []; # store some users here for testing.
+    public static array $TEST_USERS = [];
     
     ###########
     ### boo ###
@@ -53,31 +54,5 @@ final class GDT_MethodTest extends GDT_Method
     	}
     	return parent::execute();
     }
-    
-//     /**
-//      * Try to guess default params for a GDT.
-//      * 
-//      * @param GDT $gdt
-//      * @return string
-//      */
-//     public function xxxplugParam(GDT $gdt, Method $method) : string
-//     {
-//         $klass = get_class($gdt);
-//         $plugvar = $gdt->plugVar();
-//         if ($plugvar)
-//         {
-//             echo "Try to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
-//             ob_flush();
-//         }
-//         else
-//         {
-//             echo Color::red("FAILED")." to auto plug {$method->getModuleName()}::{$method->getMethodName()}.{$gdt->name} which is a {$klass} with {$plugvar}\n";
-//             ob_flush();
-//         }
-        
-//         $this->addInput($gdt->getName(), $plugvar);
-        
-//         return $plugvar;
-//     }
 
 }

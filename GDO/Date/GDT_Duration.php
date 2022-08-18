@@ -8,15 +8,15 @@ use GDO\Core\GDT_String;
  * Duration field int in seconds.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_Duration extends GDT_String
 {
 	public function defaultLabel() : self { return $this->label('duration'); }
 	
-	public string $pattern = '/^(?:[0-9 ]+[smohdwy]? *)+$/iD';
 	public int $max = 16;
+	public string $pattern = '/^(?:[0-9 ]+[smohdwy]? *)+$/iD';
 	
 	protected function __construct()
 	{
@@ -41,7 +41,6 @@ class GDT_Duration extends GDT_String
 	
 	public function toValue($var = null)
 	{
-// 		$var = parent::toValue($var);
 	    return $var === null ? null : Time::humanToSeconds($var);
 	}
 	
@@ -77,9 +76,11 @@ class GDT_Duration extends GDT_String
 		return true;
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return '1s';
+		return [
+			[$this->getName() => '1s'],
+		];
 	}
-
+	
 }

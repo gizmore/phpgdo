@@ -66,9 +66,11 @@ class GDT_Decimal extends GDT_Int
 		}
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return "3.14";
+		return [
+			[$this->getName() => '3.14'],
+		];
 	}
 	
 	public function toVar($value) : ?string

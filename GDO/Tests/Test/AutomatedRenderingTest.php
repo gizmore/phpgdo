@@ -110,25 +110,25 @@ final class AutomatedRenderingTest extends TestCase
 	###############
 	### Private ###
 	###############
-	/**
-	 * @var string[string][]
-	 */
-	private array $plugVariants;
+// 	/**
+// 	 * @var string[string][]
+// 	 */
+// 	private array $plugVariants;
 	
-	private function addPlugVars(string $name, array $plugs)
-	{
-		if (!isset($this->plugVariants[$name]))
-		{
-			$this->plugVariants[$name] = [];
-		}
-		foreach ($plugs as $plug)
-		{
-			if (!in_array($plug, $this->plugVariants[$name], true))
-			{
-				$this->plugVariants[$name][] = $plug;
-			}
-		}
-	}
+// 	private function addPlugVars(string $name, array $plugs)
+// 	{
+// 		if (!isset($this->plugVariants[$name]))
+// 		{
+// 			$this->plugVariants[$name] = [];
+// 		}
+// 		foreach ($plugs as $plug)
+// 		{
+// 			if (!in_array($plug, $this->plugVariants[$name], true))
+// 			{
+// 				$this->plugVariants[$name][] = $plug;
+// 			}
+// 		}
+// 	}
 	
 	private function fieldTestGDT(GDT $gdt) : bool
 	{

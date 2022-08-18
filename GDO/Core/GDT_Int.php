@@ -146,13 +146,13 @@ class GDT_Int extends GDT_DBField
 		}
 	}
 	
-	/**
-	 * 4 === 4
-	 */
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-	    return "4"; # don't get lost
+		return [
+			[$this->getName() => '4'],
+		];
 	}
+	
 	
 	public function gdoExampleVars() : ?string
 	{

@@ -9,7 +9,7 @@ namespace GDO\Core;
  * Base class of GDT_Object.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.5.0
  * 
  * @see GDT_Object

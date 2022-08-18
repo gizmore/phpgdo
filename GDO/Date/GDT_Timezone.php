@@ -55,9 +55,10 @@ final class GDT_Timezone extends GDT_ObjectSelect
     
     public function plugVars() : array
     {
+    	$name = $this->getName();
     	return [
-    		GDO_Timezone::getBy('tz_name', 'UTC')->getID(),
-    		GDO_Timezone::getBy('tz_name', 'Europe/Berlin')->getID(),
+    		[$name => GDO_Timezone::getBy('tz_name', 'UTC')->getID()],
+    		[$name => GDO_Timezone::getBy('tz_name', 'Europe/Berlin')->getID()],
     	];
     }
     

@@ -4,13 +4,14 @@ namespace GDO\Tests\Test;
 use GDO\Tests\TestCase;
 use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
-use GDO\Core\GDT;
 use function PHPUnit\Framework\assertTrue;
 
 /**
- * Test if module default configs are valid.
+ * Test if module default configs and settings are valid.
  * 
  * @author gizmore
+ * @version 7.0.1
+ * @since 7.0.0
  */
 final class AutomatedModuleConfigTest extends TestCase
 {
@@ -24,15 +25,14 @@ final class AutomatedModuleConfigTest extends TestCase
 	
 	private function singleModuleTest(GDO_Module $module)
 	{
-		foreach ($module->getConfig() as $gdt)
+		foreach ($module->getConfigCache() as $gdt)
 		{
-			$this->gdtTest($gdt);
+			assertTrue($gdt->validate($gdt->getValue()), "Check if default config value for {$gdt->getName()} in module {$module->getName()} is ok.");
 		}
-	}
-	
-	private function gdtTest(GDT $gdt)
-	{
-		assertTrue($gdt->validate($gdt->getValue()), "Check if default value for {$gdt->getName()} is ok.");
+		foreach ($module->getSettingsCache() as $gdt)
+		{
+			assertTrue($gdt->validate($gdt->getValue()), "Check if default setting value for {$gdt->getName()} in module {$module->getName()} is ok.");
+		}
 	}
 	
 }

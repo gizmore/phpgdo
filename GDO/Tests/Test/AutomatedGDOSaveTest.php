@@ -10,7 +10,7 @@ use GDO\Core\Application;
 
 /**
  * Try to save all GDO.
- * Once with blank. (crashtest)
+ * Once with blank. (crashtest) (REMOVED)
  * Once with plugged. (should be a success)
  * 
  * @author gizmore
@@ -84,26 +84,6 @@ final class AutomatedGDOSaveTest extends TestCase
 	###############
 	### Private ###
 	###############
-	/**
-	 * @var string[string][]
-	 */
-	private array $plugVariants;
-	
-	private function addPlugVars(string $name, array $plugs)
-	{
-		if (!isset($this->plugVariants[$name]))
-		{
-			$this->plugVariants[$name] = [];
-		}
-		foreach ($plugs as $plug)
-		{
-			if (!in_array($plug, $this->plugVariants[$name], true))
-			{
-				$this->plugVariants[$name][] = $plug;
-			}
-		}
-	}
-	
 	private function reportStatistics()
 	{
 		$this->message(CLI::bold("DONE!"));
@@ -124,29 +104,30 @@ final class AutomatedGDOSaveTest extends TestCase
 	
 	private function saveTestGDO(GDO $gdo)
 	{
-// 		$this->saveTestGDOUnplugged($gdo);
-
-// 		if ($gdo instanceof GDO_ModuleVar)
-// 		{
-// 			xdebug_break();
-// 		}
-		
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $name => $gdt)
 		{
-			$gdt->inputs();
+			$gdt->inputs(); # clear input
 			$this->addPlugVars($name, $gdt->plugVars());
 		}
 		
 		$permutations = new Permutations($this->plugVariants);
-		foreach ($permutations->generate() as $i => $inputs)
+		foreach ($permutations->generate() as $inputs)
 		{
-			echo "$i\n";
 			$new = $gdo->table()->cache->getNewDummy();
 			$new->setVars($inputs);
 			if ($new->isValid())
 			{
-				$new->replace();
+				$new->insert();
+				$new->delete();
+			}
+			else
+			{
+				$this->error("%4d.) %s: %s - %s",
+					$this->gdoTested,
+					CLI::bold(CLI::red("WARNING")),
+					$gdo->gdoClassName(),
+					'has invalid plug vars');
 			}
 		}
 	}

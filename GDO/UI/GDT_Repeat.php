@@ -73,11 +73,15 @@ final class GDT_Repeat extends GDT
 	
 	public function plugVars() : array
 	{
+		$pv = $this->proxy->plugVars(); # sets of gdovar
 		$back = [];
-		$pv = $this->proxy->plugVars();
-		foreach ($pv as $p)
+		foreach ($pv as $p) # $p is a gdovars with single string
 		{
-			$back[] = [$p, $p, $p];
+			foreach ($p as $name => $var)
+			{
+				# now make an array out of var
+				$back[] = [$name => [$var, $var, $var]];
+			}
 		}
 		return $back;
 	}

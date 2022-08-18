@@ -82,14 +82,11 @@ final class GDT_DateDisplay extends GDT
 		]);
 	}
 
-	// public function gdo(GDO $gdo = null) : self
-	// {
-	// $date = $gdo->gdoVar($this->getName());
-	// return $this->var($date);
-	// }
-	public function plugVar(): string
+	public function plugVars() : array
 	{
-		return '2022-07-19 13:37:42';
+		return [
+			[$this->getName() => '2022-07-18 13:37:42'],
+		];
 	}
 
 }

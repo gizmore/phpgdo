@@ -60,9 +60,15 @@ class GDT_Token extends GDT_Char
 		return $token === $compare;
 	}
 	
-	public function plugVar() : string
+	public function plugVars() : array
 	{
-		return Random::randomKey($this->max);
+		if ($this->initialNull)
+		{
+			return [[$this->getName() => null]];
+		}
+		return [
+			[$this->getName() => Random::mrandomKey($this->max)],
+		];
 	}
 	
 }

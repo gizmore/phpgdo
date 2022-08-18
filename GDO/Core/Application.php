@@ -7,10 +7,14 @@ use GDO\DB\Database;
 
 /**
  * Application runtime data.
+ * Global error methods.
+ * Rendering mode.
+ * Global Application time and microtime.
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.0
+ * @see GDT_Page
  */
 class Application extends GDT
 {
@@ -25,6 +29,11 @@ class Application extends GDT
 			Logger::flush();
 		}
 	}
+	
+	################################
+	### HREF COLLECTOR FOR TESTS ###
+	################################
+// 	public static array $HREFS = []; 
 
 	################
 	### App Time ###
@@ -52,6 +61,7 @@ class Application extends GDT
 	 */
 	public static function init()
 	{
+		# Could init stuff here? ... meh
 		return self::instance();
 	}
 
@@ -125,11 +135,11 @@ class Application extends GDT
 		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
 		$this->mode = $this->modeDetected;
-		self::updateTime();
 		if ($removeInput)
 		{
 			self::$INSTANCE->inputs();
 		}
+		self::updateTime();
 		return $this;
 	}
 	
@@ -258,9 +268,17 @@ class Application extends GDT
 		}
 	}
 	
-	#############
-	### Mo/Me ###
-	#############
+// 	#######################
+// 	### Error / Message ###
+// 	#######################
+// 	public static function error(string $key, array $args = null) : bool
+// 	{
+// 		return false;
+// 	}
+	
+// 	#############
+// 	### Mo/Me ###
+// 	#############
 // 	public Method $method;
 // 	public string $mo;
 // 	public string $me;

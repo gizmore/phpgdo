@@ -3,11 +3,13 @@ namespace GDO\Core;
 
 /**
  * The GDO Logger.
+ * Buffered.
+ * One logfile per user.
  * 
+ * @version 7.0.1
+ * @since 1.0.0
  * @author gizmore
  * @author spaceone
- * @version 7.0.0
- * @since 1.0.0
  */
 final class Logger
 {
@@ -185,10 +187,9 @@ final class Logger
 	}
 
 	/**
-	 * Flush all logfiles
-	 * throws an GDO_Error within logfile content when fails
+	 * Flush all logfiles.
 	 */
-	public static function flush()
+	public static function flush() : void
 	{
 		foreach (self::$logs as $file => $msg)
 		{
@@ -300,19 +301,23 @@ final class Logger
 
 		return true;
 	}
-	
-	public static function debug(...$objects)
-	{
-		foreach ($objects as $object)
-		{
-			$message = $object;
-			if ( (is_array($object)) || (is_object($object)) )
-			{
-				$message = print_r($object, true);
-			}
-			self::logDebug($message);
-		}
-	}
+
+// 	/**
+// 	 * Writes print_r(objects) to the debug file.
+// 	 * @deprecated never used
+// 	 */
+// 	public static function debug(...$objects)
+// 	{
+// 		foreach ($objects as $object)
+// 		{
+// 			$message = $object;
+// 			if ( (is_array($object)) || (is_object($object)) )
+// 			{
+// 				$message = print_r($object, true);
+// 			}
+// 			self::logDebug($message);
+// 		}
+// 	}
 	
 }
 

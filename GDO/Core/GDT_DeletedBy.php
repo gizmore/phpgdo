@@ -8,18 +8,21 @@ use GDO\User\GDT_User;
  * Not often used yet.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.11.2
  */
 final class GDT_DeletedBy extends GDT_User
 {
 	public bool $writeable = false;
+	
 	public function isHidden() : bool { return true; }
 	public function defaultLabel() : self { return $this->label('deleted_by'); }
 
 	public function plugVars() : array
 	{
-		return [null];
+		return [
+			[$this->getName() => null],
+		];
 	}
 	
 }

@@ -374,7 +374,7 @@ class Installer
 	 */
 	public static function getDependencyModules(string $moduleName) : array
 	{
-	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, false, true);
+	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, true, true);
 	    $deps = $module->getDependencies();
 	    $deps[] = $module->getName();
 	    $deps[] = 'Core';
@@ -384,20 +384,27 @@ class Installer
 	        $cnt = count($deps);
 	        foreach ($deps as $dep)
 	        {
-	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, false, true);
+	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, true, true);
 	            
 	            if (!$depmod)
 	            {
 	                continue;
 	            }
 	            
-	            $deps = array_unique(array_merge($depmod->getDependencies(), $deps));
+	            $more = $depmod->getDependencies();
+
+	            if (!is_array($more))
+	            {
+	            	xdebug_break();
+	            }
+	            
+	            $deps = array_unique(array_merge($deps, $more));
 	        }
 	    }
 
 	    $back = array_unique($deps);
 	    $back = (array_map(function(string $dep) { 
-	        return ModuleLoader::instance()->getModule($dep, true, false);
+	        return ModuleLoader::instance()->getModule($dep, true, true);
 	    }, $deps));
 	    return $back;
 	}

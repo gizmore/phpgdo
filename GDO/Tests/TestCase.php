@@ -156,8 +156,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function user(GDO_User $user) : GDO_User
     {
         $this->session($user);
-        Trans::setISO($user->getLangISO());
-        Time::setTimezone($user->getTimezone());
+//         Trans::setISO($user->getLangISO());
+//         Time::setTimezone($user->getTimezone());
         return GDO_User::setCurrent($user);
     }
     
@@ -235,7 +235,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
     	$app = Application::$INSTANCE;
     	$app->reset();
     	$app->cli(true);
-//     	$_POST = ['a' => '1'];
        	$expression = GDT_Expression::fromLine($command);
     	$response = $expression->execute();
     	$result = $response->renderCLI();
@@ -286,6 +285,38 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function mome(Method $method)
     {
     	return sprintf('%s/%s', $method->getModuleName(), $method->getMethodName());
+    }
+    
+    ################
+    ### PlugVars ###
+    ################
+    protected array $plugVariants;
+    
+    protected function addPlugVars(string $name, array $_plugs)
+    {
+    	foreach ($_plugs as $name => $plugs)
+    	{
+    		if (!is_array($plugs))
+    		{
+    			xdebug_break();
+    		}
+    		$this->addPlugVarsB($name, $plugs);
+    	}
+    }
+    
+    protected function addPlugVarsB(string $name, array $plugs)
+    {
+    	foreach ($plugs as $name => $plug)
+    	{
+    		if (!isset($this->plugVariants[$name]))
+    		{
+    			$this->plugVariants[$name] = [];
+    		}
+    		if (!in_array($plug, $this->plugVariants[$name], true))
+    		{
+    			$this->plugVariants[$name][] = $plug;
+    		}
+    	}
     }
     
 }

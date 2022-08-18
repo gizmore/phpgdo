@@ -7,7 +7,7 @@ use GDO\Core\GDT_UInt;
  * Page num to select.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.4.0
  */
 final class GDT_PageNum extends GDT_UInt
@@ -66,7 +66,11 @@ final class GDT_PageNum extends GDT_UInt
     
     public function plugVars() : array
     {
-    	return ['1'];
+    	$name = $this->getName();
+    	return [
+    		[$name => '1'],
+    		[$name => '2'],
+    	];
     }
 
     ################

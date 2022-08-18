@@ -103,10 +103,11 @@ final class GDT_Module extends GDT_ObjectSelect
 	#############
 	public function plugVars(): array
 	{
+		$name = $this->getName();
 		return [
-			'UI',
-			'Table',
-			'Admin'
+			[$name => 'UI'],
+			[$name => 'Table'],
+			[$name => 'Admin'],
 		];
 	}
 	

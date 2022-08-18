@@ -35,12 +35,13 @@ final class GDT_AutoInc extends GDT_UInt
 	##############
 	### Events ###
 	##############
+	/**
+	 * After creation store the auto inc value.
+	 */
 	public function gdoAfterCreate(GDO $gdo) : void
 	{
-		if ($id = Database::instance()->insertId())
-		{
-			$gdo->setVar($this->name, $id, false);
-		}
+		$id = Database::instance()->insertId();
+		$gdo->setVar($this->name, $id, false);
 	}
 	
 	public function blankData() : array
@@ -51,7 +52,9 @@ final class GDT_AutoInc extends GDT_UInt
 	
 	public function plugVars() : array
 	{
-		return [null];
+		return [
+			[$this->name => null],
+		];
 	}
 	
 }

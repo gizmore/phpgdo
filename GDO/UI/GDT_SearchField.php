@@ -36,7 +36,12 @@ class GDT_SearchField extends GDT_String
 	
 	public function plugVars() : array
 	{
-		return ['giz', 'ess', 'xxx'];
+		$name = $this->getName();
+		return [
+			[$name => 'giz'],
+			[$name => 'ess'],
+			[$name => 'xxx'],
+		];
 	}
 
 }

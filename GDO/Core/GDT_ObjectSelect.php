@@ -126,10 +126,12 @@ class GDT_ObjectSelect extends GDT_Select
 			$first = $this->table->select()->first()->exec()->fetchObject();
 			if ($first)
 			{
-				return [$first->getID()];
+				return [
+					[$this->name => $first->getID()],
+				];
 			}
 		}
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	/**
