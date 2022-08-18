@@ -35,8 +35,8 @@ GDOv7 is property of gizmore@wechall.net.
 
 The individual modules have their own license.
 
-There is a
-[phpgdo-license](https://github.com/gizmore/phpgdo-licenses)
+There is the
+[phpgdo-licenses](https://github.com/gizmore/phpgdo-licenses)
 module that explicitly lists all licenses involved in an installation.
 
 Yet open source, usage is prohibited,

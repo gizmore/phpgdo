@@ -1,41 +1,12 @@
 # GDOv7 Changelog (and Roadmap)
 ###### [INDEX](./_GDO7_INDEX.md)
 
-
-Welcome to the GDOv7 changelog + combined roadmap + documentation.
-
+Welcome to the GDOv7 changelog + combined roadmap.
 
 Please read it upside down, from bottom to top and sometimes again.
 
-Please **do not** refer to the old
-gdo6 (https://github.com/gizmore/gdo6)
-GDO_HISTORY.md
-](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_HISTORY.md)
- for earlier versions *anymore*. Delinked sic.
 
-
-## GDOv7 Versioning
-
-A @version in an annotation of a GDOv7 php file means the featureset the code already will be compatible with, not it's module version installed.
-
-A version in this file denotes the version a feature will officially be available. 
-This might be wrong.
-Some fine future features from the function factory are already available in earlier versions, maybe even backported to their branches.
-Those are marked with a "**?!**".
-
-A version in the module database denotes the installed GDO_Module->$version. This is *7.0.0* by default.
-If we now increase to 7.0.1, hooks will be triggered,
-including the event of a full table rebuild on a schema change, etc... i want to keep version bumps rare.
-
-
-## 7.0.4 / scheduled 9.Aug.2023
-
- GDOv7.0.4 will introduce full support for french and latvian.
- 
-Just kidding *:)*
-
-
-## 7.0.3 / scheduled 21.Jul.2023
+## 7.0.3
 
  - Support for SQLite **or** Postgres support. What shall i try first?
 
@@ -48,13 +19,13 @@ Just kidding *:)*
  [MySQL](https://github.com/gizmore/phpgdo-dbms-mysql), [SQLite](https://github.com/gizmore/phpgdo-dbms-sqlite) and [Postgres](https://github.com/gizmore/phpgdo-dbms-postgres).
  
 
-## 7.0.2 / scheduled 26.Dec.2022
+## 7.0.2 / scheduled 9.Nov.2022
 
  - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
 
- - New demo sites, like [RendlessCode](https://rendless.code.wechall.net) which is a web exploit hacking challenge.
-
  - Refurbished [Module_Boostrap5](https://github.com/gizmore/phpgdo-bootstrap5) and [Module_Boostrap5Theme](https://github.com/gizmore/phpgdo-bootstrap5-theme).
+ 
+ - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again.
 
 
 ## 7.0.1 / released 14.Aug.2022
@@ -69,7 +40,7 @@ GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
  - A working website: HTTP/WWW support beside CLI and JSON. Write methods once and use them everywhere!
 
- - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again.
+ - New demo sites, like [Fineprint](https://fineprint.phpgdo.com) which is a web exploit hacking challenge.
 
  - [Module_DOMPDF](https://github.com/gizmore/phpgdo-dompdf) replaces [Module_TCPDPF](https://github.com/gizmore/phpgdo-dompdf) (which never got finished). We are now using a HTML to PDF strategy. New GDT render method renderPDF() which defaults renderHTML(). It's the first module to use composer as 3rd party library provider.
  
@@ -84,6 +55,7 @@ now test all GDO to be gdoSaveable() when initial + plugged.
 now test all rendering modes on all
 [GDO](GDO7_GDO.md) + [GDT](GDO7_GDT.md) automatically.
 Tests are performed With plugged and unplugged initials.
+
 
 ## 7.0.0 / released 22.May.2022 22:22:22, almost :)
 

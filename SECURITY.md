@@ -22,7 +22,7 @@ Some GDOv7 modules are currently vulnerable to package manager code injection vi
 Default this to true!
 
 
-## Supported Versions
+## GDOv7 SECURITY.md: Supported Versions
 
 As no-one really uses this, it does not matter much.
 There is only one branch, the master one, and all installations should be up to date, always.
@@ -38,7 +38,7 @@ v7(properitary) is under development. v6(free) would still receive security fixe
     +---------+-----+
 
 
-## Reporting a Vulnerability
+## GDOv7 SECURITY.md: Reporting a Vulnerability
 
 Just write me a mail (gizmore@wechall.net),
 open an issue, or contact on irc.wechall.net.
@@ -46,10 +46,10 @@ A security problem will be fixed asap.
 There is no real reward, but helping the GDO project is a hacking challenge flag on www.wechall.net :)
 
 
-## Credits
+### Credits
 
 Thanks for reading SECURITY.md!
- - gizmore
+    - gizmore
 
 
 ### Hall of Fame
