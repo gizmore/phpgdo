@@ -29,7 +29,7 @@ use GDO\UI\GDT_HTML;
  */
 # Really, the first thing we do is measure performance :)
 # Go Go Go GDO7!
-gc_disable(); # GC slows things down? => Nope... GDO is just slow.
+#gc_disable(); # GC slows things down? => Nope... GDO is just slow.
 define('GDO_TIME_START', microtime(true));
 #
 #######################

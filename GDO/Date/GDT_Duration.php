@@ -16,7 +16,7 @@ class GDT_Duration extends GDT_String
 	public function defaultLabel() : self { return $this->label('duration'); }
 	
 	public int $max = 16;
-	public string $pattern = '/^(?:[0-9 ]+[smohdwy]? *)+$/iD';
+	public string $pattern = '/^(?:[\\.0-9 ]+[sminohdwy]{0,2} *)+$/iD';
 	
 	protected function __construct()
 	{

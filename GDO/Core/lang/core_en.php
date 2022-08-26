@@ -68,7 +68,8 @@ return [
 	'err_unknown_acl_setting' => 'Unknown ACL Setting: `%s`.',
 	'err_submit_without_click_handler' => 'Method `%s`s submit button `%s` is missing a click handler.',
 // 	'err_duplicate_field_name' => 'A field has been added twice: `%s`.',
-	
+	'err_url_not_reachable' => 'This URL is not reachable: `%s`.',
+
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',

@@ -109,7 +109,7 @@ class Application extends GDT
 	### Application state ###
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
-	public function isWebserver() : bool { return !$this->cli; }
+	public function isWebserver() : bool { return !$this->isCLI(); }
 	# render
 	public function isCLI() : bool { return $this->cli; }
 	public function isAjax() : bool { return $this->ajax; }
@@ -231,7 +231,14 @@ class Application extends GDT
 	public array $inputs;
 	public function inputs(array $inputs=null) : self
 	{
-		$this->inputs = $inputs;
+		if ($inputs === null)
+		{
+			unset($this->inputs);
+		}
+		else
+		{
+			$this->inputs = $inputs;
+		}
 		return $this;
 	}
 	

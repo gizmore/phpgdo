@@ -60,6 +60,10 @@ trait WithError
 				}
 			}
 		}
+		if (Application::instance()->isError())
+		{
+			return true;
+		}
 		return false;
 	}
 	
