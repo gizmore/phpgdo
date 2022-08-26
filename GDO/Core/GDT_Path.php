@@ -12,7 +12,7 @@ use GDO\Util\FileUtil;
  * @version 7.0.0
  * @since 6.0.0
  */
-final class GDT_Path extends GDT_String
+final class GDT_Path extends GDT_ComboBox
 {
 	public string $pattern = "#^[^?!]+$#iD";
 	
@@ -26,6 +26,9 @@ final class GDT_Path extends GDT_String
 	#################
 	### Existance ###
 	#################
+	/**
+	 * @var bool|callable
+	 */
 	public $existing = false;
 	public function existingDir() : self { $this->existing = 'is_dir'; return $this->icon('folder'); }
 	public function existingFile() : self { $this->existing = 'is_file'; return $this->icon('file'); }
@@ -52,9 +55,10 @@ final class GDT_Path extends GDT_String
 	{
 		if ($this->existing)
 		{
-			if ( (!is_readable($filename)) || (!call_user_func($this->existing, $filename)) )
+			if ( (!is_readable($filename)) ||
+				(!call_user_func($this->existing, $filename)) )
 			{
-				return $this->error('err_path_not_exists', [$filename, t($this->existing)]);
+				return $this->error('err_path_not_exists', [html($filename), t($this->existing)]);
 			}
 		}
 		return true;

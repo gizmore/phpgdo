@@ -197,6 +197,7 @@ abstract class MethodForm extends Method
 					}
 
 					$this->afterValidation();
+					
 					return $result;
 				}
 				else

@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\DB\Query;
 use GDO\UI\TextStyle;
+use GDO\Table\GDT_Filter;
 
 /**
  * You would expect this to be in GDT_Object,
@@ -374,10 +375,10 @@ trait WithObject
 	# #############
 	public string $filterField;
 	
-	public function filterVar(string $key = null)
-	{
-		return '';
-	}
+// 	public function filterVar(string $key = null)
+// 	{
+// 		return '';
+// 	}
 
 	public function renderFilter($f): string
 	{
@@ -396,7 +397,7 @@ trait WithObject
 	 * @see GDT_Int::filterQuery()
 	 * @see GDT_String::filterQuery()
 	 */
-	public function filterQuery(Query $query, $rq = null): self
+	public function filterQuery(Query $query, GDT_Filter $f): self
 	{
 		if (isset($this->filterField))
 		{

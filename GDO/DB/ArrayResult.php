@@ -3,6 +3,7 @@ namespace GDO\DB;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT;
+use GDO\Table\GDT_Filter;
 
 /**
  * Mimics a GDO Result from database.
@@ -87,22 +88,25 @@ final class ArrayResult extends Result
 	### Filter ###
 	##############
 	/**
+	 * Filter an Array Result data array.
+	 * 
 	 * @param GDO[] $data
 	 * @param GDT[] $filters
+	 * @param string[] $filter
 	 */
-	public function filterResult(array $data, GDO $table, array $filters, $rq) : self
+	public function filterResult(array $data, array $filters, GDT_Filter $f) : self
 	{
 	    foreach ($filters as $gdt)
 	    {
 	        if ($gdt->isFilterable())
 	        {
-	            $filter = $gdt->filterVar($rq);
-	            if ($filter !== null)
+	            $flt = $gdt->filterVar($f);
+	            if ($flt !== null)
 	            {
 	                $keep = [];
 	                foreach ($data as $gdo)
 	                {
-	                    if ($gdt->gdo($gdo)->filterGDO($gdo, $filter))
+	                	if ($gdt->gdo($gdo)->filterGDO($gdo, $flt))
     	                {
     	                    $keep[] = $gdo;
     	                }

@@ -4,7 +4,6 @@ namespace GDO\UI\tpl;
 ?>
 <span class="<?=$field->htmlClass()?>"><a
 <?=$field->htmlDisabled()?>
-<?=$field->htmlID()?>
 <?=$field->htmlAttributes()?>
 <?=$field->htmlTarget()?>
 <?=$field->htmlHREF()?>

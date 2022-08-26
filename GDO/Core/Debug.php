@@ -6,6 +6,7 @@ use GDO\User\GDO_User;
 use GDO\Util\Strings;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use GDO\UI\GDT_Page;
 
 /**
  * Debug backtrace and error handler.
@@ -41,6 +42,22 @@ final class Debug
 		self::enableExceptionHandler();
 		self::setDieOnError($die);
 		self::setMailOnError($mail);
+	}
+	
+	#############
+	### Break ###
+	#############
+	/**
+	 * Trigger a breakpoint and gather global variables.
+	 */
+	public static function breakpoint() : bool
+	{
+		$app = Application::$INSTANCE;
+		$page = GDT_Page::instance();
+		$user = GDO_User::current();
+		$modules = ModuleLoader::instance()->getModules();
+		xdebug_break();
+		return $app && $page && $user && $modules;
 	}
 	
 	###############
@@ -228,6 +245,8 @@ final class Debug
 	    {
 	        return self::renderError($message);
 	    }
+	    
+	    return '';
 	}
 	
 	private static function renderError(string $message) : string
@@ -278,7 +297,7 @@ final class Debug
 	{
 		if (module_enabled('Mail'))
 		{
-			return Mail::sendDebugMail(': PHP Error', $message);
+			return Mail::sendDebugMail('PHP Error', $message);
 		}
 		return false;
 	}
@@ -337,8 +356,8 @@ final class Debug
 	
 	public static function backtraceException(\Throwable $ex, bool $html = true, string $message = '') : string
 	{
-		$message = sprintf("%s: '%s' in %s line %s",
-			Color::red(get_class($ex)), $ex->getMessage(),
+		$message = sprintf("%s: ´%s´ in %s line %s",
+			Color::red(get_class($ex)), TextStyle::italic($ex->getMessage()),
 			TextStyle::bold(self::shortpath($ex->getFile())),
 			TextStyle::bold($ex->getLine()));
 		return self::backtraceMessage($message, $html, $ex->getTrace(), $ex->getLine(), $ex->getFile());

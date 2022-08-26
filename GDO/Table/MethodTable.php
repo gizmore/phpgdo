@@ -17,9 +17,12 @@ use GDO\Core\GDT_Tuple;
  * @version 7.0.1
  * @since 5.0.0
  * @see ArrayResult
- * @see GDT_Table
- * @see GDT
  * @see GDO
+ * @see GDT
+ * @see GDT_Table
+ * @see GDT_Order
+ * @see GDT_Filter
+ * @see GDT_SearchField
  */
 abstract class MethodTable extends Method
 {
@@ -28,9 +31,19 @@ abstract class MethodTable extends Method
 	# Override Feature Parameter Names.
 	protected function getIPPName() : string { return 'ipp'; }
 	protected function getPageName() : string { return 'page'; }
-	protected function getOrderName() : string { return 'by'; }
+	protected function getOrderName() : string { return 'o'; }
 	protected function getTableName() : string { return 'table'; }
+	protected function getFilterName() : string { return 'f'; }
 	protected function getSearchName() : string { return 'search'; }
+	
+	protected function gdoTableHREF() : string { return $this->href(); }
+	
+	/**
+	 * Override this.
+	 * Called upon creation of the GDT_Table.
+	 */
+	public function onCreateTable(GDT_Table $table) : void {}
+	protected function onInitTable() : void {}
 	
 	/**
 	 * Override this.
@@ -38,11 +51,10 @@ abstract class MethodTable extends Method
 	 * Defaults to all fields from your gdoTable().
 	 * @return GDT[]
 	 */
-	public function gdoHeaders() : array { return $this->gdoTable()->gdoColumnsCache(); }
-	protected function gdoTableHREF() : string { return $this->href(); }
-	
-	# event
-	protected function onInitTable() : void {}
+	public function gdoHeaders() : array
+	{
+		return $this->gdoTable()->gdoColumnsCache();
+	}
 	
 	/**
 	 * @return GDT[string]
@@ -54,11 +66,16 @@ abstract class MethodTable extends Method
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
 			$this->addComposeParameters($this->gdoTableFeatures());
+// 			$this->addComposeParameters($this->gdoHeaders());
 		}
 		return $this->parameterCache;
 	}
 	
+	/**
+	 * @var GDT[]
+	 */
 	private array $headerCache;
+	
 	public function gdoHeaderCache() : array
 	{
 		if (!isset($this->headerCache))
@@ -74,7 +91,7 @@ abstract class MethodTable extends Method
 	
 	/**
 	 * Table features paramter array.
-	 * @return array
+	 * @return GDT[]
 	 */
 	private function gdoTableFeatures() : array
 	{
@@ -96,6 +113,7 @@ abstract class MethodTable extends Method
 		}
 		if ($this->isFiltered())
 		{
+			$features[] = GDT_Filter::make($this->getFilterName());
 		}
 		return $features;
 	}
@@ -113,43 +131,33 @@ abstract class MethodTable extends Method
     
     /**
      * Override this with returning an ArrayResult with data.
-     * @return ArrayResult
      */
     public function getResult() : ArrayResult { return new ArrayResult([], $this->gdoTable()); }
 
     /**
      * Override this to toggle fetchInto speedup in table rendering to reduce GDO allocations.
-     * @return boolean
      */
     public function useFetchInto() : bool { return true; }
     
     /**
      * Default IPP defaults to config in Module_Table.
      * @see Module_Table::getConfig()
-     * @return string
      */
     public function getDefaultIPP() : int { return Module_Table::instance()->cfgItemsPerPage(); }
     
-    /**
-     * Override this.
-     * Called upon creation of the GDT_Table.
-     * @param GDT_Table $table
-     */
-    public function onCreateTable(GDT_Table $table) : void {}
-    
     protected function getCurrentHREF()
     {
-    	return $_SERVER['REQUEST_URI'];
+    	return @$_SERVER['REQUEST_URI'];
     }
     
     /**
      * Creates the collection GDT.
      */
-    public function createCollection() : GDT_Table
+    protected function createCollection() : GDT_Table
     {
         $this->table = GDT_Table::make($this->getTableName());
         $this->table->href($this->gdoTableHREF());
-        $this->table->gdo($this->gdoTable());
+//         $this->table->gdo($this->gdoTable());
         $this->table->fetchAs($this->gdoFetchAs());
         return $this->table;
     }
@@ -239,6 +247,16 @@ abstract class MethodTable extends Method
 		return $this->gdoParameterValue($this->getOrderName());
 	}
 	
+	public function getFilterVars() : array
+	{
+		return $this->getFilterField()->getFilterVars();
+	}
+	
+	public function getFilterField() : ?GDT_Filter
+	{
+		return $this->gdoParameter($this->getFilterName(), false, false);
+	}
+	
 	###############
 	### Execute ###
 	###############
@@ -299,13 +317,13 @@ abstract class MethodTable extends Method
 	    {
 		    $table->ordered($this->gdoParameter($this->getOrderName()));
 	    }
-	    $table->filtered($this->isFiltered());
+	    $table->filtered($this->isFiltered(), $this->getFilterField());
 	    $table->searched($this->isSearched());
 	    $table->sorted($this->isSorted());
 	    if ($this->isPaginated())
 	    {
-	    	$table->paginated(true, $this->href(), $this->getIPP());
-	    	$table->pagemenu->page($this->gdoParameterValue($this->getPageName()));
+	    	$table->paginated(true, $this->gdoTableHREF(), $this->getIPP());
+	    	$table->pagemenu->page($this->getPage());
 	    }
 	    
 	    # 4 editor permissions
@@ -325,24 +343,19 @@ abstract class MethodTable extends Method
 		if (!isset($this->table))
 		{
 			$this->table = $this->createCollection();
+			$this->initTable();
 		}
 		return $this->table;
 	}
 	
-// 	public function onInit()
-// 	{
-// // 		$this->initTable();
-// 	}
-	
-	public function initTable()
+	private function initTable()
 	{
-		$table = $this->getTable();
+		$table = $this->table;
 		$this->setupCollection($table);
 		$this->onInitTable();
 		$this->beforeCalculateTable($table);
 		$this->calculateTable($table);
-		$this->validate();
-	    $this->calculateTable($table);
+// 		$this->validate();
 	    $result = $table->getResult();
         $result->table = $this->gdoFetchAs();
 	    $this->setupTitle($table);
@@ -351,7 +364,7 @@ abstract class MethodTable extends Method
 	
 	public function renderTable()
 	{
-	    return $this->initTable();
+	    return $this->getTable();
 	}
 	
 	protected function beforeCalculateTable(GDT_Table $table)
@@ -372,7 +385,7 @@ abstract class MethodTable extends Method
 	    # Exec features
 	    if ($this->isFiltered())
 	    {
-	        $result = $result->filterResult($result->getFullData(), $this->gdoTable(), $table->getHeaderFields(), $table->headers->getName());
+	        $result = $result->filterResult($result->getFullData(), $table->getHeaderFields(), $this->getFilterField());
 	    }
 	    if ($this->isSearched())
 	    {
@@ -390,10 +403,10 @@ abstract class MethodTable extends Method
 	    $table->result($result);
 	}
 	
-	public function renderCLIHelp() : string
-	{
-	    $this->calculateTable($this->initTable());
-	    return parent::renderCLIHelp();
-	}
+// 	public function renderCLIHelp() : string
+// 	{
+// 	    $this->calculateTable($this->initTable());
+// 	    return parent::renderCLIHelp();
+// 	}
 	
 }

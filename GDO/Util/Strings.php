@@ -151,4 +151,18 @@ final class Strings
 		return $html;
 	}
 	
+	###############
+	### Explode ###
+	###############
+	/**
+	 * Explode, trim and remove empty elements.
+	 */
+	public static function explode(string $string, string $delimiter = ',') : array
+	{
+		$array = array_map('trim', explode($delimiter, $string));
+		return array_filter($array, function($s){
+			return $s !== '';
+		});
+	}
+	
 }

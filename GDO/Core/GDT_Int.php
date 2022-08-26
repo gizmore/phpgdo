@@ -2,6 +2,8 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
+use GDO\Table\GDT_Filter;
+use GDO\Util\Arrays;
 
 /** 
  * Database capable base integer class.
@@ -226,14 +228,9 @@ class GDT_Int extends GDT_DBField
 		return GDT_Template::php('Core', 'integer_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
-	public function filterVar(string $key=null)
+	public function filterQuery(Query $query, GDT_Filter $f) : self
 	{
-		return [];
-	}
-	
-	public function filterQuery(Query $query, $rq=null) : self
-	{
-	    if ($filter = $this->filterVar($rq))
+	    if ($filter = $this->filterVar($f))
 	    {
 	        if ($condition = $this->searchQuery($query, $filter, true))
 	        {
@@ -245,19 +242,38 @@ class GDT_Int extends GDT_DBField
 	
 	public function filterGDO(GDO $gdo, $filtervalue) : bool
 	{
-		return true; # @TODO implement GDT_Int::filterGDO
-// 		$min = $filtervalue['min'];
-// 		$max = $filtervalue['max'];
-// 		$var = $this->getVar();
-// 		if ( ($min !== null) && ($var < $min) )
-// 		{
-// 			return false;
-// 		}
-// 		if ( ($max !== null) && ($var > $max) )
-// 		{
-// 			return false;
-// 		}
-// 		return true;
+		$min = $filtervalue['min'];
+		$max = $filtervalue['max'];
+		$var = $this->getVar();
+		if ( ($min !== null) && ($var < $min) )
+		{
+			return false;
+		}
+		if ( ($max !== null) && ($var > $max) )
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	public function filterVar(GDT_Filter $f)
+	{
+		$fv = parent::filterVar($f);
+		return Arrays::empty($fv) ? null : self::intFilterVar($fv);
+	}
+	
+	private function intFilterVar(array $fv) : array
+	{
+		foreach ($fv as $k => $v)
+		{
+			if ($v !== null)
+			{
+				$v = trim($v);
+				$v = $v === '' ? null : (int) $v;
+			}
+			$fv[$k] = $v;
+		}
+		return $fv;
 	}
 	
 	/**

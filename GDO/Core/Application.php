@@ -40,13 +40,13 @@ class Application extends GDT
 	################
 	public static int $TIME;
 	public static float $MICROTIME;
-	public static function time(float $time)
+	public static function time(float $time) : void
 	{
 		self::$TIME = (int)$time;
 		self::$MICROTIME = $time;
 	}
 	
-	public static function updateTime()
+	public static function updateTime() : void
 	{
 		self::time(microtime(true));
 	}
@@ -109,19 +109,20 @@ class Application extends GDT
 	### Application state ###
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
-	# render modes
-	public function isWebsocket() : bool { return false; }
-	public function isAjax() : bool { return $this->ajax; }
-	public function isHTML() : bool { return $this->mode >= 10; }
-	public function isJSON() : bool { return $this->mode === GDT::RENDER_JSON; }
-	public function isXML() : bool { return $this->mode === GDT::RENDER_XML; }
-	public function isPDF() : bool { return $this->mode === GDT::RENDER_PDF; }
+	public function isWebserver() : bool { return !$this->cli; }
+	# render
 	public function isCLI() : bool { return $this->cli; }
+	public function isAjax() : bool { return $this->ajax; }
+	public function isWebsocket() : bool { return false; }
+	public function isHTML() : bool { return $this->modeDetected >= 10; }
+	public function isJSON() : bool { return $this->modeDetected === GDT::RENDER_JSON; }
+	public function isXML() : bool { return $this->modeDetected === GDT::RENDER_XML; }
+	public function isPDF() : bool { return $this->modeDetected === GDT::RENDER_PDF; }
+	public function isGTK() : bool { return $this->modeDetected === GDT::RENDER_GTK; }
 	# 
-	public function isAPI() : bool { return !$this->isWebserver(); }
+// 	public function isAPI() : bool { return !$this->isWebserver(); }
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
-	public function isWebserver() : bool { return !$this->cli; }
 
 	/**
 	 * Is a session handler supported?

@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Language\Trans;
+
 /**
  * Add a name to a GDT.
  * Display human classname.
@@ -62,7 +64,23 @@ trait WithName
 	###############
 	public static function make(string $name = null) : self
 	{
-		return self::makeNamed($name)->defaultLabel();
+		$obj = self::makeNamed($name);
+		if ($name = $obj->getName())
+		{
+			if (Trans::hasKey($name))
+			{
+				$obj->label($name);
+			}
+			else
+			{
+				$obj->defaultLabel();
+			}
+		}
+		else
+		{
+			$obj->defaultLabel();
+		}
+		return $obj;
 	}
 	
 	public static function makeNamed(string $name = null) : self

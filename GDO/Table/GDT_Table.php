@@ -133,11 +133,17 @@ class GDT_Table extends GDT
 	# ################
 	# ## Filtering ###
 	# ################
-	public $filtered;
+	public bool $filtered = false;
+	public GDT_Filter $filter;
 
-	public function filtered($filtered = true)
+	public function filtered($filtered = true, GDT_Filter $filter = null)
 	{
 		$this->filtered = $filtered;
+		unset($this->filter);
+		if ($filter)
+		{
+			$this->filter = $filter;
+		}
 		return $this;
 	}
 
@@ -265,12 +271,11 @@ class GDT_Table extends GDT
 	{
 		if ($this->filtered)
 		{
-			$rq = '';
 			foreach ($this->getHeaderFields() as $gdt)
 			{
 				if ($gdt->isFilterable())
 				{
-					$gdt->filterQuery($query, $rq);
+					$gdt->filterQuery($query, $this->filter);
 				}
 			}
 		}

@@ -23,14 +23,20 @@ define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 ########################
 global $GDT_LOADED;
 $GDT_LOADED = 0; # perf
+// global $GDT_PATHES;
+// $GDT_PATHES = [];
+#
 spl_autoload_register(function(string $name) : void
 {
 	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
-	{ # 2 lines path
-		$name = str_replace('\\', '/', $name) . '.php';
-		require GDO_PATH . $name;
-		global $GDT_LOADED; # 2 lines perf
+	{   # 2 lines path
+		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php';
+		require $name;
+		# 4 lines perf
+		global $GDT_LOADED;
 		$GDT_LOADED++;
+// 		global $GDT_PATHES;
+// 		$GDT_PATHES[] = $name;
 	}
 });
 
@@ -81,12 +87,14 @@ function href(string $module, string $method, string $append = null, bool $lang 
 // 		}
 // 	}
 	
+	$module = strtolower($module);
+	$method = strtolower($method);
+
 	if (GDO_SEO_URLS)
 	{
-		$module = strtolower($module);
-		$method = strtolower($method);
 		$href = GDO_WEB_ROOT . "{$module}/{$method}";
-
+		$q = [];
+		$hash = '';
 		if ($append)
 		{
 			$append = ltrim($append, '&');
@@ -94,7 +102,6 @@ function href(string $module, string $method, string $append = null, bool $lang 
 			$query = $hashparts[0];
 			$hash = isset($hashparts[1]) ? $hashparts[1] : '';
 			$qparts = explode('&', $query);
-			$q = [];
 			foreach ($qparts as $part)
 			{
 				if (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
@@ -112,23 +119,19 @@ function href(string $module, string $method, string $append = null, bool $lang 
 			if ($q)
 			{
 				$href .= '?' . implode('&', $q);
-				if ($lang)
-				{
-					$href .= '&_lang=' . Trans::$ISO;
-				}
 			}
-			elseif ($lang)
-			{
-				$href .= '?_lang=' . Trans::$ISO;
-			}
-			else
-			{
-				$href .= '?x=1';
-			}
-			if ($hash)
-			{
-				$href .= "#{$hash}";
-			}
+		}
+		
+		if ($lang)
+		{
+			$href .= $q ? '&' : '?';
+			$href .= '_lang=';
+			$href .= Trans::$ISO;
+		}
+	
+		if ($hash)
+		{
+			$href .= "#{$hash}";
 		}
 	}
 	else
@@ -217,9 +220,10 @@ function hdr(string $header, bool $replace = true)
 	$app = Application::$INSTANCE;
 	if ($app->isUnitTests())
 	{
-// 		echo $header . PHP_EOL;
+		echo $header . PHP_EOL;
+		flush();
 	}
-	elseif (!$app->isCLI())
+	elseif ($app->isWebserver())
 	{
 		header($header, $replace);
 	}

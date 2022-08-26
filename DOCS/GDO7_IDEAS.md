@@ -52,3 +52,8 @@ Your playlists are ACL sharable.
  
  - new GDT_GuestACL. A checkbox that is false when global guest support is dropped.
  
+ - phpgdo-doublettes - Detect Multiple Accounts for a single person. Do this by recording IPs on every request. show matching IPs. MyISAM. cleanup with lookback duration.
+ 
+ - A command to search the Handelsregister.
+ 
+ 

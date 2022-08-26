@@ -8,6 +8,7 @@ use GDO\Table\WithOrder;
 use GDO\Core\Application;
 use GDO\Core\GDT_DBField;
 use GDO\Core\GDO;
+use GDO\Table\GDT_Filter;
 
 /**
  * The GDT_Timestamp field is the baseclass for all datefields.
@@ -275,19 +276,19 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	### Filter ###
 	##############
-	public function filterVar(string $key=null)
-	{
-		return [];
-	}
+// 	public function filterVar(string $key=null)
+// 	{
+// 		return [];
+// 	}
 	
 	public function renderFilter($f) : string
 	{
 		return GDT_Template::php('Date', 'timestamp_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
-	public function filterQuery(Query $query, $rq=null) : self
+	public function filterQuery(Query $query, GDT_Filter $f) : self
 	{
-		$filter = $this->filterVar($rq);
+		$filter = $this->filterVar($f);
 		if ($filter)
 		{
 			if ($condition = $this->searchQuery($query, $filter, true))

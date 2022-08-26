@@ -2,10 +2,12 @@
 namespace GDO\Form;
 
 use GDO\Session\GDO_Session;
+use GDO\User\GDO_User;
 use GDO\Util\Random;
 use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
+use GDO\Core\GDT;
 
 /**
  * GDT_Form CSRF protection.
@@ -31,6 +33,17 @@ class GDT_AntiCSRF extends GDT_String
 	###########
 	### GDT ###
 	###########
+	protected function __construct()
+	{
+		parent::__construct();
+		$mod = Module_Form::instance();
+		if ($mod->cfgXSRFMode() === 'fixed')
+		{
+			$this->fixed();
+		}
+		$this->csrfExpire($mod->cfgXSRFDuration());
+	}
+	
 	public function getGDOData() : ?array
 	{
 	    return null;
@@ -46,40 +59,40 @@ class GDT_AntiCSRF extends GDT_String
 		return $this;
 	}
 	
-// 	#############
-// 	### Fixed ###
-// 	#############
-// 	public bool $fixed = false;
-// 	public function complex() : self { return $this->fixed(false); }
-// 	public function fixed(bool $fixed=true) : self
-// 	{
-// 	    $this->fixed = $fixed;
-// 	    return $this;
-// 	}
+	#############
+	### Fixed ###
+	#############
+	public bool $fixed = false;
+	public function complex() : self { return $this->fixed(false); }
+	public function fixed(bool $fixed=true) : self
+	{
+	    $this->fixed = $fixed;
+	    return $this;
+	}
 	
-// 	/**
-// 	 * Calculate a fixed static token for a user.
-// 	 * @TODO verify crypto
-// 	 */
-// 	public static function fixedToken(GDO_User $user=null) : string
-// 	{
-// 	    $user = $user ? $user : GDO_User::current();
-// 	    $time = 1337;
-// 	    $hash = sprintf('%s_%s_%s_%s_%s',
-// 	        GDO_SALT, $user->renderUserName(),
-// 	    	GDO_SALT, $user->gdoVar('user_password'), $time);
-// 	    return substr(sha1($hash), 0, self::KEYLEN);
-// 	}
+	/**
+	 * Calculate a fixed static token for a user.
+	 * @TODO verify crypto
+	 */
+	public static function fixedToken(GDO_User $user=null) : string
+	{
+	    $user = $user ? $user : GDO_User::current();
+	    $time = 1337;
+	    $hash = sprintf('%s_%s_%s_%s_%s',
+	        GDO_SALT, $user->renderUserName(),
+	    	GDO_SALT, $user->gdoVar('user_password'), $time);
+	    return substr(sha1($hash), 0, self::KEYLEN);
+	}
 	
 	#################
 	### Construct ###
 	#################
 	public function csrfToken()
 	{
-// 	    if ($this->fixed)
-// 	    {
-// 	        return self::fixedToken();
-// 	    }
+	    if ($this->fixed)
+	    {
+	        return self::fixedToken();
+	    }
 	    
 	    $token = '';
 	    if (module_enabled('Session'))
@@ -127,6 +140,11 @@ class GDT_AntiCSRF extends GDT_String
 	################
 	public function validate($value) : bool
 	{
+		if (Module_Form::instance()->cfgXSRFMode() === 'off')
+		{
+			return true;
+		}
+		
 	    $headers = getallheaders();
 	    if (isset($headers['X-CSRF-TOKEN']))
 	    {
@@ -140,20 +158,20 @@ class GDT_AntiCSRF extends GDT_String
 	    }
 	    
 	    # No session, no token
-	    if (!module_enabled('Session'))
-		{
-			return true;
-// 			return $this->error('err_session_required');
-		}
-		
-// 		if ($this->fixed)
+// 	    if (!module_enabled('Session'))
 // 		{
-// 		    if ($value === self::fixedToken())
-// 		    {
-// 		        return true;
-// 		    }
-// 		    return $this->error('err_csrf');
+// 			return true;
+// // 			return $this->error('err_session_required');
 // 		}
+		
+		if ($this->fixed)
+		{
+		    if ($value === self::fixedToken())
+		    {
+		        return true;
+		    }
+		    return $this->error('err_csrf');
+		}
 
 		# Load tokens
 		$csrf = $this->loadCSRFTokens();

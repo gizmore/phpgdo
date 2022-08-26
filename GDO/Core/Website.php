@@ -12,7 +12,6 @@ use GDO\UI\GDT_Success;
  * Keeps lists of assets and feeds them to minifiers.
  * Features redirects and alerts.
  * 
- * @deprecated It is not nice to have a class Website in core somehow... or is it?
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.5
@@ -24,69 +23,15 @@ use GDO\UI\GDT_Success;
  */
 final class Website
 {
-// 	/**
-// 	 * Redirection URL
-// 	 * @var string
-// 	 */
-// 	public static ?string $REDIRECTED = null;
-
+	############
+	### LINK ###
+	############
 	/**
 	 * HTML page LINK elements.
 	 * array<array<string>>
 	 * @var array
 	 */
 	private static array $LINKS = [];
-	
-	/**
-	 * @param number $time
-	 * @return \GDO\Core\GDT_Response
-	 */
-// 	public static function redirectBack($time=0, $default=null)
-// 	{
-// 	    return self::redirect(self::hrefBack($default), $time);
-// 	}
-	
-// 	public static function redirect(string $url, int $time=0) : GDT
-// 	{
-// 		$app = Application::$INSTANCE;
-// 	    switch ($app->getFormat())
-// 		{
-// 			case Application::HTML:
-// 				if ($app->isAjax())
-// 				{
-// 					return GDT_Response::makeWith(GDT_HTML::withHTML(self::ajaxRedirect($url, $time)));
-// 				}
-// 				elseif (!self::$REDIRECTED)
-// 				{
-// 					if ($time > 0)
-// 					{
-// 					    hdr("Refresh:$time; url=$url");
-// 					}
-// 					else
-// 					{
-// 						hdr('Location: ' . $url);
-// 					}
-// 					self::$REDIRECTED = $url;
-// 				}
-// 		}
-// 		GDT_Page::instance()->topResponse()->addField(GDT_Success::with('msg_redirect', [GDT_Link::anchor($url), $time]));
-// 	}
-
-// 	private static function ajaxRedirect($url, $time)
-// 	{
-// 		# Don't do this at home kids!
-// 		return sprintf('<script>setTimeout(function(){ window.location.href="%s" }, %d);</script>', $url, $time*1000);
-// 	}
-	
-	public static function addInlineCSS(string $css)
-	{
-		CSS::addInline($css);
-	}
-	
-	public static function addCSS(string $path)
-	{
-		CSS::addFile($path);
-	}
 	
 	/**
 	 * add an html <link>
@@ -175,153 +120,10 @@ final class Website
 		}
 		return $back;
 	}
-	
-	/**
-	 * Renders a json response and dies.
-	 * 
-	 * @param mixed $json
-	 * @param boolean $die
-	 */
-// 	public static function renderJSON($json) : string
-// 	{
-// 	    if (!Application::$INSTANCE->isCLI())
-// 		{
-// 			hdr('Content-Type: application/json');
-// 		}
-// 		return json_encode($json, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
-// 	}
-	
-// 	public static function outputStarted() : bool
-// 	{
-// 		return headers_sent() || ob_get_contents();
-// 	}
-	
-	#############
-	### Error ###
-	#############
-// 	public static function error($key, array $args=null, $code=409)
-// 	{
-// 	    self::topResponse()->addField(GDT_Error::with($key, $args, $code));
-// 	}
-	
-// 	/**
-// 	 * Redirect and show a message at the new page.
-// 	 * @param string $key
-// 	 * @param array $args
-// 	 * @param string $url
-// 	 * @param number $time
-// 	 * @return \GDO\Core\GDT_Response
-// 	 */
-// 	public static function redirectMessage($key, array $args=null, $url=null, $time=0)
-// 	{
-// 	    return self::redirectMessageRaw(t($key, $args), $url, $time);
-// 	}
-	
-// 	public static function redirectMessageRaw(string $message, string $url=null, int $time=0) : GDT
-// 	{
-// 	    $app = Application::$INSTANCE;
-	 
-// 	    GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
-	  
-// // 	    if ($app->isCLI() || $app->isUnitTests())
-// // 	    {
-// // 	        if ($app->isUnitTests())
-// // 	        {
-// // 	            echo "Redirect => $url\n";
-// // 	        }
-// // 	        echo "{$message}\n";
-// // 	        return;
-// // 	    }
-	    
-// 	    $url = $url === null ? self::hrefBack() : $url;
-	    
-// // 	    if (!$app->isInstall())
-// // 	    {
-// 	        GDO_Session::set('redirect_message', $message);
-// 	        return self::redirect($url, $time);
-// // 	    }
-// 	}
-	
-// 	public static function redirectError($key, array $args=null, $url=null, $time=0, $code=409)
-// 	{
-// 		return self::redirectErrorRaw(t($key, $args), $url, $time, $code);
-// 	}
-	
-// 	public static function redirectErrorRaw($message, $url=null, $time=0, $code=409)
-// 	{
-// 	    $app = Application::$INSTANCE;
 
-// 	    self::topResponse()->addField(GDT_Error::make()->textRaw($message, $code));
-	    
-// 	    if ($app->isCLI())
-// 	    {
-// 	        echo "{$message}\n";
-// 	        return;
-// 	    }
-	    
-// 	    $url = $url === null ? self::hrefBack() : $url;
-// 	    if (!$app->isInstall())
-// 	    {
-// 	        GDO_Session::set('redirect_error', $message);
-// 	        return self::redirect($url, $time);
-// 	    }
-// 	}
-	
-	####################
-	### Top Response ###
-	####################
-// 	public static $TOP_RESPONSE = null;
-// 	public static function topResponse()
-// 	{
-// 	    if (self::$TOP_RESPONSE === null)
-// 	    {
-// 	        self::$TOP_RESPONSE = GDT_Container::make('topResponse');
-// 	        if (!Application::$INSTANCE->isInstall())
-// 	        {
-// 	            if ($message = GDO_Session::get('redirect_message'))
-// 	            {
-// 	                GDO_Session::remove('redirect_message');
-// 	                self::$TOP_RESPONSE->addField(GDT_Success::make()->textRaw($message));
-// 	            }
-// 	            if ($message = GDO_Session::get('redirect_error'))
-// 	            {
-// 	                GDO_Session::remove('redirect_error');
-// 	                self::$TOP_RESPONSE->addField(GDT_Error::make()->textRaw($message));
-// 	            }
-// 	        }
-// 	    }
-// 	    return self::$TOP_RESPONSE;
-// 	}
-	
-// 	public static function renderTopResponse()
-// 	{
-// 	    return self::topResponse()->render();
-// 	}
-	
-// 	#####################
-// 	### JSON Response ###
-// 	#####################
-// 	public static $JSON_RESPONSE;
-// 	public static function jsonResponse()
-// 	{
-// 	    if (!self::$JSON_RESPONSE)
-// 	    {
-// 	        self::$JSON_RESPONSE = GDT_Response::make();
-// 	    }
-// 	    return self::$JSON_RESPONSE;
-// 	}
-	
-// 	public static function renderJSONResponse()
-// 	{
-// 	    if (self::$JSON_RESPONSE)
-// 	    {
-// 	        return self::$JSON_RESPONSE->renderJSON();
-// 	    }
-// 	}
-	
-	####################
-	### Generic Head ###
-	####################
+	############
+	### HEAD ###
+	############
 	private static string $HEAD = '';
 	
 	public static function addHead(string $string) : void
@@ -361,43 +163,44 @@ final class Website
 	#############
 	### Error ###
 	#############
-	public static function message(string $key, array $args = null, bool $log = true, int $code = 200)
+	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200)
 	{
 		$app = Application::$INSTANCE;
-		Application::setResponseCode($code);
+		$app->setResponseCode($code);
+		if ($app->isCLI() || $app->isUnitTests())
+		{
+			echo Color::green(t($key, $args)) . "\n";
+			flush();
+		}
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));
 		}
-		if ($app->isCLI())
-		{
-			$text = TextStyle::bold(Color::green(t($key, $args)));
-			echo "{$text}\n";
-		}
-		else
-		{
-			$message = GDT_Success::make()->text($key, $args);
-			GDT_Page::instance()->topResponse()->addField($message);
-		}
+		$success = GDT_Success::make()->
+			titleRaw($titleRaw)->
+			text($key, $args);
+		$top = GDT_Page::instance()->topResponse();
+		$top->addField($success);
 	}
 	
-	public static function error(string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
+	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
 	{
-		Application::setResponseCode($code);
+		$app = Application::$INSTANCE;
+		$app->setResponseCode($code);
+		if ($app->isCLI() || $app->isUnitTests())
+		{
+			echo TextStyle::bold(Color::red(t($key, $args))) . "\n";
+			flush();
+		}
 		if ($log)
 		{
 			Logger::logError(ten($key, $args));
 		}
-		if (Application::$INSTANCE->isCLI())
-		{
-			$text = TextStyle::bold(Color::red(t($key, $args)));
-			echo "{$text}\n";
-		}
-		else
-		{
-			$error = GDT_Error::make()->text($key, $args);
-			GDT_Page::instance()->topResponse()->addField($error);
-		}
+		$error = GDT_Error::make()->
+			titleRaw($titleRaw)->
+			text($key, $args);
+		$top = GDT_Page::instance()->topResponse();
+		$top->addField($error);
 	}
 	
 }

@@ -12,7 +12,6 @@ use GDO\Install\Installer;
 use GDO\UI\GDT_Button;
 use GDO\Util\Strings;
 use GDO\Core\GDT_Tuple;
-use GDO\DB\Cache;
 
 /**
  * Install a module. Wipe a module. Enable and disable a module.
@@ -27,9 +26,9 @@ class Install extends MethodForm
 {
 	use MethodAdmin;
 	
-	private GDO_Module $configModule;
+// 	private GDO_Module $configModule;
 	
-	public function isShownInSitemap() : bool { return false; }
+// 	public function isShownInSitemap() : bool { return false; }
 
 	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	
@@ -48,11 +47,7 @@ class Install extends MethodForm
 	
 	public function configModule() : GDO_Module
 	{
-		if (!isset($this->configModule))
-		{
-			$this->configModule = $this->gdoParameterValue('module');
-		}
-		return $this->configModule;
+		return $this->gdoParameterValue('module');
 	}
 	
 	public function execute()
@@ -79,7 +74,6 @@ class Install extends MethodForm
 		if ($module = $this->configModule())
 		{
 	        return t('mt_admin_install', [$module->renderName()]);
-			
 		}
 	    else
 	    {
@@ -98,14 +92,14 @@ class Install extends MethodForm
 	    
 		$form->actions()->addField(GDT_Submit::make('install')->label('btn_install'));
 
-		if ($this->configModule && $this->configModule->isInstalled())
+		if ($mod && $mod->isInstalled())
 		{
-			$tables = $this->configModule->getClasses();
+			$tables = $mod->getClasses();
 			$modules = empty($tables) ? t('enum_none') : implode(', ', array_map(function($t){return Strings::rsubstrFrom($t, '\\');}, $tables));
 			$text = t('confirm_wipe_module', [$modules]);
 			$form->actions()->addField(GDT_Submit::make('uninstall')->label('btn_uninstall')->attr('onclick', 'return confirm(\''.$text.'\')"'));
 			$form->actions()->addField(GDT_Submit::make('reinstall')->label('btn_reinstall'));
-			if ($this->configModule->isEnabled())
+			if ($mod->isEnabled())
 			{
 			    $form->actions()->addField(GDT_Submit::make('disable')->label('btn_disable'));
 			}
@@ -114,7 +108,7 @@ class Install extends MethodForm
 				$form->actions()->addField(GDT_Submit::make('enable')->label('btn_enable'));
 			}
 			
-			if ($adminHREF = $this->configModule->href_administrate_module())
+			if ($adminHREF = $mod->href_administrate_module())
 			{
 			    $form->actions()->addField(GDT_Button::make('href_admin')->href($adminHREF));
 			}
@@ -133,41 +127,47 @@ class Install extends MethodForm
 	public function executeButton($button)
 	{
 		$response = call_user_func([$this, "execute_$button"]);
-		Cache::flush();
-		Cache::fileFlush();
+// 		Cache::flush();
+// 		Cache::fileFlush();
 		$this->resetForm();
 		return $response;
 	}
 	
 	public function execute_install()
 	{
-		Installer::installModuleWithDependencies($this->configModule);
-		$this->configModule->saveVar('module_enabled', '1');
-		return $this->message('msg_module_installed', [$this->configModule->getName()]);
+		$mod = $this->configModule();
+		$oid = spl_object_id($mod);
+		Installer::installModuleWithDependencies($mod);
+		$mod->saveVar('module_enabled', '1');
+		return $this->message('msg_module_installed', [$mod->getName()]);
 	}
 	
 	public function execute_reinstall()
 	{
-		Installer::installModule($this->configModule, true);
-		return $this->message('msg_module_installed', [$this->configModule->getName()]);
+		$mod = $this->configModule();
+		Installer::installModule($mod, true);
+		return $this->message('msg_module_installed', [$mod->getName()]);
 	}
 	
 	public function execute_uninstall()
 	{
-		Installer::dropModule($this->configModule);
-		return $this->message('msg_module_uninstalled', [$this->configModule->getName()]);
+		$mod = $this->configModule();
+		Installer::dropModule($mod);
+		return $this->message('msg_module_uninstalled', [$mod->getName()]);
 	}
 	
 	public function execute_enable()
 	{
-		$this->configModule->saveVar('module_enabled', '1');
-		return $this->message('msg_module_enabled', [$this->configModule->getName()]);
+		$mod = $this->configModule();
+		$mod->saveVar('module_enabled', '1');
+		return $this->message('msg_module_enabled', [$mod->getName()]);
 	}
 
 	public function execute_disable()
 	{
-		$this->configModule->saveVar('module_enabled', '0');
-		return $this->message('msg_module_disabled', [$this->configModule->getName()]);
+		$mod = $this->configModule();
+		$mod->saveVar('module_enabled', '0');
+		return $this->message('msg_module_disabled', [$mod->getName()]);
 	}
 	
 }

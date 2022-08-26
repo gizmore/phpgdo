@@ -138,8 +138,9 @@ class GDO_Module extends GDO
 	}
 	
 	/**
+	 * @TODO: IF a method description is not unique, use the module description?
+	 * 
 	 * Module description is fetched from README.md by default.
-	 * @return string
 	 */
 	public function getModuleDescription() : ?string
 	{
@@ -991,7 +992,8 @@ class GDO_Module extends GDO
 	public function addCSS(string $path) : void
 	{
 		$nc = $this->nocacheVersion();
-		Website::addCSS($this->wwwPath("{$path}?{$nc}"));
+		$path = $this->wwwPath("{$path}?{$nc}");
+		CSS::addFile($path);
 	}
 
 // 	public function prefetch($path, $type)
@@ -1004,14 +1006,17 @@ class GDO_Module extends GDO
 	#############
 	### Error ###
 	#############
-	public function error(string $key, array $args=null) : bool
-	{
-		$gdt = GDT_Error::make()->text($key, $args)->titleRaw($this->renderName());
-		Application::$INSTANCE->setResponseCode(409);
-		Logger::logError(ten($key, $args));
-		GDT_Page::instance()->topResponse()->addField($gdt);
-		return false;
-	}
+// 	public function message(string $key, array $args=null, bool $log=true, int $code=200) : bool
+// 	{
+// 		Website::message($this->renderName(), $key, $args, $log, $code);
+// 		return true;
+// 	}
+	
+// 	public function error(string $key, array $args=null, bool $log=true, int $code=GDO_Exception::DEFAULT_ERROR_CODE) : bool
+// 	{
+// 		Website::error($this->renderName(), $key, $args, $log, $code);
+// 		return false;
+// 	}
 	
 	protected function errorSystemDependency(string $key, array $args = null) : bool
 	{

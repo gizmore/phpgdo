@@ -17,10 +17,8 @@ trait WithGDO
 	
 	/**
 	 * Add the current GDO to this GDT.
-	 * @param GDO $gdo
-	 * @return self
 	 */
-	public function gdo(GDO $gdo=null) : self
+	public function gdo(GDO $gdo = null) : self
 	{
 		if ($gdo)
 		{
@@ -35,12 +33,30 @@ trait WithGDO
 		{
 			unset($this->gdo);
 		}
-		return $this;
+		return $this->var(null);
+	}
+	
+	public function gdoInitial(GDO $gdo = null) : self
+	{
+		if ($gdo)
+		{
+			$this->gdo = $gdo;
+			if ($name = $this->getName())
+			{
+				$var = $gdo->gdoVar($name);
+				return $this->initial($var);
+			}
+		}
+		else
+		{
+			unset($this->gdo);
+		}
+		return $this->initial(null);
 	}
 	
 	public function hasGDO() : bool
 	{
-		return !!$this->gdo;
+		return isset($this->gdo);
 	}
 	
 	public function getGDO() : GDO

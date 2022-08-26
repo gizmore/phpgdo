@@ -52,7 +52,7 @@ class Users extends MethodQueryTable
 			$gdo->gdoColumn('user_name'),
 			$gdo->gdoColumn('user_guest_name'),
 			$gdo->gdoColumn('user_level'),
-			$gdo->gdoColumn('user_last_activity'),
+// 			$gdo->gdoColumn('user_last_activity'),
 			$gdo->gdoColumn('user_deleted'),
 			$gdo->gdoColumn('user_deletor'),
 		];

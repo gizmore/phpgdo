@@ -41,10 +41,13 @@ final class GDT_Order extends GDT_String
 	{
 		if ($value)
 		{
-			$orders = explode(',', $value);
+			if (is_string($value))
+			{
+				$orders = Strings::explode($value);
+			}
 			foreach ($orders as $order)
 			{
-				if (!$this->validateOrder(trim($order)))
+				if (!$this->validateOrder($order))
 				{
 					return false;
 				}
@@ -85,10 +88,23 @@ final class GDT_Order extends GDT_String
 		return $this;
 	}
 	
+	###########
+	### Var ###
+	###########
+	public function getVar()
+	{
+		$name = $this->name;
+		if (isset($this->inputs[$name]))
+		{
+			return $this->inputs[$name];
+		}
+		return $this->var;
+	}
+	
 	#############
 	### Query ###
 	#############
-	public function filterQuery(Query $query, $rq='') : self
+	public function filterQuery(Query $query, GDT_Filter $f) : self
 	{
 		$query->order($this->getVar());
 		return $this;
@@ -127,7 +143,7 @@ final class GDT_Order extends GDT_String
 			case self::DESC:
 				return 'selected';
 			default:
-				return '';
+				return GDT::EMPTY_STRING;
 		}
 	}
 
@@ -137,7 +153,7 @@ final class GDT_Order extends GDT_String
 		{
 			return GDT_Icon::iconS($icon);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	###############

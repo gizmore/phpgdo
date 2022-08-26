@@ -582,40 +582,10 @@ class Cache
 	}
 
 }
-
-# ###########
-# ## SHIM ###
-# ###########
-#
-# Indicate fallback required.
-#
-if ( !class_exists('Memcached', false))
-{
-	define('GDO_MEMCACHE_FALLBACK', true);
-}
-
-#
-# Dynamic poisonable prefix.
-#
-define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
-
-#
-# Default Cache config; Filecache only, no debug.
-#
-if ( !defined('GDO_CACHE_DEBUG'))
-{
-	define('GDO_CACHE_DEBUG', 0);
-}
-if ( !defined('GDO_FILECACHE'))
-{
-	define('GDO_FILECACHE', 1);
-}
-if ( !defined('GDO_MEMCACHE'))
-{
-	define('GDO_MEMCACHE', 2);
-}
-
-#
-# Cache writes to temp path.
-#
-define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));
+# config
+deff('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
+deff('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
+deff('GDO_CACHE_DEBUG', 0);
+deff('GDO_FILECACHE', 1);
+deff('GDO_MEMCACHE', 2);
+deff('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));

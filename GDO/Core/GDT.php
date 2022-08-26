@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
+use GDO\Table\GDT_Filter;
 use GDO\UI\TextStyle;
 
 /**
@@ -208,7 +209,6 @@ abstract class GDT
 	public function renderOption() : string { return $this->renderHTML(); }
 	# HTML table rendering
 	public function renderTHead() : string { return $this->renderHTML(); }
-	public function renderOrder() : string { return ''; }
 	public function renderFilter($f) : string { return self::EMPTY_STRING; }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderTFoot() : string { return $this->renderHTML(); }
@@ -401,9 +401,11 @@ abstract class GDT
 	/**
 	 * Get the input for this GDTs filter var. 
 	 */
-	public function filterVar(string $key=null)
+	public function filterVar(GDT_Filter $f)
 	{
-		return self::EMPTY_STRING;
+		$fv = @$f->getVar()[$this->name];
+		$fv = $fv === '' ? null : $fv;
+		return $fv;
 	}
 	
 	/**
@@ -411,12 +413,17 @@ abstract class GDT
 	 */
 	public function filterGDO(GDO $gdo, $filterInput) : bool
 	{
-		return true;
+		$var = $this->getVar();
+		if (!is_string($var))
+		{
+			return false;
+		}
+		return stripos($var, $filterInput) !== false;
 	}
 	
-	public function filterQuery(Query $query, $rq='') : self
+	public function filterQuery(Query $query, GDT_Filter $f) : self
 	{
-		if ($var = $this->filterVar($this->name))
+		if (null !== ($var = $this->filterVar($f)))
 		{
 			$var = GDO::escapeSearchS($var);
 			$condition = "{$this->getName()} LIKE '%{$var}%'";
@@ -693,10 +700,10 @@ abstract class GDT
 	
 }
 
-if (def('GDT_GDO_DEBUG', 0))
+# Init
+if (GDT::$GDT_DEBUG = deff('GDT_GDO_DEBUG', 0))
 {
 	# Clear trace log
-	GDT::$GDT_DEBUG = GDT_GDO_DEBUG;
 	Logger::log('gdt', '--- NEW RUN ---');
 	Logger::log('gdo', '--- NEW RUN ---');
 }

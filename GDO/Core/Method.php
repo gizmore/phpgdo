@@ -2,14 +2,10 @@
 namespace GDO\Core;
 
 use GDO\DB\Database;
-use GDO\UI\GDT_Error;
-use GDO\UI\GDT_Success;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
 use GDO\UI\WithTitle;
 use GDO\UI\WithDescription;
-use GDO\CLI\CLI;
-use GDO\UI\GDT_Page;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Redirect;
 use GDO\Form\GDT_Submit;
@@ -123,7 +119,7 @@ abstract class Method #extends GDT
 	############
 	### HREF ###
 	############
-	public function href(string $append='')
+	public function href(string $append='') : string
 	{
 		return $this->getModule()->href($this->getMethodName(), $append);
 	}
@@ -426,7 +422,7 @@ abstract class Method #extends GDT
 	{
 		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
 		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : '';
+		return Trans::hasKey($key) ? t($key) : GDT::EMPTY_STRING;
 	}
 	
 	public function getMethodDescription() : string
@@ -454,21 +450,19 @@ abstract class Method #extends GDT
 	##################
 	### Statistics ###
 	##################
-	public function storeLastURL() : void
+	private function storeLastURL() : void
 	{
-// 		$user = GDO_User::current();
 		if (module_enabled('Session'))
 		{
 			# Without session we do not care over referrer.
 			GDO_Session::set('sess_last_url', $_SERVER['REQUEST_URI']);
 		}
-// 		->saveSettingVar('User', 'last_url', $var)
 	}
 
 	/**
 	 * Update user last activity timestamp, for persisted users/guests.
 	 */
-	public function storeLastActivity() : void
+	private function storeLastActivity() : void
 	{
 		$user = GDO_User::current();
 		if ($user->isPersisted())
@@ -476,7 +470,6 @@ abstract class Method #extends GDT
 			$time = Application::$TIME;
 			$time -= $time % $user->settingValue('Date', 'activity_accuracy');
 			$date = Time::getDate($time);
-// 			$user->saveVar('user_last_activity', $date);
 			$user->saveSettingVar('User', 'last_activity', $date);
 		}
 	}
@@ -493,7 +486,7 @@ abstract class Method #extends GDT
 	
 	/**
 	 * Get plug variables.
-	 * @return string[string]
+	 * @return [string[string]]
 	 */
 	public function plugVars() : array
 	{
@@ -516,69 +509,37 @@ abstract class Method #extends GDT
 		}
 	}
 	
-	public function hasFields() : bool
-	{
-		return false;
-	}
+// 	public function hasFields() : bool
+// 	{
+// 		return false;
+// 	}
 	
 	#############
 	### Error ###
 	#############
-	public function response(string $response) : GDT_String
+	public function message(string $key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
-		return GDT_String::make()->var($response);
-	}
-	
-	public function message($key, array $args = null, int $code = 200, bool $log = true) : GDT
-	{
-		return $this->success($key, $args, $code, $log);
-	}
-	
-	public function success($key, array $args = null, int $code = 200, bool $log = true) : GDT
-	{
-		Application::setResponseCode($code);
-		if (Application::$INSTANCE->isCLI())
-		{
-			echo t($key, $args) . "\n";
-		}
-		if ($log)
-		{
-			Logger::logMessage(ten($key, $args));
-		}
-		$success = GDT_Success::make()->titleRaw($this->getModuleName())->text($key, $args);
-		$top = GDT_Page::instance()->topResponse();
-		$top->addField($success);
-		$result = GDT_Tuple::make();
-		return $result;
+		$titleRaw = $this->getModule()->gdoHumanName();
+		Website::message($titleRaw, $key, $args, $log, $code);
+		return GDT_Response::make();
 	}
 	
 	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
 	{
-		Application::setResponseCode($code);
-		if (Application::$INSTANCE->isCLI())
-		{
-			echo CLI::red(t($key, $args)) . "\n";
-		}
-		if ($log)
-		{
-			Logger::logError(ten($key, $args));
-		}
-		$error = GDT_Error::make()->titleRaw($this->getModule()->gdoHumanName())->text($key, $args);
-		$top = GDT_Page::instance()->topResponse();
-		$top->addField($error);
-		$response = GDT_Response::make();
-		return $response;
+		$titleRaw = $this->getModule()->gdoHumanName();
+		Website::error($titleRaw, $key, $args, $log, $code);
+		return GDT_Response::make();
 	}
 	
-	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
-	{
-		Application::setResponseCode($code);
-		if ($log)
-		{
-			Logger::logError($message);
-		}
-		return GDT_Error::make()->titleRaw($this->getModuleName())->textRaw($message);
-	}
+// 	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
+// 	{
+// 		Application::setResponseCode($code);
+// 		if ($log)
+// 		{
+// 			Logger::logError($message);
+// 		}
+// 		return GDT_Error::make()->titleRaw($this->getModuleName())->textRaw($message);
+// 	}
 	
 	################
 	### Redirect ###
@@ -590,17 +551,19 @@ abstract class Method #extends GDT
 	
 	public function redirectBack(string $default = null) : GDT_Redirect
 	{
-		$href = GDT_Redirect::make()->hrefBack($default);
+		$href = GDT_Redirect::hrefBack($default);
 		return $this->redirect($href);
 	}
 	
 	public function redirectMessage(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
+		$href = $href ? $href : GDT_Redirect::hrefBack();
 		return GDT_Redirect::make()->href($href)->redirectMessage($key, $args);
 	}
 	
-	public function redirectError(string $key, array $args = null, string $href) : GDT_Redirect
+	public function redirectError(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
+		$href = $href ? $href : GDT_Redirect::hrefBack();
 		return GDT_Redirect::make()->href($href)->redirectError($key, $args);
 	}
 	

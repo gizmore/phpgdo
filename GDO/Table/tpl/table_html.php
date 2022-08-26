@@ -30,7 +30,7 @@ $result = $field->getResult();
 			<label><?=$gdt->renderOrder()?></label>
 			<?php endif; ?>
 		  <?php if ($field->filtered) : ?>
-			<?=$gdt->renderFilter($field->headers->name)?>
+			<?=$gdt->renderFilter($field->filter)?>
 		  <?php endif; ?>
 		</th>
       <?php endif;?>

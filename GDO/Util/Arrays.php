@@ -84,4 +84,22 @@ final class Arrays
 		return $unique;
 	}
 	
+	public static function empty(?array $array) : bool
+	{
+		if ($array === null)
+		{
+			return true;
+		}
+		$result = true;
+		foreach ($array as $element)
+		{
+			if ( ($element !== null) &&
+				 ($element !== '') )
+			{
+				$result = false;
+			}
+		}
+		return $result;
+	}
+	
 }

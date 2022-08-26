@@ -9,7 +9,6 @@ use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Language\Trans;
 use GDO\Core\GDT_DeletedAt;
-use GDO\Core\GDT_EditedAt;
 use GDO\DB\Query;
 use GDO\DB\Result;
 use GDO\Date\Module_Date;

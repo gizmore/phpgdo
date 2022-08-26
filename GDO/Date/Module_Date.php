@@ -30,16 +30,16 @@ final class Module_Date extends GDO_Module
     ##############
     ### Config ###
     ##############
-//     public string $timezone = '1';
-
     public function getConfig() : array
     {
         return [
-        	GDT_Checkbox::make('clock_sidebar')->initial('0'),
-        	GDT_Checkbox::make('tz_probe_js')->initial('1'),
-        	GDT_Checkbox::make('tz_sidebar_select')->initial('1'),
+        	GDT_Timezone::make('tz_default')->initial('1')->notNull(),
+        	GDT_Checkbox::make('clock_sidebar')->initial('0')->notNull(),
+        	GDT_Checkbox::make('tz_probe_js')->initial('1')->notNull(),
+        	GDT_Checkbox::make('tz_sidebar_select')->initial('1')->notNull(),
         ];
     }
+    public function cfgTimezone() : GDO_Timezone { return $this->getConfigValue('tz_default'); }
     public function cfgClock() : string { return $this->getConfigVar('clock_sidebar'); }
     public function cfgProbeJS() : string { return $this->getConfigVar('tz_probe_js'); }
     public function cfgSidebarSelect() : string { return $this->getConfigVar('tz_sidebar_select'); }
@@ -69,6 +69,12 @@ final class Module_Date extends GDO_Module
     	return $this->userSettingVar($user, 'timezone');
     }
     
+    public function cfgUserActivityAccuracy(GDO_User $user=null) : int
+    {
+    	$user = $user ? $user : GDO_User::current();
+    	return $this->userSettingValue($user, 'activity_accuracy');
+    }
+    
     ############
     ### Init ###
     ############
@@ -80,9 +86,9 @@ final class Module_Date extends GDO_Module
     public function onInit()
     {
         $user = GDO_User::current();
-        $this->timezone = $user->hasTimezone() ?
-            $user->getTimezone() : $this->timezone;
-        Time::setTimezone($this->timezone);
+        $timezone = $this->cfgTimezone();
+        $timezone = $user->hasTimezone() ? $user->getTimezone() : $timezone;
+        Time::setTimezone($timezone);
     }
     
     public function onIncludeScripts() : void

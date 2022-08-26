@@ -7,10 +7,12 @@ use GDO\UI\GDT_HTML;
 
 /**
  * This method decorator adds file cache behaviour to a method.
+ * File cache key is generated from all Method::gdoParameterCache()
  * 
  * @author gizmore
  * @version 7.0.1
  * @since 7.0.1
+ * @see Cache
  * @see Method
  */
 trait WithFileCache

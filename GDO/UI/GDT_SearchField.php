@@ -8,7 +8,7 @@ use GDO\Core\GDT_String;
  * Input type is set to search.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.2.0
  */
 class GDT_SearchField extends GDT_String

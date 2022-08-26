@@ -12,7 +12,7 @@ use GDO\Core\GDO_Exception;
  * A method that displays a table via a query.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  * @see GDT_Table
  */

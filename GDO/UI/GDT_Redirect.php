@@ -57,8 +57,8 @@ final class GDT_Redirect extends GDT
 		if ( (!$sess) || (!($url = $sess->getLastURL())) )
 		{
 			$url = isset($_SERVER['HTTP_REFERER']) ?
-			$_SERVER['HTTP_REFERER'] :
-			($default ? $default : hrefDefault());
+				$_SERVER['HTTP_REFERER'] :
+				($default ? $default : hrefDefault());
 		}
 		
 		return $url;

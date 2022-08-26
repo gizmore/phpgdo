@@ -12,7 +12,7 @@ use GDO\Core\GDT_Fields;
  * - Implements @\GDO\Core\ArrayResult multisort for use in @\GDO\Table\MethodTable.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.5.0
  */
 trait WithHeaders

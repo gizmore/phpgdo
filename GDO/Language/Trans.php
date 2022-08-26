@@ -94,7 +94,7 @@ final class Trans
 	 */
 	public static function addPath(string $path) : void
 	{
-	    self::$PATHS[$path] = $path;
+	    self::$PATHS[] = $path;
 	}
 	
 	/**
@@ -103,8 +103,8 @@ final class Trans
 	 */
 	public static function inited(bool $inited = true) : void
 	{
-		self::$INITED = $inited;
 	    self::$CACHE = [];
+		self::$INITED = $inited;
 	}
 	
 	/**
@@ -145,7 +145,6 @@ final class Trans
 	public static function tiso(string $iso, string $key, array $args=null)
 	{
 		$cache = self::load($iso);
-
 		if (isset($cache[$key]))
 		{
 		    $text = $cache[$key];
@@ -153,7 +152,7 @@ final class Trans
 			{
 				if (!($text = @vsprintf($text, $args)))
 				{
-					self::missing($key);
+					self::missing($iso, $key);
 					$text = $cache[$key] . ': ';
 					$text .= json_encode($args);
 				}
@@ -161,7 +160,7 @@ final class Trans
 		}
 		else # Fallback key + printargs
 		{
-			self::missing($key);
+			self::missing($iso, $key);
 		    $text = $key;
 			if ($args)
 			{
@@ -175,14 +174,15 @@ final class Trans
 	/**
 	 * When a key is missing, log it.
 	 */
-	private static function missing(string $key) : void
+	private static function missing(string $iso, string $key) : bool
 	{
 		if (self::$INITED)
 		{
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
-			Logger::log('i18n', $key);
+			Logger::log("i18n_{$iso}", $key);
 		}
+		return false;
 	}
 
 	private static function getCacheKey(string $iso) : string
@@ -191,6 +191,9 @@ final class Trans
 		return $key;
 	}
 	
+	/**
+	 * @TODO: This algorithm is bad and i should feel bad.
+	 */
 	private static function &reload(string $iso) : array
 	{
 		$trans = [];
@@ -261,14 +264,9 @@ final class Trans
 	/**
 	 * Check if a translation key exists.
 	 */
-	public static function hasKey(string $key, bool $withMiss=false) : bool
+	public static function hasKey(string $key) : bool
 	{
-	    $result = self::hasKeyIso(self::$ISO, $key);
-	    if ($withMiss && (!$result))
-	    {
-	    	self::missing($key);
-	    }
-	    return $result;
+	    return self::hasKeyIso(self::$ISO, $key);
 	}
 
 	/**
@@ -277,10 +275,10 @@ final class Trans
 	public static function hasKeyIso(string $iso, string $key) : bool
 	{
 		$cache = self::load($iso);
-		return isset($cache[$key]);
+		return isset($cache[$key]) ? true : self::missing($iso, $key);
 	}
+	
 }
-
 #############
 ### Setup ###
 #############

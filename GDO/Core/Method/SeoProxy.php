@@ -33,7 +33,7 @@ final class SeoProxy extends Method
 		$module = $loader->getModule($mo, false, false);
 		if (!$module)
 		{
-// 			$_REQUEST['url'] = $url; # and a step back for 404 url :)
+			$_REQUEST['url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
 		}
 		
@@ -42,7 +42,7 @@ final class SeoProxy extends Method
 		$method = $module->getMethodByName($me, false);
 		if (!$method)
 		{
-// 			$_REQUEST['url'] = $url; # and a step back for 404 url :)
+			$_REQUEST['url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
 		}
 		

@@ -4,6 +4,7 @@ namespace GDO\User;
 use GDO\DB\Query;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Object;
+use GDO\Table\GDT_Filter;
 
 /**
  * An autocomplete enabled user field.
@@ -196,11 +197,11 @@ class GDT_User extends GDT_Object
 		return $this;
 	}
 	
-	public function filterQuery(Query $query, $rq=null) : self
+	public function filterQuery(Query $query, GDT_Filter $f) : self
 	{
 		if (!$this->noFilter)
 		{
-			if ($filter = $this->filterVar($rq))
+			if ($filter = $this->filterVar($f))
 			{
 				$filter = GDO::escapeSearchS($filter);
 				$filter = "LIKE '%{$filter}%'";

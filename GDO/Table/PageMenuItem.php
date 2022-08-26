@@ -1,7 +1,9 @@
 <?php
 namespace GDO\Table;
+
 /**
  * Struct for pagemenu.
+ * 
  * @author gizmore
  */
 final class PageMenuItem
@@ -25,11 +27,6 @@ final class PageMenuItem
 	public function htmlClass() : string
 	{
 		return $this->selected ? ' page-selected' : '';
-	}
-	
-	public function isSelected()
-	{
-		return $this->selected;
 	}
 	
 }

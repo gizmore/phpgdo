@@ -29,7 +29,7 @@ use GDO\UI\GDT_HTML;
  */
 # Really, the first thing we do is measure performance :)
 # Go Go Go GDO7!
-// gc_disable(); # GC slows things down? => Nope... GDO is just slow.
+gc_disable(); # GC slows things down? => Nope... GDO is just slow.
 define('GDO_TIME_START', microtime(true));
 #
 #######################
@@ -44,14 +44,14 @@ require 'GDO7.php';
 ############
 ### Init ###
 ############
-$app = Application::instance();
+$app = Application::init();
 Logger::init(null, GDO_ERROR_LEVEL);
-Debug::init(GDO_ERROR_DIE, GDO_ERROR_EMAIL);
+Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
-if (!module_enabled('Core'))
+if (!module_enabled('core'))
 {
 	require 'index_install.php';
 }
@@ -61,13 +61,15 @@ if ($app->hasSession())
 	$session = GDO_Session::instance();
 }
 $user = GDO_User::current();
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 Logger::init($user->getName(), GDO_ERROR_LEVEL);
+# First convert the response to readable.
+$app->handleJSONRequests();
+# Log it
 if (GDO_LOG_REQUEST)
 {
 	Logger::logRequest();
 }
-$app->handleJSONRequests();
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###
@@ -193,7 +195,7 @@ else
 	}
 	elseif (GDO_SEO_URLS)
 	{
-// 		unset($_REQUEST['url']);
+		unset($_REQUEST['url']);
 		$me = SeoProxy::makeProxied($url);
 	}
 	else
@@ -227,6 +229,8 @@ try
 }
 catch (\Throwable $t)
 {
+	# Send mail
+	Debug::debugException($t, false);
 	# Error message result
 	$result = GDT_Error::fromException($t);
 }
@@ -239,10 +243,10 @@ if (!($result instanceof GDT_Response))
 {
 	$result = GDT_Response::make()->addField($result);
 }
-
+#
 # Render the response.
 $content = $result->render();
-
+#
 ##############
 ### Finish ###
 ##############

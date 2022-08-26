@@ -656,13 +656,13 @@ abstract class GDO extends GDT
 	 */
 	public function gdoColumn(string $key, bool $throw=true) : GDT
 	{
-		if ($gdt = $this->gdoColumnsCache()[$key])
+		if ($gdt = @$this->gdoColumnsCache()[$key])
 		{
 			return $gdt->gdo($this); # assign values
 		}
 		elseif ($throw)
 		{
-			throw new GDO_Error('err_unknown_gdo_column', [$this->renderName(), html($key)]);
+			throw new GDO_Error('err_unknown_gdo_column', [$this->gdoClassName(), html($key)]);
 		}
 		return null;
 	}
