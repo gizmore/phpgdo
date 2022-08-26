@@ -184,7 +184,7 @@ final class Debug
 		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 		
 		$messageHTML = sprintf('<p>%s(EH %s):&nbsp;%s&nbsp;in&nbsp;<b style=\"font-size:16px;\">%s</b>&nbsp;line&nbsp;<b style=\"font-size:16px;\">%s</b></p>', $errnostr, $errno, $errstr, $errfile, $errline);
-		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, $errstr, $errfile, $errline);
+		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, TextStyle::italic($errstr), $errfile, $errline);
 		$message = $is_html ? $messageHTML : $messageCLI;
 		
 		// Send error to admin
