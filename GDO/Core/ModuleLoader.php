@@ -386,7 +386,7 @@ final class ModuleLoader
 			$className = "GDO\\$name\\Module_$name";
 // 			try
 // 			{
-				if (class_exists($className, true))
+				if (@class_exists($className, true))
 				{
 					$moduleData = GDO_Module::table()->getBlankData(['module_name' => $name]);
 					if ($module = self::instanciate($moduleData, true))
