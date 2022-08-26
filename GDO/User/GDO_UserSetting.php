@@ -7,6 +7,7 @@ use GDO\Core\GDT_String;
 use GDO\Core\GDT_Index;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Result;
+use GDO\DB\Query;
 
 /**
  * Similiar to modulevars, this table is for user vars.
@@ -50,7 +51,12 @@ final class GDO_UserSetting extends GDO
 	 * Get all users with a specified setting.
 	 * Return as DB result.
 	 */
-	public static function usersWith(string $moduleName, string $key, string $var, bool $like=false) : Result
+	public static function usersWith(string $moduleName, string $key, string $var, string $op='=') : Result
+	{
+		return self::usersWithQuery($moduleName, $key, $var, $op)->exec();
+	}
+	
+	public static function usersWithQuery(string $moduleName, string $key, string $var, string $op='=') : Query
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$gdt = $module->setting($key);
@@ -60,7 +66,8 @@ final class GDO_UserSetting extends GDO
 		$query = GDO_User::table()->select('gdo_user.*');
 		$query->join("LEFT JOIN gdo_usersetting ON user_id=uset_user AND uset_name={$key}");
 		
-		if ($like)
+		$op = strtoupper($op);
+		if ($op === 'like')
 		{
 			$query->where("uset_value LIKE \"{$var}\"");
 		}
@@ -75,7 +82,7 @@ final class GDO_UserSetting extends GDO
 			$query->orWhere('uset_value IS NULL');
 		}
 		
-		return $query->fetchTable(GDO_User::table())->exec();
+		return $query->fetchTable(GDO_User::table());
 	}
 	
 }

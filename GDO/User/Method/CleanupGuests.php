@@ -5,6 +5,7 @@ use GDO\Cronjob\MethodCronjob;
 use GDO\User\GDO_User;
 use GDO\Core\Application;
 use GDO\Date\Time;
+use GDO\User\GDO_UserSetting;
 
 /**
  * Cleanup old guest accounts that are unused.
@@ -22,9 +23,17 @@ final class CleanupGuests extends MethodCronjob
 	
     public function run()
     {
+    	# Basically fetch all users with no recent activity.
         $cut = Time::getDate(Application::$TIME - GDO_SESS_TIME);
-        $condition = "user_type='guest' AND user_guest_name IS NULL AND user_last_activity < '$cut'";
-        $numDeleted = GDO_User::table()->deleteWhere($condition, false);
+    	$query = GDO_UserSetting::usersWithQuery('User', 'last_activity', $cut, '<');
+    	# And we want only guests
+    	$query->where('user_type="guest"');
+    	# And we turn this into a delete
+        $query->delete(GDO_User::table()->gdoTableName());
+        # Exec
+    	$result = $query->exec();
+    	# Stats
+    	$numDeleted = $result->affectedRows();
         if ($numDeleted > 0)
         {
             $this->logNotice(sprintf('Deleted %d guest users', $numDeleted));
