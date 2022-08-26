@@ -663,7 +663,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 	$missing = [];
 	foreach ($deps as $dep)
 	{
-		if ( !$loader->getModule($dep, true, false))
+		if ( !$loader->getModule($dep, false, false))
 		{
 			$missing[] = $dep;
 		}
