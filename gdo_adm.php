@@ -853,7 +853,6 @@ elseif ($argv[1] === 'gizmore_setup')
 				CLI::error(t('err_clone_url', [
 					$url
 				]));
-				die(1);
 			}
 		}
 

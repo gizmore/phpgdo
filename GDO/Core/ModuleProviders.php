@@ -167,7 +167,7 @@ final class ModuleProviders
 		'LinkUUp' => '',
 		'Login' => 'phpgdo-login',
 		'Mail' => 'phpgdo-mail',
-		'Mailer' => 'phpgdo-mailer-gdo',
+		'Mailer' => 'phpgdo-mailer',
 		'Maps' => 'phpgdo-maps',
 		'Markdown' => 'phpgdo-markdown',
 		'Math' => 'phpgdo-math',
