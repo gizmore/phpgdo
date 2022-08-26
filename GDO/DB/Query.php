@@ -204,6 +204,12 @@ final class Query
 		return $this;
 	}
 	
+	public function onlyFrom(string $tableName) : self
+	{
+		$this->from = $tableName;
+		return $this;
+	}
+	
 	public function fromSelf() : self
 	{
 		return $this->from($this->table->gdoTableIdentifier());
@@ -303,7 +309,7 @@ final class Query
 	{
 		$this->type = self::DELETE;
 		$this->write = true;
-		return $this->from($tableName);
+		return $this->onlyFrom($tableName);
 	}
 	
 	/**
