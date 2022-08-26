@@ -10,7 +10,7 @@ namespace GDO\Core;
  * You can generate providers and dependenices with providers.php and provider_dependenciews.php
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class ModuleProviders
@@ -267,8 +267,7 @@ gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links
 		'Language' => [],
 		'Licenses' => [],
 		'Links' => ['Votes', 'Tags', 'Cronjob'],
-		'LinkUUp' => ['Account', 'Websocket', 'Comments', 'Login', 'Recovery', 'Register', 'Avatar', 'Gallery', 'Admin', 'Contact', 'Facebook', 'Instagram', 'OpenTimes', 'Friends', 'Addres
-s', 'Maps', 'QRCode', 'Bootstrap5Theme', 'CORS', 'JPGraph', 'Markdown', 'News', 'ActivationAlert', 'Perf', 'Birthday', 'Backup'],
+		'LinkUUp' => ['Account', 'Websocket', 'Comments', 'Login', 'Recovery', 'Register', 'Avatar', 'Gallery', 'Admin', 'Contact', 'Facebook', 'Instagram', 'OpenTimes', 'Friends', 'Address', 'Maps', 'QRCode', 'Bootstrap5Theme', 'CORS', 'JPGraph', 'Markdown', 'News', 'ActivationAlert', 'Perf', 'Birthday', 'Backup'],
 		'Login' => ['Session'],
 		'Mail' => ['Mailer'],
 		'Mailer' => [],
