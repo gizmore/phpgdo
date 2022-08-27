@@ -7,13 +7,14 @@ use \gizmore\Filewalker as FW;
 
 /**
  * Wrapper for my own lib :]
+ * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class Filewalker
 {
-	public static function traverse(string $path, string $pattern=null, callable $callback_file=null, callable $callback_dir=null, int $recursive=FW::MAX_RECURSION, $args=null)
+	public static function traverse(string $path, string $pattern=null, callable $callback_file=null, callable $callback_dir=null, int $recursive=FW::MAX_RECURSION, $args=null) : void
 	{
-		return FW::traverse($path, $pattern, $callback_file, $callback_dir, $recursive, $args);
+		FW::traverse($path, $pattern, $callback_file, $callback_dir, $recursive, $args);
 	}
 }

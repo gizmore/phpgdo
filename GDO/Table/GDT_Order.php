@@ -104,7 +104,13 @@ final class GDT_Order extends GDT_String
 	#############
 	### Query ###
 	#############
-	public function filterQuery(Query $query, GDT_Filter $f) : self
+// 	public function filterQuery(Query $query, GDT_Filter $f) : self
+// 	{
+// 		$query->order($this->getVar());
+// 		return $this;
+// 	}
+	
+	public function orderQuery(Query $query) : self
 	{
 		$query->order($this->getVar());
 		return $this;

@@ -176,12 +176,12 @@ class Cache
 
 	public static function init()
 	{
-		if (GDO_MEMCACHE)
+		if (GDO_MEMCACHE == 1)
 		{
 			self::$MEMCACHED = new \Memcached();
 			self::$MEMCACHED->addServer(GDO_MEMCACHE_HOST, GDO_MEMCACHE_PORT);
 		}
-		if (GDO_FILECACHE)
+		if ( (GDO_FILECACHE) || (GDO_MEMCACHE == 2) )
 		{
 			FileUtil::createDir(self::filePath());
 		}

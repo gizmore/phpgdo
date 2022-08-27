@@ -877,7 +877,7 @@ class GDO_Module extends GDO
 	    }
 	    if ($throw)
 	    {
-	    	throw new GDO_Error('err_method', [$this->gdoHumanName(), html($methodName)]);
+	    	throw new GDO_Error('err_unknown_method', [$this->gdoHumanName(), html($methodName)]);
 	    }
 	    return null;
 	}

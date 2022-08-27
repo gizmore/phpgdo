@@ -69,13 +69,14 @@ abstract class Method #extends GDT
 	 * Toggle if method can be trivially fuzz-tested. defaults to yes.
 	 */
 	public function isTrivial() : bool { return true; }
-	public function getUserType() : ?string { return null; }
+	public function isLocking() : bool { return false; }
 	public function isUserRequired() : bool { return false; }
 	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
 	public function isTransactional() : bool { return Application::$INSTANCE->verb === GDT_Form::POST; }
 	public function isAlwaysTransactional() : bool { return false; }
 	public function isSavingLastUrl() : bool { return true; }
 	public function isShownInSitemap() : bool { return true; }
+	public function getUserType() : ?string { return null; }
 	
 	# events
 	public function onInit() {}
@@ -261,6 +262,11 @@ abstract class Method #extends GDT
 				(Application::$INSTANCE->verb === GDT_Form::POST) );
 	}
 	
+	public function locking() : bool
+	{
+		return $this->isLocking() && $this->transactional();
+	}
+	
 	/**
 	 * Wrap execution in transaction if desired from method.
 	 * @throws \Exception
@@ -309,6 +315,7 @@ abstract class Method #extends GDT
 // 			}
 			
 			# 1) Start the transaction
+			$this->lock();
 			$transactional = $this->transactional();
 			if ($transactional)
 			{
@@ -398,6 +405,53 @@ abstract class Method #extends GDT
 			}
 			throw $e;
 		}
+		finally
+		{
+			$this->unlock();
+		}
+	}
+	
+	############
+	### Lock ###
+	############
+	private bool $locked = false;
+	
+	private function lockKey() : string
+	{
+		$user = GDO_User::current();
+		$lock = GDO_SITENAME . "_USERLOCK_{$user->getID()}";
+		return $lock;
+	}
+	
+	private function lock() : bool
+	{
+		$user = GDO_User::current();
+		if ( (!module_enabled('Session')) ||
+			 (!$this->isLocking()) ||
+			 (!$user->isPersisted()) )
+		{
+			return false;
+		}
+		$lock = $this->lockKey();
+		if (Database::instance()->lock($lock))
+		{
+			$this->locked = true;
+		}
+		return $this->locked;
+	}
+	
+	private function unlock() : bool
+	{
+		if (!$this->locked)
+		{
+			return true;
+		}
+		$lock = $this->lockKey();
+		if (Database::instance()->unlock($lock))
+		{
+			$this->locked = false;
+		}
+		return !$this->locked;
 	}
 	
 	###########

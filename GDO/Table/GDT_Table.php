@@ -299,7 +299,7 @@ class GDT_Table extends GDT
 	{
 		if (isset($this->order))
 		{
-			$this->order->filterQuery($query);
+			$this->order->orderQuery($query);
 		}
 		return $query;
 	}

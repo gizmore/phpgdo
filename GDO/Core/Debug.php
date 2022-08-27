@@ -315,9 +315,9 @@ final class Debug
     		try { $user = GDO_User::current()->renderUserName(); } catch (\Throwable $ex) { }
 		}
 		
-		if ($url = trim(@urldecode($_SERVER['REQUEST_URI']), '/'))
+		if ($url = trim(@urldecode(@$_SERVER['REQUEST_URI']), '/'))
 		{
-		    $url = GDO_PROTOCOL . '://' . GDO_DOMAIN . GDO_WEB_ROOT . $url;
+		    $url = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/' . $url;
 		    $url = "<a href=\"{$url}\">{$url}</a>";
 		}
 		
