@@ -129,7 +129,7 @@ trait WithObject
 		{
 			return $value ? sprintf(' value="%s"', $value->getID()) : '';
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 
 	public function displayVar(string $var = null): string
@@ -143,7 +143,7 @@ trait WithObject
 					return $gdo->renderName();
 				}, $gdos));
 			}
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 		/** @var $gdo GDO **/
 		if ($gdo = $this->toValue($var))
@@ -367,7 +367,7 @@ trait WithObject
 		// $on = $this->fkOn ? $this->fkOn : $primaryKey->identifier();
 		$on = $primaryKey->identifier();
 		return "$define{$this->gdoNullDefine()}" .
-			",FOREIGN KEY ({$this->identifier()}) REFERENCES $tableName($on) ON DELETE {$this->cascade} ON UPDATE {$this->cascade}";
+			",FOREIGN KEY ({$this->identifier()}) REFERENCES $tableName($on) ON DELETE {$this->cascade} ON UPDATE CASCADE";
 	}
 
 	# #############
@@ -375,12 +375,7 @@ trait WithObject
 	# #############
 	public string $filterField;
 	
-// 	public function filterVar(string $key = null)
-// 	{
-// 		return '';
-// 	}
-
-	public function renderFilter($f): string
+	public function renderFilter(GDT_Filter $f): string
 	{
 		return GDT_Template::php('Core', 'object_filter.php', [
 			'field' => $this,

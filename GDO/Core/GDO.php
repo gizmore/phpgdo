@@ -1167,23 +1167,25 @@ abstract class GDO extends GDT
 	/**
 	 * Raw initial string data.
 	 * @TODO throw error on unknown initial vars.
-	 * @param array $initial data to copy
-	 * @return array the new blank data1
+	 * @param string[string] $initial gdovars data to copy
+	 * @return string[string] the new blank data
 	 */
 	public static function getBlankData(array $initial = null) : array
 	{
 		$table = self::table();
 		
 		$gdoVars = [];
-		foreach ($table->gdoColumnsCache() as $gdt)
+		foreach ($table->gdoColumnsCache() as $name => $gdt)
 		{
 			# Reset to initial state.
 			$gdt->reset();
 			
+// 			$name = $gdt->getName();
+			
 			# init gdt with initial var.
-			if (isset($initial[$gdt->getName()]))
+			if (isset($initial[$name]))
 			{
-				$var = $initial[$gdt->getName()];
+				$var = (string) $initial[$name];
 				$gdt->var($var);
 			}
 			else
@@ -1199,7 +1201,7 @@ abstract class GDO extends GDT
 					if (isset($initial[$k]))
 					{
 						# override with initial
-						$gdoVars[$k] = $initial[$k];
+						$gdoVars[$k] = (string) $initial[$k];
 					}
 					else
 					{
@@ -1762,19 +1764,19 @@ abstract class GDO extends GDT
 		return true;
 	}
 	
-	############
-	### Lock ###
-	############
-	public function lock(string $lock, int $timeout=10) : bool
-	{
-		$result = Database::instance()->lock($lock, $timeout);
-		return mysqli_fetch_field($result) === '1';
-	}
+// 	############
+// 	### Lock ###
+// 	############
+// 	public function lock(string $lock, int $timeout=10) : bool
+// 	{
+// 		$result = Database::instance()->lock($lock, $timeout);
+// 		return mysqli_fetch_field($result) === '1';
+// 	}
 	
-	public function unlock($lock) : bool
-	{
-		$result = Database::instance()->unlock($lock);
-		return mysqli_fetch_field($result) === '1';
-	}
+// 	public function unlock($lock) : bool
+// 	{
+// 		$result = Database::instance()->unlock($lock);
+// 		return mysqli_fetch_field($result) === '1';
+// 	}
 	
 }

@@ -16,52 +16,50 @@ trait WithGDO
 	public GDO $gdo;
 	
 	/**
-	 * Add the current GDO to this GDT.
+	 * Assign the current GDO to this GDT. Copy it's data.
 	 */
 	public function gdo(GDO $gdo = null) : self
 	{
-		if ($gdo)
-		{
-			$this->gdo = $gdo;
-			if ($name = $this->getName())
-			{
-				$var = $gdo->gdoVar($name);
-				return $this->var($var);
-			}
-		}
-		else
-		{
-			unset($this->gdo);
-		}
-		return $this->var(null);
+		return $this->gdoVarInitial($gdo, false);
 	}
 	
+	/**
+	 * Assign the current GDO to this GDT. Copy it's data and load it as intial var.
+	 */
 	public function gdoInitial(GDO $gdo = null) : self
 	{
+		return $this->gdoVarInitial($gdo, true);
+	}
+
+	// 	public function hasGDO() : bool
+	// 	{
+	// 		return isset($this->gdo);
+	// 	}
+	
+	// 	public function getGDO() : GDO
+	// 	{
+	// 		return $this->gdo;
+	// 	}
+	#################
+	### Protected ###
+	#################
+	protected function gdoVarInitial(GDO $gdo = null, bool $initial = false)
+	{
+		$var = null;
 		if ($gdo)
 		{
 			$this->gdo = $gdo;
 			if ($name = $this->getName())
 			{
 				$var = $gdo->gdoVar($name);
-				return $this->initial($var);
 			}
 		}
 		else
 		{
 			unset($this->gdo);
 		}
-		return $this->initial(null);
-	}
-	
-	public function hasGDO() : bool
-	{
-		return isset($this->gdo);
-	}
-	
-	public function getGDO() : GDO
-	{
-		return $this->gdo;
+		$func = $initial ? 'initial' : 'var';
+		return call_user_func([$this, $func], $var);
 	}
 	
 }

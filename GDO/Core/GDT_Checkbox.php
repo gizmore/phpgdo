@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\UI\Color;
+use GDO\Table\GDT_Filter;
 
 /**
  * Boolean tri-state Checkbox; NULL, 1 and 0
@@ -156,7 +157,7 @@ class GDT_Checkbox extends GDT_Select
 		return parent::renderForm();
 	}
 	
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 	    $vars = ['field' => $this, 'f'=> $f];
 		return GDT_Template::php('Core', 'checkbox_filter.php', $vars);

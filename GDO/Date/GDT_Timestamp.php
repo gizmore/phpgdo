@@ -281,7 +281,7 @@ class GDT_Timestamp extends GDT_DBField
 // 		return [];
 // 	}
 	
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 		return GDT_Template::php('Date', 'timestamp_filter.php', ['field' => $this, 'f' => $f]);
 	}

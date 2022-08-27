@@ -91,6 +91,10 @@ class GDT_Method extends GDT
 	### Perm ###
 	############
 	public bool $withPermissionCheck = true;
+	
+	/**
+	 * Disable permission checking for executing this method.
+	 */
 	public function noChecks(bool $noChecks=true) : self
 	{
 		$this->withPermissionCheck = !$noChecks;

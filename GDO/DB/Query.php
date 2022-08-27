@@ -32,20 +32,10 @@ final class Query
 	const REPLACE = 3;
 	const UPDATE = 4;
 	const DELETE = 5;
-	
-// 	public static $TYPES = [
-// 		'NO',
-// 	];
-	
-	
-// 	const SELECT = "SELECT";
-// 	const INSERT = "INSERT INTO";
-// 	const REPLACE = "REPLACE INTO";
-// 	const UPDATE = "UPDATE";
-// 	const DELETE = "DELETE FROM";
-	
+
 	/**
 	 * The table in FROM/INTO
+	 * @deprecated unused?
 	 */
 	public GDO $table;
 	

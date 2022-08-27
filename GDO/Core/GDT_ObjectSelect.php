@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 
 use GDO\Util\Arrays;
+use GDO\Table\GDT_Filter;
 
 /**
  * A select WithObject trait.
@@ -16,6 +17,13 @@ use GDO\Util\Arrays;
 class GDT_ObjectSelect extends GDT_Select
 {
 	use WithObject;
+	
+	public bool $searchable = true;
+	public function searchable(bool $searchable) : self
+	{
+		$this->searchable = $searchable;
+		return $this;
+	}
 	
 	public function getChoices()
 	{
@@ -97,7 +105,7 @@ class GDT_ObjectSelect extends GDT_Select
 		}
 	}
 	
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
 	}
@@ -178,6 +186,22 @@ class GDT_ObjectSelect extends GDT_Select
 		return $back;
 	}
 	
+	/**
+	 * Try the choices from GDT_Select.
+	 * But we are an Object and read from DB!
+	 */
+	public function selectToValue(string $var = null)
+	{
+		if ($var !== null)
+		{
+			if ($value = parent::selectToValue($var))
+			{
+				return $value;
+			}
+			return $this->table->getById($var);
+		}
+	}
+	
 	##############
 	### Config ###
 	##############
@@ -222,13 +246,6 @@ class GDT_ObjectSelect extends GDT_Select
 	    return array_merge(parent::configJSON(), [
 	        'selected' => $this->configJSONSelected(),
 	    ]);
-	}
-	
-	public bool $searchable = true;
-	public function searchable(bool $searchable) : self
-	{
-		$this->searchable = $searchable;
-		return $this;
 	}
 	
 }

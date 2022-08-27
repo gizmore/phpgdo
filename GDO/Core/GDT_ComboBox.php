@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Table\GDT_Filter;
+
 /**
  * A combobox is a string with additional completion and dropdown.
  * 
@@ -45,7 +47,7 @@ class GDT_ComboBox extends GDT_String
 	##############
 	### Render ###
 	##############
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 		if ($this->hasCompletion())
 		{

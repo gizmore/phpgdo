@@ -6,6 +6,7 @@ use GDO\Core\GDT_Template;
 
 /**
  * A small icon with a badge counter number.
+ * Not DB driven.
  * 
  * @author gizmore
  * @since 7.0.1
@@ -13,8 +14,15 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Badge extends GDT
 {
+	use WithIcon;
 	use WithLabel;
 	use WithPHPJQuery;
+	
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->icon('badge');
+	}
 	
 	#############
 	### Badge ###

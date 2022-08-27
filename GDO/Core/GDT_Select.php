@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\UI\TextStyle;
+use GDO\Table\GDT_Filter;
 
 /**
  * An HTML select.
@@ -152,10 +153,6 @@ class GDT_Select extends GDT_ComboBox
 	        if ($pos === false)
 	        {
 	        	$name = is_string($value) ? $value : $value->getName();
-// 	        	if ($name === null)
-// 	        	{
-// 	        		xdebug_break();
-// 	        	}
         		$pos = stripos($name, $var);
         		if ($pos === false)
         		{
@@ -511,7 +508,7 @@ class GDT_Select extends GDT_ComboBox
 		return $value->renderName();
 	}
 	
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 		if ($this->hasCompletion())
 		{

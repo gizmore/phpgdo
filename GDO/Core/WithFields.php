@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Table\GDT_Filter;
+
 /**
  * Add children fields to a GDT.
  * 
@@ -381,7 +383,7 @@ trait WithFields
 	# html table rendering
 	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
 	public function renderOrder() : string { return $this->renderFields(GDT::RENDER_ORDER); }
-	public function renderFilter($f) : string { return $this->renderFields(GDT::RENDER_FILTER); }
+	public function renderFilter(GDT_Filter $f) : string { return $this->renderFields(GDT::RENDER_FILTER); }
 	public function renderCell() : string { return $this->renderFields(GDT::RENDER_CELL); }
 	public function renderTFoot() : string { return $this->renderFields(GDT::RENDER_TFOOT); }
 

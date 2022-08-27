@@ -223,7 +223,7 @@ class GDT_Int extends GDT_DBField
 	##############
 	### Filter ###
 	##############
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 		return GDT_Template::php('Core', 'integer_filter.php', ['field' => $this, 'f' => $f]);
 	}

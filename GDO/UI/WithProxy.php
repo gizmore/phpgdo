@@ -2,7 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT;
-use GDO\Table\GDT_Table;
+use GDO\Table\GDT_Filter;
 
 /**
  * This GDT does something for/with a proxy GDT.
@@ -60,7 +60,7 @@ trait WithProxy
 	# html table rendering
 	public function renderCell() : string { return $this->proxy->renderCell(); }
 	public function renderHeader() : string { return $this->proxy->renderHeader(); }
-	public function renderFilter($f) : string { return $this->proxy->renderFilter($f); }
+	public function renderFilter(GDT_Filter $f) : string { return $this->proxy->renderFilter($f); }
 	public function renderOrder() : string { return $this->proxy->renderOrder(); }
 
 	public function getName() : ?string

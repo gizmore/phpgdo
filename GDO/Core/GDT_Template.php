@@ -6,6 +6,7 @@ use GDO\Language\Trans;
 use GDO\UI\WithLabel;
 use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
+use GDO\Table\GDT_Filter;
 
 /**
  * GDOv7 Template Engine as a GDT implementation.
@@ -82,7 +83,7 @@ class GDT_Template extends GDT
 		return strip_tags($this->renderTemplate());
 	}
 
-	public function renderFilter($f): string
+	public function renderFilter(GDT_Filter $f): string
 	{
 		return $this->renderTemplate($f);
 	}

@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\Util\Strings;
+use GDO\Table\GDT_Filter;
 
 /**
  * A String is a database capable GDT_DBField, but you can also use it without a db.
@@ -222,7 +223,7 @@ class GDT_String extends GDT_DBField
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
 	}
 	
-	public function renderFilter($f) : string
+	public function renderFilter(GDT_Filter $f) : string
 	{
 		return GDT_Template::php('Core', 'string_filter.php', ['field' => $this, 'f' => $f]);
 	}
