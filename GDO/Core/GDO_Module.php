@@ -14,8 +14,6 @@ use GDO\UI\GDT_Divider;
 use GDO\User\GDT_ACL;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_HR;
-use GDO\UI\GDT_Page;
-use GDO\UI\GDT_Error;
 
 /**
  * GDO base module class.
@@ -867,7 +865,7 @@ class GDO_Module extends GDO
 	##############
 	### Method ###
 	##############
-	public function getMethod(string $methodName) : Method
+	public function getMethod(string $methodName, bool $throw=true) : ?Method
 	{
 	    $methods = $this->getMethods(false);
 	    foreach ($methods as $method)
@@ -877,6 +875,11 @@ class GDO_Module extends GDO
 	            return $method;
 	        }
 	    }
+	    if ($throw)
+	    {
+	    	throw new GDO_Error('err_method', [$this->gdoHumanName(), html($methodName)]);
+	    }
+	    return null;
 	}
 	
 	/**
