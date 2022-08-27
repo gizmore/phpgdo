@@ -6,6 +6,7 @@ use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
 use GDO\Core\GDT_Text;
+use GDO\Util\Strings;
 
 /**
  * A message is a GDT_Text with an editor.
@@ -185,7 +186,7 @@ class GDT_Message extends GDT_Text
 	###############
 	public static function DECODE(?string $s): ?string
 	{
-		return self::getPurifier()->purify($s);
+		return self::getPurifier()->purify(Strings::nl2brHTMLSafe($s));
 	}
 
 	public static function ESCAPE(?string $s): ?string

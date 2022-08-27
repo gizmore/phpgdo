@@ -10,6 +10,12 @@ use GDO\Util\Filewalker;
 use GDO\Core\Website;
 use GDO\Util\FileUtil;
 
+/**
+ * Copy all files from all subdirectories in the path to the path itself.
+ * 
+ * @author gizmore
+ * @version 7.0.1
+ */
 final class Collect extends MethodCLI
 {
 	public function isTrivial() : bool { return false; }
