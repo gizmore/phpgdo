@@ -155,7 +155,9 @@ class GDT_Message extends GDT_Text
 		{
 			return null;
 		}
-		return call_user_func(self::$DECODER, $s);
+		$decoded = call_user_func(self::$DECODER, $s);
+		$decoded = trim($decoded);
+		return $decoded === '' ? null : $decoded;
 	}
 	
 	/**
@@ -164,7 +166,7 @@ class GDT_Message extends GDT_Text
 	 */
 	public static function plaintext(?string $html): ?string
 	{
-		if ($html)
+		if ($html !== null)
 		{
 			$html = html_entity_decode($html, ENT_HTML5);
 			$html = preg_replace("#\r?\n#", ' ', $html);
@@ -172,7 +174,8 @@ class GDT_Message extends GDT_Text
 			$html = preg_replace('#</p>#i', "\n", $html);
 			$html = preg_replace('#<[^\\>]*>#', ' ', $html);
 			$html = preg_replace('# +#', ' ', $html);
-			return trim($html);
+			$html = trim($html);
+			return $html === '' ? null : $html;
 		}
 		return null;
 	}
@@ -187,7 +190,7 @@ class GDT_Message extends GDT_Text
 
 	public static function ESCAPE(?string $s): ?string
 	{
-		return $s ? html($s) : null;
+		return $s !== null ? html($s) : null;
 	}
 
 	# ###############
