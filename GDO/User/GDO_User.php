@@ -15,6 +15,7 @@ use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
 use GDO\Core\GDT;
 use GDO\Core\ModuleLoader;
+use GDO\Core\GDO_Error;
 
 /**
  * The holy user class.
@@ -458,14 +459,35 @@ final class GDO_User extends GDO
 	 * Optionally an SQL like match is performed.
 	 * @return self[]
 	 */
-	public static function withSetting(string $moduleName, string $key, string $var, bool $like=false) : array
+	public static function withSetting(string $moduleName, string $key, string $var, string $op='=') : array
 	{
-		return self::withSettingResult($moduleName, $key, $var, $like)->fetchAllObjects();
+		return self::withSettingResult($moduleName, $key, $var, $op)->fetchAllObjects();
 	}
 	
-	public static function withSettingResult(string $moduleName, string $key, string $var, bool $like=false) : Result
+	public static function withSettingResult(string $moduleName, string $key, string $var, string $op='=') : Result
 	{
-		return GDO_UserSetting::usersWith($moduleName, $key, $var, $like);
+		return GDO_UserSetting::usersWith($moduleName, $key, $var, $op);
+	}
+	
+	public static function getSingleWithSetting(string $moduleName, string $key, string $var, string $op='=') : ?self
+	{
+		$users = self::withSetting($moduleName, $key, $var, $op);
+		return count($users) === 1 ? $users[0] : null;
+	}
+
+	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op='=') : self
+	{
+		$users = self::withSetting($moduleName, $key, $var, $op);
+		$c = count($users);
+		switch ($c)
+		{
+			case 0:
+				self::notFoundException("$key = $var");
+			case 1:
+				return $users[0];
+			default:
+				throw new GDO_Error('err_user_ambigious', [$c, $key, $op, $var]);
+		}
 	}
 	
 	#############

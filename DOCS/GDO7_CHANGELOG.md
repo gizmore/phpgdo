@@ -21,6 +21,8 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.2 / scheduled 9.Nov.2022
 
+ - New LGPL [Module_FFMpeg](https://github.com/gizmore/phpgdo-ffmpeg) which offers MP3 encoding and ffmpeg wrappers.
+
  - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
 
  - Refurbished [Module_Boostrap5](https://github.com/gizmore/phpgdo-bootstrap5) and [Module_Boostrap5Theme](https://github.com/gizmore/phpgdo-bootstrap5-theme).

@@ -545,6 +545,16 @@ abstract class Method #extends GDT
 		return GDT::EMPTY_ARRAY;
 	}
 	
+	public function plugUserID() : string
+	{
+		return '2'; # gizmore
+	}
+	
+	public function plugUser() : GDO_User
+	{
+		return GDO_User::findById($this->plugUserID());
+	}
+	
 	public function appliedInputs(array $inputs) : self
 	{
 		$this->inputs($inputs);

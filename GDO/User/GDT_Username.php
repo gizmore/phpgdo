@@ -15,8 +15,6 @@ use GDO\Core\GDT_Name;
  */
 class GDT_Username extends GDT_Name
 {
-	use WithGDO;
-	
 	const LENGTH = 32;
 	
 	public int $min = 2;

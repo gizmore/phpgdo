@@ -589,7 +589,7 @@ class GDO_Module extends GDO
 	    return self::saveUserSetting(GDO_User::current(), $key, $var);
 	}
 	
-	public function saveUserSetting(GDO_User $user, string $key, string $var) : GDT
+	public function saveUserSetting(GDO_User $user, string $key, ?string $var) : GDT
 	{
 	    $gdt = $this->getSetting($key);
 	    if ($gdt->var === $var)

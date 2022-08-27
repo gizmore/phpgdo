@@ -6,6 +6,7 @@ use GDO\Core\GDT;
 use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
 use GDO\DB\Query;
+use GDO\UI\WithIcon;
 
 /**
  * An ACL adds 3 fields to a GDT.
@@ -25,6 +26,7 @@ use GDO\DB\Query;
 final class GDT_ACL extends GDT
 {
 	use WithGDO;
+	use WithIcon;
 	use WithLabel;
 	
 	public GDT_Level $aclLevel;

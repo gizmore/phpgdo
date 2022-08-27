@@ -70,7 +70,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     	
     	$app = Application::$INSTANCE;
     	$app->reset(true);
-    	$app->verb(GDT_Form::GET);
+    	$app->verb(GDT_Form::POST);
         
         # Increase IP
         GDT_IP::$CURRENT = $this->nextIP();

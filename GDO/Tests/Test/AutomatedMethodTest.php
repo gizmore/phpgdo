@@ -31,6 +31,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		$method = $mt->method;
+		$mt->runAs($mt->method->plugUser());
 		$result = $mt->execute();
 		assertLessThan(500, Application::$RESPONSE_CODE,
 			"Test if trivial method {$this->mome($method)} does not crash.");

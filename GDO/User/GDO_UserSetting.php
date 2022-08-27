@@ -60,21 +60,21 @@ final class GDO_UserSetting extends GDO
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$gdt = $module->setting($key);
-		$all = $var === $gdt->initial;
 		$key = quote($key);
+		$all = $var === $gdt->initial;
 		
 		$query = GDO_User::table()->select('gdo_user.*');
 		$query->join("LEFT JOIN gdo_usersetting ON user_id=uset_user AND uset_name={$key}");
 		
 		$op = strtoupper($op);
-		if ($op === 'like')
+		if ($op === 'LIKE')
 		{
 			$query->where("uset_value LIKE \"{$var}\"");
 		}
 		else
 		{
 			$var = quote($var);
-			$query->where("uset_value = $var");
+			$query->where("uset_value $op $var");
 		}
 		
 		if ($all)

@@ -47,4 +47,8 @@ return [
 	
 	# Clock
 	'cfg_clock_sidebar' => 'Mostra l\'orologio nella navigazione?',
+
+	# Activity Accuracy
+	'activity_accuracy' => 'Activity Accuracy',
+	'tt_activity_accuracy' => 'Control how exact your online activity is shown / last seen on...',
 ];

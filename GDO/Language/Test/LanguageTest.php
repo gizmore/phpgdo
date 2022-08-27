@@ -131,5 +131,13 @@ final class LanguageTest extends TestCase
     	assertFalse($user->isAdmin(), "Test if staff is not admin.");
     	assertTrue($user->isStaff(), "Test if staff has staff permissions assigned correctly.");
     	assertTrue($user->isMember(), "Test if staff is a member.");
+    	
+    	# User 7 is Darla / will be deleted!
+    	$user = GDO_User::blank([
+    		'user_id' => '7',
+    		'user_name' => 'Darla',
+    		'user_type' => 'member',
+    	])->replace();
+    	assertTrue($user->isMember(), "Test if darla is a member.");
     }
 }

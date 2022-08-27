@@ -22,6 +22,8 @@ final class GDT_MethodTest extends GDT_Method
     # 2) 4-Monica  (member)
     # 3) 5-Gaston  (guest)
     # 4) 6-Sven    (staff)
+    # 5) 7-Darla   (deleted later)
+    
     /**
      * Store some users here for testing.
      * @var GDO_User[]
