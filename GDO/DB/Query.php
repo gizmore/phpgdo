@@ -26,11 +26,23 @@ use GDO\Core\GDO_Error;
 final class Query
 {
 	# Type constants
-	const SELECT = "SELECT";
-	const INSERT = "INSERT INTO";
-	const REPLACE = "REPLACE INTO";
-	const UPDATE = "UPDATE";
-	const DELETE = "DELETE FROM";
+	const RAW = 0;
+	const SELECT = 1;
+	const INSERT = 2;
+	const REPLACE = 3;
+	const UPDATE = 4;
+	const DELETE = 5;
+	
+// 	public static $TYPES = [
+// 		'NO',
+// 	];
+	
+	
+// 	const SELECT = "SELECT";
+// 	const INSERT = "INSERT INTO";
+// 	const REPLACE = "REPLACE INTO";
+// 	const UPDATE = "UPDATE";
+// 	const DELETE = "DELETE FROM";
 	
 	/**
 	 * The table in FROM/INTO
@@ -49,7 +61,7 @@ final class Query
 	private ?string $group = null;
 	private ?string $having = null;
 	private ?string $from = null;
-	private ?string $type = null;
+	private int $type = self::RAW;
 	private ?string $set = null;
 	public  ?array  $order = null;
 	public  ?array  $values = null;
@@ -499,6 +511,19 @@ final class Query
 			(' UNION ' . $this->union->buildQuery()) :
 			null;
 	}
+	
+	public function getType() : string
+	{
+		switch ($this->type)
+		{
+			case self::RAW: return '';
+			case self::SELECT: return 'SELECT ';
+			case self::INSERT: return 'INSERT INTO ';
+			case self::REPLACE: return 'REPLACE INTO ';
+			case self::UPDATE: return 'UPDATE ';
+			case self::DELETE: return "DELETE {$this->from} FROM ";
+		}
+	}
 
 	/**
 	 * Build the query string.
@@ -508,7 +533,7 @@ final class Query
 	    return isset($this->raw) ?
     	    $this->raw :
     	    
-    	    $this->type .
+    	    $this->getType() .
     	    $this->getSelect() .
     	    $this->getFrom() .
     	    $this->getValues() .

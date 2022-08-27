@@ -6,6 +6,7 @@ use GDO\User\GDO_User;
 use GDO\Core\Application;
 use GDO\Date\Time;
 use GDO\User\GDO_UserSetting;
+use GDO\DB\Database;
 
 /**
  * Cleanup old guest accounts that are unused.
@@ -31,9 +32,9 @@ final class CleanupGuests extends MethodCronjob
     	# And we turn this into a delete
         $query->delete(GDO_User::table()->gdoTableName());
         # Exec
-    	$result = $query->exec();
+    	$query->exec();
     	# Stats
-    	$numDeleted = $result->affectedRows();
+    	$numDeleted = Database::instance()->affectedRows();
         if ($numDeleted > 0)
         {
             $this->logNotice(sprintf('Deleted %d guest users', $numDeleted));
