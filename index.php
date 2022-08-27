@@ -250,7 +250,7 @@ $content = $result->render();
 ##############
 ### Finish ###
 ##############
-if (isset($session))
+if (isset($session) && $session)
 {
 	$session->commit(); # setting headers sometimes
 }
