@@ -23,7 +23,7 @@ return [
 'install_optional_1' => 'Is PHP gd installed?',
 'install_optional_2' => 'Is PHP memcached installed?',
 'install_optional_3' => 'Is openssl extension available?',
-'install_optional_4' => 'Are nodejs, npm, bower and yarn available?',
+'install_optional_4' => 'Are nodejs, npm and yarn available?',
 'install_system_ok' => 'Your system is able to run GDOv7. You can continue with %s.',
 'install_system_not_ok' => 'Your system is currently not able to run GDOv7. You can try again to run %s.',
 
@@ -89,12 +89,10 @@ As Root:<br/>
 aptitude install nodejs nodejs-dev npm # Install javascript<br/>
 npm install -g yarn # Install yarn<br/>
 <br/>
-As gdo6 user:<br/>
+As phpgdo user:<br/>
 <br/>
-cd www/gdo6<br/>
+cd www/phpgdo<br/>
 ./gdo_yarn.sh # Install module js dependencies<br/>
-<br/>
-Note: Currently bower and yarn are both in use. Bower will be dropped.<br/>
 </code>
 ',
 	

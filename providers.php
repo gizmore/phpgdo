@@ -19,7 +19,7 @@ if ($mode)
 {
 	echo "'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],\n";
 	echo "'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],\n";
-	echo "'Mailer' => ['phpgdo-mailer-gdo', 'phpgdo-mailer-symfony'],\n";
+	echo "'Mailer' => ['phpgdo-mailer', 'phpgdo-mailer-symfony'],\n";
 	echo "'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],\n";
 }
 
