@@ -15,7 +15,14 @@ final class GDT_Join extends GDT
 {
 	use WithName;
 	
+	public function isTestable() : bool { return false; }
+	
 	public function isSearchable() : bool { return true; }
+	
+// 	public static function make(string $name = null) : self
+// 	{
+// 		return self::makeNamed($name);
+// 	}
 	
 	############
 	### Join ###

@@ -1,11 +1,17 @@
 <?php
 namespace GDO\Table;
+
 use GDO\Core\Method;
 use GDO\Core\GDO;
-use GDO\Core\GDT;
-use GDO\Core\GDT_AutoInc;
-use GDO\Util\Common;
+use GDO\Core\GDT_Object;
 
+/**
+ * This method renders a GDO as card.
+ * 
+ * @author gizmore
+ * @version 7.0.1
+ * @since 6.3.0
+ */
 abstract class MethodQueryCard extends Method
 {
 	/**
@@ -13,20 +19,16 @@ abstract class MethodQueryCard extends Method
 	 */
 	public abstract function gdoTable();
 	
-	/**
-	 * @return GDT[]
-	 */
 	public function gdoParameters() : array
 	{
-		return [GDT_AutoInc::make('id')];
+		return [
+			GDT_Object::make('id')->table($this->gdoTable())->notNull(),
+		];
 	}
 	
-	/**
-	 * @return \GDO\Core\GDO
-	 */
-	public function getQueryCard()
+	public function getQueryCard() : GDO
 	{
-		return $this->gdoTable()->find(Common::getRequestString('id'));
+		return $this->gdoParameterValue('id');
 	}
 	
 	public function execute()
@@ -36,9 +38,8 @@ abstract class MethodQueryCard extends Method
 	
 	public function renderCard() : string
 	{
-		if ($object = $this->getQueryCard())
-		{
-			return $object->responseCard();
-		}
+		$object = $this->getQueryCard();
+		return $object->responseCard();
 	}
+	
 }

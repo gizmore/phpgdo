@@ -32,7 +32,7 @@ final class GDT_Filter extends GDT
 	
 	public function getVar()
 	{
-		return @$this->inputs[$this->name];
+		return isset($this->inputs) ? @$this->inputs[$this->name] : null;
 	}
 	
 }

@@ -43,9 +43,15 @@ class GDT_Color extends GDT_String
 	##############
 	public function renderHTML() : string
 	{
-		$hx = $this->getValue();
-		$fg = Color::fromHex($hx)->complementary()->asHex();
-		return '<div class="gdt-color" style="background: '.$hx.'; color: '.$fg.';">'.$hx.'</div>';
+		if ($hx = $this->getValue())
+		{
+			$fg = Color::fromHex($hx)->complementary()->asHex();
+			return '<div class="gdt-color" style="background: '.$hx.'; color: '.$fg.';">'.$hx.'</div>';
+		}
+		else
+		{
+			return '<div class="gdt-color" style="background: #eee; color: #333;">'.t('none').'</div>';
+		}
 	}
 
 	###############

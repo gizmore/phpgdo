@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\WithName;
 use GDO\Core\Application;
 use GDO\Core\GDT;
+use GDO\Language\Trans;
 
 /**
  * Add label fields to a GDT.
@@ -15,6 +16,27 @@ use GDO\Core\GDT;
 trait WithLabel
 {
 	use WithName;
+	
+	public static function make(string $name = null) : self
+	{
+		$obj = self::makeNamed($name);
+		if ($name = $obj->getName())
+		{
+			if (Trans::hasKey($name))
+			{
+				$obj->label($name);
+			}
+			else
+			{
+				$obj->defaultLabel();
+			}
+		}
+		else
+		{
+			$obj->defaultLabel();
+		}
+		return $obj;
+	}
 	
 	############
 	### Star ###

@@ -7,11 +7,13 @@ namespace GDO\Util;
  * If you have empty values, you have one permutation with an empty array.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  */
 final class Permutations
 {
+	private int $count = 0;
 	private array $values;
+	private array $lastPermutation;
 	
 	public function __construct(array $values)
 	{
@@ -21,28 +23,40 @@ final class Permutations
 		{
 			$this->lastPermutation[$k] = 0;
 		}
+		$this->count = self::countPermutations($values);
 	}
 	
-	private array $lastPermutation;
+	public static function countPermutations(array $values) : int
+	{
+		$n = 1;
+		foreach ($values as $value)
+		{
+			$n *= count($value);
+		}
+		return $n;
+	}
 	
 	public function generate() : \Generator
 	{
 		yield $this->lastPermutation();
-		
-		foreach ($this->values as $k => $v)
+
+		for ($i = 1; $i < $this->count; $i++)
 		{
-			$p = $this->lastPermutation[$k];
-			$p++;
-			if ($p >= count($v))
+			foreach ($this->values as $k => $v)
 			{
-				$p = 0;
-				$this->lastPermutation[$k] = $p;
-			}
-			else
-			{
-				$this->lastPermutation[$k] = $p;
-				yield $this->lastPermutation();
-				break;
+				$p = $this->lastPermutation[$k];
+				$p++;
+				if ($p >= count($v))
+				{
+					$p = 0;
+					$this->lastPermutation[$k] = $p;
+				}
+				else
+				{
+					$this->lastPermutation[$k] = $p;
+					yield $this->lastPermutation();
+					break;
+				}
 			}
 		}
 	}

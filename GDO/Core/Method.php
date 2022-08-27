@@ -383,7 +383,7 @@ abstract class Method #extends GDT
 			{
 				$db->transactionRollback();
 			}
-			return $this->errorRaw($e->getMessage());
+			return $this->error('error', [html($e->getMessage())]);
 		}
 		catch (GDO_RedirectError $e)
 		{
@@ -395,7 +395,8 @@ abstract class Method #extends GDT
 			{
 				$db->transactionRollback();
 			}
-			return $this->errorRaw($e->getMessage());
+			Logger::logException($e);
+			return $this->error('error', [html($e->getMessage())]);
 		}
 		catch (\Throwable $e)
 		{
@@ -494,6 +495,7 @@ abstract class Method #extends GDT
 			$keywords[] = t('site_keywords');
 		}
 		$key = sprintf('mk_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
 		if (Trans::hasKey($key))
 		{
 			$keywords[] = t($key);
@@ -530,17 +532,10 @@ abstract class Method #extends GDT
 			$user->saveSettingVar('User', 'last_activity', $date);
 		}
 	}
-	
-	
-// 	###################
-// 	### Apply Input ###
-// 	###################
-// 	public function addInput(?string $key, $var) : self
-// 	{
-// 		$gdt = $this->gdoParameter($key, false);
-// 		xdebug_break();
-// 	}
-	
+
+	#############
+	### Input ###
+	#############
 	/**
 	 * Get plug variables.
 	 * @return [string[string]]
@@ -566,11 +561,6 @@ abstract class Method #extends GDT
 		}
 	}
 	
-// 	public function hasFields() : bool
-// 	{
-// 		return false;
-// 	}
-	
 	#############
 	### Error ###
 	#############
@@ -587,16 +577,6 @@ abstract class Method #extends GDT
 		Website::error($titleRaw, $key, $args, $log, $code);
 		return GDT_Response::make()->code($code);
 	}
-	
-// 	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
-// 	{
-// 		Application::setResponseCode($code);
-// 		if ($log)
-// 		{
-// 			Logger::logError($message);
-// 		}
-// 		return GDT_Error::make()->titleRaw($this->getModuleName())->textRaw($message);
-// 	}
 	
 	################
 	### Redirect ###

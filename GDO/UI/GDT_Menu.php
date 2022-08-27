@@ -3,7 +3,6 @@ namespace GDO\UI;
 
 use GDO\Core\WithInput;
 use GDO\Core\GDT_Template;
-use GDO\Core\GDT;
 
 /**
  * A popup menu

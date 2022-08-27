@@ -19,6 +19,7 @@ use GDO\Date\Time;
 use GDO\Date\GDO_Timezone;
 use PHPUnit\Framework\Assert;
 use GDO\Core\WithModule;
+use GDO\Form\GDT_Form;
 
 /**
  * A GDO test case knows a few helper functions.
@@ -67,7 +68,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
     	$this->message("Running %s", CLI::bold($this->gdoClassName()));
     	
-        Application::$INSTANCE->reset();
+    	$app = Application::$INSTANCE;
+    	$app->reset(true);
+    	$app->verb(GDT_Form::GET);
         
         # Increase IP
         GDT_IP::$CURRENT = $this->nextIP();

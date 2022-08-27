@@ -25,7 +25,8 @@ final class Error extends MethodPage
 	
 	public function execute() : GDT
 	{
-		return $this->errorRaw($this->gdoParameterVar('error'));
+		$error = $this->gdoParameterVar('error');
+		return $this->error('error', [html($error)]);
 	}
 	
 }

@@ -46,7 +46,7 @@ final class GDT_MethodTest extends GDT_Method
     {
     	if ($button === null)
     	{
-    		$this->clibutton();
+//     		$this->clibutton();
     	}
     	else
     	{

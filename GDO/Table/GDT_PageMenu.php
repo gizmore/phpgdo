@@ -21,7 +21,6 @@ use GDO\DB\ArrayResult;
 class GDT_PageMenu extends GDT
 {
 	use WithHREF;
-// 	use WithLabel;
 
 	public string $pageName;
 	public function pageName(string $pageName) : self

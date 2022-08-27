@@ -401,12 +401,12 @@ trait WithObject
 	{
 		if (isset($this->filterField))
 		{
-			$this->table->gdoColumn($this->filterField)->filterQuery($query, $rq);
+			$this->table->gdoColumn($this->filterField)->filterQuery($query, $f);
 			return $this;
 		}
 		else
 		{
-			return parent::filterQuery($query, $rq);
+			return parent::filterQuery($query, $f);
 		}
 	}
 

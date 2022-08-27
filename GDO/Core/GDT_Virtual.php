@@ -13,7 +13,7 @@ use GDO\Table\GDT_Filter;
  * You need to provide subquery sql and gdt proxy
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  * 
  * @see GDT_Join
@@ -21,9 +21,7 @@ use GDO\Table\GDT_Filter;
 class GDT_Virtual extends GDT
 {
 	use WithGDO;
-	use WithName;
 	use WithLabel;
-// 	use WithValue;
 	
 	public function isTestable() : bool { return false; }
     public function isVirtual() : bool { return true; }

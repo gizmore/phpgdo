@@ -14,7 +14,6 @@ use GDO\Form\WithFormAttributes;
  */
 class GDT_Composite extends GDT_Container
 {
-	use WithName;
 	use WithLabel;
 	use WithValue;
 	use WithInput;

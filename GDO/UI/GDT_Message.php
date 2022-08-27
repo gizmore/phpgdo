@@ -300,6 +300,8 @@ class GDT_Message extends GDT_Text
 	 */
 	public function var(string $var = null): self
 	{
+		$this->var = $var;
+// 		$this->valueConverted = false;
 		$this->msgInput = $var;
 		$this->msgOutput = self::decodeMessage($var);
 		$this->msgText = self::plaintext($this->msgOutput);
@@ -344,13 +346,20 @@ class GDT_Message extends GDT_Text
 	 */
 	public function setGDOData(array $data): self
 	{
-#		$name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
+// 		$name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
 		$name = $this->name;
-		$this->msgInput = @$data["{$name}_input"];
-		$this->msgOutput = @$data["{$name}_output"];
-		$this->msgText = @$data["{$name}_text"];
-		$this->msgEditor = @$data["{$name}_editor"];
-		$this->var = $this->msgInput;
+		if (isset($data[$name]))
+		{
+			$this->var($data[$name]);
+		}
+		else
+		{
+			$this->msgInput = @$data["{$name}_input"];
+			$this->msgOutput = @$data["{$name}_output"];
+			$this->msgText = @$data["{$name}_text"];
+			$this->msgEditor = @$data["{$name}_editor"];
+			$this->var = $this->msgInput;
+		}
 		return $this;
 	}
 

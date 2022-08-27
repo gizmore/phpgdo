@@ -157,7 +157,7 @@ abstract class MethodTable extends Method
     {
         $this->table = GDT_Table::make($this->getTableName());
         $this->table->href($this->gdoTableHREF());
-//         $this->table->gdo($this->gdoTable());
+        $this->table->gdo($this->gdoTable());
         $this->table->fetchAs($this->gdoFetchAs());
         return $this->table;
     }

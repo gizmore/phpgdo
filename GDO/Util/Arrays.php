@@ -84,6 +84,9 @@ final class Arrays
 		return $unique;
 	}
 	
+	/**
+	 * Check if an array is empty. NULL values do not count.
+	 */
 	public static function empty(?array $array) : bool
 	{
 		if ($array === null)
@@ -101,5 +104,23 @@ final class Arrays
 		}
 		return $result;
 	}
+	
+// 	/**
+// 	 * Recursive count.
+// 	 * @since 7.0.1
+// 	 */
+// 	public static function countr(array $array) : int
+// 	{
+// 		$result = 0;
+// 		foreach ($array as $ele)
+// 		{
+// 			if (is_array($ele))
+// 			{
+// 				$result += self::countr($ele);
+// 			}
+// 			$result++;
+// 		}
+// 		return $result;
+// 	}
 	
 }

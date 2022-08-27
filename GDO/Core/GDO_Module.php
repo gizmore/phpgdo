@@ -41,7 +41,6 @@ class GDO_Module extends GDO
 	public function isSiteModule() : bool { return false; }
 	public function isInstallable() : bool { return true; }
 	
-	### Hax
 	public function isTestable() : bool { return false; } # Overrides the GDT behaviour. GDO_Module is abstract.
 	
 	/**
@@ -90,7 +89,6 @@ class GDO_Module extends GDO
 	
 	/**
 	 * Provided theme name in module /thm/$themeName/ folder.
-	 * @return string $themeName
 	 */
 	public function getTheme() : ?string { return null; }
 	
@@ -591,7 +589,7 @@ class GDO_Module extends GDO
 	    return self::saveUserSetting(GDO_User::current(), $key, $var);
 	}
 	
-	public function saveUserSetting(GDO_User $user, $key, $var)
+	public function saveUserSetting(GDO_User $user, string $key, string $var) : GDT
 	{
 	    $gdt = $this->getSetting($key);
 	    if ($gdt->var === $var)
@@ -800,12 +798,6 @@ class GDO_Module extends GDO
 	    $settings = GDO_UserSetting::table()->select('uset_name, uset_value')->where("uset_user={$user->getID()}");
 	    $blobs = GDO_UserSettingBlob::table()->select('uset_name, uset_value')->where("uset_user={$user->getID()}");
 	    return $settings->union($blobs)->exec()->fetchAllArray2dPair();
-// 	    return array_merge(
-// 	        GDO_UserSetting::table()->select('uset_name, uset_value')->
-// 	           where("uset_user={$user->getID()}")->exec()->1fetchAllArray2dPair(),
-// 	        GDO_UserSettingBlob::table()->select('uset_name, uset_value')->
-// 	           where("uset_user={$user->getID()}")->exec()->fetchAllArray2dPair()
-// 	    );
 	}
 	
 	###########
@@ -999,28 +991,9 @@ class GDO_Module extends GDO
 		CSS::addFile($path);
 	}
 
-// 	public function prefetch($path, $type)
-// 	{
-// 	    $v = $this->nocacheVersion();
-// 	    $href = $this->wwwPath($path.'?'.$v);
-// 	    Website::addPrefetch($href, $type);
-// 	}
-	
 	#############
 	### Error ###
 	#############
-// 	public function message(string $key, array $args=null, bool $log=true, int $code=200) : bool
-// 	{
-// 		Website::message($this->renderName(), $key, $args, $log, $code);
-// 		return true;
-// 	}
-	
-// 	public function error(string $key, array $args=null, bool $log=true, int $code=GDO_Exception::DEFAULT_ERROR_CODE) : bool
-// 	{
-// 		Website::error($this->renderName(), $key, $args, $log, $code);
-// 		return false;
-// 	}
-	
 	protected function errorSystemDependency(string $key, array $args = null) : bool
 	{
 		$msg = t($key, $args);

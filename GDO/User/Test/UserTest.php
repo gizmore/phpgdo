@@ -36,10 +36,14 @@ final class UserTest extends TestCase
     
     public function testProfileAboutMe()
     {
+    	$user = GDO_User::current();
+    	$user->saveSettingVar('User', 'gender', 'male');
+    	$user->saveSettingVar('User', 'about_me', 'Aziloppegiz');
     	$me = GDT_MethodTest::make()->method(Profile::make())->inputs(['for' => 'gizmore']);
     	$result = $me->execute();
-    	$html = $result->renderMode(GDT::RENDER_HTML);
-    	assertEquals(1, substr_count($html, 'gdt-card-message'), 'Test if about me is only shown once in gizmore\'s profile.');
+    	$html = $result->renderMode(GDT::RENDER_WEBSITE);
+    	assertEquals(1, substr_count($html, 'male'), 'Test if gender is only shown once in gizmore\'s profile.');
+    	assertEquals(1, substr_count($html, 'Aziloppegiz'), 'Test if about me is only shown once in gizmore\'s profile.');
     }
     
 }

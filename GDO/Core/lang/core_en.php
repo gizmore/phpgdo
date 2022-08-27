@@ -5,6 +5,7 @@ return [
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
 	
 	# Errors
+	'error' => 'Error: %s',
 	'err_php_extension_missing' => 'This module requires the `%s` PHP extension.',
 	'err_system_dependency' => 'A system requirement is not fulfilled: %s',
 	'err_php_major_version' => 'GDOv7 requires PHP version %s.',
@@ -307,4 +308,7 @@ The %2$s System',
 	'method' => 'Method',
 	
 	'msg_installed_modules' => 'Installed modules: %s.',
+	
+	'mt_core_gettypes' => 'Get GDT Meta-Data',
+	'mt_core_pathcompletion' => 'Path completion',
 ];

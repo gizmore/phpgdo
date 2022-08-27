@@ -84,7 +84,7 @@ final class Profile extends MethodCard
 			{
 				continue; # skip fields that are not meant to be shown.
 			}
-			$gdt = $module->userSetting($target, $gdt->getName());
+			$gdt = $module->userSetting($target, $name);
 			$reason = '';
 			if (!$acl->hasAccess($user, $target, $reason))
 			{

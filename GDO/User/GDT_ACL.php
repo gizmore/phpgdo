@@ -1,7 +1,6 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\WithName;
 use GDO\Core\WithGDO;
 use GDO\Core\GDT;
 use GDO\UI\GDT_Container;
@@ -26,7 +25,6 @@ use GDO\DB\Query;
 final class GDT_ACL extends GDT
 {
 	use WithGDO;
-	use WithName;
 	use WithLabel;
 	
 	public GDT_Level $aclLevel;

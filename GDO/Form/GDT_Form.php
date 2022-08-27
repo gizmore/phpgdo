@@ -65,6 +65,11 @@ final class GDT_Form extends GDT
 		$this->addClass('gdt-form');
 	}
 	
+// 	public static function make(string $name = null) : self
+// 	{
+// 		return self::makeNamed($name);
+// 	}
+	
 	############
 	### Slim ###
 	############

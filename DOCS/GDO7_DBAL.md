@@ -82,6 +82,11 @@ Of course the many foreign keys are performance hungry.
     ->fetchTable(GDO_User::table()) # Set result fetch class to GDO_User. Else it would fetch GDO_UserPermission objects.
     ->fetchAllObjects() # get an array of GDO_User objects
 
+3) A union select
+
+    $query1 = GDO_User::table()->where('user_type="member"'); # simple query 1
+    $query2 = GDO_User::table()->where('user_type="guest"'); # simple query 2
+    $query1->union($query2)->exec()->fetchAll(); # Use union to merge the two queries.
 
 
 ## GDOv7 DBAL: GDO vs. Eloquent
