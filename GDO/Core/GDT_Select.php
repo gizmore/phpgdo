@@ -347,7 +347,7 @@ class GDT_Select extends GDT_ComboBox
 		{
 			return t($this->emptyLabelKey, $this->emptyLabelArgs);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 
 	################

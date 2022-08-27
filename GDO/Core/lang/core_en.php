@@ -72,6 +72,7 @@ return [
 	'err_url_not_reachable' => 'This URL is not reachable: `%s`.',
 	'err_cli_form_gdt' => '%s has an error: %s',
 	'err_path_not_exists' => 'The %2$s `%1$s` does not exist or is not readable.',
+	'err_token' => 'Your authenticity token is invalid or has been used already.',
 
 	# err_path
 	'is_dir' => 'directory',
@@ -311,4 +312,6 @@ The %2$s System',
 	
 	'mt_core_gettypes' => 'Get GDT Meta-Data',
 	'mt_core_pathcompletion' => 'Path completion',
+	'mt_ajax' => '%s Data Retrieval',
+	
 ];

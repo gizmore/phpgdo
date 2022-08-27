@@ -300,11 +300,6 @@ abstract class Method #extends GDT
 		{
 			# 0) Init
 			$this->applyInput();
-// 			if (Application::isError())
-// 			{
-// 				throw new GDO_Error('err_init_apply_input');
-// 			}
-			
 			if ($result = $this->onInit())
 			{
 				$response->addField($result);

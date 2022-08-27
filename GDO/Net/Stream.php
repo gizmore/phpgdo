@@ -8,25 +8,34 @@ use GDO\Core\Application;
  * File utility to stream downloads in chunks.
  * 
  * @author gizmore
- * @version 6.10.3
+ * @version 7.0.1
  * @since 6.2.0
  */
 final class Stream
 {
 	public static function path($path)
 	{
-		$out = false;
-		if (ob_get_level()>0)
+		if (Application::$INSTANCE->isUnitTests())
 		{
-			$out = ob_end_clean();
+			echo "Sending file: $path\n";
+			return '';
 		}
-		$result = self::_path($path);
-		if ($out !== false)
+		else
 		{
-			ob_start();
-			echo $out;
+			$out = false;
+			if (ob_get_level() > 0)
+			{
+				$out = ob_get_contents();
+				ob_end_clean();
+			}
+			$result = self::_path($path);
+			if ($out !== false)
+			{
+				ob_start();
+				echo $out;
+			}
+			return $result;
 		}
-		return $result;
 	}
 	
 	private static function _path($path)
@@ -129,11 +138,6 @@ final class Stream
 	            $buffer = $end - $p + 1;
 	        }
 
-// 	        if ($die)
-// 	        {
-// 	            fpassthru($fp);
-// 	        }
-	        
 	        $data = fread($fp, $buffer);
 	        if ($die)
 	        {

@@ -1,7 +1,6 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\WithGDO;
 use GDO\Core\GDT_Name;
 
 /**

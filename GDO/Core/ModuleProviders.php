@@ -235,8 +235,7 @@ final class ModuleProviders
 		'DogIRCSpider' => ['DogIRC'],
 		'DogShadowdogs' => ['DogAuth'],
 		'DogTick' => ['Dog', 'DogIRC'],
-		'DogWebsite' => ['Bootstrap5Theme', 'JQuery', 'Avatar', 'Dog', 'DogAuth', 'Login', 'Register', 'Admin', 'DogIRC', 'DogTick', 'DogShadowdogs', 'DogIRCAutologin', 'DogIRCSpider', 'Do
-gGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links', 'Download', 'Math', 'Contact', 'Todo', 'Perf', 'Markdown'],
+		'DogWebsite' => ['Bootstrap5Theme', 'JQuery', 'Avatar', 'Dog', 'DogAuth', 'Login', 'Register', 'Admin', 'DogIRC', 'DogTick', 'DogShadowdogs', 'DogIRCAutologin', 'DogIRCSpider', 'DogGreetings', 'DogBlackjack', 'News', 'PM', 'Quotes', 'Shoutbox', 'Forum', 'Links', 'Download', 'Math', 'Contact', 'Todo', 'Perf', 'Markdown'],
 		'DOMPDF' => ['File'],
 		'Download' => ['Payment'],
 		'DSGVO' => [],

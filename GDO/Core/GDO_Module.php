@@ -643,6 +643,16 @@ class GDO_Module extends GDO
 	private array $userConfigCacheContainers;
 	
 	/**
+	 * @var GDT[]
+	 */
+	private array $userConfigCacheConfigs;
+	
+	/**
+	 * @var GDT[]
+	 */
+	private array $userConfigCacheSettings;
+	
+	/**
 	 * @return GDT[]
 	 */
 	public function &getSettingsCache() : array
@@ -652,6 +662,24 @@ class GDO_Module extends GDO
 	        $this->buildSettingsCache();
 	    }
 	    return $this->userConfigCache;
+	}
+	
+	public function &getUserConfigCacheConfigs() : array
+	{
+		if (!isset($this->userConfigCache))
+		{
+			$this->buildSettingsCache();
+		}
+		return $this->userConfigCacheConfigs;
+	}
+	
+	public function &getUserConfigCacheSettings() : array
+	{
+		if (!isset($this->userConfigCache))
+		{
+			$this->buildSettingsCache();
+		}
+		return $this->userConfigCacheSettings;
 	}
 	
 	public function &getSettingsCacheContainers() : array
@@ -695,6 +723,8 @@ class GDO_Module extends GDO
 	    if (!isset($this->userConfigCache))
 	    {
 	    	$this->userConfigCache = [];
+	    	$this->userConfigCacheConfigs = GDT::EMPTY_ARRAY;
+	    	$this->userConfigCacheSettings = GDT::EMPTY_ARRAY;
 	    	$this->userConfigCacheACL = [];
 	    	$this->userConfigCacheContainers = [];
 	    	$configs = [];
@@ -708,11 +738,13 @@ class GDO_Module extends GDO
     	    }
     	    if ($configs)
     	    {
+    	    	$this->userConfigCacheSettings = $configs;
     	    	$this->userConfigCacheContainers['div_set'] = GDT_Divider::make('div_sett')->label('mt_account_settings');
     	    	$this->_buildSettingsCacheB($configs, true);
     	    }
     	    if ($config = $this->getUserConfig())
     	    {
+    	    	$this->userConfigCacheConfigs = $config;
     	    	$this->userConfigCacheContainers['div_conf'] = GDT_Divider::make('div_conf')->label('mt_account_config');
     	    	$this->_buildSettingsCacheB($config, false);
     	    }

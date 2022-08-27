@@ -3,7 +3,6 @@ use GDO\DB\Database;
 use GDO\Install\Installer;
 use GDO\Core\Logger;
 use GDO\Core\Application;
-use GDO\Session\GDO_Session;
 use GDO\Util\FileUtil;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
@@ -48,24 +47,31 @@ require 'GDO7.php';
 require 'vendor/autoload.php';
 Debug::init();
 Logger::init('gdo_test');
+
+# Confirm
+echo "I will erase the database " . GDO_DB_NAME .".\n";
+echo "Is this correct? (Y/n)";
+flush();
+$c = fread(STDIN, 1);
+
+if ( ($c !== 'y') && ($c !== 'Y') &&
+	 ($c !== "\x0D") && ($c !== "\x0A") )
+{
+	echo "Abort!\n";
+	die(0);
+}
+
 /**
  * Override a few toggles for unit test mode.
- *
- * @author gizmore
  */
 final class gdo_test extends Application
 {
 	public function isUnitTests(): bool { return true; }
 }
-gdo_test::instance()->mode(GDT::RENDER_CLI, true)->cli();
+gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 
 Database::init(null);
-
-// if (module_enabled('Session'))
-// {
-// 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
-// }
 
 # ##########################
 # Simulate HTTP env a bit #
@@ -108,11 +114,17 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 	$count = 0;
 	$modules = explode(',', $argv[1]);
 	
-	# Add Tests and Perf as dependency when unit testing.
+	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
 	$modules[] = 'Tests';
 
+	# Fix lowercase names
+	$modules = array_map(function(string $moduleName) {
+		$module = ModuleLoader::instance()->loadModuleFS($moduleName);
+		return $module->getName();
+	}, $modules);
+	
 	# While loading...
 	while ($count != count($modules))
 	{
@@ -130,20 +142,25 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 			$modules = array_merge($modules, $more);
 			$modules[] = $module->getName();
 		}
+
 		$modules = array_unique($modules);
 	}
+	
+	# Map
 	$modules = array_map(
 		function ($m)
 		{
 			return ModuleLoader::instance()->getModule($m);
 		}, $modules);
-
+	
+	# Sort
 	usort($modules,
 		function (GDO_Module $m1, GDO_Module $m2)
 		{
 			return $m1->priority - $m2->priority;
 		});
 
+	# Inited!
 	Trans::inited(true);
 
 	if (Installer::installModules($modules))

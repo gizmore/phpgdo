@@ -22,4 +22,9 @@ abstract class MethodAjax extends Method
 	public function isSavingLastUrl() : bool { return false; }
 	public function isShownInSitemap() : bool { return false; }
 
+	public function getMethodTitle() : string
+	{
+		return t('mt_ajax', [$this->getModuleName()]);
+	}
+	
 }
