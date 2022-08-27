@@ -104,7 +104,7 @@ class GDT_PageMenu extends GDT
 		return max(array(intval((($numItems-1) / $ipp)+1), 1));
 	}
 	
-	public function filterQuery(Query $query, GDT_Filter $f) : self
+	public function paginateQuery(Query $query) : self
 	{
 		$query->limit($this->ipp, $this->getFrom());
 		return $this;

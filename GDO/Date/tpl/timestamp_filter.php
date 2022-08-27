@@ -1,16 +1,16 @@
 <?php
 namespace GDO\Date\tpl;
 /** @var $field \GDO\Date\GDT_Timestamp **/
-/** @var $f string **/
+/** @var $f \GDO\Table\GDT_Filter **/
 ?>
 <input
- name="<?=$f?>[f][<?=$field->name?>][min]"
+ name="<?=$f->name?>[<?=$field->name?>][min]"
  type="search"
  pattern="^[-\.0-9/ :aAmMpP]*$"
  value="<?=$field->displayVar(@$field->filterVar($f)['min'])?>"
  placeholder="<?=t('from')?>" />
 <input
- name="<?=$f?>[f][<?=$field->name?>][max]"
+ name="<?=$f->name?>[<?=$field->name?>][max]"
  type="search"
  pattern="^[-\.0-9/ :aAmMpP]*$"
  value="<?=$field->displayVar(@$field->filterVar($f)['max'])?>"

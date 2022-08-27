@@ -69,11 +69,18 @@ return [
 	'err_submit_without_click_handler' => 'Method `%s`s submit button `%s` is missing a click handler.',
 // 	'err_duplicate_field_name' => 'A field has been added twice: `%s`.',
 	'err_url_not_reachable' => 'This URL is not reachable: `%s`.',
+	'err_cli_form_gdt' => '%s has an error: %s',
+	'err_path_not_exists' => 'The %2$s `%1$s` does not exist or is not readable.',
 
+	# err_path
+	'is_dir' => 'directory',
+	'is_file' => 'file',
+	
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',
 	'msg_crud_created' => 'Your %s has been created successfully.',
+	'msg_binary_detected' => 'The %s binary has been detected.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',

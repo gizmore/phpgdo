@@ -84,7 +84,7 @@ final class GDT_Redirect extends GDT
 	{
 		if ($log)
 		{
-			Logger::logError(ten($key, $args));
+			Logger::logMessage(ten($key, $args));
 		}
 		return $this->redirectErrorRaw(t($key, $args), false);
 	}
@@ -95,7 +95,7 @@ final class GDT_Redirect extends GDT
 
 		if ($log)
 		{
-			Logger::logError($message);
+			Logger::logMessage($message);
 		}
 		if (class_exists('GDO\\Session\\GDO_Session', false))
 		{

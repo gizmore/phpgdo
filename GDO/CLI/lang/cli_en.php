@@ -25,4 +25,9 @@ return [
 	'mt_cli_help' => 'Help',
 	'md_cli_help' => 'Print short help for a method.',
 	
+	'mt_cli_collect' => 'Collect Files',
+	'md_cli_collect' => 'Collect all files in subfolders of the target path.',
+	'msg_cli_skip_file' => 'Moving file SKIPPED: %s',
+	'msg_cli_collect_file' => 'Moving file: %s',
+	
 ];

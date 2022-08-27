@@ -16,6 +16,7 @@ use GDO\UI\GDT_SearchField;
 use GDO\Table\GDT_Order;
 use GDO\Core\WithGDO;
 use GDO\UI\WithPHPJQuery;
+use GDO\UI\Color;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
@@ -94,9 +95,33 @@ final class GDT_Form extends GDT
 	##############
 	public function renderCLI() : string
 	{
-		$title = $this->renderTitle();
-		$text = $this->renderText();
-		return trim($title . ' ' . $text);
+		if (!$this->hasError())
+		{
+			$title = $this->renderTitle();
+			$text = $this->renderText();
+			$tt = trim("{$title} {$text}");
+			return $tt;
+		}
+		else
+		{
+			$rendered = '';
+			foreach ($this->getAllFields() as $gdt)
+			{
+				if ($gdt->hasError())
+				{
+					$rendered .= $this->renderCLIError($gdt);
+				}
+			}
+			return $rendered;
+		}
+	}
+	
+	private function renderCLIError(GDT $gdt)
+	{
+		return t('err_cli_form_gdt', [
+			Color::red(html($gdt->getName())),
+			html($gdt->renderError())],
+		) . "\n";
 	}
 
 	public function renderHTML() : string
@@ -212,7 +237,7 @@ final class GDT_Form extends GDT
 			if (($gdt instanceof GDT_Order) ||
 				($gdt instanceof GDT_SearchField))
 			{
-				if (!($var = $gdt->filterVar($this->name)))
+// 				if (!($var = $gdt->filterVar($this->name)))
 				{
 					$var = $gdt->getVar();
 				}

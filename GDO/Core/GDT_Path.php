@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\Util\FileUtil;
+use GDO\UI\TextStyle;
 
 /**
  * A path variable with existance validator.
@@ -48,6 +49,10 @@ final class GDT_Path extends GDT_ComboBox
 				}
 			}
 		}
+		else
+		{
+			return false;
+		}
 		return true;
 	}
 	
@@ -58,7 +63,10 @@ final class GDT_Path extends GDT_ComboBox
 			if ( (!is_readable($filename)) ||
 				(!call_user_func($this->existing, $filename)) )
 			{
-				return $this->error('err_path_not_exists', [html($filename), t($this->existing)]);
+				return $this->error('err_path_not_exists', [
+					TextStyle::bold(html($filename)),
+					t($this->existing)]
+				);
 			}
 		}
 		return true;

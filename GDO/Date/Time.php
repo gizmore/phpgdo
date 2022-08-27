@@ -89,6 +89,11 @@ final class Time
 	    Module_Date::instance()->timezone = $timezone;
 	}
 	
+	public static function setTimezoneGDO(GDO_Timezone $tz) : void
+	{
+		self::setTimezone($tz->getID());
+	}
+	
 	###############
 	### Convert ###
 	###############

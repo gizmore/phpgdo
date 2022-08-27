@@ -194,7 +194,7 @@ final class Website
 		}
 		if ($log)
 		{
-			Logger::logError(ten($key, $args));
+			Logger::logMessage(ten($key, $args));
 		}
 		$error = GDT_Error::make()->
 			titleRaw($titleRaw)->

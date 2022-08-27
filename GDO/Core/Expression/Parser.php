@@ -71,6 +71,10 @@ final class Parser
 						$this->parseB($new, $line2);
 						$this->addArgExpr($current, $new);
 					}
+					else
+					{
+						$arg .= $c;
+					}
 					break;
 				
 				case self::ESCAPE_CHARACTER:

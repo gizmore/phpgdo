@@ -108,7 +108,7 @@ abstract class MethodQueryTable extends MethodTable
 	    	$table->pagemenu->page($this->getPage());
 	    	$table->pagemenu->numItems($table->countItems());
 	    	$table->pagemenu->pageName = $this->getPageName();
-	        $table->pagemenu->filterQuery($table->query);
+	        $table->pagemenu->paginateQuery($table->query);
 	    }
 	}
 

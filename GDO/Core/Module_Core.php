@@ -33,7 +33,7 @@ use GDO\Util\Strings;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1536';
+	const GDO_REVISION = '7.0.1-r1538';
 	const GDO_CODENAME = 'Ordered-Odeuvre';
 	
 	##############
@@ -207,6 +207,11 @@ final class Module_Core extends GDO_Module
 		return (strpos($url, 'GDO/') !== 0);
 	}
 	
+	/**
+	 * Check if an URL is an allowed resource.
+	 * Dotfiles may be forbidden, except .well-known
+	 * @TODO: Fix checking each child if it's a dotfile!!! (thx jusb3)
+	 */
 	public function checkDotfileAllowed(string $url) : bool
 	{
 		if ($this->cfgDotfiles())

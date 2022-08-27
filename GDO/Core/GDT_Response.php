@@ -17,7 +17,7 @@ final class GDT_Response extends GDT_Tuple
 {
 	public function render() : string
 	{
-		switch (Application::$INSTANCE->mode)
+		switch (Application::$INSTANCE->modeDetected)
 		{
 			case GDT::RENDER_WEBSITE:
 				return Strings::shrinkHTML($this->renderWebsite());

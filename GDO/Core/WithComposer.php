@@ -10,10 +10,16 @@ namespace GDO\Core;
  */
 trait WithComposer
 {
+	private bool $composerIncluded = false;
+	
 	public function includeVendor() : void
 	{
-		$path = $this->filePath('vendor/autoload.php');
-		require_once $path;
+		if (!$this->composerIncluded)
+		{
+			$path = $this->filePath('vendor/autoload.php');
+			require $path;
+			$this->composerIncluded = true;
+		}
 	}
 	
 }

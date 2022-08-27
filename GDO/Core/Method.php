@@ -509,7 +509,10 @@ abstract class Method #extends GDT
 		if (module_enabled('Session'))
 		{
 			# Without session we do not care over referrer.
-			GDO_Session::set('sess_last_url', $_SERVER['REQUEST_URI']);
+			if (Application::$INSTANCE->isWebserver())
+			{
+				GDO_Session::set('sess_last_url', $_SERVER['REQUEST_URI']);
+			}
 		}
 	}
 
@@ -582,7 +585,7 @@ abstract class Method #extends GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
 		Website::error($titleRaw, $key, $args, $log, $code);
-		return GDT_Response::make();
+		return GDT_Response::make()->code($code);
 	}
 	
 // 	public function errorRaw(string $message, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT

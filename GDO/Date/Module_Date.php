@@ -86,8 +86,9 @@ final class Module_Date extends GDO_Module
     public function onInit()
     {
         $user = GDO_User::current();
-        $timezone = $this->cfgTimezone();
-        $timezone = $user->hasTimezone() ? $user->getTimezone() : $timezone;
+        $timezone = $user->hasTimezone() ?
+        	$user->getTimezone() :
+        	$this->cfgTimezone()->getName();
         Time::setTimezone($timezone);
     }
     
