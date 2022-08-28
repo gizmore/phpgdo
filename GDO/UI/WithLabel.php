@@ -129,7 +129,6 @@ trait WithLabel
 			return t($this->name);
 		}
 		return GDT::EMPTY_STRING;
-// 		return $this->gdoHumanName();
 	}
 	
 	/**

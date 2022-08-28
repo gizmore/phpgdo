@@ -194,10 +194,10 @@ class GDT_Int extends GDT_DBField
 	{
 		switch ($this->bytes)
 		{
-			case 1: return "TINY";
-			case 2: return "MEDIUM";
-			case 4: return "";
-			case 8: return "BIG";
+			case 1: return 'TINY';
+			case 2: return 'MEDIUM';
+			case 4: return '';
+			case 8: return 'BIG';
 			default: throw new GDO_Error('err_int_bytes_length', [$this->bytes]);
 		}
 	}
