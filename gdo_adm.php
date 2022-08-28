@@ -485,7 +485,7 @@ elseif ($argv[1] === 'wipe')
 	}
 }
 
-elseif ($argv[1] === 'config')
+elseif ( ($argv[1] === 'config') || ($argv[1] === 'conf') )
 {
 	if (($argc < 2) || ($argc > 5))
 	{

@@ -4,6 +4,7 @@ namespace GDO\Table;
 use GDO\Core\Method;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Object;
+use GDO\UI\GDT_HTML;
 
 /**
  * This method renders a GDO as card.
@@ -39,7 +40,7 @@ abstract class MethodQueryCard extends Method
 	public function renderCard() : string
 	{
 		$object = $this->getQueryCard();
-		return $object->responseCard();
+		return GDT_HTML::make()->var($object->renderCard());
 	}
 	
 }

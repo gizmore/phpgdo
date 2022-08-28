@@ -121,10 +121,12 @@ return [
 	'btn_preview' => 'Preview',
 	'btn_save' => 'Save',
 	'btn_send' => 'Send',
+	'btn_invisible' => 'Set Invisble',
+	'btn_send_mail' => 'Send Mail',
 	'btn_set' => 'Set',
 	'btn_upload' => 'Upload',
 	'btn_view' => 'View',
-	'btn_visible' => 'Visible',
+	'btn_visible' => 'Set Visible',
 	'submit' => 'Submit',
 	
 	# Float
@@ -206,7 +208,6 @@ return [
 	'object_filter' => 'Filter',
 	'directory' => 'Directory',
 	
-	
 	# CBX
 	'sel_all' => 'Select All',
 	'sel_checked' => 'Yes',
@@ -214,11 +215,9 @@ return [
 	
 	# Fineprint
 	'privacy' => 'Privacy',
-	'md_privacy' => 'Privacy and Dataflow information for %s.',
+	'md_core_privacy' => 'Privacy and Dataflow information for %s.',
 	'impressum' => 'Impressum',
-	'md_impressum' => 'The impressum for the %s service website.',
-	'landscape' => 'Landscape',
-	'portrait' => 'Portrait',
+	'md_core_impressum' => 'The impressum for the %s service website.',
 	
 	# Util
 	'and' => ' and ',

@@ -142,8 +142,7 @@ abstract class MethodCrud extends MethodForm
 	    }
 	    elseif (!$this->canCreate($table))
 	    {
-	    	return $this->error('err_permission_create,' [$table->gdoHumanName()]);
-// 	        throw new GDO_PermissionException('err_permission_create', $this, $);
+	    	return $this->error('err_permission_create', [$table->gdoHumanName()]);
 	    }
 	    
 	    $this->getForm();
@@ -214,15 +213,6 @@ abstract class MethodCrud extends MethodForm
 			$d = GDT_DeleteButton::make()->onclick([$this, 'onDelete']);
 			$form->actions()->addField($d);
 		}
-
-// 		if ($gdo)
-// 		{
-//     	    $form->withGDOValuesFrom($this->gdo);
-// 		}
-// 		else
-// 		{
-// 		    $form->withGDOValuesFrom($this->gdoTable());
-// 		}
 	}
 	
 	public function getMethodTitle() : string

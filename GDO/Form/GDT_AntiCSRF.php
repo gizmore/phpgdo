@@ -7,7 +7,6 @@ use GDO\Util\Random;
 use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
-use GDO\Core\GDT;
 
 /**
  * GDT_Form CSRF protection.

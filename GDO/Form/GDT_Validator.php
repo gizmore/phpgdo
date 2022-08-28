@@ -3,6 +3,7 @@ namespace GDO\Form;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Core\WithName;
 
 /**
  * A field that is an additional validator for a field.
@@ -16,6 +17,8 @@ use GDO\Core\GDT_Template;
  */
 class GDT_Validator extends GDT
 {
+	use WithName;
+	
 	public function isWriteable() : bool { return true; } # so it gets evaluated in the validation process.
 	
 	/**
@@ -74,7 +77,7 @@ class GDT_Validator extends GDT
 				return GDT_Template::php('Form', 'validator_form.php', ['field' => $this]);
 			}
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 }

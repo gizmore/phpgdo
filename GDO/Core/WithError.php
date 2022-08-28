@@ -19,11 +19,11 @@ trait WithError
 	 */
 	public function error(string $key, array $args=null) : bool
 	{
-		if (!$this->hasError())
-		{
+// 		if (!$this->hasError())
+// 		{
 			$this->errorKey = $key;
 			$this->errorArgs = $args;
-		}
+// 		}
 		return false;
 	}
 	
@@ -60,10 +60,10 @@ trait WithError
 				}
 			}
 		}
-		if (Application::instance()->isError())
-		{
-			return true;
-		}
+// 		if (Application::instance()->isError())
+// 		{
+// 			return true;
+// 		}
 		return false;
 	}
 	

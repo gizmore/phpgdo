@@ -2,7 +2,6 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Page;
-use GDO\Util\Strings;
 
 /**
  * A response renders a GDT result.
@@ -17,10 +16,10 @@ final class GDT_Response extends GDT_Tuple
 {
 	public function render() : string
 	{
-		switch (Application::$INSTANCE->modeDetected)
+		switch (Application::$INSTANCE->mode)
 		{
 			case GDT::RENDER_WEBSITE:
-				return Strings::shrinkHTML($this->renderWebsite());
+				return $this->renderWebsite();
 			case GDT::RENDER_XML:
 				hdr('Content-Type: application/xml');
 				return $this->renderXML();

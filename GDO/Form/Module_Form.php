@@ -2,7 +2,6 @@
 namespace GDO\Form;
 
 use GDO\Core\GDO_Module;
-use GDO\Core\GDT_Checkbox;
 use GDO\Core\GDT_EnumNoI18n;
 use GDO\Date\GDT_Duration;
 use GDO\Date\Time;

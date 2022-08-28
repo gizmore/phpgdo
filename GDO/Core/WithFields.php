@@ -113,18 +113,18 @@ trait WithFields
 	private function getFieldsSlicy(array $fields, GDT $field, bool $last, ?GDT $after)
 	{
 		# Build 3 slices depending on first, after, last.
-		if ($last)
-		{
-			$begn = $fields;
-			$midl = [$field];
-			$aftr = GDT::EMPTY_ARRAY;
-		}
-		elseif ($after !== null)
+		if ($after !== null)
 		{
 			$i = array_search($field, $fields, true);
 			$begn = array_slice($fields, 0, $i);
 			$midl = [$field];
-			$aftr = array_slice($fields, $i, count($fields) - $i);
+			$aftr = array_slice($fields, $i+1);
+		}
+		elseif ($last)
+		{
+			$begn = $fields;
+			$midl = [$field];
+			$aftr = GDT::EMPTY_ARRAY;
 		}
 		else # first
 		{

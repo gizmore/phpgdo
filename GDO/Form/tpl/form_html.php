@@ -1,11 +1,12 @@
 <?php
 namespace GDO\Form\tpl;
+use GDO\UI\GDT_Error;
 /** @var \GDO\Form\GDT_Form $field **/
 ?>
-<div<?=$field->htmlID()?><?=$field->htmlAttributes()?>>
 <?php if ($field->hasError()) : ?>
-<?=$field->renderError()?>
+<?=GDT_Error::make()->textRaw($field->renderError())->render()?>
 <?php endif;?>
+<div<?=$field->htmlID()?><?=$field->htmlAttributes()?>>
 <form<?=$field->htmlVerb()?><?=$field->htmlAction()?><?=$field->htmlTarget()?>>
  <div class="gdt-form-inner">
 <?php if ($field->hasTitle() || $field->hasText()) : ?>
