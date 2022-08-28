@@ -242,14 +242,14 @@ trait WithObject
 			->exec()
 			->fetchObject())
 		{
-			$back[] = $first->getID();
+			$back[] = [$this->name => $first->getID()];
 		}
 		if ($second = $this->table->select()
 			->limit(1, 1)
 			->exec()
 			->fetchObject())
 		{
-			$back[] = $second->getID();
+			$back[] = [$this->name => $second->getID()];
 		}
 		return $back;
 	}
@@ -262,18 +262,16 @@ trait WithObject
 		$plugs = [];
 		if ($first)
 		{
-			$plugs[] = json_encode($first);
+			$plugs[] = [$this->name => json_encode($first)];
 		}
 		if ($second)
 		{
-			$plugs[] = json_encode($second);
+			$plugs[] = [$this->name => json_encode($second)];
 		}
 		if ($first && $second)
 		{
-			$plugs[] = json_encode([
-				$first,
-				$second
-			]);
+			$json = json_encode([$first, $second]);
+			$plugs[] = [$this->name => $json];
 		}
 		return $plugs;
 	}

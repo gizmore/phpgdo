@@ -174,9 +174,9 @@ final class Trans
 	/**
 	 * When a key is missing, log it.
 	 */
-	private static function missing(string $iso, string $key) : bool
+	private static function missing(string $iso, string $key, bool $logMissing=false) : bool
 	{
-		if (self::$INITED)
+		if (self::$INITED && $logMissing)
 		{
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
@@ -264,18 +264,18 @@ final class Trans
 	/**
 	 * Check if a translation key exists.
 	 */
-	public static function hasKey(string $key) : bool
+	public static function hasKey(string $key, bool $logMissing=false) : bool
 	{
-	    return self::hasKeyIso(self::$ISO, $key);
+	    return self::hasKeyIso(self::$ISO, $key, $logMissing);
 	}
 
 	/**
 	 * Check if a translation key exists for an ISO.
 	 */
-	public static function hasKeyIso(string $iso, string $key) : bool
+	public static function hasKeyIso(string $iso, string $key, bool $logMissing=false) : bool
 	{
 		$cache = self::load($iso);
-		return isset($cache[$key]) ? true : self::missing($iso, $key);
+		return isset($cache[$key]) ? true : self::missing($iso, $key, $logMissing);
 	}
 	
 }

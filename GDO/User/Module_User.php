@@ -10,6 +10,7 @@ use GDO\UI\GDT_Message;
 use GDO\Net\GDT_Url;
 use GDO\Date\GDT_Date;
 use GDO\UI\GDT_Color;
+use GDO\Date\GDT_Timestamp;
 
 /**
  * GDO_User related types and plugins.
@@ -105,7 +106,7 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			GDT_Url::make('last_url')->noacl()->hidden(),
-			GDT_Date::make('last_activity'),
+			GDT_Timestamp::make('last_activity'),
 			GDT_UInt::make('profile_views')->initial('0'),
 		];
 	}

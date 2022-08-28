@@ -174,7 +174,7 @@ final class Query
 	
 	public function orWhere($condition) : self
 	{
-		return $this->where($condition, "OR");
+		return $this->where($condition, 'OR');
 	}
 	
 	public function getWhere() : string

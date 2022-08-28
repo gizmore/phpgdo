@@ -33,7 +33,7 @@ use GDO\Util\Strings;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1547';
+	const GDO_REVISION = '7.0.1-r1548';
 	const GDO_CODENAME = 'Ordered-Odeuvre';
 	
 	##############
@@ -106,7 +106,6 @@ final class Module_Core extends GDO_Module
 			GDT_Checkbox::make('siteshort_title_append')->initial('1'),
 			GDT_Checkbox::make('mail_403')->initial('1'), # mail 403 error mails?
 			GDT_Checkbox::make('mail_404')->initial('1'), # mail 404 error mails?
-// 			GDT_Checkbox::make('load_sidebars')->initial('1'),
 			GDT_Checkbox::make('directory_indexing')->initial('1'),
 			GDT_Checkbox::make('module_assets')->initial('1'),
 			GDT_Checkbox::make('dotfiles')->initial('0'),
@@ -121,7 +120,6 @@ final class Module_Core extends GDO_Module
 	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
 	public function cfgMail403() : string { return $this->getConfigVar('mail_404'); }
 	public function cfgMail404() : string { return $this->getConfigVar('mail_404'); }
-// 	public function cfgLoadSidebars() : string { return $this->getConfigVar('load_sidebars'); }
 	public function cfgDirectoryIndex() : string { return $this->getConfigVar('directory_indexing'); }
 	public function cfgModuleAssets() : string { return $this->getConfigVar('module_assets'); }
 	public function cfgDotfiles() : bool { return $this->getConfigValue('dotfiles'); }
