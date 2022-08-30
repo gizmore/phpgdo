@@ -75,7 +75,7 @@ class GDT_Button extends GDT
 	    return $this->renderHTML();
 	}
 	
-	public function renderOrder() : string
+	public function renderTHead() : string
 	{
 		return GDT::EMPTY_STRING;
 	}

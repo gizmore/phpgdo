@@ -8,4 +8,4 @@ namespace GDO\Core\tpl;
  type="text"
  value="<?=html($field->filterVar($f))?>"
  size="5"
- placeholder="<?=t('object_filter')?>"  />
+ placeholder="<?=t('object_filter')?>" />

@@ -180,7 +180,7 @@ abstract class GDT
 			# HTML table submodes
 			case self::RENDER_THEAD: return $this->renderTHead();
 			case self::RENDER_ORDER: return $this->renderOrder();
-			case self::RENDER_FILTER: return $this->renderFilter(self::EMPTY_STRING);
+			case self::RENDER_FILTER: return self::EMPTY_STRING;
 			case self::RENDER_CELL: return $this->renderHTML();
 			case self::RENDER_TFOOT: return $this->renderTFoot();
 		}

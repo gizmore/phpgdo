@@ -56,4 +56,6 @@ Your playlists are ACL sharable.
  
  - A command to search the Handelsregister.
  
+ - AmateurCovers.net - A site about amateur music covers (youtube links?)
+ 
  
