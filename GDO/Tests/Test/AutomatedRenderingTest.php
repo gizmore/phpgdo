@@ -212,6 +212,9 @@ final class AutomatedRenderingTest extends TestCase
 		$gdt->renderForm();
 		$gdt->renderCard();
 		# html table rendering
+		$gdt->renderCell();
+		$gdt->renderTHead();
+		$gdt->renderTFoot();
 		return true;
 	}
 
