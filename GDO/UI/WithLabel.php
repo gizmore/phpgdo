@@ -54,7 +54,7 @@ trait WithLabel
 	#############
 	### Label ###
 	#############
-	public bool   $labelNone = false;
+	public bool   $labelNone = true;
 	public string $labelRaw;
 	public string $labelKey;
 	public ?array $labelArgs = null;

@@ -152,11 +152,11 @@ final class GDT_Redirect extends GDT
 	
 	public function renderHTML() : string
 	{
-		$ajax = '';
+// 		$ajax = '';
 		$url = isset($this->href) ? $this->href : $this->hrefBack();
 		if (Application::$INSTANCE->isAjax())
 		{
-			$ajax = $this->renderAjaxRedirect();
+// 			$ajax = $this->renderAjaxRedirect();
 		}
 		else
 		{
@@ -172,8 +172,9 @@ final class GDT_Redirect extends GDT
 		}
 		
 		$link = GDT_Link::make()->href($url);
+		$link = $link->render();
 		
-		return t('gdt_redirect_to', [$link->render()]) . $ajax;
+		return GDT_Panel::make()->text('gdt_redirect_to', [$link])->render();
 	}
 	
 	private function renderAjaxRedirect()
