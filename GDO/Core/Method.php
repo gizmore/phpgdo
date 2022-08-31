@@ -125,7 +125,12 @@ abstract class Method #extends GDT
 		return $this->getModule()->href($this->getMethodName(), $append);
 	}
 	
-	/**
+	public function hrefNoSEO(string $append='') : string
+	{
+		return $this->getModule()->hrefNoSEO($this->getMethodName(), $append);
+	}
+	
+/**
 	 * Get a method by cli convention. Aliases first, then module DOT method.
 	 * 
 	 * @param string $alias
@@ -207,7 +212,7 @@ abstract class Method #extends GDT
 			$ut = $user->getType();
 			if (!in_array($ut, $mt, true))
 			{
-				return $this->error('err_user_type', [Arrays::implodeHuman($mt)]);
+				return $this->error('err_user_type', [Arrays::implodeHuman($mt, 'or')]);
 			}
 		}
 		

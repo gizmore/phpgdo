@@ -56,7 +56,7 @@ final class Arrays
 	/**
 	 * Return comma seperated and a final "and" like foo, bar and boo.
 	 */
-	public static function implodeHuman(array $array) : string
+	public static function implodeHuman(array $array, string $conn='and') : string
 	{
 		switch (count($array))
 		{
@@ -64,7 +64,7 @@ final class Arrays
 			case 1: return array_pop($array);
 			default:
 				$last = array_pop($array);
-				return implode(', ', $array) . ' ' . t('and') . ' ' . $last;
+				return implode(', ', $array) . ' ' . t($conn) . ' ' . $last;
 		}
 	}
 	

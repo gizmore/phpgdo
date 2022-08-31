@@ -8,7 +8,6 @@ use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Message;
 use GDO\Net\GDT_Url;
-use GDO\Date\GDT_Date;
 use GDO\UI\GDT_Color;
 use GDO\Date\GDT_Timestamp;
 
@@ -28,7 +27,8 @@ final class Module_User extends GDO_Module
 	##############
 	### Module ###
 	##############
-	public int $priority = 4; # Start very early. Important for test chain.
+	# Start very early. Important for test chain.
+	public int $priority = 4;
 	
 	public function getDependencies() : array
 	{
@@ -81,10 +81,18 @@ final class Module_User extends GDO_Module
 		return [
 			GDT_Checkbox::make('hook_sidebar')->initial('1'),
 			GDT_Checkbox::make('about_me')->initial('1'),
+			GDT_Checkbox::make('fav_color')->initial('1'),
+			GDT_Checkbox::make('acl_relations')->initial('1'),
+			GDT_Checkbox::make('acl_levels')->initial('0'),
+			GDT_Checkbox::make('acl_permissions')->initial('0'),
 		];
 	}
 	public function cfgSidebar() : bool { return $this->getConfigValue('hook_sidebar'); }
 	public function cfgAboutMe() : bool { return $this->getConfigValue('about_me'); }
+	public function cfgFavColor() : bool { return $this->getConfigValue('fav_color'); }
+	public function cfgACLRelations() : bool { return $this->getConfigValue('acl_relations'); }
+	public function cfgACLLevels() : bool { return $this->getConfigValue('acl_levels'); }
+	public function cfgACLPermissions() : bool { return $this->getConfigValue('acl_permissions'); }
 	
 	################
 	### Settings ###
@@ -113,10 +121,13 @@ final class Module_User extends GDO_Module
 		
 	public function getUserSettings() : array
 	{
-		return [
-			GDT_Color::make('color'),
+		$settings = [
 			GDT_Gender::make('gender'),
 		];
+		if ($this->cfgFavColor()) {
+			$settings[] = GDT_Color::make('color');
+		}
+		return $settings;
 	}
 	
 	public function getUserSettingBlobs() : array

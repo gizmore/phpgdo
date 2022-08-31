@@ -73,24 +73,14 @@ function hrefDefault() : string
  * Append timezone and language to an url via dash paramter.
  * @see seo()
  */
-function href(string $module, string $method, string $append = null, bool $lang = true) : string
+function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS) : string
 {
-// 	if ($lang)
-// 	{
-// 		$lang = false;
-// 		if (!GDO_User::current()->isPersisted())
-// 		{
-// 			if (GDO_User::current()->getLangISO() !== GDO_LANGUAGE)
-// 			{
-// 				$lang = true;
-// 			}
-// 		}
-// 	}
+	$lang = true;
 	
 	$module = strtolower($module);
 	$method = strtolower($method);
 
-	if (GDO_SEO_URLS)
+	if ($seo)
 	{
 		$href = GDO_WEB_ROOT . "{$module}/{$method}";
 		$q = [];
@@ -149,9 +139,14 @@ function href(string $module, string $method, string $append = null, bool $lang 
 	return $href;
 }
 
+function hrefNoSeo(string $module, string $method, string $append = null) : string
+{
+	return href($module, $method, $append, false);
+}
+
 function seo($str)
 {
-	return trim(preg_replace('#[^{}\\.\\p{L}0-9]#', '_', $str), '_');
+	return trim(preg_replace('#[^\\-{}\\.\\p{L}0-9]#', '_', $str), '_');
 }
 
 function quote($value)

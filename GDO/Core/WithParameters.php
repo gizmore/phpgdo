@@ -162,6 +162,7 @@ trait WithParameters
 		{
 			$name = $gdt->getName(); # Has to supper getName()
 			$this->parameterCache[$name] = $gdt;
+			$gdt->inputs($this->inputs);
 		}
 	}
 	

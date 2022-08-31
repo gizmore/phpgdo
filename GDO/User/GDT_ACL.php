@@ -135,38 +135,48 @@ final class GDT_ACL extends GDT
 	###########
 	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason) : bool
 	{
+		$mu = Module_User::instance();
+		
 		# Self is fine
 		if ($user === $target)
 		{
 			return true;
 		}
 		
-		# Check level
-		$minLevel = $this->aclLevel->getValue();
-		$userLevel = $user->getLevel();
-		if ($userLevel < $minLevel)
-		{
-			$reason = t('err_only_level_access', [$minLevel]);
-			return false;
-		}
-		
 		# Check relation
-		if (!$this->aclRelation->hasAccess($user, $target, $reason))
+		if ($mu->cfgACLRelations())
 		{
-			return false;
-		}
-		
-		# Check permission
-		if ($permission = $this->aclPermission->getValue())
-		{
-			if (!$user->hasPermissionObject($permission))
+			if (!$this->aclRelation->hasAccess($user, $target, $reason))
 			{
-				$reason = t('err_only_permission_access', [$permission->renderName()]);
 				return false;
 			}
 		}
 		
-		# This is fine. Ô-o
+		# Check level
+		if ($mu->cfgACLLevels())
+		{
+			$minLevel = $this->aclLevel->getValue();
+			$userLevel = $user->getLevel();
+			if ($userLevel < $minLevel)
+			{
+				$reason = t('err_only_level_access', [$minLevel]);
+				return false;
+			}
+		}
+		
+		# Check permission
+		if ($mu->cfgACLPermissions())
+		{
+			if ($permission = $this->aclPermission->getValue())
+			{
+				if (!$user->hasPermissionObject($permission))
+				{
+					$reason = t('err_only_permission_access', [$permission->renderName()]);
+					return false;
+				}
+			}
+		}
+		
 		return true;
 	}
 	

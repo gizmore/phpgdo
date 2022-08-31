@@ -14,6 +14,7 @@ use GDO\UI\GDT_Divider;
 use GDO\User\GDT_ACL;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_HR;
+use GDO\User\Module_User;
 
 /**
  * GDO base module class.
@@ -254,6 +255,11 @@ class GDO_Module extends GDO
 	public function href(string $methodName, string $append='') : string
 	{
 		return href($this->getName(), $methodName, $append);
+	}
+	
+	public function hrefNoSEO(string $methodName, string $append='') : string
+	{
+		return hrefNoSEO($this->getName(), $methodName, $append);
 	}
 	
 	public function href_install_module() : string { return href('Admin', 'Install', '&module='.$this->getName()); }
@@ -795,18 +801,31 @@ class GDO_Module extends GDO
 		$acl = GDT_ACL::make("_acl_{$name}");
 		$this->userConfigCacheACL[$name] = $acl;
 		
-		$level = $acl->aclLevel;
 		$relation = $acl->aclRelation;
+		$level = $acl->aclLevel;
 		$permission = $acl->aclPermission;
 		
+		$mu = Module_User::instance();
+		$cont = GDT_Container::make()->horizontal();
+		
 		# Each var results in 3 GDT ACL vars in config cache.
-		$this->userConfigCache[$level->name] = $level;
-		$this->userConfigCache[$relation->name] = $relation;
-		$this->userConfigCache[$permission->name] = $permission;
+		if ($mu->cfgACLRelations())
+		{
+			$this->userConfigCache[$relation->name] = $relation;
+			$cont->addField($relation);
+		}
+		if ($mu->cfgACLLevels())
+		{
+			$this->userConfigCache[$level->name] = $level;
+			$cont->addField($level);
+		}
+		if ($mu->cfgACLPermissions())
+		{
+			$this->userConfigCache[$permission->name] = $permission;
+			$cont->addField($permission);
+		}
 		
 		# we add the GDT + a container with 3 acl fields to the container cache.
-		$cont = GDT_Container::make()->horizontal();
-		$cont->addFields($relation, $level, $permission);
 		$this->userConfigCacheContainers[] = $cont;
 	}
 	
