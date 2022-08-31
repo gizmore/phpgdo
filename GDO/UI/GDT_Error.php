@@ -19,6 +19,16 @@ final class GDT_Error extends GDT_Panel
 	{
 		return self::make()->exception($t);
 	}
+	
+	############
+	### Code ###
+	############
+	public int $code = 200;
+	public function code(int $code) : self
+	{
+		$this->code = $code;
+		return $this;
+	}
 
 	###########
 	### GDT ###
@@ -40,7 +50,7 @@ final class GDT_Error extends GDT_Panel
 	
 	public function renderHTML() : string
 	{
-		hdrc('HTTP/1.1 ' . GDO_Exception::DEFAULT_ERROR_CODE  .' GDO Error');
+		hdrc('HTTP/1.1 ' . $this->code . ' GDO Error');
 // 		hdr('X-GDO-ERROR: ' . $this->renderText());
 		return parent::renderHTML();
 	}
