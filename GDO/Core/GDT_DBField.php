@@ -10,7 +10,6 @@ namespace GDO\Core;
  * 
  * - Attributes bool $primary
  * - Attributes bool $unique
- * - Attributes bool $virtual
  * 
  * - Defaults $searchable, $filterable and $orderable to true.
  * 
@@ -60,16 +59,6 @@ abstract class GDT_DBField extends GDT_Field
 	public function isUnique() : bool
 	{
 		return $this->unique;
-	}
-	
-	###############
-	### Virtual ###
-	###############
-	public bool $virtual = false;
-	public function virtual(bool $virtual = true) : self
-	{
-		$this->virtual = $virtual;
-		return $this;
 	}
 	
 	##################

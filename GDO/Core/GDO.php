@@ -1105,7 +1105,7 @@ abstract class GDO extends GDT
 		{
 			foreach ($this->gdoColumnsCache() as $column)
 			{
-				if (!$column->virtual)
+				if (!$column->isVirtual())
 				{
 					if ( ($this->dirty === true) || (isset($this->dirty[$column->name])) )
 					{

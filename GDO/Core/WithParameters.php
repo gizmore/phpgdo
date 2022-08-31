@@ -29,21 +29,6 @@ trait WithParameters
 	##################
 	### Parameters ###
 	##################
-// 	/**
-// 	 * Compose all parameters. Not needed yet?
-// 	 *
-// 	 * @return GDT[]
-// 	 */
-// 	public function gdoComposeParameters() : array
-// 	{
-// 		return $this->gdoParameters();
-// 	}
-	
-// 	public function gdoHasParameter(string $key) : bool
-// 	{
-// 		return isset($this->gdoParameterCache()[$key]);
-// 	}
-	
 	/**
 	 * Get a parameter by key.
 	 * If key is an int, get positional parameter N.
@@ -54,7 +39,6 @@ trait WithParameters
 		{
 			if ($validate)
 			{
-// 				$gdt->reset();
 				if (!$gdt->validated())
 				{
 					if ($throw)
@@ -160,9 +144,12 @@ trait WithParameters
 	{
 		foreach ($params as $gdt)
 		{
-			$name = $gdt->getName(); # Has to supper getName()
+			$name = $gdt->getName(); # Has to suppprt getName()!
 			$this->parameterCache[$name] = $gdt;
-			$gdt->inputs($this->inputs);
+			if (isset($this->inputs))
+			{
+				$gdt->inputs($this->inputs);
+			}
 		}
 	}
 	
