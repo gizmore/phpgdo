@@ -29,6 +29,7 @@ class GDT_Card extends GDT
 {
 	use WithGDO;
 	use WithTitle;
+	use WithSubTitle;
 	use WithAvatar;
 	use WithFields;
 	use WithActions;
@@ -184,21 +185,27 @@ class GDT_Card extends GDT
 	    return $this;
 	}
 	
-	public function subtitle(GDT $gdt) : self
-	{
-		$this->subtitle = $gdt;
-		return $this;
-	}
+// 	public function subtitle(GDT $gdt) : self
+// 	{
+// 		$this->subtitle = $gdt;
+// 		return $this;
+// 	}
 	
-	public function hasSubTitle() : bool
-	{
-		return isset($this->subtitle);
-	}
+// 	public function hasSubTitle() : bool
+// 	{
+// 		return isset($this->subtitle);
+// 	}
 	
-	public function renderSubTitle() : string
-	{
-		return $this->subtitle->render();
-	}
+// 	public function renderSubTitle() : string
+// 	{
+// 		$foo = $this->subtitle->render();
+// 		if (!$foo)
+// 		{
+// 			xdebug_break();
+// 			return GDT::EMPTY_STRING;
+// 		}
+// 		return $foo;
+// 	}
 	
 	#####################
 	### Edited Footer ###

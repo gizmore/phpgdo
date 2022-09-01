@@ -123,7 +123,7 @@ abstract class GDT
 // 	const RENDER_RESERVED_8 = 8; # knows
 // 	const RENDER_RESERVED_9 = 9; # :) ... maybe soap? maybe the new safe JSON?
 	# HTML format rendering   #### Your Flight!
-	const RENDER_WEBSITE   = 10; # <html> page skeleton, html init mode that switches to RENDER_HTML.
+	const RENDER_WEBSITE= 10; # <html> page skeleton, html init mode that switches to RENDER_HTML.
 	const RENDER_HTML   = 11; # <div> plain html mode
 	const RENDER_CARD   = 12; # <div> many ui frameworks use cards...
 	const RENDER_LIST   = 13; # <li>
@@ -255,8 +255,8 @@ abstract class GDT
 	 */
 	public function renderMode(int $mode=-1)
 	{
-		$mode = $mode < 0 ? Application::$INSTANCE->modeDetected : $mode;
 		$app = Application::$INSTANCE;
+		$mode = $mode < 0 ? $app->modeDetected : $mode;
 		$old = $app->mode;
 		$app->mode($mode);
 		$result = $this->renderGDT();

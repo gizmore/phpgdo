@@ -40,7 +40,7 @@ class GDT_SearchField extends GDT_String
 		$name = $this->getName();
 		return [
 			[$name => 'giz'],
-			[$name => 'ess'],
+// 			[$name => 'ess'],
 		];
 	}
 

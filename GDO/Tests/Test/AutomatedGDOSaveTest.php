@@ -84,6 +84,7 @@ final class AutomatedGDOSaveTest extends TestCase
 					$this->gdoFailure++;
 					Application::$INSTANCE->reset();
 				}
+				CLI::flushTopResponse();
 			}
 		}
 	}
@@ -113,17 +114,17 @@ final class AutomatedGDOSaveTest extends TestCase
 	
 	private function saveTestGDO(GDO $gdo) : bool
 	{
-		if ($gdo instanceof \GDO\News\GDO_NewsComments)
-		{
-			xdebug_break();
-		}
-		
 		$success = true;
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
 			$gdt->inputs(); # clear input
 			$this->addPlugVars($gdt->plugVars());
+		}
+		
+		if ($gdo instanceof \GDO\LinkUUp\LUP_MessageSent)
+		{
+			xdebug_break();
 		}
 		
 		$permutations = new Permutations($this->plugVariants);
@@ -137,9 +138,25 @@ final class AutomatedGDOSaveTest extends TestCase
 				if ($new->isValid())
 				{
 					$new->replace();
-// 					$new->delete(); # might ruin custom test chains :(
+					# might ruin custom test chains :(
+// 					$new->delete(); 
 					$success = true;
 					break;
+				}
+				else
+				{
+					foreach ($gdo->gdoColumnsCache() as $gdt)
+					{
+						if ($gdt->hasError())
+						{
+							$this->error('%s: %s could not save - %s %s',
+								Color::red('WARNING'),
+								TextStyle::bold(get_class($gdo)),
+								$gdt->getName(),
+								TextStyle::italic($gdt->renderError()),
+							);
+						}
+					}
 				}
 			}
 			catch (\Throwable $ex)

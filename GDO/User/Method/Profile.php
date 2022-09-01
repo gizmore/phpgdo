@@ -10,7 +10,6 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
 use GDO\User\Module_User;
 use GDO\UI\GDT_Tooltip;
-use GDO\Core\GDT_String;
 
 /**
  * Show a user's profile.
@@ -67,11 +66,47 @@ final class Profile extends MethodCard
 		$card->creatorHeader('profile_user', 'profile_activity');
 		$card->title('mt_user_profile', [$user->renderUserName()]);
 		$modules = ModuleLoader::instance()->getEnabledModules();
-		$card->subtitle(GDT_String::make()->labelNone());
+		$card->subtitle('profile_level', [
+			$this->getHighestPermission($user),
+			$user->getLevel()]);
 		foreach ($modules as $module)
 		{
 			$this->createCardB($card, $module);
 		}
+	}
+	
+	/**
+	 * Get the highest permission name/title for user.
+	 */
+	private function getHighestPermission(GDO_User $user) : string
+	{
+		$high = -1;
+		$highn = null;
+		$perms = $user->loadPermissions();
+		foreach ($perms as $name => $level)
+		{
+			if ($level > $high)
+			{
+				$high = $level;
+				$highn = $name;
+			}
+		}
+		if ($highn === null)
+		{
+			if ($user->isMember())
+			{
+				return t('member');
+			}
+			elseif ($user->isGuest(false))
+			{
+				return t('guest');
+			}
+			else
+			{
+				return t('ghost');
+			}
+		}
+		return t("perm_$highn");
 	}
 	
 	private function createCardB(GDT_Card $card, GDO_Module $module) : void

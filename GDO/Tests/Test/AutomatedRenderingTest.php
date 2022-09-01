@@ -92,6 +92,8 @@ final class AutomatedRenderingTest extends TestCase
 					$this->error(Debug::backtraceException($t, false, $t->getMessage()));
 					$this->fieldsFailed++;
 				}
+				
+				CLI::flushTopResponse();
 			}
 		}
 		$this->reportStatistics();

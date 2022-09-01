@@ -15,6 +15,7 @@ use GDO\Tests\TestCase;
 use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
 use GDO\UI\GDT_Page;
+use GDO\Session\GDO_Session;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -165,6 +166,12 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 
 	if (Installer::installModules($modules))
 	{
+		if (module_enabled('Session'))
+		{
+			GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
+			GDO_Session::instance();
+		}
+		define('GDO_CORE_STABLE', true); # all fine? @deprecated
 		foreach ($modules as $module)
 		{
 			Module_Tests::runTestSuite($module);
@@ -178,6 +185,12 @@ else # All!
 	$loader->initModules();
 	if (Installer::installModules($modules))
 	{
+		if (module_enabled('Session'))
+		{
+			GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
+			GDO_Session::instance();
+		}
+		define('GDO_CORE_STABLE', true); # all fine? @deprecated
 		echo "Running tests for all modules.\n";
 		foreach ($modules as $module)
 		{

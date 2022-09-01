@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\Application;
 use GDO\Core\GDT_Hook;
 use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
@@ -48,13 +47,10 @@ class UserEdit extends MethodForm
 		return $this->gdoParameterValue('user');
 	}
 	
-	public function beforeExecute() : void
+	public function onRenderTabs() : void
 	{
-	    if (Application::$INSTANCE->isHTML())
-	    {
-    	    $this->renderAdminBar();
-    	    $this->renderPermissionBar();
-	    }
+   	    $this->renderAdminBar();
+   	    $this->renderPermissionBar();
 	}
 
 	public function createForm(GDT_Form $form) : void

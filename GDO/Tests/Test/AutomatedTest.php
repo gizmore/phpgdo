@@ -11,6 +11,7 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
 use function PHPUnit\Framework\assertLessThanOrEqual;
 use function PHPUnit\Framework\assertLessThan;
+use GDO\CLI\CLI;
 
 /**
  * Auto coverage test.
@@ -89,8 +90,9 @@ final class AutomatedTest extends TestCase
 					$gdt->toVar($value);
 					$count++;
 					assertTrue(!!$gdt, "Test if {$gdt->gdoClassName()} can be created.");
-					continue;
 				}
+				
+				CLI::flushTopResponse();
 			}
 		}
 		$this->message('%d different GDT tested.', $count);
@@ -125,6 +127,7 @@ final class AutomatedTest extends TestCase
 					assertInstanceOf(GDO::class, $gdo,
 						'Test if ' . $klass . ' is a GDO.');
 				}
+				CLI::flushTopResponse();
 			}
 		}
 		

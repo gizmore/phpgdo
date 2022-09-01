@@ -35,7 +35,7 @@ trait WithFileCache
 		$key .= $sep;
 		$key .= Trans::$ISO;
 		$key .= $sep;
-		$key .= $app->modeDetected;
+		$key .= $app->mode;
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
 			$key .= $sep;

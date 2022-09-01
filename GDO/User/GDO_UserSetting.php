@@ -30,7 +30,7 @@ final class GDO_UserSetting extends GDO
 		return [
 			GDT_User::make('uset_user')->primary(),
 			GDT_Name::make('uset_name')->primary()->unique(false),
-			GDT_String::make('uset_value'),
+			GDT_String::make('uset_var'),
 		    GDT_Index::make('uset_user_index')->indexColumns('uset_user')->hash(),
 		];
 	}
@@ -69,17 +69,17 @@ final class GDO_UserSetting extends GDO
 		$op = strtoupper($op);
 		if ($op === 'LIKE')
 		{
-			$query->where("uset_value LIKE \"{$var}\"");
+			$query->where("uset_var LIKE \"{$var}\"");
 		}
 		else
 		{
 			$var = quote($var);
-			$query->where("uset_value $op $var");
+			$query->where("uset_var $op $var");
 		}
 		
 		if ($all)
 		{
-			$query->orWhere('uset_value IS NULL');
+			$query->orWhere('uset_var IS NULL');
 		}
 		
 		return $query->fetchTable(GDO_User::table());

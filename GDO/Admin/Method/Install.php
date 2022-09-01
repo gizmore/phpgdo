@@ -26,13 +26,13 @@ class Install extends MethodForm
 {
 	use MethodAdmin;
 	
-// 	private GDO_Module $configModule;
-	
-// 	public function isShownInSitemap() : bool { return false; }
-
 	public function isTrivial() : bool { return false; }
 
-	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
+	/**
+	 * Install is called from Configure.
+	 * No double Tabs please.
+	 */
+	public function onRenderTabs() : void {}
 	
 	public function getFormName() : string
 	{

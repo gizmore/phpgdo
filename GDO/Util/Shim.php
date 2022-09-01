@@ -1,4 +1,11 @@
 <?php
+use GDO\Core\GDO_Exception;
+
+/**
+ * Backwards compatibility.
+ * PHP7.4 will not work though :(
+ */
+
 if ( !function_exists('getallheaders'))
 {
 	/**
@@ -6,19 +13,19 @@ if ( !function_exists('getallheaders'))
 	 *
 	 * @return string[string] The HTTP header key/value pairs.
 	 */
-	function getallheaders()
+	function getallheaders() : array
 	{
-		$headers = array();
+		$headers = [];
 
-		$copy_server = array(
+		$copy_server = [
 			'CONTENT_TYPE' => 'Content-Type',
 			'CONTENT_LENGTH' => 'Content-Length',
 			'CONTENT_MD5' => 'Content-Md5',
-		);
+		];
 
 		foreach ($_SERVER as $key => $value)
 		{
-			if (substr($key, 0, 5) === 'HTTP_')
+			if (str_starts_with($key, 'HTTP_'))
 			{
 				$key = substr($key, 5);
 				if ( !isset($copy_server[$key]) || !isset($_SERVER[$key]))
@@ -57,7 +64,7 @@ if ( !function_exists('getallheaders'))
 
 if ( !function_exists('openssl_random_pseudo_bytes'))
 {
-	function openssl_random_pseudo_bytes($length, $crypto_strong)
+	function openssl_random_pseudo_bytes(int $length, bool $crypto_strong) : string 
 	{
 		$rand = '';
 		for ($i = 0; $i < $length; $i++)
@@ -70,16 +77,27 @@ if ( !function_exists('openssl_random_pseudo_bytes'))
 
 if ( !function_exists('str_starts_with'))
 {
-	function str_starts_with($haystack, $needle)
+	function str_starts_with(string $haystack, string $needle) : bool
 	{
-		return $needle && (strpos($haystack, $needle) === 0);
+		return strpos($haystack, $needle) === 0;
 	}
 }
 
 if ( !function_exists('str_ends_with'))
 {
-	function str_ends_with($haystack, $needle)
+	function str_ends_with(string $haystack, string $needle) : bool
 	{
 		return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+	}
+}
+
+/**
+ * Dangling breakpoints throw an exception.
+ */
+if ( !function_exists('xdebug_break'))
+{
+	function xdebug_break() : void
+	{
+		throw new GDO_Exception('A breakpoint has been encountered. OOPS!');
 	}
 }

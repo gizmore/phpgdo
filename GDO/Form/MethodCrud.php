@@ -10,7 +10,6 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Date\Time;
-use GDO\Util\Common;
 use GDO\Core\GDT_CreatedBy;
 use GDO\UI\GDT_EditButton;
 
@@ -102,9 +101,10 @@ abstract class MethodCrud extends MethodForm
 	 * @return string
 	 */
 	public function crudName() { return 'id'; }
-	public function getCRUDID()
+	
+	public function getCRUDID() : string
 	{
-	    return Common::getRequestString($this->crudName());
+	    return $this->gdoParameterVar($this->crudName());
 	}
 
 	##############

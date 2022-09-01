@@ -14,7 +14,7 @@ use GDO\Table\GDT_List;
 ###################
 ### Search Form ###
 ###################
-if ($field->headers)
+if (isset($field->headers))
 {
     # The list search criteria form.
     $frm = GDT_Form::make($field->headers->name)->verb('GET');
@@ -78,4 +78,5 @@ if ($field->headers)
         $accordeon = GDT_Accordeon::make()->addField($frm)->titleRaw($frm->displaySearchCriteria());
         echo $accordeon->renderHTML();
     }
+    
 }

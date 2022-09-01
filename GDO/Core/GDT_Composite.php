@@ -64,6 +64,14 @@ class GDT_Composite extends GDT_Container
 	###################
 	### Var / Value ###
 	###################
+	public function gdo(GDO $gdo = null) : self
+	{
+		array_map(function(GDT $gdt) use ($gdo) {
+			$gdt->gdo($gdo);
+		}, $this->getAllFields());
+		return $this;
+	}
+	
 	public function getGDOData() : ?array
 	{
 		$gdodata = [];
@@ -148,5 +156,21 @@ class GDT_Composite extends GDT_Container
 		}
 		return $plugs;
 	}
-
+	
+	##############
+	### Render ###
+	##############
+	public function renderError() : string
+	{
+		$errors = [];
+		foreach ($this->getAllFields() as $gdt)
+		{
+			if ($gdt->hasError())
+			{
+				$errors[] = "{$gdt->getName()}: {$gdt->renderError()}";
+			}
+		}
+		return implode(' - ', $errors);
+	}
+	
 }

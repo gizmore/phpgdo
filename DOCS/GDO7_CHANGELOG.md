@@ -30,9 +30,11 @@ Please read it upside down, from bottom to top and sometimes again.
  - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again.
 
 
-## 7.0.1 / released 14.Aug.2022
+## 7.0.1 / released 01.Sep.2022
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
+
+ - [Module_Perf](../GDO/Perf/Module_Perf.php) now additionally utilizes PHP [getrusage](https://www.php.net/manual/en/function.getrusage.php). 
 
  - Memcached now does a fallback to filecache API, if config.php GDO_MEMCACHED ist set to 2. GDO_MEMCACHED is now an INT from 0-2.
 

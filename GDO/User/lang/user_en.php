@@ -7,7 +7,6 @@ return [
 	'profile_views' => 'Profile Views',
 	'cfg_about_me' => 'About Me',
 	
-	
 	'enum_none' => 'not specified',
 	'enum_male' => 'male',
 	'enum_female' => 'female',
@@ -16,6 +15,7 @@ return [
 	'last_activity' => 'Last activity',
 
 	'user_name' => 'Username',
+	'profile_level' => 'This %s has a user level of %s.',
 	
 	'link_your_profile' => 'Your profile',
 

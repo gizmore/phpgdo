@@ -13,7 +13,10 @@ class GDT_Name extends GDT_String
 {
 	use WithGDO;
 	
-	public function defaultLabel() : self { return $this->label('name'); }
+	public function defaultLabel() : self
+	{
+		return $this->label('name');
+	}
 
 	const LENGTH = 64;
 	
@@ -38,7 +41,7 @@ class GDT_Name extends GDT_String
 	    {
 		    return html($var);
 	    }
-	    return '';
+	    return GDT::EMPTY_STRING;
 	}
 	
 	public function renderCLI() : string
@@ -53,8 +56,10 @@ class GDT_Name extends GDT_String
 	
 	public function plugVars() : array
 	{
+		static $plugNum = 0; # @TODO: meh :( I'd like to have some scheme here, but meh
+		$plugNum++;
 		return [
-			[$this->getName() => 'Name_' . self::$GDT_COUNT],
+			[$this->getName() => "Name_$plugNum"],
 		];
 	}
 	

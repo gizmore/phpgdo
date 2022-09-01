@@ -1,7 +1,6 @@
 <?php
 namespace GDO\CLI;
 
-use GDO\Core\Logger;
 use GDO\Core\Debug;
 
 /**
@@ -11,7 +10,7 @@ use GDO\Core\Debug;
  * Turn pathes to OS DIR_SEPARATOR path.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.10.0
  */
 final class Process
@@ -19,10 +18,8 @@ final class Process
 
 	/**
 	 * Check if the operating system is Windows.
-	 *
-	 * @return boolean
 	 */
-	public static function isWindows()
+	public static function isWindows() : bool
 	{
 		return PHP_OS === 'WINNT';
 	}
@@ -30,12 +27,10 @@ final class Process
 	/**
 	 * Convert DIR separator for operating System.
 	 * On Windows we use backslash.
-	 * On Linux we keep forward slash, which is default in gdo6.
-	 *
-	 * @param string $path
-	 * @return string
+	 * On Linux we keep forward slash, which is default in GDOv7.
+	 * @deprecated Nobody cares?
 	 */
-	public static function osPath($path)
+	public static function osPath(string $path) : string
 	{
 		if (self::isWindows())
 		{
@@ -44,6 +39,10 @@ final class Process
 		return $path;
 	}
 
+	/**
+	 * Get the number of CPU cores.
+	 * Used in Module_FFMpeg.
+	 */
 	public static function cores() : int
 	{
 		try
@@ -60,7 +59,6 @@ final class Process
 		catch (\Throwable $ex)
 		{
 			Debug::debugException($ex, false);
-			Logger::logException($ex);
 			return 1;
 		}
 	}
@@ -94,10 +92,11 @@ final class Process
 			fclose($pipes[2]);
 			proc_close($process);
 
-			if ($stdout !== '')
-			{
-				return trim($stdout, "\r\n\t ");
-			}
+			# Only return first executeable
+			$stdout = str_replace("\r", '', $stdout);
+			$files = explode("\n", $stdout);
+			$file = trim($files[0]);
+			return $file;
 		}
 		return null;
 	}

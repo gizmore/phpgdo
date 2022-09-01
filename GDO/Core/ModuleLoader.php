@@ -470,7 +470,10 @@ final class ModuleLoader
 		    			$query->where('module_name='.quote($singleModuleName));
 		    		}
 		    		$data = $query->exec()->fetchAllRows();
-		    		Cache::fileSetSerialized('gdo_modulevars', $data);
+		    		if (!$singleModuleName)
+		    		{
+		    			Cache::fileSetSerialized('gdo_modulevars', $data);
+		    		}
 		    	}
 		    	
         		# Assign them to the modules
@@ -489,7 +492,7 @@ final class ModuleLoader
         		}
 		    }
 		}
-		catch (\GDO\Core\GDO_DBException $e)
+		catch (\GDO\Core\GDO_DBException $ex)
 		{
 			$app = Application::$INSTANCE;
 		    if ($app->isCLI()) # && (!$app->isInstall()))

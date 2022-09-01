@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * Adds a title to a GDT.
  * This title is not rendered with a H tag.
@@ -12,8 +14,10 @@ namespace GDO\UI;
  */
 trait WithTitle
 {
+	public string $titleRaw;
 	public string $titleKey;
 	public ?array $titleArgs;
+	
 	public function title(string $key, array $args=null) : self
 	{
 		unset($this->titleRaw);
@@ -22,10 +26,13 @@ trait WithTitle
 	    return $this;
 	}
 	
-	public string $titleRaw;
-	public function titleRaw(string $title) : self
+	public function titleRaw(?string $title) : self
 	{
-	    $this->titleRaw = $title;
+		unset($this->titleRaw);
+		if ($title)
+		{
+			$this->titleRaw = $title;
+		}
 	    unset($this->titleKey);
 	    unset($this->titleArgs);
 	    return $this;
@@ -66,7 +73,7 @@ trait WithTitle
 		}
 		else
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 	}
 	

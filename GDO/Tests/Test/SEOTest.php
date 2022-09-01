@@ -5,8 +5,6 @@ use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Tests\AutomatedTestCase;
 use function PHPUnit\Framework\assertNotEquals;
-use GDO\UI\Color;
-use GDO\UI\TextStyle;
 
 /**
  * Test if all methods have a title and description.

@@ -102,6 +102,13 @@ class Application extends GDT
 				self::$RESPONSE_CODE = $code;
 // 			}
 		}
+		if ($code >= 500)
+		{
+			if (defined('GDO_CORE_STABLE'))
+			{
+				xdebug_break();
+			}
+		}
 	}
 
 	public static function isError() : bool
@@ -119,7 +126,7 @@ class Application extends GDT
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
 	public function isWebserver() : bool { return !$this->isCLI(); }
-	# render
+	# Render
 	public function isCLI() : bool { return $this->cli; }
 	public function isAjax() : bool { return $this->ajax; }
 	public function isWebsocket() : bool { return false; }
@@ -128,15 +135,17 @@ class Application extends GDT
 	public function isXML() : bool { return $this->modeDetected === GDT::RENDER_XML; }
 	public function isPDF() : bool { return $this->modeDetected === GDT::RENDER_PDF; }
 	public function isGTK() : bool { return $this->modeDetected === GDT::RENDER_GTK; }
-	# 
-// 	public function isAPI() : bool { return !$this->isWebserver(); }
+	# Install / Tests
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
 
 	/**
 	 * Is a session handler supported?
 	 */
-	public function hasSession() : bool { return module_enabled('Session'); }
+	public function hasSession() : bool
+	{
+		return module_enabled('Session');
+	}
 	
 	/**
 	 * Call when you create the next command in a loop.
@@ -304,48 +313,6 @@ class Application extends GDT
 			$_REQUEST = array_merge($_REQUEST, $data);
 		}
 	}
-	
-// 	#######################
-// 	### Error / Message ###
-// 	#######################
-// 	public static function error(string $key, array $args = null) : bool
-// 	{
-// 		return false;
-// 	}
-	
-// 	#############
-// 	### Mo/Me ###
-// 	#############
-// 	public Method $method;
-// 	public string $mo;
-// 	public string $me;
-	
-// 	public function method(Method $method) : self
-// 	{
-// // 		$this->mo = $method->getModule()->getName();
-// // 		$this->me = $method->getName();
-// 		$this->method = $method;
-// 		return $this;
-// 	}
-	
-// 	public function mo(string $mo) : self
-// 	{
-// 		$this->mo = strtolower($mo);
-// 		return $this;
-// 	}
-	
-// 	public function me(string $me) : self
-// 	{
-// 		$this->me = strtolower($me);
-// 		return $this;
-// 	}
-	
-// 	public function getMoMe() : string
-// 	{
-// 		$me = $this->method->getMethodName();
-// 		$mo = $this->method->getModuleName();
-// 		return strtolower("{$mo}::{$me}");
-// 	}
 	
 }
 

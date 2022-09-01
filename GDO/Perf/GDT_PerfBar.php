@@ -15,6 +15,7 @@ use GDO\Mail\Mail;
 use GDO\CLI\CLI;
 use GDO\Core\GDT_UInt;
 use GDO\DB\Cache;
+use GDO\CLI\Process;
 
 /**
  * Performance statistics panel.
@@ -37,6 +38,9 @@ final class GDT_PerfBar extends GDT_Panel
 		$phpTime = $totalTime - Database::$QUERY_TIME;
 		$memphp = memory_get_peak_usage(false);
 		$memreal = memory_get_peak_usage(true);
+		
+		$res = self::getResourceUsage();
+		
 		return [
 			'logWrites' => Logger::$WRITES,
 
@@ -74,7 +78,55 @@ final class GDT_PerfBar extends GDT_Panel
 // 		    'gdoHookNames' => GDT_Hook::$CALL_NAMES,
 			'gdoIPC' => GDT_Hook::$IPC_CALLS,
 			'gdoMails' => self::getMailCount(),
+			
+			'blocksSent' => $res['ru_oublock'],
+			'blocksReceived' => $res['ru_inblock'],
+			
+			'ipcSent' => $res['ru_msgsnd'],
+			'ipcReceived' => $res['ru_msgrcv'],
+			
+			'rssMaximum' => $res['ru_maxrss'],
+			'rssShared' => $res['ru_ixrss'],
+			'rssUnshared' => $res['ru_idrss'],
+		
+			'pageSoft' => $res['ru_minflt'],
+			'pageHard' => $res['ru_majflt'],
+			
+			'signals' => $res['ru_nsignals'],
+			
+			'ctxSwitchV' => $res['ru_nvcsw'],
+			'ctxSwitchIV' => $res['ru_nivcsw'],
+			'ctxSwap' => $res['ru_nswap'],
 		];
+	}
+	
+	public static function getResourceUsage() : array
+	{
+		$res = getrusage();
+		if (Process::isWindows())
+		{
+			$res = array_merge($res, [
+				'ru_oublock' => '?',
+				'ru_inblock' => '?',
+				
+				'ru_msgsnd' => '?',
+				'ru_msgrcv' => '?',
+				
+// 				'ru_maxrss' => $res['ru_maxrss'],
+				'ru_ixrss' => '?',
+				'ru_idrss' => '?',
+				
+				'ru_minflt' => '?',
+// 				'ru_majflt' => $res['ru_majflt'],
+				
+				'ru_nsignals' => '?',
+				
+				'ru_nvcsw' => '?',
+				'ru_nivcsw' => '?',
+				'ru_nswap' => '?',
+			]);
+		}
+		return $res;
 	}
 	
 	private static function getMailCount() : int

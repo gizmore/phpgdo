@@ -43,7 +43,7 @@ class Permissions extends MethodQueryTable
 		];
 	}
 	
-	public function beforeExecute() : void
+	public function onRenderTabs() : void
 	{
 	    $this->renderAdminBar();
 	    $this->renderPermissionBar();

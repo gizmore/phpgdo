@@ -3,8 +3,6 @@ namespace GDO\Core;
 
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Error;
-use GDO\UI\TextStyle;
-use GDO\UI\Color;
 use GDO\UI\GDT_Success;
 
 /**
@@ -28,8 +26,6 @@ final class Website
 	############
 	/**
 	 * HTML page LINK elements.
-	 * array<array<string>>
-	 * @var array
 	 */
 	private static array $LINKS = [];
 	
@@ -167,17 +163,17 @@ final class Website
 	{
 		$app = Application::$INSTANCE;
 		$app->setResponseCode($code);
-		if ($app->isCLI() || $app->isUnitTests())
-		{
-			echo TextStyle::bold(Color::red(t($key, $args))) . "\n";
-		}
+// 		if ($app->isCLI() || $app->isUnitTests())
+// 		{
+// 			echo TextStyle::bold(Color::red(t($key, $args))) . "\n";
+// 		}
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));
 		}
 		$error = GDT_Error::make()->
-		titleRaw($titleRaw)->
-		text($key, $args);
+			titleRaw($titleRaw)->
+			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($error);
 	}
 	
@@ -185,10 +181,10 @@ final class Website
 	{
 		$app = Application::$INSTANCE;
 		$app->setResponseCode($code);
-		if ($app->isCLI() || $app->isUnitTests())
-		{
-			echo Color::green(t($key, $args)) . "\n";
-		}
+// 		if ($app->isCLI() || $app->isUnitTests())
+// 		{
+// 			echo Color::green(t($key, $args)) . "\n";
+// 		}
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));

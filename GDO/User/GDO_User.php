@@ -311,8 +311,16 @@ final class GDO_User extends GDO
 	
 	public function isAdmin() : bool { return $this->hasPermission('admin'); }
 	public function isStaff() : bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
-	public function hasPermission(string $permission) : bool { return array_key_exists($permission, $this->loadPermissions()); }
-	public function hasPermissionObject(GDO_Permission $permission) : bool { return $this->hasPermission($permission->getName()); }
+	
+	public function hasPermission(string $permission) : bool
+	{
+		return array_key_exists($permission, $this->loadPermissions());
+	}
+	
+	public function hasPermissionObject(GDO_Permission $permission) : bool
+	{
+		return $this->hasPermission($permission->getName());
+	}
 	
 	public function changedPermissions() : self
 	{

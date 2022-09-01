@@ -10,12 +10,12 @@ use GDO\UI\TextStyle;
  * @TODO: Make a GDT_PathCompleted that is GDT_ComboBox with auto completion.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 final class GDT_Path extends GDT_ComboBox
 {
-	public string $pattern = "#^[^?!]+$#iD";
+	public string $pattern = "/^[^?!]+$/iD";
 	
 	public function defaultLabel() : self { return $this->label('path'); }
 	

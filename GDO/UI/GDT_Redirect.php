@@ -22,6 +22,8 @@ final class GDT_Redirect extends GDT
 	use WithHREF;
 	use WithText;
 	
+	const CODE = 307;
+	
 	public static bool $REDIRECTED = false; # Only once
 	
 	public static function to(string $href) : void
@@ -77,42 +79,35 @@ final class GDT_Redirect extends GDT
 	#############
 	### Flash ###
 	#############
-// 	public string $redirectError;
-// 	public string $redirectMessage;
-
 	public function redirectError(string $key, array $args=null, bool $log=true) : self
 	{
-		$code = 307;
-		
-		Website::error(t('redirect'), $key, $args, $log, $code);
-		
-		$error = GDT_Error::make()->code($code)->text($key, $args);
-		
-		GDT_Page::instance()->topResponse()->addField($error);
-		
-		if (class_exists('GDO\\Session\\GDO_Session', false))
+		Website::error(t('redirect'), $key, $args, $log, self::CODE);
+// 		$error = GDT_Error::make()->code(self::CODE)->text($key, $args);
+// 		GDT_Page::instance()->topResponse()->addField($error);
+		if (module_enabled('Session'))
 		{
-			GDO_Session::set('redirect_error', t($key, $args));
+			$app = Application::$INSTANCE;
+			if ($app->isWebserver())
+			{
+				GDO_Session::set('redirect_error', t($key, $args));
+			}
 		}
-		
 		return $this;
 	}
 	
 	public function redirectMessage(string $key, array $args=null, bool $log=true) : self
 	{
-		$code = 307;
-		
-		Website::message(t('redirect'), $key, $args, $log, $code);
-		
-		$success = GDT_Success::make()->code($code)->text($key, $args);
-		
-		GDT_Page::instance()->topResponse()->addField($success);
-		
-		if (class_exists('GDO\\Session\\GDO_Session', false))
+		Website::message(t('redirect'), $key, $args, $log, self::CODE);
+// 		$success = GDT_Success::make()->code(self::CODE)->text($key, $args);
+// 		GDT_Page::instance()->topResponse()->addField($success);
+		if (module_enabled('Session'))
 		{
-			GDO_Session::set('redirect_message', t($key, $args));
+			$app = Application::$INSTANCE;
+			if ($app->isWebserver())
+			{
+				GDO_Session::set('redirect_message', t($key, $args));
+			}
 		}
-		
 		return $this;
 	}
 	
@@ -156,7 +151,6 @@ final class GDT_Redirect extends GDT
 	{
 		return sprintf('<script>setTimeout(function(){ window.location.href="%s" }, %d);</script>',
 			$this->href, $this->redirectTime * 1000);
-		
 	}
 
 }

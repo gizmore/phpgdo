@@ -25,4 +25,12 @@ final class GDT_Success extends GDT_Panel
 		return $this;
 	}
 	
+	##############
+	### Render ###
+	##############
+	public function renderCLI() : string
+	{
+		return Color::green($this->renderText()) . "\n";
+	}
+	
 }

@@ -51,13 +51,13 @@ final class GDT_Error extends GDT_Panel
 	public function renderHTML() : string
 	{
 		hdrc('HTTP/1.1 ' . $this->code . ' GDO Error');
-		hdr('X-GDO-ERROR: ' . $this->renderText());
+		hdr('X-GDO-ERROR: ' . str_replace(["\r", "\n"], ['', ' '], $this->renderText()));
 		return parent::renderHTML();
 	}
 	
 	public function renderCLI() : string
 	{
-		return Color::red($this->renderText());
+		return Color::red($this->renderText()) . "\n";
 	}
 	
 }

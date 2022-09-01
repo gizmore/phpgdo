@@ -38,14 +38,22 @@ class GDT_Container extends GDT
 
 	public function renderCLI(): string
 	{
-		$newline = $this->flexDirection === self::HORIZONTAL ? ' | ' : "\n";
 		$rendered = '';
+		$newline = $this->flexDirection === self::HORIZONTAL ? ' | ' : "\n";
 		if (isset($this->fields))
 		{
+			$first = true;
 			foreach ($this->fields as $field)
 			{
+				if ($first)
+				{
+					$first = false;
+				}
+				else
+				{
+					$rendered .= $newline;
+				}
 				$rendered .= $field->renderCLI();
-				$rendered .= $newline;
 			}
 		}
 		return $rendered;

@@ -14,6 +14,20 @@ printf('<i>%d&nbsp;Classes</i>|<i>%d&nbsp;gdoClasses</i>|<i>%d(<b>%d</b>)&nbsp;G
 	$i['phpClasses'], $i['gdoFiles'], $i['gdtCount'], $i['gdtPeakCount'], $i['gdoCount'], $i['gdoPeakCount'], $i['gdoModules'], $i['gdoLangFiles']);
 printf('<b>%d&nbsp;tmpl</b>|<b title="Hooks">%d&nbsp;hook</b>|<b>%d&nbsp;ipc</b>|<b>%d&nbsp;mail</b> - ',
 	$i['gdoTemplates'], $i['gdoHooks'], $i['gdoIPC'], $i['gdoMails']);
-printf('<b>%d/%d&nbsp;cache</b>',
+printf('<b>%d/%d&nbsp;cache</b> - ',
 	$i['fileCacheHits'], $i['fileCacheRq']);
+printf('%d/%d(block R/W) - ',
+	$i['blocksReceived'], $i['blocksSent']);
+printf('%d/%d(ipc R/W) - ',
+	$i['ipcReceived'], $i['ipcSent']);
+printf('%s/%s<b>(%s)</b>(U/S/MX/RSS) - ',
+	$i['rssUnshared'], $i['rssShared'], $i['rssMaximum']);
+printf('%d/%d(S/H faults) - ',
+	$i['pageSoft'], $i['pageHard']);
+printf('%d signals - ',
+	$i['signals']);
+printf('%d/%d(V/IV ctx) - ',
+	$i['ctxSwitchV'], $i['ctxSwitchIV']);
+printf('%d swaps',
+	$i['ru_nswap']);
 printf('</span>');

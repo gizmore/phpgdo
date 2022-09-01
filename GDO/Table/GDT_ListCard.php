@@ -20,7 +20,7 @@ class GDT_ListCard extends GDT_List
 {
 	public function renderHTML() : string
 	{
-		return GDT_Template::php('Table', 'cell/list_card.php', ['field' => $this]);
+		return GDT_Template::php('Table', 'list_card.php', ['field' => $this]);
 	}
 	
 }

@@ -94,6 +94,7 @@ abstract class AutomatedTestCase extends TestCase
 				if ($this->isPluggableMethod($method))
 				{
 					$this->tryTrivialMethod($method);
+					CLI::flushTopResponse();
 				}
 				else
 				{

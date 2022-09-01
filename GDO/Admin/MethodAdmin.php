@@ -12,6 +12,7 @@ use GDO\UI\GDT_Link;
  * @author gizmore
  * @version 7.0.1
  * @since 5.0.0
+ * @see \GDO\Core\Method
  */
 trait MethodAdmin
 {
@@ -25,7 +26,7 @@ trait MethodAdmin
 		return 'admin';
 	}
 	
-	public function beforeExecute() : void
+	public function onRenderTabs() : void
 	{
 		$this->renderAdminBar();
 	}
@@ -41,8 +42,7 @@ trait MethodAdmin
 			GDT_Bar::make()->addFields(
 				GDT_Link::make()->href(href('Admin', 'Permissions'))->label('permissions'),
 				GDT_Link::make()->href(href('Admin', 'PermissionAdd'))->label('add_permissions'),
-				GDT_Link::make()->href(href('Admin', 'PermissionGrant'))->label('link_grant_perm'),
-				));
+				GDT_Link::make()->href(href('Admin', 'PermissionGrant'))->label('link_grant_perm')));
 	}
 	
 // 	public function getMethodTitle() : string

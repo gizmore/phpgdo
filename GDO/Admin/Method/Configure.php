@@ -56,7 +56,6 @@ class Configure extends MethodForm
 		$response = GDT_Tuple::make();
 		
 		$mod = $this->configModule();
-// 		$oid = spl_object_id($mod);
 
 		# Response for install and configure
 		if ($descr = $mod->getModuleDescription())
@@ -68,8 +67,6 @@ class Configure extends MethodForm
 		# Response for install panel
 		$install = Install::make()->inputs($this->inputs);
 		$response->addField($install->executeWithInit());
-		
-// 		$this->getForm()->gdo($mod);
 		
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())
@@ -152,7 +149,6 @@ class Configure extends MethodForm
 		$c->addField($mod->gdoColumn('module_version')->writeable(false)->initial($mod->gdoVar('module_version')));
 		$c->addField(GDT_Version::make('version_available')->writeable(false)->initial($mod->version));
 		$form->addField($c);
-// 		$form->inputs($this->configModule->getGDOVars());
 		if ($config = $mod->getConfigCache())
 		{
 			$form->addField(
@@ -204,8 +200,6 @@ class Configure extends MethodForm
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);
 		}
 		
-// 		$this->resetForm();
-
 		# Announce
 		return $this->message('msg_module_saved',
 			[

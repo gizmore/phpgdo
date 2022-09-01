@@ -24,8 +24,6 @@ use GDO\Util\Arrays;
  * @since 3.0.1
  * @see GDT
  * @see GDO
- * @see WithParameters
- * @see WithEnvironment
  */
 abstract class Method #extends GDT
 {
@@ -80,6 +78,7 @@ abstract class Method #extends GDT
 	
 	# events
 	public function onInit() {}
+	public function onRenderTabs() : void {}
 	public function beforeExecute() : void {}
 	public function afterExecute() : void {}
 	
@@ -223,7 +222,7 @@ abstract class Method #extends GDT
 		
 		if (!$this->hasPermission($user))
 		{
-			return $this->error('err_no_permission');
+			return $this->error('err_permission_required');
 		}
 		
 		return true;
@@ -305,10 +304,10 @@ abstract class Method #extends GDT
 			{
 				$response->addField($result);
 			}
-// 			if (Application::isError())
-// 			{
-// 				return $response;
-// 			}
+			if (Application::isError())
+			{
+				return $response;
+			}
 			
 			# 1) Start the transaction
 			$this->lock();
@@ -334,7 +333,13 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
-			# 3) Execute
+			# 3) Build top response tabs
+			if (Application::$INSTANCE->isHTML())
+			{
+				$this->onRenderTabs();
+			}
+			
+			# 4) Execute
 			if ($result = $this->executeB())
 			{
 				$response->addField($result);
@@ -348,7 +353,7 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
-			# 4) After execute
+			# 5) After execute
 			$this->afterExecute();
 			$result = GDT_Hook::callHook('AfterExecute', $this, $response);
 			if ($result)
@@ -364,7 +369,7 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
-			# 5) Commit transaction
+			# 6) Commit transaction
 			if ($transactional)
 			{
 				$db->transactionEnd();

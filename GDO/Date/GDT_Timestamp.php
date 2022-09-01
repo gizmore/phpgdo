@@ -190,6 +190,14 @@ class GDT_Timestamp extends GDT_DBField
 		return parent::validate($value);
 	}
 	
+	public function plugVars() : array
+	{
+		$name = $this->name;
+		return [
+			[$name => Time::getDate()],
+		];
+	}
+	
 	##############
 	### Column ###
 	##############

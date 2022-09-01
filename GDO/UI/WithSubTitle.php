@@ -1,13 +1,16 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * Adds a subtitle to a GDT.
  * This subtitle is not rendered with a H tag.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
+ * @see WithTitle
  * @see GDT_Title
  * @see GDT_Headline
  */
@@ -24,9 +27,13 @@ trait WithSubTitle
 	    return $this;
 	}
 	
-	public function subtitleRaw(string $title) : string
+	public function subtitleRaw(?string $subtitle) : self
 	{
-		$this->subtitleRaw = $title;
+		unset($this->subtitleRaw);
+		if ($subtitle)
+		{
+			$this->subtitleRaw = $subtitle;
+		}
 		unset($this->subtitleKey);
 		unset($this->subtitleArgs);
 	    return $this;
@@ -67,7 +74,7 @@ trait WithSubTitle
 		}
 		else
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 	}
 	

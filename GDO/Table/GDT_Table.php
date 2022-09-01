@@ -413,7 +413,7 @@ class GDT_Table extends GDT
 	{
 		if (($this->hideEmpty) && ($this->getResult()->numRows() === 0))
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 		return GDT_Template::php('Table', 'table_html.php',
 		[
@@ -498,7 +498,8 @@ class GDT_Table extends GDT
 	public function renderXML() : string
 	{
 		$xml = "<data>\n";
-		while ($gdo = $this->result->fetchObject())
+		$result = $this->getResult();
+		while ($gdo = $result->fetchObject())
 		{
 			$xml .= "<row>\n";
 			foreach ($this->getHeaderFields() as $gdt)
@@ -516,14 +517,18 @@ class GDT_Table extends GDT
 
 	public function renderCLI() : string
 	{
+		# Collect
+		$items = [];
+		$result = $this->getResult();
+		while ($gdo = $result->fetchObject())
+		{
+			$items[] = $gdo->renderCLI();
+		}
+
+		# Print either single page or pages.
 		$p = isset($this->pagemenu) ? $this->pagemenu : false;
 		if ($p && $p->getPageCount() > 1)
 		{
-			$items = [];
-			while ($gdo = $this->getResult()->fetchObject())
-			{
-				$items[] = $gdo->renderCLI();
-			}
 			return t('cli_pages',
 			[
 				$this->renderTitle(),
@@ -534,11 +539,6 @@ class GDT_Table extends GDT
 		}
 		else
 		{
-			$items = [];
-			while ($gdo = $this->getResult()->fetchObject())
-			{
-				$items[] = $gdo->renderCLI();
-			}
 			return t('cli_page', [
 				$this->renderTitle(),
 				implode(', ', $items)

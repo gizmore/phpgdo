@@ -44,9 +44,9 @@ Logger::init(null, GDO_ERROR_LEVEL); # init without username
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
 $loader->initModules();
-define('GDO_CORE_STABLE', 1);
 CLI::setupUser();
 Logger::init(GDO_User::current()->renderUserName(), GDO_ERROR_LEVEL);
+define('GDO_CORE_STABLE', 1);
 # Shell
 if (!CLI::isCLI())
 {

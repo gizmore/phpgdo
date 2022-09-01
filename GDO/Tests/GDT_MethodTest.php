@@ -22,7 +22,7 @@ final class GDT_MethodTest extends GDT_Method
     # 2) 4-Monica  (member)
     # 3) 5-Gaston  (guest)
     # 4) 6-Sven    (staff)
-    # 5) 7-Darla   (deleted later)
+    # 5) 7-Darla   (deleted)
     
     /**
      * Store some users here for testing.
@@ -30,27 +30,23 @@ final class GDT_MethodTest extends GDT_Method
      */
     public static array $TEST_USERS = [];
     
-    ###########
-    ### boo ###
-    ###########
-    /**
-     * @deprecated Use ->inputs() method
-     */
-    public function parameters(array $inputs) : self
-    {
-    	return $this->inputs($inputs);
-    }
+//     ###########
+//     ### boo ###
+//     ###########
+//     /**
+//      * @deprecated Use ->inputs() method
+//      */
+//     public function parameters(array $inputs) : self
+//     {
+//     	return $this->inputs($inputs);
+//     }
     
     ############
     ### Exec ###
     ############
     public function execute(string $button=null)
     {
-    	if ($button === null)
-    	{
-//     		$this->clibutton();
-    	}
-    	else
+    	if ($button)
     	{
     		$this->inputs[$button] = '1';
     	}

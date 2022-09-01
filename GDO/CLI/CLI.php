@@ -8,6 +8,7 @@ use GDO\Core\GDO_Module;
 use GDO\UI\Color;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Page;
+use GDO\Session\GDO_Session;
 
 /**
  * CLI utility.
@@ -63,9 +64,15 @@ final class CLI
     ##############
     public static function flushTopResponse()
     {
+    	# Get
     	$response = GDT_Page::instance()->topResponse();
+    	# Render
     	echo $response->renderCLI();
+    	# Clear
     	$response->removeFields();
+    	# Clear redirect messages.
+    	GDO_Session::remove('redirect_error');
+    	GDO_Session::remove('redirect_message');
     }
     
     
@@ -95,11 +102,14 @@ final class CLI
     	return $html;
     }
     
-    public static function error(string $s) : void
-    {
-    	echo self::red(self::bold($s)) . "\n";
-    }
+//     public static function error(string $s) : void
+//     {
+//     	echo self::red(self::bold($s)) . "\n";
+//     }
     
+    #############
+    ### Style ###
+    #############
     public static function red(string $s) : string { return Color::red($s); }
     public static function green(string $s) : string { return Color::green($s); }
     public static function bold(string $s) : string { return self::typemode($s, '1'); }
@@ -113,18 +123,9 @@ final class CLI
     	return sprintf("\033[%sm%s\033[0m", $mode, $s);
     }
     
-//     /**
-//      * Stop output buffering and start auto flush for CLI mode.
-//      */
-//     public static function autoFlush()
-//     {
-//         while (ob_get_level())
-//         {
-//             ob_end_flush();
-//         }
-//         ob_implicit_flush(true);
-//     }
-    
+    ##############
+    ### Server ###
+    ##############
     /**
      * Simulate PHP $_SERVER vars.
      */
@@ -151,6 +152,9 @@ final class CLI
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
     }
     
+    #############
+    ### Usage ###
+    #############
     private static function showHelp(Method $method)
     {
         return $method->renderCLIHelp();
@@ -216,6 +220,6 @@ final class CLI
 }
 
 # Required gdo constants
-if (!defined('GDO_DOMAIN')) define('GDO_DOMAIN', 'gdo7.localhost');
-if (!defined('GDO_MODULE')) define('GDO_MODULE', 'Core');
-if (!defined('GDO_METHOD')) define('GDO_METHOD', 'Welcome');
+deff('GDO_DOMAIN', 'gdo7.localhost');
+deff('GDO_MODULE', 'Core');
+deff('GDO_METHOD', 'Welcome');

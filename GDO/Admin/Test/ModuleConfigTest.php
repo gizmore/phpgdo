@@ -10,6 +10,9 @@ use GDO\Core\GDT_Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
 use GDO\Core\ModuleLoader;
+use function PHPUnit\Framework\assertEmpty;
+use GDO\UI\Color;
+use GDO\UI\TextStyle;
 
 /**
  * Test method form for module admin configuration.
@@ -51,6 +54,27 @@ final class ModuleConfigTest extends TestCase
     	$inputs = ['module' => $module->getName(), 'submit' => 'submit'];
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
+    	
+    	# Check
+    	$errors = [];
+    	foreach ($module->getConfigCache() as $gdt)
+    	{
+    		if ($gdt->hasError())
+    		{
+    			$errors[] = sprintf('`%s`: %s',
+    				$gdt->getName(),
+    				TextStyle::italic($gdt->renderError()));
+    		}
+    	}
+    	if (count($errors))
+    	{
+    		$this->error("%s: %s",
+    			Color::red('Warning'),
+    			TextStyle::bold($module->getName()),
+    			implode(' - ', $errors),
+    		);
+    	}
+    	assertEmpty($errors, "Test if {$module->getName()} ");
     	$html = $result->renderMode(GDT::RENDER_WEBSITE);
     	$this->assert200("Test if {$module->getName()} can save it's configuration.");
     }

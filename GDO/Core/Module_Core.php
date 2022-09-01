@@ -33,8 +33,8 @@ use GDO\Util\Strings;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1560';
-	const GDO_CODENAME = 'Ordered-Odeuvre';
+	const GDO_REVISION = '7.0.1-r1562';
+	const GDO_CODENAME = 'Clever-Cashier';
 	
 	##############
 	### Module ###

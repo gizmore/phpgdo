@@ -14,7 +14,7 @@ class PermissionGrant extends MethodForm
 {
 	use MethodAdmin;
 	
-	public function beforeExecute() : void
+	public function onRenderTabs() : void
 	{
 	    $this->renderAdminBar();
 	    $this->renderPermissionBar();

@@ -70,7 +70,7 @@ final class GDT_Page extends GDT
 		if (!isset($this->topResponse))
 		{
 			$this->topResponse = GDT_Box::make()->vertical();
-			if (class_exists('GDO\\Session\\GDO_Session', false))
+			if (module_enabled('Session'))
 			{
 				$this->restoreSessionRedirectResponse();
 			}

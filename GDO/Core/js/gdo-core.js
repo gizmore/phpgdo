@@ -52,7 +52,7 @@ window.GDO.triggerEvent = function(name) {
 };
 
 /**
- * Init GDO612jsv701
+ * Init GDOv7js612
  * @returns interest
  */
 document.addEventListener('DOMContentLoaded', function(){
@@ -110,6 +110,10 @@ window.GDO.exception = function(ex) {
 	return window.GDO.responseError({json:{error: ex.message, stack: ex.stack}});
 };
 
+////////////////////
+// --- Dialog --- //
+////////////////////
+
 window.GDO.DIALOG_RESULT = null;
 
 window.GDO.closeDialog = function(dialogId, result) {
@@ -137,31 +141,30 @@ window.GDO.openDialog = function(dialogId) {
 	dlg.showModal();
 };
 
-/**
- * @TODO make seo friendly urls like in PHP.
- * @see GDO7.php
- */
-window.GDO.href = function(module, method, append='') {
-	return GDO_WEB_ROOT + 'index.php?_mo=' + module + '&_me=' + method + append;
-};
+// ----------- //
+// --- XHR --- //
+// ----------- //
 
-/**
- * Inherit this class for GDO plugins.
- */
-window.GDO.Plugin = function(config) {
-	for (var i in config) {
-		if (this[i] !== undefined) {
-			this[i] = config[i];
-		}
-	}
-};
-
-window.GDO.xhr = function(url, method, data) {
+window.GDO.xhr = function(url, verb, data) {
 	return fetch(url, {
-		method: method||'GET',
+		method: verb||'GET',
 		headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify(data)
 	});
+};
+
+window.GDO.href = function(module, method, append) {
+	let href = window.GDO_WEB_ROOT + 'index.php';
+	href += '?_mo=' + module;
+	href += '&_me=' + method;
+	href += '&_lang=' + window.GDO_LANGUAGE;
+	href += append;
+	return href;
+};
+
+window.GDO.gdoxhr = function(module, method, append, verb, data) {
+	const href = window.GDO.href(module, method, append);
+	return window.GDO.xhr(href, verb, data);
 };
 
 var origOpen = XMLHttpRequest.prototype.open;
@@ -174,6 +177,9 @@ XMLHttpRequest.prototype.open = function () {
 	return result;
 };
 
+// ------------ //
+// --- Data --- //
+// ------------ //
 /**
  * Get URL GET parameter.
  * @since 6.11.3

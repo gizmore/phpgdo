@@ -20,6 +20,7 @@ use GDO\Date\GDO_Timezone;
 use PHPUnit\Framework\Assert;
 use GDO\Core\WithModule;
 use GDO\Form\GDT_Form;
+use function PHPUnit\Framework\assertLessThan;
 
 /**
  * A GDO test case knows a few helper functions.
@@ -97,6 +98,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$add = $new - self::$LAST_COUNT;
 		self::$ASSERT_COUNT += $add;
 		// self::$LAST_COUNT = self::$ASSERT_COUNT;
+		CLI::flushTopResponse();
 	}
 
 	/**
@@ -239,6 +241,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ##############
 	# ## Asserts ###
 	# ##############
+	protected function assertOK(string $message)
+	{
+		assertLessThan(400, Application::$RESPONSE_CODE, $message);
+	}
+	
 	protected function assert200(string $message)
 	{
 		$this->assertCode(200, $message);
@@ -251,10 +258,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function assertCode(int $code, string $message)
 	{
-		if (Application::isError())
-		{
-			CLI::flushTopResponse();
-		}
+// 		if (Application::isError())
+// 		{
+// 			CLI::flushTopResponse();
+// 		}
 		assertEquals($code, Application::$RESPONSE_CODE, $message);
 	}
 
@@ -277,17 +284,17 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ##################
 	# ## Call method ###
 	# ##################
-	protected function callMethod(Method $method, array $parameters = null, array $getParameters = null)
-	{
-		$gdt_method = GDT_MethodTest::make()->method($method)
-			->runAs()
-			->addFields(...$getParameters)
-			->addFields(...$parameters);
-		$result = $gdt_method->execute();
-		$gdt_method->result($result);
-		$this->assert200(sprintf('Test if %s response code is 200.', $method->gdoClassName()));
-		return $result;
-	}
+// 	protected function callMethod(Method $method, array $parameters = null, array $getParameters = null)
+// 	{
+// 		$gdt_method = GDT_MethodTest::make()->method($method)
+// 			->runAs($method->plugUser())
+// 			->addFields(...$getParameters)
+// 			->addFields(...$parameters);
+// 		$result = $gdt_method->execute();
+// 		$gdt_method->result($result);
+// 		$this->assert200(sprintf('Test if %s response code is 200.', $method->gdoClassName()));
+// 		return $result;
+// 	}
 
 	protected function fakeFileUpload($fieldName, $fileName, $path)
 	{
