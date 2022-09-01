@@ -85,13 +85,23 @@ class Application extends GDT
 	#################
 	### HTTP Code ###
 	#################
+	/**
+	 * HTTP Response Code.
+	 */
 	public static int $RESPONSE_CODE = 200;
 	
+	/**
+	 * Set the HTTP response code.
+	 * This only works once.
+	 */
 	public static function setResponseCode(int $code) : void
 	{
 		if ($code !== 200)
 		{
-			self::$RESPONSE_CODE = $code;
+			if (self::$RESPONSE_CODE !== 200)
+			{
+				self::$RESPONSE_CODE = $code;
+			}
 		}
 	}
 
@@ -140,7 +150,7 @@ class Application extends GDT
 		$this->mode = $this->modeDetected;
 		if ($removeInput)
 		{
-			self::$INSTANCE->inputs();
+			$this->inputs();
 		}
 		self::updateTime();
 		return $this;
@@ -195,6 +205,9 @@ class Application extends GDT
 	############
 	### Ajax ###
 	############
+	/**
+	 * Ajax mode is website/html without the html boilerplate.
+	 */
 	public bool $ajax = false;
 	public function ajax(bool $ajax) : self
 	{
@@ -205,6 +218,9 @@ class Application extends GDT
 	###########
 	### SEO ###
 	###########
+	/**
+	 * Toggle if this page should be indexed by search engines.
+	 */
 	public bool $indexed = false;
 	public function indexed(bool $indexed=true)
 	{
@@ -215,6 +231,9 @@ class Application extends GDT
 	################
 	### CLI Mode ###
 	################
+	/**
+	 * Toggle CLI force mode (mostly for tests)
+	 */
 	public bool $cli = false;
 	public function cli(bool $cli=true)
 	{
@@ -228,7 +247,16 @@ class Application extends GDT
 	####################
 	### Global Input ###
 	####################
+	/**
+	 * Current input
+	 * @deprecated
+	 * @var string[string]
+	 */
 	public array $inputs;
+	
+	/**
+	 * @deprecated
+	 */
 	public function inputs(array $inputs=null) : self
 	{
 		if ($inputs === null)

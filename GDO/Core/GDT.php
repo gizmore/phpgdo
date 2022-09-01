@@ -212,6 +212,10 @@ abstract class GDT
 	public function renderFilter(GDT_Filter $f) : string { return self::EMPTY_STRING; }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderTFoot() : string { return $this->renderHTML(); }
+	# Various rendering
+	public function renderLabel() : string { return GDT::EMPTY_STRING; }
+	public function renderLabelText() : string { return GDT::EMPTY_STRING; }
+	public function cliIcon() : string { return GDT::EMPTY_STRING; }
 	
 	#####################
 	### Render Helper ###

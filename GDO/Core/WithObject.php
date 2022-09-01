@@ -70,10 +70,14 @@ trait WithObject
 	{
 		$query = $this->table->select();
 		$gdt = $this->table->gdoColumnOf(GDT_Name::class);
-		$var = GDO::escapeSearchS($var);
-		$query->where("{$gdt->name} LIKE '%{$var}%'");
-		$query->limit(GDT_Object::MAX_SUGGESTIONS);
-		return $query->exec()->fetchAllObjects();
+		if ($gdt !== null)
+		{
+			$var = GDO::escapeSearchS($var);
+			$query->where("{$gdt->name} LIKE '%{$var}%'");
+			$query->limit(GDT_Object::MAX_SUGGESTIONS);
+			return $query->exec()->fetchAllObjects();
+		}
+		return [];
 	}
 
 	/**

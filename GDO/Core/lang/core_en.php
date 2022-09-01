@@ -83,7 +83,7 @@ return [
 	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',
 	'msg_crud_created' => 'Your %s has been created successfully.',
 	'msg_binary_detected' => 'The %s binary has been detected.',
-
+	'msg_module_methods' => 'Module %s methods: %s.',
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',

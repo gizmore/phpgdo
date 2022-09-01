@@ -34,13 +34,14 @@ abstract class MethodQueryCard extends Method
 	
 	public function execute()
 	{
-		return $this->renderCard();
+		$html = $this->renderCard();
+		return GDT_HTML::make()->var($html);
 	}
 	
 	public function renderCard() : string
 	{
 		$object = $this->getQueryCard();
-		return GDT_HTML::make()->var($object->renderCard());
+		return $object->renderCard();
 	}
 	
 }

@@ -143,18 +143,24 @@ final class GDT_Redirect extends GDT
 	##############
 	public function renderCLI() : string
 	{
-		if (isset($this->href))
-		{
-			return t('gdt_redirect_to', [$this->href]);
-		}
+// 		if (isset($this->href))
+// 		{
+// 			return t('gdt_redirect_to', [$this->href]);
+// 		}
 		return GDT::EMPTY_STRING;
 	}
 	
 	public function renderHTML() : string
 	{
+		$app = Application::$INSTANCE;
+// 		if ($app->isCLI())
+// 		{
+// 			return GDT::EMPTY_STRING;
+// 		}
+		
 // 		$ajax = '';
 		$url = isset($this->href) ? $this->href : $this->hrefBack();
-		if (Application::$INSTANCE->isAjax())
+		if ($app->isAjax())
 		{
 // 			$ajax = $this->renderAjaxRedirect();
 		}
@@ -173,7 +179,6 @@ final class GDT_Redirect extends GDT
 		
 		$link = GDT_Link::make()->href($url);
 		$link = $link->render();
-		
 		return GDT_Panel::make()->text('gdt_redirect_to', [$link])->render();
 	}
 	

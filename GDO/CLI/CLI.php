@@ -199,7 +199,7 @@ final class CLI
             }
             else
             {
-            	if ($gdt->name !== 'submit')
+            	if ($gdt->getName() !== 'submit')
             	{
 	                $usage2[] = sprintf('[--%s=<%s>(%s)]',
 	                    $gdt->name, $gdt->gdoExampleVars(), $gdt->getVar());

@@ -118,17 +118,17 @@ final class AutomatedGDOSaveTest extends TestCase
 			$new->setVars($inputs);
 			if ($new->isValid())
 			{
-				$new->insert();
-				$new->delete();
+				$new->replace();
+// 				$new->delete();
 			}
-			else
-			{
-				$this->error("%4d.) %s: %s - %s",
-					$this->gdoTested,
-					CLI::bold(CLI::red("WARNING")),
-					$gdo->gdoClassName(),
-					'has invalid plug vars');
-			}
+// 			else
+// 			{
+// 				$this->error("%4d.) %s: %s - %s",
+// 					$this->gdoTested,
+// 					CLI::bold(CLI::red("WARNING")),
+// 					$gdo->gdoClassName(),
+// 					'has invalid plug vars');
+// 			}
 		}
 	}
 

@@ -62,4 +62,10 @@ final class GDT_ProfileLink extends GDT_Link
 		return GDT_Template::php('User', 'profile_link_html.php', $tVars);
 	}
 	
+	public function renderCLI() : string
+	{
+		return $this->user->renderUserName();
+	}
+	
+	
 }

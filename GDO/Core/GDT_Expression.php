@@ -51,7 +51,7 @@ final class GDT_Expression extends GDT
 		$response = $this->method->execute();
 		if ($response->hasError())
 		{
-			$help = CLI::renderCLIHelp($this->method->method);
+			$help = trim(CLI::renderCLIHelp($this->method->method));
 			$response->addField(GDT_String::make()->var($help));
 		}
 		return $response;

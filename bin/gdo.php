@@ -3,8 +3,10 @@ namespace bin;
 
 use GDO\CLI\CLI;
 use GDO\Core\Debug;
+use GDO\Core\GDO_NoSuchMethodError;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Logger;
+use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
 use GDO\DB\Database;
@@ -12,6 +14,12 @@ use GDO\Language\Trans;
 use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\User\GDO_User;
+use GDO\Util\Arrays;
+use GDO\UI\GDT_Error;
+
+/**
+ * @var $argv string[]
+ */
 
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
@@ -46,11 +54,36 @@ if (!CLI::isCLI())
 }
 elseif (CLI::isInteractive())
 {
-	$line = CLI::getSingleCommandLine();
-	$expression = GDT_Expression::fromLine($line);
-	$result = $expression->execute();
-	echo $result->renderCLI();
-// 	echo GDT_Page::$INSTANCE->topResponse()->renderCLI();
+	$line = trim(CLI::getSingleCommandLine());
+	if ($line !== '')
+	{
+		try
+		{
+			$expression = GDT_Expression::fromLine($line);
+			/** @var $result \GDO\Core\GDT_Response **/
+			$result = $expression->execute();
+			echo $result->render();
+		}
+		catch (GDO_NoSuchMethodError $ex)
+		{
+			$module = $ex->module;
+			$methods = $module->getMethods();
+			$methods = array_map(function(Method $m) {
+				return $m->gdoHumanName();
+			}, $methods);
+			$methods = Arrays::implodeHuman($methods);
+			echo t('msg_module_methods', [$module->gdoHumanName(), $methods]);
+		}
+		catch (\Throwable $ex)
+		{
+			Debug::debugException($ex, false);
+			echo GDT_Error::fromException($ex)->render();
+		}
+	}
+	else
+	{
+		echo "Usage: {$argv[0]} <gdo expression here>\n";
+	}
 }
 // else
 // {

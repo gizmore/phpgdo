@@ -148,23 +148,23 @@ abstract class Method #extends GDT
 		{
 			$moduleName = Strings::substrTo($alias, '.', $alias);
 			
-			if (!($module = ModuleLoader::instance()->getModule($moduleName)))
+			if (!($module = ModuleLoader::instance()->getModule($moduleName, false, $throw)))
 			{
-				if ($throw)
-				{
-					throw new GDO_Error('err_unknown_module', [html($moduleName)]);
-				}
+// 				if ($throw)
+// 				{
+// 					throw new GDO_Error('err_unknown_module', [html($moduleName)]);
+// 				}
 				return null;
 			}
 			
 			$methodName = Strings::substrFrom($alias, '.', t('none'));
-			if ($method = $module->getMethod($methodName))
+			if ($method = $module->getMethod($methodName, false))
 			{
 				return $method;
 			}
 			if ($throw)
 			{
-				throw new GDO_Error('err_unknown_method', [$module->getName(), html($methodName)]);
+				throw new GDO_NoSuchMethodError($module, $methodName);
 			}
 		}
 		return null;

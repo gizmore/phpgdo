@@ -27,9 +27,16 @@ trait WithInput
 	 */
 	public function inputs(array $inputs=null) : self
 	{
+		# Delete them
 		if ($inputs === null)
 		{
 			unset($this->inputs);
+			return $this;
+		}
+		# Add/Set them
+		if (isset($this->inputs))
+		{
+			$this->inputs = array_merge($this->inputs, $inputs);
 		}
 		else
 		{

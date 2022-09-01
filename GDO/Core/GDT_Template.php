@@ -145,7 +145,6 @@ class GDT_Template extends GDT
 	{
 		try
 		{
-			ob_start();
 			self::$CALLS++;
 			$path = self::getPath($moduleName, $path);
 			if (GDO_GDT_DEBUG)
@@ -165,6 +164,7 @@ class GDT_Template extends GDT
 					$$__key = $__value;
 				}
 			}
+			ob_start();
 			include $path; # a hell of a bug is to supress errors here.
 			return ob_get_contents();
 		}

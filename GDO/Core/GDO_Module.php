@@ -980,7 +980,7 @@ class GDO_Module extends GDO
         if ($withPermission)
         {
             $methods = array_filter($methods, function(Method $method) {
-				return $method->hasUserPermission(GDO_User::current());
+				return $method->hasPermission(GDO_User::current());
 			});
         }
         return $methods;

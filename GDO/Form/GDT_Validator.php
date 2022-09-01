@@ -19,13 +19,21 @@ class GDT_Validator extends GDT
 {
 	use WithName;
 	
-	public function isWriteable() : bool { return true; } # so it gets evaluated in the validation process.
-	
 	/**
 	 * Dummy signature
 	 */
 	public function validator_func_dummy(GDT_Form $form, GDT $field, $value) {}
 
+	/**
+	 * so it gets evaluated in the validation process.
+	 */
+	public function isWriteable() : bool { return true; }
+	
+	/**
+	 * So it is not shown in CLI and stuff.
+	 */
+	public function isHidden() : bool { return true; }
+	
 	public function hasInput() : bool
 	{
 		return true; # this triggers validation code

@@ -16,15 +16,13 @@ class GDT_Duration extends GDT_String
 	public function defaultLabel() : self { return $this->label('duration'); }
 	
 	public int $max = 16;
+	public int $encoding = self::ASCII;
+	public string $icon = 'time';
 	public string $pattern = '/^(?:[\\.0-9 ]+[sminohdwy]{0,2} *)+$/iD';
 	
-	protected function __construct()
-	{
-	    parent::__construct();
-		$this->icon('time');
-		$this->ascii();
-	}
-	
+	#################
+	### Min / Max ###
+	#################
 	public int $minDuration = 0;
 	public function min(int $minDuration) : self
 	{
@@ -38,7 +36,10 @@ class GDT_Duration extends GDT_String
 		$this->maxDuration = $maxDuration;
 		return $this;
 	}
-	
+
+	###################
+	### Var / Value ###
+	###################
 	public function toValue($var = null)
 	{
 	    return $var === null ? null : Time::humanToSeconds($var);
@@ -49,6 +50,9 @@ class GDT_Duration extends GDT_String
 	    return $value === null ? null : Time::humanDuration($value);
 	}
 	
+	##############
+	### Render ###
+	##############
 	public function renderHTML() : string
 	{
 		return html($this->getVar());
@@ -58,7 +62,10 @@ class GDT_Duration extends GDT_String
 	{
 		return GDT_Template::php('Date', 'form/duration.php', ['field' => $this]);
 	}
-	
+
+	################
+	### Validate ###
+	################
 	public function validate($value) : bool
 	{
 		if (!parent::validate($value))

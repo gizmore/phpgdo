@@ -96,7 +96,6 @@ final class Parser
 					if ($arg)
 					{
 						$this->addArg($current, $arg);
-						$arg = '';
 					}
 					break;
 
@@ -166,7 +165,10 @@ final class Parser
 				break;
 			}
 		}
-		return Method::getMethod($parsed);
+		
+		$method = Method::getMethod($parsed, true);
+		
+		return $method;
 	}
 	
 	/**

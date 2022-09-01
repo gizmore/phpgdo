@@ -250,6 +250,7 @@ class GDT_Method extends GDT
 			{
 				if ($i === $this->positionalPosition)
 				{
+					$this->positionalPosition++;
 					return $gdt;
 				}
 				$last = $gdt;
