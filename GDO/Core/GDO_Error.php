@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 /**
  * An exception with translated error message.
+ * @TODO Move all GDO Exceptions to GDO/Core/Exception.
  * 
  * @author gizmore
  * @version 7.0.1

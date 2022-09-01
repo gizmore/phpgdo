@@ -74,6 +74,11 @@ class GDT_Link extends GDT_Url
 	{
 		return $this->renderHTML();
 	}
+
+	public function renderCLI() : string
+	{
+		return $this->renderJSON();
+	}
 	
 	public function renderJSON()
 	{

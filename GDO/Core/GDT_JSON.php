@@ -28,9 +28,32 @@ class GDT_JSON extends GDT_Text
 		return $this->getValue();
 	}
 	
-	public static function with(array $data) : self
+// 	public static function with(array $data) : self
+// 	{
+// 		return self::make()->value($data);
+// 	}
+
+	public function validate($value) : bool
 	{
-		return self::make()->value($data);
+		if (!$this->validateNull($value))
+		{
+			return false;
+		}
+		if (!$this->validateLength($this->getVar()))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	############
+	### Test ###
+	############
+	public function plugVars() : array
+	{
+		return [
+			[$this->name => '["one","two","three"]'],
+		];
 	}
 
 }

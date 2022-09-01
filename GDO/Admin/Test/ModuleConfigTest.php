@@ -31,7 +31,7 @@ final class ModuleConfigTest extends TestCase
     
     public function testAllEnabledModulesToConfigure()
     {
-    	$this->messageBold("Testing all enabled modules to configure.");
+    	$this->message("Testing all enabled modules to configure.");
     	foreach (ModuleLoader::instance()->getEnabledModules() as $module)
     	{
     		$this->configureTest($module);

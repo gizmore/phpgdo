@@ -9,6 +9,7 @@ use GDO\Core\Application;
 use GDO\Core\GDT_DBField;
 use GDO\Core\GDO;
 use GDO\Table\GDT_Filter;
+use GDO\Core\GDT;
 
 /**
  * The GDT_Timestamp field is the baseclass for all datefields.
@@ -23,7 +24,7 @@ use GDO\Table\GDT_Filter;
  * @TODO: DateTimes transfer as string for the websocket protocol. 
  * 
  * @author gizmore
- * @version 6.11.2
+ * @version 7.0.1
  * @since 6.0.7
  */
 class GDT_Timestamp extends GDT_DBField
@@ -39,7 +40,7 @@ class GDT_Timestamp extends GDT_DBField
 	#############
 	public function toValue($var = null)
 	{
-	    if ($var)
+	    if ($var !== null)
 	    {
 	        return Time::parseDateDB($var);
 	    }
@@ -71,11 +72,7 @@ class GDT_Timestamp extends GDT_DBField
 	    return $this->initialAgo(0);
 	}
 	
-	/**
-	 * @param int $secondsAgo
-	 * @return self
-	 */
-	public function initialAgo($secondsAgo)
+	public function initialAgo(int $secondsAgo) : self
 	{
 	    return $this->initial(Time::getDate(Application::$MICROTIME - $secondsAgo));
 	}
@@ -108,12 +105,8 @@ class GDT_Timestamp extends GDT_DBField
 	###############
 	### Min/Max ###
 	###############
-	/**
-	 * @param int $duration
-	 * @return \GDO\Date\GDT_Timestamp
-	 */
-	public function minAge($duration) { return $this->minTimestamp(Application::$TIME - $duration); }
-	public function maxAge($duration) { return $this->maxTimestamp(Application::$TIME + $duration); }
+	public function minAge(int $duration) : self { return $this->minTimestamp(Application::$TIME - $duration); }
+	public function maxAge(int $duration) : self { return $this->maxTimestamp(Application::$TIME + $duration); }
 	
 	public $minDate;
 	public function minTimestamp($minTimestamp)
@@ -214,7 +207,7 @@ class GDT_Timestamp extends GDT_DBField
 			Time::parseDateTimeDB($this->getVar()),
 			$this->format);
 	}
-	public function renderForm() : string { return GDT_Template::php('Date', 'form/datetime.php', ['field'=>$this]); }
+	public function renderForm() : string { return GDT_Template::php('Date', 'datetime_form.php', ['field' => $this]); }
 	public function renderAge() : string { return Time::displayAge($this->getVar()); }
 	public function renderCLI() : string { return $this->renderLabel() . ': ' . $this->getVar(); }
 	public function renderJSON() { return Time::getTimestamp($this->getVar()) * 1000; }
@@ -224,8 +217,13 @@ class GDT_Timestamp extends GDT_DBField
 		{
 			return Time::displayDateTime($dt, $this->format, '');
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
+	
+// 	public function renderCard() : string
+// 	{
+// 		die('XXXXX');
+// 	}
 	
 	public function inputToVar($input) : ?string
 	{
@@ -276,11 +274,6 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	### Filter ###
 	##############
-// 	public function filterVar(string $key=null)
-// 	{
-// 		return [];
-// 	}
-	
 	public function renderFilter(GDT_Filter $f) : string
 	{
 		return GDT_Template::php('Date', 'timestamp_filter.php', ['field' => $this, 'f' => $f]);

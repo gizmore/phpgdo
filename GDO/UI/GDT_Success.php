@@ -15,4 +15,14 @@ final class GDT_Success extends GDT_Panel
 		$this->icon = 'check';
 	}
 	
+	############
+	### Code ###
+	############
+	public int $code = 200;
+	public function code(int $code) : self
+	{
+		$this->code = $code;
+		return $this;
+	}
+	
 }

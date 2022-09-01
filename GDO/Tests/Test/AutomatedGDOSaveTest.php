@@ -7,10 +7,13 @@ use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Util\Permutations;
 use GDO\Core\Application;
+use GDO\Core\GDO_Exception;
+use GDO\UI\Color;
+use GDO\UI\TextStyle;
 
 /**
  * Try to save all GDO.
- * Once with blank. (crashtest) (REMOVED)
+ * Once with blank. (may fail!)
  * Once with plugged. (should be a success)
  * 
  * @author gizmore
@@ -58,8 +61,12 @@ final class AutomatedGDOSaveTest extends TestCase
 				}
 				try
 				{
-					$this->saveTestGDO($gdo);
+					$success = $this->saveTestGDO($gdo);
 					$this->assert200("Test if {$gdo->gdoClassName()} can be saved.");
+					if (!$success)
+					{
+						throw new GDO_Exception("Cannot save blank plugged GDO: " . get_class($gdo));
+					}
 					$this->message("%4d.) %s: %s",
 						$this->gdoTested,
 						CLI::bold(CLI::green("SUCCESS")),
@@ -89,47 +96,60 @@ final class AutomatedGDOSaveTest extends TestCase
 		$this->message(CLI::bold("DONE!"));
 		$this->message('Tested %d GDO', $this->gdoTested);
 		$this->message('%s have succeeded. %s were abstract. %s. %s ',
-			$this->gdoSuccess, $this->gdoAbstract, CLI::bold("{$this->gdoFailure} failed", CLI::bold("{$this->gdoNonTestable} were not testable.")));
+			$this->gdoSuccess, $this->gdoAbstract,
+			CLI::bold("{$this->gdoFailure} failed",
+			CLI::bold("{$this->gdoNonTestable} were not testable.")));
 	}
 
-	private function saveTestGDOUnplugged(GDO $gdo)
-	{
-		$this->plugVariants = [];
-		$new = $gdo->table()->cache->getNewDummy();
-		if ($new->isValid())
-		{
-			$new->replace();
-		}
-	}
+// 	private function saveTestGDOUnplugged(GDO $gdo)
+// 	{
+// 		$this->plugVariants = [];
+// 		$new = $gdo->table()->cache->getNewDummy();
+// 		if ($new->isValid())
+// 		{
+// 			$new->replace();
+// 		}
+// 	}
 	
-	private function saveTestGDO(GDO $gdo)
+	private function saveTestGDO(GDO $gdo) : bool
 	{
+		if ($gdo instanceof \GDO\News\GDO_NewsComments)
+		{
+			xdebug_break();
+		}
+		
+		$success = true;
 		$this->plugVariants = [];
-		foreach ($gdo->gdoColumnsCache() as $name => $gdt)
+		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
 			$gdt->inputs(); # clear input
-			$this->addPlugVars($name, $gdt->plugVars());
+			$this->addPlugVars($gdt->plugVars());
 		}
 		
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $inputs)
 		{
-			$new = $gdo->table()->cache->getNewDummy();
-			$new->setVars($inputs);
-			if ($new->isValid())
+			$success = false;
+			try
 			{
-				$new->replace();
-// 				$new->delete();
+				$new = $gdo->table()->cache->getNewDummy();
+				$new->setVars($inputs);
+				if ($new->isValid())
+				{
+					$new->replace();
+// 					$new->delete(); # might ruin custom test chains :(
+					$success = true;
+					break;
+				}
 			}
-// 			else
-// 			{
-// 				$this->error("%4d.) %s: %s - %s",
-// 					$this->gdoTested,
-// 					CLI::bold(CLI::red("WARNING")),
-// 					$gdo->gdoClassName(),
-// 					'has invalid plug vars');
-// 			}
+			catch (\Throwable $ex)
+			{
+				$this->error("%s: %s",
+					Color::red(get_class($ex)),
+					TextStyle::bold($ex->getMessage()));
+			}
 		}
+		return $success;
 	}
 
 }

@@ -11,6 +11,7 @@ p { word-break: break-word; }
 .ce { text-align: center; margin: auto; }
 .cb { clear: both; }
 .dn { display: none; }
+.dc { display: none; }
 .gdt-table td.gdt-num.gdt-user { text-align: left; }
 .ri { text-align: right; float: right; }
 .ri:after,.fr:after,.fl:after { content: ""; visibility: hidden; display: block; height: 0; clear: both; }

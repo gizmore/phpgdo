@@ -326,8 +326,8 @@ class Database
 		
 		foreach ($gdo->gdoColumnsCache() as $column)
 		{
-			if ($column instanceof GDT_DBField)
-			{
+// 			if ($column instanceof GDT_DBField)
+// 			{
 				if ($define = $column->gdoColumnDefine())
 				{
 					$columns[] = $define;
@@ -336,7 +336,7 @@ class Database
 				{
 					$primary[] = $column->identifier();
 				}
-			}
+// 			}
 		}
 		
 		if (count($primary))

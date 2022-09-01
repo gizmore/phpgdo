@@ -875,7 +875,7 @@ elseif ($argv[1] === 'confgrade')
 			$path = $argv[2];
 	}
 	
-	Installer::refreshConfig($path);
+	Installer::refreshConfig("protected/{$path}");
 	
 	echo "All done!\n";
 }

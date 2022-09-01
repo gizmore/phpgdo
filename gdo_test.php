@@ -89,7 +89,7 @@ Database::instance()->queryWrite(
 	"CREATE DATABASE " . GDO_DB_NAME);
 Database::instance()->useDatabase(GDO_DB_NAME);
 
-FileUtil::removeDir(GDO_PATH . 'files_temp/');
+FileUtil::removeDir(GDO_PATH . 'files_test/');
 FileUtil::removeDir(GDO_TEMP_PATH);
 
 # 1. Try the install process if mode all.

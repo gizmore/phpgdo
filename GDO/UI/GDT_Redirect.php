@@ -4,7 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\Application;
 use GDO\Session\GDO_Session;
-use GDO\Core\Logger;
+use GDO\Core\Website;
 
 /**
  * A redirect.
@@ -77,64 +77,42 @@ final class GDT_Redirect extends GDT
 	#############
 	### Flash ###
 	#############
-	public string $redirectError;
-	public string $redirectMessage;
+// 	public string $redirectError;
+// 	public string $redirectMessage;
 
 	public function redirectError(string $key, array $args=null, bool $log=true) : self
 	{
-		if ($log)
-		{
-			Logger::logMessage(ten($key, $args));
-		}
-		return $this->redirectErrorRaw(t($key, $args), false);
-	}
-	
-	public function redirectErrorRaw(string $message, bool $log=true) : self
-	{
-		GDT_Page::instance()->topResponse()->addField(GDT_Error::make()->code(307)->textRaw($message));
-
-		if ($log)
-		{
-			Logger::logMessage($message);
-		}
+		$code = 307;
+		
+		Website::error(t('redirect'), $key, $args, $log, $code);
+		
+		$error = GDT_Error::make()->code($code)->text($key, $args);
+		
+		GDT_Page::instance()->topResponse()->addField($error);
+		
 		if (class_exists('GDO\\Session\\GDO_Session', false))
 		{
-			GDO_Session::set('redirect_error', $message);
+			GDO_Session::set('redirect_error', t($key, $args));
 		}
-		if (Application::$INSTANCE->isCLI())
-		{
-			echo "$message\n";
-		}
-		$this->redirectError = $message;
+		
 		return $this;
 	}
 	
 	public function redirectMessage(string $key, array $args=null, bool $log=true) : self
 	{
-		if ($log)
-		{
-			Logger::logMessage(ten($key, $args));
-		}
-		return $this->redirectMessageRaw(t($key, $args), false);
-	}
-	
-	public function redirectMessageRaw(string $message, bool $log=true) : self
-	{
-		GDT_Page::instance()->topResponse()->addField(GDT_Success::make()->textRaw($message));
+		$code = 307;
 		
-		if ($log)
-		{
-			Logger::logMessage($message);
-		}
+		Website::message(t('redirect'), $key, $args, $log, $code);
+		
+		$success = GDT_Success::make()->code($code)->text($key, $args);
+		
+		GDT_Page::instance()->topResponse()->addField($success);
+		
 		if (class_exists('GDO\\Session\\GDO_Session', false))
 		{
-			GDO_Session::set('redirect_message', $message);
+			GDO_Session::set('redirect_message', t($key, $args));
 		}
-		if (Application::$INSTANCE->isCLI())
-		{
-			echo "$message\n";
-		}
-		$this->redirectMessage = $message;
+		
 		return $this;
 	}
 	
@@ -143,20 +121,12 @@ final class GDT_Redirect extends GDT
 	##############
 	public function renderCLI() : string
 	{
-// 		if (isset($this->href))
-// 		{
-// 			return t('gdt_redirect_to', [$this->href]);
-// 		}
 		return GDT::EMPTY_STRING;
 	}
 	
 	public function renderHTML() : string
 	{
 		$app = Application::$INSTANCE;
-// 		if ($app->isCLI())
-// 		{
-// 			return GDT::EMPTY_STRING;
-// 		}
 		
 // 		$ajax = '';
 		$url = isset($this->href) ? $this->href : $this->hrefBack();

@@ -92,16 +92,15 @@ class Application extends GDT
 	
 	/**
 	 * Set the HTTP response code.
-	 * This only works once.
 	 */
 	public static function setResponseCode(int $code) : void
 	{
 		if ($code !== 200)
 		{
-			if (self::$RESPONSE_CODE !== 200)
-			{
+// 			if (self::$RESPONSE_CODE !== 200)
+// 			{
 				self::$RESPONSE_CODE = $code;
-			}
+// 			}
 		}
 	}
 

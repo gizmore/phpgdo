@@ -73,7 +73,10 @@ return [
 	'err_cli_form_gdt' => '%s has an error: %s',
 	'err_path_not_exists' => 'The %2$s `%1$s` does not exist or is not readable.',
 	'err_token' => 'Your authenticity token is invalid or has been used already.',
-
+	'err_exception' => '%s: `%s`.',
+	'err_is_deleted' => 'This entry got deleted and cannot be altered anymore.',
+	'err_session_required' => 'You need a session cookie to utilize this method.',
+	
 	# err_path
 	'is_dir' => 'directory',
 	'is_file' => 'file',
@@ -83,7 +86,8 @@ return [
 	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',
 	'msg_crud_created' => 'Your %s has been created successfully.',
 	'msg_binary_detected' => 'The %s binary has been detected.',
-	'msg_module_methods' => 'Module %s methods: %s.',
+	'msg_module_methods' => '%s methods: %s.',
+
 	# Checkbox
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
@@ -140,8 +144,10 @@ return [
 	'enum_member' => 'Member',
 	'enum_link' => 'Link',
 	'enum_bot' => 'Bot',
+	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'redirect' => 'Redirect',
 	'attachment' => 'Attachment',
 	'edited_by' => 'Edited by',
 	'html' => 'HTML',
@@ -220,7 +226,8 @@ return [
 	'md_core_impressum' => 'The impressum for the %s service website.',
 	
 	# Util
-	'and' => ' and ',
+	'or' => 'or',
+	'and' => 'and',
 	'none' => 'None',
 	
 	# Welcome

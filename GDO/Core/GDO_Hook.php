@@ -6,12 +6,11 @@ namespace GDO\Core;
  * The IPC shim uses a DB table to communicate with other processes.
  * data is simply stored as a json message.
  * 
+ * @author gizmore@wechall.net
+ * @version 7.0.1
+ * @since 6.5.0
  * @see GDT_Hook
  * @see GWS_Server
- * 
- * @author gizmore@wechall.net
- * @version 7.0.0
- * @since 6.5.0
  */
 final class GDO_Hook extends GDO
 {

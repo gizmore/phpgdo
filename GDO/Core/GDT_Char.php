@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Util\Random;
+
 /**
  * A GDT_Char is a fixed length CHAR value in the db.
  * 
@@ -27,4 +29,11 @@ class GDT_Char extends GDT_String
 			$this->gdoNullDefine() . $this->gdoInitialDefine();
 	}
 	
+	public function plugVars() : array
+	{
+		return [
+			[$this->name => Random::mrandomKey($this->min, Random::HEXUPPER)],
+		];
+	}
+
 }

@@ -6,7 +6,7 @@ namespace GDO\Core;
  * This phpdoc shall be a reference documentation entry for v7.
  * [This](https://github.com/gizmore/phpgdo) is a link to a website to see bleeding stuff while i try a fresh start. 
  * 
- * - Abstracts gdoColumnDefine() : string
+ * - Abstracts gdoColumnDefine() : string (now GDT)
  * 
  * - Attributes bool $primary
  * - Attributes bool $unique
@@ -23,12 +23,10 @@ abstract class GDT_DBField extends GDT_Field
 	####################
 	### Create Table ###
 	####################
-	public abstract function gdoColumnDefine() : string;
-	
 	public function gdoInitialDefine() : string
 	{
 		return isset($this->initial) ?
-			(" DEFAULT ".GDO::quoteS($this->initial)) : '';
+			(' DEFAULT '.GDO::quoteS($this->initial)) : '';
 	}
 	
 	###############

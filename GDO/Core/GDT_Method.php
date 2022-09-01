@@ -43,9 +43,6 @@ class GDT_Method extends GDT
 		{
 			$this->changeUser();
 			$inputs = $this->getInputs();
-// 			$method = $this->method->inputs($inputs);
-// 			$
-// 			$method->appliedInputs($inputs);
 			if ($this->clibutton)
 			{
 				if ($button = $this->getCLIAutoButton($inputs))

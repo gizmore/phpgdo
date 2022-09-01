@@ -8,8 +8,8 @@ use GDO\Core\GDT_String;
  * Current IP is assigned at the very bottom.
  * 
  * @author gizmore
- * @version 7.0.0
- * @since 6.0.0
+ * @version 7.0.1
+ * @since 4.0.0
  */
 final class GDT_IP extends GDT_String
 {
@@ -60,11 +60,23 @@ final class GDT_IP extends GDT_String
 	public int $max = 45;
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
-	public string $pattern = "/^[.:0-9A-Fa-f]{3,45}$/";
+	public string $pattern = "/^[.:0-9a-f]{3,45}$/D";
 	public string $icon = 'url';
 	
 	public function defaultLabel() : self { return $this->label('ip'); }
 
+	############
+	### Test ###
+	############
+	public function plugVars() : array
+	{
+		$n = $this->getName();
+		return [
+			[$n => '12.13.14.15'],
+			[$n => '23.45.67.89'],
+		];
+	}
+	
 }
 
 # Assign current IP.

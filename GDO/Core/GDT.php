@@ -347,8 +347,8 @@ abstract class GDT
 	
 	public function validated(bool $throw=false) : ?self
 	{
-		$var = $this->getVar();
-		$value = $this->toValue($var);
+// 		$var = $this->getVar();
+		$value = $this->getValue();
 		if ($this->validate($value))
 		{
 			$this->onValidated();
@@ -474,6 +474,11 @@ abstract class GDT
 	public function gdoColumnNames() : array
 	{
 		return self::EMPTY_ARRAY;
+	}
+	
+	public function gdoColumnDefine() : string
+	{
+		return self::EMPTY_STRING;
 	}
 	
 	/**

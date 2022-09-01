@@ -1,6 +1,9 @@
 <?php
 namespace GDO\Core;
 
+use GDO\UI\Color;
+use GDO\UI\TextStyle;
+
 /**
  * Base GDOv7 Exception class.
  * @author gizmore
@@ -16,6 +19,17 @@ class GDO_Exception extends \Exception
 		parent::__construct($message, $code, $previous);
 		Application::setResponseCode($code);
 		Logger::logException($this);
+	}
+	
+	public function renderCLI() : string
+	{
+		$args = [
+			Color::red(get_class($this)),
+			TextStyle::italic($this->getMessage()),
+// 			TextStyle::bold(Debug::shortpath($this->getFile())),
+// 			TextStyle::bold($this->getLine()),
+		];
+		return t('err_exception', $args);
 	}
 
 }

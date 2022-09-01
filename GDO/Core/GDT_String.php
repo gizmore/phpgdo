@@ -235,8 +235,10 @@ class GDT_String extends GDT_DBField
 	
 	public function plugVars() : array
 	{
+		$str = 'str<i>ng</i>s';
+		$str = mb_substr($str, 0, $this->max);
 		return [
-			[$this->getName() => '<b>string</b>'],
+			[$this->getName() => $str],
 		];
 	}
 

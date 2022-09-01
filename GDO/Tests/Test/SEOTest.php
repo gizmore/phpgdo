@@ -5,6 +5,8 @@ use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Tests\AutomatedTestCase;
 use function PHPUnit\Framework\assertNotEquals;
+use GDO\UI\Color;
+use GDO\UI\TextStyle;
 
 /**
  * Test if all methods have a title and description.
@@ -76,7 +78,13 @@ final class SEOTest extends AutomatedTestCase
 		$descr = $method->getMethodDescription();
 		assertNotEmpty($title, "Test if {$method->gdoClassName()} has a method title.");
 		assertNotEmpty($descr, "Test if {$method->gdoClassName()} has a method description.");
-// 		assertNotEquals($title, $descr, "Test if {$method->gdoClassName()} title differs from description.");
+// 		if ($title === $descr)
+// 		{
+// 			$this->error("%s: %s has no real method description.",
+// 				Color::red('Warning'),
+// 				TextStyle::bold(get_class($method)),
+// 			);
+// 		}
 	}
 
 	

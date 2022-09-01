@@ -67,5 +67,12 @@ class GDT_Font extends GDT_Select
 // 		}
 		return $choices;
 	}
-
+	
+	public function plugVars() : array
+	{
+		return [
+			[$this->name => 'GDO/Core/thm/default/fonts/arial.ttf'],
+		];
+	}
+	
 }

@@ -163,6 +163,24 @@ final class Website
 	#############
 	### Error ###
 	#############
+	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
+	{
+		$app = Application::$INSTANCE;
+		$app->setResponseCode($code);
+		if ($app->isCLI() || $app->isUnitTests())
+		{
+			echo TextStyle::bold(Color::red(t($key, $args))) . "\n";
+		}
+		if ($log)
+		{
+			Logger::logMessage(ten($key, $args));
+		}
+		$error = GDT_Error::make()->
+		titleRaw($titleRaw)->
+		text($key, $args);
+		GDT_Page::instance()->topResponse()->addField($error);
+	}
+	
 	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200)
 	{
 		$app = Application::$INSTANCE;
@@ -170,7 +188,6 @@ final class Website
 		if ($app->isCLI() || $app->isUnitTests())
 		{
 			echo Color::green(t($key, $args)) . "\n";
-			flush();
 		}
 		if ($log)
 		{
@@ -179,28 +196,7 @@ final class Website
 		$success = GDT_Success::make()->
 			titleRaw($titleRaw)->
 			text($key, $args);
-		$top = GDT_Page::instance()->topResponse();
-		$top->addField($success);
-	}
-	
-	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
-	{
-		$app = Application::$INSTANCE;
-		$app->setResponseCode($code);
-		if ($app->isCLI() || $app->isUnitTests())
-		{
-			echo TextStyle::bold(Color::red(t($key, $args))) . "\n";
-			flush();
-		}
-		if ($log)
-		{
-			Logger::logMessage(ten($key, $args));
-		}
-		$error = GDT_Error::make()->
-			titleRaw($titleRaw)->
-			text($key, $args);
-		$top = GDT_Page::instance()->topResponse();
-		$top->addField($error);
+		GDT_Page::instance()->topResponse()->addField($success);
 	}
 	
 }

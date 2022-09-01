@@ -31,15 +31,6 @@ trait WithGDO
 		return $this->gdoVarInitial($gdo, true);
 	}
 
-	// 	public function hasGDO() : bool
-	// 	{
-	// 		return isset($this->gdo);
-	// 	}
-	
-	// 	public function getGDO() : GDO
-	// 	{
-	// 		return $this->gdo;
-	// 	}
 	#################
 	### Protected ###
 	#################
@@ -58,8 +49,7 @@ trait WithGDO
 		{
 			unset($this->gdo);
 		}
-		$func = $initial ? 'initial' : 'var';
-		return call_user_func([$this, $func], $var);
+		return $initial ? $this->initial($var) : $this->var($var);
 	}
 	
 }

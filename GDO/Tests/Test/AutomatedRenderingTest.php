@@ -110,26 +110,6 @@ final class AutomatedRenderingTest extends TestCase
 	###############
 	### Private ###
 	###############
-// 	/**
-// 	 * @var string[string][]
-// 	 */
-// 	private array $plugVariants;
-	
-// 	private function addPlugVars(string $name, array $plugs)
-// 	{
-// 		if (!isset($this->plugVariants[$name]))
-// 		{
-// 			$this->plugVariants[$name] = [];
-// 		}
-// 		foreach ($plugs as $plug)
-// 		{
-// 			if (!in_array($plug, $this->plugVariants[$name], true))
-// 			{
-// 				$this->plugVariants[$name][] = $plug;
-// 			}
-// 		}
-// 	}
-	
 	private function fieldTestGDT(GDT $gdt) : bool
 	{
 // 		$this->renderAll($gdt); # unplugged
@@ -143,7 +123,7 @@ final class AutomatedRenderingTest extends TestCase
 		$name = $name ? $name : "testfield";
 		$this->plugVariants = [];
 		$plugs = $gdt->plugVars();
-		$this->addPlugVars($name, $plugs);
+		$this->addPlugVars($plugs);
 		$permutations = new Permutations($this->plugVariants);
 		$success = true;
 		foreach ($permutations->generate() as $inputs)
@@ -166,11 +146,11 @@ final class AutomatedRenderingTest extends TestCase
 // 		$this->renderAllUnplugged($gdo);
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
-			if ($name = $gdt->getName())
-			{
+// 			if ($name = $g<dt->getName())
+// 			{
 				$gdt->gdo($gdo);
-				$this->addPlugVars($name, $gdt->plugVars());
-			}
+				$this->addPlugVars($gdt->plugVars());
+// 			}
 		}
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $inputs)

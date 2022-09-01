@@ -27,13 +27,9 @@ class GDT_CreatedAt extends GDT_Timestamp
 		return "{$this->identifier()} TIMESTAMP({$this->millis}){$this->gdoNullDefine()} DEFAULT CURRENT_TIMESTAMP({$this->millis})";
 	}
 	
-	/**
-	 * Fill with creation date timestamp.
-	 * @see \GDO\Core\GDT::blankData()
-	 */
 	public function blankData() : array
 	{
-	    $var = $this->var ? $this->var : Time::getDate();
+	    $var = $this->var !== null ? $this->var : Time::getDate();
 		return [$this->name => $var];
 	}
 	

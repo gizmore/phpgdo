@@ -74,15 +74,21 @@ elseif (CLI::isInteractive())
 			$methods = Arrays::implodeHuman($methods);
 			echo t('msg_module_methods', [$module->gdoHumanName(), $methods]);
 		}
+		catch (\GDO\Core\GDO_Error $ex)
+		{
+			echo $ex->renderCLI();
+		}
 		catch (\Throwable $ex)
 		{
 			Debug::debugException($ex, false);
 			echo GDT_Error::fromException($ex)->render();
+			die(-1);
 		}
 	}
 	else
 	{
-		echo "Usage: {$argv[0]} <gdo expression here>\n";
+		echo "Usage: gdo <gdo_expression>. Example: `gdo module.method param,param2`";
+		die(0);
 	}
 }
 // else

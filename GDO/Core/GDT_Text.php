@@ -30,7 +30,7 @@ class GDT_Text extends GDT_String
 	protected function gdoColumnDefineB() : string
 	{
 	    $collate = $this->gdoCollateDefine($this->caseSensitive);
-	    return "TEXT({$this->max}) CHARSET {$this->gdoCharsetDefine()} {$collate}{$this->gdoNullDefine()}";
+	    return "TEXT({$this->max}) CHARSET {$this->gdoCharsetDefine()}{$collate}{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
 	}
 	
 	################

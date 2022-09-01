@@ -16,6 +16,7 @@ final class GDT_MD5 extends GDT_Char
 		$this->length(32);
 		$this->caseS();
 		$this->ascii();
+		$this->pattern('/^[a-z0-9]{32}$/iD');
 	}
 	
 }

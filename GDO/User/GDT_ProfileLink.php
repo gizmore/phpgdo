@@ -64,7 +64,9 @@ final class GDT_ProfileLink extends GDT_Link
 	
 	public function renderCLI() : string
 	{
-		return $this->user->renderUserName();
+		return isset($this->user) ? 
+			$this->user->renderUserName() :
+			t('unknown_user');
 	}
 	
 	

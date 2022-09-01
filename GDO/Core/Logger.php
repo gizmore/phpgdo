@@ -302,26 +302,6 @@ final class Logger
 		return true;
 	}
 
-// 	/**
-// 	 * Writes print_r(objects) to the debug file.
-// 	 * @deprecated never used
-// 	 */
-// 	public static function debug(...$objects)
-// 	{
-// 		foreach ($objects as $object)
-// 		{
-// 			$message = $object;
-// 			if ( (is_array($object)) || (is_object($object)) )
-// 			{
-// 				$message = print_r($object, true);
-// 			}
-// 			self::logDebug($message);
-// 		}
-// 	}
-	
 }
 
-if (!defined('GDO_LOG_REQUEST'))
-{
-    define('GDO_LOG_REQUEST', 0);
-}
+deff('GDO_LOG_REQUEST', false);

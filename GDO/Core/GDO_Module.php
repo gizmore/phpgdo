@@ -212,14 +212,15 @@ class GDO_Module extends GDO
 	##############
 	public function getID() : ?string { return $this->gdoVar('module_id'); }
 	
-	private string $name; 
+// 	private string $name; 
 	public function getName() : ?string
 	{
-		if (!isset($this->name))
-		{
-			$this->name = $this->getModuleName();
-		}
-		return $this->name;
+		return $this->getModuleName();
+// 		if (!isset($this->name))
+// 		{
+// 			$this->name = $this->getModuleName();
+// 		}
+// 		return $this->name;
 	}
 	
 	public function getVersion() : Version

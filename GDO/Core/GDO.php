@@ -784,11 +784,7 @@ abstract class GDO extends GDT
 		$invalid = 0;
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			if ($name = $gdt->getName())
-			{
-				$gdt = $this->gdoColumn($name);
-				$invalid += $gdt->validate($gdt->getValue()) ? 0 : 1;
-			}
+			$invalid += $gdt->gdo($this)->validated() ? 0 : 1;
 		}
 		return $invalid === 0;
 	}
@@ -1175,25 +1171,20 @@ abstract class GDO extends GDT
 		$table = self::table();
 		
 		$gdoVars = [];
-		foreach ($table->gdoColumnsCache() as $name => $gdt)
+		foreach ($table->gdoColumnsCache() as $gdt)
 		{
-			# Reset to initial state.
-			$gdt->reset();
-			
-// 			$name = $gdt->getName();
-			
-			# init gdt with initial var.
+			# Pass 1) Plug initial var
+			$name = $gdt->getName();
 			if (isset($initial[$name]))
 			{
-				$var = (string) $initial[$name];
-				$gdt->var($var);
+				$gdt->var($initial[$name]);
 			}
 			else
 			{
-				$gdt->var($gdt->getInitial());
+				$gdt->reset();
 			}
-			
-			# loop over blank data
+
+			# Pass 2) Loop over vars
 			if ($data = $gdt->blankData())
 			{
 				foreach ($data as $k => $v)

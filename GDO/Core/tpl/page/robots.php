@@ -5,12 +5,9 @@ use GDO\Core\Module_Core;
 #
 # <?=sitename()?> robots.txt
 #
-# powered by gdo6-<?=Module_Core::GDO_REVISION?>.
+# powered by phpgdo-<?=Module_Core::GDO_REVISION?>.
 #
-# (c) 2019-2021 gizmore@wechall.net
-#
-# (l) MIT for the core and most modules.
-# (l) Module dependant.
+# (c) 2022 - gizmore@wechall.net (C.B.)
 #
 
 User-agent: *

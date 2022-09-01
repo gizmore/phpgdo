@@ -128,7 +128,7 @@ final class AutomatedTest extends TestCase
 			}
 		}
 		
-		$this->messageBold("%d GDO tested.", $count);
+		$this->message("%d GDO tested.", $count);
 		echo "{$count} GDO tested!\n";
 		ob_flush();
 	}

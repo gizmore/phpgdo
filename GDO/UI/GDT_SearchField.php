@@ -6,6 +6,7 @@ use GDO\Core\GDT_String;
 /**
  * A search field is a text with icon and default label.
  * Input type is set to search.
+ * Field is auxillary and does not feature order, filter and search.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -16,7 +17,7 @@ class GDT_SearchField extends GDT_String
 	public string $icon = 'search';
 	
 	public int $min = 2;
-	public int $max = 64;
+	public int $max = 256;
 	
 	public bool $hidden = true;
     
@@ -40,7 +41,6 @@ class GDT_SearchField extends GDT_String
 		return [
 			[$name => 'giz'],
 			[$name => 'ess'],
-			[$name => 'xxx'],
 		];
 	}
 

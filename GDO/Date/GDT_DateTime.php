@@ -21,7 +21,7 @@ class GDT_DateTime extends GDT_Date
 
 	public function renderForm() : string
 	{
-		return GDT_Template::php('Date', 'form/datetime.php', ['field'=>$this]);
+		return GDT_Template::php('Date', 'datetime_form.php', ['field'=>$this]);
 	}
 	
 	public function htmlValue() : string

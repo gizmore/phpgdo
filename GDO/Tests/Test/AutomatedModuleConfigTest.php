@@ -27,6 +27,10 @@ final class AutomatedModuleConfigTest extends TestCase
 	{
 		foreach ($module->getConfigCache() as $gdt)
 		{
+// 			if ($gdt->getName()==='captcha_font')
+// 			{
+// 				xdebug_break();
+// 			}
 			assertTrue($gdt->validate($gdt->getValue()), "Check if default config value for {$gdt->getName()} in module {$module->getName()} is ok.");
 		}
 		foreach ($module->getSettingsCache() as $gdt)

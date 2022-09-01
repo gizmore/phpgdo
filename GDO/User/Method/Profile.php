@@ -50,9 +50,14 @@ final class Profile extends MethodCard
 		{
 			return $this->error('err_no_data_yet');
 		}
+		$this->onProfileView($user);
 		$profile = GDO_Profile::forUser($user);
-		Module_User::instance()->increaseUserSetting($user, 'profile_views');
 		return $this->executeFor($profile);
+	}
+	
+	public function onProfileView(GDO_User $user) : void
+	{
+		Module_User::instance()->increaseUserSetting($user, 'profile_views');
 	}
 
 	protected function createCard(GDT_Card $card) : void

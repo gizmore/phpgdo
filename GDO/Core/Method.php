@@ -274,15 +274,11 @@ abstract class Method #extends GDT
 	
 	/**
 	 * Wrap execution in transaction if desired from method.
-	 * @throws \Exception
-	 * @return GDT_Response
 	 */
 	public function execWrap()
 	{
-		if ($response = $this->executeWithInit())
-		{
-			$this->setupSEO();
-		}
+		$response = $this->executeWithInit();
+		$this->setupSEO();
 		return $response;
 	}
 	
@@ -316,14 +312,13 @@ abstract class Method #extends GDT
 			
 			# 1) Start the transaction
 			$this->lock();
-			$transactional = $this->transactional();
-			if ($transactional)
+			if ($this->transactional())
 			{
 				$db->transactionBegin();
+				$transactional = true;
 			}
 
 			# 2) Before execute
-// 			$this->applyInput();
 			$this->beforeExecute();
 			$result = GDT_Hook::callHook('BeforeExecute', $this, $response);
 			if ($result)
@@ -376,6 +371,14 @@ abstract class Method #extends GDT
 			}
 			
 			return $response;
+		}
+		catch (GDO_Error $e)
+		{
+			if ($transactional)
+			{
+				$db->transactionRollback();
+			}
+			return $this->error('error', [html($e->getMessage())]);
 		}
 		catch (GDO_ArgException $e)
 		{

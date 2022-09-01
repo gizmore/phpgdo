@@ -106,7 +106,6 @@ final class GDT_Module extends GDT_ObjectSelect
 		$name = $this->getName();
 		return [
 			[$name => 'UI'],
-			[$name => 'Table'],
 			[$name => 'Admin'],
 		];
 	}

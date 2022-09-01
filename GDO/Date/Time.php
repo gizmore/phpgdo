@@ -294,15 +294,8 @@ final class Time
 	
 	/**
 	 * Display a datestring.
-	 * 
-	 * @param string $iso
-	 * @param string $date a date from the database in utc
-	 * @param string $format display format
-	 * @param string $default_return default return for null
-	 * @param string $timezone
-	 * @return string
 	 */
-	public static function displayDateISO($iso, $date=null, $format='short', $default_return='---', $timezone=null)
+	public static function displayDateISO(string $iso, string $date=null, string $format='short', string $default_return='---', string $timezone=null) : string
 	{
 	    if ($date === null)
 	    {
@@ -315,15 +308,7 @@ final class Time
 	    return self::displayDateTimeISO($iso, $d, $format, $default_return, $timezone);
 	}
 	
-	/**
-	 * 
-	 * @param DateTime $datetime
-	 * @param string $format
-	 * @param string $default_return
-	 * @param int $timezone
-	 * @return string
-	 */
-	public static function displayDateTime(DateTime $datetime=null, $format='short', $default_return='---', $timezone=null)
+	public static function displayDateTime(DateTime $datetime=null, string $format='short', string $default_return='---', int $timezone=null)
 	{
 		return self::displayDateTimeISO(Trans::$ISO, $datetime, $format, $default_return, $timezone);
 	}

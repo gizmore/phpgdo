@@ -19,6 +19,7 @@ use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_TinyInt;
 use GDO\Core\GDT_EnumNoI18n;
 use GDO\Core\GDO;
+use GDO\Core\GDT_Path;
 
 /**
  * Configuration helper during install wizard.
@@ -95,6 +96,7 @@ class Config
 		deff('GDO_WEB_ROOT', Strings::substrTo($_SERVER['SCRIPT_NAME'], 'install/wizard.php'));
 		# Files
 		deff('GDO_CHMOD', 0770);
+		deff('GDO_FILES_DIR', 'files');
 		# Logging
 		deff('GDO_LOG_REQUEST', false);
 		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
@@ -166,6 +168,7 @@ class Config
 			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT),
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
+			GDT_Path::make('files_dir')->label('files_dir')->initial(GDO_FILES_DIR),
 			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initial('0'.base_convert(GDO_CHMOD, 10, 8)),
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),

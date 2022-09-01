@@ -36,6 +36,36 @@ final class GDT_DateDisplay extends GDT
 		return $this;
 	}
 	
+	#############
+	### Empty ###
+	#############
+	public string $emptyTextKey;
+	public array $emptyTextArgs;
+	public string $emptyTextRaw = '---';
+	
+	public function emptyText(string $key, array $args = null) : self
+	{
+		$this->emptyTextKey = $key;
+		$this->emptyTextArgs = $args;
+		return $this;
+	}
+	
+	public function emptyTextRaw(string $emptyText) : self
+	{
+		unset($this->emptyTextKey);
+		unset($this->emptyTextArgs);
+		$this->emptyTextRaw = $emptyText;
+		return $this;
+	}
+	
+	public function noEmptyText() : self
+	{
+		unset($this->emptyTextKey);
+		unset($this->emptyTextArgs);
+		unset($this->emptyTextRaw);
+		return $this;
+	}
+	
 	##############
 	### Format ###
 	##############
@@ -57,12 +87,26 @@ final class GDT_DateDisplay extends GDT
 	# #############
 	# ## Render ###
 	# #############
+	public function renderCLI() : string
+	{
+		return $this->renderDateOrAge();
+	}
+	
 	public function renderHTML(): string
+	{
+		$display = $this->renderDateOrAge();
+		return GDT_Template::php('Date', 'date_html.php', [
+			'field' => $this,
+			'display' => $display
+		]);
+	}
+
+	private function renderDateOrAge() : string
 	{
 		$date = $this->getVar();
 		if ( !$date)
 		{
-			return '---';
+			return $this->renderEmptyText();
 		}
 		$diff = Time::getDiff($date);
 		if ($diff > $this->showDateAfterSeconds)
@@ -75,12 +119,25 @@ final class GDT_DateDisplay extends GDT
 				Time::displayAge($date)
 			]);
 		}
-		return GDT_Template::php('Date', 'date_html.php', [
-			'field' => $this,
-			'display' => $display
-		]);
+		return $display;
 	}
-
+	
+	private function renderEmptyText() : string
+	{
+		if (isset($this->emptyTextKey))
+		{
+			return t($this->emptyTextKey, $this->emptyTextArgs);
+		}
+		if (isset($this->emptyTextRaw))
+		{
+			return $this->emptyTextRaw;
+		}
+		return GDT::EMPTY_STRING;
+	}
+	
+	################
+	### Validate ###
+	################
 	public function plugVars() : array
 	{
 		return [

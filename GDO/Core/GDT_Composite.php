@@ -130,12 +130,23 @@ class GDT_Composite extends GDT_Container
 	
 	public function gdoColumnDefine() : string
 	{
-		$define = [];
+		$defines = array_map(function(GDT $gdt) {
+			return $gdt->gdoColumnDefine();
+		}, $this->getAllFields());
+		return implode(",\n", $defines);
+	}
+
+	############
+	### Test ###
+	############
+	public function plugVars() : array
+	{
+		$plugs = [];
 		foreach ($this->getAllFields() as $gdt)
 		{
-			$define[] = $gdt->gdoColumnDefine();
+			$plugs = array_merge($plugs, $gdt->plugVars());
 		}
-		return implode("\n", $define);
+		return $plugs;
 	}
 
 }

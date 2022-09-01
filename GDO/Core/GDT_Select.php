@@ -258,6 +258,8 @@ class GDT_Select extends GDT_ComboBox
 			return $this->notNull ? $this->errorNull() : true;
 		}
 		
+		$this->initChoices();
+		
 		if ($value instanceof GDO)
 		{
     		if (isset($this->choices[$value->getID()]))

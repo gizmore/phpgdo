@@ -43,7 +43,7 @@ abstract class AutomatedTestCase extends TestCase
 	
 	protected function automatedMethods()
 	{
-		$this->messageBold("This Test is testing all trivial methods automagically...");
+		$this->message("This Test is testing all trivial methods automagically...");
 
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		foreach ($modules as $module)
@@ -128,7 +128,7 @@ abstract class AutomatedTestCase extends TestCase
 			$n = $this->automatedTested;
 			$this->automatedCalled++;
 			$mt = GDT_MethodTest::make()->inputs($plugVars);
-			$mt->runAs($this->gizmore());
+			$mt->runAs($method->plugUser());
 			$mt->method($method);
 
 			$this->runMethodTest($mt);
@@ -175,43 +175,51 @@ abstract class AutomatedTestCase extends TestCase
 
 	private function isPluggableMethod(Method $method)
 	{
-		$this->plugVariants = [];
-		foreach ($method->plugVars() as $name => $plug)
-		{
-			$this->addPlugVars($name, [$name => $plug]);
-		}
 		$trivial = true;
-		$fields = $method->gdoParameters();
-		foreach ($fields as $gdt)
+		$this->plugVariants = [];
+		$pluggedViaMethod = false;
+		
+// 		foreach ($method->plugVars() as $name => $plug)
+		if ($plugs = $method->plugVars())
 		{
-			if ($name = $gdt->getName())
+			$this->addPlugVars($plugs);
+			$pluggedViaMethod = true;
+		}
+		
+		if (!$pluggedViaMethod)
+		{
+			# Plug via GDTs
+			$fields = $method->gdoParameters();
+			foreach ($fields as $gdt)
 			{
-				if ($plugs = $gdt->plugVars())
-				{
-					$this->addPlugVars($name, $plugs);
-				}
+// 				if ($name = $gdt->getName())
+// 				{
+// 					if ($plugs = $gdt->plugVars())
+// 					{
+						$this->addPlugVars($gdt->plugVars());
+// 					}
+// 				}
+			}
+			
+			$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
+			foreach ($fields as $gdt)
+			{
+// 				if ($name = $gdt->getName())
+// 				{
+// 					if ($plugs = $gdt->plugVars())
+// 					{
+						$this->addPlugVars($gdt->plugVars());
+// 					}
+// 				}
 			}
 		}
 
-		$fields = $method->inputs($this->firstPlugPermutation())
-			->gdoParameterCache();
-		foreach ($fields as $gdt)
-		{
-			if ($name = $gdt->getName())
-			{
-				if ($plugs = $gdt->plugVars())
-				{
-					$this->addPlugVars($name, $plugs);
-				}
-			}
-		}
-
-		if ( !$this->isPluggableParameters($method, $fields))
-		{
-			$trivial = false;
-		}
-		$fields = $method->inputs($this->firstPlugPermutation())
-			->gdoParameterCache();
+// 		$fields = $method->gdoParameterCache();
+// 		if ( !$this->isPluggableParameters($method, $fields))
+// 		{
+// 			$trivial = false;
+// 		}
+		$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
 		if ( !$this->isPluggableParameters($method, $fields))
 		{
 			$trivial = false;
@@ -238,7 +246,7 @@ abstract class AutomatedTestCase extends TestCase
 			{
 				if ($plugs = $gdt->plugVars())
 				{
-					$this->addPlugVars($gdt->getName(), $plugs);
+					$this->addPlugVars($plugs);
 					$trivial = true;
 				}
 				else

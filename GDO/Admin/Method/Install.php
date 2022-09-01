@@ -30,6 +30,8 @@ class Install extends MethodForm
 	
 // 	public function isShownInSitemap() : bool { return false; }
 
+	public function isTrivial() : bool { return false; }
+
 	public function beforeExecute() : void {} # hide tabs (multi method configure page fix)
 	
 	public function getFormName() : string
@@ -136,7 +138,7 @@ class Install extends MethodForm
 	public function execute_install()
 	{
 		$mod = $this->configModule();
-		$oid = spl_object_id($mod);
+// 		$oid = spl_object_id($mod);
 		Installer::installModuleWithDependencies($mod);
 		$mod->saveVar('module_enabled', '1');
 		return $this->message('msg_module_installed', [$mod->getName()]);
@@ -145,7 +147,7 @@ class Install extends MethodForm
 	public function execute_reinstall()
 	{
 		$mod = $this->configModule();
-		Installer::installModule($mod, true);
+		Installer::installModuleWithDependencies($mod, true);
 		return $this->message('msg_module_installed', [$mod->getName()]);
 	}
 	

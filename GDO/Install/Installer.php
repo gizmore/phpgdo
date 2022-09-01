@@ -27,7 +27,7 @@ class Installer
 	/**
 	 * @param GDO_Module[] $modules
 	 */
-	public static function installModules(array $modules) : bool
+	public static function installModules(array $modules, bool $forceMigrate=false) : bool
 	{
 		$app = Application::$INSTANCE;
 		$isCLI = $app->isCLI();
@@ -62,35 +62,19 @@ class Installer
 			{
 				continue;
 			}
-// 			try
-// 			{
-				if ( ($isInstall && $isCLI) || ($isTest) )
-				{
-					echo "Installing {$module->getName()}\n";
-					flush();
-				}
-				self::installModule($module);
-// 			}
-// 			catch (\Throwable $e)
-// 			{
-// 				$app = Application::$INSTANCE;
-// 				if ( ($app->isCLI()) || ($app->isUnitTests()) )
-// 				{
-// 					echo Debug::backtraceException($e, false, "Cannot install {$module->getName()}");
-// 				}
-// 				else
-// 				{
-// 					throw $e;
-// 				}
-// 			}
+			if ( ($isInstall && $isCLI) || ($isTest) )
+			{
+				echo "Installing {$module->getName()}\n";
+			}
+			self::installModule($module, $forceMigrate);
 		}
 		return true;
 	}
 	
-	public static function installModuleWithDependencies(GDO_Module $module) : void
+	public static function installModuleWithDependencies(GDO_Module $module, bool $forceMigrate=false) : void
 	{
 		$modules = self::getDependencyModules($module->getName());
-		self::installModules($modules);
+		self::installModules($modules, $forceMigrate);
 	}
 	
 	public static function installModule(GDO_Module $module, bool $forceMigrate=false) : void
