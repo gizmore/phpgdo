@@ -73,7 +73,7 @@ final class ModuleLoader
 	
 	public function addEnabledModule(GDO_Module $module) : void
 	{
-		if (!in_array($module, $this->enabledModules, true))
+		if (!in_array($module, $this->getEnabledModules(), true))
 		{
 			$this->enabledModules[] = $module;
 			$module->onInit();
