@@ -19,6 +19,7 @@ use GDO\CLI\Process;
 
 /**
  * Performance statistics panel.
+ * New: Added info from @see \getrusage()
  * 
  * @author gizmore
  * @version 7.0.1
