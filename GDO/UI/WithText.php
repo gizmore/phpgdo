@@ -30,9 +30,13 @@ trait WithText
 	    return $this->textUnescaped();
 	}
 	
-	public function textRaw(string $text) : self
+	public function textRaw(?string $text) : self
 	{
-		$this->textRaw = $text;
+		unset($this->textRaw);
+		if ($text)
+		{
+			$this->textRaw = $text;
+		}
 		unset($this->textKey);
 		unset($this->textArgs);
 	    return $this->textUnescaped();
