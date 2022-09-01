@@ -127,6 +127,12 @@ final class GDT_PerfBar extends GDT_Panel
 				'ru_nswap' => '?',
 			]);
 		}
+		else
+		{
+			$res = array_merge($res, [
+				'ru_nswap' => '?',
+			]);
+		}
 		return $res;
 	}
 	
