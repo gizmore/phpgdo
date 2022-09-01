@@ -1,5 +1,5 @@
 <?php
-use GDO\Core\GDO_Exception;
+// use GDO\Core\GDO_Exception;
 
 /**
  * Backwards compatibility.
@@ -98,6 +98,6 @@ if ( !function_exists('xdebug_break'))
 {
 	function xdebug_break() : void
 	{
-		throw new GDO_Exception('A breakpoint has been encountered. OOPS!');
+// 		throw new GDO_Exception('A breakpoint has been encountered. OOPS!');
 	}
 }
