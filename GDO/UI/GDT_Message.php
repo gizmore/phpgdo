@@ -204,7 +204,7 @@ class GDT_Message extends GDT_Text
 		{
 			require GDO_PATH . 'GDO/UI/htmlpurifier/library/HTMLPurifier.auto.php';
 			$config = \HTMLPurifier_Config::createDefault();
-			$config->set('Cache.SerializerPath', Module_UI::instance()->tempPath('htmlpurifier'));
+			$config->set('Cache.SerializerPath', rtrim(Module_UI::instance()->tempPath('htmlpurifier/'), '/'));
 			$config->set('Cache.SerializerPermissions', GDO_CHMOD);
 			$config->set('URI.Host', GDO_DOMAIN);
 			$config->set('HTML.Nofollow', true);
