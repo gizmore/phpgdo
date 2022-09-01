@@ -29,5 +29,5 @@ printf('%d signals - ',
 printf('%d/%d(V/IV ctx) - ',
 	$i['ctxSwitchV'], $i['ctxSwitchIV']);
 printf('%d swaps',
-	$i['ru_nswap']);
+	$i['ctxSwap']);
 printf('</span>');
