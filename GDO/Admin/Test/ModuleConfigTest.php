@@ -68,13 +68,13 @@ final class ModuleConfigTest extends TestCase
     	}
     	if (count($errors))
     	{
-    		$this->error("%s: %s",
+    		$this->error("%s: %s cannot save config; %s",
     			Color::red('Warning'),
     			TextStyle::bold($module->getName()),
-    			implode(' - ', $errors),
+    			TextStyle::italic(implode(' - ', $errors)),
     		);
     	}
-    	assertEmpty($errors, "Test if {$module->getName()} ");
+    	assertEmpty($errors, "Test if {$module->getName()} can save config.");
     	$html = $result->renderMode(GDT::RENDER_WEBSITE);
     	$this->assert200("Test if {$module->getName()} can save it's configuration.");
     }

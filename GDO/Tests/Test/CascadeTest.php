@@ -14,6 +14,10 @@ use GDO\User\GDO_Permission;
  */
 final class CascadeTest extends TestCase
 {
+	/**
+	 * Try to delete a permission that is in use.
+	 * This throws a DB 500 exception.
+	 */
 	public function testCascadeRestrict()
 	{
 		try

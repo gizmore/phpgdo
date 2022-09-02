@@ -34,6 +34,8 @@ Please read it upside down, from bottom to top and sometimes again.
 
 GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
 
+ - [GDO_Country]() now tries to render UTF8 country flags in CLI mode.
+
  - [Module_Perf](../GDO/Perf/Module_Perf.php) now additionally utilizes PHP [getrusage](https://www.php.net/manual/en/function.getrusage.php). 
 
  - Memcached now does a fallback to filecache API, if config.php GDO_MEMCACHED ist set to 2. GDO_MEMCACHED is now an INT from 0-2.

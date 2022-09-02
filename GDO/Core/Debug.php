@@ -7,6 +7,7 @@ use GDO\Util\Strings;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Error;
 
 /**
  * Debug backtrace and error handler.
@@ -264,10 +265,11 @@ final class Debug
 		{
 		    return "$message\n";
 		}
-// 		if (defined('GDO_CORE_STABLE'))
-// 		{
-// 			return GDT_Page::instance()->html($message)->renderHTML();
-// 		}
+		if (defined('GDO_CORE_STABLE'))
+		{
+			$error = GDT_Error::make()->var($message);
+			return GDT_Response::make()->addField($error)->renderMode();
+		}
 	    return $message;
 	}
 	

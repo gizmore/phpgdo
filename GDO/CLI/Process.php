@@ -71,7 +71,7 @@ final class Process
 	 * @return bool True if the command has been found; otherwise, false.
 	 * @author https://stackoverflow.com/a/18540185/13599483
 	 */
-	public static function commandPath($command, $windowsSuffix = '.*')
+	public static function commandPath(string $command, string $windowsSuffix = '.*') : ?string
 	{
 		$whereIsCommand = self::isWindows() ? 'where' : 'which';
 		$command = self::isWindows() ? "$command$windowsSuffix" : $command;
@@ -96,7 +96,7 @@ final class Process
 			$stdout = str_replace("\r", '', $stdout);
 			$files = explode("\n", $stdout);
 			$file = trim($files[0]);
-			return $file;
+			return $file === '' ? null : $file;
 		}
 		return null;
 	}

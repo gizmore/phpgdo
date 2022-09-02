@@ -110,6 +110,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		if (count(GDT_MethodTest::$TEST_USERS))
 		{
+			# IF GIZMORE
 			if ($user->getID() === GDT_MethodTest::$TEST_USERS[0]->getID())
 			{
 				$table = GDO_UserPermission::table();
@@ -119,9 +120,20 @@ class TestCase extends \PHPUnit\Framework\TestCase
 				$user->changedPermissions();
 				$user->saveVar('user_deleted', null);
 				$user->saveVar('user_deletor', null);
+				
+				$this->restoreUserSettings($user);
 			}
 		}
 	}
+	
+	protected function restoreUserSettings(GDO_User $user) : void
+	{
+		# english and male
+		$user->saveSettingVar('User', 'gender', 'male');
+// 		$user->saveSettingVar('Country', 'country', 'DE');
+		$user->saveSettingVar('Language', 'language', GDO_LANGUAGE);
+	}
+	
 
 	/**
 	 *

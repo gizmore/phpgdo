@@ -52,6 +52,11 @@ final class GDO_Language extends GDO
 	public function getID() : ?string { return $this->gdoVar('lang_iso'); }
 	public function getISO() : string { return $this->getID(); }
 	
+	public function hrefFlag() : string
+	{
+		return Module_Language::instance()->wwwPath("img/{$this->getISO()}");
+	}
+	
 	##############
 	### Render ###
 	##############

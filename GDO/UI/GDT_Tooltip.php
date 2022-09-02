@@ -1,13 +1,11 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT_Template;
-
 /**
  * A tooltip is a help icon with hover text.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 5.2.0
  */
 class GDT_Tooltip extends GDT_Icon
@@ -16,7 +14,8 @@ class GDT_Tooltip extends GDT_Icon
 
 	public function renderHTML() : string
 	{
-		return GDT_Template::php('UI', 'cell/tooltip.php', ['field'=>$this]);
+		return $this->htmlIcon();
+// 		return GDT_Template::php('UI', 'cell/tooltip.php', ['field'=>$this]);
 	}
 	
 	public function renderCard() : string

@@ -30,17 +30,6 @@ final class GDT_MethodTest extends GDT_Method
      */
     public static array $TEST_USERS = [];
     
-//     ###########
-//     ### boo ###
-//     ###########
-//     /**
-//      * @deprecated Use ->inputs() method
-//      */
-//     public function parameters(array $inputs) : self
-//     {
-//     	return $this->inputs($inputs);
-//     }
-    
     ############
     ### Exec ###
     ############

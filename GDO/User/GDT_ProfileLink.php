@@ -3,6 +3,7 @@ namespace GDO\User;
 
 use GDO\UI\GDT_Link;
 use GDO\Core\GDT_Template;
+use GDO\UI\TextStyle;
 
 /**
  * A link to a profile.
@@ -27,7 +28,7 @@ final class GDT_ProfileLink extends GDT_Link
 	
 	public function hrefProfile() : string
 	{
-		return $this->user->hrefProfile();
+		return $this->getUser()->hrefProfile();
 	}
 	
 	################
@@ -57,7 +58,7 @@ final class GDT_ProfileLink extends GDT_Link
 	{
 		$tVars = [
 			'field' => $this,
-			'user' => isset($this->user) ? $this->user : GDO_User::current(),
+			'user' => $this->getUser(),
 		];
 		return GDT_Template::php('User', 'profile_link_html.php', $tVars);
 	}
@@ -66,7 +67,7 @@ final class GDT_ProfileLink extends GDT_Link
 	{
 		return isset($this->user) ? 
 			$this->user->renderUserName() :
-			t('unknown_user');
+			TextStyle::italic(t('unknown_user'));
 	}
 	
 	

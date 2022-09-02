@@ -21,9 +21,9 @@ trait WithUser
     	return $this->user(GDO_User::current());
     }
     
-    public function getUser() : GDO_User
+    public function getUser() : ?GDO_User
     {
-    	return $this->user;
+    	return isset($this->user) ? $this->user : null;
     }
 
 }

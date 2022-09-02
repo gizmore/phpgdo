@@ -130,7 +130,7 @@ class Config
 		deff('GDO_SESS_LOCK', GDO_DB_ENABLED);
 		# Email
 		deff('GDO_ENABLE_EMAIL', false);
-		deff('GDO_BOT_NAME', GDO_SITENAME . ' Support Robot');
+		deff('GDO_BOT_NAME', GDO_SITENAME . ' Support System');
 		deff('GDO_BOT_EMAIL', 'support@'.GDO_DOMAIN);
 		deff('GDO_ADMIN_EMAIL', 'administrator@'.GDO_DOMAIN);
 		deff('GDO_ERROR_EMAIL', 'errors@'.GDO_DOMAIN);

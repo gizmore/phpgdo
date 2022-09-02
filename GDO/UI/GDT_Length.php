@@ -1,7 +1,7 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT_UInt;
+use GDO\Core\GDT_Float;
 
 /**
  * A length is a dimension for width and height.
@@ -11,7 +11,7 @@ use GDO\Core\GDT_UInt;
  * @version 7.0.1
  * @since 7.0.1
  */
-final class GDT_Length extends GDT_UInt
+final class GDT_Length extends GDT_Float
 {
 	/**
 	 * For tests we try two sizes.
