@@ -63,6 +63,7 @@ final class GDT_Form extends GDT
 		parent::__construct();
 		$this->verb(self::POST);
 		$this->addClass('gdt-form');
+		$this->action((string)@urldecode($_SERVER['REQUEST_URI']));
 	}
 	
 // 	public static function make(string $name = null) : self

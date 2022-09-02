@@ -2,7 +2,6 @@
 namespace GDO\Form;
 
 use GDO\Core\GDT_Template;
-use GDO\Core\WithName;
 use GDO\UI\GDT_Button;
 use GDO\Core\WithValue;
 use GDO\Core\WithInput;
@@ -16,7 +15,6 @@ use GDO\Core\WithInput;
  */
 class GDT_Submit extends GDT_Button
 {
-	use WithName;
 	use WithInput;
 	use WithValue;
 	use WithFormAttributes;

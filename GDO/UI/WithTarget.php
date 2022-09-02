@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * HTML target attribute for GDTs.
  * Offers target attribute rendering.
@@ -17,7 +19,14 @@ trait WithTarget
 	public string $target;
 	public function target(string $target=null) : self
 	{
-		$this->target = $target;
+		if ($target === null)
+		{
+			unset($this->target);
+		}
+		else
+		{
+			$this->target = $target;
+		}
 		return $this;
 	}
 
@@ -32,7 +41,7 @@ trait WithTarget
 		{
 			return sprintf(' target="%s"', $this->target);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 }
