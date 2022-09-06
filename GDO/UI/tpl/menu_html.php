@@ -8,6 +8,6 @@ $field->addClass('gdt-menu');
  <div class="menu-title"><?=$field->renderLabel()?></div>
 <?php endif; ?>
 <?php foreach ($field->getFields() as $gdt) : ?>
- <?=$gdt->renderHTML()?>
+ <?=$gdt->render()?>
 <?php endforeach; ?>
 </div>

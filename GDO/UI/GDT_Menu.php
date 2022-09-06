@@ -36,13 +36,21 @@ final class GDT_Menu extends GDT_Container
 	##############
 	public function renderForm() : string
 	{
-		return $this->renderHTML();
+		return $this->renderMenu(true);
 	}
 
 	public function renderHTML() : string
 	{
-		$this->setupHTML();
-		return GDT_Template::php('UI', 'menu_html.php', ['field' => $this]);
+		return $this->renderMenu(false);
 	}
 	
+	public function renderMenu(bool $isForm) : string
+	{
+		$this->setupHTML();
+		return GDT_Template::php('UI', 'menu_html.php', [
+			'field' => $this,
+			'isForm' => $isForm, 
+		]);
+	}
+
 }

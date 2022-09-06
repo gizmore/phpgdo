@@ -5,7 +5,6 @@
  */
 use GDO\DB\Database;
 use GDO\Language\Trans;
-use GDO\Session\GDO_Session;
 use GDO\Core\Debug;
 use GDO\Core\Logger;
 use GDO\Core\ModuleLoader;

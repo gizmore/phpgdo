@@ -14,8 +14,8 @@ use GDO\Date\Time;
 use GDO\Tests\TestCase;
 use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
-use GDO\UI\GDT_Page;
 use GDO\Session\GDO_Session;
+use GDO\UI\TextStyle;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -49,8 +49,20 @@ require 'vendor/autoload.php';
 Debug::init();
 Logger::init('gdo_test');
 
+/**
+ * Override a few toggles for unit test mode.
+ */
+final class gdo_test extends Application
+{
+	public function isUnitTests(): bool { return true; }
+}
+gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
+$loader = new ModuleLoader(GDO_PATH . 'GDO/');
+Database::init(null);
+
+
 # Confirm
-echo "I will erase the database " . GDO_DB_NAME .".\n";
+echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) .".\n";
 echo "Is this correct? (Y/n)";
 flush();
 $c = fread(STDIN, 1);
@@ -62,17 +74,6 @@ if ( ($c !== 'y') && ($c !== 'Y') &&
 	die(0);
 }
 
-/**
- * Override a few toggles for unit test mode.
- */
-final class gdo_test extends Application
-{
-	public function isUnitTests(): bool { return true; }
-}
-gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
-$loader = new ModuleLoader(GDO_PATH . 'GDO/');
-
-Database::init(null);
 
 # ##########################
 # Simulate HTTP env a bit #
@@ -163,43 +164,36 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 
 	# Inited!
 	Trans::inited(true);
-
-	if (Installer::installModules($modules))
-	{
-		if (module_enabled('Session'))
-		{
-			GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
-			GDO_Session::instance();
-		}
-		define('GDO_CORE_STABLE', true); # all fine? @deprecated
-		foreach ($modules as $module)
-		{
-			Module_Tests::runTestSuite($module);
-		}
-	}
 }
-else # All!
+
+###################
+### All modules ###
+###################
+else
 {
 	echo "Loading and install all modules from filesystem again...\n";
 	$modules = $loader->loadModules(false, true, true);
 	$loader->initModules();
-	if (Installer::installModules($modules))
+}
+
+#######################
+### Install and run ###
+#######################
+if (Installer::installModules($modules))
+{
+	if (module_enabled('Session'))
 	{
-		if (module_enabled('Session'))
-		{
-			GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
-			GDO_Session::instance();
-		}
-		define('GDO_CORE_STABLE', true); # all fine? @deprecated
-		echo "Running tests for all modules.\n";
-		foreach ($modules as $module)
-		{
-			Module_Tests::runTestSuite($module);
-		}
+		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
+		GDO_Session::instance();
+	}
+	define('GDO_CORE_STABLE', true); # all fine? @deprecated
+	foreach ($modules as $module)
+	{
+		Module_Tests::runTestSuite($module);
 	}
 }
 
-echo GDT_Page::instance()->topResponse()->renderCLI();
+CLI::flushTopResponse();
 
 # ###########
 # ## PERF ###
@@ -207,6 +201,6 @@ echo GDT_Page::instance()->topResponse()->renderCLI();
 $time = microtime(true) - GDO_TIME_START;
 $perf = GDT_PerfBar::make('performance');
 $perf = $perf->renderMode(GDT::RENDER_CLI);
-printf("Finished with %s asserts after %s.\nGDT_PerfBar->render() says:\n%s",
+printf("Finished with %s asserts after %s.\n%s",
 	TestCase::$ASSERT_COUNT, Time::humanDuration($time),
 	$perf);
