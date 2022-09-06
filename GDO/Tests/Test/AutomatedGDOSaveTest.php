@@ -122,10 +122,10 @@ final class AutomatedGDOSaveTest extends TestCase
 			$this->addPlugVars($gdt->plugVars());
 		}
 		
-		if ($gdo instanceof \GDO\LinkUUp\LUP_MessageSent)
-		{
-			xdebug_break();
-		}
+// 		if ($gdo instanceof \GDO\LinkUUp\LUP_MessageSent)
+// 		{
+// 			xdebug_break();
+// 		}
 		
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $inputs)
