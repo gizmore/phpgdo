@@ -37,7 +37,7 @@ final class Sort
 //         $table = GDT_Table::make()->addHeaderFields(...$result->table->gdoColumnsCache());
 // //         $table->inputs($orders);
         
-// //         $table->addHeaders($result->table->gdoColumnsCache());
+// //         $table->addHeaderFields($result->table->gdoColumnsCache());
 // //         $table->headers->name = '_mosort_';
 //         $table->headers->inputs($orders);
         

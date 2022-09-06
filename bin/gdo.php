@@ -82,7 +82,11 @@ elseif (CLI::isInteractive())
 		{
 			Debug::debugException($ex, false);
 			echo GDT_Error::fromException($ex)->render();
-			die(-1);
+// 			die(-1);
+		}
+		finally
+		{
+			CLI::flushTopResponse();
 		}
 	}
 	else

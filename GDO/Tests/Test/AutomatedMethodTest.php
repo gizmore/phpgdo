@@ -30,10 +30,10 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
-		if ($mt->method instanceof \GDO\Backup\Method\CreateBackup)
-		{
-			xdebug_break();
-		}
+// 		if ($mt->method instanceof \GDO\LinkUUp\Method\AddCoworker)
+// 		{
+// 			xdebug_break();
+// 		}
 		
 		$method = $mt->method;
 		$mt->runAs($mt->method->plugUser());

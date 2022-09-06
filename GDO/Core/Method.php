@@ -61,8 +61,9 @@ abstract class Method #extends GDT
 	}
 
 	# toggles
-	public function isCLI() : bool { return false; }
-	public function isAjax() : bool { return false; }
+	public function isCLI() : bool { return true; }
+	public function isWeb() : bool { return true; }
+// 	public function isAjax() : bool { return false; }
 	/**
 	 * Toggle if method can be trivially fuzz-tested. defaults to yes.
 	 */

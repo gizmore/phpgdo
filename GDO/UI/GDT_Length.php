@@ -20,8 +20,7 @@ final class GDT_Length extends GDT_Float
 	{
 		$n = $this->getName();
 		return [
-			[$n => 64],
-			[$n => 128],
+			[$n => 512], # kinda large image?
 		];
 	}
 
