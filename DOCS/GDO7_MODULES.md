@@ -21,7 +21,7 @@ Below i have listed the available modules, categorized a bit.
 
 These modules are final websites. Feel free to peek at the source.
 
-- 
+- [Fineprint](https://fineprint.phpgdo.com) HTML2PDF Conversion service with a security vulnerability.
 
 
 ## GDO7_MODULES: Theme Modules
