@@ -6,6 +6,7 @@ return [
 	'gender' => 'Gender',
 	'profile_views' => 'Profile Views',
 	'cfg_about_me' => 'About Me',
+	'profile_visibility' => 'Profile visible for',
 	
 	'enum_none' => 'not specified',
 	'enum_male' => 'male',

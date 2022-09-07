@@ -106,6 +106,7 @@ final class Module_User extends GDO_Module
 			'color' => [GDT_ACLRelation::GUESTS, 0, null],
 			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'about_me' => [GDT_ACLRelation::MEMBERS, 0, null],
+			'last_activity' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
 			'profile_visibility' => [GDT_ACLRelation::GUESTS, 0, null],
 		];

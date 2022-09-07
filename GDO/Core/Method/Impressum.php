@@ -15,8 +15,6 @@ use GDO\Core\WithFileCache;
  */
 final class Impressum extends MethodPage
 {
-	use WithFileCache;
-	
 	public function getMethodTitle() : string
 	{
 		return t('impressum');

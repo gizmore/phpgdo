@@ -3,6 +3,7 @@ namespace GDO\UI;
 
 use GDO\Core\Method;
 use GDO\Core\GDT_Template;
+use GDO\Core\WithFileCache;
 
 /**
  * Default method that simply loads a template.
@@ -14,6 +15,8 @@ use GDO\Core\GDT_Template;
  */
 abstract class MethodPage extends Method
 {
+	use WithFileCache;
+	
 	public function execute()
 	{
 		return $this->pageTemplate();

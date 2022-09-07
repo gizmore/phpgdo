@@ -2,7 +2,6 @@
 namespace GDO\Core\Method;
 
 use GDO\UI\MethodPage;
-use GDO\Core\WithFileCache;
 
 /**
  * Show the privacy informational page. 
@@ -11,10 +10,9 @@ use GDO\Core\WithFileCache;
  * @since 6.8.0
  * @author gizmore
  */
-final class Privacy extends MethodPage {
+final class Privacy extends MethodPage
+{
     
-	use WithFileCache;
-	
 	public function getMethodTitle() : string
 	{
 		return t('privacy');
