@@ -15,6 +15,7 @@ return [
 	'last_activity' => 'Ultima attivitá',
 
 	'user_name' => 'Nome utente',
+	'profile_level' => 'Questo utente è un %s con livello %s.',
 	
 	'link_your_profile' => 'Your profile',
 	

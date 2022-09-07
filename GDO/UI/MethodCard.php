@@ -49,12 +49,18 @@ abstract class MethodCard extends Method
 
 	protected function executeFor(GDO $gdo): GDT
 	{
+		return $this->getCard($gdo);
+	}
+
+	protected function getCard(GDO $gdo = null): GDT_Card
+	{
+		$gdo = $gdo ? $gdo : $this->getObject();
 		$card = GDT_Card::make()->gdo($gdo);
 		$this->createCard($card);
 		$this->callCardHook($card);
 		return $card;
 	}
-
+	
 	/**
 	 * Override this method to setup your card.
 	 */

@@ -107,6 +107,7 @@ final class Module_User extends GDO_Module
 			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'about_me' => [GDT_ACLRelation::MEMBERS, 0, null],
 			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
+			'profile_visibility' => [GDT_ACLRelation::GUESTS, 0, null],
 		];
 	}
 	
@@ -123,6 +124,7 @@ final class Module_User extends GDO_Module
 	{
 		$settings = [
 			GDT_Gender::make('gender'),
+			GDT_ACLRelation::make('profile_visibility'),
 		];
 		if ($this->cfgFavColor()) {
 			$settings[] = GDT_Color::make('color');

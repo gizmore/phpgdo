@@ -24,6 +24,11 @@ final class GDT_Path extends GDT_ComboBox
 		return FileUtil::isFile($this->getValue()) ? ' gdo-file-valid' : ' gdo-file-invalid';
 	}
 	
+// 	protected function __construct()
+// 	{
+// 		parent::__construct();
+// 	}
+	
 	#################
 	### Existance ###
 	#################
@@ -31,8 +36,55 @@ final class GDT_Path extends GDT_ComboBox
 	 * @var bool|callable
 	 */
 	public $existing = false;
-	public function existingDir() : self { $this->existing = 'is_dir'; return $this->icon('folder'); }
-	public function existingFile() : self { $this->existing = 'is_file'; return $this->icon('file'); }
+	public function existingDir() : self
+	{
+		$this->existing = 'is_dir';
+		return $this->icon('folder');
+	}
+	
+	public function existingFile() : self
+	{
+		$this->existing = 'is_file';
+		return $this->icon('file');
+	}
+
+	##################
+	### Completion ###
+	##################
+	public bool $completion = false;
+	public function completion(bool $completion=true) : self
+	{
+		$this->completion = $completion;
+		return $this;
+	}
+	
+	private function setupCompletionHref()
+	{
+		switch ($this->existing)
+		{
+			case 'is_dir': $append = "&check=is_dir"; break;
+			case 'is_file': $append = "&check=is_file"; break;
+			default: $append = "&check=any"; break;
+		}
+		return $this->completionHref(href('Core', 'PathCompletion', $append));
+	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderForm() : string
+	{
+		unset($this->completionHref);
+		if ($this->completion)
+		{
+			$this->setupCompletionHref();
+		}
+		if (isset($this->completionHref))
+		{
+			return GDT_Template::php('Core', 'object_completion_form.php', ['field' => $this]);
+		}
+		return parent::renderForm();
+	}
 
 	################
 	### Validate ###

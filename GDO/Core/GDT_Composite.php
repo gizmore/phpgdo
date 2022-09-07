@@ -180,4 +180,13 @@ class GDT_Composite extends GDT_Container
 		];
 	}
 	
+	public function tooltip(string $key, array $args=null) : self
+	{
+		foreach ($this->getAllFields() as $gdt)
+		{
+			$gdt->tooltip($key, $args);
+		}
+		return $this;
+	}
+
 }
