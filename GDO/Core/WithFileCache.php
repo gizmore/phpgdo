@@ -47,7 +47,7 @@ trait WithFileCache
 	protected function executeB()
 	{
 		$key = $this->fileCacheKey();
-		if ($content = Cache::fileGet($key, $this->fileCacheExpire))
+		if ($content = Cache::fileGetSerialized($key, $this->fileCacheExpire))
 		{
 			# Cache hit :)
 			return GDT_HTML::make()->var($content);
@@ -59,8 +59,15 @@ trait WithFileCache
 			if (!$app->isError())
 			{
 				$content = $result->renderMode($app->modeDetected);
-				Cache::fileSet($key, $content);
-				return GDT_HTML::make()->var($content);
+				Cache::fileSetSerialized($key, $content);
+				if (is_array($content))
+				{
+					return GDT_JSON::make()->value($content);
+				}
+				else
+				{
+					return GDT_HTML::make()->value($content);
+				}
 			}
 			return $result;
 		}

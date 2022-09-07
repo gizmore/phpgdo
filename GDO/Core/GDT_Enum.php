@@ -27,6 +27,17 @@ class GDT_Enum extends GDT_Select
 		return [];
 	}
 	
+	public function enumIndex()
+	{
+		return $this->enumIndexFor($this->getVar());
+	}
+	
+	public function enumIndexFor($enumValue)
+	{
+		$index = array_search($enumValue, $this->enumValues, true);
+		return $index === false ? 0 : $index + 1;
+	}
+	
 	##############
 	### Render ###
 	##############

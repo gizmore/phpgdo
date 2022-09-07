@@ -96,9 +96,10 @@ abstract class Method #extends GDT
 		self::$CLI_ALIASES[$alias] = $className;
 	}
 	
-	public function getAutoButton($keys) : ?string
+	public function getAutoButton(array $keys=null) : ?string
 	{
 		$first = null;
+		$keys = Arrays::arrayed($keys);
 		foreach ($this->gdoParameterCache() as $key => $gdt)
 		{
 			if ($gdt instanceof GDT_Submit)

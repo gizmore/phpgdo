@@ -63,7 +63,7 @@ final class GetEnums extends MethodAjax
 				{
 					if ($gdt instanceof GDT_Enum)
 					{
-						$columns[$module->getName().'.userconfig.'.$name] = $gdt->enumValues;
+						$columns[$module->getName().'.userconfig.'.$gdt->name] = $gdt->enumValues;
 					}
 				}
 			}
@@ -74,7 +74,7 @@ final class GetEnums extends MethodAjax
 				{
 					if ($gdt instanceof GDT_Enum)
 					{
-						$columns[$module->getName().'.settings.'.$name] = $gdt->enumValues;
+						$columns[$module->getName().'.settings.'.$gdt->name] = $gdt->enumValues;
 					}
 				}
 			}

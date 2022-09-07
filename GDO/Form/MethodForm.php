@@ -155,7 +155,12 @@ abstract class MethodForm extends Method
 		$this->pressedButton = null;
 		
 		### Generate form
-		$form = $this->getForm()->inputs($this->inputs);
+		$form = $this->getForm();
+		
+		if (isset($this->inputs))
+		{
+			$form->inputs($this->inputs);
+		}
 		
 		### Flow upload
 		if ($flowField = Common::getRequestString('flowField'))
