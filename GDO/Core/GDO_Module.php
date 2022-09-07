@@ -225,9 +225,9 @@ class GDO_Module extends GDO
 	{
 	}
 
-	public function onLoad(): void
-	{
-	}
+// 	public function onLoad(): void
+// 	{
+// 	}
 
 	public function onLoadLanguage(): void
 	{
@@ -283,22 +283,22 @@ class GDO_Module extends GDO
 		return ModuleLoader::instance()->getModule(self::getNameS(), true);
 	}
 
-	/**
-	 * Modulename cache.
-	 * @TODO: delete?
-	 *
-	 * @var string[string]
-	 */
-	private static array $nameCache = [];
+// 	/**
+// 	 * Modulename cache.
+// 	 * @TODO: delete?
+// 	 * @var string[string]
+// 	 */
+// 	private static array $nameCache = [];
 
 	public static function getNameS()
 	{
-		if (isset(self::$nameCache[static::class]))
-		{
-			return self::$nameCache[static::class];
-		}
-		self::$nameCache[static::class] = $cache = strtolower(substr(self::gdoShortNameS(), 7));
-		return $cache;
+		return strtolower(substr(self::gdoShortNameS(), 7));
+// 		if (isset(self::$nameCache[static::class]))
+// 		{
+// 			return self::$nameCache[static::class];
+// 		}
+// 		self::$nameCache[static::class] = $cache = strtolower(substr(self::gdoShortNameS(), 7));
+// 		return $cache;
 	}
 
 	# #############
@@ -309,15 +309,9 @@ class GDO_Module extends GDO
 		return $this->gdoVar('module_id');
 	}
 
-	// private string $name;
 	public function getName(): ?string
 	{
 		return $this->getModuleName();
-		// if (!isset($this->name))
-		// {
-		// $this->name = $this->getModuleName();
-		// }
-		// return $this->name;
 	}
 
 	public function getVersion(): Version
@@ -402,6 +396,9 @@ class GDO_Module extends GDO
 		return !$this->isPersisted();
 	}
 
+	############
+	### Path ###
+	############
 	/**
 	 * Filesystem path for a file within this module.
 	 */
@@ -1222,7 +1219,7 @@ class GDO_Module extends GDO
 	{
 		$msg = t($key, $args);
 		return $this->error('err_system_dependency', [
-			$msg
+			$msg,
 		]);
 	}
 

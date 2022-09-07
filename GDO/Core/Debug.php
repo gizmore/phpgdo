@@ -53,12 +53,13 @@ final class Debug
 	 */
 	public static function breakpoint() : bool
 	{
+		global $me;
 		$app = Application::$INSTANCE;
 		$page = GDT_Page::instance();
 		$user = GDO_User::current();
 		$modules = ModuleLoader::instance()->getModules();
 		xdebug_break();
-		return $app && $page && $user && $modules;
+		return $me && $app && $page && $user && $modules;
 	}
 	
 	###############
@@ -139,7 +140,9 @@ final class Debug
 		if (class_exists('GDO\Core\Logger', false))
 		{
 			# But only if logger already in memory.
-			Logger::logCritical(sprintf('%s in %s line %s', $errstr, $errfile, $errline));
+			$msg = sprintf('%s in %s line %s',
+				$errstr, $errfile, $errline);
+			Logger::logCritical(self::backtrace($msg, false));
 			Logger::flush();
 		}
 		
@@ -174,7 +177,9 @@ final class Debug
 			case E_PARSE:
 				$errnostr = 'PHP Parse Error';
 				break;
-			
+			case E_DEPRECATED:
+				$errnostr = 'PHP Deprecation Error';
+				break;
 			default:
 				$errnostr = 'PHP Unknown Error';
 				break;
@@ -267,8 +272,9 @@ final class Debug
 		}
 		if (defined('GDO_CORE_STABLE'))
 		{
-			$error = GDT_Error::make()->var($message);
-			return GDT_Response::make()->addField($error)->renderMode();
+			$app->ajax(false);
+			$error = GDT_Error::make()->titleRaw('Debug')->textRaw($message);
+			return GDT_Response::make()->addField($error)->render();
 		}
 	    return $message;
 	}

@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
+
 use GDO\DB\Database;
 use GDO\Core\GDT;
 use GDO\Core\Logger;
 use GDO\Core\Debug;
 use GDO\Core\Application;
+use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\Language\Trans;
 use GDO\Session\GDO_Session;
@@ -20,9 +23,16 @@ use GDO\Core\Method\Error;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
-use GDO\Core\GDO_Module;
+use GDO\UI\GDT_Page;
+use GDO\CLI\CLI;
+
 /**
- * GDOv7 - The best PHP Framework on Planet SOL.
+ * @var $me Method
+ */
+global $me;
+
+/**
+ * GDOv7 - The best PHP Framework on Planet SOL. Really! :)
  * 
  * @author gizmore@wechall.net
  * @version 7.0.1
@@ -114,35 +124,24 @@ if (isset($_REQUEST['_fmt']))
 }
 $app->mode($mode, true); # set detected mode.
 
-#
-# Remember ajax request option
-#
-$ajax = false;
-if (isset($_REQUEST['_ajax']))
-{
-	$ajax = (bool)@$_REQUEST['_ajax'];
-	unset($_REQUEST['_ajax']);
-}
-$app->ajax($ajax);
-
 ###################
 ### Pick Method ###
 ###################
 #
 # We already have a method. This is a 403!
-if (isset($me))
-{
-	# Patch all input to only the error!
-	$_REQUEST = [
-		'error' => t('err_request_method_denied', [
-			html((string) $_SERVER['REQUEST_METHOD'])]),
-	];
-}
+// if (isset($me))
+// {
+// 	# Patch all input to only the error!
+// 	$_REQUEST = [
+// 		'error' => t('err_request_method_denied', [
+// 			html((string) $_SERVER['REQUEST_METHOD'])]),
+// 	];
+// }
 #
 # index.php is called directly.
 # Read $_GET _mo/_me
 #
-elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
+if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
 	unset($_REQUEST['_url']);
 	if (isset($_REQUEST['_mo']))
@@ -205,6 +204,21 @@ else
 		$me = FileNotFound::make();
 	}
 }
+#
+# Remember ajax request option.
+#
+$ajax = false;
+if (isset($_REQUEST['_ajax']))
+{
+	$ajax = (bool)@$_REQUEST['_ajax'];
+	unset($_REQUEST['_ajax']);
+}
+if ($me->isAjax())
+{
+	$ajax = true;
+}
+$app->ajax($ajax);
+#
 ############
 ### Exec ###
 ############
@@ -214,6 +228,7 @@ $_POST = null;
 // $app->method($me);
 # plug together GDT_Method
 $loader->initModules();
+Trans::inited();
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 #
 # Execute and force a GDO result.
@@ -227,7 +242,19 @@ try
 	}
 	elseif (is_string($result)) # text response, we wanna support that?
 	{
-		$result = GDT_HTML::withHTML($result);
+		$result = GDT_HTML::make()->var($result);
+	}
+	
+	if ($app->isError())
+	{
+		if ($app->isAPI())
+		{
+			$result = GDT_Page::instance()->topResponse();
+		}
+		elseif ($app->isCLI())
+		{
+			CLI::flushTopResponse();
+		}
 	}
 }
 catch (\Throwable $t)
@@ -267,4 +294,6 @@ echo $content; # asap
 #########################
 ### fire IPC recaches ###
 #########################
+#Logger::flush(); # Done in Application
+# @TODO On application exit, send mails
 Cache::recacheHooks(); # we have time to recache now.

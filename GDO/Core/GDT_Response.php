@@ -52,4 +52,9 @@ final class GDT_Response extends GDT_Tuple
 		return $this;
 	}
 	
+	public function hasError() : bool
+	{
+		return Application::isError();
+	}
+	
 }

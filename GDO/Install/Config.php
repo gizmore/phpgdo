@@ -108,6 +108,7 @@ class Config
 		deff('GDO_SALT', Random::randomKey(16));
 		deff('GDO_DB_ENABLED', true);
 		deff('GDO_DB_HOST', 'localhost');
+		deff('GDO_DB_PORT',  3306);
 		deff('GDO_DB_USER', '');
 		deff('GDO_DB_PASS', '');
 		deff('GDO_DB_NAME', '');
@@ -149,17 +150,17 @@ class Config
 			# Site
 			GDT_Divider::make()->label('install_config_section_site'),
 			GDT_String::make('sitename')->initialValue(GDO_SITENAME)->max(16)->label('cfg_sitename'),
-			GDT_Checkbox::make('seo_urls')->initialValue(GDO_SEO_URLS?true:false),
+			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED),
-			GDT_Enum::make('language')->enumValues('en', 'de')->initialValue(GDO_LANGUAGE)->notNull(),
+			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull(),
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull(),
 			GDT_Select::make('themes')->multiple()->choices(array_combine($themes, $themes))->notNull()->initialValue(array('default')),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE),
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD),
 			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC),
-			GDT_Checkbox::make('ipc_debug')->initialValue(GDO_IPC_DEBUG?true:false),
-			GDT_TinyInt::make('gdt_debug')->unsigned()->initialValue(GDO_GDT_DEBUG)->min(0)->max(2),
-			GDT_Checkbox::make('json_debug')->initialValue(GDO_JSON_DEBUG?true:false),
+			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG),
+			GDT_TinyInt::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2),
+			GDT_Checkbox::make('json_debug')->initialValue(!!GDO_JSON_DEBUG),
 			# HTTP
 			GDT_Divider::make()->label('install_config_section_http'),
 			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN),
@@ -172,37 +173,38 @@ class Config
 			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initial('0'.base_convert(GDO_CHMOD, 10, 8)),
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
-			GDT_Checkbox::make('log_request')->initialValue(GDO_LOG_REQUEST?true:false),
-			GDT_Hidden::make('error_level')->initialValue(GDO_ERROR_LEVEL),
-			GDT_Checkbox::make('error_stacktrace')->initialValue(GDO_ERROR_STACKTRACE?true:false),
-			GDT_Checkbox::make('error_die')->initialValue(GDO_ERROR_DIE?true:false),
-			GDT_Checkbox::make('error_mail')->initialValue(GDO_ERROR_MAIL?true:false),
+			GDT_Checkbox::make('log_request')->initialValue(!!GDO_LOG_REQUEST),
+			GDT_Hidden::make('error_level')->initialValue((int)GDO_ERROR_LEVEL),
+			GDT_Checkbox::make('error_stacktrace')->initialValue(!!GDO_ERROR_STACKTRACE),
+			GDT_Checkbox::make('error_die')->initialValue(!!GDO_ERROR_DIE),
+			GDT_Checkbox::make('error_mail')->initialValue(!!GDO_ERROR_MAIL),
 			# Database
 			GDT_Divider::make()->label('install_config_section_database'),
 			GDT_Hidden::make('salt')->initialValue(GDO_SALT),
-			GDT_Checkbox::make('db_enabled')->initialValue(GDO_DB_ENABLED?true:false),
+			GDT_Checkbox::make('db_enabled')->initialValue(!!GDO_DB_ENABLED),
 			GDT_String::make('db_host')->initialValue(GDO_DB_HOST),
+			GDT_Port::make('db_port')->initialValue((int)GDO_DB_PORT),
 			GDT_String::make('db_user')->initialValue(GDO_DB_USER),
 			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS),
 			GDT_String::make('db_name')->initialValue(GDO_DB_NAME),
-			GDT_EnumNoI18n::make('db_engine')->initialValue(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM),
-			GDT_TinyInt::make('db_debug')->unsigned()->initialValue(GDO_DB_DEBUG)->min(0)->max(2),
+			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM),
+			GDT_TinyInt::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2),
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
-			GDT_UInt::make('cache_debug')->initialValue(GDO_CACHE_DEBUG),
-			GDT_Checkbox::make('filecache')->initialValue(GDO_FILECACHE),
-			GDT_TinyInt::make('memcache')->unsigned()->min(0)->max(2)->initialValue(GDO_MEMCACHE),
+			GDT_UInt::make('cache_debug')->initialValue((int)GDO_CACHE_DEBUG)->min(0)->max(2),
+			GDT_Checkbox::make('filecache')->initialValue(!!GDO_FILECACHE),
+			GDT_TinyInt::make('memcache')->unsigned()->min(0)->max(2)->initialValue((int)GDO_MEMCACHE),
 			GDT_String::make('memcache_host')->initialValue(GDO_MEMCACHE_HOST)->notNull(),
-			GDT_Port::make('memcache_port')->initialValue(GDO_MEMCACHE_PORT)->notNull(),
-			GDT_UInt::make('memcache_ttl')->unsigned()->initialValue(GDO_MEMCACHE_TTL)->notNull(),
+			GDT_Port::make('memcache_port')->initialValue((int)GDO_MEMCACHE_PORT)->notNull(),
+			GDT_UInt::make('memcache_ttl')->unsigned()->initialValue((int)GDO_MEMCACHE_TTL)->notNull(),
 			# Cookies
 			GDT_Divider::make()->label('install_config_section_cookies'),
 			GDT_String::make('sess_name')->ascii()->caseS()->initialValue(GDO_SESS_NAME)->notNull(),
 			GDT_Hidden::make('sess_domain')->initialValue(GDO_SESS_DOMAIN),
-			GDT_UInt::make('sess_time')->initialValue(GDO_SESS_TIME)->notNull()->min(30),
-			GDT_Checkbox::make('sess_js')->initialValue(GDO_SESS_JS),
-			GDT_Checkbox::make('sess_https')->initialValue(GDO_SESS_HTTPS),
-			GDT_Checkbox::make('sess_lock')->initialValue(GDO_SESS_LOCK),
+			GDT_UInt::make('sess_time')->initialValue((int)GDO_SESS_TIME)->notNull()->min(30),
+			GDT_Checkbox::make('sess_js')->initialValue(!!GDO_SESS_JS),
+			GDT_Checkbox::make('sess_https')->initialValue(!!GDO_SESS_HTTPS),
+			GDT_Checkbox::make('sess_lock')->initialValue(!!GDO_SESS_LOCK),
 			GDT_EnumNoI18n::make('sess_samesite')->enumValues('lax', 'none', 'strict')->initialValue(GDO_SESS_SAMESITE),
 			# Email
 			GDT_Divider::make()->label('install_config_section_email'),
@@ -221,7 +223,6 @@ class Config
 		{
 			return 'none';
 		}
-		
 		$software = $_SERVER['SERVER_SOFTWARE'];
 		if (stripos($software, 'Apache') !== false)
 		{

@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\UI\GDT_Page;
 use function GDO\Perf\xdebug_get_function_count;
+use GDO\Core\Method\Stub;
 use GDO\DB\Database;
 
 /**
@@ -61,8 +62,9 @@ class Application extends GDT
 	 */
 	public static function init()
 	{
-		# Could init stuff here? ... meh
-		return self::instance();
+		global $me;
+		$me = Stub::make();
+		return $me ? self::instance() : null;
 	}
 
 	/**
@@ -132,6 +134,7 @@ class Application extends GDT
 	### Application state ###
 	#########################
 	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
+	public function isAPI() : bool { return $this->isAjax() || $this->isJSON() || $this->isXML(); }
 	public function isWebserver() : bool { return !$this->isCLI(); }
 	# Render
 	public function isCLI() : bool { return $this->cli; }
@@ -313,11 +316,14 @@ class Application extends GDT
 	 */
 	public function handleJSONRequests() : void
 	{
-		if (@$_SERVER["CONTENT_TYPE"] === 'application/json')
+		if (isset($_SERVER['CONTENT_TYPE']))
 		{
-			$data = file_get_contents('php://input');
-			$data = json_decode($data, true);
-			$_REQUEST = array_merge($_REQUEST, $data);
+			if ($_SERVER["CONTENT_TYPE"] === 'application/json')
+			{
+				$data = file_get_contents('php://input');
+				$data = json_decode($data, true);
+				$_REQUEST = array_merge($_REQUEST, $data);
+			}
 		}
 	}
 	

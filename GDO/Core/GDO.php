@@ -46,9 +46,9 @@ abstract class GDO extends GDT
 	#################
 	const TOKEN_LENGTH = 16; # length of gdoHashcode and GDT_Token
 	
-	const MYISAM = 'myisam'; # Faster writes
-	const INNODB = 'innodb'; # Foreign keys
-	const MEMORY = 'memory'; # Temp tables @TODO Temp memory tables not working? => remove
+	const MYISAM = 'MyIsam'; # Faster writes
+	const INNODB = 'InnoDB'; # Foreign keys
+	const MEMORY = 'Memory'; # Temp tables @TODO Temp memory tables not working? => remove
 	
 	##############
 	### Static ###
@@ -994,12 +994,6 @@ abstract class GDO extends GDT
 				$this->recache(); # save is the only action where we recache!
 			}
 		}
-		
-// 		foreach ($this->gdoColumnsCache() as $gdt)
-// 		{
-			
-// 		}
-		
 		return $this;
 	}
 	

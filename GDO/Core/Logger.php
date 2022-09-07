@@ -156,7 +156,7 @@ final class Logger
 		$message = sprintf("%s in %s Line %s\n", $e->getMessage(), Debug::shortpath($e->getFile()), $e->getLine());
 		self::log('critical', $message, self::GDO_CRITICAL);
 		$log = Debug::backtraceException($e, true).PHP_EOL.self::stripPassword($_REQUEST).PHP_EOL.$message;
-		self::log('critical_details', $log, self::GDO_CRITICAL);
+		self::log('critical', $log, self::GDO_CRITICAL);
 	}
 	public static function logInstall($message) { self::log('install', $message, self::_NONE); }
 	public static function logHTTP($message) { self::rawLog('http', $message, self::HTTP_ERROR); }
