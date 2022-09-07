@@ -173,4 +173,11 @@ class GDT_Composite extends GDT_Container
 		return implode(' - ', $errors);
 	}
 	
+	public function configJSON() : array
+	{
+		return [
+			'name' => $this->getName(),
+		];
+	}
+	
 }
