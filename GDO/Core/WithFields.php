@@ -90,24 +90,9 @@ trait WithFields
 			$this->fields = [];
 			$this->fieldsFlat = [];
 		}
-
-		# Check dup
-// 		$name = $gdt->getName();
-// 		if ($name && isset($this->fieldsFlat[$name]))
-// 		{
-// 			throw new GDO_Error('err_duplicate_field_name', [html($name)]);
-// 		}
-		
-// 		if ($last)
-// 		{
-			
-// 		}
 		
 		# Do the hard work
 		$this->fields = $this->getFieldsSlicy($this->fields, $gdt, $last, $after);
-// 		$this->fieldsFlat = $this->getFieldsSlicy($this->fieldsFlat, $gdt, $last, $after);
-
-// 		$this->fieldsFlat = array_merge($this->fieldsFlat, $gdt->getAllFields());
 	}
 	
 	private function getFieldsSlicy(array $fields, GDT $field, bool $last, ?GDT $after)
@@ -169,7 +154,6 @@ trait WithFields
 		# Add children in flatten only
 		if ($gdt->hasFields())
 		{
-// 			$me = $this;
 			foreach ($gdt->getAllFields() as $gdt)
 			{
 				if ($name = $gdt->getName())
@@ -181,18 +165,6 @@ trait WithFields
 					$this->fieldsFlat[] = $gdt;
 				}
 			}
-			
-// 			$gdt->withFields(function(GDT $gdt) use ($me)
-// 			{
-// 				if ($name = $gdt->getName())
-// 				{
-// 					$me->fieldsFlat[$name] = $gdt;
-// 				}
-// 				else
-// 				{
-// 					$me->fieldsFlat[] = $gdt;
-// 				}
-// 			});
 		}
 		
 		return $this;

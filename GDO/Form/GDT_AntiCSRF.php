@@ -26,8 +26,10 @@ class GDT_AntiCSRF extends GDT_String
     const KEYLEN = 8;
     const MAX_KEYS = 12;
     
-	public function isHidden() : bool { return true; }
 	public function getDefaultName() : ?string { return 'xsrf'; }
+
+	public function isHidden() : bool { return true; }
+	public function isSerializable() : bool { return false; }
 	
 	###########
 	### GDT ###

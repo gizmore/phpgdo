@@ -27,6 +27,11 @@ final class NotAllowed extends MethodPage
 		return t('err_forbidden');
 	}
 	
+	public function getTemplateName() : string
+	{
+		return 'page/403_page.php';
+	}
+	
 	public function gdoParameters() : array
 	{
 		return [

@@ -102,7 +102,7 @@ abstract class MethodCrud extends MethodForm
 	 */
 	public function crudName() { return 'id'; }
 	
-	public function getCRUDID() : string
+	public function getCRUDID() : ?string
 	{
 	    return $this->gdoParameterVar($this->crudName());
 	}

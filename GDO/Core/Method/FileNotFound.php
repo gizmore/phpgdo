@@ -28,6 +28,11 @@ final class FileNotFound extends MethodPage
 		return t('file_not_found');
 	}
 	
+	public function getTemplateName() : string
+	{
+		return 'page/404_page.php';
+	}
+	
 	public function gdoParameters() : array
 	{
 		return [
