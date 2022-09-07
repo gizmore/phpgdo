@@ -45,6 +45,11 @@ class GDT_Enum extends GDT_Select
 	{
 		return $var === null ? '' : t('enum_' . $var);
 	}
+	
+	public function gdoExampleVars() : ?string
+	{
+		return implode('|', $this->enumValues);
+	}
 
 	################
 	### DB Field ###
