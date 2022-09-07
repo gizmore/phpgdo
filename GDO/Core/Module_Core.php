@@ -130,13 +130,16 @@ final class Module_Core extends GDO_Module
 	public function onInitSidebar() : void
 	{
 		$page = GDT_Page::instance();
+		$bar = $page->bottomBar();
 		if ($this->cfgShowImpressum())
 		{
-			$page->bottomBar()->addField(GDT_Link::make('impressum')->href(href('Core', 'Impressum')));
+			$bar->addField(GDT_Link::make('impressum')
+				->href(href('Core', 'Impressum')));
 		}
 		if ($this->cfgShowPrivacy())
 		{
-			$page->bottomBar()->addField(GDT_Link::make('privacy')->href(href('Core', 'Privacy')));
+			$bar->addField(GDT_Link::make('privacy')
+				->href(href('Core', 'Privacy')));
 		}
 	}
 	
