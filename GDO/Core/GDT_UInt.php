@@ -21,4 +21,11 @@ class GDT_UInt extends GDT_Int
     
     public function isDefaultAsc() : bool { return false; }
     
+    public function configJSON() : array
+    {
+    	return array_merge(parent::configJSON(), [
+    		'signed' => false,
+    	]);
+    }
+    
 }

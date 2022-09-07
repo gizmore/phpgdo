@@ -155,7 +155,6 @@ class GDT_Int extends GDT_DBField
 		];
 	}
 	
-	
 	public function gdoExampleVars() : ?string
 	{
 	    if ( ($this->min !== null) && ($this->max !== null) )
@@ -218,6 +217,14 @@ class GDT_Int extends GDT_DBField
 	public function renderHTML() : string
 	{
 		return GDT_Float::displayS($this->getVar(), 0);
+	}
+	
+	public function configJSON() : array
+	{
+		return array_merge(parent::configJSON(), [
+			'bytes' => $this->bytes,
+			'signed' => true,
+		]);
 	}
 	
 	##############
