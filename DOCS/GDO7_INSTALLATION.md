@@ -28,7 +28,9 @@ An up-to-date requirements check should be in the installers.
 ## GDOv7 Installation: Web
 
 Make your webserver point to the phpgdo root folder.
-Open `yourhost/install/index.php` in your web browser.
+Open `yourhost/install/wizard.php` in your web browser.
+
+Please note that you manually have to edit the protected/config.php file in any case.
 
 
 ## GDOv7 Installation: CLI
@@ -58,17 +60,17 @@ Then you can install the module via web or cli.
 
     ./gdo_adm.sh install fontawesome
     
-The ./gdo_adms.sh utility is quite helpful.
+But... the ./gdo_adm.sh utility is quite convinient.
 
 For example the following command clones and installs a whole website project with around 50 module dependencies.
 
     ./gdo_adm.sh provide KassiererCard
     
     
-An overview of modules is given here.
+An overview of official modules is given by.
 
     ./gdo_adm.sh modules
     
     
     
-    
+   
