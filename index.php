@@ -71,7 +71,7 @@ if (GDO_LOG_REQUEST)
 {
 	Logger::logRequest();
 }
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+// $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###

@@ -28,6 +28,7 @@ use GDO\UI\GDT_Error;
 use GDO\Core\GDT_Expression;
 use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Method;
+use GDO\Core\Method\Stub;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -125,6 +126,9 @@ final class gdo_adm extends Application
 
 $app = gdo_adm::instance();
 $app->cli(true)->verb(GDT_Form::POST);
+
+global $me;
+$me = Stub::make();
 
 # Load config defaults
 if ( !defined('GDO_CONFIGURED'))
