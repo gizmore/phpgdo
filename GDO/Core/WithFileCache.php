@@ -50,6 +50,10 @@ trait WithFileCache
 		if ($content = Cache::fileGetSerialized($key, $this->fileCacheExpire))
 		{
 			# Cache hit :)
+			if (Application::$INSTANCE->isJSON())
+			{
+				return GDT_JSON::make()->value($content);
+			}
 			return GDT_HTML::make()->var($content);
 		}
 		else
