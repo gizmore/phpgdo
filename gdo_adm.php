@@ -458,11 +458,10 @@ elseif ($argv[1] === 'wipe')
 
 	$module = ModuleLoader::instance()->loadModuleFS($argv[2]);
 
-	$response = Install::make()->withAppliedInputs([
+	$response = Install::make()->executeWithInputs([
 		'module' => $module->getName(),
 		'uninstall' => '1'
-	])
-		->executeWithInit();
+	]);
 
 	if (Application::isError())
 	{
@@ -864,7 +863,7 @@ elseif ($argv[1] === 'gizmore_setup')
 		echo "Cleaning provider choice in use: {$dir}.\n";
 		FileUtil::removeDir($dir);
 	}
-	echo "All done, gizmore sire! =)\n";
+	echo "All done, gizmore sire o\"! =)\n";
 }
 
 elseif ($argv[1] === 'confgrade')
@@ -889,3 +888,5 @@ else
 	echo "Unknown command {$argv[1]}\n\n";
 	printUsage();
 }
+
+CLI::flushTopResponse();
