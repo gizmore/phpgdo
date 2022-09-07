@@ -28,7 +28,9 @@ To install a module type `./gdo_adm.sh provide <module_name>`.
 
 These modules are final websites. Feel free to peek at the source.
 
-- [Fineprint](https://fineprint.phpgdo.com) HTML2PDF Conversion service with a security vulnerability.
+- [Fineprint](https://fineprint.phpgdo.com) [src](https://github.com/gizmore/phpgdo-fineprint) HTML2PDF Conversion service with a security vulnerability for a hacking challenge.
+
+- [Geo2Country](https://geo2country.phpgdo.com) [src](https://github.com/gizmore/phpgdo-geo2country) Convert Lat/Lng map coordinates to country ISO.
 
 
 ## GDO7_MODULES: Theme Modules
