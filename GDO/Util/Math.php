@@ -2,9 +2,10 @@
 namespace GDO\Util;
 /**
  * Math utility.
+ * Seems like not much math is required, to code a complex and ugly framework.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 1.0.0
  */
 final class Math

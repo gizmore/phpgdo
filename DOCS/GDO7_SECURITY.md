@@ -19,7 +19,7 @@ Of course nowadays the web is a much more safe place than back in 2000.
 Sane cookie defaults and other measures are of course also in place.
 The passwords use bcrypt as their hash,
 and some salt and pepper to keep the GPUs busy.
-Every request should and can be piped through GDO to enforce ACL.
+Every request should and can be piped through GDO to enforce ACL on every single file.
 
 
 ## GDOv7 SECURITY: Javascript

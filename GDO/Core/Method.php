@@ -477,7 +477,8 @@ abstract class Method #extends GDT
 		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
 		
 		# Store last URL in session
-		if ($this->isSavingLastUrl())
+		if ( ($this->isSavingLastUrl()) &&
+			(Application::$INSTANCE->isWebserver()) )
 		{
 			$this->storeLastURL();
 			$this->storeLastActivity();
@@ -524,7 +525,7 @@ abstract class Method #extends GDT
 			# Without session we do not care over referrer.
 			if (Application::$INSTANCE->isWebserver())
 			{
-				GDO_Session::set('sess_last_url', $_SERVER['REQUEST_URI']);
+				GDO_Session::set('sess_last_url', @$_SERVER['REQUEST_URI']);
 			}
 		}
 	}

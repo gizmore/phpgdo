@@ -74,7 +74,19 @@ final class CLI
     	GDO_Session::remove('redirect_error');
     	GDO_Session::remove('redirect_message');
     }
-    
+
+    public static function getTopResponse() : string
+    {
+    	$response = GDT_Page::instance()->topResponse();
+    	# Render
+    	$result = $response->renderCLI();
+    	# Clear
+    	$response->removeFields();
+    	# Clear redirect messages.
+    	GDO_Session::remove('redirect_error');
+    	GDO_Session::remove('redirect_message');
+    	return $result;
+    }
     
     public static function displayCLI(string $html) : string
     {
@@ -101,11 +113,6 @@ final class CLI
     	$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
     	return $html;
     }
-    
-//     public static function error(string $s) : void
-//     {
-//     	echo self::red(self::bold($s)) . "\n";
-//     }
     
     #############
     ### Style ###

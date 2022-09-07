@@ -12,14 +12,14 @@ namespace GDO\Core;
  */
 class GDT_Serialize extends GDT_Text
 {
-	public static function serialize($data)
+	public static function serialize($data) : string
 	{
-		return base64_encode(serialize($data));
+		return serialize($data);
 	}
 	
-	public static function unserialize($string)
+	public static function unserialize(string $string)
 	{
-		return unserialize(base64_decode($string));
+		return unserialize($string);
 	}
 
 	public int $max = 65535;

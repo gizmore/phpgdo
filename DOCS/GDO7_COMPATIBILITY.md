@@ -8,7 +8,7 @@ List various compat aspects of GDOv7.
 Requirements and dependencies.
 
  - htmlpurifier (required; clone --recursive)
- - MariaDB/MySQL (required)
+ - MariaDB/MySQL (required) 
  - php_bcrypt (required)
  - php_mb_string (required)
  - PHP >= 8.0 (required)
@@ -50,5 +50,5 @@ Requirements and dependencies.
 ## GDOv7 COMPATIBILITY: Windows
 
  - 32bit machines *might* work
- - git4windows is *required*
+ - git4windows is *required*?
 

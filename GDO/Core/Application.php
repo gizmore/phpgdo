@@ -102,6 +102,13 @@ class Application extends GDT
 				self::$RESPONSE_CODE = $code;
 // 			}
 		}
+// 		if ($code >= 400)
+// 		{
+// 			if (defined('GDO_CORE_STABLE'))
+// 			{
+// 				xdebug_break();
+// 			}
+// 		}
 // 		if ($code >= 500)
 // 		{
 // 			if (defined('GDO_CORE_STABLE'))

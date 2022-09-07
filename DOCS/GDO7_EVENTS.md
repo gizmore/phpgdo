@@ -20,7 +20,7 @@ Note that a GDO is also a GDT:
 
 ## GDOv7 Events: Module Hooks
 
-Module hooks are methods that start with "*hook*" literally.
+Module hooks are GDO_Module methods that start with "*hook*", literally.
 
     public function hookUserActivated(GDO_User $user)
     {
@@ -31,7 +31,13 @@ Module hooks are methods that start with "*hook*" literally.
 ## GDOv7 Events: List of Hooks
 
  - UserActivated(GDO_User $user, GDO_UserActivation $ua)
+ 
+ - UserDeleted(GDO_User $user)
+ 
+ - UserAuthenticated(GDO_User $user)
 
+ - CreateCard{$Module}{$Method}(GDT_Card $card)
+ 
 
 ## GDOv7 Events: Module Hook IPC
 

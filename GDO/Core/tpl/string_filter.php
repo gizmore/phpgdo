@@ -7,6 +7,6 @@ use GDO\Table\GDT_Filter;
 <input
  name="<?=$f->name?>[<?=$field->name?>]"
  type="search"
- size="<?=min($field->max, 16)?>"
+ size="<?=min($field->min, 16)?>"
  value="<?=html($field->filterVar($f))?>"
  placeholder="<?=t('text')?>" />

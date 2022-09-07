@@ -321,4 +321,5 @@ The %2$s System',
 	'mt_core_pathcompletion' => 'Path completion',
 	'mt_ajax' => '%s Data Retrieval',
 	
+	'creator_header' => '%s added this on %s.',
 ];

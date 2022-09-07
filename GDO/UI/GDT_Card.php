@@ -16,7 +16,6 @@ use GDO\Core\WithFields;
 use GDO\Core\Application;
 use GDO\Core\WithGDO;
 use GDO\User\GDT_User;
-use GDO\Core\GDT_String;
 
 /**
  * A card with title, subtitle, creator, date, content and actions.
@@ -75,14 +74,7 @@ class GDT_Card extends GDT
 	    {
 	        return $this->renderCLI();
 	    }
-// 	    elseif ($app->isHTML())
-// 	    {
-// 	        GDT_Response::$INSTANCE->addField($this);
-// 	    }
-// 	    else
-// 	    {
-	        return $this->renderHTML();
-// 	    }
+        return $this->renderHTML();
 	}
 	public function renderCard() : string { return $this->renderHTML(); }
 	public function renderHTML() : string { return GDT_Template::php('UI', 'card_html.php', ['field' => $this]); }
@@ -118,14 +110,6 @@ class GDT_Card extends GDT
 	    }
 	    return implode(', ', $back);
 	}
-	
-// 	##############
-// 	### Helper ###
-// 	##############
-// 	public function addLabel($key, array $args=null)
-// 	{
-// 	    return $this->addField(GDT_Label::make()->label($key, $args));
-// 	}
 	
 	######################
 	### Creation title ###
@@ -170,42 +154,22 @@ class GDT_Card extends GDT
 	    }
 	    
 	    # Add created by / at to subtitle
-        $profileLink = GDT_ProfileLink::make()->user($user)->nickname()->level();
-	    $this->subtitle = GDT_Container::make()->horizontal(true, true);
-        $this->subtitle->addField($profileLink);
         if ($subtitleOverride)
         {
-        	$this->subtitle->addField(GDT_String::make()->var($subtitleOverride));
+        	$this->subtitleRaw($subtitleOverride);
         }
         else
         {
-        	$this->subtitle->addField(GDT_DateDisplay::make($atField->name)->gdo($this->gdo));
+	        $profileLink = GDT_ProfileLink::make()->user($user)->nickname()->level();
+        	$date = t('unknown');
+	        if ($atField)
+	        {
+	        	$date = GDT_DateDisplay::make($atField->name)->gdo($this->gdo)->render();
+	        }
+        	$this->subtitle('creator_header', [$profileLink->render(), $date]);
         }
-	    
 	    return $this;
 	}
-	
-// 	public function subtitle(GDT $gdt) : self
-// 	{
-// 		$this->subtitle = $gdt;
-// 		return $this;
-// 	}
-	
-// 	public function hasSubTitle() : bool
-// 	{
-// 		return isset($this->subtitle);
-// 	}
-	
-// 	public function renderSubTitle() : string
-// 	{
-// 		$foo = $this->subtitle->render();
-// 		if (!$foo)
-// 		{
-// 			xdebug_break();
-// 			return GDT::EMPTY_STRING;
-// 		}
-// 		return $foo;
-// 	}
 	
 	#####################
 	### Edited Footer ###

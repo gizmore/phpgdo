@@ -1755,19 +1755,4 @@ abstract class GDO extends GDT
 		return true;
 	}
 	
-// 	############
-// 	### Lock ###
-// 	############
-// 	public function lock(string $lock, int $timeout=10) : bool
-// 	{
-// 		$result = Database::instance()->lock($lock, $timeout);
-// 		return mysqli_fetch_field($result) === '1';
-// 	}
-	
-// 	public function unlock($lock) : bool
-// 	{
-// 		$result = Database::instance()->unlock($lock);
-// 		return mysqli_fetch_field($result) === '1';
-// 	}
-	
 }

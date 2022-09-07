@@ -39,16 +39,18 @@ class GDT_Url extends GDT_String
     ### Static ###
     ##############
 	public static function host() : string { return isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : GDO_DOMAIN; }
-	public static function port() : int { return defined('GDO_PORT') ? GDO_PORT : @$_SERVER['SERVER_PORT']; }
+	public static function port() : ?int { return def('GDO_PORT', @$_SERVER['SERVER_PORT']); }
 	public static function hostWithPort() : string
 	{
 		$port = self::port();
 		if (GDO_PROTOCOL === 'https')
 		{
+			$port = $port === null ? 443 : $port;
 			$port = $port == 443 ? GDT::EMPTY_STRING : ":{$port}";
 		}
 		else
 		{
+			$port = $port === null ? 80 : $port;
 			$port = $port == 80 ? GDT::EMPTY_STRING : ":{$port}";
 		}
 		return self::host() . $port;

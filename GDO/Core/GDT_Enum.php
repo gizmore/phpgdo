@@ -37,6 +37,16 @@ class GDT_Enum extends GDT_Select
 		$index = array_search($enumValue, $this->enumValues, true);
 		return $index === false ? 0 : $index + 1;
 	}
+
+	public function configJSON() : array
+	{
+		return [
+			'name' => $this->getName(),
+			'enumValues' => isset($this->enumValues) ? $this->enumValues : null,
+			'selected' => $this->getVar(),
+			'notNull' => $this->notNull,
+		];
+	}
 	
 	##############
 	### Render ###

@@ -52,7 +52,7 @@ abstract class MethodCard extends Method
 		return $this->getCard($gdo);
 	}
 
-	protected function getCard(GDO $gdo = null): GDT_Card
+	public function getCard(GDO $gdo = null): GDT_Card
 	{
 		$gdo = $gdo ? $gdo : $this->getObject();
 		$card = GDT_Card::make()->gdo($gdo);
