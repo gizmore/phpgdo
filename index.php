@@ -20,6 +20,7 @@ use GDO\Core\Method\Error;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
+use GDO\Core\GDO_Module;
 /**
  * GDOv7 - The best PHP Framework on Planet SOL.
  * 
@@ -44,6 +45,7 @@ require 'GDO7.php';
 ############
 ### Init ###
 ############
+global $me;
 $app = Application::init();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
@@ -211,6 +213,7 @@ $_POST = null;
 // $app->inputs($_REQUEST);
 // $app->method($me);
 # plug together GDT_Method
+$loader->initModules();
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 #
 # Execute and force a GDO result.

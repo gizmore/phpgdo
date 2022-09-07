@@ -72,6 +72,7 @@ abstract class Method #extends GDT
 	public function isUserRequired() : bool { return false; }
 	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
 	public function isTransactional() : bool { return Application::$INSTANCE->verb === GDT_Form::POST; }
+	public function isAlwaysAllowed() : bool { return false; }
 	public function isAlwaysTransactional() : bool { return false; }
 	public function isSavingLastUrl() : bool { return true; }
 	public function isShownInSitemap() : bool { return true; }

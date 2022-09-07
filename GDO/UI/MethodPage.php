@@ -16,13 +16,19 @@ abstract class MethodPage extends Method
 {
 	public function execute()
 	{
-		$name = strtolower($this->gdoShortName());
-		return $this->pageTemplate($name);
+		return $this->pageTemplate();
 	}
 	
-	protected function pageTemplate($name) : GDT_Template
+	protected function getTemplateName() : string
 	{
-		return $this->templatePHP("page/{$name}.php",
+		$name = strtolower($this->gdoShortName());
+		return "page/{$name}.php";
+	}
+	
+	protected function pageTemplate() : GDT_Template
+	{
+		return $this->templatePHP(
+			$this->getTemplateName(),
 			$this->getTemplateVars());
 	}
 	
@@ -36,9 +42,4 @@ abstract class MethodPage extends Method
 		return $tVars;
 	}
 
-// 	public function getMethodTitle() : string
-// 	{
-// 		return t(strtolower('mt_' . $this->gdoShortName()));
-// 	}
-	
 }

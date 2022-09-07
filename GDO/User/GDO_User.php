@@ -539,6 +539,11 @@ final class GDO_User extends GDO
 		return $this->settingValue('PaymentCredits', 'credits');
 	}
 	
+	public function getCountryISO() : ?string
+	{
+		return $this->settingVar('Country', 'country');
+	}
+	
 }
 
 GDO_User::setCurrent(GDO_User::ghost());
