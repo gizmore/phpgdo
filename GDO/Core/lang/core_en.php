@@ -313,6 +313,7 @@ The %2$s System',
 	'mt_sort' => 'Sort %s Database',
 	
 	'mt_crud_create' => 'New %s',
+	'mt_crud_update' => 'Edit %s',
 	
 	'cronjob_method' => 'Cronjob Method',
 	'method' => 'Method',
