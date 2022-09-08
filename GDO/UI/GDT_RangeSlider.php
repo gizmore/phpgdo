@@ -18,7 +18,7 @@ final class GDT_RangeSlider extends GDT_Slider
 	###########
 	### GDO ###
 	###########
-	public function getGDOData() : ?array { return [$this->name => $this->getLow(), $this->highName => $this->getHigh()]; }
+	public function getGDOData() : array { return [$this->name => $this->getLow(), $this->highName => $this->getHigh()]; }
 	
 	###############
 	### Options ###

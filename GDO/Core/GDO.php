@@ -236,21 +236,19 @@ abstract class GDO extends GDT
 	/**
 	 * @return GDT[]
 	 */
-	public function toJSON()
+	public function toJSON() : array
 	{
 		$values = [];
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
 			if ($gdt->isSerializable())
 			{
-				if ($data = $gdt->gdo($this)->getGDOData())
+				$data = $gdt->gdo($this)->getGDOData();
+				foreach ($data as $k => $v)
 				{
-					foreach ($data as $k => $v)
+					if ($v !== null)
 					{
-						if ($v !== null)
-						{
-							$values[$k] = $v;
-						}
+						$values[$k] = $v;
 					}
 				}
 			}
@@ -338,8 +336,8 @@ abstract class GDO extends GDT
 		
 		$gdt = $this->gdoColumn($key)->var($var);
 		$d = false;
-		if ($data = $gdt->getGDOData())
-		{
+		$data = $gdt->getGDOData();
+// 		{
 			foreach ($data as $k => $v)
 			{
 				if ($this->gdoVars[$k] !== $v)
@@ -348,7 +346,7 @@ abstract class GDO extends GDT
 					$d = true;
 				}
 			}
-		}
+// 		}
 		return ($markDirty && $d) ? $this->markDirty($key) : $this;
 	}
 	
@@ -363,10 +361,8 @@ abstract class GDO extends GDT
 	
 	public function setValue(string $key, $value, bool $markDirty=true) : self
 	{
-		if ($vars = $this->gdoColumn($key)->value($value)->getGDOData())
-		{
-			$this->setVars($vars, $markDirty);
-		}
+		$vars = $this->gdoColumn($key)->value($value)->getGDOData();
+		$this->setVars($vars, $markDirty);
 		return $this;
 	}
 	
@@ -442,13 +438,10 @@ abstract class GDO extends GDT
 			$vars = [];
 			foreach ($this->gdoColumnsCache() as $gdt)
 			{
-				if ($data = $gdt->gdo($this)->getGDOData())
-// 				if ($data = $gdt->getGDOData())
+				$data = $gdt->gdo($this)->getGDOData();
+				foreach ($data as $k => $v)
 				{
-					foreach ($data as $k => $v)
-					{
-						$vars[$k] = $v;
-					}
+					$vars[$k] = $v;
 				}
 			}
 			return $vars;

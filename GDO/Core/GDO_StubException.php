@@ -9,7 +9,7 @@ class GDO_StubException extends GDO_Error
 {
 	public function __construct(string $what)
 	{
-		parent::__construct('err_method_is_stub', [html($what)]);
+		parent::__construct('err_method_is_stub', [$what]);
 		
 	}
 	

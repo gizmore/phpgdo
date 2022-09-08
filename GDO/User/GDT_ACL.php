@@ -86,7 +86,7 @@ final class GDT_ACL extends GDT
 	############
 	public string $initial = '';
 	
-	public function getGDOData() : ?array
+	public function getGDOData() : array
 	{
 		return array_merge(
 			$this->aclLevel->getGDOData(),

@@ -18,6 +18,11 @@ final class FileNotFound extends MethodPage
 {
 	public function isSavingLastUrl() : bool { return false; }
 	
+	protected function isFileCacheEnabled() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('file_not_found');
@@ -49,11 +54,6 @@ final class FileNotFound extends MethodPage
 				$this->send404Mails();
 			}
 		}
-	}
-	
-	public function execute()
-	{
-		return $this->pageTemplate('404_page');
 	}
 	
 	private function send404Mails() : void

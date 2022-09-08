@@ -194,17 +194,12 @@ class GDT_Select extends GDT_ComboBox
 	    }
 	}
 	
-	public function getGDOData() : ?array
+	public function getGDOData() : array
 	{
 		$var = $this->getVar();
 		return ( ($var === null) || ($var === $this->emptyVar) ) ?
-			null : [$this->name => $var];
+			GDT::EMPTY_ARRAY : [$this->name => $var];
 	}
-	
-// 	public function setGDOData(array $data) : self
-// 	{
-// 	    return (!$gdo) || $gdo->gdoIsTable() ? $this->var($this->emptyVar) : parent::setGDOData($gdo);
-// 	}
 	
 	################
 	### Validate ###

@@ -108,15 +108,15 @@ final class Module_User extends GDO_Module
 			'about_me' => [GDT_ACLRelation::MEMBERS, 0, null],
 			'last_activity' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
-			'profile_visibility' => [GDT_ACLRelation::GUESTS, 0, null],
+// 			'profile_visibility' => [GDT_ACLRelation::GUESTS, 0, null],
 		];
 	}
 	
 	public function getUserConfig() : array
 	{
 		return [
-			GDT_Url::make('last_url')->noacl()->hidden(),
 			GDT_Timestamp::make('last_activity'),
+			GDT_Url::make('last_url')->noacl()->hidden()->allowInternal(),
 			GDT_UInt::make('profile_views')->initial('0'),
 		];
 	}
@@ -125,7 +125,7 @@ final class Module_User extends GDO_Module
 	{
 		$settings = [
 			GDT_Gender::make('gender'),
-			GDT_ACLRelation::make('profile_visibility'),
+			GDT_ACLRelation::make('profile_visibility')->noacl(),
 		];
 		if ($this->cfgFavColor()) {
 			$settings[] = GDT_Color::make('color');

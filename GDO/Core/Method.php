@@ -385,7 +385,7 @@ abstract class Method #extends GDT
 			{
 				$db->transactionRollback();
 			}
-			return $this->error('error', [html($e->getMessage())]);
+			return $this->error('error', [$e->getMessage()]);
 		}
 		catch (GDO_ArgException $e)
 		{
@@ -393,7 +393,7 @@ abstract class Method #extends GDT
 			{
 				$db->transactionRollback();
 			}
-			return $this->error('error', [html($e->getMessage())]);
+			return $this->error('error', [$e->getMessage()]);
 		}
 		catch (GDO_RedirectError $e)
 		{
@@ -406,7 +406,7 @@ abstract class Method #extends GDT
 				$db->transactionRollback();
 			}
 			Logger::logException($e);
-			return $this->error('error', [html($e->getMessage())]);
+			return $this->error('error', [$e->getMessage()]);
 		}
 		catch (\Throwable $e)
 		{

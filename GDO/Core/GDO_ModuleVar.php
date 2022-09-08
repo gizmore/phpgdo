@@ -50,15 +50,4 @@ final class GDO_ModuleVar extends GDO
 		return $gdt->setGDOData($inputs);
 	}
 	
-// 	public static function removeModuleVar(GDO_Module $module, $varname)
-// 	{
-// 		$varname = GDO::escapeS($varname);
-// 		self::table()->deleteWhere("mv_module={$module->getID()} AND mv_name='$varname'");
-// 		return self::table()->blank([
-// 		    'mv_module' => $module->getID(),
-// 		    'mv_name' => $varname,
-// 		    'mv_value' => null,
-// 		]);
-// 	}
-	
 }

@@ -605,9 +605,9 @@ abstract class GDT
 	/**
 	 * @return string[string]
 	 */
-	public function getGDOData() : ?array
+	public function getGDOData() : array
 	{
-		return null;
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public function setGDOData(array $data) : self

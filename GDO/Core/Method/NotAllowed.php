@@ -12,11 +12,21 @@ use GDO\User\GDO_User;
  * Send an email if opted-in.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 final class NotAllowed extends MethodPage
 {
+	public function isSavingLastUrl() : bool
+	{
+		return false;
+	}
+	
+	protected function isFileCacheEnabled() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('forbidden');
@@ -50,11 +60,6 @@ final class NotAllowed extends MethodPage
 		}
 	}
 	
-	public function execute()
-	{
-		return $this->pageTemplate('403_page');
-	}
-	
 	private function send403Mails() : void
 	{
 		foreach (GDO_User::staff() as $user)
@@ -67,8 +72,8 @@ final class NotAllowed extends MethodPage
 	{
 		$url = $this->gdoParameterVar('url');
 		$mail = Mail::botMail();
-		$mail->setSubject(t('mail_title_403', [sitename(), html($url)]));
-		
+		$mail->setSubject(t('mail_title_403', [
+			sitename(), html($url)]));
 		$tVars = [
 			html($user->renderUserName()),
 			sitename(),

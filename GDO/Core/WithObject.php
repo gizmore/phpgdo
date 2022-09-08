@@ -167,7 +167,7 @@ trait WithObject
 		}
 	}
 
-	public function getGDOData(): ?array
+	public function getGDOData() : array
 	{
 		if ($gdo = $this->getValue())
 		{

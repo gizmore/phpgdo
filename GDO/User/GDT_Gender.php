@@ -25,6 +25,7 @@ class GDT_Gender extends GDT_Enum
 		$this->label('gender');
 // 		$this->enumValues(self::NONE, self::MALE, self::FEMALE);
 		$this->enumValues(self::MALE, self::FEMALE);
+		$this->emptyInitial('not_specified');
 // 		$this->initial(self::NONE);
 // 		$this->notNull();
 	}

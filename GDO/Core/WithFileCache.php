@@ -44,8 +44,18 @@ trait WithFileCache
 		return $key;
 	}
 	
+	protected function isFileCacheEnabled() : bool
+	{
+		return true;
+	}
+	
 	protected function executeB()
 	{
+		if (!$this->isFileCacheEnabled())
+		{
+			return $this->execute();
+		}
+		
 		$key = $this->fileCacheKey();
 		if ($content = Cache::fileGetSerialized($key, $this->fileCacheExpire))
 		{

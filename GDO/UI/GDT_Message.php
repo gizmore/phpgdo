@@ -373,7 +373,7 @@ class GDT_Message extends GDT_Text
 	 * getGDOData() is called when the gdo wants to update it's gdoVars.
 	 * This happens when formData() is plugged into saveVars() upon update and creation.
 	 */
-	public function getGDOData(): ?array
+	public function getGDOData() : array
 	{
 		return [
 			"{$this->name}_input" => $this->msgInput,

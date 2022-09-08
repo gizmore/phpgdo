@@ -105,10 +105,10 @@ class GDT_Url extends GDT_String
 		return $this;
 	}
 	
-	public function allowExternal(bool $allowExternal=true) : self
+	public function allowExternal(bool $allowExternal=true, bool $reachable=true) : self
 	{
 		$this->allowExternal = $allowExternal;
-		return $this;
+		return $this->reachable($reachable);
 	}
 	
 	public function reachable(bool $reachable=true) : self

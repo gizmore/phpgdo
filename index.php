@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 use GDO\DB\Database;
 use GDO\Core\GDT;
 use GDO\Core\Logger;

@@ -38,9 +38,9 @@ abstract class MethodPage extends Method
 	protected function getTemplateVars()
 	{
 		$tVars = [];
-		foreach ($this->gdoParameters() as $param)
+		foreach ($this->gdoParameterCache() as $param)
 		{
-			$tVars[$param->name] = $this->gdoParameterValue($param->name);
+			$tVars[$param->name] = $param->getValue();
 		}
 		return $tVars;
 	}

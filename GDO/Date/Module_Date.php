@@ -6,6 +6,7 @@ use GDO\Core\GDT_Checkbox;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Page;
 use GDO\Date\Method\Timezone;
+use GDO\User\GDT_ACLRelation;
 
 /**
  * Date specific stuff.
@@ -50,8 +51,8 @@ final class Module_Date extends GDO_Module
     public function getACLDefaults() : ?array
     {
     	return [
-    		'timezone' => ['acl_all', 0, null],
-    		'activity_accuracy' => ['friend_friends', 0, null],
+    		'timezone' => [GDT_ACLRelation::ALL, 0, null],
+    		'activity_accuracy' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
     	];
     }
     

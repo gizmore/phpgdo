@@ -63,10 +63,9 @@ abstract class GDT_Field extends GDT
 	############
 	### Data ###
 	############
-	public function getGDOData() : ?array
+	public function getGDOData() : array
 	{
-		$v = $this->getVar();
-		return $v === null ? null : [$this->name => $v];
+		return [$this->name => $this->getVar()];
 	}
 
 	public function setGDOData(array $data) : self

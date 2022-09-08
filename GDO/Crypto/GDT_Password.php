@@ -39,7 +39,7 @@ class GDT_Password extends GDT_String
 		return $var === null ? null : new BCrypt($var);
 	}
 	
-	public function getGDOData() : ?array
+	public function getGDOData() : array
 	{
 		$pass = $this->getValue();
 		return [$this->name => $pass ? $pass->__toString() : null];

@@ -8,7 +8,7 @@ use GDO\CLI\CLI;
  * An expression executes a command line.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 7.0.0
  */
 final class GDT_Expression extends GDT

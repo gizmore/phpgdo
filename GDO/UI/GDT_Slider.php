@@ -31,7 +31,7 @@ class GDT_Slider extends GDT_Field
 	################
 	### Validate ###
 	################
-	public function getGDOData() : ?array { return [$this->name => $this->var]; }
+	public function getGDOData() : array { return [$this->name => $this->var]; }
 	
 	public function validate($value) : bool
 	{

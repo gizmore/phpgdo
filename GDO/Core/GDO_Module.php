@@ -739,18 +739,16 @@ class GDO_Module extends GDO
 			return $gdt; # @TODO either persist the user on save setting or else?
 		}
 
-		if ($data = $gdt->var($var)->getGDOData())
+		$data = $gdt->var($var)->getGDOData();
+		foreach ($data as $key => $var)
 		{
-			foreach ($data as $key => $var)
-			{
-				$data = [
-					'uset_user' => $user->getID(),
-					'uset_name' => $key,
-					'uset_var' => $var,
-				];
-				$entry = ($gdt instanceof GDT_Text) ? GDO_UserSettingBlob::blank($data) : GDO_UserSetting::blank($data);
-				$entry->replace();
-			}
+			$data = [
+				'uset_user' => $user->getID(),
+				'uset_name' => $key,
+				'uset_var' => $var,
+			];
+			$entry = ($gdt instanceof GDT_Text) ? GDO_UserSettingBlob::blank($data) : GDO_UserSetting::blank($data);
+			$entry->replace();
 		}
 
 		$user->tempUnset('gdo_setting');

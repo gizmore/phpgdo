@@ -10,7 +10,7 @@ namespace GDO\UI\tpl;
 <?=$field->htmlFocus()?>
 <?=$field->htmlName()?>
 <?=$field->htmlRequired()?>
-<?=$field->htmlDisabled()?>><?=html($field->getVar())?></textarea>
- <?=$field->htmlError()?>
+<?=$field->htmlDisabled()?>><?=html($field->getVarInput())?></textarea>
+<?=$field->htmlError()?>
 </div>
 </div>

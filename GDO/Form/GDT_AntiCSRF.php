@@ -7,6 +7,7 @@ use GDO\Util\Random;
 use GDO\Core\Application;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
+use GDO\Core\GDT;
 
 /**
  * GDT_Form CSRF protection.
@@ -45,9 +46,9 @@ class GDT_AntiCSRF extends GDT_String
 		$this->csrfExpire($mod->cfgXSRFDuration());
 	}
 	
-	public function getGDOData() : ?array
+	public function getGDOData() : array
 	{
-	    return null;
+	    return GDT::EMPTY_ARRAY;
 	}
 	
 	##############
