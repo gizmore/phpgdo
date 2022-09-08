@@ -67,7 +67,7 @@ final class Profile extends MethodCard
 		$card->title('mt_user_profile', [$user->renderUserName()]);
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		$card->subtitle('profile_level', [
-			$this->getHighestPermission($user),
+			self::getHighestPermission($user),
 			$user->getLevel()]);
 		foreach ($modules as $module)
 		{
@@ -78,7 +78,7 @@ final class Profile extends MethodCard
 	/**
 	 * Get the highest permission name/title for user.
 	 */
-	private function getHighestPermission(GDO_User $user) : string
+	public static function getHighestPermission(GDO_User $user) : string
 	{
 		$high = -1;
 		$highn = null;
@@ -101,10 +101,7 @@ final class Profile extends MethodCard
 			{
 				return t('guest');
 			}
-			else
-			{
-				return t('ghost');
-			}
+			return t('ghost');
 		}
 		return t("perm_$highn");
 	}

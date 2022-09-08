@@ -7,6 +7,7 @@ use GDO\DB\Query;
 use GDO\DB\Result;
 use GDO\Date\Time;
 use GDO\User\GDO_User;
+use GDO\UI\TextStyle;
 
 /**
  * A data exchange object, and...
@@ -1325,7 +1326,9 @@ abstract class GDO extends GDT
 	public static function notFoundException(string $id) : void
 	{
 		throw new GDO_Error('err_gdo_not_found', [
-			self::table()->gdoHumanName(), html($id)]);
+			TextStyle::bold(self::table()->gdoHumanName()),
+			TextStyle::boldi(html($id)),
+		]);
 	}
 	
 	/**

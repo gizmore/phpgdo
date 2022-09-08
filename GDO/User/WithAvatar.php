@@ -24,7 +24,7 @@ trait WithAvatar
 	### User ###
 	############
 	public GDO_User $avatarUser;
-	public function avatarUser(GDO_User $user=null, int $size=32) : self
+	public function avatarUser(GDO_User $user=null, int $size=42) : self
 	{
 		if ($user === null)
 		{

@@ -116,6 +116,8 @@ return [
 	'perm_cronjob' => 'Cronjob',
 	
 	# Buttons
+	'btn_ok' => 'O.K.',
+	'btn_add' => 'Add',
 	'btn_back' => 'Back',
 	'btn_clearcache' => 'Clear Cache',
 	'btn_create' => 'Create',

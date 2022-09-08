@@ -21,6 +21,7 @@ return [
 	'link_your_profile' => 'Your profile',
 	
 	'tt_password' => 'Il password dovrebbe avere minimo 9 caratteri e non essere presente in liste di parole.',
+
 	'lvlpopup_item_level' => 'Livello necessitato: %s',
 	'lvlpopup_your_level' => 'Il suo livello é: %s',
 	'lvlpopup_ok' => 'Il suo livello di applicazione é salito',
@@ -32,7 +33,8 @@ return [
 	'md_user_admin' => 'Administrare  utente',
 
 	'user_subtitle' => 'Membro da %s. Livello utente: %s.',
-
+	'user_info_subtitle' => '%s è %s su %s con un livello utente di %s.',
+	
 	'mt_user_cleanupguests' => 'Pulisci gli ospiti',
 	'md_user_cleanupguests' => 'Cron job per ripulire gli utenti ospiti orfani.',
 	

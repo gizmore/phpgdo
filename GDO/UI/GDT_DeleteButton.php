@@ -24,8 +24,12 @@ class GDT_DeleteButton extends GDT_Submit
 	
 	public function confirmText($key, array $args=null)
 	{
+		# put in form rendering
 	    $this->confirmKey = $key;
 	    $this->confirmArgs = $args;
+	    # put in html rendering
+		$text = t($key, $args);
+		$this->attr('onclick', "return confirm('$text')");
 	    return $this;
 	}
 	

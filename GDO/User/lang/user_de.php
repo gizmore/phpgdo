@@ -33,7 +33,8 @@ return [
 	'md_user_admin' => 'Nutzer administrieren',
 	
 	'user_subtitle' => 'Mitglied seit %s. Level: %s',
-
+	'user_info_subtitle' => '%s ist %s auf %s mit einem Nutzerlevel von %s.',
+	
 	'mt_user_cleanupguests' => 'Gäste säubern',
 	'md_user_cleanupguests' => 'Cronjob um verwaiste Gastnutzer aufzuräumen.',
 

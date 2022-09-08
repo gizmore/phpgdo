@@ -4,7 +4,9 @@ use GDO\Table\GDT_ListItem;
 /** @var $gdt GDT_ListItem **/
 $gdt->addClass('gdt-list-item');
 ?>
+<!-- BEGIN LIST ITEM -->
 <div
+
  <?=$gdt->htmlAttributes()?>>
 <?php if ($gdt->hasAvatar() || $gdt->hasTitle() || $gdt->hasSubTitle()) : ?>
   <div class="gdt-li-upper">
@@ -26,15 +28,15 @@ $gdt->addClass('gdt-list-item');
 
 <?php if (isset($gdt->image) ||  isset($gdt->content) || isset($gdt->right)) : ?>
   <div class="gdt-li-main">
-<?php if ($gdt->image) : ?>
+<?php if (isset($gdt->image)) : ?>
     <div class="gdt-li-image"><?=$gdt->image->render()?></div>
 <?php endif; ?>
-<?php if ($gdt->content) : ?>
+<?php if (isset($gdt->content)) : ?>
     <div class="gdt-li-content">
       <?=$gdt->content->render()?>
     </div>
 <?php endif; ?>
-<?php if ($gdt->right) : ?>
+<?php if (isset($gdt->right)) : ?>
     <div class="gdt-li-right"><?=$gdt->right->render()?></div>
 <?php endif; ?>
   </div>
@@ -42,9 +44,8 @@ $gdt->addClass('gdt-list-item');
 
 <?php if ($gdt->hasActions()) : ?>
   <div class="gdt-li-lower">
-<?php if ($gdt->hasActions()) : ?>
     <div class="gdt-li-actions"><?=$gdt->actions()->render()?></div>
-<?php endif; ?>
   </div>
 <?php endif; ?>
+
 </div>

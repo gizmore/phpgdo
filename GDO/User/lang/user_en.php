@@ -33,6 +33,7 @@ return [
 	'md_user_admin' => 'Administrate users',
 
 	'user_subtitle' => 'Member since %s. Level: %s',
+	'user_info_subtitle' => '%s is %s on %s with userlevel %s.',
 	
 	'mt_user_cleanupguests' => 'Guest Cleanup',
 	'md_user_cleanupguests' => 'Guest Cleanup Cronjob for GDOv7.',
