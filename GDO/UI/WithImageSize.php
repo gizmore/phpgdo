@@ -10,8 +10,8 @@ namespace GDO\UI;
  */
 trait WithImageSize
 {
-    public int $imageWidth = 32;
-    public int $imageHeight = 32;
+    public int $imageWidth = 42;
+    public int $imageHeight = 42;
     
     public function imageSize(int $w, int $h=0) : self
     {

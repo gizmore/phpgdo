@@ -125,7 +125,7 @@ class GDT_Float extends GDT_Int
 		    $display = number_format(floatval($var), $decimals, $dot, $comma);
 		    return $display;
 		}
-		return '';
+		return self::none();
 	}
 	
 	public int $decimals = 4;

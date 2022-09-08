@@ -31,7 +31,7 @@ final class PathCompletion extends MethodCompletion
 	{
 		$query = $this->getSearchTerm();
 		$files = glob("{$query}*");
-		$check = $this->getCheckMethod();
+// 		$check = $this->getCheckMethod();
 		$json = [];
 		foreach ($files as $file)
 		{

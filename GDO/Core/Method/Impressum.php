@@ -2,7 +2,6 @@
 namespace GDO\Core\Method;
 
 use GDO\UI\MethodPage;
-use GDO\Core\WithFileCache;
 
 /**
  * Show the impressum informational page.

@@ -230,7 +230,20 @@ abstract class GDT
 	 */
 	public function displayVar(string $var=null) : string
 	{
-		return $var === null ? TextStyle::italic(t('none')) : html($var);
+		return $var === null ? self::none() : html($var);
+	}
+	
+	/**
+	 * Render a null value.
+	 */
+	public static function none() : string
+	{
+		static $none;
+		if (!$none)
+		{
+			$none = TextStyle::italic(t('not_specified'));
+		}
+		return $none;
 	}
 	
 	public function displayChoice($choice) : string

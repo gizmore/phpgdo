@@ -53,7 +53,7 @@ class GDT_Enum extends GDT_Select
 	##############
 	public function displayVar(string $var=null) : string
 	{
-		return $var === null ? '' : t('enum_' . $var);
+		return $var === null ? self::none(): t('enum_' . $var);
 	}
 	
 	public function gdoExampleVars() : ?string

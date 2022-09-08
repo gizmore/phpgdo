@@ -431,7 +431,7 @@ final class GDO_User extends GDO
 		return $link->render();
 	}
 	
-	public function getGender() : string
+	public function getGender() : ?string
 	{
 		return $this->settingVar('User', 'gender');
 	}
