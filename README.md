@@ -18,6 +18,8 @@ and
 
  - [Fineprint](https://fineprint.phpgdo.com) is a hacking challenge with a known vulnerability. It also serves as a demo site for the classic theme.
 
+ - [Geo2Country](https://geo2country.phpgdo.com) is a small service that converts geocoordinates (lat/lng) into country codes. Currently, also with gdo classic design.
+ 
 
 ## phpgdo: Installation
 
