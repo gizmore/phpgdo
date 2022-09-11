@@ -8,6 +8,7 @@ In this page i want to explain the debugging techniques available in GDOv7.
 To enable Query logging set GDO_DB_DEBUG to 1 or 2.
 
 If set to 2, every query is logged with an additional backtrace.
+This can help to figure out where db queries originate.
 
 
 ## GDOv7 Debugging: Allocations
@@ -16,13 +17,17 @@ To enable GDO/GDT allocation logging set GDO_GDT_DEBUG to 1 or 2.
 
 If set to 2, GDO does log every GDT/GDO allocation with an additional backtrace.
 
+This can help to track down mass allocations.
+
 
 ## GDOv7 Debugging: xDebug
 
 Of course you should make use of a debugger.
 I use [xdebug](https://pecl.php.net/package/xdebug).
-In [Eclipse PDT](https://www.eclipse.org/pdt/) i have xDebug configured and can set breakpoints to step the application at any time.
+In [Eclipse PDT](https://www.eclipse.org/pdt/),
+i have xDebug configured and can set breakpoints to step the application at any time.
 This works from bash as well as from chrome.
+I do not know what i did without a debugger for soo long.
 
 Here is an example php.ini for xdebug:
 
@@ -35,8 +40,20 @@ Here is an example php.ini for xdebug:
     xdebug.profiler_output_name=callgrind.cli.%H.%t.%p.cgrind
     
 
-To debug JS code, place `debugger;` anywhere in JS.
+### GDOv7 Debugging: Javascript
+
+To debug JS code, simply place the word `debugger;` anywhere in your JS Sources.
 It will trigger the debugger in chrome.
+
+Also, gdo comes without any binary blob.
+For every library, the sourcecode distribution is loaded.
+
+On production sites it is recommended to install
+[Javascript](https://github.com/gizmore/phpgdo-javascript)
+and
+[CSS](https://github.com/gizmore/phpgdo-css)
+to create minfied asset builds on the fly,
+also blocking all source files so you scripts are safe.
 
 
 ## GDOv7 Debugging: Performance
