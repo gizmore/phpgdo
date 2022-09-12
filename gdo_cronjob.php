@@ -6,6 +6,7 @@ use GDO\Cronjob\Cronjob;
 use GDO\Language\Trans;
 use GDO\Core\Debug;
 use GDO\CLI\CLI;
+use GDO\Core\Method\Stub;
 
 ############
 ### Init ###
@@ -25,6 +26,9 @@ final class gdo_cronjob extends Application
 	public function isCronjob() : bool { return true; }
 	
 }
+
+global $me;
+$me = Stub::make();
 
 gdo_cronjob::instance();
 CLI::setServerVars();
