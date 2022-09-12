@@ -201,6 +201,17 @@ abstract class GDT_Field extends GDT
 		return null;
 	}
 	
+	public function renderList() : string
+	{
+		$text = $this->renderLabelText();
+		if ($text)
+		{
+			$text .= ':&nbsp;';
+		}
+		$text .= $this->displayVar($this->getVar());
+		return "<div class=\"gdt-li-string\">$text</div>";
+	}
+	
 	public function renderCard() : string
 	{
 		return $this->displayCard($this->renderHTML());

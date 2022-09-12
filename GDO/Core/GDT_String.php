@@ -223,6 +223,17 @@ class GDT_String extends GDT_DBField
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
 	}
 	
+// 	public function renderList() : string
+// 	{
+// 		$text = $this->renderLabelText();
+// 		if ($text)
+// 		{
+// 			$text .= ':&nbsp;';
+// 		}
+// 		$text .= $this->displayVar($this->getVar());
+// 		return "<div class=\"gdt-li-string\">$text</div>";
+// 	}
+	
 	public function renderFilter(GDT_Filter $f) : string
 	{
 		return GDT_Template::php('Core', 'string_filter.php', ['field' => $this, 'f' => $f]);

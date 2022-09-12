@@ -126,6 +126,7 @@ return [
 	'btn_modules' => 'Modules',
 	'btn_overview' => 'Overview',
 	'btn_preview' => 'Preview',
+	'btn_print' => 'Print',
 	'btn_save' => 'Save',
 	'btn_send' => 'Send',
 	'btn_invisible' => 'Set Invisble',
