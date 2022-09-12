@@ -16,6 +16,7 @@ use GDO\Core\GDT;
 use GDO\User\GDO_User;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Error;
+use GDO\Core\Method\Stub;
 
 /**
  * @var $argv string[]
@@ -36,6 +37,8 @@ class gdo extends Application
 	public function isCLI() : bool { return true; }
 }
 gdo::instance()->cli()->mode(GDT::RENDER_CLI, true);
+global $me;
+$me = Stub::make();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();

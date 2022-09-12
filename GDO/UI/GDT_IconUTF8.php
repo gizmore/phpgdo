@@ -35,6 +35,7 @@ final class GDT_IconUTF8
         'block' => '✖',
         'book' => '📖',
         'bulb' => '💡',
+    	'business' => ' 🏬',
         'calendar' => '📅',
         'captcha' => '♺',
         'caret' => '⌄',

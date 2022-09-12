@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\DB\Query;
 use GDO\Table\GDT_Table;
+use GDO\UI\WithIcon;
 use GDO\UI\WithLabel;
 use GDO\Table\GDT_Filter;
 
@@ -21,6 +22,7 @@ use GDO\Table\GDT_Filter;
 class GDT_Virtual extends GDT
 {
 	use WithGDO;
+	use WithIcon;
 	use WithLabel;
 	
 	public function isTestable() : bool { return false; }

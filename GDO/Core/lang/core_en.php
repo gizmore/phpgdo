@@ -151,6 +151,8 @@ return [
 	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'front' => 'Front',
+	'back' => 'Back',
 	'redirect' => 'Redirect',
 	'attachment' => 'Attachment',
 	'edited_by' => 'Edited by',
