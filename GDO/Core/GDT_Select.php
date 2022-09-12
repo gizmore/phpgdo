@@ -422,7 +422,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 		else
 		{
-			return $this->var === $var ? self::SELECTED : '';
+			return $this->getVar() === $var ? self::SELECTED : '';
 		}
 	}
 	

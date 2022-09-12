@@ -61,6 +61,12 @@ trait WithFields
 	{
 		return $this->addFieldB($gdt, $after, false);
 	}
+
+	public function addFieldAfterName(GDT $gdt, string $afterName) : self
+	{
+	    $after = $this->getField($afterName);
+	    return $this->addFieldAfter($gdt, $after);
+	}
 	
 	public function addFieldAfterNamed(GDT $gdt, string $afterName) : self
 	{
@@ -101,9 +107,9 @@ trait WithFields
 		if ($after !== null)
 		{
 			$i = array_search($field, $fields, true);
-			$begn = array_slice($fields, 0, $i);
+			$begn = array_slice($fields, 0, $i + 1);
 			$midl = [$field];
-			$aftr = array_slice($fields, $i+1);
+			$aftr = array_slice($fields, $i + 1);
 		}
 		elseif ($last)
 		{

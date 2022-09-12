@@ -113,6 +113,10 @@ trait WithValue
 	{
 		if ($gdo)
 		{
+			if ($gdo->gdoIsTable())
+			{
+				return $this->var($this->initial);
+			}
 			if ($name = $this->getName())
 			{
 				return $this->var($gdo->gdoVar($name));

@@ -43,7 +43,7 @@ abstract class MethodCronjob extends Method
 		return $this->runDailyAt(0);
 	}
 	
-	protected function runDailyAt($hour)
+	protected function runDailyAt($hour) : string
 	{
 		return "0 $hour * * *";
 	}

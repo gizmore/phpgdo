@@ -16,6 +16,6 @@ use GDO\Core\GDT_Int;
 <?=$field->htmlDisabled()?>
 <?=$field->htmlRequired()?>
 <?=$field->htmlFocus()?>
- value="<?=$field->getVar()?>" />
+<?=$field->htmlValue()?>
 <?=$field->htmlError()?>
 </div>

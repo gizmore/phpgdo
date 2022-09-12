@@ -33,7 +33,7 @@ $gdt->addClass('gdt-list-item');
 <?php endif; ?>
 <?php if (isset($gdt->content)) : ?>
     <div class="gdt-li-content">
-      <?=$gdt->content->render()?>
+      <?=$gdt->content->renderList()?>
     </div>
 <?php endif; ?>
 <?php if (isset($gdt->right)) : ?>
