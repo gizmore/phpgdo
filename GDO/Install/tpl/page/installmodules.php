@@ -16,11 +16,11 @@ echo GDT_Panel::make()->text('install_modules_info_text')->render();
  * @var array $modules
  */
 $table = GDT_Table::make()->result(new ArrayResult($modules, GDO_Module::table()));
-$table->addHeader(GDT_Template::make()->template('Install', 'cell/installcbx.php')->templateHead('Install', 'cell/installcbx_head.php'));
-$table->addHeader(GDO_Module::table()->gdoColumn('module_name'));
-$table->addHeader(GDT_Template::make('module_license')->label('license')->template('Install', 'cell/modulelicense.php'));
+$table->addHeaderField(GDT_Template::make()->template('Install', 'cell/installcbx.php')->templateHead('Install', 'cell/installcbx_head.php'));
+$table->addHeaderField(GDO_Module::table()->gdoColumn('module_name'));
+$table->addHeaderField(GDT_Template::make('module_license')->label('license')->template('Install', 'cell/modulelicense.php'));
 $table->addField(GDT_Template::make('module_name')->template('Install', 'modulename_html.php'));
-$table->addHeader(GDO_Module::table()->gdoColumn('module_priority'));
+$table->addHeaderField(GDO_Module::table()->gdoColumn('module_priority'));
 // $table->addHeader(GDT_ModuleFeature::make('module_features'));
 // $table->addHeader(GDT_Text::make('module_description')->method('displayModuleDescription'));
 // $table->fetchAs();
