@@ -69,10 +69,7 @@ final class CLI
     	# Render
     	echo $response->renderCLI();
     	# Clear
-    	$response->removeFields();
-    	# Clear redirect messages.
-    	GDO_Session::remove('redirect_error');
-    	GDO_Session::remove('redirect_message');
+    	self::clearFlash($response);
     }
 
     public static function getTopResponse() : string
@@ -81,11 +78,18 @@ final class CLI
     	# Render
     	$result = $response->renderCLI();
     	# Clear
-    	$response->removeFields();
-    	# Clear redirect messages.
-    	GDO_Session::remove('redirect_error');
-    	GDO_Session::remove('redirect_message');
+    	self::clearFlash($response);
     	return $result;
+    }
+    
+    private static function clearFlash(GDT $response) : void
+    {
+    	$response->removeFields();
+    	if (module_enabled('Session'))
+    	{
+	    	GDO_Session::remove('redirect_error');
+	    	GDO_Session::remove('redirect_message');
+    	}
     }
     
     public static function displayCLI(string $html) : string

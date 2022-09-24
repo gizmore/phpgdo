@@ -14,7 +14,6 @@ use GDO\Net\GDT_Url;
 use GDO\Language\GDO_Language;
 use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
-use GDO\Util\Strings;
 
 /**
  * The core module holds some generic config as well as the global revision string.
@@ -33,8 +32,8 @@ use GDO\Util\Strings;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1595';
-	const GDO_CODENAME = 'Clever-Cashier';
+	const GDO_REVISION = '7.0.1-r1602';
+	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############
 	### Module ###
@@ -43,7 +42,7 @@ final class Module_Core extends GDO_Module
 	
 	public function isCoreModule() : bool { return true; }
 	
-	public function getTheme() : string { return 'default'; }
+	public function getTheme() : ?string { return 'default'; }
 	
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/core'); }
 	
@@ -208,24 +207,4 @@ final class Module_Core extends GDO_Module
 		return (strpos($url, 'GDO/') !== 0);
 	}
 	
-	/**
-	 * Check if an URL is an allowed resource.
-	 * Dotfiles may be forbidden, except .well-known
-	 * @TODO: Fix checking each child if it's a dotfile!!! (thx jusb3)
-	 */
-	public function checkDotfileAllowed(string $url) : bool
-	{
-		if ($this->cfgDotfiles())
-		{
-			return true;
-		}
-		$url = rtrim($url, '/');
-		$filename = Strings::rsubstrFrom($url, '/', $url);
-		if ($filename === '.well-known')
-		{
-			return false;
-		}
-		return $filename[0] !== '.';
-	}
-
 }

@@ -6,6 +6,13 @@ Hopefully the best todo list ever.
 
  - Haha :)
 
+ - Activation Mail shall have "Delete User" Links
+ 
+ - Detect Bots by UserAgent in Core module. Mark as user_type BOT and create it.
+ 
+ - Detect VPN/Proxy in Core module, mark user suspicous.
+ 
+ - Double account, mark user suspicous - deny any form.
 
 ## GDOv7_TODO: Automated ToDo List.
 

@@ -339,7 +339,13 @@ final class Debug
 			$message,
 		    print_r($_REQUEST, true),
 		];
-		$args = array_map('html', $args);
+		foreach ($args as $i => $arg)
+		{
+			if ($i !== 6)
+			{
+				$args[$i] = html($arg);
+			}
+		}
 		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\nREQUEST: %s\n\n";
 		return vsprintf($pattern, $args);
 	}

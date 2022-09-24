@@ -114,7 +114,7 @@ final class Module_Language extends GDO_Module
 	/**
 	 * Add meta tag on init.
 	 */
-	public function onInit()
+	public function onModuleInit()
 	{
         Website::addMeta(['language', Trans::$ISO, 'name']);
 	}

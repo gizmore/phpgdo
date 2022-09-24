@@ -91,8 +91,9 @@ class Installer
 				'module_priority' => $module->priority,
 			]);
 			$module->insert();
-			ModuleLoader::instance()->setModule($module);
 		}
+		
+		ModuleLoader::instance()->setModule($module);
 		
 		$upgraded = false;
 		while ($module->getVersion()->__toString() !== $module->version)

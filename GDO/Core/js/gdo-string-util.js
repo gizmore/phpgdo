@@ -1,20 +1,36 @@
 /**
  * gizmore string utility.
  * Some code here is taken from http://phpjs.orgode.
- * @version 6.10.4
+ * @version 7.0.1
+ * @since 3.0.2
  **/
 
 String.prototype.ltrim = function(chars) { chars = chars || "\\s"; return this.replace(new RegExp("^[" + chars + "]+", "g"), ""); };
 String.prototype.rtrim = function(chars) { chars = chars || "\\s"; return this.replace(new RegExp("[" + chars + "]+$", "g"), ""); };
 String.prototype.trim = function(chars) { return this.rtrim(chars).ltrim(chars); };
-String.prototype.startsWith = function(s) { return this.match(new RegExp('^'+s, 'i')) !== null; };
-String.prototype.endsWith = function(s) { return this.match(new RegExp(s+'$', 'i')) !== null; };
-String.prototype.contains = function(s) { return this.match(new RegExp(s, 'i')) !== null; };
 String.prototype.substrFrom = function(s, d) { var i = this.indexOf(s); return i === -1 ? d : this.substr(i+s.length); };
 String.prototype.rsubstrFrom = function(s, d) { var i = this.lastIndexOf(s); return i === -1 ? d : this.substr(i+s.length); };
 String.prototype.substrTo = function(s, d) { var i = this.indexOf(s); return i === -1 ? d : this.substring(0, i); };
 String.prototype.rsubstrTo = function(s, d) { var i = this.lastIndexOf(s); return i === -1 ? d : this.substring(0, i); };
 String.prototype.nibbleTo = function(s) { var r = this.substrTo(s); this.replace(this.substrFrom(s)); return r; };
+
+if (!String.prototype.startsWith) {
+	String.prototype.startsWith = function(prefix, pos) {
+		return this.indexOf(prefix, pos) === 0;
+	};
+}
+
+if (!String.prototype.endsWith) {
+	String.prototype.endsWith = function(suffix) {
+		return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	};
+}
+
+if (!String.prototype.contains) {
+	String.prototype.contains = function(s) {
+		return this.indexOf(s) >= 0;
+	};
+}
 
 String.prototype.html = function(s) {
 	return s.replace(/[&<"']/g, function(m) {

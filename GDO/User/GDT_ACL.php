@@ -125,8 +125,8 @@ final class GDT_ACL extends GDT
 	public function gdoColumnDefine() : string
 	{
 		return
-			$this->aclLevel->gdoColumnDefine() . "\n" .
-			$this->aclRelation->gdoColumnDefine() . "\n" .
+			$this->aclLevel->gdoColumnDefine() . ",\n" .
+			$this->aclRelation->gdoColumnDefine() . ",\n" .
 			$this->aclPermission->gdoColumnDefine();
 	}
 	

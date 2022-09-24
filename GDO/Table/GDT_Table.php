@@ -460,7 +460,7 @@ class GDT_Table extends GDT
 			'filterable' => $this->isFilterable(),
 			'ordered' => isset($this->order),
 			'orderable' => $this->isOrderable(),
-			'orderDefault' => $this->order->getVar(),
+			'orderDefault' => $this->isOrderable() ? $this->order->getVar() : null,
 		]);
 	}
 

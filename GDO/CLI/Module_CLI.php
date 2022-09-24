@@ -21,7 +21,7 @@ final class Module_CLI extends GDO_Module
         $this->loadLanguage('lang/cli');
     }
     
-    public function onInitCLI() : void
+    public function onModuleInitCLI() : void
     {
     	Method::addCLIAlias('echo', Ekko::class);
     }

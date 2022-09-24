@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core;
 
+use GDO\CLI\CLI;
 use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Language\Trans;
@@ -213,15 +214,31 @@ class GDO_Module extends GDO
 	{
 	}
 
-	public function onInit()
+	public function initOnce() : void
+	{
+		if (!$this->inited)
+		{
+			if (!Application::$INSTANCE->isInstall())
+			{
+				$this->onModuleInit();
+				if (CLI::isCLI())
+				{
+					$this->onModuleInitCLI();
+				}
+				$this->inited = true;
+			}
+		}
+	}
+	
+	public function onModuleInit()
 	{
 	}
 
-	public function onInitCLI(): void
+	public function onModuleInitCLI() : void
 	{
 	}
 
-	public function onInitSidebar(): void
+	public function onInitSidebar() : void
 	{
 	}
 
@@ -489,11 +506,11 @@ class GDO_Module extends GDO
 		parent::__wakeup();
 	}
 
-	public function inited(bool $inited = true): self
-	{
-		$this->inited = true;
-		return $this;
-	}
+// 	public function inited(bool $inited = true): self
+// 	{
+// 		$this->inited = true;
+// 		return $this;
+// 	}
 
 	public function loadLanguage($path): self
 	{

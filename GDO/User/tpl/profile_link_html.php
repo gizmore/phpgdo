@@ -15,6 +15,7 @@ if ($field->level)
 	$htmlTitle = t('tt_user_level', [$user->renderUserName(), $user->getLevel()]);
 }
 $htmlTitle = isset($htmlTitle) ? " title=\"{$htmlTitle}\"" : '';
+$field->avatarSize(18);
 ?>
 <span class="gdt-profile-link"<?=$htmlTitle?>>
 <?php if ($field->hasAvatar()) : ?>

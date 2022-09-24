@@ -17,13 +17,13 @@ use GDO\Core\Method\ClearCache;
  */
 final class Module_Install extends GDO_Module
 {
-	public function getTheme() : string	{ return 'install'; }
+	public function getTheme() : ?string	{ return 'install'; }
 	public function isInstallable() : bool { return false; }
 	public function defaultEnabled() : bool { return false; }
 	
 	public function onLoadLanguage() : void { $this->loadLanguage('lang/install'); }
 
-	public function onInit()
+	public function onModuleInit()
 	{
 		ClearCache::make()->clearCache();
 	}

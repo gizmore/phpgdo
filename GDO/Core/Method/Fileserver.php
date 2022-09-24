@@ -4,7 +4,6 @@ namespace GDO\Core\Method;
 use GDO\Core\Method;
 use GDO\Core\Module_Core;
 use GDO\Date\Time;
-use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
 use GDO\Core\Application;
 use GDO\Net\GDT_Url;
@@ -44,7 +43,7 @@ final class Fileserver extends Method
 			return NotAllowed::make()->executeWithInputs($this->inputs);
 		}
 		
-		if (!Module_Core::instance()->checkDotfileAllowed($url))
+		if (!$this->checkDotfileAllowed($url))
 		{
 			return NotAllowed::make()->executeWithInputs($this->inputs);
 		}
@@ -89,6 +88,34 @@ final class Fileserver extends Method
 	private function md5_file(string $path, int $last_modified_time) : string
 	{
 		return GDO_FileCache::md5For($path, $last_modified_time);
+	}
+	
+	/**
+	 * Check if an URL is an allowed resource.
+	 * Dotfiles may be forbidden, except .well-known
+	 */
+	private function checkDotfileAllowed(string $url) : bool
+	{
+		if (Module_Core::instance()->cfgDotfiles())
+		{
+			# All allowed by config
+			return true;
+		}
+		foreach (explode('/', $url) as $segment)
+		{
+			# special dotfile allowed
+			if ($segment === '.well-known')
+			{
+				return true;
+			}
+			# other dotfile forbidden
+			if ($segment[0] === '.')
+			{
+				return false;
+			}
+		}
+		# no dotfile
+		return true;
 	}
 	
 }

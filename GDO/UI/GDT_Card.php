@@ -177,7 +177,7 @@ class GDT_Card extends GDT
 	/**
 	 * Create a last 'edited by' footer.
 	 */
-	public function editorFooter()
+	public function editorFooter() : self
 	{
 	    /** @var $user GDO_User **/
 	    if ($user = $this->gdo->gdoColumnOf(GDT_EditedBy::class)->getValue())
@@ -187,6 +187,11 @@ class GDT_Card extends GDT
     	    $this->footer = GDT_Label::make()->label('edited_info', [$username, $at]);
 	    }
 	    return $this;
+	}
+	
+	public function hasFooter() : bool
+	{
+		return isset($this->footer);
 	}
 	
 }

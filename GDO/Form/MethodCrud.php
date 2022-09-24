@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Form;
 
+use GDO\Captcha\GDT_Captcha;
 use GDO\Core\GDO;
 use GDO\Core\GDO_PermissionException;
 use GDO\UI\GDT_DeleteButton;
@@ -179,16 +180,16 @@ abstract class MethodCrud extends MethodForm
 		}
 	}
 
-// 	public function createCaptcha(GDT_Form $form)
-// 	{
-// 		if (module_enabled('Captcha'))
-// 		{
-// 			if ($this->isCaptchaRequired())
-// 			{
-// 				$form->addField(GDT_Captcha::make());
-// 			}
-// 		}
-// 	}
+	public function createCaptcha(GDT_Form $form)
+	{
+		if (module_enabled('Captcha'))
+		{
+			if ($this->isCaptchaRequired())
+			{
+				$form->addField(GDT_Captcha::make());
+			}
+		}
+	}
 	
 	public function createFormButtons(GDT_Form $form) : void
 	{

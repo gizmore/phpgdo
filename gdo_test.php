@@ -55,8 +55,11 @@ Logger::init('gdo_test');
 final class gdo_test extends Application
 {
 	public function isUnitTests(): bool { return true; }
+	
+	public bool $install = true;
+	public function isInstall() : bool { return $this->install; }
 }
-gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
+$app = gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init(null);
 
@@ -100,6 +103,7 @@ if ($argc === 1)
 	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
 	Module_Tests::runTestSuite($install);
+	$app->install = false; 
 }
 
 if (Application::$INSTANCE->isError())

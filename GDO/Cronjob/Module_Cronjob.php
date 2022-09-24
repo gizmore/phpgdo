@@ -57,7 +57,7 @@ class Module_Cronjob extends GDO_Module
 		return href('Cronjob', 'Cronjob');
 	}
 	
-	public function onInit()
+	public function onModuleInit()
 	{
 		# @TODO: Cronjob shall run via any request randomly.
 	}

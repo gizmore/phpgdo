@@ -1028,6 +1028,12 @@ abstract class GDO extends GDT
 		{
 			return $this;
 		}
+
+// 		# Not persisted, insert it.
+// 		if (!$this->persisted)
+// 		{
+// 			return $this->insert($withHooks);
+// 		}
 		
 		# Call hooks even when not needed. Because its needed on GDT_Files
 		if ($withHooks)

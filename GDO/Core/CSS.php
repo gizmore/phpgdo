@@ -29,7 +29,10 @@ final class CSS
 	
 	public static function addInline(string $css) : void
 	{
-		self::$INLINE .= $css . "\n";
+		if ($css)
+		{
+			self::$INLINE .= $css . "\n";
+		}
 	}
 	
 	public static function render()

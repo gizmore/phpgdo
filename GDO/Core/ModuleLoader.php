@@ -75,8 +75,8 @@ final class ModuleLoader
 	{
 		if (!in_array($module, $this->getEnabledModules(), true))
 		{
+			$module->initOnce();
 			$this->enabledModules[] = $module;
-			$module->onInit();
 		}
 	}
 	
@@ -135,28 +135,6 @@ final class ModuleLoader
 		}
 	}
 	
-	############
-	### Init ###
-	############
-// 	/**
-// 	 * Init the module loader for website mode.
-// 	 * 
-// 	 * @param bool $withDb
-// 	 * @return GDO_Module[]
-// 	 */
-// 	public static function init(bool $withDb=true) : array
-// 	{
-// 		$loader = new ModuleLoader(GDO_PATH . 'GDO/');
-// 		if ($withDb)
-// 		{
-// 			return $loader->loadModulesCache();
-// 		}
-// 		else
-// 		{
-// 			return $loader->loadModules(false, true);
-// 		}
-// 	}
-	
 	#################
 	### Cacheload ###
 	#################
@@ -182,7 +160,6 @@ final class ModuleLoader
 	private function initFromCache(array $cache) : void
 	{
 		$this->modules = $cache;
-// 		$this->initModules();
 	}
 	
 	public function loadLangFiles() : void
@@ -216,15 +193,7 @@ final class ModuleLoader
 		{
 			foreach ($this->getEnabledModules() as $module)
 			{
-				if (!$module->inited)
-				{
-					$module->onInit();
-					if (CLI::isCLI())
-					{
-						$module->onInitCLI();
-					}
-					$module->inited();
-				}
+				$module->initOnce();
 			}
 		}
 	}

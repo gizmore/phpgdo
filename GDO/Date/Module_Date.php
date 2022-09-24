@@ -84,7 +84,7 @@ final class Module_Date extends GDO_Module
     	Install::install($this);
     }
     
-    public function onInit()
+    public function onModuleInit()
     {
         $user = GDO_User::current();
         $timezone = $user->hasTimezone() ?

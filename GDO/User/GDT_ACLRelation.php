@@ -13,6 +13,7 @@ use GDO\Friends\GDO_Friendship;
  * @author gizmore@wechall.net
  * @version 7.0.1
  * @since 6.8.0
+ * @see GDT_ACL
  */
 final class GDT_ACLRelation extends GDT_Enum
 {

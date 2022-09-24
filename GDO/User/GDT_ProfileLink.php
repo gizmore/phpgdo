@@ -4,6 +4,7 @@ namespace GDO\User;
 use GDO\UI\GDT_Link;
 use GDO\Core\GDT_Template;
 use GDO\UI\TextStyle;
+use GDO\Core\GDO;
 
 /**
  * A link to a profile.
@@ -29,6 +30,11 @@ final class GDT_ProfileLink extends GDT_Link
 	public function hrefProfile() : string
 	{
 		return $this->getUser()->hrefProfile();
+	}
+	
+	public function gdo(GDO $gdo=null) : self
+	{
+		return $this->user($gdo);
 	}
 	
 	################
