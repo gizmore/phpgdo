@@ -17,7 +17,7 @@ fi
 
 echo "Updating all repos in $THREADS parallel threads."
 
-find . -type d -iname '.git' -print0 | xargs $XARGS_OPTIONS bash -c "cd \"{}\"/../ && OUT=\"\$(echo \"{}\" | cut -f 3 -d '/')\" && echo -e \"-----------------------------\nupdating repo [ \\\"\$(pwd)\\\" ]:\" >> temp/git_pull_\$OUT && LANG=en_GB LC_ALL=en_GB git pull &>> temp/git_pull_\$OUT && git submodule update --recursive --remote &>> temp/git_pull_\$OUT  ; cat temp/git_pull_\$OUT && rm temp/git_pull_\$OUT "
+find . -type d -iname '.git' -print0 | xargs $XARGS_OPTIONS bash -c "cd \"{}\"/../ && OUT=\"\$(echo \"{}\" | cut -f 3 -d '/')\" && echo -e \"-----------------------------\nupdating repo [ \\\"\$(pwd)\\\" ]:\" >> ../../temp/git_pull_\$OUT && LANG=en_GB LC_ALL=en_GB git pull &>> ../../temp/git_pull_\$OUT && git submodule update --recursive --remote &>> ../../temp/git_pull_\$OUT  ; cat ../../temp/git_pull_\$OUT && rm ../../temp/git_pull_\$OUT "
 
 echo "Triggering 'gdo_adm.sh update'."
 bash gdo_adm.sh update
