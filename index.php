@@ -23,7 +23,6 @@ use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\CLI\CLI;
-use GDO\Core\GDO_RedirectError;
 
 /**
  * @var $me Method

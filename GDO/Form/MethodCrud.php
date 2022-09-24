@@ -119,9 +119,9 @@ abstract class MethodCrud extends MethodForm
 	    return array_merge($p, parent::gdoParameters());
 	}
 	
-	public function onInit()
+	public function onMethodInit()
 	{
-		parent::onInit();
+		parent::onMethodInit();
 	    $this->crudMode = self::CREATED;
 	    $table = $this->gdoTable();
 	    if ($id = $this->getCRUDID())

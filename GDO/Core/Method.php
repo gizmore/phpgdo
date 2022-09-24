@@ -79,7 +79,7 @@ abstract class Method #extends GDT
 	public function isIndexed() : bool { return true; }
 	
 	# events
-	public function onInit() {}
+	public function onMethodInit() {}
 	public function onRenderTabs() : void {}
 	public function beforeExecute() : void {}
 	public function afterExecute() : void {}
@@ -303,7 +303,7 @@ abstract class Method #extends GDT
 		{
 			# 0) Init
 			$this->applyInput();
-			if ($result = $this->onInit())
+			if ($result = $this->onMethodInit())
 			{
 				$response->addField($result);
 			}

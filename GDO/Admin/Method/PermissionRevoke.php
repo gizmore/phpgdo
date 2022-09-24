@@ -35,7 +35,7 @@ class PermissionRevoke extends MethodForm
 	 */
 	private $permission;
 	
-	public function onInit()
+	public function onMethodInit()
 	{
 	    if ($userid = Common::getRequestString('user'))
 	    {

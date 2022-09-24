@@ -39,6 +39,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		$mt->runAs($mt->method->plugUser());
 		$result = $mt->execute();
 		CLI::flushTopResponse();
+		
 		assertLessThan(500, Application::$RESPONSE_CODE,
 			"Test if trivial method {$this->mome($method)} does not crash.");
 		assertInstanceOf(GDT::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT.");

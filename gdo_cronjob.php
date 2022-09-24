@@ -39,4 +39,4 @@ Trans::setISO('en');
 
 /** @var $argv string[] **/
 $force = in_array('--force', $argv, true);
-Cronjob::run($force);
+Cronjob::run($me && $force);

@@ -77,7 +77,11 @@ final class GDT_ACLRelation extends GDT_Enum
 			case self::NOONE:
 				$reason = t('err_only_private_access');
 				return false;
-			
+	
+			case self::HIDDEN:
+				# Show nothing
+				return false;
+				
 			default: # Should never happen.
 				$reason = t('err_unknown_acl_setting', [$this->var]);
 				return false;

@@ -111,7 +111,7 @@ final class CLI
      */
     public static function htmlToCLI(string $html) : string
     {
-    	$html = preg_replace('/<a .*href="([^"]+)".*>([^<]+)<\\/a>/ius', "$1 ($2)", $html);
+    	$html = preg_replace('/<a .*href="([^"]+)".*?>([^<]+)<\\/a>/ius', "$1 ($2)", $html);
     	$html = self::br2nl($html);
     	$html = preg_replace('/<[^>]*>/is', '', $html);
     	$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');

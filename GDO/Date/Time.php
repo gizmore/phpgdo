@@ -430,9 +430,9 @@ final class Time
 	
 	public static function humanDurationISO(string $iso, $seconds, int $nUnits=2, bool $withMillis=false) : string
 	{
-		static $cache = [];
-		if (!isset($cache[$iso]))
-		{
+// 		static $cache = [];
+// 		if (!isset($cache[$iso]))
+// 		{
 			$cache[$iso] = array(
 // 				tiso($iso, 'tu_ms') => 1000,
 				tiso($iso, 'tu_s') => 60,
@@ -443,7 +443,7 @@ final class Time
 // 				tiso($iso, 'tu_mo') => 4,
 				tiso($iso, 'tu_y') => 1000000,
 			);
-		}
+// 		}
 		return self::humanDurationRaw($seconds, $nUnits, $cache[$iso], $withMillis);
 	}
 	

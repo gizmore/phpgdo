@@ -35,11 +35,9 @@ echo "###       Enjoy your flight!       ###\n";
 echo "######################################\n";
 
 # Rename the config in case an accident happened.
-if ((is_file('protected/config_test2.php')) &&
-	( !is_file('protected/config_test.php')))
+if ((is_file('protected/config_test2.php')) && ( !is_file('protected/config_test.php')))
 {
-	rename('protected/config_test2.php',
-		'protected/config_test.php');
+	rename('protected/config_test2.php', 'protected/config_test.php');
 }
 
 # Bootstrap GDOv7 with PHPUnit support.
@@ -54,29 +52,35 @@ Logger::init('gdo_test');
  */
 final class gdo_test extends Application
 {
-	public function isUnitTests(): bool { return true; }
-	
+
+	public function isUnitTests(): bool
+	{
+		return true;
+	}
+
 	public bool $install = true;
-	public function isInstall() : bool { return $this->install; }
+
+	public function isInstall(): bool
+	{
+		return $this->install;
+	}
+
 }
 $app = gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init(null);
 
-
 # Confirm
-echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) .".\n";
+echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) . ".\n";
 echo "Is this correct? (Y/n)";
 flush();
 $c = fread(STDIN, 1);
 
-if ( ($c !== 'y') && ($c !== 'Y') &&
-	 ($c !== "\x0D") && ($c !== "\x0A") )
+if (($c !== 'y') && ($c !== 'Y') && ($c !== "\x0D") && ($c !== "\x0A"))
 {
 	echo "Abort!\n";
 	die(0);
 }
-
 
 # ##########################
 # Simulate HTTP env a bit #
@@ -88,10 +92,8 @@ CLI::setServerVars();
 
 echo "Dropping Test Database: " . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
-Database::instance()->queryWrite(
-	"DROP DATABASE IF EXISTS " . GDO_DB_NAME);
-Database::instance()->queryWrite(
-	"CREATE DATABASE " . GDO_DB_NAME);
+Database::instance()->queryWrite("DROP DATABASE IF EXISTS " . GDO_DB_NAME);
+Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
 Database::instance()->useDatabase(GDO_DB_NAME);
 
 FileUtil::removeDir(GDO_PATH . 'files_test/');
@@ -103,7 +105,7 @@ if ($argc === 1)
 	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
 	Module_Tests::runTestSuite($install);
-	$app->install = false; 
+	$app->install = false;
 }
 
 if (Application::$INSTANCE->isError())
@@ -119,18 +121,20 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 {
 	$count = 0;
 	$modules = explode(',', $argv[1]);
-	
+
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
 	$modules[] = 'Tests';
 
 	# Fix lowercase names
-	$modules = array_map(function(string $moduleName) {
-		$module = ModuleLoader::instance()->loadModuleFS($moduleName);
-		return $module->getName();
-	}, $modules);
-	
+	$modules = array_map(
+		function (string $moduleName)
+		{
+			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
+			return $module->getName();
+		}, $modules);
+
 	# While loading...
 	while ($count != count($modules))
 	{
@@ -140,49 +144,49 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 		{
 			$module = $loader->loadModuleFS($moduleName, true, true);
 			$more = Installer::getDependencyModules($moduleName);
-			$more = array_map(
-				function ($m)
-				{
-					return $m->getName();
-				}, $more);
+			$more = array_map(function ($m)
+			{
+				return $m->getName();
+			}, $more);
 			$modules = array_merge($modules, $more);
 			$modules[] = $module->getName();
 		}
 
 		$modules = array_unique($modules);
 	}
-	
+
 	# Map
-	$modules = array_map(
-		function ($m)
-		{
-			return ModuleLoader::instance()->getModule($m);
-		}, $modules);
-	
+	$modules = array_map(function ($m)
+	{
+		return ModuleLoader::instance()->getModule($m);
+	}, $modules);
+
 	# Sort
-	usort($modules,
-		function (GDO_Module $m1, GDO_Module $m2)
-		{
-			return $m1->priority - $m2->priority;
-		});
+	usort($modules, function (GDO_Module $m1, GDO_Module $m2)
+	{
+		return $m1->priority - $m2->priority;
+	});
 
 	# Inited!
-	Trans::inited(true);
 }
 
-###################
-### All modules ###
-###################
+# ##################
+# ## All modules ###
+# ##################
 else
 {
 	echo "Loading and install all modules from filesystem again...\n";
 	$modules = $loader->loadModules(false, true, true);
-	$loader->initModules();
 }
 
-#######################
-### Install and run ###
-#######################
+// $loader = ModuleLoader::instance();
+// $loader->initModules();
+// Trans::inited(true);
+
+# ######################
+# ## Install and run ###
+# ######################
+// $loader->initModules();
 if (Installer::installModules($modules))
 {
 	if (module_enabled('Session'))
@@ -205,6 +209,4 @@ CLI::flushTopResponse();
 $time = microtime(true) - GDO_TIME_START;
 $perf = GDT_PerfBar::make('performance');
 $perf = $perf->renderMode(GDT::RENDER_CLI);
-printf("Finished with %s asserts after %s.\n%s",
-	TestCase::$ASSERT_COUNT, Time::humanDuration($time),
-	$perf);
+printf("Finished with %s asserts after %s.\n%s", TestCase::$ASSERT_COUNT, Time::humanDuration($time), $perf);

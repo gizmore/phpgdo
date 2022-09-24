@@ -19,7 +19,7 @@ use GDO\Install\Method\Configure;
  * Install helper.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class Installer
@@ -83,17 +83,19 @@ class Installer
 		
 		if (!$module->isPersisted())
 		{
-			$version = $module->version;
 			$module->setVars([
 				'module_name' => $module->getName(),
 				'module_enabled' => '1',
-				'module_version' => $version,
+				'module_version' => $module->version,
 				'module_priority' => $module->priority,
-			]);
-			$module->insert();
+			])->insert();
+			ModuleLoader::instance()->addEnabledModule($module);
+		}
+		else
+		{
+			ModuleLoader::instance()->setModule($module);
 		}
 		
-		ModuleLoader::instance()->setModule($module);
 		
 		$upgraded = false;
 		while ($module->getVersion()->__toString() !== $module->version)

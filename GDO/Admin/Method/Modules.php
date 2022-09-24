@@ -42,10 +42,10 @@ class Modules extends MethodTable
 	
 	public function getPermission() : ?string { return 'staff'; }
 	
-	public function onInit()
+	public function onMethodInit()
 	{
 		$this->modules = ModuleLoader::instance()->loadModules(false, true, false);
-		return parent::onInit();
+		return parent::onMethodInit();
 	}
 	
 	public function execute()

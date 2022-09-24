@@ -384,6 +384,11 @@ abstract class GDT
 		return false;
 	}
 	
+	public function noError() : self
+	{
+		return $this;
+	}
+	
 	public function classError() : string
 	{
 		return self::EMPTY_STRING;

@@ -778,7 +778,7 @@ abstract class GDO extends GDT
 		$invalid = 0;
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			$invalid += $gdt->gdo($this)->validated() ? 0 : 1;
+			$invalid += $gdt->noError()->gdo($this)->validated() ? 0 : 1;
 		}
 		return $invalid === 0;
 	}

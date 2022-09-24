@@ -2,7 +2,6 @@
 namespace GDO\Core;
 
 use GDO\DB\Cache;
-use GDO\CLI\CLI;
 use GDO\Util\Filewalker;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
@@ -371,11 +370,11 @@ final class ModuleLoader
 					if ($module = self::instanciate($moduleData, true))
 					{
 						$this->modules[$lowerName] = $module;
-					    $module->onLoadLanguage();
-					    if ($theme = $module->getTheme())
-					    {
-					        GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
-					    }
+// 					    $module->onLoadLanguage();
+// 					    if ($theme = $module->getTheme())
+// 					    {
+// 					        GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
+// 					    }
 					}
 				}
 				elseif ($throw)

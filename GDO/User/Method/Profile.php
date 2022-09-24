@@ -125,7 +125,10 @@ final class Profile extends MethodCard
 			$reason = '';
 			if (!$acl->hasAccess($user, $target, $reason))
 			{
-				$card->addField(GDT_Tooltip::make()->labelRaw($gdt->renderLabel())->tooltipRaw($reason));
+				if ($reason)
+				{
+					$card->addField(GDT_Tooltip::make()->labelRaw($gdt->renderLabel())->tooltipRaw($reason));
+				}
 			}
 			else
 			{

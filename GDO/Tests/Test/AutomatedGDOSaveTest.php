@@ -59,32 +59,8 @@ final class AutomatedGDOSaveTest extends TestCase
 					$this->gdoNonTestable++;
 					continue;
 				}
-				try
-				{
-					$success = $this->saveTestGDO($gdo);
-					$this->assert200("Test if {$gdo->gdoClassName()} can be saved.");
-					if (!$success)
-					{
-						throw new GDO_Exception("Cannot save blank plugged GDO: " . get_class($gdo));
-					}
-					$this->message("%4d.) %s: %s",
-						$this->gdoTested,
-						CLI::bold(CLI::green("SUCCESS")),
-						get_class($gdo));
-					$this->gdoSuccess++;
-				}
-				catch(\Throwable $t)
-				{
-					$this->error("%4d.) %s: %s - %s",
-						$this->gdoTested,
-						CLI::bold(CLI::red("FAILURE")),
-						get_class($t),
-						$t->getMessage());
-					$this->error(Debug::backtraceException($t, false, $t->getMessage()));
-					$this->gdoFailure++;
-					Application::$INSTANCE->reset();
-				}
-				CLI::flushTopResponse();
+				
+				$this->trySafeTestGDO($gdo);
 			}
 		}
 	}
@@ -101,17 +77,42 @@ final class AutomatedGDOSaveTest extends TestCase
 			CLI::bold("{$this->gdoFailure} failed",
 			CLI::bold("{$this->gdoNonTestable} were not testable.")));
 	}
-
-// 	private function saveTestGDOUnplugged(GDO $gdo)
-// 	{
-// 		$this->plugVariants = [];
-// 		$new = $gdo->table()->cache->getNewDummy();
-// 		if ($new->isValid())
-// 		{
-// 			$new->replace();
-// 		}
-// 	}
 	
+	private function trySafeTestGDO(GDO $gdo) : bool
+	{
+		try
+		{
+			$success = $this->saveTestGDO($gdo);
+			$this->assert200("Test if {$gdo->gdoClassName()} can be saved.");
+			if (!$success)
+			{
+				throw new GDO_Exception("Cannot save blank plugged GDO: " . get_class($gdo));
+			}
+			$this->message("%4d.) %s: %s",
+				$this->gdoTested,
+				CLI::bold(CLI::green("SUCCESS")),
+				get_class($gdo));
+			$this->gdoSuccess++;
+			return true;
+		}
+		catch(\Throwable $t)
+		{
+			$this->error("%4d.) %s: %s - %s",
+				$this->gdoTested,
+				CLI::bold(CLI::red("FAILURE")),
+				get_class($t),
+				$t->getMessage());
+			$this->error(Debug::backtraceException($t, false, $t->getMessage()));
+			$this->gdoFailure++;
+			Application::$INSTANCE->reset();
+			return false;
+		}
+		finally
+		{
+			CLI::flushTopResponse();
+		}
+	}
+
 	private function saveTestGDO(GDO $gdo) : bool
 	{
 		$success = true;
@@ -122,7 +123,7 @@ final class AutomatedGDOSaveTest extends TestCase
 			$this->addPlugVars($gdt->plugVars());
 		}
 		
-// 		if ($gdo instanceof \GDO\LinkUUp\LUP_MessageSent)
+// 		if ($gdo instanceof \GDO\Mettwitze\GDO_MettwitzComments)
 // 		{
 // 			xdebug_break();
 // 		}

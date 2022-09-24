@@ -55,7 +55,7 @@ final class SEOTest extends AutomatedTestCase
 		}
 
 		$method->inputs($plugged);
-		$method->onInit();
+		$method->onMethodInit();
 
 		foreach ($method->gdoParameterCache() as $gdt)
 		{
@@ -78,7 +78,7 @@ final class SEOTest extends AutomatedTestCase
 		assertNotEmpty($descr, "Test if {$method->gdoClassName()} has a method description.");
 // 		if ($title === $descr)
 // 		{
-// 			$this->error("%s: %s has no real method description.",
+// 			$this->eWrror("%s: %s has no real method description.",
 // 				Color::red('Warning'),
 // 				TextStyle::bold(get_class($method)),
 // 			);
