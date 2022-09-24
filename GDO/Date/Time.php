@@ -127,7 +127,7 @@ final class Time
 	 * @param number $time
 	 * @return \DateTime
 	 */
-	public static function getDateTime(int $time=0)
+	public static function getDateTime(float $time=0)
 	{
 	    $time = $time <= 0 ? Application::$MICROTIME : (float)$time;
 	    return DateTime::createFromFormat('U.u', sprintf('%.03f', $time), self::$UTC);
