@@ -68,11 +68,11 @@ trait WithFields
 	    return $this->addFieldAfter($gdt, $after);
 	}
 	
-	public function addFieldAfterNamed(GDT $gdt, string $afterName) : self
-	{
-		$after = $this->getField($afterName);
-		return $this->addFieldAfter($gdt, $after);
-	}
+// 	public function addFieldAfterNamed(GDT $gdt, string $afterName) : self
+// 	{
+// 		$after = $this->getField($afterName);
+// 		return $this->addFieldAfter($gdt, $after);
+// 	}
 	
 	public function addFieldLast(GDT $gdt) : self
 	{

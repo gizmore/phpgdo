@@ -335,7 +335,6 @@ abstract class MethodTable extends Method
 	    
 	    # 1 speedup
 	    $table->fetchInto($this->useFetchInto());
-	   
 	}
 	
 	public function getTable() : GDT_Table
@@ -355,7 +354,6 @@ abstract class MethodTable extends Method
 		$this->onInitTable();
 		$this->beforeCalculateTable($table);
 		$this->calculateTable($table);
-// 		$this->validate();
 	    $result = $table->getResult();
         $result->table = $this->gdoFetchAs();
 	    $this->setupTitle($table);
@@ -402,11 +400,5 @@ abstract class MethodTable extends Method
 	    }
 	    $table->result($result);
 	}
-	
-// 	public function renderCLIHelp() : string
-// 	{
-// 	    $this->calculateTable($this->initTable());
-// 	    return parent::renderCLIHelp();
-// 	}
 	
 }

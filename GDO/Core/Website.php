@@ -8,7 +8,6 @@ use GDO\UI\GDT_Success;
 /**
  * General Website utility and storage for header and javascript elements.
  * Keeps lists of assets and feeds them to minifiers.
- * Features redirects and alerts.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -30,36 +29,29 @@ final class Website
 	private static array $LINKS = [];
 	
 	/**
-	 * add an html <link>
-	 * @param string $type = mime_type
-	 * @param mixed $rel relationship (one
-	 * @param int $media
-	 * @param string $href URL
+	 * Add an html <link> to the <head>.
+	 * Use href, type, rel, title, sizes, etc... dictionary.
 	 * @see http://www.w3schools.com/tags/tag_link.asp
 	 */
-	public static function addLink($href, $type, $rel, $title=null)
+	public static function addLink(array $data)
 	{
-		self::$LINKS[] = [$href, $type, $rel, $title];
-	}
-	
-	public static function addPrefetch($href, $type)
-	{
-	    array_unshift(self::$LINKS, [$href, $type, 'prefetch', null]);
+		self::$LINKS[] = $data;
 	}
 	
 	/**
 	 * Output of {$head_links}
-	 * @return string
 	 */
-	public static function displayLink()
+	public static function displayLink() : string
 	{
 		$back = '';
-		
 		foreach(self::$LINKS as $link)
 		{
-			list($href, $type, $rel, $title) = $link;
-			$title = $title ? " title=\"$title\"" : '';
-			$back .= sprintf('<link rel="%s" type="%s" href="%s"%s />'."\n", $rel, $type, $href, $title);
+			$back .= "<link";
+			foreach ($link as $k => $v)
+			{
+				$back .= " {$k}=\"{$v}\"";
+			}
+			$back .= " />\n";
 		}
 		
 		$back .= CSS::render();
@@ -96,7 +88,9 @@ final class Website
 	 */
 	public static function displayMeta()
 	{
-		if (Application::$INSTANCE->indexed)
+		/** @var \GDO\Core\Method $me **/
+		global $me;
+		if ($me->isIndexed())
 		{
     	    self::$META[] = ['robots', 'index, follow', 'name'];
 	    }
@@ -163,10 +157,6 @@ final class Website
 	{
 		$app = Application::$INSTANCE;
 		$app->setResponseCode($code);
-// 		if ($app->isCLI() || $app->isUnitTests())
-// 		{
-// 			echo TextStyle::bold(Color::red(t($key, $args))) . "\n";
-// 		}
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));
@@ -181,10 +171,6 @@ final class Website
 	{
 		$app = Application::$INSTANCE;
 		$app->setResponseCode($code);
-// 		if ($app->isCLI() || $app->isUnitTests())
-// 		{
-// 			echo Color::green(t($key, $args)) . "\n";
-// 		}
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));

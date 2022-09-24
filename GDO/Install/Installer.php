@@ -347,9 +347,12 @@ class Installer
 	public static function installMethod($entry, $path, GDO_Module $module)
 	{
 		$method = self::loopMethod($module, $path);
-		if ($permission = $method->getPermission())
+		if ($permissions = $method->getPermission())
 		{
-			GDO_Permission::create($permission);
+			foreach (explode(',', $permissions) as $permission)
+			{
+				GDO_Permission::create($permission);
+			}
 		}
 	}
 

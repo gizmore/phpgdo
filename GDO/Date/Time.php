@@ -127,13 +127,13 @@ final class Time
 	 * @param number $time
 	 * @return \DateTime
 	 */
-	public static function getDateTime($time=0)
+	public static function getDateTime(int $time=0)
 	{
 	    $time = $time <= 0 ? Application::$MICROTIME : (float)$time;
 	    return DateTime::createFromFormat('U.u', sprintf('%.03f', $time), self::$UTC);
 	}
 	
-	public static function getDateWithoutTime($time=null)
+	public static function getDateWithoutTime(int $time=null) : string
 	{
 		return substr(self::getDate($time), 0, 10);
 	}

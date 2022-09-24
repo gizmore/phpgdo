@@ -76,6 +76,7 @@ abstract class Method #extends GDT
 	public function isSavingLastUrl() : bool { return true; }
 	public function isShownInSitemap() : bool { return true; }
 	public function getUserType() : ?string { return null; }
+	public function isIndexed() : bool { return true; }
 	
 	# events
 	public function onInit() {}
@@ -189,7 +190,7 @@ abstract class Method #extends GDT
 			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()]);
 		}
 		
-		if ( (!$this->isGuestAllowed()) && (!$user->isMember()) )
+		if ( ($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()) )
 		{
 			return $this->error('err_members_only');
 		}
@@ -471,9 +472,11 @@ abstract class Method #extends GDT
 	public function setupSEO()
 	{
 		# SEO
+		$description = $this->getMethodDescription();
 		Website::setTitle($this->getMethodTitle());
 		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
-		Website::addMeta(['description', $this->getMethodDescription(), 'name']);
+		Website::addMeta(['description', $description, 'name']);
+		Website::addMeta(['og:description', $description, 'property']);
 		
 		# Store last URL in session
 		if ( ($this->isSavingLastUrl()) &&

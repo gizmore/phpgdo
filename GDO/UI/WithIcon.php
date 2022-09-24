@@ -131,7 +131,7 @@ trait WithIcon
 	public function htmlIcon() : string
 	{
 	    $text = $this->renderIconText();
-	    $color = isset($this->iconColor) ? $this->iconColor : ($text ? 'gold' : null);
+	    $color = isset($this->iconColor) ? $this->iconColor : ($text ? '#a17f1a' : null);
 		if (isset($this->icon))
 		{
 			return self::iconS($this->icon, $text, $this->iconSize, $color);

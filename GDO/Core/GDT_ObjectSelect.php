@@ -25,6 +25,11 @@ class GDT_ObjectSelect extends GDT_Select
 		return $this;
 	}
 	
+// 	public function multiple(bool $multiple=true) : self
+// 	{
+// 		return parent::multiple($multiple);
+// 	}
+	
 	public function getChoices()
 	{
 		return isset($this->table) ? $this->table->allCached() : GDT::EMPTY_ARRAY;
@@ -59,7 +64,7 @@ class GDT_ObjectSelect extends GDT_Select
 	public function renderForm() : string
 	{
 		$this->initChoices();
-		if (isset($this->completionHref))
+		if ( (isset($this->completionHref)) && (!$this->multiple) )
 		{
 		    return GDT_Template::php('Core', 'object_completion_form.php', ['field' => $this]);
 		}

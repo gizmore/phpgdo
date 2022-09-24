@@ -58,5 +58,6 @@ Your playlists are ACL sharable.
  
  - AmateurCovers.net - A site about amateur music covers (youtube links?)
  
+ - Testamento.com - A site where you could put your testament.
  
  

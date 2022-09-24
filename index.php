@@ -23,6 +23,7 @@ use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\CLI\CLI;
+use GDO\Core\GDO_RedirectError;
 
 /**
  * @var $me Method
@@ -105,6 +106,8 @@ else
 	$iso = Module_Language::instance()->detectISO();
 }
 Trans::setISO($iso);
+$loader->loadLangFiles();
+
 
 #
 # Remember GET/POST HTTP verb.
@@ -121,6 +124,20 @@ if (isset($_REQUEST['_fmt']))
 	unset($_REQUEST['_fmt']);
 }
 $app->mode($mode, true); # set detected mode.
+
+###################
+### Finish Init ###
+###################
+// try
+// {
+// 	$loader->initModules();
+// 	Trans::inited();
+// }
+// catch (GDO_RedirectError $ex)
+// {
+// 	hdr('Location: ' . $ex->href);
+// 	die(0);
+// }
 
 ###################
 ### Pick Method ###
@@ -216,7 +233,6 @@ if ($me->isAjax())
 	$ajax = true;
 }
 $app->ajax($ajax);
-#
 ############
 ### Exec ###
 ############
@@ -224,9 +240,8 @@ $_GET = null; # from this point we have everything only in gdo.
 $_POST = null;
 // $app->inputs($_REQUEST);
 // $app->method($me);
-# plug together GDT_Method
 $loader->initModules();
-Trans::inited();
+# plug together GDT_Method
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 #
 # Execute and force a GDO result.

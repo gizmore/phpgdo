@@ -28,6 +28,7 @@ use GDO\UI\GDT_Error;
 use GDO\Core\GDT_Expression;
 use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Method;
+use GDO\User\GDO_Permission;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -425,9 +426,10 @@ elseif ($argv[1] === 'admin')
 	$user->saveVar('user_password', BCrypt::create($argv[3])->__toString());
 	$user->saveVar('user_deleted', null);
 	$user->saveVar('user_deletor', null);
-	GDO_UserPermission::grant($user, 'admin');
-	GDO_UserPermission::grant($user, 'staff');
-	GDO_UserPermission::grant($user, 'cronjob');
+	foreach (GDO_Permission::table()->all() as $perm)
+	{
+		GDO_UserPermission::grant($user, $perm->getName());
+	}
 	$user->changedPermissions();
 	echo t('msg_admin_created', [
 		$argv[2]

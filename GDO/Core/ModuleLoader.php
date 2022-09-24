@@ -185,20 +185,26 @@ final class ModuleLoader
 // 		$this->initModules();
 	}
 	
-	public function initModules() : void
+	public function loadLangFiles() : void
 	{
-		$this->initModuleVars();
-		
-		# Register themes and load language
 		foreach ($this->getEnabledModules() as $module)
 		{
 	        $module->onLoadLanguage();
+		}
+		Trans::inited(true);
+	}
+	
+	public function initModules() : void
+	{
+		$this->initModuleVars();
+		# Register themes and load language
+		foreach ($this->getEnabledModules() as $module)
+		{
 	        if ($theme = $module->getTheme())
 	        {
 	            GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
 	        }
 		}
-		Trans::inited(true);
 		$this->initModulesB();
 	}
 		

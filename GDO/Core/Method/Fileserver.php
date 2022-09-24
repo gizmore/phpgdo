@@ -4,6 +4,7 @@ namespace GDO\Core\Method;
 use GDO\Core\Method;
 use GDO\Core\Module_Core;
 use GDO\Date\Time;
+use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
 use GDO\Core\Application;
 use GDO\Net\GDT_Url;
@@ -22,6 +23,8 @@ use GDO\Core\GDO_FileCache;
 final class Fileserver extends Method
 {
 	public function isTrivial() : bool { return false; }
+	
+	public function isAlwaysAllowed() : bool { return true; }
 	
 	public function gdoParameters() : array
 	{

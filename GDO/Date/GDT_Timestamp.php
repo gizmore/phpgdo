@@ -109,31 +109,40 @@ class GDT_Timestamp extends GDT_DBField
 	public function maxAge(int $duration) : self { return $this->maxTimestamp(Application::$TIME + $duration); }
 	
 	public $minDate;
+	public $maxDate;
+	
 	public function minTimestamp($minTimestamp)
 	{
 		return $this->minDate(Time::getDate($minTimestamp));
 	}
+	
 	public function minDate($minDate)
 	{
 		$this->minDate = $minDate;		
 		return $this;
 	}
 	
-	public $maxDate;
 	public function maxTimestamp($maxTimestamp)
 	{
 		return $this->maxDate(Time::getDate($maxTimestamp));
 	}
+	
 	public function maxDate($maxDate)
 	{
 		$this->maxDate = $maxDate;
 		return $this;
 	}
+	
 	public function maxNow()
 	{
 	    return $this->maxDate(Time::getDate());
 	}
-
+	
+	public function minNow() : self
+	{
+		return $this->minTimestamp(Application::$TIME);
+	}
+	
 	##############
 	### Millis ###
 	##############

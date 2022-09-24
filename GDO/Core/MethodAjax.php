@@ -17,7 +17,7 @@ namespace GDO\Core;
 abstract class MethodAjax extends Method
 {
 	public function isAjax() : bool { return true; }
-	public function isSEOIndexed() { return false; }
+	public function isIndexed() : bool { return false; }
 	public function isLockingSession() { return false; }
 	public function isSavingLastUrl() : bool { return false; }
 	public function isShownInSitemap() : bool { return false; }

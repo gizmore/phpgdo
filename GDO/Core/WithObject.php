@@ -129,9 +129,9 @@ trait WithObject
 	# #############
 	public function htmlValue(): string
 	{
-		if ($value = $this->getValue())
+		if ($value = $this->getVar())
 		{
-			return $value ? sprintf(' value="%s"', $value->getID()) : '';
+			return sprintf(' value="%s"', html($value));
 		}
 		return GDT::EMPTY_STRING;
 	}

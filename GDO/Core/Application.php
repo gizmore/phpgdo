@@ -233,18 +233,18 @@ class Application extends GDT
 		return $this;
 	}
 	
-	###########
-	### SEO ###
-	###########
-	/**
-	 * Toggle if this page should be indexed by search engines.
-	 */
-	public bool $indexed = false;
-	public function indexed(bool $indexed=true)
-	{
-		$this->indexed = $indexed;
-		return $indexed;
-	}
+// 	###########
+// 	### SEO ###
+// 	###########
+// 	/**
+// 	 * Toggle if this page should be indexed by search engines.
+// 	 */
+// 	public bool $indexed = false;
+// 	public function indexed(bool $indexed=true)
+// 	{
+// 		$this->indexed = $indexed;
+// 		return $indexed;
+// 	}
 	
 	################
 	### CLI Mode ###
