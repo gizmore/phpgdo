@@ -144,11 +144,22 @@ Trans::$ISO = GDO_LANGUAGE;
 Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
 $loader = ModuleLoader::instance();
-$loader->loadModules(GDO_DB_ENABLED ? true : false, true);
-$loader->loadLangFiles();
-// $loader->initModules();
 
 define('GDO_CORE_STABLE', true);
+
+$db = !!GDO_DB_ENABLED;
+switch ($argv[1])
+{
+	case 'configure':
+	case 'systemtest':
+	case 'wipe_all':
+		$db = false;
+		break;
+}
+
+$loader->loadModules($db, true);
+$loader->loadLangFiles();
+$loader->initModules();
 
 if ($argv[1] === 'systemtest')
 {
