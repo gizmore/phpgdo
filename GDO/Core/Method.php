@@ -302,7 +302,7 @@ abstract class Method #extends GDT
 		try
 		{
 			# 0) Init
-			$this->applyInput();
+// 			$this->applyInput();
 			if ($result = $this->onMethodInit())
 			{
 				$response->addField($result);

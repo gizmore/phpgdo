@@ -27,18 +27,18 @@ final class Trans
 	public static string $ISO = GDO_LANGUAGE;
 
 	private static bool $HAS_LOADED_FILE_CACHE = false;
-
+	
 	/**
 	 * Base pathes for translation data files.
 	 * @var string[]
 	 */
-	private static array $PATHS = [];
+	public static array $PATHS = [];
 	
 	/**
 	 * Translation data cache.
 	 * @var string[string]
 	 */
-	private static array $CACHE = [];
+	public static array $CACHE = [];
 	
 	/**
 	 * Are all pathes added? # @TODO: This can be removed?

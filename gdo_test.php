@@ -104,9 +104,12 @@ if ($argc === 1)
 {
 	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
+	$loader->initModules();
+	$install->onLoadLanguage();
 	Module_Tests::runTestSuite($install);
-	$app->install = false;
 }
+
+$app->install = false;
 
 if (Application::$INSTANCE->isError())
 {
@@ -189,6 +192,7 @@ else
 // $loader->initModules();
 if (Installer::installModules($modules))
 {
+	Trans::inited(true);
 	if (module_enabled('Session'))
 	{
 		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);

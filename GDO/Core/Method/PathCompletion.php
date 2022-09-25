@@ -1,10 +1,11 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDO;
 use GDO\Core\MethodCompletion;
 use GDO\Core\GDT_JSON;
-use GDO\Core\GDT_EnumNoI18n;
 use GDO\UI\TextStyle;
+use GDO\Core\GDO_FileCache;
 
 /**
  * Path completion for GDT_Path.
@@ -15,42 +16,32 @@ use GDO\UI\TextStyle;
  */
 final class PathCompletion extends MethodCompletion
 {
-	public function gdoParameters() : array
+	protected function gdoTable(): GDO
 	{
-		return array_merge(parent::gdoParameters(), [
-			GDT_EnumNoI18n::make('check')->initial('any')->enumValues('any', 'is_dir', 'is_file')->notNull(),
-		]);
-	}
-	
-	private function getCheckMethod() : string
-	{
-		return $this->gdoParameterVar('check');
+		# Actually fake and not used!
+		return GDO_FileCache::table();
 	}
 	
 	public function execute()
 	{
 		$query = $this->getSearchTerm();
 		$files = glob("{$query}*");
-// 		$check = $this->getCheckMethod();
 		$json = [];
+		$max = $this->getMaxSuggestions();
 		foreach ($files as $file)
 		{
-			if (!is_readable($file))
+			if (is_readable($file))
 			{
-				continue;
+				$json[] = [
+					'id' => $file,
+					'text' => $file,
+					'display' => TextStyle::underline($file),
+				];
 			}
-// 			if ($check !== 'any')
-// 			{
-// // 				if (!call_user_func($check, $file))
-// // 				{
-// // 					continue;
-// // 				}
-// 			}
-			$json[] = [
-				'id' => $file,
-				'text' => $file,
-				'display' => TextStyle::underline($file),
-			];
+			if (count($json) >= $max)
+			{
+				break;
+			}
 		}
 		return GDT_JSON::make()->value($json);
 	}

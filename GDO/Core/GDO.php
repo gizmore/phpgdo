@@ -679,15 +679,29 @@ abstract class GDO extends GDT
 	}
 	
 	/**
+	 * Get only wanted GDT columns.
+	 * @return GDT[]
+	 */
+	public function gdoColumnsOnly(string...$keys) : array
+	{
+		return $this->gdoColumnsOnlyExcept($keys, true);
+	}
+	
+	/**
 	 * Get all GDT columns except those listed.
 	 * @return GDT[]
 	 */
-	public function gdoColumnsExcept(string...$except) : array
+	public function gdoColumnsExcept(string...$keys) : array
+	{
+		return $this->gdoColumnsOnlyExcept($keys, false);
+	}
+	
+	private function gdoColumnsOnlyExcept(array $keys, bool $negate) : array
 	{
 		$columns = [];
 		foreach (array_keys($this->gdoColumnsCache()) as $key)
 		{
-			if (!in_array($key, $except, true))
+			if (in_array($key, $keys, true) === $negate)
 			{
 				$columns[$key] = $this->gdoColumn($key);
 			}

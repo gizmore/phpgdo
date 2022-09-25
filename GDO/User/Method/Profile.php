@@ -110,7 +110,8 @@ final class Profile extends MethodCard
 	{
 		$user = GDO_User::current();
 		$target = $this->getUser();
-		foreach ($module->getSettingsCache() as $gdt)
+		$cache = $module->getSettingsCache();
+		foreach ($cache as $gdt)
 		{
 			$name = $gdt->getName();
 			if (!$gdt->isACLCapable())

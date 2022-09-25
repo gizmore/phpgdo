@@ -21,6 +21,7 @@ echo GDT_Template::php('Table', 'list_filter.php', ['field' => $field]);
 ### List ###
 ############
 $pagemenu = @$field->pagemenu;
+$page = $pagemenu ? $pagemenu->page : 1;
 $pagemenu = $pagemenu ? $pagemenu->renderHTML() : '';
 
 if (!$field->countItems())
@@ -37,10 +38,11 @@ echo $pagemenu;
 ?>
 <!-- Begin List -->
 <div class="gdt-list">
+<?php if ( ($page == 1) && ($field->hasText()) ) : ?>
+  <p class="gdt-list-text"><?=$field->renderText()?></p>
+<?php endif; ?>
 <?php if ($field->hasTitle()) : ?>
-  <div class="gdt-list-title">
-    <h3><?=$field->renderTitle()?></h3>
-  </div>
+  <div class="gdt-list-title"><h3><?=$field->renderTitle()?></h3></div>
 <?php endif; ?>
 <?php
 $dummy = $field->fetchAs->cache->getDummy();

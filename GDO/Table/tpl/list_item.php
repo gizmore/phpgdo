@@ -44,8 +44,12 @@ $gdt->addClass('gdt-list-item');
 
 <?php if ($gdt->hasActions() || $gdt->hasFooter()) : ?>
   <div class="gdt-li-lower">
+<?php if ($gdt->hasFooter()) : ?>
     <div class="gdt-li-footer"><?=$gdt->footer->render()?></div>
+<?php endif; ?>
+<?php if ($gdt->hasActions()) : ?>
     <div class="gdt-li-actions"><?=$gdt->actions()->render()?></div>
+<?php endif; ?>
   </div>
 <?php endif; ?>
 

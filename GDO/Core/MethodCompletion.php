@@ -3,18 +3,33 @@ namespace GDO\Core;
 
 use GDO\Table\Module_Table;
 use GDO\UI\GDT_SearchField;
+use GDO\DB\Query;
+use GDO\DB\Result;
 
 /**
  * Generic autocompletion base code.
- * Override 1 method for full implemented completion of a GDT.
+ * Override 1 method (itemToCompletionJSON) for full implemented completion of a GDO.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.3.0
  * @see GDT_Table
+ * @see MethodAjax
  */
 abstract class MethodCompletion extends MethodAjax
 {
+	protected abstract function gdoTable() : GDO;
+	
+	protected  function gdoHeaderFields() : array
+	{
+		return $this->gdoTable()->gdoColumnsCache();
+	}
+	
+	protected function getQuery() : Query
+	{
+		return $this->gdoTable()->select();
+	}
+	
     public function gdoParameters() : array
     {
         return [
@@ -27,16 +42,84 @@ abstract class MethodCompletion extends MethodAjax
     #############
 	public function getSearchTerm() : string
 	{
-		if ($var = $this->gdoParameterVar('query'))
+		if (null !== ($var = $this->gdoParameterVar('query')))
 		{
 			return $var;
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function getMaxSuggestions() : int
 	{
 		return Module_Table::instance()->cfgSuggestionsPerRequest();
+	}
+	
+	############
+	### Exec ###
+	############
+	public function execute()
+	{
+		$query = $this->buildQuery();
+		$result = $query->exec();
+		$items = $this->collectItems($result);
+		$json = $this->itemsToJSON($items);
+		return GDT_Array::make()->value($json);
+	}
+	
+	protected function buildQuery() : Query
+	{
+		$max = $this->getMaxSuggestions();
+		$term = $this->getSearchTerm();
+		$table = $this->gdoTable();
+		$query = $this->getQuery();
+		$eterm = GDO::escapeSearchS($term);
+		foreach ($this->gdoHeaderFields() as $gdt)
+		{
+			$query->orWhere("{$gdt->name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
+		}
+		if ($order = $table->getDefaultOrder())
+		{
+			$query->order($order);
+		}
+		return $query->limit($max);
+	}
+	
+	protected function collectItems(Result $result) : array
+	{
+		$table = $this->gdoTable();
+		$term = $this->getSearchTerm();
+		$q = mb_strtolower($term);
+		$dummy = $table->cache->getDummy();
+		$items = [];
+		while ($gdo = $result->fetchInto($dummy))
+		{
+			# ID match == 1st item
+			$id = mb_strtolower($gdo->getID());
+			if ($id === $q)
+			{
+				array_unshift($items, $gdo);
+			}
+			else
+			{
+				# append
+				$items[] = $gdo;
+			}
+		}
+		return $items;
+	}
+	
+	protected function itemsToJSON(array $items) : array
+	{
+		return array_map([$this, 'itemToCompletionJSON'], $items);
+	}
+	
+	public function itemToCompletionJSON(GDO $item) : array
+	{
+		return [
+			'id' => $item->getID(),
+			'text' => $item->renderName(),
+			'display' => $item->renderOption(),
+		];
 	}
 	
 }

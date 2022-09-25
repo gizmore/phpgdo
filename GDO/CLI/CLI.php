@@ -107,13 +107,13 @@ final class CLI
     
     /**
      * Turn html into CLI output by stripping tags.
-     * @deprecated only needed for bad code.
+     * @deprecated only needed for bad code (Mail). It is required!
      */
     public static function htmlToCLI(string $html) : string
     {
-    	$html = preg_replace('/<a .*href="([^"]+)".*?>([^<]+)<\\/a>/ius', "$1 ($2)", $html);
+    	$html = preg_replace('#<a *href="([^"]+)">([^<]+)</a>#i', "$1 ($2)", $html);
     	$html = self::br2nl($html);
-    	$html = preg_replace('/<[^>]*>/is', '', $html);
+    	$html = preg_replace('#<[^>]*>/is#', '', $html);
     	$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
     	return $html;
     }

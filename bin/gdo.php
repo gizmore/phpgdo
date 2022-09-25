@@ -46,16 +46,19 @@ Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # init without username
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
+$loader->loadLangFiles();
 $loader->initModules();
-CLI::setupUser();
-Logger::init(GDO_User::current()->renderUserName(), GDO_ERROR_LEVEL);
-define('GDO_CORE_STABLE', 1);
-# Shell
 if (!CLI::isCLI())
 {
 	echo "This GDOv7 binary does only run in the commandline!\n";
+	die(-1);
 }
-elseif (CLI::isInteractive())
+CLI::setupUser();
+Logger::init(GDO_User::current()->renderUserName(), GDO_ERROR_LEVEL);
+define('GDO_CORE_STABLE', 1);
+
+# Shell
+if (CLI::isInteractive() && $me)
 {
 	$line = trim(CLI::getSingleCommandLine());
 	if ($line !== '')

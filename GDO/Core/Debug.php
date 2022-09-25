@@ -274,7 +274,7 @@ final class Debug
 		{
 			$app->ajax(false);
 			$error = GDT_Error::make()->titleRaw('Debug')->textRaw($message);
-			return GDT_Response::make()->addField($error)->render();
+			return GDT_Response::make()->addField($error)->renderWebsite();
 		}
 	    return $message;
 	}
@@ -343,10 +343,18 @@ final class Debug
 		{
 			if ($i !== 6)
 			{
-				$args[$i] = html($arg);
+				$arg = html($arg);
 			}
+			$args[$i] = $arg;
 		}
-		$pattern = "RequestMethod: %s\nRequestURI: %s\nReferer: %s\nIP: %s\nUserAgent: %s\nGDO_User: %s\n\nMessage: %s\n\nREQUEST: %s\n\n";
+		$pattern = "RequestMethod: %s\n
+RequestURI: %s\n
+Referer: %s\n
+IP: %s\n
+UserAgent: %s\n
+GDO_User: %s\n\n
+Message: %s\n\n
+REQUEST: %s\n\n";
 		return vsprintf($pattern, $args);
 	}
 	

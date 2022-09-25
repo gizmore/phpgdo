@@ -15,14 +15,19 @@ use GDO\Core\MethodCompletion;
  */
 class Completion extends MethodCompletion
 {
+	protected function gdoTable(): GDO
+	{
+		return GDO_User::table();
+	}
+	
 	public function getMethodTitle() : string
 	{
-		return "Autocompletion for users";
+		return "User Autocompletion";
 	}
 	
 	public function getMethodDescription() : string
 	{
-		return "Autocompletion for users";
+		return "Autocompletion for users on " . sitename();
 	}
 	
 	public function execute()
@@ -50,4 +55,5 @@ class Completion extends MethodCompletion
 	
 		return GDT_JSON::make()->value($response);
 	}
+	
 }

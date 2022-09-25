@@ -2,6 +2,7 @@
 namespace GDO\Language\Method;
 
 use GDO\Language\GDO_Language;
+use GDO\Core\GDO;
 use GDO\Core\MethodCompletion;
 use GDO\Core\GDT_JSON;
 
@@ -14,6 +15,12 @@ use GDO\Core\GDT_JSON;
  */
 final class Completion extends MethodCompletion
 {
+	protected function gdoTable(): GDO
+	{
+		# STUB
+		return GDO_Language::table();
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return "Language Completion";

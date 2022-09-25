@@ -227,6 +227,7 @@ class GDT_Method extends GDT
 		{
 			$this->inputs[$key] = $var;
 		}
+		$gdt->inputs($this->inputs);
 		return $this;
 	}
 		

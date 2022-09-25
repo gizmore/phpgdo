@@ -38,9 +38,13 @@ final class SeoProxy extends Method
 		}
 		
 		# Method
-		$me = array_shift($args);
-		$method = $module->getMethodByName($me, false);
-		if (!$method)
+		if (!($me = array_shift($args)))
+		{
+			$_REQUEST['url'] = $url; # and a step back for 404 url :)
+			return FileNotFound::make();
+		}
+		
+		if (!($method = $module->getMethodByName($me, false)))
 		{
 			$_REQUEST['url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();

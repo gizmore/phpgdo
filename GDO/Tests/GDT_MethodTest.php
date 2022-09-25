@@ -5,6 +5,8 @@ use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertEquals;
 use GDO\Core\GDT_Method;
+use GDO\Core\Application;
+use GDO\Form\GDT_Form;
 
 /**
  * Helper Class to test GDOv7 methods.
@@ -35,10 +37,13 @@ final class GDT_MethodTest extends GDT_Method
     ############
     public function execute(string $button=null)
     {
+    	$verb = GDT_Form::GET;
     	if ($button)
     	{
+    		$verb = GDT_Form::POST;
     		$this->inputs[$button] = '1';
     	}
+    	Application::$INSTANCE->verb($verb);
     	return parent::execute();
     }
 

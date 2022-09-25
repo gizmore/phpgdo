@@ -76,34 +76,31 @@ final class Strings
 	    for ($i = 0; $i < $len; $i++)
 	    {
 	        $c = $s[$i];
-	        if ($c === '<')
+	        switch ($c)
 	        {
-	            $back .= $c;
-	            $open++;
-	        }
-	        elseif ($c === '>')
-	        {
-	            $back .= $c;
-	            $open--;
-	        }
-	        elseif ($c === "\r")
-	        {
-	            # skip
-	        }
-	        elseif ($c === "\n")
-	        {
-	            if (!$open)
-	            {
-	                $back .= "<br/>\n"; # safe to convert
-	            }
-	            else
-	            {
-	                $back .= ' '; # Open tag. use space instead.
-	            }
-	        }
-	        else
-	        {
-	            $back .= $c;
+	        	case '<':
+		            $back .= $c;
+		            $open++;
+		            break;
+	        	case '>':
+		            $back .= $c;
+		            $open--;
+		            break;
+	        	case "\r":
+	        		break;
+	        	case "\n":
+		            if (!$open)
+		            {
+		                $back .= "<br/>\n"; # safe to convert
+		            }
+		            else
+		            {
+		                $back .= ' '; # Open tag. use space instead.
+		            }
+		            break;
+		        default:
+		            $back .= $c;
+		            break;
 	        }
 	    }
 	    return $back;
