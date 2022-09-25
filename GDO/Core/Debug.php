@@ -270,12 +270,12 @@ final class Debug
 		{
 		    return "$message\n";
 		}
-		if (defined('GDO_CORE_STABLE'))
-		{
-			$app->ajax(false);
-			$error = GDT_Error::make()->titleRaw('Debug')->textRaw($message);
-			return GDT_Response::make()->addField($error)->renderWebsite();
-		}
+// 		if (defined('GDO_CORE_STABLE'))
+// 		{
+// 			$app->ajax(false);
+// 			$error = GDT_Error::make()->titleRaw('Debug')->textRaw($message);
+// 			return GDT_Response::make()->addField($error)->renderWebsite();
+// 		}
 	    return $message;
 	}
 	

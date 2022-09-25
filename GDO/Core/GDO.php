@@ -45,6 +45,7 @@ abstract class GDO extends GDT
 	#################
 	### Constants ###
 	#################
+	const LICENSE = 'GDOv7-LICENSE';
 	const TOKEN_LENGTH = 16; # length of gdoHashcode and GDT_Token
 	
 	const MYISAM = 'MyIsam'; # Faster writes

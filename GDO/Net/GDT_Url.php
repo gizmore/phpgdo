@@ -27,6 +27,8 @@ class GDT_Url extends GDT_String
     	return 'url';
     }
     
+    public function defaultLabel() : self { return $this->label('url'); }
+    
     protected function __construct()
     {
     	parent::__construct();

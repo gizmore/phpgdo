@@ -81,6 +81,9 @@ final class GDT_Order extends GDT_String
 	#############
 	### Order ###
 	#############
+	/**
+	 * @var GDT[]
+	 */
 	public array $orders;
 	public function orders(array $orders) : self
 	{

@@ -10,13 +10,16 @@ use GDO\Table\GDT_Filter;
 
 /**
  * GDOv7 Template Engine as a GDT implementation.
+ * 256 lines with theming and multi-lang support.
  *
- * - There are php and static file templates.
- * - Themes is an array, so you can always override with your theme.
+ * - There are php and static file templates (for assets. These are both multi-lang capable, but it's better to store i18n in lang files (generator support)).
+ * - Themes cascade similiar to css.
+ * - @TODO get Sidebar Menu Ordering done.
  *
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.0
+ * @notin 3.0.4 - 4.9.0
  */
 class GDT_Template extends GDT
 {
@@ -171,6 +174,10 @@ class GDT_Template extends GDT
 		catch (\Throwable $ex)
 		{
 			$html = Debug::debugException($ex);
+			if (GDO_ERROR_DIE)
+			{
+				die($html);
+			}
 			return html(ob_get_contents()) . $html;
 		}
 		finally
@@ -200,14 +207,14 @@ class GDT_Template extends GDT
 	 */
 	private static function getPath(string $moduleName, string $path): string
 	{
-//		return self::getPathB($moduleName, $path);
-		static $cache = [];
-		$p = $moduleName . $path . Trans::$ISO;
-		if ( !isset($cache[$p]))
-		{
-			$cache[$p] = self::getPathB($moduleName, $path);
-		}
-		return $cache[$p];
+		return self::getPathB($moduleName, $path);
+// 		static $cache = [];
+// 		$p = $moduleName . $path . Trans::$ISO;
+// 		if ( !isset($cache[$p]))
+// 		{
+// 			$cache[$p] = self::getPathB($moduleName, $path);
+// 		}
+// 		return $cache[$p];
 	}
 
 	private static function getPathB(string $moduleName, string $path): string

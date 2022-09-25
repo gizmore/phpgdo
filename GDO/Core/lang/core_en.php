@@ -112,6 +112,7 @@ return [
 	'enum_bottom' => 'Bottom',
 	
 	# Permissions
+	'sel_no_permissions' => 'Not required',
 	'perm_admin' => 'Admin',
 	'perm_staff' => 'Staff',
 	'perm_cronjob' => 'Cronjob',

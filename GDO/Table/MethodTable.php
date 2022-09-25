@@ -134,10 +134,10 @@ abstract class MethodTable extends Method
      */
     public function getResult() : ArrayResult { return new ArrayResult([], $this->gdoTable()); }
 
-    /**
-     * Override this to toggle fetchInto speedup in table rendering to reduce GDO allocations.
-     */
-    public function useFetchInto() : bool { return true; }
+//     /**
+//      * Override this to toggle fetchInto speedup in table rendering to reduce GDO allocations.
+//      */
+//     public function useFetchInto() : bool { return true; }
     
     /**
      * Default IPP defaults to config in Module_Table.
@@ -239,7 +239,7 @@ abstract class MethodTable extends Method
 		{
 			return $var;
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function getOrderTerm() : string
@@ -334,7 +334,8 @@ abstract class MethodTable extends Method
 	    $table->deletable($this->isDeleteable($user));
 	    
 	    # 1 speedup
-	    $table->fetchInto($this->useFetchInto());
+	    $table->fetchAs($this->gdoFetchAs());
+// 	    $table->fetchInto($this->useFetchInto());
 	}
 	
 	public function getTable() : GDT_Table

@@ -93,7 +93,7 @@ abstract class MethodQueryTable extends MethodTable
 	protected function calculateTable(GDT_Table $table)
 	{
 	    $query = $table->query;
-	    $table->fetchAs($this->gdoTable());
+	    $table->fetchAs($this->gdoFetchAs());
 	    if ($this->isOrdered())
 	    {
 	    	# Get order with sanity check

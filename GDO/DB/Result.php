@@ -222,25 +222,4 @@ class Result
 	    return $this->fetchAllValues();
 	}
 	
-// 	############
-// 	### JSON ###
-// 	############
-// 	/**
-// 	 * @param GDT[] $headers
-// 	 */
-// 	public function renderJSON(array $headers) : array
-// 	{
-// 		$data = [];
-// 		while ($gdo = $this->fetchObject())
-// 		{
-// 			$row = [];
-// 			foreach($headers as $gdt)
-// 			{
-// 				$row[] = $gdt->gdo($gdo)->gdoRenderCell();
-// 			}
-// 			$data[] = $row;
-// 		}
-// 		return $data;
-// 	}
-	
 }

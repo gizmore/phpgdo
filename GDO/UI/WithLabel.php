@@ -79,6 +79,12 @@ trait WithLabel
 		return $this->labelNone(false);
 	}
 	
+	public function labelArgs(...$args) : self
+	{
+		$this->labelArgs = $args;
+		return $this;
+	}
+	
 	public function labelRaw(string $label) : self
 	{
 		$this->labelRaw = $label;

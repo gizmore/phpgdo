@@ -34,7 +34,7 @@ class GDO_Module extends GDO
 
 	public string $version = '7.0.1';
 
-	public string $license = 'GDOv7-LICENSE';
+	public string $license = GDO::LICENSE;
 
 	public string $authors = 'gizmore <gizmore@wechall.net>';
 

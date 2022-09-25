@@ -20,7 +20,7 @@ $pages = $pagemenu ? $pagemenu->render() : '';
 // $template = $field->getItemTemplate();
 if ($field->fetchInto)
 {
-    $dummy = $result->table->cache->getDummy();
+    $dummy = $field->fetchAs->cache->getDummy();
     while ($gdo = $result->fetchInto($dummy))
     {
         echo "<li>\n";

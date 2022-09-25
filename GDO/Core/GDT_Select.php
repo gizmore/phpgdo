@@ -351,6 +351,13 @@ class GDT_Select extends GDT_ComboBox
 	public function multiple(bool $multiple=true) : self
 	{
 		$this->multiple = $multiple;
+		if ($multiple)
+		{
+			if ($this->initial === null)
+			{
+				$this->initial = '[]';
+			}
+		}
 		return $this;
 	}
 	

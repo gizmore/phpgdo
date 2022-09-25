@@ -95,16 +95,20 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	# #################
-	# ## Fetch Into ###
-	# #################
-	public bool $fetchInto = false;
+// 	# #################
+// 	# ## Fetch Into ###
+// 	# #################
+// 	public bool $fetchInto = true;
 
-	public function fetchInto(bool $fetchInto)
-	{
-		$this->fetchInto = $fetchInto;
-		return $this;
-	}
+// 	public function fetchInto(bool $fetchInto)
+// 	{
+// 		$this->fetchInto = $fetchInto;
+// 		if ($fetchInto && (!$this->fetchAs))
+// 		{
+// 			$this->fetchAs($this->gdo);
+// 		}
+// 		return $this;
+// 	}
 
 	# #####################
 	# ## Drag&Drop sort ###
@@ -393,6 +397,19 @@ class GDT_Table extends GDT
 	################
 	public GDO $fetchAs;
 
+	public function gdo(GDO $gdo=null) : self
+	{
+		if ($gdo === null)
+		{
+			unset($this->fetchAs);
+		}
+		else
+		{
+			$this->fetchAs = $gdo;
+		}
+		return parent::gdo($gdo);
+	}
+	
 	public function fetchAs(GDO $fetchAs = null) : self
 	{
 		if ($fetchAs)

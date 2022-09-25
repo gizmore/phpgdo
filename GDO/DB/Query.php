@@ -34,10 +34,9 @@ final class Query
 	const DELETE = 5;
 
 	/**
-	 * The table in FROM/INTO
-	 * @deprecated unused?
+	 * The table to select from
 	 */
-	public GDO $table;
+// 	public GDO $table;
 	
 	/**
 	 * The fetch into object gdo table / final class.

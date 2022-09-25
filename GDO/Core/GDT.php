@@ -106,6 +106,7 @@ abstract class GDT
 	###########################
 	/**
 	 * @license GDOv7-LICENSE (c)2020-2023 C.B. gizmore@wechall.net
+	 * @see Rendern gegen Mobbing.com
 	 */
 	##############
 	### Render ### 19 Render modes
@@ -115,7 +116,7 @@ abstract class GDT
 	const RENDER_NIL = 0;     # nil
 	const RENDER_BINARY = 1;  # websocket (@TODO WS Render Mode)
 	const RENDER_CLI = 2;     # plaintext
-	const RENDER_PDF = 3;     # pdf (@TODO PDF Render Mode)
+	const RENDER_PDF = 3;     # pdf (@TODO PDF Render Mode) what is the ultimate solution?
 	const RENDER_XML = 4;     # xml (@TODO XML Render Mode)
 	const RENDER_JSON= 5;     # json
 	const RENDER_GTK = 6;     #### Enjoy!

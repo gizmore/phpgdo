@@ -2,6 +2,7 @@
 namespace GDO\Table\tpl;
 use GDO\Table\GDT_List;
 use GDO\Core\GDT_Template;
+use GDO\Core\GDT;
 /** @var $field GDT_List **/
 
 echo GDT_Template::php('Table', 'list_filter.php', ['field' => $field]);
@@ -20,9 +21,9 @@ echo GDT_Template::php('Table', 'list_filter.php', ['field' => $field]);
 ############
 ### List ###
 ############
-$pagemenu = @$field->pagemenu;
+$pagemenu = isset($field->pagemenu) ? $field->pagemenu : GDT::EMPTY_STRING;
 $page = $pagemenu ? $pagemenu->page : 1;
-$pagemenu = $pagemenu ? $pagemenu->renderHTML() : '';
+$pagemenu = $pagemenu ? $pagemenu->renderHTML() : GDT::EMPTY_STRING;
 
 if (!$field->countItems())
 {
@@ -46,7 +47,6 @@ echo $pagemenu;
 <?php endif; ?>
 <?php
 $dummy = $field->fetchAs->cache->getDummy();
-// $li = GDT_ListItem::make();
 while ($gdo = $result->fetchInto($dummy)) :
   echo $gdo->renderList();
 endwhile;
