@@ -38,30 +38,17 @@ $result = $field->getResult();
 	  </tr>
 	</thead>
 	<tbody>
-	<?php if ($field->fetchInto) : ?>
-	<?php $dummy = $result->table->cache->getDummy(); ?>
-	<?php while ($gdo = $result->fetchInto($dummy)) : ?>
+<?php $dummy = $result->table->cache->getDummy(); ?>
+<?php while ($gdo = $result->fetchInto($dummy)) : ?>
 	<tr data-gdo-id="<?=$gdo->getID()?>">
-	  <?php foreach($headers as $gdt) :
+<?php foreach($headers as $gdt) :
 	        if (!$gdt->isHidden()) :
 	        $gdt->gdo($gdo); ?>
 		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
-	  <?php endif; ?>
-	  <?php endforeach; ?>
+<?php endif; ?>
+<?php endforeach; ?>
 	</tr>
 	<?php endwhile; ?>
-	<?php else : ?>
-	<?php while ($gdo = $result->fetchAs($field->fetchAs)) : ?>
-	<tr data-gdo-id="<?=$gdo->getID()?>">
-	  <?php foreach($headers as $gdt) :
-	        if (!$gdt->isHidden()) :
-	        $gdt->gdo($gdo); ?>
-		<td class="<?=$gdt->htmlClass()?>"><?=$gdt->renderCell()?></td>
-	  <?php endif; ?>
-	  <?php endforeach; ?>
-	</tr>
-	<?php endwhile; ?>
-	<?php endif; ?>
 	</tbody>
 <?php if (isset($field->footer)) : ?>
 	<tfoot><?=$field->footer->renderTFoot()?></tfoot>
