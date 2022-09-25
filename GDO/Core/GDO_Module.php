@@ -19,6 +19,7 @@ use GDO\User\Module_User;
 
 /**
  * GDO base module class.
+ * 1300 lines is huge.
  *
  * @author gizmore
  * @version 7.0.1
