@@ -46,8 +46,8 @@ echo $pagemenu;
   <div class="gdt-list-title"><h3><?=$field->renderTitle()?></h3></div>
 <?php endif; ?>
 <?php
-$dummy = $field->fetchAs->cache->getDummy();
-while ($gdo = $result->fetchInto($dummy)) :
+$gdo = $field->fetchAs->cache->getDummy();
+while ($gdo = $result->fetchInto($gdo)) :
   echo $gdo->renderList();
 endwhile;
 ?>

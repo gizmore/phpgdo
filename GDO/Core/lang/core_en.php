@@ -78,7 +78,8 @@ return [
 	'err_session_required' => 'You need a session cookie to utilize this method.',
 	'err_invalid_ipc' => 'The IPC Bridge settings in config.php are invalid.',
 	'err_positional_after_named_parameter' => 'You cannot specify named parameters after required positionals.',
-	
+	'err_gdo_is_not_table' => 'A %s table GDO is not a table but an instance.',
+
 	# err_path
 	'is_dir' => 'directory',
 	'is_file' => 'file',

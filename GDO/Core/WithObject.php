@@ -28,6 +28,10 @@ trait WithObject
 	 */
 	public function table(GDO $table): self
 	{
+// 		if (!$table->gdoIsTable()) # requires cache too early
+// 		{
+// 			throw new GDO_Error('err_gdo_is_not_table', [$this->getName()]);
+// 		}
 		$this->table = $table;
 		return $this;
 	}
