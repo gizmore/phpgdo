@@ -32,8 +32,9 @@ abstract class MethodCompletion extends MethodAjax
 	
     public function gdoParameters() : array
     {
+    	$min = $this->getSearchTermMinLength();
         return [
-            GDT_SearchField::make('query')->notNull(),
+            GDT_SearchField::make('query')->notNull()->min($min)->max(228),
         ];
     }
     
@@ -49,6 +50,11 @@ abstract class MethodCompletion extends MethodAjax
 		return GDT::EMPTY_STRING;
 	}
 	
+	protected function getSearchTermMinLength() : int
+	{
+		return 2;
+	}
+
 	public function getMaxSuggestions() : int
 	{
 		return Module_Table::instance()->cfgSuggestionsPerRequest();
