@@ -180,8 +180,19 @@ if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 	}
 	else
 	{
-		$mo = ModuleLoader::instance()->getModule(GDO_MODULE);
-		$me = $mo->getMethod(GDO_METHOD);
+		if ($mo = ModuleLoader::instance()->getModule(GDO_MODULE, false, false))
+		{
+			if (!($me = $mo->getMethod(GDO_METHOD)))
+			{
+				$me = Error::make();
+				$_REQUEST['error'] = t('err_unknown_method', [$mo->gdoShortName(), GDO_METHOD]);
+			}
+		}
+		else
+		{
+			$me = Error::make();
+			$_REQUEST['error'] = t('err_unknown_module', [GDO_MODULE]);
+		}
 	}
 	unset($_REQUEST['_mo']);
 	unset($_REQUEST['_me']);

@@ -69,7 +69,16 @@ class GDT_Virtual extends GDT
      */
     private function proxy()
     {
-        return $this->gdtType->gdo($this->gdo)->label($this->labelKey, $this->labelArgs);
+    	$gdt = $this->gdtType->gdo($this->gdo);
+    	if (isset($this->labelKey))
+    	{
+    		$gdt->label($this->labelKey, $this->labelArgs);
+    	}
+    	elseif (isset($this->labelRaw))
+    	{
+    		$gdt->label($this->labelRaw);
+    	}
+    	return $gdt;
     }
     
     public function gdtType(GDT $gdt) : self
@@ -91,7 +100,7 @@ class GDT_Virtual extends GDT
     ##############
     public function htmlClass() : string { return $this->proxy()->htmlClass(); }
 
-    public function render() : string { return $this->proxy()->render(); }
+    public function render() { return $this->proxy()->render(); }
     public function renderHTML() : string { return $this->proxy()->renderHTML(); }
     public function renderJSON() { return $this->proxy()->renderJSON(); }
     public function renderCard() : string { return $this->proxy()->renderCard(); }

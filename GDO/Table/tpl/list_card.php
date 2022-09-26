@@ -18,26 +18,26 @@ $pages = $pagemenu ? $pagemenu->render() : '';
 <ul>
 <?php
 // $template = $field->getItemTemplate();
-if ($field->fetchInto)
-{
-    $dummy = $field->fetchAs->cache->getDummy();
-    while ($gdo = $result->fetchInto($dummy))
+// if ($field->fetchInto)
+// {
+	$gdo = $field->fetchAs->cache->getDummy();
+	while ($gdo = $result->fetchInto($gdo))
     {
         echo "<li>\n";
         echo $gdo->renderCard();
         echo "</gdoli>\n";
     }
-}
-else
-{
-    while ($gdo = $result->fetchObject())
-    {
-        echo "<li>\n";
-        echo $gdo->renderCard();
-        echo "</li>\n";
-    }
-}
-?>
+// }
+// else
+// {
+//     while ($gdo = $result->fetchObject())
+//     {
+//         echo "<li>\n";
+//         echo $gdo->renderCard();
+//         echo "</li>\n";
+//     }
+// }
+// ?>
 </ul>
 </div>
 <?=$pages?>
