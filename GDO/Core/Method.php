@@ -218,9 +218,23 @@ abstract class Method #extends GDT
 			}
 		}
 		
-		if ( ($permission = $this->getPermission()) && (!$user->hasPermission($permission)) )
+		if ($mp = $this->getPermission())
 		{
-			return $this->error('err_permission_required', [t('perm_'.$permission)]);
+			$mp = explode(',', $mp);
+			$has = false;
+			foreach ($mp as $permission)
+			{
+				if ($user->hasPermission($permission))
+				{
+					$has = true;
+					break;
+				}
+			}
+			if (!$has)
+			{
+// 				return $this->error('err_permission_required', [Arrays::implodeHuman($mp, 'or')]);
+				return $this->error('err_permission_required');
+			}
 		}
 		
 		if (!$this->hasPermission($user))
