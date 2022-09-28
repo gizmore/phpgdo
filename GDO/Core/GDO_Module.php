@@ -632,7 +632,7 @@ class GDO_Module extends GDO
 		}
 	}
 
-	public function saveConfigVar(string $key, string $var): void
+	public function saveConfigVar(string $key, ?string $var): void
 	{
 		$gdt = $this->getConfigColumn($key);
 		GDO_ModuleVar::createModuleVar($this, $gdt->initial($var));
