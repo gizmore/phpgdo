@@ -1112,7 +1112,7 @@ abstract class GDO extends GDT
 			{
 				if (!$column->isVirtual())
 				{
-					if ( ($this->dirty === true) || (isset($this->dirty[$column->name])) )
+					if ( ($this->dirty === true) || (isset($this->dirty[$column->getName()])) )
 					{
 						foreach ($column->gdo($this)->getGDOData() as $k => $v)
 						{

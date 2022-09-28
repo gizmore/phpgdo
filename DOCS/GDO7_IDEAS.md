@@ -60,7 +60,10 @@ Your playlists are ACL sharable.
  
  - Testamento.com - A site where you could put your testament.
  
- - HTML2PDF coping 100% of CSS; via: write javascript that changes every layout to an absolute rendering. then print the page via browser? What about PageNumbers then?
+ - HTML2PDF coping 100% of CSS; via: write javascript that changes every layout to an absolute rendering. then print the page via dom2pdf.
 
  - A site themed for ManOWar Fun Names: Hellen Kill, Men at Arms, etc.
+ 
+ - New challenge: Fucktard! (A fucktard sent UTF8 Futhark letters)
+ 
  

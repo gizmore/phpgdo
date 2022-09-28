@@ -259,24 +259,22 @@ final class FileUtil
 	    return (int) $s;
 	}
 	
-// 	#########################
-// 	### Merge Directories ###
-// 	#########################
-// 	/**
-// 	 * Merge two directories recursively.
-// 	 * @TODO reorder params as $source, $dest
-// 	 * @param string $target
-// 	 * @param string $source
-// 	 */
-// 	public static function mergeDirectory(string $target, string $source) : bool
-// 	{
-// 	    Filewalker::traverse($source, null, function($entry, $fullpath) use ($source, $target) {
-// 	        $newpath = str_replace($source, $target, $fullpath);
-// 	        FileUtil::createDir(Strings::rsubstrTo($newpath, '/'));
-// 	        copy($fullpath, $newpath);
-// 	    });
-// 	    return true;
-// 	}
+	#########################
+	### Merge Directories ###
+	#########################
+	/**
+	 * Merge two directories recursively.
+	 * Used in TBS Importer only *chuckle*
+	 */
+	public static function mergeDirectory(string $source, string $target) : bool
+	{
+	    Filewalker::traverse($source, null, function($entry, $fullpath) use ($source, $target) {
+	        $newpath = str_replace($source, $target, $fullpath);
+	        FileUtil::createDir(Strings::rsubstrTo($newpath, '/'));
+	        copy($fullpath, $newpath);
+	    });
+	    return true;
+	}
 	
 	############
 	### MIME ###

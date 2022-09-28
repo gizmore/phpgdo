@@ -79,6 +79,7 @@ final class ArrayResult extends Result
 	{
 	    if ($o = $this->fetchObject())
 	    {
+// 	    	return $gdo->table()->cache->getNewDummy($o->getGDOVars());
 	        return $gdo->setGDOVars($o->getGDOVars());
 	    }
 	    return null;

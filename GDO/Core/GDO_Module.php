@@ -53,7 +53,7 @@ class GDO_Module extends GDO
 	{
 		return !$this->isSiteModule();
 	}
-
+	
 	public function isCoreModule(): bool
 	{
 		return false;
@@ -330,7 +330,8 @@ class GDO_Module extends GDO
 
 	public function getName(): ?string
 	{
-		return $this->getModuleName();
+		$name = $this->gdoVar('module_name');
+		return $name ? $name : $this->getModuleName();
 	}
 
 	public function getVersion(): Version
@@ -346,6 +347,13 @@ class GDO_Module extends GDO
 		}
 		return true;
 	}
+	
+	public function enabled(bool $enabled) : self
+	{
+		$this->saveValue('module_enabled', $enabled);
+		return $this;
+	}
+	
 
 	public function isInstalled(): bool
 	{

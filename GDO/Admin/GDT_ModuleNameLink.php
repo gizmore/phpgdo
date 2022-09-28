@@ -29,6 +29,11 @@ final class GDT_ModuleNameLink extends GDT_Link
 		return ' gdt-link';
 	}
 	
+	public function renderCell() : string
+	{
+		return $this->renderHTML();
+	}
+	
     public function renderHTML() : string
 	{
 		$name = $this->getModuleLinked()->getName();

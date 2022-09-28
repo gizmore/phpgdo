@@ -53,6 +53,10 @@ class Installer
 			return false;
 		}
 		
+		usort($modules, function(GDO_Module $a, GDO_Module $b) {
+			return $a->priority - $b->priority;
+		});
+		
 		/**
 		 * @var $module GDO_Module
 		 */

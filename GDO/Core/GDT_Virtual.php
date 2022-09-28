@@ -48,7 +48,7 @@ class GDT_Virtual extends GDT
      */
     public function gdoBeforeRead(GDO $gdo, Query $query) : void
     {
-        if ($this->subquery)
+    	if (isset($this->subquery))
         {
             $query->select("({$this->subquery}) AS {$this->getName()}");
         }
