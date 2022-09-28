@@ -83,7 +83,14 @@ abstract class MethodTable extends Method
 			$this->headerCache = [];
 			foreach ($this->gdoHeaders() as $gdt)
 			{
-				$this->headerCache[$gdt->getName()] = $gdt;
+				if ($name = $gdt->getName())
+				{
+					$this->headerCache[$name] = $gdt;
+				}
+				else
+				{
+					$this->headerCache[] = $gdt;
+				}
 			}
 		}
 		return $this->headerCache;
@@ -100,6 +107,7 @@ abstract class MethodTable extends Method
 		{
 			$features[] = GDT_IPP::make($this->getIPPName());
 			$features[] = GDT_PageNum::make($this->getPageName())->initial('1');
+// 			$this->table->paginated(true, null, $this->getIPP());
 		}
 		if ($this->isSearched())
 		{
@@ -133,11 +141,6 @@ abstract class MethodTable extends Method
      * Override this with returning an ArrayResult with data.
      */
     public function getResult() : ArrayResult { return new ArrayResult([], $this->gdoTable()); }
-
-//     /**
-//      * Override this to toggle fetchInto speedup in table rendering to reduce GDO allocations.
-//      */
-//     public function useFetchInto() : bool { return true; }
     
     /**
      * Default IPP defaults to config in Module_Table.
@@ -159,6 +162,7 @@ abstract class MethodTable extends Method
         $this->table->href($this->gdoTableHREF());
         $this->table->gdo($this->gdoTable());
         $this->table->fetchAs($this->gdoFetchAs());
+        $this->gdoParameterCache();
         return $this->table;
     }
     
@@ -310,7 +314,7 @@ abstract class MethodTable extends Method
 	protected function setupCollection(GDT_Table $table)
 	{
 	    $headers = $this->gdoHeaderCache();
-	    $this->table->addHeaderFields(...$headers);
+	    $this->table->addHeaderFields(...array_values($headers));
 	    
 	    # 5 features
 	    if ($this->isOrdered())
@@ -335,7 +339,6 @@ abstract class MethodTable extends Method
 	    
 	    # 1 speedup
 	    $table->fetchAs($this->gdoFetchAs());
-// 	    $table->fetchInto($this->useFetchInto());
 	}
 	
 	public function getTable() : GDT_Table

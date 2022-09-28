@@ -66,4 +66,5 @@ Your playlists are ACL sharable.
  
  - New challenge: Fucktard! (A fucktard sent UTF8 Futhark letters)
  
+ - Turn KassiererCard.org into a proxy challenge (CountryRestriction)
  

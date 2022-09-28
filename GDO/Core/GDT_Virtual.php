@@ -69,7 +69,7 @@ class GDT_Virtual extends GDT
      */
     private function proxy()
     {
-    	$gdt = $this->gdtType->gdo($this->gdo);
+    	$gdt = isset($this->gdo) ? $this->gdtType->gdo($this->gdo) : $this->gdtType;
     	if (isset($this->labelKey))
     	{
     		$gdt->label($this->labelKey, $this->labelArgs);

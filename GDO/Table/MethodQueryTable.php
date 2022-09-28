@@ -101,6 +101,10 @@ abstract class MethodQueryTable extends MethodTable
 	    	# order the query
 	    	$query->order($order);
 	    }
+	    elseif ($defaultOrder = $this->getDefaultOrder())
+	    {
+	    	$query->order($defaultOrder);
+	    }
         if ($this->isPaginated())
 	    {
 	    	$table->countQuery($this->getCountQuery());
