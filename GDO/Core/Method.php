@@ -260,10 +260,10 @@ abstract class Method #extends GDT
 		return $this->execWrap();
 	}
 	
-	public function execMethod()
-	{
-		return $this->execWrap();
-	}
+// 	public function execMethod()
+// 	{
+// 		return $this->execWrap();
+// 	}
 	
 	/**
 	 * Detect if we should start a transaction. # @TODO only mark DB transaction ready / lazily
@@ -298,17 +298,17 @@ abstract class Method #extends GDT
 		return $response;
 	}
 	
-	public function executeWithInputs(array $inputs=null)
+	public function executeWithInputs(array $inputs=null, bool $checkPermission=true)
 	{
 		$this->inputs = $inputs;
-		return $this->executeWithInit();
+		return $this->executeWithInit($checkPermission);
 	}
 	
 	/**
 	 * Execute this method with all hooks.
 	 * Quite a long method.
 	 */
-	public function executeWithInit()
+	public function executeWithInit(bool $checkPermission=true)
 	{
 		$db = Database::instance();
 		$response = GDT_Response::make();
@@ -320,9 +320,12 @@ abstract class Method #extends GDT
 			
 			$user = GDO_User::current();
 			
-			if (true !== ($error = $this->checkPermission($user)))
+			if ($checkPermission)
 			{
-				return $error;
+				if (true !== ($error = $this->checkPermission($user)))
+				{
+					return $error;
+				}
 			}
 			
 			if ($result = $this->onMethodInit())
