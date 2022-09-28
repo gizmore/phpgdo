@@ -209,7 +209,7 @@ abstract class GDT
 	public function renderForm() : string { return $this->renderHTML(); }
 	public function renderOption() : string { return $this->renderHTML(); }
 	# HTML table rendering
-	public function renderTHead() : string { return $this->renderHTML(); }
+	public function renderTHead() : string { return self::EMPTY_STRING; }
 	public function renderFilter(GDT_Filter $f) : string { return self::EMPTY_STRING; }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderTFoot() : string { return $this->renderHTML(); }
