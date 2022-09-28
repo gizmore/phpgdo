@@ -183,7 +183,7 @@ final class FileUtil
 					}
 				}
 			}
-			return rmdir($dir);
+			return self::removeDir($dir, $throw);
 		}
 		elseif (is_file($dir))
 		{
