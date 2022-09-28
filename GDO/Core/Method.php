@@ -236,12 +236,12 @@ abstract class Method #extends GDT
 	 */
 	public function exec()
 	{
-		$user = GDO_User::current();
+// 		$user = GDO_User::current();
 		
-		if (true !== ($error = $this->checkPermission($user)))
-		{
-			return $error;
-		}
+// 		if (true !== ($error = $this->checkPermission($user)))
+// 		{
+// 			return $error;
+// 		}
 		
 		return $this->execWrap();
 	}
@@ -303,6 +303,14 @@ abstract class Method #extends GDT
 		{
 			# 0) Init
 			$this->applyInput();
+			
+			$user = GDO_User::current();
+			
+			if (true !== ($error = $this->checkPermission($user)))
+			{
+				return $error;
+			}
+			
 			if ($result = $this->onMethodInit())
 			{
 				$response->addField($result);

@@ -573,22 +573,28 @@ class GDT_Table extends GDT
 	 */
 	public function getPageFor(GDO $gdo)
 	{
-		if ($this->result instanceof ArrayResult)
+		$result = $this->getResult();
+		
+		if ($result instanceof ArrayResult)
 		{
 			throw new GDO_Exception("@TODO implement getPageFor() ArrayResult");
 		}
 		else
 		{
 			$q = $this->query->copy(); # ->noJoins();
-			foreach ($q->order as $i => $column)
+			if (isset($this->order))
 			{
-				$subq = $gdo->entityQuery()
-					->from($gdo->gdoTableName() . " AS sq{$i}")
-					->selectOnly($column)
-					->buildQuery();
-				$order = stripos($column, 'DESC') ? '0' : '1';
-				$cmpop = $order ? '<' : '>';
-				$q->where("{$column} {$cmpop} ( {$subq} )");
+				foreach ($this->order->getAllFields() as $field)
+				{
+					$column = $field->getName();
+					$subq = $gdo->entityQuery()
+						->from($gdo->gdoTableName() . " AS sq{$i}")
+						->selectOnly($column)
+						->buildQuery();
+					$order = stripos($column, 'DESC') ? '0' : '1';
+					$cmpop = $order ? '<' : '>';
+					$q->where("{$column} {$cmpop} ( {$subq} )");
+				}
 			}
 			$q->selectOnly('COUNT(*)')->noOrder();
 			$itemsBefore = $q->exec()->fetchValue();

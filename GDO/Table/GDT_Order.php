@@ -43,9 +43,9 @@ final class GDT_Order extends GDT_String
 		{
 			if (is_string($value))
 			{
-				$orders = Strings::explode($value);
+				$value = Strings::explode($value);
 			}
-			foreach ($orders as $order)
+			foreach ($value as $order)
 			{
 				if (!$this->validateOrder($order))
 				{

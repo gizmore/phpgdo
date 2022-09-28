@@ -32,7 +32,7 @@ use GDO\Language\Module_Language;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1617';
+	const GDO_REVISION = '7.0.1-r1619';
 	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############

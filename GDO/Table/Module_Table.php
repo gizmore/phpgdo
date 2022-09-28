@@ -47,4 +47,9 @@ final class Module_Table extends GDO_Module
 	       $this->cfgItemsPerPageHTTP();
 	}
 	
+	public function onLoadLanguage() : void
+	{
+		$this->loadLanguage('lang/table');
+	}
+	
 }
