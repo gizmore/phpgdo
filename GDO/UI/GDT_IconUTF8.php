@@ -68,7 +68,9 @@ final class GDT_IconUTF8
         'help' => '💡',
     	'house' => '🏠',
         'image' => '📷',
+    	'info' => 'ⓘ',
         'language' => '⛿',
+    	'legal' => '§',
         'level' => '🏆',
         'license' => '§',
         'like' => '❤',
@@ -115,6 +117,8 @@ final class GDT_IconUTF8
         'users' => '😂',
         'view' => '👁',
         'wait' => '◴',
+    	'work' => 'XX',
+    	'write' => '✎',
     ];
     
 	public static function iconS(string $icon, string $iconText = null, string $style = null) : string

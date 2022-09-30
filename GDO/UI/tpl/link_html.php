@@ -8,9 +8,13 @@ namespace GDO\UI\tpl;
 <?=$field->htmlTarget()?>
 <?=$field->htmlHREF()?>
 <?=$field->htmlRelation()?>><?=$field->htmlIcon()?>
+<?php if (isset($field->href)) : ?>
 <?php if ($field->hasText()) : ?>
 <?=$field->renderText()?>
 <?php else : ?>
-<?=html(isset($field->href)?$field->href:'---')?>
+<?=html($field->href)?>
+<?php endif; ?>
+<?php else : ?>
+<?=t('not_specified')?>
 <?php endif; ?>
 </a></span>

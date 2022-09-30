@@ -48,11 +48,15 @@ final class GDT_Page extends GDT
 	public function renderHTML() : string
 	{
 		global $me;
+		$loader = ModuleLoader::instance();
+		foreach ($loader->getEnabledModules() as $module)
+		{
+			$module->onIncludeScripts();
+		}
 		if ($me->isSidebarEnabled())
 		{
-			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+			foreach ($loader->getEnabledModules() as $module)
 			{
-				$module->onIncludeScripts();
 				$module->onInitSidebar();
 			}
 			return GDT_Template::php('UI', 'page_html.php', ['page' => $this]);

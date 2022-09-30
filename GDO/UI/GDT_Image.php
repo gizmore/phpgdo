@@ -5,6 +5,7 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\File\GDO_File;
 use GDO\Core\WithName;
+use GDO\Core\WithValue;
 
 /**
  * HTML Image element.
@@ -13,9 +14,10 @@ use GDO\Core\WithName;
  * @version 7.0.1
  * @since 6.10.0
  */
-final class GDT_Image extends GDT
+class GDT_Image extends GDT
 {
 	use WithName;
+// 	use WithValue;
 	use WithPHPJQuery;
 	
 	const GIF = 'image/gif';
@@ -32,22 +34,25 @@ final class GDT_Image extends GDT
 		return $this;
 	}
 	
+	public function htmlSrc() : string
+	{
+		return isset($this->src) ? ' src="'.html($this->src).'"' : GDT::EMPTY_STRING;
+	}
+	
 	##############
 	### Render ###
 	##############
 	public function renderHTML() : string
 	{
-		return GDT_Template::php('UI', 'cell/image.php', ['field' => $this]);
+		return GDT_Template::php('UI', 'image_html.php', ['field' => $this]);
 	}
 	
 	###############
 	### Factory ###
 	###############
-	public static function fromFile(GDO_File $file)
+	public static function fromFile(GDO_File $file, string $name=null)
 	{
-		$image = self::make();
-		$image->src($file->getHref());
-		return $image;
+		return self::make($name)->src($file->getHref());
 	}
 	
 }

@@ -3,6 +3,7 @@ namespace GDO\Core\lang;
 return [
 	# Site
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
+	'%s' => '%s',
 	'---n/a---' => '---n/a---',
 	
 	# Errors
@@ -224,6 +225,8 @@ return [
 	'size' => 'Size',
 	'object_filter' => 'Filter',
 	'directory' => 'Directory',
+	'type' => 'Type',
+	'print' => 'Print',
 	
 	# CBX
 	'sel_all' => 'Select All',

@@ -7,7 +7,6 @@ use GDO\Util\Strings;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\UI\GDT_Page;
-use GDO\UI\GDT_Error;
 
 /**
  * Debug backtrace and error handler.

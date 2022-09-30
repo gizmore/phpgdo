@@ -30,6 +30,12 @@ trait WithText
 	    return $this->textUnescaped();
 	}
 	
+	public function textArgs(string...$args)
+	{
+		$this->textArgs = count($args) ? $args : null;
+		return $this;
+	}
+	
 	public function textRaw(?string $text) : self
 	{
 		unset($this->textRaw);

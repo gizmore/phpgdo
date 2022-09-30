@@ -8,7 +8,12 @@ This software is exclusive property of gizmore@wechall.net (Christian B.)
 2) All forbidden
 You are not allowed to have a copy of this software, unless you are hosting this for free on github.com
 The installation of this software is prohibited, unless told otherwise from me.
-Your are not allowed to trigger execution of any of this code on any remote machine you may or may not control, except for machines located in a github.com datacenter.
+If you are here for a WeChall.net challenge, you have the permission to install, debug, test and send a pull request.
+You are _never_ allowed to use this software, free or commercially in production, for no other means, unless you have purchased a license from ITMB.
+If nothing applies, you are not allowed to trigger execution of any of this code on any remote machine you may or may not control, except for machines located in a github.com datacenter.
+
+3) Liabilities
 You should set an X-HTTP-TEAPOT-TEMP-C header for my delight.
+
 
 (c)2021-2023 by gizmore@wechall.net - All rights reserved

@@ -219,7 +219,7 @@ abstract class GDT_Field extends GDT
 	
 	public function displayCard($var) : string
 	{
-		return sprintf("<label>%s%s</label>: <span>%s</span>\n",
+		return sprintf("<label>%s%s:&nbsp;</label><span>%s</span>\n",
 			$this->htmlIcon(), $this->renderLabelText(), $var);
 	}
 

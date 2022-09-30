@@ -96,10 +96,8 @@ abstract class MethodCompletion extends MethodAjax
 	
 	protected function collectItems(Result $result) : array
 	{
-		$table = $this->gdoTable();
 		$term = $this->getSearchTerm();
 		$q = mb_strtolower($term);
-// 		$dummy = $table->cache->getDummy();
 		$items = [];
 		while ($gdo = $result->fetchObject())
 		{

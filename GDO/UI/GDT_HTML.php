@@ -19,6 +19,11 @@ final class GDT_HTML extends GDT
 	{
 		return isset($this->var) ? $this->var : GDT::EMPTY_STRING;
 	}
+	
+	public function renderCard() : string
+	{
+		return '<div class="gdt-html">'.$this->var.'</div>'; # Not getVar() to prevent XSS.
+	}
 
 	/**
 	 * UnitTest default value.

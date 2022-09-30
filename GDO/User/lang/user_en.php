@@ -18,7 +18,7 @@ return [
 	'user_name' => 'Username',
 	'profile_level' => 'This %s has a user level of %s.',
 	
-	'link_your_profile' => 'Your profile',
+	'link_your_profile' => '[%s]',
 
 	'tt_password' => 'Your password should be at least 9 chars and not be included in dictionaries.',
 

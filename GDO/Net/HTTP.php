@@ -109,7 +109,7 @@ final class HTTP
 	 * @param false|string $cookie
 	 * @return string content from curl request.
 	 */
-	public static function getFromURL($url, $returnHeader=false, $cookie=false, array $httpHeaders=null)
+	public static function getFromURL($url, $returnHeader=false, $cookie=false, array $httpHeaders=null, string &$error='')
 	{
 		# Cleanup URL
 		$url = trim($url);
@@ -170,9 +170,9 @@ final class HTTP
 		
 		if (!($received = curl_exec($ch)))
 		{
-			echo GDT_Error::with('err_curl', [
+			$error = GDT_Error::make()->text('err_curl', [
 				curl_errno($ch), curl_error($ch), html($url)])->
-					render();
+					renderCLI();
 		}
 		
 		curl_close($ch);

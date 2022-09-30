@@ -18,7 +18,7 @@ return [
 	'user_name' => 'Benutzername',
 	'profile_level' => 'Dieser Nutzer ist ein %s mit Level %s.',
 	
-	'link_your_profile' => 'Ihr Profil',
+	'link_your_profile' => '[%s]',
 	
 	'tt_password' => 'Ihr password sollte mindestens 9 Zeichen enthalten und nicht in Wortlisten auftauchen.',
 	

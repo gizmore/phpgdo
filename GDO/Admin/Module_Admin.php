@@ -16,12 +16,12 @@ use GDO\UI\GDT_Page;
  * @TODO: restrict admin methods to a second admin password (like in gwf3)
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 class Module_Admin extends GDO_Module
 {
-	public int $priority = 90;
+	public int $priority = 200;
 	
 	##############
 	### Module ###

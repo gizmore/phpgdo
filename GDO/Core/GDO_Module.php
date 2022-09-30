@@ -182,17 +182,42 @@ class GDO_Module extends GDO
 	}
 
 	/**
-	 *
-	 * @TODO: IF a method description is not unique, use the module description?
-	 *
-	 * Module description is fetched from README.md by default.
+	 * Module description is fetched from README.md by default. Additionally, all Method's phpdoc is read.
 	 */
-	public function getModuleDescription(): ?string
+	public function getModuleDescription(): string
 	{
+		$back = '';
 		if ($readme = @file_get_contents($this->filePath('README.md')))
 		{
 			$matches = null;
-			if (preg_match("/^#.*[\\r\\n]+([^#]+)#?/", $readme, $matches))
+			if (preg_match("/^#.*[\\r\\n]+([^#]+)/", $readme, $matches))
+			{
+				$back .= trim($matches[1])."\n\n";
+			}
+		}
+		
+		$back .= $this->getClassDescription($this)."\n\n";
+		
+		foreach ($this->getMethods(false) as $method)
+		{
+			$back .= $this->getClassDescription($method)."\n\n";
+		}
+		
+		return trim($back);
+	}
+	
+	/**
+	 * Get a classes phpdoc description.
+	 */
+	public function getClassDescription(object $object) : ?string
+	{
+		$klass = get_class($object);
+		$klass = str_replace('\\', '/', $klass);
+		$filename = GDO_PATH . $klass . '.php';
+		if ($sourcecode = @file_get_contents($filename))
+		{
+			$matches = null;
+			if (preg_match("#/\\*\\*[\\r\\n](.*)\\*\\*/#", $sourcecode, $matches))
 			{
 				return trim($matches[1]);
 			}
