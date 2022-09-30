@@ -465,6 +465,13 @@ final class GDO_User extends GDO
 		return $this;
 	}
 	
+	public function increaseSetting(string $moduleName, string $key, float $by=1) : self
+	{
+		$now = $this->settingVar($moduleName, $key);
+		return $this->saveSettingVar($moduleName, $key, $now + $by);
+		
+	}
+	
 	/**
 	 * Get all users with a specified setting.
 	 * Optionally an SQL like match is performed.

@@ -16,6 +16,11 @@ use GDO\Core\GDO_Error;
  */
 abstract class MethodForm extends Method
 {
+	public function isUserRequired() : bool
+	{
+		return true;
+	}
+	
 	public function isLocking() : bool
 	{
 		return true;

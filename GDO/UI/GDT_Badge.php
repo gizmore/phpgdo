@@ -15,6 +15,8 @@ use GDO\Core\GDT_UInt;
  */
 class GDT_Badge extends GDT_UInt
 {
+	use WithText;
+	
 	public bool $writeable = false;
 	public ?string $initial = '0';
 	
@@ -28,7 +30,7 @@ class GDT_Badge extends GDT_UInt
 	
 	public function renderCard() : string
 	{
-		return $this->displayCard("<i class=\"gdt-badge\">{$this->var}</i>");
+		return $this->displayCard("{$this->renderText()}&nbsp;<i class=\"gdt-badge\">{$this->var}</i>");
 	}
 	
 }
