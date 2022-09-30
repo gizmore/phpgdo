@@ -169,7 +169,7 @@ trait WithParameters
 		}
 		
 		# Copy previously already named input
-		foreach ($this->inputs as $key => $input)
+		foreach ($this->getInputs() as $key => $input)
 		{
 			if (!is_numeric($key))
 			{

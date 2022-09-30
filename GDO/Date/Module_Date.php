@@ -23,7 +23,7 @@ use GDO\User\GDT_ACLRelation;
  */
 final class Module_Date extends GDO_Module
 {
-    public int $priority = 4;
+    public int $priority = 5;
  
     public function isCoreModule() : bool { return true; }
     public function onLoadLanguage() : void { $this->loadLanguage('lang/date'); }

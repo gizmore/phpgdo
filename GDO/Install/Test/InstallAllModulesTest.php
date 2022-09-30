@@ -26,9 +26,9 @@ final class InstallAllModulesTest extends TestCase
 		$loader->loadModules(false, true, true);
 		$modules = $loader->getInstallableModules();
 		Installer::installModules($modules);
-		$this->assert200('Check if all modules can be installed.');
+		$this->assertOK('Check if all modules can be installed.');
 		$installed = $loader->getEnabledModules();
-		assertGreaterThanOrEqual(4, count($installed), 'Test if installer utility works.');
+		assertGreaterThanOrEqual(5, count($installed), 'Test if installer utility works.');
 	}
 	
 	public function testWipeAllModules()
