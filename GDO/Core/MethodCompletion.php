@@ -99,9 +99,9 @@ abstract class MethodCompletion extends MethodAjax
 		$table = $this->gdoTable();
 		$term = $this->getSearchTerm();
 		$q = mb_strtolower($term);
-		$dummy = $table->cache->getDummy();
+// 		$dummy = $table->cache->getDummy();
 		$items = [];
-		while ($gdo = $result->fetchInto($dummy))
+		while ($gdo = $result->fetchObject())
 		{
 			# ID match == 1st item
 			$id = mb_strtolower($gdo->getID());

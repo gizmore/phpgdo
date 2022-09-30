@@ -209,7 +209,7 @@ abstract class GDT_Field extends GDT
 			$text .= ':&nbsp;';
 		}
 		$text .= $this->displayVar($this->getVar());
-		return "<div class=\"gdt-li-string\">$text</div>";
+		return "<div>$text</div>";
 	}
 	
 	public function renderCard() : string
@@ -219,7 +219,7 @@ abstract class GDT_Field extends GDT
 	
 	public function displayCard($var) : string
 	{
-		return sprintf("<label>%s%s:</label><div>%s</div>\n",
+		return sprintf("<label>%s%s</label>: <span>%s</span>\n",
 			$this->htmlIcon(), $this->renderLabelText(), $var);
 	}
 

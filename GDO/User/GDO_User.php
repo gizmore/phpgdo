@@ -316,7 +316,7 @@ final class GDO_User extends GDO
 	{
 		return array_key_exists($permission, $this->loadPermissions());
 	}
-	
+
 	public function hasPermissionObject(GDO_Permission $permission) : bool
 	{
 		return $this->hasPermission($permission->getName());

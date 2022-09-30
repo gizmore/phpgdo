@@ -5,7 +5,6 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithInstance;
 use GDO\Core\ModuleLoader;
-use GDO\Core\Application;
 use GDO\Session\GDO_Session;
 
 /**
@@ -48,16 +47,17 @@ final class GDT_Page extends GDT
 	 */
 	public function renderHTML() : string
 	{
-		# we want a full html page.
-		if (!Application::$INSTANCE->isInstall())
+		global $me;
+		if ($me->isSidebarEnabled())
 		{
 			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
 			{
 				$module->onIncludeScripts();
 				$module->onInitSidebar();
 			}
+			return GDT_Template::php('UI', 'page_html.php', ['page' => $this]);
 		}
-		return GDT_Template::php('UI', 'page_html.php', ['page' => $this]);
+		return GDT_Template::php('UI', 'page_blank.php', ['page' => $this]);
 	}
 	
 	###########

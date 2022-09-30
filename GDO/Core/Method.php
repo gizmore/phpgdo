@@ -77,6 +77,7 @@ abstract class Method #extends GDT
 	public function isShownInSitemap() : bool { return true; }
 	public function getUserType() : ?string { return null; }
 	public function isIndexed() : bool { return true; }
+	public function isSidebarEnabled() : bool { return true; }
 	
 	# events
 	public function onMethodInit() {}

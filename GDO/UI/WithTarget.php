@@ -30,6 +30,9 @@ trait WithTarget
 		return $this;
 	}
 
+	/**
+	 * @deprecated Is often blocked on User devices (chrome).
+	 */
 	public function targetBlank() : self
 	{
 		return $this->target('_blank');

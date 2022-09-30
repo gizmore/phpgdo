@@ -49,13 +49,24 @@ class GDT_ComboBox extends GDT_String
 	##############
 	public function renderFilter(GDT_Filter $f) : string
 	{
-		if ($this->hasCompletion())
+		if (isset($this->completionHref))
 		{
 		    return GDT_Template::php('Form', 'combobox_form.php', ['field' => $this, 'f' => $f]);
 		}
 		else
 		{
 			return parent::renderFilter($f);
+		}
+	}
+	
+	public function renderForm() : string
+	{
+		if (isset($this->completionHref))
+		{
+			$tVars = [
+				'field' => $this,
+			];
+			return GDT_Template::php('Core', 'combobox_form.php', $tVars);
 		}
 	}
 

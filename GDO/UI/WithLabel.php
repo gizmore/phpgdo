@@ -19,6 +19,11 @@ trait WithLabel
 	
 	public static function make(string $name = null) : self
 	{
+		return self::makeWithLabel($name);
+	}
+	
+	public static function makeWithLabel(string $name = null) : self
+	{
 		$obj = self::makeNamed($name);
 		if ($name = $obj->getName())
 		{

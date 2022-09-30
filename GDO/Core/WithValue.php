@@ -51,15 +51,15 @@ trait WithValue
 	public function var(string $var = null) : self
 	{
 		$this->var = $var;
-		$this->valueConverted = false;
+// 		$this->valueConverted = false;
 		return $this;
 	}
 	
 	public function value($value) : self
 	{
 		$this->var = $this->toVar($value);
-		$this->value = $value;
-		$this->valueConverted = true;
+// 		$this->value = $value;
+// 		$this->valueConverted = true;
 		return $this;
 	}
 	

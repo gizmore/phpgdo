@@ -68,7 +68,7 @@ class GDT_String extends GDT_DBField
 	### Min / Max ###
 	#################
 	public int $min = 0;
-	public int $max = 192; # utf8mb4 max length for keys
+	public int $max = 191; # utf8mb4 max length for keys
 
 	public function min(int $min) : self
 	{

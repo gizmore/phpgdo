@@ -8,8 +8,8 @@ namespace GDO\UI\tpl;
 <?=$field->htmlTarget()?>
 <?=$field->htmlHREF()?>
 <?=$field->htmlRelation()?>><?=$field->htmlIcon()?>
-<?php if ($field->hasLabel()) : ?>
-<?=$field->renderLabelText()?>
+<?php if ($field->hasText()) : ?>
+<?=$field->renderText()?>
 <?php else : ?>
 <?=html(isset($field->href)?$field->href:'---')?>
 <?php endif; ?>

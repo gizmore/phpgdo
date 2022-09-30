@@ -6,11 +6,10 @@ namespace GDO\Core\tpl;
   <label <?=$field->htmlForID()?>><?=$field->htmlIcon()?><?=$field->renderLabel()?></label>
   <input
    <?=$field->htmlID()?>
-   type="number"
-   step="1"
+   type="text"
    <?=$field->htmlFocus()?>
    <?=$field->htmlName()?>
-   value="<?=$field->renderVar()?>"
+   <?=$field->htmlValue()?>
    <?=$field->htmlRequired()?>
    <?=$field->htmlDisabled()?> />
   <?=$field->htmlError()?>

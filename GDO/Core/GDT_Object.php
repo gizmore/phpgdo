@@ -41,7 +41,7 @@ class GDT_Object extends GDT_UInt
 		{
 			return $var;
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function renderOption() : string
@@ -51,7 +51,7 @@ class GDT_Object extends GDT_UInt
 		 {
 			 return $obj->renderOption();
 		 }
-		 return '';
+		 return GDT::EMPTY_STRING;
 	 }
 	
 	 public function renderForm() : string

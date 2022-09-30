@@ -7,7 +7,7 @@ namespace GDO\Core\tpl;
   <input
    class="gdo-autocomplete-input"
    data-config='<?=$field->displayConfigJSON()?>'
-   type="<?=$field->_inputType?>"
+   type="<?=$field->getInputType()?>"
    <?=$field->htmlID()?>
    <?=$field->htmlFocus()?>
    <?=$field->htmlRequired()?>

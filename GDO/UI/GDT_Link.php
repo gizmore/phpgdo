@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT_Template;
 use GDO\Net\URL;
 use GDO\Net\GDT_Url;
+use GDO\Language\Trans;
 
 /**
  * An anchor for menus or paragraphs.
@@ -17,12 +18,23 @@ use GDO\Net\GDT_Url;
 class GDT_Link extends GDT_Url
 {
 	use WithHREF;
+	use WithText;
 	use WithTarget;
 
 	protected function __construct()
 	{
 		parent::__construct();
 		unset($this->icon); # @TODO: Optionally give a global icon for all links, like TBS did like the enter key.
+	}
+	
+	public static function make(string $name = null) : self
+	{
+		$obj = self::makeWithLabel($name);
+		if ($name && Trans::hasKey($name))
+		{
+			$obj->text($name);
+		}
+		return $obj;
 	}
 	
 	###########
@@ -78,6 +90,13 @@ class GDT_Link extends GDT_Url
 	public function renderCLI() : string
 	{
 		return $this->renderJSON();
+	}
+	
+	public function renderList() : string
+	{
+		$html = $this->renderHTML();
+		$card = $this->displayCard($html);
+		return "<span>$card</span>\n";
 	}
 	
 	public function renderJSON()

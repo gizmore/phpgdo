@@ -13,7 +13,7 @@ use GDO\Core\GDT_String;
   <?=$field->htmlPattern()?>
   <?=$field->htmlDisabled()?>
   maxlength="<?=$field->max?>"
-  size="<?=min($field->max, 32)?>"
+  size="<?=min($field->max, 64)?>"
   <?=$field->htmlName()?>
   <?=$field->htmlValue()?> />
   <?=$field->htmlError()?>

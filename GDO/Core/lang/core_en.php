@@ -3,6 +3,7 @@ namespace GDO\Core\lang;
 return [
 	# Site
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
+	'---n/a---' => '---n/a---',
 	
 	# Errors
 	'error' => 'Error: %s',
@@ -154,6 +155,7 @@ return [
 	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'code' => 'Code',
 	'front' => 'Front',
 	'back' => 'Back',
 	'redirect' => 'Redirect',
