@@ -32,7 +32,7 @@ use GDO\Core\Application;
  */
 final class Module_Language extends GDO_Module
 {
-	private array $supported;
+// 	private array $supported;
 
 	##############
 	### Module ###
@@ -88,8 +88,8 @@ final class Module_Language extends GDO_Module
 	 */
 	public function cfgSupported() : array
 	{
-		if (!isset($this->supported))
-		{
+// 		if (!isset($this->supported))
+// 		{
 			$supported = [GDO_LANGUAGE => GDO_Language::table()->find(GDO_LANGUAGE)];
 			if ($additional = $this->getConfigValue('languages'))
 			{
@@ -98,9 +98,10 @@ final class Module_Language extends GDO_Module
 					$supported[$lang->getISO()] = $lang;
 				}
 			}
-			$this->supported = $supported;
-		}
-		return $this->supported;
+// 			$this->supported = $supported;
+// 		}
+// 		return $this->supported;
+		return $supported;
 	}
 	
 	public function hookClearCache() : void

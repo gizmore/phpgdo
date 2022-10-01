@@ -1,8 +1,8 @@
 <?php
 namespace GDO\Net\Test;
 
+use GDO\Net\GDT_PackedIP;
 use GDO\Tests\TestCase;
-use GDT_PackedIP;
 
 final class IPTest extends TestCase
 {

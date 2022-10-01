@@ -26,8 +26,8 @@ final class GDT_Response extends GDT_Tuple
 			case GDT::RENDER_JSON:
 				hdr('Content-Type: application/json');
 				return json($this->renderJSON());
-// 			default:
-// 				return parent::render();
+			default:
+				return parent::render();
 		}
 	}
 	

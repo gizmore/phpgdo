@@ -68,14 +68,16 @@ final class GDT_Expression extends GDT
 	
 	public function addInput(?string $key, $input) : void
 	{
-		if ($key === null)
-		{
-			$this->inputs[] = $input;
-		}
-		else
-		{
-			$this->inputs[$key] = $input;
-		}
+		$this->method->addInput($key, $input);
+		$this->inputs = $this->method->getInputs();
+// 		if ($key === null)
+// 		{
+// 			$this->inputs[] = $input;
+// 		}
+// 		else
+// 		{
+// 			$this->inputs[$key] = $input;
+// 		}
 	}
 	
 	public function hasPositionalInput() : bool
@@ -85,6 +87,7 @@ final class GDT_Expression extends GDT
 	
 	public function applyInputs() : void
 	{
+		$this->method->inputs($this->inputs);
 		$this->method->method->inputs($this->inputs);
 		
 // 		$cache = $this->method->method->gdoParameterCache();
