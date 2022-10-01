@@ -100,6 +100,7 @@ final class GDT_IconUTF8
         'schedule' => '☷',
         'search' => '🔍',
         'settings' => '⚙',
+    	'spiderweb' => '🕸',
         'star' => '★',
     	'stop' => '❌',
     	'sun' => '🌞',
