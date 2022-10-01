@@ -218,6 +218,14 @@ class GDT_String extends GDT_DBField
 	##############
 	### Render ###
 	##############
+	public function configJSON() : array
+	{
+		return array_merge(parent::configJSON(), [
+			'min' => $this->min,
+			'max' => $this->max,
+		]);
+	}
+	
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);

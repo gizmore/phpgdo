@@ -16,7 +16,7 @@ if (isset($field->completionHref))
 <?=$field->htmlID()?>
 <?=$field->htmlAttributes()?>
 <?php if ($field->hasCompletion()) : ?>
- data-config='<?=$field->displayConfigJSON()?>'
+<?=$field->htmlConfig()?>
 <?php endif; ?>
 <?=$field->htmlName()?>
 <?=$field->htmlMultiple()?>

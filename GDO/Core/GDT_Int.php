@@ -224,6 +224,8 @@ class GDT_Int extends GDT_DBField
 		return array_merge(parent::configJSON(), [
 			'bytes' => $this->bytes,
 			'signed' => true,
+			'min' => $this->min,
+			'max' => $this->max,
 		]);
 	}
 	

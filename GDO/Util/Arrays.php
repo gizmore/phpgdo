@@ -42,6 +42,30 @@ final class Arrays
 	}
 	
 	/**
+	 * Recursive array_filter.
+	 * @param callable $callback
+	 */
+	public static function filter(array $array, $callback) : array
+	{
+		$keep = [];
+		foreach ($array as $k => $v)
+		{
+			if ($callback($v))
+			{
+				if (is_array($v))
+				{
+					$keep[$k] = self::filter($v, $callback);
+				}
+				else
+				{
+					$keep[$k] = $v;
+				}
+			}
+		}
+		return $keep;
+	}
+	
+	/**
 	 * Reverse an array but keep keys.
 	 */
 	public static function reverse(array $array) : array

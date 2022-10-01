@@ -140,11 +140,11 @@ class Application extends GDT
 	public function isCLI() : bool { return $this->cli; }
 	public function isAjax() : bool { return $this->ajax; }
 	public function isWebsocket() : bool { return false; }
-	public function isHTML() : bool { return $this->modeDetected >= 10; }
-	public function isJSON() : bool { return $this->modeDetected === GDT::RENDER_JSON; }
-	public function isXML() : bool { return $this->modeDetected === GDT::RENDER_XML; }
-	public function isPDF() : bool { return $this->modeDetected === GDT::RENDER_PDF; }
-	public function isGTK() : bool { return $this->modeDetected === GDT::RENDER_GTK; }
+	public function isHTML() : bool { return self::$MODE_DETECTED >= 10; }
+	public function isJSON() : bool { return self::$MODE_DETECTED === GDT::RENDER_JSON; }
+	public function isXML() : bool { return self::$MODE_DETECTED === GDT::RENDER_XML; }
+	public function isPDF() : bool { return self::$MODE_DETECTED === GDT::RENDER_PDF; }
+	public function isGTK() : bool { return self::$MODE_DETECTED === GDT::RENDER_GTK; }
 	# Install / Tests
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
@@ -165,7 +165,7 @@ class Application extends GDT
 	{
 		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
-		$this->mode = $this->modeDetected;
+		self::$MODE = self::$MODE_DETECTED;
 		if ($removeInput)
 		{
 			$this->inputs();
@@ -196,28 +196,30 @@ class Application extends GDT
 	}
 	
 	/**
-	 * Current global rendering mode.
+	 * Current global rendering mode. @TODO make static for performance-
 	 * For example switches from html to cell to form to table etc.
 	 */
-	public int $mode = GDT::RENDER_WEBSITE;
+	public static int $MODE = GDT::RENDER_WEBSITE;
 	
 	/**
 	 * Detected rendering mode for invocation.
 	 */
-	public int $modeDetected = GDT::RENDER_WEBSITE;
+	public static int $MODE_DETECTED = GDT::RENDER_WEBSITE;
 
 	/**
 	 * Change current rendering mode.
 	 * Optionally set detected mode to this.
 	 */
-	public function mode(int $mode, bool $detected=false) : self
+	public function mode(int $mode) : self
 	{
-		$this->mode = $mode;
-		if ($detected)
-		{
-			$this->modeDetected = $mode;
-		}
+		self::$MODE = $mode;
 		return $this;
+	}
+	
+	public function modeDetected(int $mode) : self
+	{
+		self::$MODE_DETECTED = $mode;
+		return $this->mode($mode);
 	}
 	
 	############
@@ -233,19 +235,6 @@ class Application extends GDT
 		return $this;
 	}
 	
-// 	###########
-// 	### SEO ###
-// 	###########
-// 	/**
-// 	 * Toggle if this page should be indexed by search engines.
-// 	 */
-// 	public bool $indexed = false;
-// 	public function indexed(bool $indexed=true)
-// 	{
-// 		$this->indexed = $indexed;
-// 		return $indexed;
-// 	}
-	
 	################
 	### CLI Mode ###
 	################
@@ -253,11 +242,11 @@ class Application extends GDT
 	 * Toggle CLI force mode (mostly for tests)
 	 */
 	public bool $cli = false;
-	public function cli(bool $cli=true)
+	public function cli(bool $cli=true) : self
 	{
 		if ($this->cli = $cli)
 		{
-			return $this->mode(GDT::RENDER_CLI, true);
+			return $this->mode(GDT::RENDER_CLI);
 		}
 		return $this;
 	}
@@ -303,7 +292,7 @@ class Application extends GDT
 		return $this->themes;
 	}
 	
-	public function hasTheme($theme) : bool
+	public function hasTheme(string $theme) : bool
 	{
 		return isset($this->getThemes()[$theme]);
 	}

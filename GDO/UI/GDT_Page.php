@@ -140,4 +140,15 @@ final class GDT_Page extends GDT
 		return $this->bottomBar;
 	}
 	
+	public function getSlot(string $slot) : GDT_Container
+	{
+		switch ($slot)
+		{
+			case 'top': return $this->topResponse();
+			case 'left': return $this->leftBar();
+			case 'right': return $this->rightBar();
+			case 'bottom': return $this->bottomBar();
+		}
+	}
+	
 }

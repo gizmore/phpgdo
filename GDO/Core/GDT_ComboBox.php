@@ -68,6 +68,7 @@ class GDT_ComboBox extends GDT_String
 			];
 			return GDT_Template::php('Core', 'combobox_form.php', $tVars);
 		}
+		return parent::renderForm();
 	}
 
 }

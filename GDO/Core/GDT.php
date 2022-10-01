@@ -4,6 +4,7 @@ namespace GDO\Core;
 use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
 use GDO\UI\TextStyle;
+use GDO\Util\Arrays;
 
 /**
  * The base class for all GDT.
@@ -142,10 +143,27 @@ abstract class GDT
 // 	 * Switchable rendering callmap.
 // 	 * @var callable[]
 // 	 */
-// 	public array $RENDER_CALLMAP = [
-// 		[static::class, 'renderNIL'],
-// 		[static::class, 'renderBinary'],
-// 		# ...
+// 	public static array $RENDER_CALLMAP = [
+// 		[null, 'renderNIL'],
+// 		[null, 'renderBinary'],
+// 		[null, 'renderXML'],
+// 		[null, 'renderJSON'],
+// 		[null, 'renderGTK'],
+// 		[null, 'renderNIL'],
+// 		[null, 'renderNIL'],
+// 		[null, 'renderNIL'],
+// 		[null, 'renderWebsite'],
+// 		[null, 'renderHTML'],
+// 		[null, 'renderCard'],
+// 		[null, 'renderList'],
+// 		[null, 'renderForm'],
+// 		[null, 'renderOption'],
+// 		[null, 'renderHeader'],
+// 		[null, 'renderNIL'],
+// 		[null, 'renderFilter'],
+// 		[null, 'renderCell'],
+// 		[null, 'renderTHead'],
+// 		[null, 'renderTFoot'],
 // 	];
 	
 	/**
@@ -157,10 +175,13 @@ abstract class GDT
 	 */
 	protected function renderGDT()
 	{
-		# Now could come a trick :)
-		# @TODO We simply call the function im map[$mode] / switchmap trick
-// 		self::render$this->callRenderMap
-		switch (Application::$INSTANCE->mode)
+// 		# Now could come a trick :)
+// 		# @TODO We simply call the function im map[$mode] / switchmap trick
+// 		$mode = Application::$MODE;
+// 		self::$RENDER_CALLMAP[$mode][0] = $this;
+// 		return self::$RENDER_CALLMAP[$mode]();
+		
+		switch (Application::$MODE)
 		{
 			# Output modes
 			case self::RENDER_NIL: return $this->renderNIL();
@@ -270,8 +291,8 @@ abstract class GDT
 	public function renderMode(int $mode=-1)
 	{
 		$app = Application::$INSTANCE;
-		$mode = $mode < 0 ? $app->modeDetected : $mode;
-		$old = $app->mode;
+		$mode = $mode < 0 ? Application::$MODE : $mode;
+		$old = Application::$MODE;
 		$app->mode($mode);
 		$result = $this->renderGDT();
 		$app->mode($old);
@@ -409,13 +430,18 @@ abstract class GDT
 	/**
 	 * Render config JSON as html attribute string.
 	 */
-	public function displayConfigJSON() : string
+	public function renderConfigJSON() : string
 	{
 		$json = $this->configJSON();
-		$json = array_filter($json, function($v) {
-			return $v !== null;
+		$json = Arrays::filter($json, function($value){
+			return $value !== null;
 		});
-		return json_quote(json_encode($json, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0));
+		return json_quote(json($json));
+	}
+	
+	public function htmlConfig() : string
+	{
+		return sprintf(' data-config=\'%s\'', $this->renderConfigJSON());
 	}
 	
 	##############

@@ -14,6 +14,7 @@ use GDO\User\GDO_Permission;
 use GDO\Util\Strings;
 use GDO\Core\Application;
 use GDO\Install\Method\Configure;
+use GDO\Core\ModuleProviders;
 
 /**
  * Install helper.
@@ -88,18 +89,16 @@ class Installer
 		if (!$module->isPersisted())
 		{
 			$module->setVars([
-				'module_name' => $module->getName(),
+				'module_name' => $module->getModuleName(),
 				'module_enabled' => '1',
 				'module_version' => $module->version,
 				'module_priority' => $module->priority,
 			])->insert();
-			ModuleLoader::instance()->addEnabledModule($module);
 		}
 		else
 		{
 			ModuleLoader::instance()->setModule($module);
 		}
-		
 		
 		$upgraded = false;
 		while ($module->getVersion()->__toString() !== $module->version)
@@ -362,17 +361,32 @@ class Installer
 			}
 		}
 	}
-
+	
+	public static function getDependencyModules(string $moduleName, bool $friendencies=false) : array
+	{
+		return array_map(function(string $moduleName) {
+			return ModuleLoader::instance()->getModule($moduleName, true);
+		}, self::getDependencyModuleNames($moduleName));
+	}
+	
+	public static function getFriendencyModules(string $moduleName) : array
+	{
+		return self::getDependencyModuleNames($moduleName, true);
+	}
+	
 	/**
 	 * Return all modules needed for a module.
 	 * Used in phpgdo-docs to generate a module list for a single module documentation output.
 	 * @return GDO_Module[]
 	 */
-	public static function getDependencyModules(string $moduleName) : array
+	public static function getDependencyModuleNames(string $moduleName, bool $friendencies=false) : array
 	{
 	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, true, true);
+	    $moduleName = $module->getModuleName();
 	    $deps = $module->getDependencies();
-	    $deps[] = $module->getName();
+	    $frds = $module->getFriendencies();
+// 	    $frds[] = $module->getModuleName();
+	    $deps[] = $module->getModuleName();
 	    $deps[] = 'Core';
 	    $cnt = 0;
 	    while ($cnt !== count($deps))
@@ -381,28 +395,34 @@ class Installer
 	        foreach ($deps as $dep)
 	        {
 	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, true, true);
-	            
 	            if (!$depmod)
 	            {
 	                continue;
 	            }
-	            
-	            $more = $depmod->getDependencies();
-
-	            if (!is_array($more))
-	            {
-	            	xdebug_break();
-	            }
-	            
-	            $deps = array_unique(array_merge($deps, $more));
+	            $moreFrds = $depmod->getFriendencies();
+	            $moreDeps = $depmod->getDependencies();
+	            $frds = array_unique(array_merge($frds, $moreFrds));
+	            $deps = array_unique(array_merge($deps, $moreDeps));
 	        }
 	    }
-
-	    $back = array_unique($deps);
-	    $back = (array_map(function(string $dep) { 
-	        return ModuleLoader::instance()->getModule($dep, true, true);
-	    }, $deps));
-	    return $back;
+	    
+	    $frds = array_diff($frds, $deps);
+	    
+	    $deps = $friendencies ? $frds : $deps;
+	    
+	    $deps = array_filter($deps,
+	    	function (string $name) use ($moduleName)
+	    	{
+	    		if (ModuleProviders::isCoreModule($name))
+	    		{
+	    			return false;
+	    		}
+	    		return $name !== $moduleName;
+	    });
+	    
+	    sort($deps);
+	    
+	    return $deps;
 	}
 	
 	########################
@@ -417,6 +437,68 @@ class Installer
 		Config::configure();
 		Configure::make()->writeConfig($path);
 		return true;
+	}
+	
+	###################
+	### Module Info ###
+	###################
+	/**
+	 * Module description is fetched from README.md by default. Additionally, all Method's phpdoc is read.
+	 */
+	public static function getModuleDescription(GDO_Module $module): string
+	{
+		$back = '';
+		if ($readme = @file_get_contents($module->filePath('README.md')))
+		{
+			$matches = null;
+			if (preg_match("/^#.*[\\r\\n]+([^#]+)/", $readme, $matches))
+			{
+				$back .= trim($matches[1])."\n\n";
+			}
+		}
+		
+		$back .= self::getClassDescription($module);
+		
+		foreach ($module->getClasses() as $klass)
+		{
+			$back .= self::getClassNameDescription($klass);
+		}
+		
+		$back .= "\n";
+		
+		foreach ($module->getMethods(false) as $method)
+		{
+			$back .= self::getClassDescription($method);
+		}
+		
+		return trim($back);
+	}
+	
+	/**
+	 * Get a class' phpdoc description.
+	 */
+	public static function getClassDescription(object $object) : ?string
+	{
+		$klass = get_class($object);
+		return self::getClassNameDescription($klass);
+	}
+	
+	/**
+	 * Get a class' phpdoc description.
+	 */
+	public static function getClassNameDescription(string $klass) : ?string
+	{
+		$klass = str_replace('\\', '/', $klass);
+		$filename = GDO_PATH . $klass . '.php';
+		if ($sourcecode = @file_get_contents($filename))
+		{
+			$matches = null;
+			if (preg_match_all("/[\r\n]\/\*\*[\s\*\r\n]*([\.\s\w]+)/", $sourcecode, $matches))
+			{
+				return trim($matches[1][0])."\n";
+			}
+		}
+		return null;
 	}
 	
 }

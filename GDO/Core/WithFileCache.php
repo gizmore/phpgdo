@@ -26,8 +26,6 @@ trait WithFileCache
 	
 	protected function fileCacheKey()
 	{
-		$app = Application::$INSTANCE;
-		
 		$sep = ';';
 		$key = $this->getModuleName();
 		$key .= $sep;
@@ -35,7 +33,7 @@ trait WithFileCache
 		$key .= $sep;
 		$key .= Trans::$ISO;
 		$key .= $sep;
-		$key .= $app->mode;
+		$key .= Application::$MODE;
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
 			$key .= $sep;
@@ -72,7 +70,7 @@ trait WithFileCache
 			$result = $this->execute();
 			if (!$app->isError())
 			{
-				$content = $result->renderMode($app->modeDetected);
+				$content = $result->renderMode(Application::$MODE_DETECTED);
 				Cache::fileSetSerialized($key, $content);
 				if (is_array($content))
 				{

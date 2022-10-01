@@ -112,7 +112,7 @@ trait WithLabel
 	public function renderLabel() : string
 	{
 		$text = $this->renderLabelText();
-		if (Application::$INSTANCE->mode === GDT::RENDER_FORM)
+		if (Application::$MODE === GDT::RENDER_FORM)
 		{
 			$text .= $this->charRequired();
 		}

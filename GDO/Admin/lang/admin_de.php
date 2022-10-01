@@ -65,6 +65,7 @@ return [
 ################################################################
 'msg_perm_revoked' => 'Die Berechtigung wurde zurückgewiesen.',
 'info_module_deps' => 'Modul Abhängigkeiten: %s',
+'info_module_freps' => 'Modul Vorschläge: %s',
 'mt_admin_clearcache' => 'Cache löschen',
 ################################################################
 'list_admin_viewpermission' => '%s Nutzer haben diese Berechtigung',

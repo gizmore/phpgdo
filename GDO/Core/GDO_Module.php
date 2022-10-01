@@ -181,50 +181,6 @@ class GDO_Module extends GDO
 		];
 	}
 
-	/**
-	 * Module description is fetched from README.md by default. Additionally, all Method's phpdoc is read.
-	 */
-	public function getModuleDescription(): string
-	{
-		$back = '';
-		if ($readme = @file_get_contents($this->filePath('README.md')))
-		{
-			$matches = null;
-			if (preg_match("/^#.*[\\r\\n]+([^#]+)/", $readme, $matches))
-			{
-				$back .= trim($matches[1])."\n\n";
-			}
-		}
-		
-		$back .= $this->getClassDescription($this)."\n\n";
-		
-		foreach ($this->getMethods(false) as $method)
-		{
-			$back .= $this->getClassDescription($method)."\n\n";
-		}
-		
-		return trim($back);
-	}
-	
-	/**
-	 * Get a classes phpdoc description.
-	 */
-	public function getClassDescription(object $object) : ?string
-	{
-		$klass = get_class($object);
-		$klass = str_replace('\\', '/', $klass);
-		$filename = GDO_PATH . $klass . '.php';
-		if ($sourcecode = @file_get_contents($filename))
-		{
-			$matches = null;
-			if (preg_match("#/\\*\\*[\\r\\n](.*)\\*\\*/#", $sourcecode, $matches))
-			{
-				return trim($matches[1]);
-			}
-		}
-		return null;
-	}
-
 	# #############
 	# ## Events ###
 	# #############
@@ -505,7 +461,7 @@ class GDO_Module extends GDO
 	 */
 	public function templatePHP(string $path, array $tVars = null): GDT_Template
 	{
-		switch (Application::$INSTANCE->modeDetected)
+		switch (Application::$MODE_DETECTED)
 		{
 			case GDT::RENDER_JSON:
 				return $tVars; # @TODO here is the spot to enable json for generic templates.
@@ -520,11 +476,11 @@ class GDO_Module extends GDO
 	 */
 	public function responsePHP(string $file, array $tVars = null): GDT
 	{
-		switch (Application::$INSTANCE->modeDetected)
+		switch (Application::$MODE_DETECTED)
 		{
 			case GDT::RENDER_JSON:
 				return GDT_JSON::make()->value(...$tVars);
-			case GDT::RENDER_WEBSITE:
+// 			case GDT::RENDER_WEBSITE:
 			default:
 				return $this->templatePHP($file, $tVars);
 		}
@@ -799,13 +755,15 @@ class GDO_Module extends GDO
 				'uset_name' => $key,
 				'uset_var' => $var,
 			];
-			$entry = ($gdt instanceof GDT_Text) ? GDO_UserSettingBlob::blank($data) : GDO_UserSetting::blank($data);
+			$entry = ($gdt instanceof GDT_Text) ?
+				GDO_UserSettingBlob::blank($data) :
+				GDO_UserSetting::blank($data);
 			$entry->replace();
 		}
 
 		$user->tempUnset('gdo_setting');
 		$user->recache();
-		return $gdt->var($var);
+		return $gdt;
 	}
 
 	public function increaseSetting($key, $by = 1)
@@ -902,17 +860,27 @@ class GDO_Module extends GDO
 	private function getSetting(string $key): GDT
 	{
 		$this->buildSettingsCache();
+		# Try by key
 		if (isset($this->userConfigCache[$key]))
 		{
 			return $this->userConfigCache[$key];
 		}
-		else
+		# Try subcomponents foreach
+		foreach ($this->userConfigCache as $gdt)
 		{
-			throw new GDO_Error('err_unknown_user_setting', [
+			foreach ($gdt->gdoColumnNames() as $k)
+			{
+				if ($key === $k)
+				{
+					return $gdt;
+				}
+			}
+		}
+
+		throw new GDO_Error('err_unknown_user_setting', [
 				$this->renderName(),
 				html($key)
-			]);
-		}
+		]);
 	}
 
 	public function getSettingACL(string $name): ?GDT_ACL

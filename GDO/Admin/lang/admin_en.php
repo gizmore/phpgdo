@@ -64,7 +64,8 @@ return [
 'md_admin_configure' => 'Configure the %s module',
 ################################################################
 'msg_perm_revoked' => 'The permission has been revoked.',
-'info_module_deps' => 'This module has these dependencies: %s',
+'info_module_deps' => 'Dependencies: %s',
+'info_module_freps' => 'Suggested modules: %s',
 'mt_admin_clearcache' => 'Clear Cache',
 ################################################################
 'list_admin_viewpermission' => '%s Users got this permission',

@@ -58,7 +58,7 @@ class Configure extends MethodForm
 		$mod = $this->configModule();
 
 		# Response for install and configure
-		if ($descr = $mod->getModuleDescription())
+		if ($descr = Installer::getModuleDescription($mod))
 		{
 			$panelDescr = GDT_Panel::make()->textRaw($descr);
 			$response->addField($panelDescr);
@@ -81,6 +81,11 @@ class Configure extends MethodForm
 			}
 		}
 		
+		if ($text = $this->getFriendencyText())
+		{
+			$response->addField(GDT_Panel::make()->text('info_module_freps', [$text]));
+		}
+		
 		# Respond
 		return $response;
 	}
@@ -100,25 +105,23 @@ class Configure extends MethodForm
 				$this->configModule()->renderName()
 			]);
 	}
-
+	
+	private function getFriendencyText() : string
+	{
+		$mod = $this->configModule();
+		$deps = Installer::getFriendencyModules($mod->getName());
+		return $this->getDepsText($deps);
+	}
+	
 	private function getDependencyText(): string
 	{
 		$mod = $this->configModule();
-		$deps = Installer::getDependencyModules($mod->getName());
-		$deps = array_filter($deps,
-			function (GDO_Module $m=null) use ($mod)
-			{
-				if ($m->isCoreModule())
-				{
-					return false;
-				}
-				return $m->getName() !== $mod->getName();
-			});
-		$deps = array_map(
-			function (GDO_Module $m)
-			{
-				return $m->getName();
-			}, $deps);
+		$deps = Installer::getDependencyModuleNames($mod->getName());
+		return $this->getDepsText($deps);
+	}
+	
+	private function getDepsText(array $deps): string
+	{
 		$deps = array_map(
 			function ($nam)
 			{
@@ -137,12 +140,12 @@ class Configure extends MethodForm
 	public function createForm(GDT_Form $form): void
 	{
 		$mod = $this->configModule();
-		if ($deps = $this->getDependencyText())
-		{
-			$form->text('info_module_deps', [
-				$deps
-			]);
-		}
+// 		if ($deps = $this->getFriendencyText())
+// 		{
+// 			$form->text('info_module_deps', [
+// 				$deps
+// 			]);
+// 		}
 		$form->addField(GDT_Name::make('module_name')->initial($mod->gdoHumanName())->writeable(false));
 		$form->addField(GDT_Path::make('module_path')->writeable(false)->initial($mod->filePath()));
 		$c = GDT_Container::make('versions')->horizontal();
@@ -203,7 +206,7 @@ class Configure extends MethodForm
 		# Announce
 		return $this->message('msg_module_saved',
 			[
-				implode('', $info)
+				implode("\n", $info)
 			])->addField($this->renderPage());
 	}
 

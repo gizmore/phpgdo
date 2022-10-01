@@ -7,7 +7,7 @@ use GDO\Core\Module_Core;
 #
 # powered by phpgdo-<?=Module_Core::GDO_REVISION?>.
 #
-# (c) 2022 - gizmore@wechall.net (C.B.)
+# (c) 2021-2023 - gizmore@wechall.net (C.B.)
 #
 
 User-agent: *
@@ -27,3 +27,4 @@ Disallow: /protected/
 Disallow: /temp/
 Disallow: /temp_test/
 Disallow: /vendor/
+Disallow: /*.sh

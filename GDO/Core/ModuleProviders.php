@@ -99,6 +99,21 @@ final class ModuleProviders
 		}
 		return $back;
 	}
+	
+	/**
+	 * Get all core module names.
+	 * 
+	 * @return string[]
+	 */
+	public static function getCoreModuleNames() : array
+	{
+		return ['Core', 'Date', 'Form', 'Language', 'UI', 'User'];
+	}
+	
+	public static function isCoreModule(string $moduleName) : bool
+	{
+		return in_array($moduleName, self::getCoreModuleNames(), true);
+	}
 
 	/**
 	 * Provider packages.

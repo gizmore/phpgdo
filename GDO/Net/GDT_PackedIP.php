@@ -16,31 +16,6 @@ final class GDT_PackedIP extends GDT_Char
 
 	public function isSearchable() : bool { return false; }
 	
-	protected function __construct()
-	{
-		parent::__construct();
-		$this->icon = 'url';
-		$this->binary()->length(16);
-	}
-	
-	public static function ip2packed(string $ip) : string
-	{
-		return inet_pton($ip);
-	}
-	
-	public static function packed2ip(string $packed) : string
-	{
-		return unpack("XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX, $packed);
-	}
-	
-	### Current ###
-	###############
-	public function useCurrent(bool $useCurrent=true) : GDT_PackedIP
-	{
-		$initial = $useCurrent ? GDT_PackedIP::$CURRENT : null;
-        return $this->initial($initial);
-	}
-
 	##############
 	### String ###
 	##############
@@ -51,7 +26,33 @@ final class GDT_PackedIP extends GDT_Char
 	public string $pattern = "/^[.:0-9a-f]{3,45}$/D";
 	public string $icon = 'url';
 	
-	public function defaultLabel() : GDT_PackedIP { return $this->label('ip'); }
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->binary()->length(16);
+	}
+	
+	############
+	### Pack ###
+	############
+	public static function ip2packed(string $ip) : string
+	{
+		return inet_pton($ip);
+	}
+	
+	public static function packed2ip(string $packed) : string
+	{
+		return unpack("XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX", $packed);
+	}
+	
+	###############
+	### Current ###
+	###############
+	public function useCurrent(bool $useCurrent=true) : GDT_PackedIP
+	{
+		$initial = $useCurrent ? GDT_IP::$CURRENT : null;
+        return $this->initial($initial);
+	}
 
 	############
 	### Test ###
@@ -60,12 +61,9 @@ final class GDT_PackedIP extends GDT_Char
 	{
 		$n = $this->getName();
 		return [
-			[$n => '12.13.14.15'],
-			[$n => '23.45.67.89'],
+			[$n => self::ip2packed('12.13.14.15')],
+			[$n => self::ip2packed('23.45.67.89')],
 		];
 	}
 	
 }
-
-# Assign current IP.
-GDT_PackedIP::$CURRENT = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';

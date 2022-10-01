@@ -23,7 +23,7 @@ trait MethodAdmin
 	
 	public function getPermission() : ?string
 	{
-		return 'admin';
+		return 'staff';
 	}
 	
 	public function onRenderTabs() : void

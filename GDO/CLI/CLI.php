@@ -113,7 +113,7 @@ final class CLI
     {
     	$html = preg_replace('#<a *href="([^"]+)">([^<]+)</a>#i', "$1 ($2)", $html);
     	$html = self::br2nl($html);
-    	$html = preg_replace('#<[^>]*>/is#', '', $html);
+    	$html = preg_replace('#<[^>]*>#', '', $html);
     	$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
     	return $html;
     }

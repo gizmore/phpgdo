@@ -16,6 +16,7 @@ use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
 use GDO\UI\TextStyle;
+use GDO\Core\ModuleProviders;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -66,7 +67,7 @@ final class gdo_test extends Application
 	}
 
 }
-$app = gdo_test::init()->mode(GDT::RENDER_CLI, true)->cli();
+$app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init(null);
 
@@ -124,6 +125,8 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 {
 	$count = 0;
 	$modules = explode(',', $argv[1]);
+	
+	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
@@ -135,8 +138,10 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 		function (string $moduleName)
 		{
 			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
-			return $module->getName();
+			return $module->getModuleName();
 		}, $modules);
+	
+	$modules = array_unique($modules);
 
 	# While loading...
 	while ($count != count($modules))
@@ -149,10 +154,10 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 			$more = Installer::getDependencyModules($moduleName);
 			$more = array_map(function ($m)
 			{
-				return $m->getName();
+				return $m->getModuleName();
 			}, $more);
 			$modules = array_merge($modules, $more);
-			$modules[] = $module->getName();
+			$modules[] = $module->getModuleName();
 		}
 
 		$modules = array_unique($modules);
@@ -183,8 +188,6 @@ else
 }
 
 // $loader = ModuleLoader::instance();
-// $loader->initModules();
-// Trans::inited(true);
 
 # ######################
 # ## Install and run ###
@@ -192,7 +195,10 @@ else
 // $loader->initModules();
 if (Installer::installModules($modules))
 {
+	$loader->loadLangFiles();
+	$loader->initModules();
 	Trans::inited(true);
+// 	Trans::inited(true);
 	if (module_enabled('Session'))
 	{
 		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);

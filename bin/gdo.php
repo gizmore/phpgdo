@@ -1,6 +1,5 @@
 <?php
 namespace bin;
-
 use GDO\CLI\CLI;
 use GDO\Core\Debug;
 use GDO\Core\GDO_NoSuchMethodError;
@@ -16,12 +15,9 @@ use GDO\Core\GDT;
 use GDO\User\GDO_User;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Error;
-use GDO\Core\Method\Stub;
-
 /**
  * @var $argv string[]
  */
-
 # The GDOv7 CLI bootstrap.
 define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
 require GDO_BIN_PATH . '../protected/config.php';
@@ -36,9 +32,8 @@ class gdo extends Application
 {
 	public function isCLI() : bool { return true; }
 }
-gdo::instance()->cli()->mode(GDT::RENDER_CLI, true);
 global $me;
-$me = Stub::make();
+gdo::init()->cli()->modeDetected(GDT::RENDER_CLI);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();
@@ -48,6 +43,7 @@ Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
 $loader->loadLangFiles();
 $loader->initModules();
+Trans::inited();
 if (!CLI::isCLI())
 {
 	echo "This GDOv7 binary does only run in the commandline!\n";

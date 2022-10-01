@@ -16,7 +16,7 @@ final class GDT_Response extends GDT_Tuple
 {
 	public function render() : string
 	{
-		switch (Application::$INSTANCE->mode)
+		switch (Application::$MODE)
 		{
 			case GDT::RENDER_WEBSITE:
 				return $this->renderWebsite();
@@ -25,9 +25,9 @@ final class GDT_Response extends GDT_Tuple
 				return $this->renderXML();
 			case GDT::RENDER_JSON:
 				hdr('Content-Type: application/json');
-				return json_encode($this->renderJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0); # pretty json
-			default:
-				return parent::render();
+				return json($this->renderJSON());
+// 			default:
+// 				return parent::render();
 		}
 	}
 	

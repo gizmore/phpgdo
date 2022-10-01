@@ -216,7 +216,7 @@ final class GDT_Order extends GDT_String
 			case self::DESC:
 				return 'arrow_down';
 			default:
-				return '';
+				return GDT::EMPTY_STRING;
 		}
 	}
 	

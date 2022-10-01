@@ -23,12 +23,11 @@ use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\CLI\CLI;
-
+use GDO\Core\GDO_SEO_URL;
 /**
  * @var $me Method
  */
 global $me;
-
 /**
  * GDOv7 - The best PHP Framework on Planet SOL. Really! :)
  * 
@@ -79,7 +78,8 @@ if (GDO_LOG_REQUEST)
 {
 	Logger::logRequest();
 }
-// $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+// $loader->initModules();
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###
@@ -122,7 +122,7 @@ if (isset($_REQUEST['_fmt']))
 	$mode = $app->detectRenderMode((string)@$_REQUEST['_fmt']);
 	unset($_REQUEST['_fmt']);
 }
-$app->mode($mode, true); # set detected mode.
+$app->modeDetected($mode); # set detected mode.
 
 ###################
 ### Finish Init ###
@@ -155,47 +155,53 @@ $app->mode($mode, true); # set detected mode.
 # index.php is called directly.
 # Read $_GET _mo/_me
 #
-if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
+function gdoRouteMoMe(string $mo, string $me) : Method
 {
-	unset($_REQUEST['_url']);
-	if (isset($_REQUEST['_mo']))
+	if ($mo)
 	{
-		if (!($mo = ModuleLoader::instance()->getModule((string) @$_REQUEST['_mo'], true, false)))
+		if (!($module = ModuleLoader::instance()->getModule($mo, true, false)))
 		{
-			$me = Error::make();
-			$_REQUEST['error'] = t('err_unknown_module', [html((string)$_REQUEST['_mo'])]);
+			$method = Error::make();
+			$_REQUEST['error'] = t('err_unknown_module', [html($mo)]);
 		}
-		elseif (isset($_REQUEST['_me']))
+		elseif ($me)
 		{
-			if (!($me = $mo->getMethod((string) @$_REQUEST['_me'])))
+			if (!($method = $module->getMethod($me)))
 			{
-				$me = Error::make();
-				$_REQUEST['error'] = t('err_unknown_method', [html($mo->gdoShortName()), html($_REQUEST['_me'])]);
+				$method = Error::make();
+				$_REQUEST['error'] = t('err_unknown_method', [$module->gdoHumanName(), html($$me)]);
 			}
 		}
 		else
 		{
-			$me = $mo->getDefaultMethod();
+			$method = $module->getDefaultMethod();
 		}
 	}
 	else
 	{
-		if ($mo = ModuleLoader::instance()->getModule(GDO_MODULE, false, false))
+		if ($module = ModuleLoader::instance()->getModule(GDO_MODULE, true, false))
 		{
-			if (!($me = $mo->getMethod(GDO_METHOD)))
+			if (!($method = $module->getMethod(GDO_METHOD)))
 			{
-				$me = Error::make();
-				$_REQUEST['error'] = t('err_unknown_method', [$mo->gdoShortName(), GDO_METHOD]);
+				$method = Error::make();
+				$_REQUEST['error'] = t('err_unknown_method', [$module->gdoHumanName(), GDO_METHOD]);
 			}
 		}
 		else
 		{
-			$me = Error::make();
+			$method = Error::make();
 			$_REQUEST['error'] = t('err_unknown_module', [GDO_MODULE]);
 		}
 	}
 	unset($_REQUEST['_mo']);
 	unset($_REQUEST['_me']);
+	unset($_REQUEST['_url']);
+	return $method;
+}
+
+if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
+{
+	$me = gdoRouteMoMe((string)@$_REQUEST['_mo'], (string)@$_REQUEST['_me']);
 }
 else
 {
@@ -222,7 +228,18 @@ else
 	elseif (GDO_SEO_URLS)
 	{
 		unset($_REQUEST['url']);
-		$me = SeoProxy::makeProxied($url);
+		if ($url2 = GDO_SEO_URL::getSEOUrl($url))
+		{
+			if (!($me = GDO_SEO_URL::getSEOMethod($url2)))
+			{
+				$_REQUEST['url'] = $url; # and a step back for 404 url :)
+				$me = FileNotFound::make();
+			}
+		}
+		else
+		{
+			$me = SeoProxy::makeProxied($url);
+		}
 	}
 	else
 	{
@@ -248,9 +265,6 @@ $app->ajax($ajax);
 ############
 $_GET = null; # from this point we have everything only in gdo.
 $_POST = null;
-// $app->inputs($_REQUEST);
-// $app->method($me);
-$loader->initModules();
 # plug together GDT_Method
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 #

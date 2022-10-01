@@ -1,5 +1,6 @@
 <?php
 namespace GDO\UI\tpl;
+use GDO\Core\GDT;
 use GDO\Core\Javascript;
 use GDO\Core\Website;
 use GDO\Core\Module_Core;
@@ -40,7 +41,7 @@ use GDO\Language\Trans;
 		<label for="gdo-right-nav" id="gdo-right-nav2"></label>
 		<div class="gdo-main">
           <?=$page->topResponse()->render()?>
-		  <?=isset($page->html)?$page->html:''?>
+		  <?=isset($page->html)?$page->html:GDT::EMPTY_STRING?>
 		</div>
 	  </div>
 

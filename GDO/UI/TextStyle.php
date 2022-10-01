@@ -51,7 +51,7 @@ final class TextStyle
 	private static function display(string $s, string $tagStart, string $tagEnd, string $cliMethod) : string
 	{
 		$app = Application::$INSTANCE;
-		switch ($app->mode)
+		switch (Application::$MODE)
 		{
 			case GDT::RENDER_CLI:
 				return call_user_func([CLI::class, $cliMethod], $s);

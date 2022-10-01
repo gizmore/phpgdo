@@ -2,6 +2,7 @@
 namespace GDO\Net;
 
 use GDO\Core\GDO_Module;
+use GDO\Core\GDO_SEO_URL;
 
 /**
  * Network related stuff.
@@ -22,9 +23,19 @@ final class Module_Net extends GDO_Module
 	public function getClasses() : array
 	{
 		return [
+			GDO_SEO_URL::class,
 			GDO_Domain::class,
 			GDO_SubDomain::class,
 		];
+	}
+	
+	public function OnInstall() : void
+	{
+		if (GDO_SEO_URLS)
+		{
+			GDO_SEO_URL::addRoute('robots.txt', 'index.php?_mo=Core&_me=Robots');
+			GDO_SEO_URL::addRoute('SECURITY.md', 'index.php?_mo=Core&_me=Security');
+		}
 	}
 	
 }

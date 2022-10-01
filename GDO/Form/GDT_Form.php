@@ -137,7 +137,7 @@ final class GDT_Form extends GDT
 
 		self::$CURRENT = $this;
 		$app = Application::$INSTANCE;
-		$old = $app->mode;
+		$old = Application::$MODE;
 		$app->mode(GDT::RENDER_FORM);
 		$html = GDT_Template::php('Form', 'form_html.php', ['field' => $this]);
 		self::$CURRENT = null;

@@ -126,10 +126,10 @@ final class Module_User extends GDO_Module
 	{
 		$settings = [
 			GDT_Gender::make('gender'),
-			GDT_ACLRelation::make('profile_visibility')->noacl(),
+			GDT_ACLRelation::make('profile_visibility')->initial(GDT_ACLRelation::ALL)->noacl(),
 		];
 		if ($this->cfgFavColor()) {
-			$settings[] = GDT_Color::make('color');
+			$settings[] = GDT_Color::make('color')->label('favorite_color');
 		}
 		return $settings;
 	}

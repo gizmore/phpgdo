@@ -7,7 +7,7 @@ namespace GDO\Core\tpl;
  <span>
   <input
 <?=$field->htmlAutocompleteOff()?>
-   data-config='<?=$field->displayConfigJSON()?>'
+<?=$field->htmlConfig()?>
 <?=$field->htmlID()?>
    type="search"
    class="gdo-autocomplete-input"

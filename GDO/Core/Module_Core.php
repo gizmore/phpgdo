@@ -7,7 +7,6 @@ use GDO\User\GDT_User;
 use GDO\Language\Trans;
 use GDO\User\GDO_Permission;
 use GDO\UI\GDT_Page;
-use GDO\Util\FileUtil;
 use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
 use GDO\Net\GDT_Url;
@@ -32,7 +31,7 @@ use GDO\Language\Module_Language;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1629';
+	const GDO_REVISION = '7.0.1-r1631';
 	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############
@@ -68,10 +67,7 @@ final class Module_Core extends GDO_Module
 	
 	public function onInstall() : void
 	{
-		FileUtil::createDir(GDO_PATH . 'assets');
-		FileUtil::createDir(GDO_TEMP_PATH);
-		FileUtil::createDir(GDO_TEMP_PATH . 'cache');
-		FileUtil::createFile(GDO_TEMP_PATH . 'ipc.socket');
+		Install::onInstall($this);
 	}
 	
 	public function checkSystemDependencies() : bool

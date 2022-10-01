@@ -331,11 +331,11 @@ trait WithFields
 	{
 		$app = Application::$INSTANCE;
 		$rendered = '';
-		$old = $app->mode;
+		$old = Application::$MODE;
 		$app->mode($renderMode);
 		foreach ($this->getFields() as $gdt)
 		{
-			$rendered .= $gdt->render();
+			$rendered .= $gdt->renderGDT();
 		}
 		$app->mode($old);
 		return $rendered;

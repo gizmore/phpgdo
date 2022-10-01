@@ -331,9 +331,12 @@ The %2$s System',
 	
 	'msg_installed_modules' => 'Installed modules: %s.',
 	
+	'mt_core_security' => 'SECURITY.md',
+	'mt_core_robots' => 'robots.txt',
 	'mt_core_gettypes' => 'Get GDT Meta-Data',
 	'mt_core_pathcompletion' => 'Path completion',
 	'mt_ajax' => '%s Data Retrieval',
 	
 	'creator_header' => '%s added this on %s.',
+	
 ];

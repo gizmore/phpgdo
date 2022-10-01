@@ -159,6 +159,11 @@ function json_quote($s)
 	return str_replace("'", "&#39;", $s);
 }
 
+function json($value) : string
+{
+	return json_encode($value, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
+}
+
 /**
  * HTML escaping.
  * In CLI mode, no escaping is done.

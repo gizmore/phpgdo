@@ -74,7 +74,7 @@ final class ModuleLoader
 	{
 		if (!in_array($module, $this->getEnabledModules(), true))
 		{
-			$this->initModuleVars($module->getName());
+			$this->initModuleVars($module->getModuleName());
 			$module->initOnce();
 			$this->enabledModules[] = $module;
 		}

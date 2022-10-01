@@ -67,6 +67,7 @@ final class GDT_IconUTF8
         'guitar' => '🎸',
         'help' => '💡',
     	'house' => '🏠',
+    	'icecream' => '🍦',
         'image' => '📷',
     	'info' => 'ⓘ',
         'language' => '⛿',
@@ -117,7 +118,7 @@ final class GDT_IconUTF8
         'users' => '😂',
         'view' => '👁',
         'wait' => '◴',
-    	'work' => 'XX',
+    	'work' => '👷',
     	'write' => '✎',
     ];
     
