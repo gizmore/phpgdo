@@ -115,7 +115,8 @@ class GDT_Virtual extends GDT
     
     public function filterQuery(Query $query, GDT_Filter $f) : self
     {
-        return $this->proxy()->filterQuery($query, $f);
+        $this->proxy()->filterQuery($query, $f);
+        return $this;
     }
 
 }
