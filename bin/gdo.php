@@ -64,6 +64,7 @@ if (CLI::isInteractive() && $me)
 			$expression = GDT_Expression::fromLine($line);
 			/** @var $result \GDO\Core\GDT_Response **/
 			$result = $expression->execute();
+			CLI::flushTopResponse();
 			echo $result->render();
 		}
 		catch (GDO_NoSuchMethodError $ex)
@@ -78,17 +79,14 @@ if (CLI::isInteractive() && $me)
 		}
 		catch (\GDO\Core\GDO_Error $ex)
 		{
+			CLI::flushTopResponse();
 			echo $ex->renderCLI();
 		}
 		catch (\Throwable $ex)
 		{
 			Debug::debugException($ex, false);
-			echo GDT_Error::fromException($ex)->render();
-// 			die(-1);
-		}
-		finally
-		{
 			CLI::flushTopResponse();
+			echo GDT_Error::fromException($ex)->render();
 		}
 	}
 	else

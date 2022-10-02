@@ -47,6 +47,7 @@ final class HTTP
 			curl_setopt($ch, CURLOPT_VERBOSE, true);
 		}
 		
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 		curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP|CURLPROTO_HTTPS);
 		
 		# Set the user agent - might help, doesn't hurt
@@ -112,11 +113,11 @@ final class HTTP
 	public static function getFromURL($url, $returnHeader=false, $cookie=false, array $httpHeaders=null, string &$error='')
 	{
 		# Cleanup URL
-		$url = trim($url);
-		$replace = array(
-			" " => "%20",
-		);
-		$url = str_replace(array_keys($replace), array_values($replace), $url);
+// 		$url = trim($url);
+// 		$replace = array(
+// 			" " => "%20",
+// 		);
+// 		$url = str_replace(array_keys($replace), array_values($replace), $url);
 		
 		$ch = curl_init();
 		
@@ -130,6 +131,7 @@ final class HTTP
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $httpHeaders);
 		}
 		
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 		curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP|CURLPROTO_HTTPS);
 		
 		# Try to follow redirects
@@ -214,6 +216,7 @@ final class HTTP
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $httpHeaders);
 		}
 		
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 		curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP|CURLPROTO_HTTPS);
 		
 		# Cookie stuff
