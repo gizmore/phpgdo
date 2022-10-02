@@ -25,7 +25,7 @@ if (isset($field->headers))
         $searchable = [];
         foreach ($field->headers->getAllFields() as $gdt)
         {
-            if ($gdt->searchable)
+            if ($gdt->isSearchable())
             {
                 $searchable[] = $gdt;
             }
@@ -42,7 +42,7 @@ if (isset($field->headers))
         $orderable = [];
         foreach ($field->headers->getFields() as $gdt)
         {
-            if ($gdt->orderable)
+            if ($gdt->isOrderable())
             {
                 if (!$gdt->hidden)
                 {
@@ -66,7 +66,7 @@ if (isset($field->headers))
         }
     }
     
-    if ($field->filtered)
+    if ($field->isFilterable())
     {
         # Not supported yet
     }
