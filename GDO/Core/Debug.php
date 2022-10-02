@@ -292,7 +292,7 @@ final class Debug
 		if (!self::$EXCEPTION)
 		{
 			self::$EXCEPTION = true;
-			$handler = ['GDO\\Core\\Debug', 'exception_handler'];
+			$handler = [self::class, 'exception_handler'];
 			set_exception_handler($handler);
 		}
 	}

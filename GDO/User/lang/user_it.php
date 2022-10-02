@@ -7,6 +7,7 @@ return [
 	'profile_views' => 'Visualizzazioni del profilo',
 	'cfg_about_me' => 'Su di me',
 	'profile_visibility' => 'Profilo visibile a',
+	'probably_malicious' => 'Probabile piantagrane',
 	
 	'enum_none' => 'Nessuna indicazione',
 	'enum_male' => 'Maschile',

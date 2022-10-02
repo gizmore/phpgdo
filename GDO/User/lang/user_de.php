@@ -7,6 +7,7 @@ return [
 	'profile_views' => 'Profiltreffer',
 	'cfg_about_me' => 'Über Mich',
 	'profile_visibility' => 'Profil sichtbar für',
+	'probably_malicious' => 'Wahrscheinlicher Störenfried',
 	
 	'enum_none' => 'keine Angabe',
 	'enum_male' => 'Männlich',

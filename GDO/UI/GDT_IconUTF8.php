@@ -20,6 +20,7 @@ final class GDT_IconUTF8
     public static array $MAP = [
         'account' => '⛁',
         'add' => '✚',
+    	'address' => '⌘',
         'alert' => '!',
         'all' => '▤',
         'arrow_down' => '▼',
