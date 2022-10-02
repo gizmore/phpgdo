@@ -11,11 +11,12 @@ namespace GDO\Table;
  */
 abstract class MethodQueryList extends MethodQueryTable
 {
-    public function isFiltered() { return false; }
-    
-    public function gdoHeaders() : array { return []; }
-    
-    public function listName() { return 'list'; }
+	public function listName() { return 'list'; }
+
+	public function gdoHeaders(): array
+	{
+		return $this->gdoTable()->gdoColumnsCache();
+	}
 	
 	public function createCollection() : GDT_Table
 	{
