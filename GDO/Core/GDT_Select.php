@@ -149,6 +149,11 @@ class GDT_Select extends GDT_ComboBox
 	    $this->initChoices();
 	    foreach ($this->choices as $vaar => $value)
 	    {
+	    	if (strcasecmp($var, $value->getName()) === 0)
+	    	{
+	    		return $value;
+	    	}
+	    	
 	        $pos = stripos($vaar, $var);
 	        if ($pos === false)
 	        {

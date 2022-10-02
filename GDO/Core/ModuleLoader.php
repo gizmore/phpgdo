@@ -164,6 +164,7 @@ final class ModuleLoader
 	
 	public function loadLangFiles() : void
 	{
+		Trans::inited(false);
 		foreach ($this->getEnabledModules() as $module)
 		{
 	        $module->onLoadLanguage();

@@ -69,7 +69,7 @@ final class GDT_Module extends GDT_ObjectSelect
 			if ((($module->isInstalled()) && $this->installed) ||
 				((!$module->isInstalled()) && $this->uninstalled))
 			{
-				$choices[$module->getLowerName()] = $module->renderName();
+				$choices[$module->getLowerName()] = $module;
 			}
 		}
 		return $choices;
@@ -80,8 +80,11 @@ final class GDT_Module extends GDT_ObjectSelect
 	# ################
 	public function getValueSingle(string $moduleName): ?GDO_Module
 	{
-		return ModuleLoader::instance()->getModule($moduleName,
-			true, false);
+		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
+		{
+			return $module;
+		}
+		return $this->toClosestChoiceValue($moduleName);
 	}
 
 	public function getValueMulti(string $var): array
@@ -90,7 +93,7 @@ final class GDT_Module extends GDT_ObjectSelect
 		$back = [];
 		foreach (json_decode($var) as $id)
 		{
-			if ($object = $loader->getModule($id))
+			if ($object = $loader->getModuleByID($id))
 			{
 				$back[$id] = $object;
 			}

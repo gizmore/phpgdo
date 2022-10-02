@@ -191,7 +191,7 @@ final class HTTP
 	 * @param false|string $cookie
 	 * @return string the page content
 	 */
-	public static function post($url, $postdata=[], $returnHeader=false, $httpHeaders=false, $cookie=false)
+	public static function post($url, $postdata=[], $returnHeader=false, $httpHeaders=false, $cookie=false, &$error)
 	{
 		# Clean URL
 		if (strlen($url) < 10)
@@ -227,14 +227,15 @@ final class HTTP
 		curl_setopt($ch, CURLOPT_COOKIEFILE, GDO_TEMP_PATH."test.cookie");
 		
 		curl_setopt($ch, CURLOPT_URL, $url);
- 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-		if($parts['scheme']=='https')
+ 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		if($parts['scheme'] === 'https')
 		{
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSLVERSION, 1);
 		}
-		if ($returnHeader === true) {
+		if ($returnHeader)
+		{
 			curl_setopt($ch, CURLOPT_HEADER, true);
 		}
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -247,7 +248,8 @@ final class HTTP
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
 		if (false === ($received = curl_exec($ch)))
 		{
-			echo GDT_Error::with('err_curl', [curl_errno($ch), curl_error($ch)])->render();
+			$error = t('err_curl', [curl_errno($ch), curl_error($ch)]);
+			echo GDT_Error::make()->textRaw($error)->render();
 		}
 		curl_close($ch);
 		return $received;		

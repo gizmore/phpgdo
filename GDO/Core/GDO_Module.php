@@ -200,7 +200,7 @@ class GDO_Module extends GDO
 	{
 		if (!$this->inited)
 		{
-			$this->onLoadLanguage();
+// 			$this->onLoadLanguage();
 			if (!Application::$INSTANCE->isInstall())
 			{
 				$this->onModuleInit();

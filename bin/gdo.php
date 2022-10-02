@@ -57,6 +57,7 @@ define('GDO_CORE_STABLE', 1);
 if (CLI::isInteractive() && $me)
 {
 	$line = trim(CLI::getSingleCommandLine());
+	$_SERVER['REQUEST_URI'] = $line;
 	if ($line !== '')
 	{
 		try

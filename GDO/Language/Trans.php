@@ -103,7 +103,10 @@ final class Trans
 	 */
 	public static function inited(bool $inited = true) : void
 	{
-	    self::$CACHE = [];
+// 	    if (!$inited)
+// 	    {
+// 	    	self::$CACHE = [];
+// 	    }
 		self::$INITED = $inited;
 	}
 	

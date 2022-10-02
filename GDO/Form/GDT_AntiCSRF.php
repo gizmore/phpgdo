@@ -64,7 +64,7 @@ class GDT_AntiCSRF extends GDT_String
 	#############
 	### Fixed ###
 	#############
-	public bool $fixed = false;
+	public bool $fixed = true;
 	public function complex() : self { return $this->fixed(false); }
 	public function fixed(bool $fixed=true) : self
 	{

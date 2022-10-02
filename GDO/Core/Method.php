@@ -548,15 +548,15 @@ abstract class Method #extends GDT
 	##################
 	private function storeLastURL() : void
 	{
-// 		if (module_enabled('Session'))
-// 		{
+		$user = GDO_User::current();
+		if ($user->isPersisted())
+		{
 			# Without session we do not care over referrer.
 			if (Application::$INSTANCE->isWebserver())
 			{
-				$user = GDO_User::current();
 				$user->saveSettingVar('User', 'last_url', $_SERVER['REQUEST_URI']);
 			}
-// 		}
+		}
 	}
 
 	/**
