@@ -68,3 +68,4 @@ Your playlists are ACL sharable.
  
  - Turn KassiererCard.org into a proxy challenge (CountryRestriction)
  
+ - TheClimber.net - A website with the highest altitude wins.

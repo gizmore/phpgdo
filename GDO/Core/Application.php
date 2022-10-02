@@ -310,8 +310,10 @@ class Application extends GDT
 			if ($_SERVER["CONTENT_TYPE"] === 'application/json')
 			{
 				$data = file_get_contents('php://input');
-				$data = json_decode($data, true);
-				$_REQUEST = array_merge($_REQUEST, $data);
+				if ($data = json_decode($data, true))
+				{
+					$_REQUEST = array_merge($_REQUEST, $data);
+				}
 			}
 		}
 	}
