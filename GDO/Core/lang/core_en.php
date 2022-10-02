@@ -228,6 +228,8 @@ return [
 	'type' => 'Type',
 	'print' => 'Print',
 	'favorite_color' => 'Favorite Color',
+	'website' => 'Website',
+	'information' => 'Information',
 	
 	# CBX
 	'sel_all' => 'Select All',

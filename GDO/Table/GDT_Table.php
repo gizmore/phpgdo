@@ -521,7 +521,7 @@ class GDT_Table extends GDT
 			$xml .= "<row>\n";
 			foreach ($this->getHeaderFields() as $gdt)
 			{
-				if ($gdt->name && $gdt->isSerializable())
+				if ($gdt->hasName() && $gdt->isSerializable())
 				{
 					$xml .= $gdt->gdo($gdo)->renderXML();
 				}
