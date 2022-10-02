@@ -3,6 +3,7 @@ namespace GDO\Net\Test;
 
 use GDO\Net\GDT_PackedIP;
 use GDO\Tests\TestCase;
+use function PHPUnit\Framework\assertEquals;
 
 final class IPTest extends TestCase
 {
