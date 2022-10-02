@@ -1005,7 +1005,7 @@ class GDO_Module extends GDO
 		{
 			$settings = self::loadUserSettingsB($user);
 			$user->tempSet('gdo_setting', $settings);
-			$user->recache();
+// 			$user->recache();
 		}
 		return $settings;
 	}

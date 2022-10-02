@@ -227,6 +227,7 @@ return [
 	'directory' => 'Directory',
 	'type' => 'Type',
 	'print' => 'Print',
+	'favorite_color' => 'Favorite Color',
 	
 	# CBX
 	'sel_all' => 'Select All',

@@ -9,6 +9,7 @@ use GDO\Core\GDT_Int;
 <?=$field->htmlFocus()?>
 <?=$field->htmlID()?>
  type="number"
+<?=$field->htmlConfig()?>
  min="<?=$field->min?>"
  max="<?=$field->max?>"
  step="<?=$field->step?>"

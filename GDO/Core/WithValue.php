@@ -96,7 +96,7 @@ trait WithValue
 // 		{
 			$var = $this->getVar();
 			$this->value = $this->toValue($var);
-			$this->valueConverted = true;
+// 			$this->valueConverted = true;
 // 		}
 		return $this->value;
 	}
@@ -171,12 +171,13 @@ trait WithValue
 	public function htmlValue() : string
 	{
 		$var = $this->getVar();
-		return $var ? sprintf(' value="%s"', html($var)) : '';
+		return $var === null ? GDT::EMPTY_STRING :
+			sprintf(' value="%s"', html($var));
 	}
 	
-	public function renderHeader() : string
-	{
-		return $this->renderLabel();
-	}
+// 	public function renderHeader() : string
+// 	{
+// 		return $this->renderLabel();
+// 	}
 	
 }
