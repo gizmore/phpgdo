@@ -236,8 +236,8 @@ return [
 	
 	# Fineprint
 	'privacy' => 'Privacy',
-	'md_core_privacy' => 'Privacy and Dataflow information for %s.',
 	'impressum' => 'Impressum',
+	'md_core_privacy' => 'Privacy and Dataflow information for %s.',
 	'md_core_impressum' => 'The impressum for the %s service website.',
 	
 	# Util
@@ -339,5 +339,7 @@ The %2$s System',
 	'mt_ajax' => '%s Data Retrieval',
 	
 	'creator_header' => '%s added this on %s.',
+	
+	'please_choose' => 'Please choose...',
 	
 ];

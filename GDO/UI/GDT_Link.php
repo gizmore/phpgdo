@@ -71,7 +71,7 @@ class GDT_Link extends GDT_Url
 	public static function anchor(string $href, string $labelRaw=null) : string
 	{
 		$labelRaw = $labelRaw !== null ? $labelRaw : $href;
-		return self::make()->href($href)->labelRaw($labelRaw)->renderHTML();
+		return self::make()->href($href)->labelRaw($labelRaw)->render();
 	}
 	
 	##############
