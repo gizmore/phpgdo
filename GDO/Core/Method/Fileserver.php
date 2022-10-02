@@ -94,7 +94,7 @@ final class Fileserver extends Method
 	 * Check if an URL is an allowed resource.
 	 * Dotfiles may be forbidden, except .well-known
 	 */
-	private function checkDotfileAllowed(string $url) : bool
+	public function checkDotfileAllowed(string $url) : bool
 	{
 		if (Module_Core::instance()->cfgDotfiles())
 		{

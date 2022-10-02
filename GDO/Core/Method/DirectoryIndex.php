@@ -57,7 +57,7 @@ final class DirectoryIndex extends MethodTable
 	
 	private function checkDotfile() : bool
 	{
-		return Module_Core::instance()->checkDotfileAllowed($this->getUrl());
+		return Fileserver::make()->checkDotfileAllowed($this->getUrl());
 	}
 	
 	public function execute()

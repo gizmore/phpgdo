@@ -143,8 +143,8 @@ final class Strings
 	 */
 	public static function shrinkHTML(string $html) : string
 	{
-// 		$html = preg_replace('/\s+/', ' ', $html);
-// 		$html = str_replace('> <', '><', $html);
+		$html = preg_replace('/\s+/', ' ', $html);
+		$html = str_replace('> <', '><', $html);
 		return $html;
 	}
 	
