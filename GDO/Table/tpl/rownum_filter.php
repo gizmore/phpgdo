@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Table\tpl;
 use GDO\Table\GDT_RowNum;
 /** @var $field GDT_RowNum **/
 

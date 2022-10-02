@@ -452,9 +452,12 @@ abstract class GDT
 	 */
 	public function filterVar(GDT_Filter $f)
 	{
-		$fv = @$f->getVar()[$this->name];
-		$fv = $fv === '' ? null : $fv;
-		return $fv;
+		if ( ($flt = $f->getVar()) && ($name = $this->getName()) )
+		{
+			$fv = trim((string)@$flt[$name]);
+			return $fv === '' ? null : $fv;
+		}
+		return null;
 	}
 	
 	/**

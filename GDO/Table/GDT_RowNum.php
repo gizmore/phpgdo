@@ -17,9 +17,7 @@ final class GDT_RowNum extends GDT_Checkbox
 	
 	public function isOrderable() : bool { return false; }
 	
-	public string $name = 'rbx';
-// 	public function name(string $name=null) : self { return $this; }
-	
+	public function getDefaultName() : ?string { return 'rbx'; }
 	
 	public bool $toggleAll = false;
 	public function toggleAll($toggleAll)
@@ -33,9 +31,9 @@ final class GDT_RowNum extends GDT_Checkbox
 	###############################
 	public function displayHeaderLabel() { return ''; }
 
-	public function renderHeader() : string
+	public function renderTHead() : string
 	{
-		return GDT_Template::php('Table', 'filter/rownum.php', ['field' => $this]);
+		return GDT_Template::php('Table', 'rownum_filter.php', ['field' => $this]);
 	}
 	
 	public function renderHTML() : string
