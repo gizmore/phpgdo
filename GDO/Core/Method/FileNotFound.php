@@ -61,7 +61,7 @@ final class FileNotFound extends MethodPage
 		$url = $this->gdoParameterVar('url');
 		if (!str_ends_with($url, '.map'))
 		{
-			foreach (GDO_User::staff() as $user)
+			foreach (GDO_User::admins() as $user)
 			{
 				$this->send404Mail($user);
 			}

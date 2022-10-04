@@ -15,6 +15,7 @@ if (isset($field->completionHref))
 <select
 <?=$field->htmlID()?>
 <?=$field->htmlAttributes()?>
+<?=$field->htmlFocus()?>
 <?php if ($field->hasCompletion()) : ?>
 <?=$field->htmlConfig()?>
 <?php endif; ?>

@@ -17,7 +17,6 @@ use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
 use GDO\UI\TextStyle;
 use GDO\Core\ModuleProviders;
-use GDO\Core\Method\ClearCache;
 
 define('GDO_TIME_START', microtime(true));
 

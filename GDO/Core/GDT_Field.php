@@ -183,7 +183,7 @@ abstract class GDT_Field extends GDT
 		{
 			if ($form->focus)
 			{
-				if ($this->notNull)
+				if ($this->focusable && $this->notNull)
 				{
 					if ($this->getVar() === null)
 					{

@@ -60,8 +60,7 @@ class GDT_Link extends GDT_Url
 	const REL_TAG = 'tag';
 	
 	/**
-	 * Output a link / anchor.
-	 * @deprecated not the default GDT behaviour. Yet ok? NO?
+	 * Output a link / anchor. Not the default GDT behaviour?
 	 */
 	public static function anchor(string $href, string $labelRaw=null) : string
 	{

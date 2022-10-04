@@ -4,7 +4,6 @@ namespace GDO\Form;
 use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\File\GDT_File;
-use GDO\Util\Common;
 use GDO\Core\GDO_Error;
 
 /**
@@ -168,7 +167,7 @@ abstract class MethodForm extends Method
 		}
 		
 		### Flow upload
-		if ($flowField = Common::getRequestString('flowField'))
+		if ($flowField = ((string)@$this->inputs['flowField']))
 		{
 			/** @var $formField GDT_File **/
 			if ($formField = $form->getField($flowField))

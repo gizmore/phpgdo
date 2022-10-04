@@ -62,7 +62,7 @@ final class NotAllowed extends MethodPage
 	
 	private function send403Mails() : void
 	{
-		foreach (GDO_User::staff() as $user)
+		foreach (GDO_User::admins() as $user)
 		{
 			$this->send403Mail($user);
 		}

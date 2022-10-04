@@ -308,6 +308,22 @@ class TestCase extends \PHPUnit\Framework\TestCase
 // 		return $result;
 // 	}
 
+	protected function callMethod(Method $method, array $inputs, bool $assertOk=true)
+	{
+		$m = GDT_MethodTest::make()->method($method);
+		$m->inputs();
+		$r = $m->execute();
+		if ($assertOk)
+		{
+			$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");
+		}
+		else
+		{
+			$this->assert409("Test if callMethod {$method->gdoClassName()} errors!");
+		}
+		return $r;
+	}
+	
 	protected function fakeFileUpload($fieldName, $fileName, $path)
 	{
 		$dest = Module_Tests::instance()->tempPath($fileName);

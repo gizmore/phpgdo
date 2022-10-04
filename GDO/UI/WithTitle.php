@@ -29,12 +29,12 @@ trait WithTitle
 	public function titleRaw(?string $title) : self
 	{
 		unset($this->titleRaw);
+	    unset($this->titleKey);
+	    unset($this->titleArgs);
 		if ($title)
 		{
 			$this->titleRaw = $title;
 		}
-	    unset($this->titleKey);
-	    unset($this->titleArgs);
 	    return $this;
 	}
 

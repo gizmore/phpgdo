@@ -129,6 +129,29 @@ final class Arrays
 		return $result;
 	}
 	
+	/**
+	 * Sum each field on all arrays.
+	 */
+	public static function sumEach(array $arrays)
+	{
+		$result = [];
+		foreach ($arrays as $array)
+		{
+			foreach ($array as $key => $value)
+			{
+				if (!isset($result[$key]))
+				{
+					$result[$key] = $value;
+				}
+				else
+				{
+					$result[$key] += $value;
+				}
+			}
+		}
+		return $result;
+	}
+	
 // 	/**
 // 	 * Recursive count.
 // 	 * @since 7.0.1

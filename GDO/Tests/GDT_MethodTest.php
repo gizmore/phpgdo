@@ -43,6 +43,10 @@ final class GDT_MethodTest extends GDT_Method
     		$verb = GDT_Form::POST;
     		$this->inputs[$button] = '1';
     	}
+    	else
+    	{
+    		$this->clibutton();
+    	}
     	Application::$INSTANCE->verb($verb);
     	return parent::execute();
     }

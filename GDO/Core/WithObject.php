@@ -41,7 +41,7 @@ trait WithObject
 	# ##################
 	public function getVar()
 	{
-		if ( !($var = $this->getInput($this->name)))
+		if ( !($var = $this->getInput($this->getName())))
 		{
 			$var = $this->var;
 		}
@@ -239,7 +239,7 @@ trait WithObject
 				return $this->plugVarsSingle();
 			}
 		}
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
 
 	private function plugVarsSingle(): array
