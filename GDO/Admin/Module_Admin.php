@@ -5,6 +5,7 @@ use GDO\Core\GDO_Module;
 use GDO\UI\GDT_Link;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Menu;
 
 /**
  * The admin module offers:
@@ -21,7 +22,7 @@ use GDO\UI\GDT_Page;
  */
 class Module_Admin extends GDO_Module
 {
-	public int $priority = 200;
+	public int $priority = 14;
 	
 	##############
 	### Module ###
@@ -46,9 +47,11 @@ class Module_Admin extends GDO_Module
 	###############
 	public function onInitSidebar() : void
 	{
+		$menu = GDT_Menu::make('menu_admin');
+	    GDT_Page::instance()->rightBar()->addField($menu);
 		if (GDO_User::current()->isAdmin())
 		{
-		    GDT_Page::instance()->rightBar()->addField(
+		    $menu->addField(
 		        GDT_Link::make('btn_admin')->href(
 		            href('Admin', 'Modules')));
 		}
