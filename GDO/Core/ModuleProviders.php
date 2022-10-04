@@ -306,7 +306,7 @@ final class ModuleProviders
 'JPGraph' => [],
 'JQuery' => [],
 'JQueryAutocomplete' => ['JQuery'],
-'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Category', 'Contact', 'Classic', 'CountryRestrictions', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'Login', 'Maps', 'Mail', 'Maps', 'Markdown', 'News', 'Perf', 'PM', 'QRCode', 'Recovery', 'Register', 'YouTube'],
+'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Category', 'Contact', 'Classic', 'CountryCoordinates', 'CountryRestrictions', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'Login', 'Maps', 'Mail', 'Maps', 'Markdown', 'News', 'Perf', 'PM', 'QRCode', 'Recovery', 'Register', 'YouTube'],
 'Language' => [],
 'Licenses' => [],
 'Links' => ['Votes', 'Tags', 'Cronjob'],

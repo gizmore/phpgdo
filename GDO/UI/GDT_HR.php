@@ -4,7 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 
 /**
- * A HR element, but it uses a div to design the page.
+ * An <HR> element, but it uses a span to render in html. In CLI it renders ascii art.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -14,12 +14,12 @@ final class GDT_HR extends GDT
 {
 	public function renderCLI() : string
 	{
-		return "------\n";
+		return str_repeat('-', 48) . "\n";
 	}
 	
     public function renderHTML() : string
     {
-        return '<div class="gdt-hr"></div>';
+        return '<span class="gdt-hr"></span>';
     }
     
 }
