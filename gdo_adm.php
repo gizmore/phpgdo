@@ -29,6 +29,7 @@ use GDO\Core\GDT_Expression;
 use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Method;
 use GDO\User\GDO_Permission;
+use GDO\Core\Website;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -819,7 +820,7 @@ elseif ($argv[1] === 'migrate')
 {
 	if (count($argv) !== 3)
 	{
-		GDT_Error::make()->text('err_gdoadm_migrate');
+		Website::error('Admin', 'err_gdoadm_migrate');
 	}
 	else if ( !($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
 	{

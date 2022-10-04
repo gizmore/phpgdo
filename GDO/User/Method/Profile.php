@@ -10,6 +10,9 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
 use GDO\User\Module_User;
 use GDO\UI\GDT_Tooltip;
+use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Panel;
+use GDO\UI\GDT_Link;
 
 /**
  * Show a user's profile.
@@ -49,6 +52,19 @@ final class Profile extends MethodCard
 		{
 			return $this->error('err_no_data_yet');
 		}
+		
+		$me = GDO_User::current();
+		if ($user === $me)
+		{
+			if (module_enabled('Account'))
+			{
+				$info = GDT_Panel::make()->text('p_info_own_profile', [
+					GDT_Link::make()->text('link_account')->href(href('Account', 'AllSettings'))->render(),
+				]);
+				GDT_Page::instance()->topResponse()->addField($info);
+			}
+		}
+		
 		$this->onProfileView($user);
 		$profile = GDO_Profile::forUser($user);
 		return $this->executeFor($profile);

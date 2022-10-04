@@ -703,6 +703,10 @@ abstract class GDT
 	##################
 	### Conversion ###
 	##################
+	/**
+	 * Convert user input to var.
+	 * @param array|string|null|GDT_Method $input
+	 */
 	public function inputToVar($input) : ?string
 	{
 		if ($input === null)

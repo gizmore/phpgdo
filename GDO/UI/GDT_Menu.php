@@ -11,7 +11,7 @@ use GDO\Core\GDT_Template;
  * @version 7.0.1
  * @since 6.4.0
  */
-final class GDT_Menu extends GDT_Container
+class GDT_Menu extends GDT_Container
 {
 	use WithLabel;
 	use WithInput;

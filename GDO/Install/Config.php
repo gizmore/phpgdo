@@ -77,6 +77,7 @@ class Config
 	{
 		# Site
 		deff('GDO_SITENAME', 'GDOv7');
+		deff('GDO_ENV', 'dev');
 		deff('GDO_SITECREATED', Time::getDate());
 		deff('GDO_LANGUAGE', 'en');
 		deff('GDO_TIMEZONE', ini_get('date.timezone')); # @TODO use the full timezone name here for the default timezone in module date.
@@ -150,6 +151,7 @@ class Config
 			# Site
 			GDT_Divider::make()->label('install_config_section_site'),
 			GDT_String::make('sitename')->initialValue(GDO_SITENAME)->max(16)->label('cfg_sitename'),
+			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro'),
 			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED),
 			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull(),

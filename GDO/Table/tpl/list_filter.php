@@ -53,15 +53,16 @@ if (isset($field->headers))
         
         if (count($orderable))
         {
-            $select = GDT_Select::make('order_by')->icon('arrow_up');
+        	$n = $field->order->name;
+            $select = GDT_Select::make("{$n}_by")->label('order_by');
             $select->choices($orderable);
-            $select->initial($field->order->initial);
+            $select->initial($field->order->getOrderBy());
             $frm->addField($select);
             
-            $ascdesc = GDT_Select::make('order_dir');
+            $ascdesc = GDT_Select::make("{$n}_dir")->icon('arrow_up')->label('order_dir');
             $ascdesc->choices['ASC'] = t('asc');
             $ascdesc->choices['DESC'] = t('desc');
-            $ascdesc->initial($field->order->initial);
+            $ascdesc->initial($field->order->getOrderDir());
             $frm->addField($ascdesc);
         }
     }

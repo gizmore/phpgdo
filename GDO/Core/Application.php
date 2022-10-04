@@ -148,7 +148,12 @@ class Application extends GDT
 	# Install / Tests
 	public function isInstall() : bool { return false; }
 	public function isUnitTests() : bool { return false; }
-
+	# Env
+	public static function isDev() : bool { return self::isEnv('dev'); }
+	public static function isTes() : bool { return self::isEnv('tes'); }
+	public static function isPro() : bool { return self::isEnv('pro'); }
+	private static function isEnv(string $env) : bool { return def('GDO_ENV', 'dev') === $env; }
+	
 	/**
 	 * Is a session handler supported?
 	 */

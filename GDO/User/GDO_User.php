@@ -312,9 +312,21 @@ final class GDO_User extends GDO
 	public function isAdmin() : bool { return $this->hasPermission('admin'); }
 	public function isStaff() : bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
 	
-	public function hasPermission(string $permission) : bool
+	/**
+	 * Check if the user has at least one permisson.
+	 * @param string $permission CSV permissions
+	 */
+	public function hasPermission(string $permissions) : bool
 	{
-		return array_key_exists($permission, $this->loadPermissions());
+		$perms = $this->loadPermissions();
+		foreach (explode(',', $permissions) as $permission)
+		{
+			if (array_key_exists($permission, $perms))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function hasPermissionObject(GDO_Permission $permission) : bool
@@ -548,7 +560,7 @@ final class GDO_User extends GDO
 	
 	public function getCountryISO() : ?string
 	{
-		return $this->settingVar('Country', 'country');
+		return $this->settingVar('Country', 'country_of_living');
 	}
 	
 }

@@ -34,15 +34,14 @@ final class UserTest extends TestCase
         assertFalse($user->isMember(), 'Test if guests are non members.');
     }
     
-    public function testProfileAboutMe()
+    public function testProfileGender()
     {
     	$user = GDO_User::current();
     	$user->saveSettingVar('User', 'gender', 'male');
-    	$user->saveSettingVar('User', 'about_me', 'Aziloppegiz');
     	$me = GDT_MethodTest::make()->method(Profile::make())->inputs(['for' => 'gizmore']);
     	$result = $me->execute();
     	$html = $result->renderMode(GDT::RENDER_WEBSITE);
-    	assertEquals(1, substr_count($html, 'Aziloppegiz'), 'Test if about me is only shown once in gizmore\'s profile.');
+    	assertGreaterThanOrEqual(1, substr_count($html, 'male'), 'Test if gizmore can change to male');
     }
     
 }

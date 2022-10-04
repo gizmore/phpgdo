@@ -2,6 +2,7 @@
 namespace GDO\Date;
 
 use GDO\Core\GDT_Template;
+use GDO\Core\GDT;
 
 /**
  * A Date is like a Datetime, but a bit older, so we start with year selection.
@@ -68,9 +69,9 @@ class GDT_Date extends GDT_Timestamp
 	{
 		if ($var = $this->getVar())
 		{
-			return sprintf(' value="%s"', substr($var, 0, 10));
+			return sprintf(' value="%s"', html(substr($var, 0, 10)));
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 
 }

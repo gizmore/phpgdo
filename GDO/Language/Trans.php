@@ -105,7 +105,7 @@ final class Trans
 	{
 // 	    if (!$inited)
 // 	    {
-// 	    	self::$CACHE = [];
+	    	self::$CACHE = [];
 // 	    }
 		self::$INITED = $inited;
 	}
@@ -213,7 +213,7 @@ final class Trans
 		}
 		
 		# Build lang map
-		if (self::$INITED)
+// 		if (self::$INITED)
 		{
 			foreach (self::$PATHS as $path)
 			{

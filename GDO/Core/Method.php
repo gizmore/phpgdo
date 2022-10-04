@@ -193,7 +193,8 @@ abstract class Method #extends GDT
 		
 		if ( ($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()) )
 		{
-			return $this->error('err_members_only');
+			$hrefAuth = href('Login', 'Form', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
+			return $this->error('err_members_only', [$hrefAuth]);
 		}
 		
 		if ( ($this->isUserRequired()) && (!$user->isUser()) )
@@ -205,7 +206,8 @@ abstract class Method #extends GDT
 			}
 			else
 			{
-				return $this->error('err_members_only');
+				$hrefAuth = href('Login', 'Form', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
+				return $this->error('err_members_only', [$hrefAuth]);
 			}
 		}
 		

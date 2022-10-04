@@ -64,7 +64,7 @@ return [
 	'err_unknown_order_column' => 'This column is unknown and cannot be sorted by: `%s`.',
 	'err_no_data_yet' => 'There is no data for this item yet.',
 	'err_pass_too_short' => 'Your password has to be at least %s characters long.',
-	'err_members_only' => 'You need to signup to continue.',
+	'err_members_only' => 'You need to <a href="%s">authenticate</a> to do this.',
 	'err_only_member_access' => 'Only Members are allowed to access this.',
 	'err_only_friend_access' => 'Only their friends are allowed to access this.',
 	'err_only_private_access' => 'Only the user theyself is allowed to access this.',
@@ -156,6 +156,7 @@ return [
 	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'reason' => 'Reason',
 	'code' => 'Code',
 	'front' => 'Front',
 	'back' => 'Back',

@@ -16,10 +16,17 @@ and
 
 ## phpgdo: Demo Sites
 
+Sadly, there is only the default theme available at the moment.
+This will hopefully change soon, but i want a clean default first.
+
  - [Fineprint](https://fineprint.phpgdo.com) is a hacking challenge with a known vulnerability. It also serves as a demo site for the classic theme.
 
  - [Geo2Country](https://geo2country.phpgdo.com) is a small service that converts geocoordinates (lat/lng) into country codes. Currently, also with gdo classic design.
  
+ - [KassiererCard](https://kassierercard.org) is a bonus system for cashiers, companies and customers.
+
+ - [TBS](https://tbs.wechall.net) is a remake of TBS / Bright-Shadows.net. It has an own minimal theme based on default, but currently it is very broken.
+
 
 ## phpgdo: Installation
 

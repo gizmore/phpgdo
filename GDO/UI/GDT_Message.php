@@ -346,7 +346,7 @@ class GDT_Message extends GDT_Text
 		return $this->var($gdo->gdoVar("{$this->name}_input"));
 	}
 	
-	public function inputToVar($input) : string
+	public function inputToVar($input) : ?string
 	{
 		$input = trim($input);
 		return parent::inputToVar($input);

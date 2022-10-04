@@ -11,6 +11,7 @@ use GDO\Table\GDT_Filter;
  * 
  * Settings:
  * - ghost(): fallback to ghost user for null
+ * - deleted(): also include deleted users
  * - fallbackCurrentUser(): fallback to current user for null
  * - withPermission(): only allow users with a certain permission
  * - withType(): only allow users of a certain type
@@ -46,6 +47,16 @@ class GDT_User extends GDT_Object
 	public function ghost(bool $ghost=true) : self
 	{
 		$this->ghost = $ghost;
+		return $this;
+	}
+	
+	###############
+	### Deleted ###
+	###############
+	public bool $deleted = false;
+	public function deleted(bool $deleted=true) : self
+	{
+		$this->deleted = $deleted;
 		return $this;
 	}
 	
@@ -158,6 +169,14 @@ class GDT_User extends GDT_Object
 	            $permlabel = t('perm_' . $this->withPermission);
 	            return $this->error('err_user_no_permission', [$permlabel]);
 	        }
+	    }
+	    
+	    if (!$this->deleted)
+	    {
+	    	if ($user->isDeleted())
+	    	{
+	    		return $this->error('err_user_deleted', [$user->gdoDisplay('user_deletor'), $user->gdoDisplay('user_deleted')]);
+	    	}
 	    }
 	    
 	    return true;

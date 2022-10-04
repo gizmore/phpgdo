@@ -584,8 +584,10 @@ class GDT_Table extends GDT
 			$q = $this->query->copy(); # ->noJoins();
 			if (isset($this->order))
 			{
+				$i = 0;
 				foreach ($this->order->getAllFields() as $field)
 				{
+					$i++;
 					$column = $field->getName();
 					$subq = $gdo->entityQuery()
 						->from($gdo->gdoTableName() . " AS sq{$i}")

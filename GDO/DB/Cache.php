@@ -570,15 +570,24 @@ class Cache
 		return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}.gdo";
 	}
 
+	/**
+	 * SanitizeFilename. @TODO Use urlencoding for replaced chars.
+	 * 
+	 * @param string $key
+	 * @return string
+	 */
 	private static function fileKey(string $key): string
 	{
 		return str_replace([
 			'"',
-			'/'
-		], [
+			'/',
+			'<',
+			'>',
+			'?',
+			':',
+		],
 			'_',
-			'_'
-		], $key);
+			$key);
 	}
 
 }

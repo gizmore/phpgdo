@@ -207,6 +207,10 @@ abstract class GDO extends GDT
 	public function gdoDisplay(string $key) : string
 	{
 		$var = $this->gdoVar($key);
+		if ($gdt = $this->gdoColumn($key, false))
+		{
+			return $gdt->displayVar($var);
+		}
 		return html($var);
 	}
 	
@@ -649,7 +653,7 @@ abstract class GDO extends GDT
 	 * Get the GDT column for a key.
 	 * Assign my GDO values to the GDT.
 	 */
-	public function gdoColumn(string $key, bool $throw=true) : GDT
+	public function gdoColumn(string $key, bool $throw=true) : ?GDT
 	{
 		if ($gdt = @$this->gdoColumnsCache()[$key])
 		{

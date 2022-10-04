@@ -35,8 +35,6 @@ class GDT_Index extends GDT
 	private string $indexColumns;
 	public function indexColumns(string... $indexColumns)
 	{
-// 	    $this->indexColumns = implode(',', array_map(
-// 	        ['GDO\Core\GDO', 'escapeIdentifierS'], $indexColumns));
 	    $this->indexColumns = implode(',', $indexColumns);
 	    return $this;
 	}

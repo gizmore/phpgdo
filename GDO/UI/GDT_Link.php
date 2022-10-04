@@ -4,7 +4,6 @@ namespace GDO\UI;
 use GDO\Core\GDT_Template;
 use GDO\Net\URL;
 use GDO\Net\GDT_Url;
-use GDO\Language\Trans;
 
 /**
  * An anchor for menus or paragraphs.
@@ -30,11 +29,7 @@ class GDT_Link extends GDT_Url
 	public static function make(string $name = null) : self
 	{
 		$obj = self::makeWithLabel($name);
-		if ($name && Trans::hasKey($name))
-		{
-			$obj->text($name);
-		}
-		return $obj;
+		return $obj->text($name);
 	}
 	
 	###########

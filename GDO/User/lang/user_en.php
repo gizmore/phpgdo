@@ -5,7 +5,6 @@ return [
 	'gdo_session' => 'Session',
 	'gender' => 'Gender',
 	'profile_views' => 'Profile Views',
-	'cfg_about_me' => 'About Me',
 	'profile_visibility' => 'Profile visible for',
 	'probably_malicious' => 'Probably Malicious',
 	
@@ -61,4 +60,8 @@ return [
 	'err_only_user_access' => 'Only users can see this',
 	'err_only_friend_friend_access' => 'Sie müssen zumindest Freundesfreund sein um dies zu sehen.',
 	'err_only_level_access' => 'You need level %s to see this.',
+	
+	'link_account' => 'Your account',
+	'p_info_own_profile' => 'This is your own Profile. You can edit it here: %s',
+	'err_user_deleted' => 'This user got deleted by %s on %s.',
 ];

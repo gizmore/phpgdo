@@ -101,7 +101,39 @@ final class GDT_Order extends GDT_String
 		{
 			return $this->inputs[$name];
 		}
+		if (isset($this->inputs["{$name}_by"]))
+		{
+			return $this->inputs["{$name}_by"] . ' ' . $this->inputs["{$name}_dir"];
+		}
 		return $this->var;
+	}
+	
+	public function getOrderBys() : array
+	{
+		$o = $this->getVar();
+		$os = explode(',', $o);
+		return array_map(function($o) {
+			return explode(' ', $o)[0];
+		}, $os);
+	}
+	
+	public function getOrderBy() : ?string
+	{
+		return @$this->getOrderBys()[0];
+	}
+	
+	public function getOrderDirs() : array
+	{
+		$o = $this->getVar();
+		$os = explode(',', $o);
+		return array_map(function($o) {
+			return Strings::substrFrom($o, ' ', self::ASC);
+		}, $os);
+	}
+	
+	public function getOrderDir() : ?string
+	{
+		return @$this->getOrderDirs()[0];
 	}
 	
 	#############

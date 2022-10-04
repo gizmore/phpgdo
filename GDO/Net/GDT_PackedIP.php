@@ -42,7 +42,7 @@ final class GDT_PackedIP extends GDT_Char
 	
 	public static function packed2ip(string $packed) : string
 	{
-		return unpack("XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX", $packed);
+		return implode('', unpack("XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX", $packed));
 	}
 	
 	###############

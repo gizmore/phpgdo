@@ -22,10 +22,17 @@ trait WithText
 	public ?array $textArgs;
 	public bool $textEscaped = false;
 	
-	public function text(string $key, array $args=null) : self
+	public function text(?string $key, array $args=null) : self
 	{
 		unset($this->textRaw);
-	    $this->textKey = $key;
+		if (!$key)
+		{
+			unset($this->textKey);
+		}
+		else
+		{
+			$this->textKey = $key;
+		}
 	    $this->textArgs = $args;
 	    return $this->textUnescaped();
 	}

@@ -17,6 +17,7 @@ use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
 use GDO\UI\TextStyle;
 use GDO\Core\ModuleProviders;
+use GDO\Core\Method\ClearCache;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -105,8 +106,9 @@ if ($argc === 1)
 {
 	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
-	$loader->initModules();
 	$install->onLoadLanguage();
+	$loader->initModules();
+	Trans::inited();
 	Module_Tests::runTestSuite($install);
 }
 
@@ -187,12 +189,9 @@ else
 	$modules = $loader->loadModules(false, true, true);
 }
 
-// $loader = ModuleLoader::instance();
-
 # ######################
 # ## Install and run ###
 # ######################
-// $loader->initModules();
 if (Installer::installModules($modules))
 {
 	$loader->loadLangFiles();

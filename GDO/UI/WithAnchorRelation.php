@@ -12,17 +12,24 @@ namespace GDO\UI;
  */
 trait WithAnchorRelation
 {
-    public string $relation = '';
+    public string $relation;
     
 	public function relation(string $relation) : self
 	{
-		$this->relation = $relation ? trim($this->relation . " $relation") : $this->relation;
+		if (isset($this->relation))
+		{
+			$this->relation .= " $relation";
+		}
+		else
+		{
+			$this->relation = $relation;
+		}
 		return $this;
 	}
 
 	public function htmlRelation() : string
 	{
-		return $this->relation ? " rel=\"{$this->relation}\"" : '';
+		return isset($this->relation) ? " rel=\"{$this->relation}\"" : '';
 	}
 
 	public function noFollow() : self

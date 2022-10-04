@@ -3,6 +3,7 @@ namespace GDO\Core;
 
 use GDO\Util\Strings;
 use GDO\Table\GDT_Filter;
+use GDO\Form\GDT_Hidden;
 
 /**
  * A String is a database capable GDT_DBField, but you can also use it without a db.
@@ -228,7 +229,17 @@ class GDT_String extends GDT_DBField
 	
 	public function renderForm() : string
 	{
+		if ($this->isHidden())
+		{
+			return $this->renderFormHidden();
+		}
 		return GDT_Template::php('Core', 'string_form.php', ['field' => $this]);
+	}
+	
+	public function renderFormHidden() : string
+	{
+		$hidden = GDT_Hidden::make($this->getName())->var($this->getVar());
+		return $hidden->renderForm();
 	}
 	
 // 	public function renderList() : string

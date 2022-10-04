@@ -5,7 +5,6 @@ return [
 	'gdo_session' => 'Sitzung',
 	'gender' => 'Geschlecht',
 	'profile_views' => 'Profiltreffer',
-	'cfg_about_me' => 'Über Mich',
 	'profile_visibility' => 'Profil sichtbar für',
 	'probably_malicious' => 'Wahrscheinlicher Störenfried',
 	
@@ -61,4 +60,7 @@ return [
 	'err_only_user_access' => 'Only users can see this',
 	'err_only_friend_friend_access' => 'Sie müssen zumindest Freundesfreund sein um dies zu sehen.',
 	'err_only_level_access' => 'You need level %s to see this.',
+
+	'link_account' => 'Your account',
+	'p_info_own_profile' => 'This is your own Profile. You can edit it here: %s',
 ];

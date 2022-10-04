@@ -8,7 +8,6 @@ use GDO\Core\Logger;
 use GDO\Core\GDT;
 use GDO\Core\Debug;
 use GDO\Core\GDO_DBException;
-use GDO\Core\GDT_DBField;
 
 /**
  * mySQLi abstraction layer.

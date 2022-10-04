@@ -143,6 +143,12 @@ final class GDT_ACL extends GDT
 			return true;
 		}
 		
+		# Staff may see everything
+		if ($user->isStaff())
+		{
+			return true;
+		}
+		
 		# Check relation
 		if ($mu->cfgACLRelations())
 		{
