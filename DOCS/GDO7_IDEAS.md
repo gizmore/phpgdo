@@ -68,4 +68,6 @@ Your playlists are ACL sharable.
  
  - Turn KassiererCard.org into a proxy challenge (CountryRestriction)
  
- - TheClimber.net - A website with the highest altitude wins.
+ - TheClimber.net - A server with the highest altitude wins.
+
+ - E-Penis.net domain zählt 4 punkte. server 3. projekte 10 punkte.
