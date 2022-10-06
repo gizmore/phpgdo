@@ -140,16 +140,19 @@ final class Profile extends MethodCard
 			}
 			$gdt = $module->userSetting($target, $name);
 			$reason = '';
-			if (!$acl->hasAccess($user, $target, $reason))
+			if ($gdt->var)
 			{
-				if ($reason)
+				if (!$acl->hasAccess($user, $target, $reason))
 				{
-					$card->addField(GDT_Tooltip::make()->labelRaw($gdt->renderLabel())->tooltipRaw($reason));
+					if ($reason)
+					{
+						$card->addField(GDT_Tooltip::make()->labelRaw($gdt->renderLabel())->tooltipRaw($reason));
+					}
 				}
-			}
-			else
-			{
-				$card->addField($gdt);
+				else
+				{
+					$card->addField($gdt);
+				}
 			}
 		}
 	}
