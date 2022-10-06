@@ -10,8 +10,6 @@ use GDO\Core\Application;
 use GDO\Core\GDO_Exception;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
-use GDO\Links\GDO_Link;
-use GDO\Links\GDO_LinkVote;
 
 /**
  * Try to save all GDO.
@@ -84,11 +82,6 @@ final class AutomatedGDOSaveTest extends TestCase
 	{
 		try
 		{
-			if ($gdo instanceof GDO_LinkVote)
-			{
-				xdebug_break();
-			}
-			
 			$success = $this->saveTestGDO($gdo);
 			$this->assert200("Test if {$gdo->gdoClassName()} can be saved.");
 			if (!$success)
