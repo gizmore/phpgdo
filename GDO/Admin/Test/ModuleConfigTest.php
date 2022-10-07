@@ -56,10 +56,10 @@ final class ModuleConfigTest extends TestCase
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
     	
-    	if ($module instanceof Module_Session)
-    	{
-    		xdebug_break();
-    	}
+//     	if ($module instanceof Module_Session)
+//     	{
+//     		xdebug_break();
+//     	}
     	
     	# Check
     	$errors = [];

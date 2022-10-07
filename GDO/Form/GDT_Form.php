@@ -179,6 +179,10 @@ final class GDT_Form extends GDT
 	public function errorFormInvalid()
 	{
 		$numErrors = $this->countErrors();
+		if (Application::instance()->isUnitTests())
+		{
+			echo $this->renderCLI();
+		}
 		return $this->error('err_form_invalid', [$numErrors]);
 	}
 	

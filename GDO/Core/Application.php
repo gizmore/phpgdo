@@ -99,10 +99,10 @@ class Application extends GDT
 	{
 		if ($code > self::$RESPONSE_CODE)
 		{
-			if (defined('GDO_CORE_STABLE'))
-			{
-				xdebug_break();
-			}
+// 			if (defined('GDO_CORE_STABLE'))
+// 			{
+// 				xdebug_break();
+// 			}
 			self::$RESPONSE_CODE = $code;
 		}
 	}
