@@ -12,6 +12,7 @@ use GDO\Tests\GDT_MethodTest;
 use GDO\User\Method\Profile;
 use function PHPUnit\Framework\assertCount;
 use GDO\Core\GDT;
+use function PHPUnit\Framework\assertGreaterThanOrEqual;
 
 final class UserTest extends TestCase
 {

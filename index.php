@@ -15,6 +15,7 @@ use GDO\Core\GDT_Method;
 use GDO\Core\Method\DirectoryIndex;
 use GDO\Core\Method\FileNotFound;
 use GDO\Core\Method\Fileserver;
+use GDO\Core\Method\ForceSSL;
 use GDO\Core\Method\SeoProxy;
 use GDO\Core\Method\NotAllowed;
 use GDO\Core\Method\Error;
@@ -24,6 +25,7 @@ use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\CLI\CLI;
 use GDO\Core\GDO_SEO_URL;
+
 /**
  * @var $me Method
  */
@@ -106,7 +108,6 @@ else
 }
 Trans::setISO($iso);
 $loader->loadLangFiles();
-
 
 #
 # Remember GET/POST HTTP verb.
@@ -199,7 +200,12 @@ function gdoRouteMoMe(string $mo, string $me) : Method
 	return $method;
 }
 
-if (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
+if ( (def('GDO_FORCE_SSL', false)) &&
+	(!Application::$INSTANCE->isTLS()) )
+{
+	$me = ForceSSL::make();
+}
+elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
 	$me = gdoRouteMoMe((string)@$_REQUEST['_mo'], (string)@$_REQUEST['_me']);
 }

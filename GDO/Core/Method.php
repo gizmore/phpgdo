@@ -297,7 +297,6 @@ abstract class Method #extends GDT
 	public function execWrap()
 	{
 		$response = $this->executeWithInit();
-		$this->setupSEO();
 		return $response;
 	}
 	
@@ -400,11 +399,15 @@ abstract class Method #extends GDT
 				return $response;
 			}
 			
+			# 5b)
+			$this->setupSEO();
+
 			# 6) Commit transaction
 			if ($transactional)
 			{
 				$db->transactionEnd();
 			}
+			
 			
 			return $response;
 		}

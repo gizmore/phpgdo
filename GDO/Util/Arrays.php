@@ -169,5 +169,22 @@ final class Arrays
 // 		}
 // 		return $result;
 // 	}
-	
+
+	/**
+	 * Remove a single element from an array.
+	 * 
+	 * @param mixed $object
+	 */
+	public static function remove(array &$array, $object): array
+	{
+		foreach ($array as $key => $element)
+		{
+			if ($element === $object)
+			{
+				unset($array[$key]);
+			}
+		}
+		return $array;
+	}
+
 }

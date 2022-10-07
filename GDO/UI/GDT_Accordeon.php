@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT;
 use GDO\Core\Application;
+use GDO\Core\WithName;
 
 /**
  * A panel that un/collapses on click to the title.
@@ -15,6 +16,7 @@ use GDO\Core\Application;
  */
 final class GDT_Accordeon extends GDT_Container
 {
+	use WithName;
 	use WithTitle;
 
 	# #############
@@ -32,7 +34,14 @@ final class GDT_Accordeon extends GDT_Container
 	{
 		return $this->opened( !$closed);
 	}
-
+	
+	public static int $ACCORDON_NUMBER = 1;
+	public function getDefaultName() : ?string
+	{
+		$num = self::$ACCORDON_NUMBER++;
+		return "accordeon_{$num}";
+	}
+	
 	# #############
 	# ## Render ###
 	# #############

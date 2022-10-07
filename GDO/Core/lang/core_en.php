@@ -345,4 +345,8 @@ The %2$s System',
 	
 	'please_choose' => 'Please choose...',
 	
+	# Privacy
+	'info_privacy_related_module' => '%s is a privacy related module that is currently enabled.',
+	't_privacy_core_toggles' => 'Core Configuration',
+	
 ];

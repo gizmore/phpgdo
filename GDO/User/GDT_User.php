@@ -32,7 +32,7 @@ class GDT_User extends GDT_Object
 // 		$this->orderField = 'user_name';
 		$this->table(GDO_User::table());
 		$this->icon('face');
-        $this->withCompletion();
+//         $this->withCompletion();
 	}
 
 	public function withCompletion()

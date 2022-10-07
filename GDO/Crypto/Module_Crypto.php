@@ -4,6 +4,7 @@ namespace GDO\Crypto;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_Checkbox;
+use GDO\UI\GDT_Panel;
 
 /**
  * Cryptographic functionality.
@@ -35,4 +36,10 @@ final class Module_Crypto extends GDO_Module
 	public function cfgBCryptCost() : int { return $this->getConfigValue('bcrypt_cost'); }
 	public function cfgPasswordStrong() : bool { return $this->getConfigValue('password_strong'); }
 	
+	public function getPrivacyRelatedFields(): array
+	{
+		return [
+			GDT_Panel::make('info_crypto_hash_algo'),
+		];
+	}
 }

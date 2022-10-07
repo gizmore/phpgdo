@@ -97,6 +97,17 @@ class GDO_Module extends GDO
 	{
 		return GDT::EMPTY_ARRAY;
 	}
+	
+	
+	/**
+	 * Get GDT/ETC from config for current user that are privacy related.
+	 * 
+	 * @return GDT[]
+	 */
+	public function getPrivacyRelatedFields(): array
+	{
+		return GDT::EMPTY_ARRAY;
+	}
 
 	/**
 	 * Run system checks for this module, for example if bcmath is installed.
@@ -691,20 +702,18 @@ class GDO_Module extends GDO
 	 */
 	public function userSetting(GDO_User $user, string $key): GDT
 	{
-		if ($gdt = $this->getSetting($key))
+		$gdt = $this->getSetting($key);
+		$settings = $this->loadUserSettings($user);
+		if ($acl = @$this->userConfigCacheACL[$key])
 		{
-			$settings = $this->loadUserSettings($user);
-			if ($acl = @$this->userConfigCacheACL[$key])
+			if ($def = $this->getACLDefaultsFor($key))
 			{
-				if ($def = $this->getACLDefaultsFor($key))
-				{
-					$acl->initialACL($def[0], $def[1], $def[2]);
-				}
-				$acl->setGDOData($settings);
+				$acl->initialACL($def[0], $def[1], $def[2]);
 			}
-			$gdt->setGDOData($settings);
-			return $gdt;
+			$acl->setGDOData($settings);
 		}
+		$gdt->setGDOData($settings);
+		return $gdt;
 	}
 
 	public function settingVar(string $key): ?string

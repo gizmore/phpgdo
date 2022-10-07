@@ -95,6 +95,7 @@ class Config
 		deff('GDO_PROTOCOL', @$_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
 		deff('GDO_PORT', @$_SERVER['SERVER_PORT'] ? $_SERVER['SERVER_PORT'] : (GDO_PROTOCOL === 'https' ? 443 : 80));
 		deff('GDO_WEB_ROOT', Strings::substrTo($_SERVER['SCRIPT_NAME'], 'install/wizard.php'));
+		deff('GDO_FORCE_SSL', false);
 		# Files
 		deff('GDO_CHMOD', 0770);
 		deff('GDO_FILES_DIR', 'files');
@@ -165,10 +166,11 @@ class Config
 			GDT_Checkbox::make('json_debug')->initialValue(!!GDO_JSON_DEBUG),
 			# HTTP
 			GDT_Divider::make()->label('install_config_section_http'),
-			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN),
 			GDT_Enum::make('server')->notNull()->enumValues('none', 'apache2.2', 'apache2.4', 'nginx', 'other')->initialValue(GDO_SERVER),
-			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL),
+			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN),
 			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT),
+			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL),
+			GDT_Checkbox::make('force_ssl')->initial('0'),
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
 			GDT_Path::make('files_dir')->label('files_dir')->initial(GDO_FILES_DIR),

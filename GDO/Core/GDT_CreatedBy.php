@@ -23,7 +23,7 @@ final class GDT_CreatedBy extends GDT_User
 	protected function __construct()
 	{
 		parent::__construct();
-		$this->withCompletion();
+// 		$this->withCompletion();
 	}
 	
 	/**

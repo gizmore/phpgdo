@@ -35,6 +35,11 @@ return [
 'language' => 'Hauptsprache',
 'timezone' => 'Zeitzone',
 'themes' => 'Designs',
+	'force_ssl' => 'TLS Erzwingen?',
+	'log_request' => 'Jede Anfrage Protokollieren?',
+	'sess_samesite' => 'SESS-Samesite X-Cookie',
+	'sess_https' => 'Nur verschlüsselte Cookies?',
+	
 'install_config_section_http' => 'HTTP',
 'install_config_section_files' => 'Dateien',
 'enum_448' => '700',

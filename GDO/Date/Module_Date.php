@@ -4,6 +4,7 @@ namespace GDO\Date;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Checkbox;
 use GDO\User\GDO_User;
+use GDO\UI\GDT_Divider;
 use GDO\UI\GDT_Page;
 use GDO\Date\Method\Timezone;
 use GDO\User\GDT_ACLRelation;
@@ -51,7 +52,7 @@ final class Module_Date extends GDO_Module
     public function getACLDefaults() : ?array
     {
     	return [
-    		'timezone' => [GDT_ACLRelation::ALL, 0, null],
+    		'timezone' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
     		'activity_accuracy' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
     	];
     }
@@ -74,6 +75,17 @@ final class Module_Date extends GDO_Module
     {
     	$user = $user ? $user : GDO_User::current();
     	return $this->userSettingValue($user, 'activity_accuracy');
+    }
+    
+    public function getPrivacyRelatedFields(): array
+    {
+    	return [
+    		GDT_Divider::make('privacy_info_date_module'),
+    		$this->setting('timezone'),
+    		$this->setting('_acl_timezone_relation'),
+    		$this->setting('activity_accuracy'),
+    		$this->setting('_acl_activity_accuracy_relation'),
+    	];
     }
     
     ############

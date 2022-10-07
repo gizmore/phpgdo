@@ -1,8 +1,10 @@
 <?php
 namespace GDO\Date\lang;
 return [
+	'module_date' => 'Date and Time',
 	'gdo_timezone' => 'Timezone',
     'ago' => '%s ago',
+	'privacy_info_date_module' => 'Timezone and Last-Activity can give away information.',
 	
     'err_min_date' => 'This date has to be after %s.',
     'err_max_date' => 'This date has to be before %s.',

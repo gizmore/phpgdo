@@ -2,6 +2,7 @@
 namespace GDO\Language;
 
 use GDO\Core\GDT_ObjectSelect;
+use GDO\User\GDO_User;
 
 /**
  * Language select.
@@ -37,6 +38,14 @@ final class GDT_Language extends GDT_ObjectSelect
 	{
 		$this->withFlag = $withFlag;
 		return $this;
+	}
+	
+	###############
+	### Current ###
+	###############
+	public function initialCurrent(bool $bool=true) : self
+	{
+		return $this->initial(GDO_User::current()->getLangISO());
 	}
 	
 	############

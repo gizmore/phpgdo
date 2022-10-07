@@ -59,13 +59,21 @@ class GDT_Link extends GDT_Url
 	const REL_SEARCH = 'search';
 	const REL_TAG = 'tag';
 	
+	##############
+	### Static ###
+	##############
 	/**
 	 * Output a link / anchor. Not the default GDT behaviour?
 	 */
-	public static function anchor(string $href, string $labelRaw=null) : string
+	public static function anchor(string $href, string $textRaw=null) : string
 	{
-		$labelRaw = $labelRaw !== null ? $labelRaw : $href;
-		return self::make()->href($href)->labelRaw($labelRaw)->render();
+		$textRaw = $textRaw !== null ? $textRaw : $href;
+		return self::make()->href($href)->textRaw($textRaw)->render();
+	}
+	
+	public static function anchorMain(): string
+	{
+		return self::anchor(hrefDefault(), sitename());
 	}
 	
 	##############

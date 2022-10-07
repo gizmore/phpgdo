@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\UI\MethodPage;
+use GDO\Core\GDT_Tuple;
 
 /**
  * Show the privacy informational page. 
@@ -21,6 +22,14 @@ final class Privacy extends MethodPage
 	public function getMethodDescription() : string
 	{
 		return t('md_privacy', [sitename()]);
+	}
+	
+	public function execute()
+	{
+		return GDT_Tuple::make()->addFields(
+			$this->pageTemplate(),
+			PrivacyToggles::make()->execute(),
+		);
 	}
 	
 }

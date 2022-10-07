@@ -9,6 +9,7 @@ use GDO\UI\GDT_Link;
 use GDO\Net\GDT_Url;
 use GDO\UI\GDT_Color;
 use GDO\Date\GDT_Timestamp;
+use GDO\UI\GDT_Divider;
 
 /**
  * GDO_User related types and plugins.
@@ -129,6 +130,14 @@ final class Module_User extends GDO_Module
 			$settings[] = GDT_Color::make('color')->label('favorite_color');
 		}
 		return $settings;
+	}
+	
+	public function getPrivacyRelatedFields(): array
+	{
+		return [
+			$this->setting('last_activity'),
+			$this->setting('_acl_last_activity_relation'),
+		];
 	}
 	
 }

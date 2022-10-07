@@ -1,9 +1,12 @@
 <?php
 namespace GDO\Date\lang;
 return [
+	'module_date' => 'Datum und Uhrzeit',
 	'gdo_timezone' => 'Zeitzone',
+	'privacy_info_date_module' => 'Zeitzone und letzte Aktivität können einiges verraten. Überprüfen Sie Ihre Einstellungen.',
 	'ago' => 'vor %s',
-    'err_min_date' => 'Dieses Datum muss nach %s sein.',
+    
+	'err_min_date' => 'Dieses Datum muss nach %s sein.',
     'err_max_date' => 'Dieses Datum muss vor %s sein.',
     'err_invalid_date' => 'Ungültige Zeitangabe: %s ist nicht im Format %s. Bitte stellen Sie sicher, dass Ihre Sprache und Zeitzone korrekt eingestellt sind.',
 
