@@ -9,6 +9,7 @@ use GDO\UI\GDT_Link;
 use GDO\Net\GDT_Url;
 use GDO\UI\GDT_Color;
 use GDO\Date\GDT_Timestamp;
+use GDO\UI\GDT_Menu;
 
 /**
  * GDO_User related types and plugins.
@@ -62,9 +63,12 @@ final class Module_User extends GDO_Module
 		if ($this->cfgSidebar())
 		{
 			$user = GDO_User::current();
-			if ($user->isUser()) {
-				GDT_Page::instance()->rightBar()->addField(
-					GDT_Link::make()->href($user->hrefProfile())->text('link_your_profile', [$user->renderUserName()]));
+			if ($user->isUser())
+			{
+				$menu = GDT_Menu::make('menu_profile')->vertical();
+				GDT_Page::instance()->rightBar()->addField($menu);
+				$menu->addField(GDT_Link::make()->href($user->hrefProfile())->text('link_your_profile', [
+					$user->renderUserName()]));
 			}
 		}
 	}

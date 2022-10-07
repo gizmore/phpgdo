@@ -80,8 +80,6 @@ if (GDO_LOG_REQUEST)
 {
 	Logger::logRequest();
 }
-// $loader->initModules();
-// $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 $loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
@@ -110,13 +108,10 @@ else
 }
 Trans::setISO($iso);
 Trans::inited();
-// $loader->loadLangFiles();
-
 #
 # Remember GET/POST HTTP verb.
 #
 $app->verb($_SERVER['REQUEST_METHOD']);
-
 #
 # Detect Content Type and set application render mode.
 # 
@@ -129,32 +124,8 @@ if (isset($_REQUEST['_fmt']))
 $app->modeDetected($mode); # set detected mode.
 
 ###################
-### Finish Init ###
-###################
-// try
-// {
-// 	$loader->initModules();
-// 	Trans::inited();
-// }
-// catch (GDO_RedirectError $ex)
-// {
-// 	hdr('Location: ' . $ex->href);
-// 	die(0);
-// }
-
-###################
 ### Pick Method ###
 ###################
-#
-# We already have a method. This is a 403!
-// if (isset($me))
-// {
-// 	# Patch all input to only the error!
-// 	$_REQUEST = [
-// 		'error' => t('err_request_method_denied', [
-// 			html((string) $_SERVER['REQUEST_METHOD'])]),
-// 	];
-// }
 #
 # index.php is called directly.
 # Read $_GET _mo/_me

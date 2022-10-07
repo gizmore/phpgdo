@@ -181,7 +181,7 @@ return [
 	'name' => 'Name',
 	'user_type' => 'User Type',
 	'user_guest_name' => 'Guest Name',
-	'level' => 'Level',
+	'user_level' => 'Level',
 	'copyright' => 'Copyright',
 	'password' => 'Password',
 	'ipp' => 'IPP',

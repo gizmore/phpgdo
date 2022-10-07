@@ -13,6 +13,7 @@ use GDO\Core\GDT;
  * @version 7.0.1
  * @since 6.5.0
  * @see https://www.utf8icons.com/
+ * @see https://unicode.org/emoji/charts/full-emoji-list.html
  * @see \GDO\FontAwesome\FA_Icon
  */
 final class GDT_IconUTF8
@@ -77,7 +78,7 @@ final class GDT_IconUTF8
         'image' => '📷',
     	'info' => 'ⓘ',
         'language' => '⛿',
-    	'legal' => '§',
+    	'legal' => '⚖',
         'level' => '🏆',
         'license' => '§',
         'like' => '❤',
@@ -126,6 +127,7 @@ final class GDT_IconUTF8
         'view' => '👁',
     	'vote' => '🗳',
         'wait' => '◴',
+    	'whatsapp' => '📱',
     	'work' => '👷',
     	'write' => '✎',
     ];
