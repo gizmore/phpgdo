@@ -411,6 +411,14 @@ abstract class Method #extends GDT
 			
 			return $response;
 		}
+		catch (GDO_DBException $e)
+		{
+			if ($transactional)
+			{
+				$db->transactionRollback();
+			}
+			throw $e;
+		}
 		catch (GDO_Error $e)
 		{
 			if ($transactional)

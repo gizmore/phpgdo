@@ -45,13 +45,14 @@ final class GDT_Error extends GDT_Panel
 		$is_html = Application::$INSTANCE->isHTML();
 		$this->title("exception");
 		$this->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
+		Application::setResponseCode($this->code);
 		return $this;
 	}
 	
 	public function renderHTML() : string
 	{
 		hdrc('HTTP/1.1 ' . $this->code . ' GDO Error');
-		hdr('X-GDO-ERROR: ' . str_replace(["\r", "\n"], ['', ' '], $this->renderText()));
+		hdr('X-GDO-ERROR: ' . str_replace(["\r", "\n"], '', $this->renderText()));
 		return parent::renderHTML();
 	}
 	

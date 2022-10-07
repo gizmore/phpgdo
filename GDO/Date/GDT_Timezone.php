@@ -93,7 +93,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
 	private function getBestTimezoneIdForOffset(int $offset): string
 	{
 		return GDO_Timezone::table()->select("tz_id, ABS(tz_offset-{$offset}) tzd")
-			->order('tzd ASC')
+			->order('tzd ASC, rand()')
 			->first()
 			->exec()
 			->fetchValue();

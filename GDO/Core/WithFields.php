@@ -369,13 +369,14 @@ trait WithFields
 	{
 		$json = [];
 		$this->withFields(function(GDT $gdt) use (&$json) {
-			if ($gdt->hasName())
+			$more = $gdt->renderJSON();
+			if ($name = $gdt->getName())
 			{
-				$json[$gdt->getName()] = $gdt->renderJSON();
+				$json[$name] = $more;
 			}
 			else
 			{
-				$json[] = $gdt->renderJSON();
+				$json[] = $more;
 			}
 		});
 		return $json;

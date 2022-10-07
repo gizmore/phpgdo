@@ -72,7 +72,7 @@ final class Website
 	 * @TODO possible without key but same functionality?
 	 * @TODO strings as params? addMeta($name, $content, $mode, $overwrite)
 	 */
-	public static function addMeta(array $metaA, $overwrite=true)
+	public static function addMeta(array $metaA, bool $overwrite=true): bool
 	{
 		if ((!$overwrite) && (isset(self::$META[$metaA[0]])) )
 		{

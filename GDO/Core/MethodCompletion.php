@@ -79,12 +79,15 @@ abstract class MethodCompletion extends MethodAjax
 		$table = $this->gdoTable();
 		$query = $this->getQuery();
 		$eterm = GDO::escapeSearchS($term);
-		foreach ($this->gdoHeaderFields() as $gdt)
+		foreach ($this->gdoHeaderFields() as $name => $gdt)
 		{
-			if ($name = $gdt->getName())
+			if (!$gdt->isVirtual())
 			{
-// 				$query->orWhere("{$name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
-				$query->orWhere("{$name} LIKE '%{$eterm}%'");
+// 				if ($name = $gdt->getName())
+// 				{
+	// 				$query->orWhere("{$name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
+					$query->orWhere("{$name} LIKE '%{$eterm}%'");
+// 				}
 			}
 		}
 		if ($order = $table->getDefaultOrder())

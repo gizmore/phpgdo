@@ -22,7 +22,7 @@ window.GDO.autofocusForm = function() {
 
 window.GDO.enterForm = function(form, event) {
 //	console.log('GDO.enterForm()', form, event);
-	if (event.keyCode == 13) {
+	if (event.keyCode === 13) {
 		let nn = event.srcElement.nodeName;
 		if ( (nn === 'INPUT') || (nn === 'SELECT') ) {
 			event.preventDefault();
@@ -69,8 +69,23 @@ window.GDO.toggleAll = function(toggler) {
 	});
 };
 
-window.GDO.responseError = function(response) {
+window.GDO.responseError = function(response, title) {
+	
 	let message = JSON.stringify(response);
+
+	if (typeof response === 'string' || response instanceof String) {
+		try {
+			let obj = JSON.parse(response);
+			if (obj instanceof Array) {
+				message = obj.join("\n");
+			}
+			else if (obj instanceof Object) {
+				response = obj;
+			}
+		}
+		catch (ex) {
+		} 
+	}
 	
 	if ( (!response.json) && (response.responseJSON) ) {
 		response.json = response.responseJSON.json;
@@ -79,13 +94,8 @@ window.GDO.responseError = function(response) {
 	if (response.json && response.json.error) {
 		message = response.json.error;
 	}
-	else if (response.json && response.json.topResponse) {
-		let r = response.json.topResponse;
-		if (r.error) {
-			message = r.error;
-		} else {
-			message = JSON.stringify(r);
-		}
+	else if (response.json && response.json instanceof Array) {
+		message = response.json.join("\n");
 	}
 	else if (response.error) {
 		message = response.error;
@@ -95,8 +105,37 @@ window.GDO.responseError = function(response) {
 		message += "\n\n" + response.json.stack;
 	}
 	
-	return window.GDO.error(message, "Error");
+	return window.GDO.error(message, title||"Error");
 };
+
+//window.GDO.responseErrorOLD = function(response) {
+//	let message = JSON.stringify(response);
+//	
+//	if ( (!response.json) && (response.responseJSON) ) {
+//		response.json = response.responseJSON.json;
+//	}
+//	
+//	if (response.json && response.json.error) {
+//		message = response.json.error;
+//	}
+//	else if (response.json && response.json.topResponse) {
+//		let r = response.json.topResponse;
+//		if (r.error) {
+//			message = r.error;
+//		} else {
+//			message = JSON.stringify(r);
+//		}
+//	}
+//	else if (response.error) {
+//		message = response.error;
+//	}
+//	
+//	if (response.json && response.json.stack) {
+//		message += "\n\n" + response.json.stack;
+//	}
+//	
+//	return window.GDO.error(message, "Error");
+//};
 
 /**
  * This method is a candidate to get overriden by JS frameworks.
@@ -144,12 +183,14 @@ window.GDO.openDialog = function(dialogId) {
 // ----------- //
 // --- XHR --- //
 // ----------- //
-
 window.GDO.xhr = function(url, verb, data) {
 	return fetch(url, {
 		method: verb||'GET',
 		headers: {'Content-Type': 'application/json'},
-		body: JSON.stringify(data)
+		body: JSON.stringify(data),
+	}).catch(function(){
+		debugger;
+		window.GDO.responseError();
 	});
 };
 
@@ -167,13 +208,25 @@ window.GDO.gdoxhr = function(module, method, append, verb, data) {
 	return window.GDO.xhr(href, verb, data);
 };
 
-var origOpen = XMLHttpRequest.prototype.open;
-XMLHttpRequest.prototype.open = function () {
-	let result = origOpen.apply(this, arguments);
+var origOpen = window.XMLHttpRequest.prototype.open;
+window.XMLHttpRequest.prototype.open = function () {
+	let result = window.origOpen.apply(this, arguments);
 	let token = document.querySelector('meta[name="csrf-token"]');
 	token = token ? token.getAttribute('content') : 'not-there';
 	this.setRequestHeader('X-CSRF-TOKEN', token);
+//	this.setRequestHeader('X-HTTP-TEAPOT-TEMP-C', 37.14156);
 	this.withCredentials = true;
+//	result.onerror = function() {
+//		debugger;
+//	};
+//	this.onreadystatechange = function() {
+//		if (this.status >= 400) {
+//			if (this.responseText) {
+//				return window.GDO.responseError(this.responseText);
+//			}
+//		}
+//		return this;
+//	};
 	return result;
 };
 

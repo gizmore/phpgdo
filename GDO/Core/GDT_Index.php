@@ -40,6 +40,11 @@ class GDT_Index extends GDT
 		return GDT::EMPTY_STRING;
 	}
 	
+	public function isVirtual(): bool
+	{
+		return true;
+	}
+
 	###############
 	### Columns ###
 	###############

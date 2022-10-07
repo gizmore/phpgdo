@@ -62,6 +62,8 @@ Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 if (!module_enabled('core'))
 {
 	require 'index_install.php';
@@ -81,7 +83,7 @@ if (GDO_LOG_REQUEST)
 	Logger::logRequest();
 }
 // $loader->initModules();
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+// $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###
@@ -107,7 +109,8 @@ else
 	$iso = Module_Language::instance()->detectISO();
 }
 Trans::setISO($iso);
-$loader->loadLangFiles();
+Trans::inited();
+// $loader->loadLangFiles();
 
 #
 # Remember GET/POST HTTP verb.
@@ -314,7 +317,7 @@ catch (\Throwable $t)
 #
 if (!($result instanceof GDT_Response))
 {
-	$result = GDT_Response::make()->addField($result);
+	$result = GDT_Response::make()->addFields($result);
 }
 #
 # Render the response.
