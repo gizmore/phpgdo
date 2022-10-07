@@ -187,4 +187,18 @@ final class Arrays
 		return $array;
 	}
 
+	/**
+	 * Return the same array but filter elelements by gdt names.
+	 */
+	public static function allExcept(array $array, string...$gdtNames): array
+	{
+		foreach ($array as $key => $gdt)
+		{
+			if (in_array($gdt->getName(), $gdtNames, true))
+			{
+				unset($array[$key]);
+			}
+		}
+		return $array;
+	}
 }

@@ -19,17 +19,11 @@ final class GDT_PackedIP extends GDT_Char
 	##############
 	### String ###
 	##############
-	public int $min = 3;
-	public int $max = 45;
-	public int $encoding = GDT_PackedIP::ASCII;
-	public bool $caseSensitive = true;
-	public string $pattern = "/^[.:0-9a-f]{3,45}$/D";
-	public string $icon = 'url';
-	
 	protected function __construct()
 	{
 		parent::__construct();
 		$this->binary()->length(16);
+		$this->icon = 'url';
 	}
 	
 	############
@@ -37,12 +31,17 @@ final class GDT_PackedIP extends GDT_Char
 	############
 	public static function ip2packed(string $ip) : string
 	{
-		return inet_pton($ip);
+		return (string)inet_pton($ip);
 	}
 	
 	public static function packed2ip(string $packed) : string
 	{
 		return implode('', unpack("XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX", $packed));
+	}
+	
+	public function inputToVar($input): string
+	{
+		return self::ip2packed($input);
 	}
 	
 	###############
