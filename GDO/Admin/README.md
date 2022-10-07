@@ -1,2 +1,3 @@
-# gdo6-admin
-Administration module for gdo6.
+# phpgdo-admin
+
+Administration module for GDOv7.
