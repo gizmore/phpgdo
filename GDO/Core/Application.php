@@ -95,29 +95,16 @@ class Application extends GDT
 	/**
 	 * Set the HTTP response code.
 	 */
-	public static function setResponseCode(int $code) : void
+	public static function setResponseCode(int $code): void
 	{
-		if ($code !== 200)
+		if ($code > self::$RESPONSE_CODE)
 		{
-// 			if (self::$RESPONSE_CODE !== 200)
-// 			{
-				self::$RESPONSE_CODE = $code;
-// 			}
+			if (defined('GDO_CORE_STABLE'))
+			{
+				xdebug_break();
+			}
+			self::$RESPONSE_CODE = $code;
 		}
-// 		if ($code >= 400)
-// 		{
-// 			if (defined('GDO_CORE_STABLE'))
-// 			{
-// 				xdebug_break();
-// 			}
-// 		}
-// 		if ($code >= 500)
-// 		{
-// 			if (defined('GDO_CORE_STABLE'))
-// 			{
-// 				xdebug_break();
-// 			}
-// 		}
 	}
 
 	public static function isError() : bool

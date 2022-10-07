@@ -31,7 +31,7 @@ if (isset($field->completionHref))
 <?php endif; ?>
 <?php else : ?>
 <?php foreach ($field->initChoices() as $var => $choice) : ?>
-  <option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderOption() : $field->displayChoice($var)?></option>
+  <option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderOption() : $field->displayVar($var)?></option>
 <?php endforeach; ?>
 <?php endif; ?>
 </select>

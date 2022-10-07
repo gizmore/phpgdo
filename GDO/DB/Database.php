@@ -280,7 +280,6 @@ class Database
 	
 	/**
 	 * Extract name from gdo columns for hashmap.
-	 * @param GDT[] $gdoColumns
 	 * @return GDT[]
 	 */
 	private static function hashedColumns(GDO $gdo) : array
@@ -288,13 +287,19 @@ class Database
 		$columns = [];
 		foreach ($gdo->gdoColumns() as $gdt)
 		{
-			$columns[$gdt->getName()] = $gdt; # FIXME #->gdtTable($gdo);
+			if ($name = $gdt->getName())
+			{
+				$columns[$name] = $gdt;
+			}
+			else
+			{
+				$columns[] = $gdt;
+			}
 		}
 		return $columns;
 	}
 	
 	/**
-	 * @param string $classname
 	 * @return GDT[]
 	 */
 	public static function &columnsS(string $classname) : array

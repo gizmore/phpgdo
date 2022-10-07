@@ -591,7 +591,7 @@ class Cache
 	}
 
 }
-# config
+# config :(
 deff('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
 deff('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
 deff('GDO_CACHE_DEBUG', 0);

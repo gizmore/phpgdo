@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Net;
 
-use GDO\Core\GDT_Char;
+use GDO\Core\GDT_String;
 
 /**
  * Packed IP datatype for lots of IP data.
@@ -10,7 +10,7 @@ use GDO\Core\GDT_Char;
  * @version 7.0.1
  * @since 4.0.0
  */
-final class GDT_PackedIP extends GDT_Char
+final class GDT_PackedIP extends GDT_String
 {
 	public function defaultLabel() : self { return $this->label('ip'); }
 
@@ -22,7 +22,7 @@ final class GDT_PackedIP extends GDT_Char
 	protected function __construct()
 	{
 		parent::__construct();
-		$this->binary()->length(16);
+		$this->binary()->min(4)->max(16);
 		$this->icon = 'url';
 	}
 	
@@ -36,12 +36,17 @@ final class GDT_PackedIP extends GDT_Char
 	
 	public static function packed2ip(string $packed) : string
 	{
-		return implode('', unpack("XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX", $packed));
+		return inet_ntop($packed);
 	}
 	
 	public function inputToVar($input): string
 	{
 		return self::ip2packed($input);
+	}
+	
+	public function displayVar(string $var=null): string
+	{
+		return self::packed2ip($var);
 	}
 	
 	###############

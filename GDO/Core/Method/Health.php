@@ -9,6 +9,11 @@ use GDO\Core\Method;
  */
 final class Health extends Method
 {
+	public function getMethodTitle(): string
+	{
+		return t('health');
+	}
+	
 	public function execute()
 	{
 	}

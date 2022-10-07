@@ -222,4 +222,9 @@ class Result
 	    return $this->fetchAllValues();
 	}
 	
+	public function getDummy(): GDO
+	{
+		return $this->table->cache->getDummy();
+	}
+
 }

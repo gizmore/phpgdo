@@ -5,7 +5,7 @@ namespace GDO\Core\tpl;
 ?>
 <select name="<?=$f->name?>[<?=$field->name?>]">
  <option><?=t('sel_all')?></option>
-<?php foreach($field->getChoices() as $var => $value) : ?>
- <option value="<?=$var?>"><?=is_string($value)?html($value):$value->renderOption()?></option>
+<?php foreach($field->initChoices() as $var => $value) : ?>
+ <option value="<?=$var?>"><?=is_string($value)?$field->displayVar($var):$value->renderOption()?></option>
 <?php endforeach; ?>
 </select>

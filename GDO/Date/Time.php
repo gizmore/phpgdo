@@ -125,12 +125,11 @@ final class Time
 	/**
 	 * Get a datetime object from a timestamp.
 	 * @param number $time
-	 * @return \DateTime
 	 */
-	public static function getDateTime($time=0)
+	public static function getDateTime($time=0): \DateTime
 	{
 	    $time = $time <= 0 ? Application::$MICROTIME : (float)$time;
-	    return DateTime::createFromFormat('U.u', sprintf('%.03f', $time), self::$UTC);
+	    return DateTime::createFromFormat('U.u', sprintf('%.06f', $time), self::$UTC);
 	}
 	
 	public static function getDateWithoutTime($time=null) : string

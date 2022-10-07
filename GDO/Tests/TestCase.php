@@ -253,6 +253,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ##############
 	# ## Asserts ###
 	# ##############
+	protected function assertNoCrash(string $message)
+	{
+		assertLessThan(500, Application::$RESPONSE_CODE, $message);
+	}
+	
 	protected function assertOK(string $message)
 	{
 		assertLessThan(400, Application::$RESPONSE_CODE, $message);
@@ -270,10 +275,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function assertCode(int $code, string $message)
 	{
-// 		if (Application::isError())
-// 		{
-// 			CLI::flushTopResponse();
-// 		}
+		if (Application::isError())
+		{
+			CLI::flushTopResponse();
+		}
 		assertEquals($code, Application::$RESPONSE_CODE, $message);
 	}
 

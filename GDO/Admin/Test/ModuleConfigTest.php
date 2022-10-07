@@ -13,6 +13,7 @@ use GDO\Core\ModuleLoader;
 use function PHPUnit\Framework\assertEmpty;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use GDO\Session\Module_Session;
 
 /**
  * Test method form for module admin configuration.
@@ -55,6 +56,11 @@ final class ModuleConfigTest extends TestCase
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
     	
+    	if ($module instanceof Module_Session)
+    	{
+    		xdebug_break();
+    	}
+    	
     	# Check
     	$errors = [];
     	foreach ($module->getConfigCache() as $gdt)
@@ -74,6 +80,7 @@ final class ModuleConfigTest extends TestCase
     			TextStyle::italic(implode(' - ', $errors)),
     		);
     	}
+    	
     	assertEmpty($errors, "Test if {$module->getName()} can save config.");
     	$html = $result->renderMode(GDT::RENDER_WEBSITE);
     	$this->assert200("Test if {$module->getName()} can save it's configuration.");

@@ -110,7 +110,7 @@ class Config
 		deff('GDO_SALT', Random::randomKey(16));
 		deff('GDO_DB_ENABLED', true);
 		deff('GDO_DB_HOST', 'localhost');
-		deff('GDO_DB_PORT',  3306);
+		deff('GDO_DB_PORT', 3306);
 		deff('GDO_DB_USER', '');
 		deff('GDO_DB_PASS', '');
 		deff('GDO_DB_NAME', '');
@@ -169,6 +169,7 @@ class Config
 			GDT_Enum::make('server')->notNull()->enumValues('none', 'apache2.2', 'apache2.4', 'nginx', 'other')->initialValue(GDO_SERVER),
 			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN),
 			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT),
+			GDT_Port::make('port')->notNull()->initialValue(GDO_PORT),
 			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL),
 			GDT_Checkbox::make('force_ssl')->initial('0'),
 			# Files

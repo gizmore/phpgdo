@@ -221,6 +221,7 @@ function hdr(string $header, bool $replace = true)
 	if ($app->isUnitTests())
 	{
 		echo $header . PHP_EOL;
+		@ob_flush();
 		flush();
 	}
 	elseif ($app->isWebserver())

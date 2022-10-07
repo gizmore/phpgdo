@@ -68,6 +68,7 @@ final class CLI
     	$response = GDT_Page::instance()->topResponse();
     	# Render
     	echo $response->renderCLI();
+    	@ob_flush();
     	# Clear
     	self::clearFlash($response);
     }

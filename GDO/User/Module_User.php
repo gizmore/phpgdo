@@ -9,7 +9,6 @@ use GDO\UI\GDT_Link;
 use GDO\Net\GDT_Url;
 use GDO\UI\GDT_Color;
 use GDO\Date\GDT_Timestamp;
-use GDO\UI\GDT_Divider;
 
 /**
  * GDO_User related types and plugins.
@@ -77,7 +76,6 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			GDT_Checkbox::make('hook_sidebar')->initial('1'),
-// 			GDT_Checkbox::make('about_me')->initial('1'),
 			GDT_Checkbox::make('fav_color')->initial('1'),
 			GDT_Checkbox::make('acl_relations')->initial('1'),
 			GDT_Checkbox::make('acl_levels')->initial('0'),
@@ -85,7 +83,6 @@ final class Module_User extends GDO_Module
 		];
 	}
 	public function cfgSidebar() : bool { return $this->getConfigValue('hook_sidebar'); }
-// 	public function cfgAboutMe() : bool { return $this->getConfigValue('about_me'); }
 	public function cfgFavColor() : bool { return $this->getConfigValue('fav_color'); }
 	public function cfgACLRelations() : bool { return $this->getConfigValue('acl_relations'); }
 	public function cfgACLLevels() : bool { return $this->getConfigValue('acl_levels'); }
@@ -102,11 +99,9 @@ final class Module_User extends GDO_Module
 		return [
 			'color' => [GDT_ACLRelation::GUESTS, 0, null],
 			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
-// 			'about_me' => [GDT_ACLRelation::MEMBERS, 0, null],
 			'last_activity' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
 			'probably_malicious' => [GDT_ACLRelation::HIDDEN, 0, null],
-// 			'profile_visibility' => [GDT_ACLRelation::GUESTS, 0, null],
 		];
 	}
 	
@@ -137,6 +132,7 @@ final class Module_User extends GDO_Module
 		return [
 			$this->setting('last_activity'),
 			$this->setting('_acl_last_activity_relation'),
+			$this->setting('last_url'),
 		];
 	}
 	

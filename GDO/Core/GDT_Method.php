@@ -57,15 +57,7 @@ class GDT_Method extends GDT
 			}
 
 			$method = $this->method->inputs($inputs);
-			
-			if ($this->withPermissionCheck)
-			{
-				$this->result = $method->exec();
-			}
-			else
-			{
-				$this->result = $method->executeWithInit();
-			}
+			$this->result = $method->executeWithInputs($inputs, $this->withPermissionCheck);
 		}
 		return $this->result;
 	}

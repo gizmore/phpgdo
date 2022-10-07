@@ -5,7 +5,7 @@ use GDO\Core\GDT_String;
 
 final class GDT_DomainName extends GDT_String
 {
-	public string $pattern = "/[\\.a-z]+\\.[a-z]+/D";
+	public string $pattern = "/[\\.a-z]+\\.[a-z]+$/iD";
 	
 	public $tldonly = false;
 	public function tldonly($tldonly=true)
@@ -34,4 +34,17 @@ final class GDT_DomainName extends GDT_String
 		return true;
 	}
 	
+	public function plugVars(): array
+	{
+		if ($this->tldonly)
+		{
+			return [
+				[$this->getName() => 'wechall.net'],
+			];
+		}
+		return [
+			[$this->getName() => 'www.wechall.net'],
+		];
+	}
+
 }

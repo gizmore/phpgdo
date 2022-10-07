@@ -31,7 +31,7 @@ return [
 'lbl_search_criteria' => 'Suche: %s','order_by' => 'Bestellen nach','order_dir' => 'Richtung','asc' => 'Aufsteigend','desc' => 'Absteigend',# User
 'users' => 'Benutzer','permissions' => 'Berechtigungen','msg_sort_success' => 'Erfolgreich sortiert?!',### Config ###
 'cfg_asset_revision' => 'Asset-Revision / Client-Cache-Poisoning','cfg_system_user' => 'Systembenutzer','cfg_show_impressum' => 'Impressum in der Fußzeile anzeigen?','cfg_show_privacy' => 'Datenschutzinformationen in der Fußzeile anzeigen?','cfg_allow_guests' => 'GDOv7-Gastbenutzersystem aktivieren?','cfg_siteshort_title_append' => 'Kurznamen der Website in Seitentitel einfügen?','cfg_mail_403' => 'E-Mail bei 403-Fehlern senden?','cfg_mail_404' => 'E-Mail bei 404-Fehlern senden?','cfg_directory_indexing' => 'Verzeichnisindizierung aktivieren?','cfg_module_assets' => 'Darf Assets aus dem GDO-Quellverzeichnis geladen werden?','cfg_dotfiles' => 'Erlauben, versteckte Punktdateien zu lesen und zu indizieren?',### 403 ###
-'mail_title_403' => '%s: 403 (%s)','mail_body_403' => 'Lieber S,
+'mail_title_403' => '%s: 403 (%s)','mail_body_403' => 'Liebe(r) %s,
 
 Auf %s wurde eine verbotene URL besucht.
 URL: %s
@@ -41,7 +41,7 @@ Mit freundlichen Grüße,
 Das %2$s-System',
 
 ### 404 ###
-'mail_title_404' => '%s: 404 (%s)','mail_body_404' => 'Lieber S,
+'mail_title_404' => '%s: 404 (%s)','mail_body_404' => 'Liebe(r) %s,
 
 Es wurde eine unbekannte URL auf %s besucht.
 URL: %s
@@ -54,4 +54,10 @@ Das %2$s-System',
 	
 	'info_privacy_related_module' => '%s ist installiert, ein Modul das Ihre Daten betrifft.',
 	't_privacy_core_toggles' => 'Kern-Konfiguration',
+	'_acl_last_activity_relation' => '`Letzte Aktivität` sichtbar für',
+	'_acl_timezone_relation' => '`Zeitzone` sichtbar für',
+	'privacy_settings' => 'Datenschutzeinstellungen',
+	'health' => 'Zustand',
+	'mt_core_forcessl' => 'Verschlüsselung erzwingen',
+	'err_nothing_happened' => 'Es ist kein Fehler aufgetreten, es gab aber merkwürdigerweise keine Änderung.',
 ];

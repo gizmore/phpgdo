@@ -12,7 +12,7 @@ use GDO\User\GDO_Permission;
  * Add a new permission.
  * 
  * @author gizmore
- * @version 6.10.1
+ * @version 7.0.1
  * @since 6.1.0
  */
 class PermissionAdd extends MethodForm

@@ -16,13 +16,16 @@ trait WithClickHandler
 	 */
 	public $onclick;
 	
+	public array $args;
+	
 	/**
 	 * Set the click handler.
 	 * @param callable $onclick
 	 */
-	public function onclick($onclick) : self
+	public function onclick($onclick, ...$args) : self
 	{
 		$this->onclick = $onclick;
+		$this->args = $args;
 		return $this;
 	}
 	
@@ -33,6 +36,7 @@ trait WithClickHandler
 	{
 		if (isset($this->onclick))
 		{
+			$args = array_merge($this->args, $args);
 			return call_user_func($this->onclick, ...$args);
 		}
 	}

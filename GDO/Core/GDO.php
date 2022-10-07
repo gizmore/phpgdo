@@ -58,7 +58,7 @@ abstract class GDO extends GDT
 	/**
 	 * Get the table GDO for this class.
 	 */
-	public static function table() : self
+	public static function table() : ?self
 	{
 		return Database::tableS(static::class);
 	}
@@ -166,13 +166,13 @@ abstract class GDO extends GDT
 		{
 			return "NULL";
 		}
-		elseif (is_numeric($var))
-		{
-			return "$var";
-		}
 		elseif (is_bool($var))
 		{
 			return $var ? '1' : '0';
+		}
+		elseif (is_numeric($var))
+		{
+			return $var;
 		}
 	}
 	
@@ -275,6 +275,8 @@ abstract class GDO extends GDT
 	 * Either true for all,
 	 * false for none,
 	 * or an assoc array with field mappings.
+	 * One of the very few mixed fields.
+	 * 
 	 * @var mixed $dirty
 	 */
 	private $dirty = false;
@@ -545,13 +547,13 @@ abstract class GDO extends GDT
 	public function gdoPrimaryKeyColumnNames() : array
 	{
 		$table = self::table();
-		$cache = isset($table->cache) ? $table->cache : null;
-		
-		if ($cache && isset($cache->pkNames))
+// 		$cache = isset($table->cache) ? $table->cache : null;
+		$cache = $table->cache;
+// 		if ($cache && isset($cache->pkNames))
+		if (isset($cache->pkNames))
 		{
 			return $cache->pkNames;
 		}
-		
 		$names = [];
 		foreach ($this->gdoColumnsCache() as $column)
 		{
@@ -567,15 +569,19 @@ abstract class GDO extends GDT
 		
 		if (empty($names))
 		{
-			$names = array_map(function(GDT $gdt){
-				return $gdt->getName();
-			}, $this->gdoColumnsCache());
+			foreach ($this->gdoColumnsCache() as $gdt)
+			{
+				if ($name = $gdt->getName())
+				{
+					$names[] = $name;
+				}
+			}
 		}
 		
-		if ($cache)
-		{
+// 		if ($cache)
+// 		{
 			$cache->pkNames = $names;
-		}
+// 		}
 		
 		return $names;
 	}
@@ -1252,11 +1258,15 @@ abstract class GDO extends GDT
 		$id = '';
 		foreach ($this->gdoPrimaryKeyColumnNames() as $name)
 		{
-// 			if ($name)
+			if ($name === null)
 			{
+				xdebug_break();
+			}
+// 			if ($name)
+// 			{
 				$id2 = $this->gdoVar($name);
 				$id = $id ? "{$id}:{$id2}" : $id2;
-			}
+// 			}
 		}
 // 		if ($id)
 // 		{

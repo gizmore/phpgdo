@@ -5,7 +5,7 @@ use GDO\Core\GDT_ObjectSelect;
 use GDO\User\GDO_User;
 
 /**
- * Language select.
+ * Language select. Defaults to only allow supported.
  * 
  * @author gizmore
  * @version 7.0.1

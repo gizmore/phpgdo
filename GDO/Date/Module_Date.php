@@ -61,7 +61,7 @@ final class Module_Date extends GDO_Module
     {
     	return [
     		GDT_Timezone::make('timezone')->initial('1')->notNull(),
-    		GDT_Duration::make('activity_accuracy')->initial('10m')->min(60)->max(Time::ONE_DAY * 2)->notNull()->label('activity_accuracy'),
+    		GDT_Duration::make('activity_accuracy')->initial('10m')->min(60)->max(Time::ONE_DAY * 2)->notNull()->label('activity_accuracy')->noacl(),
     	];
     }
     
@@ -84,7 +84,6 @@ final class Module_Date extends GDO_Module
     		$this->setting('timezone'),
     		$this->setting('_acl_timezone_relation'),
     		$this->setting('activity_accuracy'),
-    		$this->setting('_acl_activity_accuracy_relation'),
     	];
     }
     

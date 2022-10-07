@@ -108,8 +108,8 @@ class GDT_Timestamp extends GDT_DBField
 	public function minAge(int $duration) : self { return $this->minTimestamp(Application::$TIME - $duration); }
 	public function maxAge(int $duration) : self { return $this->maxTimestamp(Application::$TIME + $duration); }
 	
-	public $minDate;
-	public $maxDate;
+	public string $minDate;
+	public string $maxDate;
 	
 	public function minTimestamp($minTimestamp)
 	{
@@ -178,18 +178,18 @@ class GDT_Timestamp extends GDT_DBField
 		}
 		
 		/** @var $value \DateTime **/
-		if ($this->minDate !== null)
+		if (isset($this->minDate))
 		{
-		    if ($value->diff($this->minDate) < 0)
+			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->minDate))) < 0)
 		    {
     		    return $this->error('err_min_date', [
-    		        Time::displayDate($this->minDate, $this->getDateFormat())]);
+    		        Time::displayDate($this->minDate, $this->format)]);
 		    }
 		}
 		
-		if ($this->maxDate !== null)
+		if (isset($this->maxDate))
 		{
-		    if ($value->diff($this->maxDate) > 0)
+			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->maxDate))) > 0)
 		    {
 		        return $this->error('err_max_date', [
 		            Time::displayDate($this->maxDate, $this->format)]);
@@ -277,8 +277,8 @@ class GDT_Timestamp extends GDT_DBField
 		return array_merge(parent::configJSON(), [
 			'dateStartView' => $this->dateStartView,
 			'format' => $this->format,
-			'minDate' => $this->minDate,
-			'maxDate' => $this->maxDate,
+			'minDate' => isset($this->minDate) ? $this->minDate : null,
+			'minDate' => isset($this->maxDate) ? $this->maxDate : null,
 		    'millis' => $this->millis,
 		]);
 	}

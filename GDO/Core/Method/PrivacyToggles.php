@@ -2,7 +2,6 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\Method;
-use GDO\Core\GDT_Hook;
 use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Tuple;
 use GDO\Core\ModuleLoader;
@@ -11,8 +10,6 @@ use GDO\UI\GDT_Accordeon;
 use GDO\UI\GDT_Card;
 use GDO\Language\Trans;
 use GDO\Install\Config;
-use function Amp\Promise\rethrow;
-use GDO\Install\Module_Install;
 
 /**
  * Show information about privacy related settings.
@@ -22,6 +19,11 @@ use GDO\Install\Module_Install;
  */
 final class PrivacyToggles extends Method
 {
+	public function getMethodTitle(): string
+	{
+		return t('privacy_settings');
+	}
+	
 	public function execute()
 	{
 		ModuleLoader::instance()->loadModuleFS('Install')->onLoadLanguage();
@@ -84,8 +86,8 @@ final class PrivacyToggles extends Method
 						$gdt->tooltip($cfgkey);
 					}
 				}
+				$card->addFields($gdt);
 			}
-			$card->addFields($gdt);
 		}
 		return $acc->addFields($card);
 	}

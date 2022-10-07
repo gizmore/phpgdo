@@ -56,7 +56,7 @@ final class GDO_UserSetting extends GDO
 		return self::usersWithQuery($moduleName, $key, $var, $op)->exec();
 	}
 	
-	public static function usersWithQuery(string $moduleName, string $key, string $var, string $op='=') : Query
+	public static function usersWithQuery(string $moduleName, string $key, ?string $var, string $op='=') : Query
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$gdt = $module->setting($key);
@@ -73,6 +73,7 @@ final class GDO_UserSetting extends GDO
 		}
 		else
 		{
+			$op = $var === null ? 'IS' : $op;
 			$var = quote($var);
 			$query->where("uset_var $op $var");
 		}

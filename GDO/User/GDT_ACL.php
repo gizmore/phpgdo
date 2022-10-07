@@ -33,6 +33,7 @@ final class GDT_ACL extends GDT
 	public GDT_ACLRelation $aclRelation;
 	public GDT_Permission $aclPermission;
 	
+// 	public function isTestable(): bool { return false; }
 	public function isACLCapable() : bool { return $this->aclcapable; }
 	public bool $aclcapable = false;
 	public function noacl() : self { return $this->aclcapable(false); }

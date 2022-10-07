@@ -231,6 +231,7 @@ return [
 	'favorite_color' => 'Favorite Color',
 	'website' => 'Website',
 	'information' => 'Information',
+	'health' => 'Health',
 	
 	# CBX
 	'sel_all' => 'Select All',
@@ -348,5 +349,12 @@ The %2$s System',
 	# Privacy
 	'info_privacy_related_module' => '%s is a privacy related module that is currently enabled.',
 	't_privacy_core_toggles' => 'Core Configuration',
+	
+	'_acl_last_activity_relation' => '`Letzte Aktivität` sichtbar für',
+	'privacy_settings' => 'Privacy Settings',
+	'health' => 'Health',
+	'mt_core_forcessl' => 'Force Encryption',
+
+	'err_nothing_happened' => 'No error occured, but unexpectedly nothing happened.',
 	
 ];

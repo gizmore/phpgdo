@@ -33,7 +33,7 @@ final class CLITest extends TestCase
 	
 	public function testNestedConcat()
 	{
-		$result = $this->cli("cli.concat --glue=,, ,a,b,(cli.concat c,d),e");
+		$result = $this->cli("cli.concat --glue=,, ,a,b,$(cli.concat c,d),e");
 		assertEquals("a, b, cd, e", $result, 'Test if nested concat with a weird ,, glue works.');
 	}
 	

@@ -2,6 +2,7 @@
 namespace GDO\Tests\Test;
 
 use GDO\Core\Application;
+use GDO\Core\GDO;
 use GDO\Core\GDT;
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
@@ -9,6 +10,7 @@ use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertTrue;
 use GDO\CLI\CLI;
+use GDO\Core\GDT_Response;
 
 /**
  * Test all GDOv7 methods with plugvar fuzzing.
@@ -20,7 +22,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 
 	public function testAllMethods(): void
 	{
-		$this->automatedMethods();
+		$this->doAllMethods();
 	}
 	
 	protected function getTestName(): string
@@ -30,20 +32,12 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
-// 		if ($mt->method instanceof \GDO\LinkUUp\Method\AddCoworker)
-// 		{
-// 			xdebug_break();
-// 		}
-		
 		$method = $mt->method;
 		$mt->runAs($mt->method->plugUser());
-		$result = $mt->execute();
-		CLI::flushTopResponse();
-		
-		assertLessThan(500, Application::$RESPONSE_CODE,
-			"Test if trivial method {$this->mome($method)} does not crash.");
-		assertInstanceOf(GDT::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT.");
-		assertTrue($this->renderResult($result), "Test if method response renders all outputs without crash.");
+		$result = $mt->execute(null, false);
+		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
+		assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
+		assertTrue(!!$this->renderResult($result), "Test if method response renders all outputs without crash.");
 	}
 
 	/**
@@ -59,6 +53,14 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		$response->renderMode(GDT::RENDER_GTK);
 		$response->renderMode(GDT::RENDER_WEBSITE);
 		return true;
+	}
+	
+	protected function runGDTTest(GDT $gdt): void
+	{
+	}
+	
+	protected function runGDOTest(GDO $gdo): void
+	{
 	}
 	
 }

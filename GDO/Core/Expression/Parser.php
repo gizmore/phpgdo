@@ -104,17 +104,17 @@ final class Parser
 					}
 					break;
 					
-				case self::SPACE:
-					# space means next arg, if not yet positional
-					$arg .= $c;
-					if (!$current->hasPositionalInput())
-					{
-						if (str_starts_with($arg, '--'))
-						{
-							$this->addArg($current, $arg);
-						}
-					}
-					break;
+// 				case self::SPACE:
+// 					# space means next arg, if not yet positional
+// 					$arg .= $c;
+// 					if (!$current->hasPositionalInput())
+// 					{
+// 						if (str_starts_with($arg, '--'))
+// 						{
+// 							$this->addArg($current, $arg);
+// 						}
+// 					}
+// 					break;
 
 				default:
 					$arg .= $c;
@@ -140,7 +140,7 @@ final class Parser
 				throw new GDO_Error('err_positional_after_named_parameter', [html($arg)]);
 			}
 			$arg = substr($arg, 2);
-			$arg = Strings::substrTo($arg, self::SPACE, $arg);
+// 			$arg = Strings::substrTo($arg, self::ARG_SEPARATOR, $arg);
 			$key = Strings::substrTo($arg, self::VAL_SEPERATOR, $arg);
 			$input = Strings::substrFrom($arg, self::VAL_SEPERATOR, '1');
 		}
@@ -149,7 +149,7 @@ final class Parser
 			$key = null;
 			$input = $arg;
 		}
-		$arg = '';
+		$arg = ''; # do not use EMPTY_STRING!, it's a ref
 		$expression->addInput($key, $input);
 	}
 	
@@ -212,7 +212,7 @@ final class Parser
 					$parsed .= $c2;
 					break;
 				
-				case self::CMD_END:
+				case self::CMD_ENDIN:
 					break 2;
 					
 				default:

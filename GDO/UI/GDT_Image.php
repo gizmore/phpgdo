@@ -5,7 +5,6 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\File\GDO_File;
 use GDO\Core\WithName;
-use GDO\Core\WithValue;
 
 /**
  * HTML Image element.
@@ -17,7 +16,6 @@ use GDO\Core\WithValue;
 class GDT_Image extends GDT
 {
 	use WithName;
-// 	use WithValue;
 	use WithPHPJQuery;
 	
 	const GIF = 'image/gif';

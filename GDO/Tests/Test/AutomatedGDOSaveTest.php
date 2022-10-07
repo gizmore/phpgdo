@@ -86,7 +86,15 @@ final class AutomatedGDOSaveTest extends TestCase
 			$this->assert200("Test if {$gdo->gdoClassName()} can be saved.");
 			if (!$success)
 			{
-				throw new GDO_Exception("Cannot save blank plugged GDO: " . get_class($gdo));
+				$errors = '';
+				foreach($gdo->gdoColumnsCache() as $gdt)
+				{
+					if ($gdt->hasError())
+					{
+						$errors .= $gdt->getName().':'. $gdt->renderError()."\n";
+					}
+				}
+				throw new GDO_Exception("Cannot save blank plugged GDO: " . get_class($gdo).". Reason: ".$errors);
 			}
 			$this->message("%4d.) %s: %s",
 				$this->gdoTested,

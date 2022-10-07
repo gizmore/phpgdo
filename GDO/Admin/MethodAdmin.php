@@ -44,11 +44,5 @@ trait MethodAdmin
 				GDT_Link::make()->href(href('Admin', 'PermissionAdd'))->text('add_permissions'),
 				GDT_Link::make()->href(href('Admin', 'PermissionGrant'))->text('link_grant_perm')));
 	}
-	
-// 	public function getMethodTitle() : string
-// 	{
-// 		$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
-// 		return t($key);
-// 	}
 
 }

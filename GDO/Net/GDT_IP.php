@@ -21,6 +21,16 @@ final class GDT_IP extends GDT_String
 	public static string $CURRENT = '::1'; # for connections like websocket too!
 	public static function current() : string { return self::$CURRENT; }
 	
+	public static function isIPv4(string $ip): bool
+	{
+		return strpos($ip, '.') !== false;
+	}
+	
+	public static function isIPv6(string $ip): bool
+	{
+		return strpos($ip, ':') !== false;
+	}
+	
 	/**
 	 * Get the IP netmask for a number of bits.
 	 * @example netmask(8) => 11111111 00000000 00000000 00000000 => 

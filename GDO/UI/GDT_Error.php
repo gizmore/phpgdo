@@ -43,7 +43,7 @@ final class GDT_Error extends GDT_Panel
 	public function exception(\Throwable $t) : self
 	{
 		$is_html = Application::$INSTANCE->isHTML();
-		$this->titleRaw("Exception!");
+		$this->title("exception");
 		$this->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
 		return $this;
 	}

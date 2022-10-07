@@ -24,7 +24,7 @@ class GDT_Enum extends GDT_Select
 		{
 			return array_combine($this->enumValues, $this->enumValues);
 		}
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public function enumIndex()

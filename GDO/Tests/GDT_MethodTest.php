@@ -35,7 +35,7 @@ final class GDT_MethodTest extends GDT_Method
     ############
     ### Exec ###
     ############
-    public function execute(string $button=null)
+    public function execute(string $button=null, bool $cliButton=true)
     {
     	$verb = GDT_Form::GET;
     	if ($button)
@@ -45,7 +45,7 @@ final class GDT_MethodTest extends GDT_Method
     	}
     	else
     	{
-    		$this->clibutton();
+    		$this->clibutton($cliButton);
     	}
     	Application::$INSTANCE->verb($verb);
     	return parent::execute();

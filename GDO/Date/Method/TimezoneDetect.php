@@ -2,7 +2,6 @@
 namespace GDO\Date\Method;
 
 use GDO\Core\GDT_String;
-use GDO\Form\GDT_Validator;
 use GDO\Form\GDT_Form;
 use GDO\Date\GDO_Timezone;
 use GDO\Form\MethodForm;

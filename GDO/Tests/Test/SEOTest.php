@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Tests\Test;
 
+use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Tests\AutomatedTestCase;
@@ -21,7 +23,7 @@ final class SEOTest extends AutomatedTestCase
 	
 	public function testAllMethods(): void
 	{
-		$this->automatedMethods();
+		$this->doAllMethods();
 	}
 	
 	protected function runMethodTest(GDT_MethodTest $mt): void
@@ -84,6 +86,13 @@ final class SEOTest extends AutomatedTestCase
 // 			);
 // 		}
 	}
-
 	
+	protected function runGDTTest(GDT $gdt): void
+	{
+	}
+	
+	protected function runGDOTest(GDO $gdo): void
+	{
+	}
+
 }

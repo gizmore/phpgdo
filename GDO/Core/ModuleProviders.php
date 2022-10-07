@@ -182,6 +182,7 @@ final class ModuleProviders
 'Instagram' => 'phpgdo-instagram',
 'Invite' => 'phpgdo-invite',
 'IP2Country' => 'phpgdo-ip2country',
+'ITMB' => '',
 'Javascript' => 'phpgdo-javascript',
 'JPGraph' => 'phpgdo-jpgraph',
 'JQuery' => 'phpgdo-jquery',
@@ -236,7 +237,7 @@ final class ModuleProviders
 
 	public static $DEPENDENCIES = [
 		### BEGIN_DEPENDENCIES ###
-'AboutMe' => ['Register'],
+'AboutMe' => ['Account'],
 'Account' => ['Login'],
 'ActivationAlert' => [],
 'Address' => ['Mail', 'Country'],
@@ -303,11 +304,12 @@ final class ModuleProviders
 'Install' => [],
 'Invite' => [],
 'IP2Country' => ['Country'],
+'ITMB' => ['Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Contact', 'FontAtkinson', 'Markdown', 'Mibbit', 'News', 'Perf', 'PM', 'Register', 'Recovery'],
 'Javascript' => [],
 'JPGraph' => [],
 'JQuery' => [],
 'JQueryAutocomplete' => ['JQuery'],
-'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Category', 'Contact', 'Classic', 'CountryCoordinates', 'CountryRestrictions', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'Markdown', 'News', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'YouTube'],
+'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Category', 'Contact', 'Classic', 'CountryCoordinates', 'CountryRestrictions', 'Cronjob', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'GTranslate', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'Markdown', 'News', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'YouTube'],
 'Language' => [],
 'Licenses' => [],
 'Links' => ['Votes', 'Tags', 'Cronjob'],
