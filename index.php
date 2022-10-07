@@ -62,8 +62,6 @@ Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
-$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 if (!module_enabled('core'))
 {
 	require 'index_install.php';
@@ -84,6 +82,8 @@ if (GDO_LOG_REQUEST)
 }
 // $loader->initModules();
 // $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###

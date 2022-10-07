@@ -1,8 +1,8 @@
 <?php
 namespace GDO\User;
 
-use GDO\Core\GDT_UInt;
 use GDO\Core\WithGDO;
+use GDO\UI\GDT_Badge;
 
 /**
  * User level field.
@@ -16,20 +16,18 @@ use GDO\Core\WithGDO;
  * @version 7.0.1
  * @since 6.0.2
  */
-final class GDT_Level extends GDT_UInt
+final class GDT_Level extends GDT_Badge
 {
 	use WithGDO;
 	
-	public function defaultLabel() : self { return $this->label('level'); }
+	public function defaultLabel() : self { return $this->label('user_level'); }
 	
 	public string $icon = 'level';
-	public ?string $var = '0';
-	public ?string $initial = '0';
 	public bool $notNull = true;
 	
 	public function isSearchable() : bool { return false; }
 	
-	public function renderHTML() : string
+	public function getVar()
 	{
 		if (isset($this->gdo))
 		{
@@ -41,7 +39,11 @@ final class GDT_Level extends GDT_UInt
 				}
 			}
 		}
-	    return $this->getVar();
+		return parent::getVar();
 	}
+	
+// 	public function renderHTML() : string
+// 	{
+// 	}
 	
 }

@@ -54,6 +54,7 @@ final class GDT_IconUTF8
         'credits' => '¢',
         'cut' => '✂',
         'delete' => '✖',
+    	'diamond' => '❖',
     	'done' => '✔',
     	'done_all' => '✔',
     	'download' => '⇩',

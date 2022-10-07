@@ -18,6 +18,7 @@ class GDT_Badge extends GDT_UInt
 	use WithText;
 	
 	public bool $writeable = false;
+	public ?string $var = '0';
 	public ?string $initial = '0';
 	
 	##############

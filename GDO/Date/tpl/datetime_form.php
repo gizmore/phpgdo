@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Date\tpl\form;
+namespace GDO\Date\tpl;
 use GDO\Date\GDT_DateTime;
 /** @var $field GDT_DateTime **/
 ?>
