@@ -64,6 +64,7 @@ Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
 $loader->initModuleVars();
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 if (!module_enabled('core'))
 {
 	require 'index_install.php';
@@ -235,8 +236,6 @@ else
 	}
 }
 
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
-#
 # Remember ajax request option.
 #
 $ajax = false;
