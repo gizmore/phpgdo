@@ -3,11 +3,10 @@ namespace GDO\Form;
 
 use GDO\Core\GDT_Template;
 use GDO\UI\GDT_Button;
-use GDO\Core\WithValue;
 use GDO\Core\WithInput;
 
 /**
- * An input submit button.
+ * An input submit button is a button that can render submits inside forms.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -16,9 +15,8 @@ use GDO\Core\WithInput;
 class GDT_Submit extends GDT_Button
 {
 	use WithInput;
-	use WithValue;
-	use WithFormAttributes;
 	use WithClickHandler;
+	use WithFormAttributes;
 	
 	public function getDefaultName() : ?string
 	{
@@ -27,7 +25,8 @@ class GDT_Submit extends GDT_Button
 
 	public function renderForm() : string
 	{
-		return GDT_Template::php('Form', 'submit_form.php', ['field' => $this]);
+		return GDT_Template::php('Form', 'submit_form.php', [
+			'field' => $this]);
 	}
 	
 	/**
@@ -35,7 +34,7 @@ class GDT_Submit extends GDT_Button
 	 */
 	public function htmlValue() : string
 	{
-		return sprintf(' value="%s"', $this->renderLabel());
+		return ' value="'.$this->renderLabelText().'"';
 	}
 	
 	public function plugVars() : array

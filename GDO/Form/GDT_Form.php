@@ -17,7 +17,6 @@ use GDO\Table\GDT_Order;
 use GDO\Core\WithGDO;
 use GDO\UI\WithPHPJQuery;
 use GDO\UI\Color;
-use GDO\Captcha\GDT_Captcha;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
@@ -233,26 +232,26 @@ final class GDT_Form extends GDT
 // 		return $this->removeField($this->getField($key));
 // 	}
 
-	/**
-	 * Create default elements.
-	 * 
-	 * @param bool $submit
-	 */
-	protected function addFormButtons(bool $captcha=false, bool $csrf=true, bool $submit=true) : void
-	{
-		if ($captcha)
-		{
-			$this->addField(GDT_Captcha::make());
-		}
-		if ($csrf)
-		{
-			$this->addField(GDT_AntiCSRF::make());
-		}
-		if ($submit)
-		{
-			$this->actions()->addField(GDT_Captcha::make());
-		}
-	}
+// 	/**
+// 	 * Create default elements.
+// 	 * 
+// 	 * @param bool $submit
+// 	 */
+// 	protected function addFormButtons(bool $captcha=false, bool $csrf=true, bool $submit=true) : void
+// 	{
+// 		if ($captcha)
+// 		{
+// 			$this->addField(GDT_Captcha::make());
+// 		}
+// 		if ($csrf)
+// 		{
+// 			$this->addField(GDT_AntiCSRF::make());
+// 		}
+// 		if ($submit)
+// 		{
+// 			$this->actions()->addField(GDT_Captcha::make());
+// 		}
+// 	}
 	
 	
 	###############

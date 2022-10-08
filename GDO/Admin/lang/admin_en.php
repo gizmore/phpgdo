@@ -70,5 +70,5 @@ return [
 ################################################################
 'list_admin_viewpermission' => '%s Users got this permission',
 'perm_add' => 'Add Permission',
-	
+'msg_user_deleted' => 'The user %s has been marked as deleted.',
 ];

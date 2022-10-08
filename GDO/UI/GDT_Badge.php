@@ -29,6 +29,11 @@ class GDT_Badge extends GDT_UInt
 		return GDT_Template::php('UI', 'badge_html.php', ['field' => $this]);
 	}
 	
+// 	public function renderCell(): string
+// 	{
+// 		GDT_Template::php('UI', 'badge_html.php', ['field' => $this]);
+// 	}
+	
 	public function renderCard() : string
 	{
 		return $this->displayCard("{$this->renderText()}&nbsp;<i class=\"gdt-badge\">{$this->var}</i>");

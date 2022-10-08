@@ -69,4 +69,6 @@ return [
 'mt_admin_clearcache' => 'Cache löschen',
 ################################################################
 'list_admin_viewpermission' => '%s Nutzer haben diese Berechtigung',
+'perm_add' => 'Neue Berechtigung',
+'msg_user_deleted' => 'Der Benutzer %s wurde als gelöscht markiert.',
 ];

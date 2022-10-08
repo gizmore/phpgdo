@@ -69,4 +69,6 @@ return [
 'mt_admin_clearcache' => 'Elimina il buffer',
 ################################################################
 'list_admin_viewpermission' => '%s utenti hanno questa autorizzazione',
+'perm_add' => 'Aggiungi autorizzazione',
+'msg_user_deleted' => 'L\'utente %s è stato contrassegnato come eliminato.',
 ];

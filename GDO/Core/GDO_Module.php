@@ -53,7 +53,7 @@ class GDO_Module extends GDO
 	{
 		return !$this->isSiteModule();
 	}
-	
+
 	public function isCoreModule(): bool
 	{
 		return false;
@@ -97,11 +97,10 @@ class GDO_Module extends GDO
 	{
 		return GDT::EMPTY_ARRAY;
 	}
-	
-	
+
 	/**
 	 * Get GDT/ETC from config for current user that are privacy related.
-	 * 
+	 *
 	 * @return GDT[]
 	 */
 	public function getPrivacyRelatedFields(): array
@@ -128,10 +127,10 @@ class GDO_Module extends GDO
 	public function thirdPartyFolders(): array
 	{
 		return [
-			'/bower_components/',
-			'/node_modules/',
-			'/vendor/',
-			'/3p/',
+			'bower_components/',
+			'node_modules/',
+			'vendor/',
+			'3p/',
 		];
 	}
 
@@ -207,12 +206,12 @@ class GDO_Module extends GDO
 	{
 	}
 
-	public function initOnce() : void
+	public function initOnce(): void
 	{
-		if (!$this->inited)
+		if ( !$this->inited)
 		{
-// 			$this->onLoadLanguage();
-			if (!Application::$INSTANCE->isInstall())
+			// $this->onLoadLanguage();
+			if ( !Application::$INSTANCE->isInstall())
 			{
 				$this->onModuleInit();
 				if (CLI::isCLI())
@@ -223,22 +222,18 @@ class GDO_Module extends GDO
 			}
 		}
 	}
-	
+
 	public function onModuleInit()
 	{
 	}
 
-	public function onModuleInitCLI() : void
+	public function onModuleInitCLI(): void
 	{
 	}
 
-	public function onInitSidebar() : void
+	public function onInitSidebar(): void
 	{
 	}
-
-// 	public function onLoad(): void
-// 	{
-// 	}
 
 	public function onLoadLanguage(): void
 	{
@@ -294,22 +289,21 @@ class GDO_Module extends GDO
 		return ModuleLoader::instance()->getModule(self::getNameS(), true);
 	}
 
-// 	/**
-// 	 * Modulename cache.
-// 	 * @TODO: delete?
-// 	 * @var string[string]
-// 	 */
-// 	private static array $nameCache = [];
-
+	// /**
+	// * Modulename cache.
+	// * @TODO: delete?
+	// * @var string[string]
+	// */
+	// private static array $nameCache = [];
 	public static function getNameS()
 	{
 		return strtolower(substr(self::gdoShortNameS(), 7));
-// 		if (isset(self::$nameCache[static::class]))
-// 		{
-// 			return self::$nameCache[static::class];
-// 		}
-// 		self::$nameCache[static::class] = $cache = strtolower(substr(self::gdoShortNameS(), 7));
-// 		return $cache;
+		// if (isset(self::$nameCache[static::class]))
+		// {
+		// return self::$nameCache[static::class];
+		// }
+		// self::$nameCache[static::class] = $cache = strtolower(substr(self::gdoShortNameS(), 7));
+		// return $cache;
 	}
 
 	# #############
@@ -339,13 +333,12 @@ class GDO_Module extends GDO
 		}
 		return true;
 	}
-	
-	public function enabled(bool $enabled) : self
+
+	public function enabled(bool $enabled): self
 	{
 		$this->saveValue('module_enabled', $enabled);
 		return $this;
 	}
-	
 
 	public function isInstalled(): bool
 	{
@@ -415,9 +408,9 @@ class GDO_Module extends GDO
 		return !$this->isPersisted();
 	}
 
-	############
-	### Path ###
-	############
+	# ###########
+	# ## Path ###
+	# ###########
 	/**
 	 * Filesystem path for a file within this module.
 	 */
@@ -491,7 +484,7 @@ class GDO_Module extends GDO
 		{
 			case GDT::RENDER_JSON:
 				return GDT_JSON::make()->value(...$tVars);
-// 			case GDT::RENDER_WEBSITE:
+			// case GDT::RENDER_WEBSITE:
 			default:
 				return $this->templatePHP($file, $tVars);
 		}
@@ -508,12 +501,11 @@ class GDO_Module extends GDO
 		parent::__wakeup();
 	}
 
-// 	public function inited(bool $inited = true): self
-// 	{
-// 		$this->inited = true;
-// 		return $this;
-// 	}
-
+	// public function inited(bool $inited = true): self
+	// {
+	// $this->inited = true;
+	// return $this;
+	// }
 	public function loadLanguage($path): self
 	{
 		Trans::addPath($this->filePath($path));
@@ -764,9 +756,7 @@ class GDO_Module extends GDO
 				'uset_name' => $key,
 				'uset_var' => $var,
 			];
-			$entry = ($gdt instanceof GDT_Text) ?
-				GDO_UserSettingBlob::blank($data) :
-				GDO_UserSetting::blank($data);
+			$entry = ($gdt instanceof GDT_Text) ? GDO_UserSettingBlob::blank($data) : GDO_UserSetting::blank($data);
 			$entry->replace();
 		}
 
@@ -830,6 +820,18 @@ class GDO_Module extends GDO
 		return $this->userConfigCache;
 	}
 
+	public function hasUserSettings(): bool
+	{
+		foreach ($this->getSettingsCache() as $gdt)
+		{
+			if ( !$gdt->isHidden())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function &getUserConfigCacheConfigs(): array
 	{
 		if ( !isset($this->userConfigCache))
@@ -887,8 +889,8 @@ class GDO_Module extends GDO
 		}
 
 		throw new GDO_Error('err_unknown_user_setting', [
-				$this->renderName(),
-				html($key)
+			$this->renderName(),
+			html($key)
 		]);
 	}
 
@@ -954,15 +956,6 @@ class GDO_Module extends GDO
 	{
 		$name = $gdt->getName();
 		$this->userConfigCache[$name] = $gdt;
-		
-// 		if ($gdt->getName() === 'about_me')
-// 		{
-// 			Debug::breakpoint();
-// 		}
-// 		foreach ($gdt->gdoColumnNames() as $key)
-// 		{
-// 			$this->userConfigCache[$key] = $gdt;
-// 		}
 		$this->userConfigCacheContainers[$name] = $gdt;
 		# If it's a saved field, build the ACL container.
 		if ($gdt->isACLCapable())
@@ -1014,7 +1007,7 @@ class GDO_Module extends GDO
 		{
 			$settings = self::loadUserSettingsB($user);
 			$user->tempSet('gdo_setting', $settings);
-// 			$user->recache();
+			// $user->recache();
 		}
 		return $settings;
 	}
@@ -1148,8 +1141,10 @@ class GDO_Module extends GDO
 		}, $methods);
 	}
 
+// 	public array $methods;
+	
 	/**
-	 *
+	 * Get all methods for this module.
 	 * @return Method[]
 	 */
 	public function getMethods(bool $withPermission = true): array
@@ -1202,7 +1197,8 @@ class GDO_Module extends GDO
 	public function cfgMinAppend(): string
 	{
 		$mode = self::config_var('Javascript', 'minify_js', 'no');
-		return $mode === 'no' ? '' : '.min';
+		return $mode === 'no' ?
+			GDT::EMPTY_STRING : '.min';
 	}
 
 	/**
@@ -1249,9 +1245,8 @@ class GDO_Module extends GDO
 	# ############
 	protected function errorSystemDependency(string $key, array $args = null): bool
 	{
-		$msg = t($key, $args);
 		return $this->error('err_system_dependency', [
-			$msg,
+			t($key, $args),
 		]);
 	}
 

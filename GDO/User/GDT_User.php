@@ -54,6 +54,10 @@ class GDT_User extends GDT_Object
 	### Deleted ###
 	###############
 	public bool $deleted = false;
+	
+	/**
+	 * Allow deleted users to be selected.
+	 */
 	public function deleted(bool $deleted=true) : self
 	{
 		$this->deleted = $deleted;

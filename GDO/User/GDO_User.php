@@ -4,6 +4,7 @@ namespace GDO\User;
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_DeletedBy;
+use GDO\Core\GDT_Hook;
 use GDO\Crypto\GDT_PasswordHash;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
@@ -71,7 +72,6 @@ final class GDO_User extends GDO
 			GDT_Username::make('user_name')->unique(),
 			GDT_Username::make('user_guest_name')->unique()->notNull(false)->label('user_guest_name'),
 			GDT_Level::make('user_level'),
-// 			GDT_EditedAt::make('user_last_activity')->initial(Time::getDate()),
 			GDT_DeletedAt::make('user_deleted'),
 			GDT_DeletedBy::make('user_deletor'),
 			GDT_PasswordHash::make('user_password'),
@@ -469,11 +469,8 @@ final class GDO_User extends GDO
 	
 	public function saveSettingVar(string $moduleName, string $key, ?string $var) : self
 	{
-// 		if (module_enabled($moduleName))
-// 		{
-			$module = ModuleLoader::instance()->getModule($moduleName);
-			$module->saveUserSetting($this, $key, $var);
-// 		}
+		$module = ModuleLoader::instance()->getModule($moduleName);
+		$module->saveUserSetting($this, $key, $var);
 		return $this;
 	}
 	
@@ -481,7 +478,6 @@ final class GDO_User extends GDO
 	{
 		$now = $this->settingVar($moduleName, $key);
 		return $this->saveSettingVar($moduleName, $key, $now + $by);
-		
 	}
 	
 	/**
@@ -561,6 +557,14 @@ final class GDO_User extends GDO
 	public function getCountryISO() : ?string
 	{
 		return $this->settingVar('Country', 'country_of_living');
+	}
+	
+	#############
+	### Hooks ###
+	#############
+	public function gdoAfterDelete(GDO $gdo): void
+	{
+		GDT_Hook::callWithIPC('UserDeleted', $gdo, $this->isPersisted());
 	}
 	
 }

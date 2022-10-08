@@ -559,31 +559,39 @@ abstract class Method #extends GDT
 	##################
 	### Statistics ###
 	##################
+	/**
+	 * Store last url if they was reading the website.
+	 */
 	private function storeLastURL() : void
 	{
+		$app = Application::$INSTANCE;
 		$user = GDO_User::current();
-		if ($user->isPersisted())
+		if ( ($app->verb === GDT_Form::GET) &&
+			($app->isWebserver())  &&
+			($app->isHTML()) &&
+			(!$app->isAjax()) &&
+			($user->isPersisted()) )
 		{
-			# Without session we do not care over referrer.
-			if (Application::$INSTANCE->isWebserver())
-			{
-				$user->saveSettingVar('User', 'last_url', $_SERVER['REQUEST_URI']);
-			}
+			$user->saveSettingVar('User', 'last_url', $_SERVER['REQUEST_URI']);
 		}
 	}
 
 	/**
 	 * Update user last activity timestamp, for persisted users/guests.
+	 * Basically only store POST requests to non-ajax methods. And exceptions.
 	 */
 	private function storeLastActivity() : void
 	{
-		$user = GDO_User::current();
-		if ($user->isPersisted())
+		if (Application::$INSTANCE->verb === GDT_Form::POST)
 		{
-			$time = Application::$TIME;
-			$time -= $time % $user->settingValue('Date', 'activity_accuracy');
-			$date = Time::getDate($time);
-			$user->saveSettingVar('User', 'last_activity', $date);
+			$user = GDO_User::current();
+			if ($user->isPersisted())
+			{
+				$time = Application::$TIME;
+				$time -= $time % $user->settingValue('Date', 'activity_accuracy');
+				$date = Time::getDate($time);
+				$user->saveSettingVar('User', 'last_activity', $date);
+			}
 		}
 	}
 

@@ -18,6 +18,7 @@ use GDO\Form\WithAction;
 use GDO\Core\WithName;
 use GDO\Core\WithInput;
 use GDO\UI\WithPHPJQuery;
+use GDO\Core\Application;
 
 /**
  * A filterable, searchable, orderable, paginatable, sortable collection of GDT[] in headers.
@@ -70,7 +71,7 @@ class GDT_Table extends GDT
 	protected function __construct()
 	{
 		parent::__construct();
-		$this->action = @urldecode(@$_SERVER['REQUEST_URI']);
+		$this->action = urldecode($_SERVER['REQUEST_URI']);
 	}
 
 	# #############
@@ -78,7 +79,7 @@ class GDT_Table extends GDT
 	# #############
 	public GDT $footer;
 
-	public function footer(GDT $footer)
+	public function footer(GDT $footer): self
 	{
 		$this->footer = $footer;
 		return $this;
@@ -89,46 +90,35 @@ class GDT_Table extends GDT
 	# #################
 	public bool $hideEmpty = false;
 
-	public function hideEmpty(bool $hideEmpty = true)
+	public function hideEmpty(bool $hideEmpty = true): self
 	{
 		$this->hideEmpty = $hideEmpty;
 		return $this;
 	}
 
-// 	# #################
-// 	# ## Fetch Into ###
-// 	# #################
-// 	public bool $fetchInto = true;
-
-// 	public function fetchInto(bool $fetchInto)
-// 	{
-// 		$this->fetchInto = $fetchInto;
-// 		if ($fetchInto && (!$this->fetchAs))
-// 		{
-// 			$this->fetchAs($this->gdo);
-// 		}
-// 		return $this;
-// 	}
-
 	# #####################
 	# ## Drag&Drop sort ###
 	# #####################
-	public $sorted;
+	private string $sortableURL;
 
-	private $sortableURL;
-
-	public function sorted($sortableURL = null)
+	public function sorted(string $sortableURL = null)
 	{
-		$this->sorted = $sortableURL !== null;
-		$this->sortableURL = $sortableURL;
+		if ($sortableURL)
+		{
+			$this->sortableURL = $sortableURL;
+		}
+		else
+		{
+			unset($this->sortableURL);
+		}
 		return $this;
 	}
 
 	# ################
 	# ## Searching ###
 	# ################
-	public $searched;
-	public function searched($searched = true)
+	public bool $searched = false;
+	public function searched(bool $searched = true)
 	{
 		$this->searched = $searched;
 		return $this;
@@ -140,7 +130,7 @@ class GDT_Table extends GDT
 	public bool $filtered = false;
 	public GDT_Filter $filter;
 
-	public function filtered($filtered = true, GDT_Filter $filter = null)
+	public function filtered(bool $filtered = true, GDT_Filter $filter = null)
 	{
 		$this->filtered = $filtered;
 		unset($this->filter);
@@ -198,7 +188,6 @@ class GDT_Table extends GDT
 	# #################
 	# ## Pagination ###
 	# #################
-	/** @var $pagemnu GDT_PageMenu **/
 	public GDT_PageMenu $pagemenu;
 	
 	public function paginateDefault($href = null)
@@ -209,28 +198,34 @@ class GDT_Table extends GDT
 
 	public function paginated(bool $paginated = true, string $href = null, int $ipp = 0) : self
 	{
-		$ipp = $ipp < 1 ? Module_Table::instance()->cfgItemsPerPage() : $ipp;
+		unset($this->pagemenu);
 		if ($paginated)
 		{
+			$ipp = $ipp < 1 ? Module_Table::instance()->cfgItemsPerPage() : $ipp;
 			$href = $href === null ? $this->action : $href;
 			$this->pagemenu = $this->getPageMenu();
 			$this->pagemenu->href($href);
 			$this->pagemenu->ipp($ipp);
 			$this->pagemenu->page(1);
 		}
-		return $this->ipp($ipp);
-	}
-
-	# ###################
-	# ## ItemsPerPage ###
-	# ###################
-	public GDT_IPP $ipp;
-	
-	public function ipp(int $ipp) : self
-	{
-		$this->getPageMenu()->ipp($ipp);
 		return $this;
 	}
+	
+	public function isFirstPage(): bool
+	{
+		return isset($this->pagemenu) OR $this->pagemenu->getPage() === 1;
+	}
+
+// 	# ###################
+// 	# ## ItemsPerPage ###
+// 	# ###################
+// // 	public GDT_IPP $ipp;
+	
+// 	public function ipp(int $ipp) : self
+// 	{
+// 		$this->getPageMenu()->ipp($ipp);
+// 		return $this;
+// 	}
 
 	##############
 	### Result ###
@@ -432,11 +427,20 @@ class GDT_Table extends GDT
 		{
 			return GDT::EMPTY_STRING;
 		}
-		return GDT_Template::php('Table', 'table_html.php',
-		[
-			'field' => $this,
-			'form' => false,
-		]);
+		try
+		{
+			$mode = Application::$MODE;
+			Application::$MODE = GDT::RENDER_CELL;
+			return GDT_Template::php('Table', 'table_html.php',
+			[
+				'field' => $this,
+				'form' => false,
+			]);
+		}
+		finally
+		{
+			Application::$MODE = $mode;
+		}
 	}
 
 	public function renderForm() : string

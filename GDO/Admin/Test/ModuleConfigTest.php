@@ -13,7 +13,6 @@ use GDO\Core\ModuleLoader;
 use function PHPUnit\Framework\assertEmpty;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
-use GDO\Session\Module_Session;
 
 /**
  * Test method form for module admin configuration.

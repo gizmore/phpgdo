@@ -188,7 +188,7 @@ window.GDO.xhr = function(url, verb, data) {
 		method: verb||'GET',
 		headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify(data),
-	}).catch(function(){
+	}).catch(function(res){
 		debugger;
 		window.GDO.responseError();
 	});

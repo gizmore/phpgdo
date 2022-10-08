@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Admin\Method;
 
-use GDO\Core\GDT_Hook;
 use GDO\Admin\MethodAdmin;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
@@ -11,11 +10,9 @@ use GDO\User\GDO_User;
 use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDT_User;
-use GDO\UI\GDT_Redirect;
 
 /**
- * Edit a user.
- * Beside level, password and deletion, nothing much can be changed.
+ * Edit a user. Beside level, password and deletion, nothing much can be changed.
  * 
  * @TODO To edit user config and settings, a new module has to be written (or account settings need a god mode).
  * 
@@ -38,7 +35,7 @@ class UserEdit extends MethodForm
 	public function gdoParameters() : array
 	{
 	    return [
-	        GDT_User::make('user')->notNull(),
+	        GDT_User::make('user')->deleted()->notNull(),
 	    ];
 	}
 	
@@ -69,13 +66,12 @@ class UserEdit extends MethodForm
 		
 		# Add buttons
 		$form->actions()->addField(GDT_Submit::make());
-		$form->actions()->addField(GDT_DeleteButton::make()->onclick([$this, 'onDeleteUser()']));
+		$form->actions()->addField(GDT_DeleteButton::make()->onclick([$this, 'onDeleteUser']));
 		$form->addField(GDT_AntiCSRF::make());
 		
 		# Patch columns a bit
 		$form->getField('user_name')->noPattern(null);
 		$form->getField('user_password')->notNull(false)->initial('');
-// 		$form->getField('user_id')->writeable(false);
 	}
 	
 	public function formValidated(GDT_Form $form)
@@ -84,22 +80,21 @@ class UserEdit extends MethodForm
 		$values = $form->getFormVars();
 		$password = $values['user_password'];
 		unset($values['user_password']);
-		
 		$user->saveVars($values);
-// 		$form->withGDOValuesFrom($this->user);
 		if (!empty($password))
 		{
 			$user->saveVar('user_password', BCrypt::create($password)->__toString());
 			return $this->message('msg_user_password_is_now', [$password])->addField(parent::formValidated($form));
 		}
-		return parent::formValidated($form)->addField($this->renderPage());
+		return parent::formValidated($form);
 	}
 	
-	public function onDeleteUser(GDO_User $user)
+	public function onDeleteUser()
 	{
-		$user->delete();
-		GDT_Hook::callWithIPC("UserDeleted", $this->user);
-		return GDT_Redirect::make()->redirectMessage('msg_user_deleted', [$this->user->renderUserName()])->href('Admin', 'Users');
+		$user = $this->getUser();
+		$user->markDeleted();
+		$href = href('Admin', 'Users');
+		return $this->redirectMessage('msg_user_deleted', [$user->renderUserName()], $href);
 	}
 	
 }
