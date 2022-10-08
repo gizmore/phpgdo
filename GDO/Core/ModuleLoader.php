@@ -174,7 +174,6 @@ final class ModuleLoader
 	
 	public function initModules() : void
 	{
-		$this->initModuleVars();
 		# Register themes and load language
 		foreach ($this->getEnabledModules() as $module)
 		{

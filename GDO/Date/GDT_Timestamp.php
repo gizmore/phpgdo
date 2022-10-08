@@ -248,25 +248,29 @@ class GDT_Timestamp extends GDT_DBField
 		{
 			return null;
 		}
+		
+		# Not JS timestamp?
 		if (!is_numeric($input))
 		{
+			$input = str_replace('T', ' ', $input);
+			$input = str_replace('Z', '', $input);
 			if (preg_match('#^\\d{4}-\\d{2}-\\d{2}#', $input))
 			{
-				$input = Time::parseDateTimeDB($input);
+				$input = Time::parseDateTimeDB($input, null);
 			}
 			else
 			{
-				$input = str_replace('T', ' ', $input);
-				$input = str_replace('Z', '', $input);
 				$input = Time::parseDateTime($input);
 			}
 		}
 		else
 		{
+			# JS timestamp ms
 			$input /= 1000.0;
 			$input = Time::getDateTime($input);
 		}
-		return $input ? $input->format("Y-m-d H:i:s.v") : null;
+		
+		return $input ? Time::displayDateTime($input, 'db', '', Time::UTC) : null;
 	}
 	
 	##############

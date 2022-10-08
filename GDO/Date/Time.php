@@ -57,7 +57,7 @@ final class Time
 	### Timezone ###
 	################
 	/**
-	 * UTC DB ID. UTF-8 is always '1'.
+	 * UTC DB ID. UTC is always '1'.
 	 * @see GDO_Timezone
 	 */
 	const UTC = '1';
@@ -86,7 +86,7 @@ final class Time
 	public static function setTimezone(string $timezone)
 	{
 	    self::$TIMEZONE = $timezone;
-	    Module_Date::instance()->timezone = $timezone;
+// 	    Module_Date::instance()->timezone = $timezone;
 	}
 	
 	public static function setTimezoneGDO(GDO_Timezone $tz) : void
@@ -181,7 +181,7 @@ final class Time
 	{
 	    if ($d = self::parseDateTimeISO($iso, $date, $timezone, $format))
 	    {
-            $timestamp = $d->format('U.v');
+            $timestamp = $d->format('U.u');
 	        return (float)$timestamp;
 	    }
 	}
@@ -191,9 +191,12 @@ final class Time
 	    return self::parseDateTimeIso(Trans::$ISO, $date, $timezone, $format);
 	}
 	
-	public static function parseDateTimeDB($date)
+	/**
+	 * Parse a date from user input in user timezone, but Y-m-d format.
+	 */
+	public static function parseDateTimeDB(string $date, $timezone=self::UTC): ?\DateTime
 	{
-	    return self::parseDateTimeIso('en', $date, self::UTC, 'db');
+		return self::parseDateTimeIso('en', $date, $timezone, 'db');
 	}
 	
 	/**
@@ -215,7 +218,7 @@ final class Time
 	    
 	    $date = preg_replace('/[ap]m/iD', '', $date);
 // 	    $date = preg_replace('/ {2,}/D', ' ', $date);
-	    $date = trim($date, "\r\n\t ");
+	    $date = trim($date);
 	    
 	    $len = strlen($date);
 	    if ($len === 10)
@@ -238,7 +241,7 @@ final class Time
 	    # Parse
 	    if ($format === 'db')
 	    {
-	        $format = 'Y-m-d H:i:s.u';
+	        $format = 'Y-m-d H:i:s.v';
 	    }
 	    else
 	    {

@@ -106,19 +106,20 @@ class GDT_Button extends GDT
 		return GDT::EMPTY_STRING;
 	}
 	
-	public function gdoHREF()
+	public function gdoHREF(): ?string
 	{
 		if (isset($this->href))
 	    {
 	        return $this->href;
 	    }
-// 	    if (isset($this->gdo))
+	    if (isset($this->gdo))
 	    {
 	    	$method_name = 'href_' . $this->name;
 // 	    	if (method_exists($this->gdo, $method_name))
-	    	{
-				return call_user_func([$this->gdo, $method_name]);
-	    	}
+// 	    	{
+			return call_user_func([
+				$this->gdo, $method_name]);
+// 	    	}
 	    }
 	}
 	

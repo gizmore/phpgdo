@@ -25,6 +25,7 @@ use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\CLI\CLI;
 use GDO\Core\GDO_SEO_URL;
+use GDO\Core\Method\Stub;
 
 /**
  * @var $me Method
@@ -62,6 +63,7 @@ Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
+$loader->initModuleVars();
 if (!module_enabled('core'))
 {
 	require 'index_install.php';
@@ -80,7 +82,6 @@ if (GDO_LOG_REQUEST)
 {
 	Logger::logRequest();
 }
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 ###########
 ### ENV ###
 ###########
@@ -95,7 +96,6 @@ if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 #
 # Setup Language
 #
-$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 if (isset($_REQUEST['_lang']))
 {
 	$iso = (string)$_REQUEST['_lang'];
@@ -106,6 +106,7 @@ else
 	$iso = Module_Language::instance()->detectISO();
 }
 Trans::setISO($iso);
+$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 #
 # Remember GET/POST HTTP verb.
@@ -143,7 +144,8 @@ function gdoRouteMoMe(string $mo, string $me) : Method
 			if (!($method = $module->getMethod($me)))
 			{
 				$method = Error::make();
-				$_REQUEST['error'] = t('err_unknown_method', [$module->gdoHumanName(), html($$me)]);
+				$_REQUEST['error'] = t('err_unknown_method', [
+					$module->gdoHumanName(), html($me)]);
 			}
 		}
 		else
@@ -178,9 +180,12 @@ if ( (def('GDO_FORCE_SSL', false)) &&
 {
 	$me = ForceSSL::make();
 }
-// elseif ($me)
+// elseif (!($me instanceof Stub))
 // {
-// 	# already chosen
+// 	# Some initModule did set a $me
+// 	unset($_REQUEST['_mo']);
+// 	unset($_REQUEST['_me']);
+// 	unset($_REQUEST['_url']);
 // }
 elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
@@ -229,6 +234,8 @@ else
 		$me = FileNotFound::make();
 	}
 }
+
+$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 #
 # Remember ajax request option.
 #

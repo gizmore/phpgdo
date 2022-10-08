@@ -47,18 +47,18 @@ class GDT_DateTime extends GDT_Date
 // 	    return Time::displayDate($var);
 // 	}
 	
-	public function _inputToVar($input)
-	{
-	    $input = str_replace('T', ' ', $input); # remove RFC decorations
-	    $input = str_replace('Z', '', $input);
-	    if (!$d = Time::parseDateTime($input))
-	    {
-	    	$d = Time::parseDateTimeDB($input);
-	    }
-	    $d->setTimezone(Time::$UTC); # convert to UTC
-	    $var = $d->format('Y-m-d H:i:s.u'); # output UTC
-	    return $var;
-	}
+// 	public function _inputToVar($input)
+// 	{
+// 	    $input = str_replace('T', ' ', $input); # remove RFC decorations
+// 	    $input = str_replace('Z', '', $input);
+// 	    if (!$d = Time::parseDateTime($input))
+// 	    {
+// 	    	$d = Time::parseDateTimeDB($input);
+// 	    }
+// 	    $d->setTimezone(Time::$UTC); # convert to UTC
+// 	    $var = $d->format('Y-m-d H:i:s.v'); # output UTC
+// 	    return $var;
+// 	}
 
 	public function htmlClass() : string
 	{

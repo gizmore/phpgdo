@@ -36,11 +36,10 @@ final class TimezoneComplete extends MethodCompletion
 	
 	public function itemToCompletionJSON(GDO $item) : array
     {
-    	$tz = $item->renderName();
     	return [
 	    	'id' => $item->getID(),
-	    	'text' => $tz,
-	    	'display' => $tz . ' ' . $item->displayOffset(),
+    		'text' => $item->getName(),
+    		'display' => $item->renderName(),
     	];
     }
 
