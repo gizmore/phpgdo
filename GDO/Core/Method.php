@@ -659,13 +659,15 @@ abstract class Method #extends GDT
 	public function redirectMessage(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
 		$href = $href ? $href : GDT_Redirect::hrefBack();
-		return GDT_Redirect::make()->href($href)->redirectMessage($key, $args);
+		return GDT_Redirect::make()->href($href)
+			->redirectMessage($key, $args);
 	}
 	
 	public function redirectError(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
 		$href = $href ? $href : GDT_Redirect::hrefBack();
-		return GDT_Redirect::make()->href($href)->redirectError($key, $args);
+		return GDT_Redirect::make()->href($href)
+			->redirectError($key, $args);
 	}
 	
 	################

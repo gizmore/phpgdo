@@ -105,6 +105,7 @@ final class Module_User extends GDO_Module
 			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'last_activity' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
 			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
+			'level_spent' => [GDT_ACLRelation::HIDDEN, 0, null],
 			'probably_malicious' => [GDT_ACLRelation::HIDDEN, 0, null],
 		];
 	}
@@ -115,6 +116,7 @@ final class Module_User extends GDO_Module
 			GDT_Timestamp::make('last_activity'),
 			GDT_Url::make('last_url')->noacl()->hidden()->allowInternal(),
 			GDT_UInt::make('profile_views')->initial('0'),
+			GDT_Level::make('level_spent')->initial('0')->label('level_spent')->tooltip('tt_level_spent')->noacl(),
 			GDT_Checkbox::make('probably_malicious')->initial('0'),
 		];
 	}
