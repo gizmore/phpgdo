@@ -122,6 +122,7 @@ return [
 	
 	# Buttons
 	'btn_ok' => 'O.K.',
+	'btn_abort' => 'Abort',
 	'btn_add' => 'Add',
 	'btn_back' => 'Back',
 	'btn_clearcache' => 'Clear Cache',

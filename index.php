@@ -81,8 +81,6 @@ if (GDO_LOG_REQUEST)
 	Logger::logRequest();
 }
 $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
-$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
-define('GDO_CORE_STABLE', true); # all fine? @deprecated
 ###########
 ### ENV ###
 ###########
@@ -97,6 +95,7 @@ if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 #
 # Setup Language
 #
+$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 if (isset($_REQUEST['_lang']))
 {
 	$iso = (string)$_REQUEST['_lang'];
@@ -107,7 +106,7 @@ else
 	$iso = Module_Language::instance()->detectISO();
 }
 Trans::setISO($iso);
-Trans::inited();
+define('GDO_CORE_STABLE', true); # all fine? @deprecated
 #
 # Remember GET/POST HTTP verb.
 #
@@ -179,6 +178,10 @@ if ( (def('GDO_FORCE_SSL', false)) &&
 {
 	$me = ForceSSL::make();
 }
+// elseif ($me)
+// {
+// 	# already chosen
+// }
 elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
 	$me = gdoRouteMoMe((string)@$_REQUEST['_mo'], (string)@$_REQUEST['_me']);

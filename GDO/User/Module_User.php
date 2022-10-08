@@ -117,7 +117,7 @@ final class Module_User extends GDO_Module
 			GDT_Url::make('last_url')->noacl()->hidden()->allowInternal(),
 			GDT_UInt::make('profile_views')->initial('0'),
 			GDT_Level::make('level_spent')->initial('0')->label('level_spent')->tooltip('tt_level_spent')->noacl(),
-			GDT_Checkbox::make('probably_malicious')->initial('0'),
+			GDT_Checkbox::make('probably_malicious')->initial('0')->noacl()->hidden(),
 		];
 	}
 		

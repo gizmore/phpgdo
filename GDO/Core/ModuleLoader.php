@@ -254,10 +254,8 @@ final class ModuleLoader
 		# Loaded one?
 		if ($loaded)
 		{
-//    			$this->initModuleVars();
 			$order = 'module_priority ASC, module_name ASC';
 			$this->modules = $this->sortModules($order);
-// 			$this->initModules();
 		}
 		return $this->modules;
 	}

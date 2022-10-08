@@ -75,8 +75,16 @@ class GDT_Card extends GDT
 	    }
         return $this->renderHTML();
 	}
-	public function renderCard() : string { return $this->renderHTML(); }
-	public function renderHTML() : string { return GDT_Template::php('UI', 'card_html.php', ['field' => $this]); }
+	public function renderCard() : string
+	{
+		return $this->renderHTML();
+	}
+	
+	public function renderHTML() : string
+	{
+		return GDT_Template::php('UI', 'card_html.php', [
+			'field' => $this]);
+	}
 	
 	public function renderCLI() : string
 	{

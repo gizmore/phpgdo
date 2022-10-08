@@ -103,10 +103,11 @@ final class Trans
 	 */
 	public static function inited(bool $inited = true) : void
 	{
-// 	    if (!$inited)
-// 	    {
+	    if (!$inited)
+	    {
 	    	self::$CACHE = [];
-// 	    }
+	    	self::$PATHS = [];
+	    }
 		self::$INITED = $inited;
 	}
 	
@@ -213,7 +214,7 @@ final class Trans
 		}
 		
 		# Build lang map
-// 		if (self::$INITED)
+		if (self::$INITED)
 		{
 			foreach (self::$PATHS as $path)
 			{

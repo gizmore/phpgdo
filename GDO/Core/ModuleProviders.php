@@ -133,6 +133,7 @@ final class ModuleProviders
 'Aprilfools' => 'phpgdo-aprilfools',
 'Avatar' => 'phpgdo-avatar',
 'Backup' => 'phpgdo-backup',
+'Ban' => 'phpgdo-ban',
 'BasicAuth' => 'phpgdo-basic-auth',
 'Birthday' => 'phpgdo-birthday',
 'Bootstrap5' => 'phpgdo-bootstrap5',

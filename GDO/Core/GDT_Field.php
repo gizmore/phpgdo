@@ -155,7 +155,7 @@ abstract class GDT_Field extends GDT
 		return $this;
 	}
 	
-	public function noacl(bool $hidden=true) : self
+	public function noacl() : self
 	{
 		return $this->aclcapable(false);
 	}

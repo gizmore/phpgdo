@@ -26,6 +26,9 @@ final class GDT_Redirect extends GDT
 	
 	public static bool $REDIRECTED = false; # Only once
 	
+	/**
+	 * @param string $href
+	 */
 	public static function to(string $href) : void
 	{
 		$top = GDT_Page::instance()->topResponse();
