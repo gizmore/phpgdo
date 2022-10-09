@@ -164,17 +164,18 @@ abstract class MethodForm extends Method
 		if (isset($this->inputs))
 		{
 			$form->inputs($this->inputs);
-		}
-		
-		### Flow upload
-		if ($flowField = ((string)@$this->inputs['flowField']))
-		{
-			/** @var $formField GDT_File **/
-			if ($formField = $form->getField($flowField))
+
+			### Flow upload
+			if ($flowField = ($this->inputs['flowField']))
 			{
-				return $formField->flowUpload();
+				/** @var $formField GDT_File **/
+				if ($formField = $form->getField($flowField))
+				{
+					return $formField->flowUpload();
+				}
 			}
 		}
+		
 
 		### Execute action
 		foreach ($form->actions()->getAllFields() as $gdt)

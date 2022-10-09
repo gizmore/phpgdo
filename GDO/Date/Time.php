@@ -194,7 +194,7 @@ final class Time
 	/**
 	 * Parse a date from user input in user timezone, but Y-m-d format.
 	 */
-	public static function parseDateTimeDB(string $date, $timezone=self::UTC): ?\DateTime
+	public static function parseDateTimeDB(?string $date, $timezone=self::UTC): ?\DateTime
 	{
 		return self::parseDateTimeIso('en', $date, $timezone, 'db');
 	}
