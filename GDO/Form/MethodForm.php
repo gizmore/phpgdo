@@ -166,7 +166,7 @@ abstract class MethodForm extends Method
 			$form->inputs($this->inputs);
 
 			### Flow upload
-			if ($flowField = ($this->inputs['flowField']))
+			if ($flowField = (@$this->inputs['flowField']))
 			{
 				/** @var $formField GDT_File **/
 				if ($formField = $form->getField($flowField))
