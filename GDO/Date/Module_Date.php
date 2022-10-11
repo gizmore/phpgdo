@@ -149,12 +149,12 @@ final class Module_Date extends GDO_Module
     	Module_Date::instance()->saveUserSetting($user, 'timezone', $user->getTimezone());
     }
     
-    public function hookUserLoggedOut(GDO_User $user)
-    {
-    	if ($tz = GDO_Timezone::getById($this->timezone))
-    	{
-    		Timezone::make()->setTimezone($tz, false);
-    	}
-    }
+//     public function hookUserLoggedOut(GDO_User $user)
+//     {
+//     	if ($tz = GDO_Timezone::getById($this->timezone))
+//     	{
+//     		Timezone::make()->setTimezone($tz, false);
+//     	}
+//     }
     
 }
