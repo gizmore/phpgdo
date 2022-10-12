@@ -306,6 +306,11 @@ abstract class MethodTable extends Method
 		}
 	}
 	
+	public function getNumItems(): int
+	{
+		return $this->table->countItems();
+	}
+	
 	protected function setupTitle(GDT_Table $table)
 	{
 	    $table->titleRaw($this->getTableTitle());
