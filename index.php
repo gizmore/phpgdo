@@ -25,7 +25,6 @@ use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
 use GDO\CLI\CLI;
 use GDO\Core\GDO_SEO_URL;
-use GDO\Core\Method\Stub;
 
 /**
  * @var $me Method

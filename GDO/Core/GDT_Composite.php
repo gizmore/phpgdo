@@ -118,6 +118,18 @@ class GDT_Composite extends GDT_Container
 		return parent::getValue();
 	}
 	
+	#############
+	### Proxy ###
+	#############
+	public function writeable(bool $writeable): self
+	{
+		foreach ($this->getAllFields() as $gdt)
+		{
+			$gdt->writeable($writeable);
+		}
+		return $this;
+	}
+	
 	##########
 	### DB ###
 	##########

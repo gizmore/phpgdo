@@ -93,11 +93,11 @@ abstract class MethodForm extends Method
 		{
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
-// 			$this->applyInput();
+			$this->applyInput();
 			$form = $this->getForm();
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
-// 			$this->applyInput();
+			$this->applyInput();
 		}
 		return $this->parameterCache;
 	}
