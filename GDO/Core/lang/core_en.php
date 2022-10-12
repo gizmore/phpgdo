@@ -157,6 +157,7 @@ return [
 	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'exception' => 'Exception',
 	'reason' => 'Reason',
 	'code' => 'Code',
 	'front' => 'Front',

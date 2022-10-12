@@ -411,7 +411,7 @@ abstract class Method #extends GDT
 			
 			return $response;
 		}
-		catch (GDO_DBException $e)
+		catch (GDO_ErrorFatal $e)
 		{
 			if ($transactional)
 			{

@@ -591,7 +591,7 @@ class GDO_Module extends GDO
 		}
 		if ($throwError)
 		{
-			throw new GDO_Error('err_unknown_config', [
+			throw new GDO_ErrorFatal('err_unknown_config', [
 				$this->renderName(),
 				html($key)
 			]);
@@ -888,7 +888,7 @@ class GDO_Module extends GDO
 			}
 		}
 
-		throw new GDO_Error('err_unknown_user_setting', [
+		throw new GDO_ErrorFatal('err_unknown_user_setting', [
 			$this->renderName(),
 			html($key)
 		]);

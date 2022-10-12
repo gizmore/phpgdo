@@ -58,7 +58,7 @@ final class SeoProxy extends Method
 			$key = $args[$i++];
 			if (!isset($_REQUEST[$key]))
 			{
-				$_REQUEST[$key] = $args[$i];
+				$_REQUEST[$key] = @$args[$i];
 			}
 			$i++;
 		}
