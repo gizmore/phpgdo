@@ -206,13 +206,23 @@ abstract class AutomatedTestCase extends TestCase
 		return $success;
 	}
 	
-	protected function plugGDO(GDO $gdo)
+	protected function plugGDO(GDO $gdo): void
 	{
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
 			$gdt->inputs(); # clear input
 			$this->addPlugVars($gdt->gdo($gdo)->plugVars());
+		}
+	}
+	
+	protected function plugMethod(Method $method): void
+	{
+		$this->plugVariants = [];
+		foreach ($method->gdoParameterCache() as $gdt)
+		{
+			$gdt->inputs(); # clear input
+			$this->addPlugVars($gdt->plugVars());
 		}
 	}
 	

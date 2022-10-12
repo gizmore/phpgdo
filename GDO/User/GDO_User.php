@@ -17,6 +17,7 @@ use GDO\Language\Module_Language;
 use GDO\Core\GDT;
 use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Error;
+use GDO\UI\GDT_Card;
 
 /**
  * The holy user class.
@@ -422,13 +423,13 @@ final class GDO_User extends GDO
 		return $pp . t('guest') . $pp;
 	}
 	
-	public function getProfileLink(bool $nickname=true, bool $avatar=true, bool $level=true) : GDT_ProfileLink
+	public function getProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : GDT_ProfileLink
 	{
 		$link = GDT_ProfileLink::make()->gdo($this);
 		$link->nickname($nickname);
-		if ($avatar)
+		if ($avatar > 0)
 		{
-			$link->avatarUser($this);
+			$link->avatarUser($this, $avatar);
 		}
 		if ($level)
 		{
@@ -437,7 +438,7 @@ final class GDO_User extends GDO
 		return $link;
 	}
 
-	public function renderProfileLink(bool $nickname=true, bool $avatar=true, bool $level=true) : string
+	public function renderProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : string
 	{
 		$link = $this->getProfileLink($nickname, $avatar, $level);
 		return $link->render();
@@ -446,6 +447,21 @@ final class GDO_User extends GDO
 	public function getGender() : ?string
 	{
 		return $this->settingVar('User', 'gender');
+	}
+	
+	public function renderCard(): string
+	{
+		return $this->getCard()->render();
+	}
+	
+	############
+	### Card ###
+	############
+	public function getCard(): GDT_Card
+	{
+		$card = GDT_Card::make('user-card-'.$this->getID());
+		$card->titleRaw($this->renderProfileLink());
+		return $card;
 	}
 	
 	################

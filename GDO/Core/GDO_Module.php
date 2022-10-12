@@ -738,7 +738,8 @@ class GDO_Module extends GDO
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
 		$gdt = $this->getSetting($key);
-		if ($gdt->var === $var)
+		$old = $gdt->var;
+		if ($old === $var)
 		{
 			return $gdt;
 		}
@@ -759,6 +760,8 @@ class GDO_Module extends GDO
 			$entry = ($gdt instanceof GDT_Text) ? GDO_UserSettingBlob::blank($data) : GDO_UserSetting::blank($data);
 			$entry->replace();
 		}
+		
+		GDT_Hook::callHook('UserSettingChanged', $user, $key, $old, $var);
 
 		$user->tempUnset('gdo_setting');
 		$user->recache();
