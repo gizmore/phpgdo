@@ -7,9 +7,14 @@ All methods can be operated via CLI or chat systems.
 
 ## GDOv7 Installation: Requirements
 
+Clone the phpgdo core with
+
+    git clone --recursive https://github.com/gizmore/phpgdo
+    
+
 GDOv7 core requires:
 
- - PHP8
+ - PHP8 (in your PATH)
  - php-bcmath
  - php-fileinfo
  - php-mbstring

@@ -16,6 +16,7 @@ use GDO\User\GDT_ACL;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_HR;
 use GDO\User\Module_User;
+use GDO\DB\Query;
 
 /**
  * GDO base module class.
@@ -284,9 +285,14 @@ class GDO_Module extends GDO
 	# #############
 	# ## Static ###
 	# #############
+	public static function getByName(string $moduleName, bool $throw=true): ?self
+	{
+		return ModuleLoader::instance()->getModule($moduleName, $throw);
+	}
+	
 	public static function instance(): self
 	{
-		return ModuleLoader::instance()->getModule(self::getNameS(), true);
+		return self::getByName(self::getNameS());
 	}
 
 	// /**
@@ -1026,6 +1032,20 @@ class GDO_Module extends GDO
 		return $settings->union($blobs)
 			->exec()
 			->fetchAllArray2dPair();
+	}
+	
+	######################
+	### Settings Query ###
+	######################
+	/**
+	 * Join the settings table to a user field.
+	 */
+	public function joinSetting(Query $query, string $key, string $userFieldName='gdo_user.user_id'): Query
+	{
+		$setting = $this->getSetting($key);
+		$default = quote($setting->getInitial());
+		$jn = "usetjoin_{$key}";
+		return $query->select("IFNULL( ( SELECT uset_var FROM gdo_usersetting {$jn} WHERE {$jn}.uset_name='{$key}' AND {$jn}.uset_user={$userFieldName} ), {$default} ) AS {$key}");
 	}
 
 	# ##########

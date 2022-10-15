@@ -73,13 +73,14 @@ final class FileNotFound extends MethodPage
 		$url = $this->gdoParameterVar('url');
 		$mail = Mail::botMail();
 		$mail->setSubject(t('mail_title_404', [sitename(), html($url)]));
-		$tVars = [
+		$args = [
 			html($user->renderUserName()),
 			sitename(),
 			html($url),
 			GDO_User::current()->renderName(),
+			html(@$_SERVER['HTTP_REFERER']),
 		];
-		$mail->setBody(t('mail_body_404', $tVars));
+		$mail->setBody(t('mail_body_404', $args));
 		$mail->sendToUser($user);
 	}
 	

@@ -667,7 +667,7 @@ abstract class GDO extends GDT
 		}
 		elseif ($throw)
 		{
-			throw new GDO_Error('err_unknown_gdo_column', [$this->gdoClassName(), html($key)]);
+			throw new GDO_ErrorFatal('err_unknown_gdo_column', [$this->gdoClassName(), html($key)]);
 		}
 		return null;
 	}

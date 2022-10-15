@@ -8,6 +8,7 @@ use GDO\Core\GDT_Index;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Result;
 use GDO\DB\Query;
+use GDO\Core\GDO_Module;
 
 /**
  * Similiar to modulevars, this table is for user vars.
@@ -84,6 +85,27 @@ final class GDO_UserSetting extends GDO
 		}
 		
 		return $query->fetchTable(GDO_User::table());
+	}
+	
+	## 
+	
+	/**
+	 * Decorate a query with acl relation query.
+	 */
+	public static function whereSettingVisible(Query $query, string $moduleName, string $key, string $userFieldName='gdo_user.user_id'): Query
+	{
+		$user = GDO_User::current();
+		$module = GDO_Module::getByName($moduleName);
+		$settingACL = $module->getSettingACL($key);
+		$settingRel = $settingACL->aclRelation;
+		$settingRel->aclQuery($query, $user, $userFieldName);
+		return $query;
+// 		$validACLVars = [];
+// 		$defaultACL = 
+// 		$aclField = "_acl_{$key}_relation";
+// 		$query->select("(SELECT uset_var FROM gdo_usersetting WHERE uset_name={$aclField} AND uset_var IN ($validACLVars) ) ");
+// 		$query->where("( SELECT 1 FROM gdo_usersetting ust WHERE ust.uset_user={$userFieldName} AND _acl_favorite_religion_relation )")
+// 		return $query;
 	}
 	
 }

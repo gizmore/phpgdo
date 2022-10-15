@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Crypto;
 
+use GDO\Core\GDT;
+
 /**
  * Bcrypt hash form and database value
  * 
@@ -34,9 +36,9 @@ class GDT_PasswordHash extends GDT_Password
 	/**
 	 * Do not show previous input!
 	 */
-	public function htmlValue() : string
+	public function renderCell(): string
 	{
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 
 }

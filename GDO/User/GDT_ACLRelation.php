@@ -101,6 +101,11 @@ final class GDT_ACLRelation extends GDT_Enum
 		$idf = $this->identifier();
 		$condition = "$idf = 'acl_all'";
 
+		if ($user->isUser())
+		{
+			$condition .= " OR $idf = 'acl_guests'";
+		}
+		
 		# Members
 		if ($user->isMember())
 		{

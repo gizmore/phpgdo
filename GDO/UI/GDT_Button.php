@@ -121,6 +121,7 @@ class GDT_Button extends GDT
 				$this->gdo, $method_name]);
 // 	    	}
 	    }
+	    return null;
 	}
 	
 // 	public function gdoLabel()

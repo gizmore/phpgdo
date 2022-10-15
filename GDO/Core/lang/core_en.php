@@ -316,6 +316,7 @@ Dear %s,
 There has been visited an unknown URL on %s.
 URL: %s
 User: %s
+Referrer: %s
 	
 Kind Regards,
 The %2$s System',

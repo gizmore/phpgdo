@@ -71,3 +71,6 @@ Your playlists are ACL sharable.
  - TheClimber.net - A server with the highest altitude wins.
 
  - E-Penis.net domain zählt 4 punkte. server 3. projekte 10 punkte.
+
+ - A bot that analyzes Images with an AI and tags/labels them: This looks like a "....."
+ 
