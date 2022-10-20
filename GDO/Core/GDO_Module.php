@@ -526,6 +526,13 @@ class GDO_Module extends GDO
 	 * @var GDT[]
 	 */
 	private array $configCache;
+	
+	private array $configVarCache = [];
+	
+	public function addConfigVarForCache(string $key, ?string $var): void
+	{
+		$this->configVarCache[$key] = $var;
+	}
 
 	/**
 	 * Helper to get the config var for a module.
@@ -551,9 +558,14 @@ class GDO_Module extends GDO
 			$this->configCache = [];
 			foreach ($this->getConfig() as $gdt)
 			{
-				if ($gdt->hasName())
+				if ($name = $gdt->getName())
 				{
-					$this->configCache[$gdt->getName()] = $gdt; # ->gdo($this);
+					$this->configCache[$name] = $gdt;
+					if (isset($this->configVarCache[$name]))
+					{
+						$var = $this->configVarCache[$name];
+						$gdt->initial($var);
+					}
 				}
 			}
 		}

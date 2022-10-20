@@ -148,8 +148,8 @@ final class GDO_User extends GDO
 	public static function setCurrent(GDO_User $user) : self
 	{
 		self::$CURRENT = $user;
-		Time::setTimezone($user->getTimezone());
-		Trans::setISO($user->getLangISO());
+// 		Time::setTimezone($user->getTimezone());
+// 		Trans::setISO($user->getLangISO());
 		return $user;
 	}
 	

@@ -124,7 +124,7 @@ final class ModuleLoader
 	 * Get a module by ID.
 	 * @return GDO_Module
 	 */
-	public function getModuleByID(string $moduleID) : GDO_Module
+	public function getModuleByID(string $moduleID) : ?GDO_Module
 	{
 		foreach ($this->modules as $module)
 		{
@@ -133,6 +133,7 @@ final class ModuleLoader
 				return $module;
 			}
 		}
+		return null;
 	}
 	
 	#################
@@ -423,12 +424,12 @@ final class ModuleLoader
 	/**
 	 * Load module vars from database.
 	 */
-	public function initModuleVars(string $singleModuleName=null)
+	public function initModuleVars()
 	{
-	    foreach ($this->getEnabledModules() as $module)
-	    {
-	        $module->buildConfigCache();
-	    }
+// 	    foreach ($this->getEnabledModules() as $module)
+// 	    {
+// 	        $module->buildConfigCache();
+// 	    }
 	    
 		# Query all module vars
 		try
@@ -437,31 +438,36 @@ final class ModuleLoader
 		    {
 		    	if (!($data = Cache::fileGetSerialized('gdo_modulevars')))
 		    	{
-		    		$query = GDO_ModuleVar::table()->select('module_name, mv_name, mv_value')->joinObject('mv_module');
-		    		if ($singleModuleName)
-		    		{
-		    			$query->where('module_name='.quote($singleModuleName));
-		    		}
+		    		$query = GDO_ModuleVar::table()->select('mv_module, mv_name, mv_value');
+// 		    		if ($singleModuleName)
+// 		    		{
+// 		    			$query->where('module_name='.quote($singleModuleName));
+// 		    		}
 		    		$data = $query->exec()->fetchAllRows();
-		    		if (!$singleModuleName)
-		    		{
+// 		    		if (!$singleModuleName)
+// 		    		{
 		    			Cache::fileSetSerialized('gdo_modulevars', $data);
-		    		}
+// 		    		}
 		    	}
 		    	
         		# Assign them to the modules
 		    	foreach ($data as $row)
 		    	{
+// 		    		if ())
+// 		    		{
+		    			$module = $this->getModuleByID($row[0]);
+		    			$module->addConfigVarForCache($row[1], $row[2]);
+// 		    		}
 //         		while ($row = $result->fetchRow())
 //         		{
         		    /** @var $module \GDO\Core\GDO_Module **/
-        			if ($module = @$this->modules[strtolower($row[0])])
-        			{
-        				if ($gdt = $module->getConfigColumn($row[1], false))
-        				{
-        				    $gdt->initial($row[2]);
-        				}
-        			}
+//         			if ($module = @$this->modules[strtolower($row[0])])
+//         			{
+//         				if ($gdt = $module->getConfigColumn($row[1], false))
+//         				{
+//         				    $gdt->initial($row[2]);
+//         				}
+//         			}
         		}
 		    }
 		}
@@ -485,10 +491,10 @@ final class ModuleLoader
 		    Logger::logException($e);
 		}
 		
-		foreach ($this->getEnabledModules() as $module)
-		{
-    		$module->buildSettingsCache();
-		}
+// 		foreach ($this->getEnabledModules() as $module)
+// 		{
+//     		$module->buildSettingsCache();
+// 		}
 	}
 	
 	public function sortModules(string $orders) : array
