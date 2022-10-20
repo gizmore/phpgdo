@@ -21,8 +21,8 @@ window.GDO.autofocusForm = function() {
 };
 
 window.GDO.enterForm = function(form, event) {
-//	console.log('GDO.enterForm()', form, event);
-	debugger;
+	console.log('GDO.enterForm()', form, event);
+//	debugger;
 	if (event.keyCode === 13) {
 		let nn = event.srcElement.nodeName;
 		if ( (nn === 'INPUT') || (nn === 'SELECT') ) {

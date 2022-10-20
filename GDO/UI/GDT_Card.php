@@ -29,6 +29,7 @@ class GDT_Card extends GDT
 	use WithGDO;
 	use WithTitle;
 	use WithSubTitle;
+	use WithImage;
 	use WithAvatar;
 	use WithFields;
 	use WithActions;

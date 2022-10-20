@@ -66,6 +66,12 @@ function hrefDefault() : string
 	return href(GDO_MODULE, GDO_METHOD);
 }
 
+function profile_link(string $username, int $avatarSize=0)
+{
+	$user = GDO_User::getByName($username);
+	return $user->renderProfileLink(true, $avatarSize);
+}
+
 /**
  * Create a GDOv7 href.
  * SEO: Turn an url like " Forum, Board, &id=3 " into " /forum/board/id/3 ".

@@ -310,7 +310,7 @@ final class ModuleProviders
 'JPGraph' => [],
 'JQuery' => [],
 'JQueryAutocomplete' => ['JQuery'],
-'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Category', 'Contact', 'Classic', 'CountryCoordinates', 'CountryRestrictions', 'Cronjob', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'GTranslate', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'Markdown', 'News', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'YouTube'],
+'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Category', 'CKEditor', 'Contact', 'Classic', 'CountryCoordinates', 'CountryRestrictions', 'Cronjob', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'GTranslate', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'News', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'YouTube'],
 'Language' => [],
 'Licenses' => [],
 'Links' => ['Votes', 'Tags', 'Cronjob'],

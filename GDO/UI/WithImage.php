@@ -1,6 +1,8 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
+
 /**
  * Adds an image attribute to a GDT.
  * 
@@ -10,8 +12,8 @@ namespace GDO\UI;
  */
 trait WithImage
 {
-	public GDT_Image $image;
-	public function image(GDT_Image $image) : self
+	public GDT $image;
+	public function image(GDT $image) : self
 	{
 		$this->image = $image;
 		return $this;

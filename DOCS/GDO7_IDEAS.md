@@ -74,3 +74,6 @@ Your playlists are ACL sharable.
 
  - A bot that analyzes Images with an AI and tags/labels them: This looks like a "....."
  
+ - New IRC game: Tick-Du-Bist-Es: Man kann nur leute von anderen netzwerken ticken. wer es grad ist wird alle 15min gehilighted.
+ 
+ 
