@@ -258,11 +258,13 @@ class Database
 				return null;
 			}
 			
-			self::$COLUMNS[$classname] = self::hashedColumns($gdo);
-
 		    # Always init a cache item.
 			$gdo->initCache();
 // 			$gdo->setInited();
+
+			# Store hashed columns.
+			self::$COLUMNS[$classname] = self::hashedColumns($gdo);
+
 		}
 		return self::$TABLES[$classname];
 	}

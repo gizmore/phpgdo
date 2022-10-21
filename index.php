@@ -62,6 +62,7 @@ Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
+$loader->initModuleVars();
 if (!module_enabled('Core'))
 {
 	require 'index_install.php';
@@ -69,12 +70,11 @@ if (!module_enabled('Core'))
 if ($app->hasSession())
 {
 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
-}
-$loader->initModuleVars();
-if ($app->hasSession())
-{
 	$session = GDO_Session::instance();
 }
+// if ($app->hasSession())
+// {
+// }
 $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 $user = GDO_User::current();
 Logger::init($user->getName(), GDO_ERROR_LEVEL);

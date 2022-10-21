@@ -8,6 +8,10 @@ use GDO\Core\GDT_Index;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Result;
 use GDO\DB\Query;
+// use GDO\Core\GDT_CreatedAt;
+// use GDO\Core\GDT_CreatedBy;
+// use GDO\Core\GDT_EditedAt;
+// use GDO\Core\GDT_EditedBy;
 
 /**
  * Similiar to modulevars, this table is for user vars.
@@ -31,14 +35,18 @@ final class GDO_UserSetting extends GDO
 			GDT_User::make('uset_user')->primary(),
 			GDT_Name::make('uset_name')->caseS()->primary()->unique(false),
 			GDT_String::make('uset_var'),
-			GDT_ACLRelation::make('uset_relation')->notNull(),
+			GDT_ACLRelation::make('uset_relation'),
 			GDT_Level::make('uset_level'),
 			GDT_Permission::make('uset_permission'),
 			GDT_Index::make('uset_user_index')->indexColumns('uset_user,uset_name')->hash(),
+// 			GDT_CreatedAt::make('uset_created'),
+// 			GDT_CreatedBy::make('uset_creator'),
+// 			GDT_EditedAt::make('uset_edited'),
+// 			GDT_EditedBy::make('uset_editor'),
 		];
 	}
 	
-	public function getRelation(): string
+	public function getRelation(): ?string
 	{
 		return $this->gdoVar('uset_relation');
 	}
@@ -63,6 +71,15 @@ final class GDO_UserSetting extends GDO
 			$this->getLevel(),
 			$this->getPermission(),
 		];
+	}
+
+	public static function updateACL(GDO_User $user, string $key, string $aclField, ?string $var): self
+	{
+		return self::blank([
+			'uset_user' => $user->getID(),
+			'uset_name' => $key,
+			$aclField => $var,
+		])->softReplace();
 	}
 	
 	##############

@@ -158,7 +158,7 @@ final class CLI
         $_SERVER['HTTPS'] = 'off';
         $_SERVER['PHP_SELF'] = '/index.php';
         $_SERVER['REQUEST_URI'] = '/index.php';
-        $_SERVER['QUERY_STRING'] = 'mo=' . GDO_MODULE . '&me=' . GDO_METHOD;
+        $_SERVER['QUERY_STRING'] = '_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
         $_SERVER['REQUEST_METHOD'] = 'GET';
         # @TODO CLI::setServerVars() use output of locale command?
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
@@ -177,7 +177,8 @@ final class CLI
         $methods = $module->getMethods();
         
         $methods = array_filter($methods, function(Method $method) {
-            return (!$method->isAjax()) && $method->isCLI();
+        	return $method->isCLI();
+//         	return (!$method->isAjax()) && $method->isCLI();
         });
         
         $methods = array_map(function(Method $m) {

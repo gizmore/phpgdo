@@ -73,10 +73,11 @@ if (CLI::isInteractive() && $me)
 			$module = $ex->module;
 			$methods = $module->getMethods();
 			$methods = array_map(function(Method $m) {
-				return $m->gdoHumanName();
+				return $m->gdoShortName();
 			}, $methods);
 			$methods = Arrays::implodeHuman($methods);
-			echo t('msg_module_methods', [$module->gdoHumanName(), $methods]);
+			echo t('msg_module_methods', [
+				$module->gdoShortName(), $methods]);
 		}
 		catch (\GDO\Core\GDO_Error $ex)
 		{

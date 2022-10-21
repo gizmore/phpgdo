@@ -1049,17 +1049,17 @@ class GDO_Module extends GDO
 		# Each var results in 3 GDT ACL vars in config cache.
 		if ($mu->cfgACLRelations())
 		{
-			$this->userConfigCache[$relation->name] = $relation;
+// 			$this->userConfigCache[$relation->name] = $relation;
 			$cont->addField($relation);
 		}
 		if ($mu->cfgACLLevels())
 		{
-			$this->userConfigCache[$level->name] = $level;
+// 			$this->userConfigCache[$level->name] = $level;
 			$cont->addField($level);
 		}
 		if ($mu->cfgACLPermissions())
 		{
-			$this->userConfigCache[$permission->name] = $permission;
+// 			$this->userConfigCache[$permission->name] = $permission;
 			$cont->addField($permission);
 		}
 

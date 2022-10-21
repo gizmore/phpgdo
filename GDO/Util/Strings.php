@@ -57,6 +57,7 @@ final class Strings
 		if (false !== ($index = strrpos($s, $from)))
 		{
 			return substr($s, $index + strlen($from));
+// 			return substr($s, $index);
 		}
 		return $default;
 	}
