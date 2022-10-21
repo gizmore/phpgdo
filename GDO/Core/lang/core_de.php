@@ -16,7 +16,9 @@ return [
 	'is_dir' => 'Verzeichnis',	'is_file' => 'Datei',	
 # Messages
 	'msg_form_validated' => 'Ihr Formular wurde erfolgreich gesendet.',	'msg_cache_flushed' => 'Alle Caches wurden geleert. Z.B; rm -rf temp/, Cache::flush(), Interne Caches über Hooks.',
-	'msg_crud_created' => 'Ihr %s wurde erfolgreich erstellt.',	'msg_binary_detected' => 'Die Binärdatei %s wurde erkannt.',	'msg_module_methods' => '%s Methoden: %s.',	
+	'msg_crud_created' => 'Das Objekt des Typ\'s %s wurde erfolgreich erstellt.',
+	'msg_crud_updated' => 'Das Objekt des Typ\'s %s wurde erfolgreich aktualisiert.',
+	'msg_binary_detected' => 'Die Binärdatei %s wurde erkannt.',	'msg_module_methods' => '%s Methoden: %s.',	
 # Checkbox
 	'enum_yes' => 'Ja',	'enum_no' => 'Nein',	'enum_undetermined_yes_no' => 'unentschieden',	
 # Enum

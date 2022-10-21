@@ -86,6 +86,7 @@ abstract class MethodForm extends Method
 		{
 			unset($this->inputs);
 		}
+		unset($this->parameterCache); # :)
 	}
 	
 	public function &gdoParameterCache() : array
@@ -95,7 +96,7 @@ abstract class MethodForm extends Method
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
 			$this->applyInput();
-			$form = $this->getForm();
+			$form = $this->getForm(true);
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
 			$this->applyInput();
@@ -110,8 +111,12 @@ abstract class MethodForm extends Method
 		return t($key);
 	}
 	
-	public function getForm() : GDT_Form
+	public function getForm(bool $reset = false) : GDT_Form
 	{
+		if ($reset)
+		{
+			unset($this->form);
+		}
 		if (!isset($this->form))
 		{
 			$inputs = $this->getInputs();
@@ -119,10 +124,10 @@ abstract class MethodForm extends Method
 			$this->validated = false;
 			$this->pressedButton = null;
 			$this->form = GDT_Form::make($this->getFormName());
+			$this->createForm($this->form);
 			$this->form->inputs($inputs);
 			$this->form->actions()->inputs($inputs);
 			$this->form->titleRaw($this->getMethodTitle());
-			$this->createForm($this->form);
 		}
 		return $this->form;
 	}
@@ -169,7 +174,7 @@ abstract class MethodForm extends Method
 		$this->pressedButton = null;
 		
 		### Generate form
-		$form = $this->getForm();
+		$form = $this->getForm(true);
 		
 		if (isset($this->inputs))
 		{
@@ -191,7 +196,7 @@ abstract class MethodForm extends Method
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			/** @var $gdt GDT_Submit **/
-// 			$gdt->inputs($this->getInputs());
+			$gdt->inputs($this->getInputs());
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;

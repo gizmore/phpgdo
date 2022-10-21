@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Form;
 
-use GDO\Captcha\GDT_Captcha;
 use GDO\Core\GDO;
 use GDO\Core\GDO_PermissionException;
 use GDO\UI\GDT_DeleteButton;
@@ -70,16 +69,16 @@ abstract class MethodCrud extends MethodForm
 	public function canUpdate(GDO $gdo)
 	{
 	    $user = GDO_User::current();
+	    if ($user->isStaff())
+	    {
+	        return true;
+	    }
 	    if ($gdt = $gdo->gdoColumnOf(GDT_CreatedBy::class))
 	    {
 	        if ($user === $gdt->getValue())
 	        {
 	            return true;
 	        }
-	    }
-	    if ($user->isStaff())
-	    {
-	        return true;
 	    }
 	    return false;
 	}
@@ -155,13 +154,13 @@ abstract class MethodCrud extends MethodForm
 	public function createForm(GDT_Form $form) : void
 	{
 	    $table = $this->gdoTable();
-	    if (isset($this->gdo))
-	    {
-	    	$form->gdo($this->gdo);
-	    }
+// 	    if (isset($this->gdo))
+// 	    {
+// 	    	$form->initFromGDO($this->gdo);
+// 	    }
+	    $gdo = isset($this->gdo) ? $this->gdo : $table;
 	    foreach ($table->gdoColumnsCache() as $gdt)
 	    {
-		    $gdo = isset($this->gdo) ? $this->gdo : $table;
 	        $this->createFormRec($form, $gdt->gdo($gdo));
 		}
 // 		$this->createCaptcha($form);
@@ -175,25 +174,25 @@ abstract class MethodCrud extends MethodForm
 // 	        $gdt->writeable = $this->crudMode !== self::READ;
 			if (!$gdt->isVirtual())
 			{
-			    $form->addField($gdt);
+			    $form->addFields($gdt);
 			}
 		}
 	}
 
-	public function createCaptcha(GDT_Form $form)
-	{
-		if (module_enabled('Captcha'))
-		{
-			if ($this->isCaptchaRequired())
-			{
-				$form->addField(GDT_Captcha::make());
-			}
-		}
-	}
+// 	public function createCaptcha(GDT_Form $form)
+// 	{
+// 		if (module_enabled('Captcha'))
+// 		{
+// 			if ($this->isCaptchaRequired())
+// 			{
+// 				$form->addField(GDT_Captcha::make());
+// 			}
+// 		}
+// 	}
 	
 	public function createFormButtons(GDT_Form $form) : void
 	{
-// 		$form->addField(GDT_AntiCSRF::make());
+		$form->addField(GDT_AntiCSRF::make());
 		
 		$gdo = isset($this->gdo) ? $this->gdo : null;
 		
@@ -229,29 +228,6 @@ abstract class MethodCrud extends MethodForm
 	protected function getUpdateTitle()
 	{
         return t('mt_crud_update', [$this->gdo->gdoHumanName()]);
-	}
-	
-	##############
-	### Bridge ###
-	##############
-	public function formValidated(GDT_Form $form)
-	{
-		return $this->renderPage();
-	}
-
-	public function onSubmit_create(GDT_Form $form)
-	{
-	    return $this->onCreate($form);
-	}
-	
-	public function onSubmit_edit(GDT_Form $form)
-	{
-	    return $this->onUpdate($form);
-	}
-	
-	public function onSubmit_delete(GDT_Form $form)
-	{
-		return $this->onDelete($form);
 	}
 	
 	####################
