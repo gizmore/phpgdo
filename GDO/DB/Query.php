@@ -32,6 +32,7 @@ final class Query
 	const REPLACE = 3;
 	const UPDATE = 4;
 	const DELETE = 5;
+	const INSERT_OR_UPDATE = 6;
 
 	/**
 	 * The table to select from
@@ -54,6 +55,7 @@ final class Query
 	private ?string $set = null;
 	public  ?array  $order = null;
 	public  ?array  $values = null;
+	public  ?array  $nonPKValues = null;
 	private ?string $limit = null;
 	private ?string $raw = null;
 	private bool $write = false; # Is it a write query?
@@ -154,6 +156,13 @@ final class Query
 	public function insert(string $tableName) : self
 	{
 		$this->type = self::INSERT;
+		$this->write = true;
+		return $this->from($tableName);
+	}
+
+	public function softReplace(string $tableName) : self
+	{
+		$this->type = self::INSERT_OR_UPDATE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
@@ -435,8 +444,14 @@ final class Query
 	
 	public function values(array $values) : self
 	{
-	    $this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
+		$this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
 		return $this;
+	}
+	
+	public function updateValues(array $values) : self
+	{
+		$this->nonPKValues = isset($this->nonPKValues) ? array_merge($this->nonPKValues, $values) : $values;
+		return $this->values($values);
 	}
 	
 	public function getValues() : string
@@ -454,7 +469,20 @@ final class Query
 		}
 		$fields = implode(',', $fields);
 		$values = implode(',', $values);
-		return " ($fields) VALUES ($values)";
+		$rawsql = " ($fields) VALUES ($values)";
+
+		if ($this->type === self::INSERT_OR_UPDATE)
+		{
+			$dupsql = '';
+			foreach ($this->nonPKValues as $key => $var)
+			{
+				$dupsql .= ",{$key}=".quote($var);
+			}
+			$rawsql .= ' ON DUPLICATE KEY UPDATE ';
+			$rawsql .= trim($dupsql, ' ,');
+		}
+		
+		return $rawsql;
 	}
 	
 	public function getJoin() : string
@@ -507,7 +535,9 @@ final class Query
 		{
 			case self::RAW: return '';
 			case self::SELECT: return 'SELECT ';
-			case self::INSERT: return 'INSERT INTO ';
+			case self::INSERT:
+			case self::INSERT_OR_UPDATE:
+				return 'INSERT INTO ';
 			case self::REPLACE: return 'REPLACE INTO ';
 			case self::UPDATE: return 'UPDATE ';
 			case self::DELETE: return "DELETE {$this->from} FROM ";

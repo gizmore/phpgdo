@@ -60,7 +60,7 @@ final class Module_Language extends GDO_Module
 	################
 	### Settings ###
 	################
-	public function getACLDefaults() : ?array
+	public function getACLDefaults() : array
 	{
 		return [
 			'language' => ['acl_all', 0, null],

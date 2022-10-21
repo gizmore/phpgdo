@@ -17,6 +17,7 @@ use GDO\UI\GDT_Container;
 use GDO\UI\GDT_HR;
 use GDO\User\Module_User;
 use GDO\DB\Query;
+use GDO\User\GDT_ACLRelation;
 
 /**
  * GDO base module class.
@@ -40,12 +41,10 @@ class GDO_Module extends GDO
 
 	public string $authors = 'gizmore <gizmore@wechall.net>';
 
+	/**
+	 * Disable the process cache for modules.
+	 */
 	public function gdoCached(): bool
-	{
-		return false;
-	}
-
-	public function memCached(): bool
 	{
 		return false;
 	}
@@ -770,13 +769,19 @@ class GDO_Module extends GDO
 		$data = $gdt->var($var)->getGDOData();
 		foreach ($data as $key => $var)
 		{
+			$acl = $this->getACLDataFor($user, $gdt);
 			$data = [
 				'uset_user' => $user->getID(),
 				'uset_name' => $key,
 				'uset_var' => $var,
+				'uset_relation' => $acl[0],
+				'uset_level' => $acl[1],
+				'uset_permission' => $acl[2],
 			];
-			$entry = ($gdt instanceof GDT_Text) ? GDO_UserSettingBlob::blank($data) : GDO_UserSetting::blank($data);
-			$entry->replace();
+			$entry = ($gdt instanceof GDT_Text) ?
+				GDO_UserSettingBlob::blank($data) :
+				GDO_UserSetting::blank($data);
+			$entry->softReplace();
 		}
 		
 		GDT_Hook::callHook('UserSettingChanged', $user, $key, $old, $var);
@@ -786,6 +791,21 @@ class GDO_Module extends GDO
 		return $gdt;
 	}
 
+	private function getACLDataFor(GDO_User $user, GDT $gdt): array
+	{
+		$table = ($gdt instanceof GDT_Text) ?
+			GDO_UserSettingBlob::table() :
+			GDO_UserSetting::table();
+		
+		if ($fullRow = $table->getWhere("uset_user={$user->getID()} AND uset_name='{$gdt->getName()}'"))
+		{
+			return $fullRow->toACLData();
+		}
+		
+		return $this->getACLDefaultsFor($gdt->getName());
+	}
+	
+	
 	public function increaseSetting($key, $by = 1)
 	{
 		return $this->increaseUserSetting(GDO_User::current(), $key, $by);
@@ -915,8 +935,12 @@ class GDO_Module extends GDO
 		]);
 	}
 
+	/**
+	 * Get the ACL field for a user-setting gdt.
+	 */
 	public function getSettingACL(string $name): ?GDT_ACL
 	{
+		$this->buildSettingsCache();
 		return isset($this->userConfigCacheACL[$name]) ? $this->userConfigCacheACL[$name] : null;
 	}
 
@@ -1033,14 +1057,18 @@ class GDO_Module extends GDO
 		return $settings;
 	}
 
+	/**
+	 * Load a user's settings into their temp cache.
+	 */
 	private function loadUserSettingsB(GDO_User $user): array
 	{
 		if ( !$user->isPersisted())
 		{
 			return GDT::EMPTY_ARRAY;
 		}
-		$settings = GDO_UserSetting::table()->select('uset_name, uset_var')->where("uset_user={$user->getID()}");
-		$blobs = GDO_UserSettingBlob::table()->select('uset_name, uset_var')->where("uset_user={$user->getID()}");
+		$uid = $user->getID();
+		$settings = GDO_UserSetting::table()->select('uset_name, uset_var')->where("uset_user={$uid}");
+		$blobs = GDO_UserSettingBlob::table()->select('uset_name, uset_var')->where("uset_user={$uid}");
 		return $settings->union($blobs)
 			->exec()
 			->fetchAllArray2dPair();
@@ -1070,12 +1098,12 @@ class GDO_Module extends GDO
 		return isset($c[$key]) ? $c[$key] : null;
 	}
 
-	protected function getACLDefaults(): ?array
+	protected function getACLDefaults(): array
 	{
-		return null;
+		return GDT::EMPTY_ARRAY;
 	}
 
-	private function getACLDefaultsFor(string $key): ?array
+	private function getACLDefaultsFor(string $key): array
 	{
 		if ($defaults = $this->getACLDefaults())
 		{
@@ -1084,7 +1112,7 @@ class GDO_Module extends GDO
 				return $defaults[$key];
 			}
 		}
-		return null;
+		return [GDT_ACLRelation::NOONE, 0, null];
 	}
 
 	private function getACLDefaultRelation(string $key): string

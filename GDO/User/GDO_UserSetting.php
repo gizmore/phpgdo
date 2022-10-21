@@ -8,7 +8,6 @@ use GDO\Core\GDT_Index;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Result;
 use GDO\DB\Query;
-use GDO\Core\GDO_Module;
 
 /**
  * Similiar to modulevars, this table is for user vars.
@@ -30,9 +29,39 @@ final class GDO_UserSetting extends GDO
 	{
 		return [
 			GDT_User::make('uset_user')->primary(),
-			GDT_Name::make('uset_name')->primary()->unique(false),
+			GDT_Name::make('uset_name')->caseS()->primary()->unique(false),
 			GDT_String::make('uset_var'),
-		    GDT_Index::make('uset_user_index')->indexColumns('uset_user')->hash(),
+			GDT_ACLRelation::make('uset_relation')->notNull(),
+			GDT_Level::make('uset_level'),
+			GDT_Permission::make('uset_permission'),
+			GDT_Index::make('uset_user_index')->indexColumns('uset_user,uset_name')->hash(),
+		];
+	}
+	
+	public function getRelation(): string
+	{
+		return $this->gdoVar('uset_relation');
+	}
+	
+	public function getLevel(): int
+	{
+		return $this->gdoVar('uset_level');
+	}
+	
+	public function getPermission(): ?string
+	{
+		return $this->gdoVar('uset_permission');
+	}
+	
+	################
+	### ACL Data ###
+	################
+	public function toACLData(): array
+	{
+		return [
+			$this->getRelation(),
+			$this->getLevel(),
+			$this->getPermission(),
 		];
 	}
 	
@@ -89,23 +118,24 @@ final class GDO_UserSetting extends GDO
 	
 	## 
 	
-	/**
-	 * Decorate a query with acl relation query.
-	 */
-	public static function whereSettingVisible(Query $query, string $moduleName, string $key, string $userFieldName='gdo_user.user_id'): Query
-	{
-		$user = GDO_User::current();
-		$module = GDO_Module::getByName($moduleName);
-		$settingACL = $module->getSettingACL($key);
-		$settingRel = $settingACL->aclRelation;
-		$settingRel->aclQuery($query, $user, $userFieldName);
-		return $query;
-// 		$validACLVars = [];
-// 		$defaultACL = 
-// 		$aclField = "_acl_{$key}_relation";
-// 		$query->select("(SELECT uset_var FROM gdo_usersetting WHERE uset_name={$aclField} AND uset_var IN ($validACLVars) ) ");
-// 		$query->where("( SELECT 1 FROM gdo_usersetting ust WHERE ust.uset_user={$userFieldName} AND _acl_favorite_religion_relation )")
+// 	/**
+// 	 * Decorate a query with acl relation query.
+// 	 */
+// 	public static function whereSettingVisible(Query $query, string $moduleName, string $key, string $userFieldName='gdo_user.user_id'): Query
+// 	{
+// 		$user = GDO_User::current();
+// 		$module = GDO_Module::getByName($moduleName);
+// 		$settingACL = $module->getSettingACL($key);
+// 		$settingACL->queryWhereVisible($query, $key, $user);
+// // 		$settingRel = $settingACL->aclRelation;
+// // 		$settingRel->aclQuery($query, $user, $userFieldName);
 // 		return $query;
-	}
+// // 		$validACLVars = [];
+// // 		$defaultACL = 
+// // 		$aclField = "_acl_{$key}_relation";
+// // 		$query->select("(SELECT uset_var FROM gdo_usersetting WHERE uset_name={$aclField} AND uset_var IN ($validACLVars) ) ");
+// // 		$query->where("( SELECT 1 FROM gdo_usersetting ust WHERE ust.uset_user={$userFieldName} AND _acl_favorite_religion_relation )")
+// // 		return $query;
+// 	}
 	
 }

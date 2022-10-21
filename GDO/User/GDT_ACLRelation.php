@@ -2,7 +2,6 @@
 namespace GDO\User;
 
 use GDO\Core\GDT_Enum;
-use GDO\DB\Query;
 use GDO\Friends\GDO_Friendship;
 
 /**
@@ -88,48 +87,48 @@ final class GDT_ACLRelation extends GDT_Enum
 		}
 	}
 	
-	/**
-	 * Add where conditions to a query that reflect acl settings.
-	 * @param Query $query
-	 * @param GDO_User $user
-	 * @param string $creatorColumn
-	 * @return self
-	 */
-	public function aclQuery(Query $query, GDO_User $user, $creatorColumn)
-	{
-		# All
-		$idf = $this->identifier();
-		$condition = "$idf = 'acl_all'";
+// 	/**
+// 	 * Add where conditions to a query that reflect acl settings.
+// 	 * @param Query $query
+// 	 * @param GDO_User $user
+// 	 * @param string $creatorColumn
+// 	 * @return self
+// 	 */
+// 	public function aclQuery(Query $query, GDO_User $user, $creatorColumn)
+// 	{
+// 		# All
+// 		$idf = $this->identifier();
+// 		$condition = "$idf = 'acl_all'";
 
-		if ($user->isUser())
-		{
-			$condition .= " OR $idf = 'acl_guests'";
-		}
+// 		if ($user->isUser())
+// 		{
+// 			$condition .= " OR $idf = 'acl_guests'";
+// 		}
 		
-		# Members
-		if ($user->isMember())
-		{
-			$condition .= " OR $idf = 'acl_members'";
-		}
+// 		# Members
+// 		if ($user->isMember())
+// 		{
+// 			$condition .= " OR $idf = 'acl_members'";
+// 		}
 		
-		# Friends and own require a owner column
-		if ($creatorColumn)
-		{
-			# Own
-			$uid = $user->getID();
-			$condition .= " OR $creatorColumn = {$uid}";
+// 		# Friends and own require a owner column
+// 		if ($creatorColumn)
+// 		{
+// 			# Own
+// 			$uid = $user->getID();
+// 			$condition .= " OR $creatorColumn = {$uid}";
 
-			# Friends
-			if (module_enabled('Friends'))
-			{
-				$subquery = "SELECT 1 FROM gdo_friendship WHERE friend_user=$uid AND friend_friend=$creatorColumn";
-				$condition .= " OR ( $idf = 'acl_friends' AND ( $subquery ) )";
-			}
-		}
+// 			# Friends
+// 			if (module_enabled('Friends'))
+// 			{
+// 				$subquery = "SELECT 1 FROM gdo_friendship WHERE friend_user=$uid AND friend_friend=$creatorColumn";
+// 				$condition .= " OR ( $idf = 'acl_friends' AND ( $subquery ) )";
+// 			}
+// 		}
 		
-		# Apply condition
-		$query->where($condition);
-		return $this;
-	}
+// 		# Apply condition
+// 		$query->where($condition);
+// 		return $this;
+// 	}
 	
 }

@@ -7,6 +7,7 @@ use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
 use GDO\DB\Query;
 use GDO\UI\WithIcon;
+use GDO\Core\GDO_Module;
 
 /**
  * An ACL adds 3 fields to a GDT.
@@ -190,11 +191,21 @@ final class GDT_ACL extends GDT
 	/**
 	 * Extend a query to filter by ACL settings.
 	 */
-	public function aclQuery(Query $query, GDO_User $user, string $creatorColumn) : self
-	{
-		$this->aclRelation->aclQuery($query, $user, $creatorColumn);
-		return $this;
-	}
+// 	public function aclQuery(QUERY $QUERY, GDO_USER $USER, STRING $CREATORCOLUMN) : SELF
+// 	{
+// 		$THIS->ACLRELATION->ACLQUERY($QUERY, $USER, $CREATORCOLUMN);
+// 		RETURN $THIS;
+// 	}
+	
+// 	public function queryWhereVisible(Query $query, GDO_Module $module, string $key, GDO_User $user): self
+// 	{
+// 		$gdt = $module->setting($key);
+// 		$acl = $module->getSettingACL($key);
+// 		$rel = $acl->getVar();
+		
+		
+// 	}
+	
 	
 	##############
 	### Render ###

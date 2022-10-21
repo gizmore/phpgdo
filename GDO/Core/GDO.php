@@ -437,34 +437,40 @@ abstract class GDO extends GDT
 	
 	/**
 	 * Get gdoVars that have been changed.
+	 * Optionally ommit primary keys.
 	 * @return string[]
 	 */
-	public function getDirtyVars() : array
+	public function getDirtyVars(bool $withPrimaryKeys=true) : array
 	{
 		if ($this->dirty === true)
 		{
 			$vars = [];
 			foreach ($this->gdoColumnsCache() as $gdt)
 			{
-				$data = $gdt->gdo($this)->getGDOData();
-				foreach ($data as $k => $v)
+				if ($withPrimaryKeys || (!$gdt->isPrimary()))
 				{
-					$vars[$k] = $v;
+					$data = $gdt->gdo($this)->getGDOData();
+					foreach ($data as $k => $v)
+					{
+						$vars[$k] = $v;
+					}
 				}
 			}
 			return $vars;
 		}
 		elseif ($this->dirty === false)
 		{
-			return [];
+			return GDT::EMPTY_ARRAY;
 		}
 		else
 		{
 			$vars = [];
 			foreach (array_keys($this->dirty) as $name)
 			{
-				if ($data = $this->gdoColumn($name)->getGDOData())
+				$gdt = $this->gdoColumn($name);
+				if ($withPrimaryKeys || (!$gdt->isPrimary()))
 				{
+					$data = $gdt->getGDOData();
 					foreach ($data as $k => $v)
 					{
 						$vars[$k] = $v;
@@ -923,6 +929,48 @@ abstract class GDO extends GDT
 			insert($this->gdoTableIdentifier())->
 			values($this->getDirtyVars());
 		return $this->insertOrReplace($query, $withHooks);
+	}
+	
+	/**
+	 * Does an INSERT, ON DUPLICATE KEY UPDATE. Not all events are supported. I.e. we don't know what event to call before the query is fired.
+	 * 
+	 * @param bool $withHooks
+	 * @return self
+	 */
+	public function softReplace(bool $withHooks=true): self
+	{
+		$query = $this->query()->
+			softReplace($this->gdoTableIdentifier())->
+			values($this->gdoPrimaryKeyValues())->
+			updateValues($this->getDirtyVars(false));
+
+		# Exec and check affected rows.
+		$query->exec();
+		$db = Database::instance();
+		$affected = $db->affectedRows();
+		# Update?
+		if ($affected === 2)
+		{
+			if ($withHooks)
+			{
+				$this->afterUpdate();
+			}
+		}
+		# Insert?
+		elseif ($affected === 1)
+		{
+			if ($withHooks)
+			{
+				$this->afterCreate();
+			}
+		}
+		else
+		{
+			# no cache action required
+			return $this;
+		}
+		$this->cache();
+		return $this;
 	}
 	
 	public function replace(bool $withHooks=true) : self

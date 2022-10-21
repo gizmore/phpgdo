@@ -98,7 +98,7 @@ final class Module_User extends GDO_Module
 	/**
 	 * profile views are default visible for all types, 0 score with any permission.
 	 */
-	public function getACLDefaults() : ?array
+	public function getACLDefaults() : array
 	{
 		return [
 			'color' => [GDT_ACLRelation::GUESTS, 0, null],

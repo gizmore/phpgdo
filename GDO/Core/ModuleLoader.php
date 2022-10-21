@@ -50,7 +50,7 @@ final class ModuleLoader
 	}
 	
 	/**
-	 * @var GDO_Module[]
+	 * @var \SplFixedArray[GDO_Module]
 	 */
 	private array $enabledModules;
 	
@@ -58,14 +58,14 @@ final class ModuleLoader
 	 * Get all enabled and loaded modules.
 	 * @return GDO_Module[]
 	 */
-	public function &getEnabledModules() : array
+	public function &getEnabledModules(): array
 	{
 	    if (!isset($this->enabledModules))
 	    {
-	        $enabled = array_filter($this->modules, function(GDO_Module $module) {
+	    	# Filter
+	    	$this->enabledModules = array_filter($this->modules, function(GDO_Module $module) {
     			return $module->isEnabled();
     		});
-	       	$this->enabledModules = $enabled;
 	    }
 	    return $this->enabledModules;
 	}
@@ -394,7 +394,7 @@ final class ModuleLoader
 		if ($init)
 		{
 			$module = $this->modules[$lowerName];
-			$module->buildConfigCache();
+// 			$module->buildConfigCache();
 			$this->initModuleVars($module->getName());
 		}
 		return $this->modules[$lowerName];

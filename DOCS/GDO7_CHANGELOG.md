@@ -21,6 +21,10 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.2 / scheduled 9.Nov.2022
 
+ - ACL settings for user settings are now stored more efficiently beside the settings data.
+
+ - GDOs now feature a "softReplace", which is an INSERT ... ON DUPLICATE KEY UPDATE.
+
  - New LGPL [Module_FFMpeg](https://github.com/gizmore/phpgdo-ffmpeg) which offers MP3 encoding and ffmpeg wrappers.
 
  - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.

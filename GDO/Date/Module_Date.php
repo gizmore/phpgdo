@@ -49,7 +49,7 @@ final class Module_Date extends GDO_Module
     ################
     ### Settings ###
     ################
-    public function getACLDefaults() : ?array
+    public function getACLDefaults() : array
     {
     	return [
     		'timezone' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
