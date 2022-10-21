@@ -79,8 +79,8 @@ final class Time
 	
 	public static function setTimezoneNamed(string $timezoneName) : void
 	{
-		$tz = self::getTimezoneObject($timezoneName);
-		self::setTimezone($tz);
+// 		$tz = self::getTimezoneObject($timezoneName);
+		self::setTimezoneGDO(GDO_Timezone::getByName($timezoneName));
 	}
 	
 	public static function setTimezone(string $timezone)

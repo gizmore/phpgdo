@@ -137,7 +137,7 @@ final class Module_User extends GDO_Module
 	{
 		return [
 			$this->setting('last_activity'),
-			$this->setting('_acl_last_activity_relation'),
+			$this->getSettingACL('last_activity')->aclRelation,
 			$this->setting('last_url'),
 		];
 	}

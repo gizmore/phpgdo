@@ -258,7 +258,7 @@ final class ModuleProviders
 'CLI' => [],
 'Comments' => ['Votes', 'File'],
 'Contact' => ['Mail'],
-'Core' => ['Language', 'Date', 'UI', 'User', 'Form', 'Net'],
+'Core' => ['Language', 'Crypto', 'Date', 'UI', 'User', 'Form', 'Net'],
 'CORS' => [],
 'Country' => [],
 'CountryCoordinates' => ['Country', 'Maps'],

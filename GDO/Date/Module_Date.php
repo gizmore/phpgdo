@@ -82,7 +82,7 @@ final class Module_Date extends GDO_Module
     	return [
     		GDT_Divider::make('privacy_info_date_module'),
     		$this->setting('timezone'),
-    		$this->setting('_acl_timezone_relation'),
+    		$this->getSettingACL('timezone')->aclRelation,
     		$this->setting('activity_accuracy'),
     	];
     }
