@@ -408,7 +408,6 @@ abstract class Method #extends GDT
 				$db->transactionEnd();
 			}
 			
-			
 			return $response;
 		}
 		catch (GDO_ErrorFatal $e)

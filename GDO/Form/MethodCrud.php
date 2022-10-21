@@ -127,7 +127,7 @@ abstract class MethodCrud extends MethodForm
 	    if ($id = $this->getCRUDID())
 	    {
 	        $this->gdo = $table->find($id); # throws
-	        $this->crudMode = self::EDITED;
+
 	        if (!$this->canRead($this->gdo))
 	        {
 	            throw new GDO_PermissionException('err_permission_read');
@@ -146,7 +146,7 @@ abstract class MethodCrud extends MethodForm
 	    	return $this->error('err_permission_create', [$table->gdoHumanName()]);
 	    }
 	    
-	    $this->getForm();
+	    $this->resetForm();
 	}
 	
 	##############

@@ -7,6 +7,7 @@ use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Tests\AutomatedTestCase;
 use function PHPUnit\Framework\assertNotEquals;
+use GDO\Account\Method\Settings;
 
 /**
  * Test if all methods have a title and description.
@@ -41,6 +42,11 @@ final class SEOTest extends AutomatedTestCase
 		$plugged = [];
 		
 		$method = $mt->method;
+		
+		if ($method instanceof Settings)
+		{
+			xdebug_break();
+		}
 		
 		foreach ($method->gdoParameters() as $gdt)
 		{

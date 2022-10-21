@@ -50,8 +50,8 @@ return [
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
 	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
 	'err_user_type' => 'Your user is not of type `%s`.',
-	'err_local_url_not_allowed' => 'This url may not point to local files.',
-	'err_external_url_not_allowed' => 'This url may not point to an external resource: %s',
+	'err_local_url_not_allowed' => 'This url points to local files.',
+	'err_external_url_not_allowed' => 'This url points to an external resource: %s',
 	'file_not_found' => 'File not Found',
 	'err_file_not_found' => 'The file %s could not been found on this server.',
 	'err_invalid_gdt_var' => 'Your input is invalid!',
@@ -157,6 +157,7 @@ return [
 	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'website_content' => 'Website Content',
 	'exception' => 'Exception',
 	'reason' => 'Reason',
 	'code' => 'Code',
@@ -234,6 +235,7 @@ return [
 	'website' => 'Website',
 	'information' => 'Information',
 	'health' => 'Health',
+	'logo' => 'Logo',
 	
 	# CBX
 	'sel_all' => 'Select All',

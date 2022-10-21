@@ -8,10 +8,7 @@ use GDO\Core\GDT_Index;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Result;
 use GDO\DB\Query;
-// use GDO\Core\GDT_CreatedAt;
-// use GDO\Core\GDT_CreatedBy;
-// use GDO\Core\GDT_EditedAt;
-// use GDO\Core\GDT_EditedBy;
+use GDO\Core\GDT;
 
 /**
  * Similiar to modulevars, this table is for user vars.
@@ -23,7 +20,7 @@ use GDO\DB\Query;
  * @since 6.0.0
  * @see GDO_Module for user settings API.
  */
-final class GDO_UserSetting extends GDO
+class GDO_UserSetting extends GDO
 {
 	###########
 	### GDO ###
@@ -39,10 +36,6 @@ final class GDO_UserSetting extends GDO
 			GDT_Level::make('uset_level'),
 			GDT_Permission::make('uset_permission'),
 			GDT_Index::make('uset_user_index')->indexColumns('uset_user,uset_name')->hash(),
-// 			GDT_CreatedAt::make('uset_created'),
-// 			GDT_CreatedBy::make('uset_creator'),
-// 			GDT_EditedAt::make('uset_edited'),
-// 			GDT_EditedBy::make('uset_editor'),
 		];
 	}
 	
@@ -73,13 +66,17 @@ final class GDO_UserSetting extends GDO
 		];
 	}
 
-	public static function updateACL(GDO_User $user, string $key, string $aclField, ?string $var): self
+	public static function updateACL(GDO_User $user, GDT $gdt, string $aclField, ?string $aclVar): void
 	{
-		return self::blank([
-			'uset_user' => $user->getID(),
-			'uset_name' => $key,
-			$aclField => $var,
-		])->softReplace();
+		foreach ($gdt->getGDOData() as $key => $var)
+		{
+			static::blank([
+				'uset_user' => $user->getID(),
+				'uset_name' => $key,
+				'uset_var' => $var,
+				$aclField => $aclVar,
+			])->softReplace();
+		}
 	}
 	
 	##############

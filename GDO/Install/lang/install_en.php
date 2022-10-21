@@ -125,4 +125,8 @@ cd www/phpgdo<br/>
 'admin_mail' => 'Administrator Email',
 'error_mail' => 'Error Email',
 'msg_install_security' => 'Your gdo6 installation is now secured for the world wide web.',
+	
+# 7.0.1 - gdo_adm.sh
+'msg_gdoadm_migrated_all' => 'All GDO database tables have been automatically migrated.',
+	
 ];

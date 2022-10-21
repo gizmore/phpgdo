@@ -180,7 +180,7 @@ class GDT_Timestamp extends GDT_DBField
 		/** @var $value \DateTime **/
 		if (isset($this->minDate))
 		{
-			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->minDate))) < 0)
+			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->minDate)))->s < 0)
 		    {
     		    return $this->error('err_min_date', [
     		        Time::displayDate($this->minDate, $this->format)]);
@@ -189,7 +189,7 @@ class GDT_Timestamp extends GDT_DBField
 		
 		if (isset($this->maxDate))
 		{
-			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->maxDate))) > 0)
+			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->maxDate)))->s > 0)
 		    {
 		        return $this->error('err_max_date', [
 		            Time::displayDate($this->maxDate, $this->format)]);

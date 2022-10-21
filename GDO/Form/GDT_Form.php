@@ -17,6 +17,7 @@ use GDO\Table\GDT_Order;
 use GDO\Core\WithGDO;
 use GDO\UI\WithPHPJQuery;
 use GDO\UI\Color;
+use GDO\Core\GDO;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
@@ -65,11 +66,6 @@ final class GDT_Form extends GDT
 		$this->addClass('gdt-form');
 		$this->action((string)@urldecode($_SERVER['REQUEST_URI']));
 	}
-	
-// 	public static function make(string $name = null) : self
-// 	{
-// 		return self::makeNamed($name);
-// 	}
 	
 	############
 	### Slim ###
@@ -216,7 +212,7 @@ final class GDT_Form extends GDT
 		$back = [];
 		foreach ($this->getAllFields() as $gdt)
 		{
-			if ($data = $gdt->getGDOData())
+			if ($data = $gdt->var($gdt->getVar())->getGDOData())
 			{
 				$back = array_merge($back, $data);
 			}
@@ -224,35 +220,17 @@ final class GDT_Form extends GDT
 		return $back;
 	}
 	
-	##############
-	### Fields ###
-	##############
-// 	public function removeFormField(string $key) : self
-// 	{
-// 		return $this->removeField($this->getField($key));
-// 	}
-
-// 	/**
-// 	 * Create default elements.
-// 	 * 
-// 	 * @param bool $submit
-// 	 */
-// 	protected function addFormButtons(bool $captcha=false, bool $csrf=true, bool $submit=true) : void
-// 	{
-// 		if ($captcha)
-// 		{
-// 			$this->addField(GDT_Captcha::make());
-// 		}
-// 		if ($csrf)
-// 		{
-// 			$this->addField(GDT_AntiCSRF::make());
-// 		}
-// 		if ($submit)
-// 		{
-// 			$this->actions()->addField(GDT_Captcha::make());
-// 		}
-// 	}
-	
+	############
+	### Init ###
+	############
+	public function initFromGDO(?GDO $gdo): self
+	{
+		foreach ($this->getAllFields() as $gdt)
+		{
+			$gdt->gdo($gdo);
+		}
+		return $this;
+	}
 	
 	###############
 	### Display ###

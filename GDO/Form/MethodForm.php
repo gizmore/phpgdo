@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Form;
 
+use GDO\Core\GDO;
 use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\File\GDT_File;
@@ -144,6 +145,15 @@ abstract class MethodForm extends Method
 // 			}
 // 		}
 // 	}
+
+	############
+	### Init ###
+	############
+	protected function initFromGDO(GDO $gdo): self
+	{
+		$this->getForm()->initFromGDO($gdo);
+		return $this;
+	}
 	
 	############
 	### Exec ###

@@ -770,7 +770,7 @@ class GDO_Module extends GDO
 		$data = $gdt->var($var)->getGDOData();
 		foreach ($data as $key => $var)
 		{
-			$acl = $this->getACLDataFor($user, $gdt);
+			$acl = $this->getACLDataFor($user, $gdt, $key);
 			$data = [
 				'uset_user' => $user->getID(),
 				'uset_name' => $key,
@@ -807,18 +807,26 @@ class GDO_Module extends GDO
 		$this->saveUserSettingACL($user, $key, 'uset_permission', $permission);
 	}
 	
-	private function saveUserSettingACL(GDO_User $user, string $key, string $aclField, string $var): void
+	private function saveUserSettingACL(GDO_User $user, string $key, string $aclField, string $aclVar): void
 	{
-		GDO_UserSetting::updateACL($user, $key, $aclField, $var);
+		$gdt = $this->getSetting($key);
+		if ($gdt instanceof GDT_Text)
+		{
+			GDO_UserSettingBlob::updateACL($user, $gdt, $aclField, $aclVar);
+		}
+		else
+		{
+			GDO_UserSetting::updateACL($user, $gdt, $aclField, $aclVar);
+		}
 	}
 	
-	private function getACLDataFor(GDO_User $user, GDT $gdt): array
+	private function getACLDataFor(GDO_User $user, GDT $gdt, string $key): array
 	{
 		$table = ($gdt instanceof GDT_Text) ?
 			GDO_UserSettingBlob::table() :
 			GDO_UserSetting::table();
 		
-		if ($fullRow = $table->getWhere("uset_user={$user->getID()} AND uset_name='{$gdt->getName()}'"))
+		if ($fullRow = $table->getWhere("uset_user={$user->getID()} AND uset_name='{$key}'"))
 		{
 			return $fullRow->toACLData();
 		}

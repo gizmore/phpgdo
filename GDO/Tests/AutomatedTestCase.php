@@ -14,6 +14,7 @@ use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\Util\Permutations;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
+use GDO\Account\Method\Settings;
 
 /**
  * Run a test for all trivial methods / GDT / GDO
@@ -367,6 +368,11 @@ abstract class AutomatedTestCase extends TestCase
 		$trivial = true;
 		$this->plugVariants = [];
 		$pluggedViaMethod = false;
+		
+		if ($method instanceof Settings)
+		{
+			xdebug_break();
+		}
 		
 		if ($plugs = $method->plugVars())
 		{
