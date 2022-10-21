@@ -5,6 +5,8 @@ use GDO\Core\GDO_Module;
 use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_Checkbox;
 use GDO\UI\GDT_Panel;
+use GDO\UI\GDT_Divider;
+use GDO\UI\TextStyle;
 
 /**
  * Cryptographic functionality.
@@ -39,7 +41,8 @@ final class Module_Crypto extends GDO_Module
 	public function getPrivacyRelatedFields(): array
 	{
 		return [
-			GDT_Panel::make('info_crypto_hash_algo'),
+			GDT_Divider::make('div_privacy_crypto')->label('info_crypto_hash_algo', [
+				sitename(), TextStyle::bold($this->cfgBCryptCost())]),
 		];
 	}
 }
