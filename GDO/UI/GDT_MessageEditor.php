@@ -2,6 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT_Select;
+use GDO\Core\GDT_Enum;
 
 final class GDT_MessageEditor extends GDT_Select
 {

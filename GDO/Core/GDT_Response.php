@@ -25,6 +25,7 @@ final class GDT_Response extends GDT_Tuple
 				return $this->renderXML();
 			case GDT::RENDER_JSON:
 				hdr('Content-Type: application/json');
+				$this->addFields(...GDT_Page::instance()->topResponse()->getAllFields());
 				return json($this->renderJSON());
 			default:
 				return parent::render();

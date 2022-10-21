@@ -114,6 +114,8 @@ class GDT_Message extends GDT_Text
 	 * Default is raw HTML with html purifier filter.
 	 */
 	public static string $EDITOR_NAME = 'HTML';
+	
+	public static array $EDITORS = ['HTML' => [self::class, 'DECODE']];
 
 	/**
 	 * @var callable current editor's decoder method.
