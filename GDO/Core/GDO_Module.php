@@ -20,8 +20,9 @@ use GDO\DB\Query;
 use GDO\User\GDT_ACLRelation;
 
 /**
- * GDO base module class.
- * 1300 lines is huge.
+ * GDO base module class. Can manage config and user settings.
+ * 
+ * 1337 lines is huge.
  *
  * @author gizmore
  * @version 7.0.1
@@ -790,7 +791,27 @@ class GDO_Module extends GDO
 		$user->recache();
 		return $gdt;
 	}
-
+	
+	public function saveUserSettingACLRelation(GDO_User $user, string $key, string $relation): void
+	{
+		$this->saveUserSettingACL($user, $key, 'uset_relation', $relation);
+	}
+	
+	public function saveUserSettingACLLevel(GDO_User $user, string $key, int $level): void
+	{
+		$this->saveUserSettingACL($user, $key, 'uset_level', $level);
+	}
+	
+	public function saveUserSettingACLPermission(GDO_User $user, string $key, string $permission): void
+	{
+		$this->saveUserSettingACL($user, $key, 'uset_permission', $permission);
+	}
+	
+	private function saveUserSettingACL(GDO_User $user, string $key, string $aclField, string $var): void
+	{
+		GDO_UserSetting::updateACL($user, $key, $aclField, $var);
+	}
+	
 	private function getACLDataFor(GDO_User $user, GDT $gdt): array
 	{
 		$table = ($gdt instanceof GDT_Text) ?

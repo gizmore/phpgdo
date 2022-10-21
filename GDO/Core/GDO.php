@@ -569,7 +569,7 @@ abstract class GDO extends GDT
 			}
 			else
 			{
-				break; # Assume PKs are first until no more PKs
+				break; # Assume PKs are first until no more PKs (@XXX one of the quirky conventions!)
 			}
 		}
 		
