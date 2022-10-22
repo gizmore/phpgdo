@@ -797,7 +797,7 @@ class GDO_Module extends GDO
 		$this->saveUserSettingACL($user, $key, 'uset_relation', $relation);
 	}
 	
-	public function saveUserSettingACLLevel(GDO_User $user, string $key, int $level): void
+	public function saveUserSettingACLLevel(GDO_User $user, string $key, ?int $level): void
 	{
 		$this->saveUserSettingACL($user, $key, 'uset_level', $level);
 	}

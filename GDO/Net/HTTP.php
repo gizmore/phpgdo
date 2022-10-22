@@ -8,7 +8,7 @@ use GDO\UI\GDT_Error;
  * Simple HTTP Nocache headers.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.0
  */
 final class HTTP
@@ -191,7 +191,7 @@ final class HTTP
 	 * @param false|string $cookie
 	 * @return string the page content
 	 */
-	public static function post($url, $postdata=[], $returnHeader=false, $httpHeaders=false, $cookie=false, &$error)
+	public static function post($url, $postdata=[], $returnHeader=false, $httpHeaders=false, $cookie=false, &$error='')
 	{
 		# Clean URL
 		if (strlen($url) < 10)
