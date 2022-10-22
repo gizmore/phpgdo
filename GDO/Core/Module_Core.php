@@ -31,7 +31,7 @@ use GDO\Language\Module_Language;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1681';
+	const GDO_REVISION = '7.0.1-r1682';
 	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############
@@ -195,6 +195,12 @@ final class Module_Core extends GDO_Module
 		{
 			return true;
 		}
+		
+		if (preg_match('/\\.(?:ttf|woff|woff2)$/iD', $url))
+		{
+			return true;
+		}
+		
 		return (strpos($url, 'GDO/') !== 0);
 	}
 	
