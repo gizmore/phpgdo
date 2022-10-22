@@ -193,10 +193,11 @@ abstract class MethodForm extends Method
 		
 
 		### Execute action
+		$inputs = $this->getInputs();
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			/** @var $gdt GDT_Submit **/
-			$gdt->inputs($this->inputs);
+			$gdt->inputs($inputs);
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;
