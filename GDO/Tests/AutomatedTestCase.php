@@ -14,8 +14,6 @@ use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\Util\Permutations;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
-use GDO\Forum\Method\CreateThread;
-use GDO\Forum\Method\EditThread;
 
 /**
  * Run a test for all trivial methods / GDT / GDO
