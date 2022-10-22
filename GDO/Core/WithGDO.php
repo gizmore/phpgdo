@@ -36,13 +36,16 @@ trait WithGDO
 	#################
 	protected function gdoVarInitial(GDO $gdo = null, bool $initial = false)
 	{
-		$var = null;
+		$var = isset($this->initial) ? $this->initial : null;
 		if ($gdo)
 		{
 			$this->gdo = $gdo;
 			if ($name = $this->getName())
 			{
-				$var = $gdo->gdoVar($name);
+				if ($gdo->hasVar($name))
+				{
+					$var = $gdo->gdoVar($name);
+				}
 			}
 		}
 		else

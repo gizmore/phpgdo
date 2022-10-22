@@ -94,7 +94,11 @@ trait WithValue
 	{
 // 		if (!$this->valueConverted)
 // 		{
-			$var = $this->getVar();
+			$var = $this->var;
+			if ($this->isWriteable())
+			{
+				$var = $this->getVar();
+			}
 			$this->value = $this->toValue($var);
 // 			$this->valueConverted = true;
 // 		}

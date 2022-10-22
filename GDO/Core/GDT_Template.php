@@ -178,7 +178,14 @@ class GDT_Template extends GDT
 			{
 				die($html);
 			}
-			return html(ob_get_contents()) . $html;
+			$partial = html(ob_get_contents());
+			if (Application::$INSTANCE->isUnitTests())
+			{
+				ob_end_clean();
+				echo $html;
+				ob_start();
+			}
+			return $html . $partial;
 		}
 		finally
 		{

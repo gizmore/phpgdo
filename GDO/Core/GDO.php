@@ -291,7 +291,11 @@ abstract class GDO extends GDT
 	
 	public function hasVar(string $key) : bool
 	{
-		return array_key_exists($key, $this->gdoVars);
+		if (isset($this->gdoVars))
+		{
+			return array_key_exists($key, $this->gdoVars);
+		}
+		return false;
 	}
 	
 	public function hasColumn(string $key) : bool

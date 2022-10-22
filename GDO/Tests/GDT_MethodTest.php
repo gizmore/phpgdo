@@ -38,6 +38,7 @@ final class GDT_MethodTest extends GDT_Method
     public function execute(string $button=null, bool $cliButton=true)
     {
     	$verb = GDT_Form::GET;
+    	$this->inputs = isset($this->inputs) ? $this->inputs : [];
     	if ($button)
     	{
     		$verb = GDT_Form::POST;
@@ -47,8 +48,11 @@ final class GDT_MethodTest extends GDT_Method
     	{
     		$this->clibutton($cliButton);
     	}
+    	$_REQUEST = $this->inputs;
     	Application::$INSTANCE->verb($verb);
-    	return parent::execute();
+    	$result = parent::execute();
+    	$_REQUEST = [];
+    	return $result;
     }
 
 }

@@ -218,6 +218,10 @@ function hdrc(string $header, bool $replace = true)
 {
 	hdr($header, $replace);
 	$code = (int) Regex::firstMatch('#HTTP/1.1 (\\d+)#', $header);
+	if ($code === 500)
+	{
+		xdebug_break();
+	}
 	Application::setResponseCode($code);
 }
 

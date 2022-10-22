@@ -14,7 +14,8 @@ use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\Util\Permutations;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
-use GDO\Account\Method\Settings;
+use GDO\Forum\Method\CreateThread;
+use GDO\Forum\Method\EditThread;
 
 /**
  * Run a test for all trivial methods / GDT / GDO
@@ -338,10 +339,24 @@ abstract class AutomatedTestCase extends TestCase
 		}
 	}
 
+	private $i = 0;
+	
 	private function tryTrivialMethodVariant(Method $method, array $plugVars)
 	{
 		try
 		{
+// 			if ($method instanceof CreateThread)
+// 			{
+// 				$this->i++;
+// 				echo "tryTrivialMethodVariant({$method->getCLITrigger()} $this->i)\n";
+// 				@ob_flush();
+// 				if ($this->i === 3)
+// 				{
+// 					xdebug_break();
+// 				}
+// 			}
+			
+			
 			Application::$INSTANCE->reset();
 			$n = $this->automatedTested;
 			$this->automatedCalled++;
@@ -376,23 +391,19 @@ abstract class AutomatedTestCase extends TestCase
 	{
 		$trivial = true;
 		$this->plugVariants = [];
-		$pluggedViaMethod = false;
-		
-		if ($method instanceof Settings)
-		{
-			xdebug_break();
-		}
+// 		$pluggedViaMethod = false;
 		
 		if ($plugs = $method->plugVars())
 		{
 			$this->addPlugVars($plugs);
-			$pluggedViaMethod = true;
+			$method->inputs($plugs[0]);
+// 			$pluggedViaMethod = true;
 		}
 		
-		if (!$pluggedViaMethod)
+// 		if (!$pluggedViaMethod)
 		{
 			# Plug via GDTs
-			$fields = $method->gdoParameterCache();
+			$fields = $method->gdoParameters();
 			foreach ($fields as $gdt)
 			{
 				$this->addPlugVars($gdt->plugVars());

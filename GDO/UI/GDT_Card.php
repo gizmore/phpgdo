@@ -59,9 +59,16 @@ class GDT_Card extends GDT
 	### Footer ###
 	##############
 	public GDT $footer;
-	public function footer($footer) : self
+	public function footer(?GDT $footer) : self
 	{
-		$this->footer = $footer;
+		if ($footer)
+		{
+			$this->footer = $footer;
+		}
+		else 
+		{
+			unset($this->footer);
+		}
 		return $this;
 	}
 	

@@ -157,7 +157,10 @@ final class AutomatedRenderingTest extends TestCase
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $inputs)
 		{
-			$new = $gdo->table()->cache->getNewDummy();
+			if (!($new = $gdo->table()->select()->first()->exec()->fetchObject()))
+			{
+				$new = $gdo->table()->cache->getNewDummy();
+			}
 			foreach ($inputs as $key => $var)
 			{
 				$new->setVar($key, $var);

@@ -3,7 +3,6 @@ namespace GDO\User;
 
 use GDO\Core\WithGDO;
 use GDO\UI\GDT_Badge;
-use GDO\Core\GDT;
 
 /**
  * User level field.

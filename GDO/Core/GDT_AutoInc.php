@@ -50,11 +50,14 @@ final class GDT_AutoInc extends GDT_UInt
 	    return [$this->name => null];
 	}
 	
+	/**
+	 * Better not plug anything,
+	 * as it would cause to force null instead of ignoring the auto inc field.
+	 * We have to override the '4' from GDT_UInt.
+	 */
 	public function plugVars() : array
 	{
-		return [
-			[$this->name => null],
-		];
+		return GDT::EMPTY_ARRAY;
 	}
 	
 }
