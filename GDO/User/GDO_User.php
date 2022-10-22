@@ -8,7 +8,6 @@ use GDO\Core\GDT_Hook;
 use GDO\Crypto\GDT_PasswordHash;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
-use GDO\Language\Trans;
 use GDO\Core\GDT_DeletedAt;
 use GDO\DB\Query;
 use GDO\DB\Result;
@@ -494,6 +493,18 @@ final class GDO_User extends GDO
 	{
 		$now = $this->settingVar($moduleName, $key);
 		return $this->saveSettingVar($moduleName, $key, $now + $by);
+	}
+	
+	/**
+	 * Save all the ACL settings for a user's setting var.
+	 */
+	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level=null, string $permission=null): self
+	{
+		$module = ModuleLoader::instance()->getModule($moduleName);
+		$module->saveUserSettingACLRelation($this, $key, $relation);
+		$module->saveUserSettingACLLevel($this, $key, $level);
+		$module->saveUserSettingACLPermission($this, $key, $permission);
+		return $this;
 	}
 	
 	/**

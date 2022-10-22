@@ -45,6 +45,9 @@ final class FileNotFound extends MethodPage
 		];
 	}
 	
+	############
+	### Mail ###
+	############
 	public function beforeExecute() : void
 	{
 		if (Module_Core::instance()->cfgMail404())

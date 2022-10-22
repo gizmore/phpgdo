@@ -45,11 +45,6 @@ class GDT_Password extends GDT_String
 		return [$this->name => $pass ? $pass->__toString() : null];
 	}
 	
-// 	public function renderForm() : string
-// 	{
-// 		return GDT_Template::php('XC', 'form/password.php', ['field'=>$this]);
-// 	}
-	
 	public function validate($value) : bool
 	{
 		if ($value === null || (!$value->hash))

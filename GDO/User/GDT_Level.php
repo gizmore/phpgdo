@@ -3,6 +3,7 @@ namespace GDO\User;
 
 use GDO\Core\WithGDO;
 use GDO\UI\GDT_Badge;
+use GDO\Core\GDT;
 
 /**
  * User level field.
@@ -21,12 +22,19 @@ final class GDT_Level extends GDT_Badge
 	use WithGDO;
 	
 	public function defaultLabel() : self { return $this->label('user_level'); }
-	
-	public string $icon = 'level';
-	public bool $notNull = true;
-	
 	public function isSearchable() : bool { return false; }
 	
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->initial('0');
+		$this->notNull();
+		$this->icon('level');
+	}
+	
+	#################
+	### Var / Val ###
+	#################
 	public function getVar()
 	{
 		if (isset($this->gdo))
@@ -41,9 +49,5 @@ final class GDT_Level extends GDT_Badge
 		}
 		return parent::getVar();
 	}
-	
-// 	public function renderHTML() : string
-// 	{
-// 	}
 	
 }

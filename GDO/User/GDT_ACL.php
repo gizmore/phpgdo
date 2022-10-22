@@ -5,9 +5,7 @@ use GDO\Core\WithGDO;
 use GDO\Core\GDT;
 use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
-use GDO\DB\Query;
 use GDO\UI\WithIcon;
-use GDO\Core\GDO_Module;
 
 /**
  * An ACL adds 3 fields to a GDT.

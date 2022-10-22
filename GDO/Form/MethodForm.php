@@ -94,12 +94,12 @@ abstract class MethodForm extends Method
 		if (!isset($this->parameterCache))
 		{
 			$this->parameterCache = [];
-			$this->addComposeParameters($this->gdoParameters());
 			$this->applyInput();
+			$this->addComposeParameters($this->gdoParameters());
 			$form = $this->getForm(true);
+			$this->applyInput();
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
-			$this->applyInput();
 		}
 		return $this->parameterCache;
 	}
@@ -196,11 +196,11 @@ abstract class MethodForm extends Method
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			/** @var $gdt GDT_Submit **/
-			$gdt->inputs($this->getInputs());
+			$gdt->inputs($this->inputs);
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;
-				$this->pressedButton = $gdt->name;
+				$this->pressedButton = $gdt->getName();
 				
 				$this->beforeValidation();
 				
@@ -216,7 +216,7 @@ abstract class MethodForm extends Method
 					{
 						$result = $gdt->click($form);
 					}
-					elseif ($this->pressedButton === 'submit')
+					elseif ($gdt->name === 'submit')
 					{
 						$result = $this->formValidated($form);
 					}

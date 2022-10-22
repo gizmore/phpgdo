@@ -251,7 +251,9 @@ abstract class MethodCrud extends MethodForm
 	    $this->beforeUpdate($form, $this->gdo);
 		$this->gdo->saveVars($form->getFormVars());
 		$this->message('msg_crud_updated', [$this->gdo->gdoHumanName()]);
-		return $this->afterUpdate($form, $this->gdo);
+		$this->afterUpdate($form, $this->gdo);
+		$this->resetForm(true);
+		return $this->renderPage();
 	}
 	
 	public function onDelete(GDT_Form $form)

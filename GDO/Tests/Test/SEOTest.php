@@ -8,6 +8,7 @@ use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Tests\AutomatedTestCase;
 use function PHPUnit\Framework\assertNotEquals;
 use GDO\Account\Method\Settings;
+use GDO\Forum\Method\BoardImage;
 
 /**
  * Test if all methods have a title and description.
@@ -43,11 +44,6 @@ final class SEOTest extends AutomatedTestCase
 		
 		$method = $mt->method;
 		
-		if ($method instanceof Settings)
-		{
-			xdebug_break();
-		}
-		
 		foreach ($method->gdoParameters() as $gdt)
 		{
 			if ($name = $gdt->getName())
@@ -79,7 +75,8 @@ final class SEOTest extends AutomatedTestCase
 			}
 		}
 		
-		$method->inputs($plugged);
+// 		$method->inputs($plugged);
+		$method->appliedInputs($plugged);
 		$title = $method->getMethodTitle();
 		$descr = $method->getMethodDescription();
 		assertNotEmpty($title, "Test if {$method->gdoClassName()} has a method title.");

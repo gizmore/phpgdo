@@ -9,11 +9,12 @@ use GDO\Core\GDO;
 use GDO\Core\GDT;
 
 /**
- * Test if all icons exist.
+ * Test if all default icons exist.
  * Tests all GDO/GDT and Methods automatically.
  * 
  * @author gizmore
  * @version 7.0.1
+ * @since 7.0.1
  */
 final class AutomatedIconTest extends AutomatedTestCase
 {
@@ -44,12 +45,16 @@ final class AutomatedIconTest extends AutomatedTestCase
 	{
 		foreach ($mt->method->gdoParameterCache() as $gdt)
 		{
-			$this->tryClassname(get_class($gdt));
+			$this->runGDTTest($gdt);
 		}
 	}
 	
 	protected function runGDOTest(GDO $gdo): void
 	{
+		foreach ($gdo->gdoColumnsCache() as $gdt)
+		{
+			$this->runGDTTest($gdt);
+		}
 	}
 	
 }

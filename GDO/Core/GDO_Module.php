@@ -720,7 +720,7 @@ class GDO_Module extends GDO
 			{
 				$acl->initialACL($def[0], $def[1], $def[2]);
 			}
-			$acl->setGDOData($settings);
+// 			$acl->setGDOData($settings);
 		}
 		$gdt->setGDOData($settings);
 		return $gdt;
@@ -802,12 +802,12 @@ class GDO_Module extends GDO
 		$this->saveUserSettingACL($user, $key, 'uset_level', $level);
 	}
 	
-	public function saveUserSettingACLPermission(GDO_User $user, string $key, string $permission): void
+	public function saveUserSettingACLPermission(GDO_User $user, string $key, ?string $permission): void
 	{
 		$this->saveUserSettingACL($user, $key, 'uset_permission', $permission);
 	}
 	
-	private function saveUserSettingACL(GDO_User $user, string $key, string $aclField, string $aclVar): void
+	private function saveUserSettingACL(GDO_User $user, string $key, string $aclField, ?string $aclVar): void
 	{
 		$gdt = $this->getSetting($key);
 		if ($gdt instanceof GDT_Text)
@@ -842,7 +842,7 @@ class GDO_Module extends GDO
 
 	public function increaseUserSetting(GDO_User $user, $key, $by = 1)
 	{
-		return $this->saveUserSetting($user, $key, $this->userSettingVar($user, $key) + $by);
+		return $this->saveUserSetting($user, $key, $this->userSettingValue($user, $key) + $by);
 	}
 
 	# Cache
@@ -1124,7 +1124,17 @@ class GDO_Module extends GDO
 	{
 		$c = $this->userConfigCacheACL;
 		$user = $user ? $user : GDO_User::current();
-		return isset($c[$key]) ? $c[$key] : null;
+		return isset($c[$key]) ? $this->_ucacl($key, $c[$key], $user) : null;
+	}
+	
+	private function _ucacl(string $key, GDT_ACL $acl, GDO_User $user): GDT_ACL
+	{
+		$gdt = $this->userSetting($user, $key);
+		$data = $this->getACLDataFor($user, $gdt, $key);
+		$acl->aclRelation->var($data[0]);
+		$acl->aclLevel->var($data[1]);
+		$acl->aclPermission->var($data[2]);
+		return $acl;
 	}
 
 	protected function getACLDefaults(): array

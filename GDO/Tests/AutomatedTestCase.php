@@ -107,58 +107,67 @@ abstract class AutomatedTestCase extends TestCase
 	
 	protected function doAllGDT(): void
 	{
-		foreach (get_declared_classes() as $classname)
+		try
 		{
-			# All GDT (+GDO)
-			if (is_subclass_of($classname, GDT::class))
+			foreach (get_declared_classes() as $classname)
 			{
-				$this->numGDT++;
-				if ($this->class_is_abstract($classname))
+				# All GDT (+GDO)
+				if (is_subclass_of($classname, GDT::class))
 				{
-					$this->numGDT_abstract++;
+					$this->numGDT++;
+					if ($this->class_is_abstract($classname))
+					{
+						$this->numGDT_abstract++;
+						continue;
+					}
+				}
+				else
+				{
+					# other
 					continue;
 				}
-			}
-			else
-			{
-				# other
-				continue;
-			}
-		
-			if (is_subclass_of($classname, GDO::class))
-			{
-				if (!($table = call_user_func([$classname, 'table'])))
-				{
-					$this->numGDT_abstract++;
-					continue;
-				}
-				if (!$table->isTestable())
-				{
-					$this->numGDT_skipped++;
-					continue;
-				}
-				$this->numGDT_tested++;
-				$this->foreachGDOsGDT($table);
-				$this->assertOK('Test if we have no gdo error');
-				$this->numGDT_success++;
-			}
 			
-			# All GDO Columns
-			elseif (is_subclass_of($classname, GDT::class))
-			{
-				$gdt = call_user_func([$classname, 'make'], 'testfield');
-				if (!$gdt->isTestable())
+				if (is_subclass_of($classname, GDO::class))
 				{
-					$this->numGDT_skipped++;
-					continue;
+					if (!($table = call_user_func([$classname, 'table'])))
+					{
+						$this->numGDT_abstract++;
+						continue;
+					}
+					if (!$table->isTestable())
+					{
+						$this->numGDT_skipped++;
+						continue;
+					}
+					$this->numGDT_tested++;
+					$this->foreachGDOsGDT($table);
+					$this->assertOK('Test if we have no gdo error');
+					$this->numGDT_success++;
 				}
-				$this->numGDT_tested++;
-				$this->runGDTTest($gdt);
-				$this->assertOK('Test if we have no error');
-				$this->numGDT_success++;
+				
+				# All GDO Columns
+				elseif (is_subclass_of($classname, GDT::class))
+				{
+					$gdt = call_user_func([$classname, 'make'], 'testfield');
+					if (!$gdt->isTestable())
+					{
+						$this->numGDT_skipped++;
+						continue;
+					}
+					$this->numGDT_tested++;
+					$this->runGDTTest($gdt);
+					$this->assertOK('Test if we have no error');
+					$this->numGDT_success++;
+				}
 			}
+			$this->assertOK('Test if we still have no error');
 		}
-		$this->assertOK('Test if we still have no error');
+		catch (\Throwable $ex)
+		{
+			echo Debug::backtraceException($ex);
+			@ob_end_flush();
+			throw $ex;
+		}
 	}
 	
 	private function foreachGDOsGDT(GDO $gdo): bool
@@ -311,8 +320,8 @@ abstract class AutomatedTestCase extends TestCase
 			} # is Method
 		} # foreach classes
 
-		$this->message(CLI::bold("Done with automated method test {$this->getTestName()}."));
-		$this->message("Tested %s trivial methods.", CLI::bold($this->automatedTested));
+		$this->message(Color::green(CLI::bold("Done with automated method test {$this->getTestName()}.")));
+		$this->message("Tested %s trivial methods.", TextStyle::bold($this->automatedTested));
 		$this->message(CLI::bold($this->automatedFailed . ' FAILED!'));
 		$this->message("%s were skipped because they were abstract.", CLI::bold($this->automatedSkippedAbstract));
 		$this->message("%s were skipped because they were unpluggable.", CLI::bold($this->automatedSkippedAuto));

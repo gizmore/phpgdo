@@ -6,7 +6,7 @@ use GDO\Core\GDT_Method;
 use GDO\Core\WithInput;
 
 /**
- * A parameter repeater.
+ * A parameter repeater. @TODO: Move to Core module
  * 
  * Used for CLI parameter lists, like $sum 1,2,3,...
  * These need to be notNull and may not have an initial value.

@@ -29,11 +29,11 @@ final class Random
 	
 	/**
 	 * Get a single random item from an array.
-	 * This is not cryptographically safe.
+	 * This is not cryptographically safe!
 	 */
 	public static function arrayItem(array $array)
 	{
-		return $array[array_rand($array, 1)];
+		return count($array) ? $array[array_rand($array, 1)] : null;
 	}
 
 	/**

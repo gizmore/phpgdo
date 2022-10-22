@@ -21,6 +21,7 @@ use PHPUnit\Framework\Assert;
 use GDO\Core\WithModule;
 use GDO\Form\GDT_Form;
 use function PHPUnit\Framework\assertLessThan;
+use GDO\Core\Debug;
 
 /**
  * A GDO test case knows a few helper functions.
@@ -255,12 +256,28 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ##############
 	protected function assertNoCrash(string $message)
 	{
-		assertLessThan(500, Application::$RESPONSE_CODE, $message);
+		try
+		{
+			assertLessThan(500, Application::$RESPONSE_CODE, $message);
+		}
+		catch (\Throwable $ex)
+		{
+			echo Debug::debugException($ex);
+			throw $ex;
+		}
 	}
 	
 	protected function assertOK(string $message)
 	{
-		assertLessThan(400, Application::$RESPONSE_CODE, $message);
+		try
+		{
+			assertLessThan(400, Application::$RESPONSE_CODE, $message);
+		}
+		catch (\Throwable $ex)
+		{
+			echo Debug::debugException($ex);
+			throw $ex;
+		}
 	}
 	
 	protected function assert200(string $message)
@@ -275,11 +292,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function assertCode(int $code, string $message)
 	{
-		if (Application::isError())
+		try
 		{
-			CLI::flushTopResponse();
+			assertEquals($code, Application::$RESPONSE_CODE, $message);
 		}
-		assertEquals($code, Application::$RESPONSE_CODE, $message);
+		catch (\Throwable $ex)
+		{
+			echo Debug::debugException($ex);
+			throw $ex;
+		}
 	}
 
 	protected function assertStringContainsStrings(array $needles, string $haystack, string $message = '')

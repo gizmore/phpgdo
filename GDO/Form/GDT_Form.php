@@ -161,9 +161,10 @@ final class GDT_Form extends GDT
 	public function validate($value) : bool
 	{
 		$valid = true;
+		$inputs = $this->getInputs();
 		foreach ($this->getAllFields() as $gdt)
 		{
-			if (!$gdt->validated())
+			if (!$gdt->inputs($inputs)->validated())
 			{
 				$valid = false;
 			}

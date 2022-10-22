@@ -997,9 +997,12 @@ abstract class GDO extends GDT
 		{
 			$this->beforeCreate($query);
 		}
+		
 		$query->exec();
+		
 		$this->dirty = false;
 		$this->persisted = true;
+		
 		if ($withHooks)
 		{
 			$this->afterCreate();
