@@ -495,7 +495,7 @@ class GDT_Table extends GDT
 			$dat = [];
 			foreach ($this->getHeaderFields() as $gdt)
 			{
-				if ($gdt->name && $gdt->isSerializable())
+				if ($gdt->hasName() && $gdt->isSerializable())
 				{
 					$json = $gdt->gdo($gdo)->renderJSON();
 					if (is_array($json))
