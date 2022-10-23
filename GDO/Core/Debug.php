@@ -244,6 +244,12 @@ final class Debug
 	        Logger::flush();
 	    }
 	    
+	    if ($app->isUnitTests())
+	    {
+	    	echo $message . "\n";
+	    	@ob_flush();
+	    }
+	    
 	    hdrc('HTTP/1.1 500 Server Error');
 	    
 	    if ($render)
@@ -419,7 +425,10 @@ REQUEST: %s\n\n";
 			{
 				if (defined('GDO_CORE_STABLE'))
 				{
-					$back .= '#' . $arg->getID();
+					if (!$arg->gdoAbstract())
+					{
+						$back .= '#' . $arg->getID();
+					}
 				}
 			}
 			return $back;

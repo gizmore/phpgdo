@@ -128,7 +128,8 @@ abstract class AutomatedTestCase extends TestCase
 			
 				if (is_subclass_of($classname, GDO::class))
 				{
-					if (!($table = call_user_func([$classname, 'table'])))
+					if ( (!($table = call_user_func([$classname, 'table'])))
+						|| ($table->gdoAbstract()) )
 					{
 						$this->numGDT_abstract++;
 						continue;
@@ -164,7 +165,7 @@ abstract class AutomatedTestCase extends TestCase
 		catch (\Throwable $ex)
 		{
 			echo Debug::backtraceException($ex);
-			@ob_end_flush();
+			@ob_flush();
 			throw $ex;
 		}
 	}
@@ -456,10 +457,10 @@ abstract class AutomatedTestCase extends TestCase
 	##############
 	### Helper ###
 	##############
-	protected function class_uses_trait(string $classname, string $traitname) : bool
-	{
-		return in_array($traitname, class_uses($classname, true), true);
-	}
+// 	protected function class_uses_trait(string $classname, string $traitname) : bool
+// 	{
+// 		return in_array($traitname, class_uses($classname, true), true);
+// 	}
 	
 	protected function class_is_abstract(string $classname): bool
 	{

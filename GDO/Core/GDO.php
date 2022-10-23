@@ -557,9 +557,15 @@ abstract class GDO extends GDT
 	public function gdoPrimaryKeyColumnNames() : array
 	{
 		$table = self::table();
+// 		if (!isset($table->cache))
+// 		{
+// 			xdebug_break();
+// 		}
 // 		$cache = isset($table->cache) ? $table->cache : null;
 		$cache = $table->cache;
 // 		if ($cache && isset($cache->pkNames))
+
+
 		if (isset($cache->pkNames))
 		{
 			return $cache->pkNames;
@@ -1313,10 +1319,10 @@ abstract class GDO extends GDT
 		$id = '';
 		foreach ($this->gdoPrimaryKeyColumnNames() as $name)
 		{
-			if ($name === null)
-			{
-				xdebug_break();
-			}
+// 			if ($name === null)
+// 			{
+// 				xdebug_break();
+// 			}
 // 			if ($name)
 // 			{
 				$id2 = $this->gdoVar($name);

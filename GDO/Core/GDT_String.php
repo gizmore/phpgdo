@@ -162,9 +162,29 @@ class GDT_String extends GDT_DBField
 		{
 			return false;
 		}
-		return $value === null ? true :  
-			($this->validatePattern($value) &&
+		
+		return $value === null ? true :
+			($this->validateUnique($value) &&
+			$this->validatePattern($value) &&
 			$this->validateLength($value));
+	}
+	
+	protected function validateUnique($value) : bool
+	{
+		if (isset($this->gdo) && $this->unique)
+		{
+			$condition = "{$this->identifier()}=".quote($value);
+			if ($this->gdo->isPersisted())
+			{
+				# ignore own row
+				$condition .= " AND NOT ( " . $this->gdo->getPKWhere() . " )";
+			}
+			if ($this->gdo->table()->select('1')->where($condition)->first()->exec()->fetchValue() === '1')
+			{
+				return $this->error('err_db_unique');
+			}
+		}
+		return true;
 	}
 	
 	##########

@@ -16,6 +16,11 @@ final class GDT_Filter extends GDT
 	use WithName;
 	use WithInput;
 	
+	public function getDefaultName() : ?string
+	{
+		return 'f';
+	}
+	
 	public function getFilterVars() : array
 	{
 		if (isset($_REQUEST[$this->name]))
