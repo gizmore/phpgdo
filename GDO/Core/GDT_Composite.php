@@ -44,16 +44,17 @@ class GDT_Composite extends GDT_Container
 		return $this;
 	}
 	
-	public function inputs(array $inputs=null) : self
+	public function inputs(?array $inputs) : self
 	{
-		if ($inputs === null)
-		{
-			unset($this->inputs);
-		}
-		else
-		{
-			$this->inputs = $inputs;
-		}
+// 		if ($inputs === null)
+// 		{
+// 			unset($this->inputs);
+// 		}
+// 		else
+// 		{
+// 			$this->inputs = $inputs;
+// 		}
+		parent::inputs($inputs);
 		foreach ($this->getAllFields() as $gdt)
 		{
 			$gdt->inputs($inputs);

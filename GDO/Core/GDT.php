@@ -547,12 +547,17 @@ abstract class GDT
 		return null;
 	}
 	
+	public function getInputs() : array
+	{
+		return self::EMPTY_ARRAY;
+	}
+	
 	public function getInput() : ?string
 	{
 		return null;
 	}
 	
-	public function inputs(array $inputs=null) : self
+	public function inputs(?array $inputs) : self
 	{
 		return $this;
 	}

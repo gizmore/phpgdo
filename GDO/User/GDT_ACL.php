@@ -111,7 +111,7 @@ final class GDT_ACL extends GDT
 			$this->aclPermission->hasChanged();
 	}
 	
-	public function inputs(array $inputs = null) : self
+	public function inputs(?array $inputs): self
 	{
 		$this->aclLevel->inputs($inputs);
 		$this->aclRelation->inputs($inputs);

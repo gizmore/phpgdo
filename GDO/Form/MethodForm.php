@@ -94,12 +94,12 @@ abstract class MethodForm extends Method
 		if (!isset($this->parameterCache))
 		{
 			$this->parameterCache = [];
-			$this->applyInput();
+// 			$this->applyInput();
 			$this->addComposeParameters($this->gdoParameters());
 			$form = $this->getForm(true);
-			$this->applyInput();
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
+// 			$this->applyInput();
 		}
 		return $this->parameterCache;
 	}
@@ -116,6 +116,7 @@ abstract class MethodForm extends Method
 		if ($reset)
 		{
 			unset($this->form);
+// 			unset($this->parameterCache);
 		}
 		if (!isset($this->form))
 		{
@@ -126,6 +127,7 @@ abstract class MethodForm extends Method
 			$this->form = GDT_Form::make($this->getFormName());
 			$this->createForm($this->form);
 			$this->form->inputs($inputs);
+			$this->applyInput();
 			$this->form->actions()->inputs($inputs);
 			$this->form->titleRaw($this->getMethodTitle());
 		}
@@ -160,6 +162,12 @@ abstract class MethodForm extends Method
 		return $this;
 	}
 	
+	protected function applyInput(): void
+	{
+		$this->getForm();
+		parent::applyInput();
+	}
+	
 	############
 	### Exec ###
 	############
@@ -174,11 +182,16 @@ abstract class MethodForm extends Method
 		$this->pressedButton = null;
 		
 		### Generate form
-		$form = $this->getForm(true);
+		unset($this->parameterCache);
+		$this->gdoParameterCache();
+		$form = $this->getForm();
 		
-		if (isset($this->inputs))
-		{
-			$form->inputs($this->inputs);
+		$this->appliedInputs($this->getInputs());
+		
+// 		if (isset($this->inputs))
+// 		{
+// 			$form->inputs($this->inputs);
+// 			$this->applyInput();
 
 			### Flow upload
 			if ($flowField = (@$this->inputs['flowField']))
@@ -189,15 +202,15 @@ abstract class MethodForm extends Method
 					return $formField->flowUpload();
 				}
 			}
-		}
+// 		}
 		
 
 		### Execute action
-		$inputs = $this->getInputs();
+// 		$inputs = $this->getInputs();
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			/** @var $gdt GDT_Submit **/
-			$gdt->inputs($inputs);
+// 			$gdt->inputs($inputs);
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;

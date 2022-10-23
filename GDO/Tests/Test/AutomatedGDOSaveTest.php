@@ -5,6 +5,7 @@ use GDO\Tests\TestCase;
 use GDO\CLI\CLI;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Util\Permutations;
 use GDO\Core\Application;
 use GDO\Core\GDO_Exception;
@@ -127,7 +128,7 @@ final class AutomatedGDOSaveTest extends TestCase
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
-			$gdt->inputs(); # clear input
+			$gdt->inputs(null); # clear input
 			$this->addPlugVars($gdt->plugVars());
 		}
 		

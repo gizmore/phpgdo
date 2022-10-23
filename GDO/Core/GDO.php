@@ -395,7 +395,7 @@ abstract class GDO extends GDT
 		return $this->gdoColumn($key)->getValue();
 	}
 	
-	public function inputs(array $inputs=null) : self
+	public function inputs(?array $inputs) : self
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{

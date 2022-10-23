@@ -146,7 +146,7 @@ class Configure extends MethodForm
 // 				$deps
 // 			]);
 // 		}
-		$form->addField(GDT_Name::make('module_name')->initial($mod->gdoHumanName())->writeable(false));
+		$form->addField(GDT_Name::make('module_name')->initial($mod->getModuleName())->writeable(false));
 		$form->addField(GDT_Path::make('module_path')->writeable(false)->initial($mod->filePath()));
 		$c = GDT_Container::make('versions')->horizontal();
 		$c->addField($mod->gdoColumn('module_version')->writeable(false)->initial($mod->gdoVar('module_version')));

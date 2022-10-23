@@ -72,6 +72,7 @@ final class GDT_IconUTF8
         'gender' => '⚥',
         'group' => '😂',
         'guitar' => '🎸',
+    	'hands' => '🤝',
     	'heart' => '♡',
         'help' => '💡',
     	'house' => '🏠',

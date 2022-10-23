@@ -25,16 +25,13 @@ trait WithInput
 	 * Set all inputs to the fixed inputs parameter.
 	 * @param GDT|string[] $inputs
 	 */
-	public function inputs(array $inputs=null) : self
+	public function inputs(?array $inputs) : self
 	{
-		# Delete them
 		if ($inputs === null)
 		{
 			unset($this->inputs);
-			return $this;
 		}
-		# Add/Set them
-		if (isset($this->inputs))
+		elseif (isset($this->inputs))
 		{
 			$this->inputs = array_merge($this->inputs, $inputs);
 		}
@@ -42,6 +39,30 @@ trait WithInput
 		{
 			$this->inputs = $inputs;
 		}
+		
+// 		# Delete them
+// 		if ($inputs === null)
+// 		{
+// 			unset($this->inputs);
+// 			return $this;
+// 		}
+// 		# Add/Set them
+// 		if (isset($this->inputs))
+// 		{
+// 			$this->inputs = array_merge($this->inputs, $inputs);
+// 		}
+// 		else
+// 		{
+// 			$this->inputs = $inputs;
+// 		}
+		
+// 		if ($this->hasFields())
+// 		{
+// 			foreach ($this->getAllFields() as $gdt)
+// 			{
+// 				$gdt->inputs($inputs);
+// 			}
+// 		}
 		return $this;
 	}
 	

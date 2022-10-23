@@ -55,9 +55,7 @@ class GDT_Method extends GDT
 					Application::instance()->verb(GDT_Form::GET);
 				}
 			}
-
-			$method = $this->method->inputs($inputs);
-			$this->result = $method->executeWithInputs($inputs, $this->withPermissionCheck);
+			$this->result = $this->method->executeWithInputs($inputs, $this->withPermissionCheck);
 		}
 		return $this->result;
 	}

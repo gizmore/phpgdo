@@ -173,6 +173,8 @@ trait WithFields
 			}
 		}
 		
+// 		$gdt->inputs($this->getInputs());
+		
 		return $this;
 	}
 	

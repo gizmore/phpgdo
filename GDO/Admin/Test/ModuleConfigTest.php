@@ -13,6 +13,7 @@ use GDO\Core\ModuleLoader;
 use function PHPUnit\Framework\assertEmpty;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use GDO\Session\Module_Session;
 
 /**
  * Test method form for module admin configuration.
@@ -44,14 +45,14 @@ final class ModuleConfigTest extends TestCase
     private function configureTest(GDO_Module $module)
     {
     	# Get
-    	$inputs = ['module' => $module->getName()];
+    	$inputs = ['module' => $module->getModuleName()];
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
     	$html = $result->renderMode(GDT::RENDER_WEBSITE);
     	assertStringContainsString('</form>', $html, "Test if {$module->getName()} can be configured correctly.");
     	
     	# Save
-    	$inputs = ['module' => $module->getName(), 'submit' => 'submit'];
+    	$inputs = ['module' => $module->getModuleName(), 'submit' => 'submit'];
     	$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
     	$result = $method->execute();
     	
