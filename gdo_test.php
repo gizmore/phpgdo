@@ -122,7 +122,7 @@ if (Application::$INSTANCE->isError())
 # #############
 # ## Single ###
 # #############
-if ($argc === 2) # Specifiy with module names, separated by comma.
+if ($argc >= 2) # Specifiy with module names, separated by comma.
 {
 	$count = 0;
 	$modules = explode(',', $argv[1]);
@@ -132,7 +132,10 @@ if ($argc === 2) # Specifiy with module names, separated by comma.
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
-	$modules[] = 'Tests';
+	if ($argv[2] !== '-s')
+	{
+		$modules[] = 'Tests';
+	}
 
 	# Fix lowercase names
 	$modules = array_map(

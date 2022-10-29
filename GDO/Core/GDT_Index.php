@@ -20,6 +20,12 @@ class GDT_Index extends GDT
 	###########
 	### GDT ###
 	###########
+	public function isPrimary(): bool
+	{
+		# This fixes gdoPrimaryKeyColumns() for IP2Country
+		return false;
+	}
+	
 	public function gdoColumnDefine() : string
 	{
 	    return "{$this->fulltextDefine()} INDEX({$this->indexColumns}) {$this->usingDefine()}";

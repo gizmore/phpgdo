@@ -532,7 +532,13 @@ abstract class GDO extends GDT
 		
 		if (empty($columns))
 		{
-			$columns = $this->gdoColumnsCache();
+			foreach ($this->gdoColumnsCache() as $column)
+			{
+				if (!$column->isVirtual())
+				{
+					$columns[] = $column;
+				}
+			}
 		}
 		
 		$cache->pkColumns = $columns;

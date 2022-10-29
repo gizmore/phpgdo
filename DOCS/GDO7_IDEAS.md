@@ -76,4 +76,10 @@ Your playlists are ACL sharable.
  
  - New IRC game: Tick-Du-Bist-Es: Man kann nur leute von anderen netzwerken ticken. wer es grad ist wird alle 15min gehilighted.
  
+ - https://jdan.github.io/98.css/ - A new Win98 Theme.
+ 
+ - the seo game. you get a unique name to seo. Monthly google, duckduckgo rankings for the best SEO company.
+ 
+ 
+ 
  

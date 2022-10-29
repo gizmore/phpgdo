@@ -5,12 +5,12 @@ use GDO\Tests\TestCase;
 use GDO\CLI\CLI;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
-use GDO\Core\GDT;
 use GDO\Util\Permutations;
 use GDO\Core\Application;
 use GDO\Core\GDO_Exception;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use GDO\IP2Country\GDO_IPCountry;
 
 /**
  * Try to save all GDO.
@@ -143,6 +143,11 @@ final class AutomatedGDOSaveTest extends TestCase
 			$success = false;
 			try
 			{
+// 				if ($gdo instanceof GDO_IPCountry)
+// 				{
+// 					xdebug_break();
+// 				}
+				
 				$new = $gdo->table()->cache->getNewDummy();
 				$new->setVars($inputs);
 				if ($new->isValid())

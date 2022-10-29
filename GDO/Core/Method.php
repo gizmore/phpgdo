@@ -108,6 +108,7 @@ abstract class Method #extends GDT
 			{
 				if (in_array($key, $keys, true))
 				{
+					Application::$INSTANCE->verb(GDT_Form::POST);
 					return $key;
 				}
 				if (!$first)
@@ -116,6 +117,12 @@ abstract class Method #extends GDT
 				}
 			}
 		}
+		
+		if ($first)
+		{
+			Application::$INSTANCE->verb(GDT_Form::POST);
+		}
+		
 		return $first;
 	}
 	

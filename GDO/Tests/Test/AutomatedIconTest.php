@@ -3,12 +3,10 @@ namespace GDO\Tests\Test;
 
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
-use GDO\UI\WithIcon;
 use GDO\UI\GDT_IconUTF8;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
 use GDO\Core\Debug;
-use GDO\Core\GDT_CreatedBy;
 
 /**
  * Test if all default icons exist.
@@ -62,7 +60,7 @@ final class AutomatedIconTest extends AutomatedTestCase
 // 			{
 				if (isset($gdt->icon))
 				{
-					assert(isset(GDT_IconUTF8::$MAP[$gdt->icon]), 'Test if icon exists for ' . $classname);
+					assert(isset(GDT_IconUTF8::$MAP[$gdt->icon]), 'Test if icon ' . $gdt->icon . ' exists for ' . $classname);
 				}
 // 			}
 		}

@@ -3,6 +3,7 @@ namespace GDO\User;
 
 use GDO\Core\WithGDO;
 use GDO\Core\GDT;
+use GDO\DB\Query;
 use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
 use GDO\UI\WithIcon;
@@ -186,23 +187,57 @@ final class GDT_ACL extends GDT
 		return true;
 	}
 	
-	/**
-	 * Extend a query to filter by ACL settings.
-	 */
-// 	public function aclQuery(QUERY $QUERY, GDO_USER $USER, STRING $CREATORCOLUMN) : SELF
-// 	{
-// 		$THIS->ACLRELATION->ACLQUERY($QUERY, $USER, $CREATORCOLUMN);
-// 		RETURN $THIS;
-// 	}
-	
-// 	public function queryWhereVisible(Query $query, GDO_Module $module, string $key, GDO_User $user): self
-// 	{
+	public function queryWhereVisible(Query $query, string $moduleName, string $key, GDO_User $user): self
+	{
+// 		$module = ModuleLoader::instance()->getModule($moduleName);
 // 		$gdt = $module->setting($key);
 // 		$acl = $module->getSettingACL($key);
-// 		$rel = $acl->getVar();
+
+// 		if ($user->isStaff())
+// 		{
+// 			return $this;
+// 		}
 		
+		# 3 Conditions for each access type. rel,lvl,perm
+		$conditions = [];
+		$conditions[] = "uset_level<={$user->getLevel()}";
+// 		$conditions[] = " ( SELECT 1 FROM gdo_userpermission WHERE perm_perm_id=uset_permission AND perm_user_id={$user->getID()})";
 		
-// 	}
+		$rels = ['acl_all'];
+		if ($user->isMember())
+		{
+			$rels[] = 'acl_members';
+		}
+		if ($user->isUser())
+		{
+			$rels[] = 'acl_guests';
+		}
+// 		if (module_enabled('Friends'))
+// 		{
+// 			$rels[] = " (SELECT 1 FRO;) ";
+// 		}
+		$rels = "'" . implode("', '", $rels) . "'"; 
+		$conditions[] = "uset_relation IN (" . $rels . ")";
+		
+		$conditions[] = "uset_name=" . quote($key); 
+		
+		$query->where("uset_user={$user->getID()}");
+		$query->orWhere(implode(' AND ', $conditions));
+// 		
+$q  = $query->buildQuery();
+
+		
+// 		switch ($rel)
+// 		{
+// 			case GDT_ACLRelation::NOONE:
+// 			case GDT_ACLRelation::HIDDEN:
+// 				$condition[] = '0';
+// 			case GDT_ACLRelation::FRIENDS:
+// 		}
+// 		$condition[] =  "uset_relation IN ({$rel}) OR ";
+// 		$query->orWhere(implode(' AND ', $condition));
+		return $this;
+	}
 	
 	
 	##############

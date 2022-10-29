@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Tests\Test;
 
-use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
 use GDO\Tests\AutomatedTestCase;
@@ -9,7 +8,6 @@ use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertTrue;
-use GDO\CLI\CLI;
 use GDO\Core\GDT_Response;
 
 /**

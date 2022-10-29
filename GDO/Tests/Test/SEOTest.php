@@ -7,8 +7,6 @@ use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
 use GDO\Tests\AutomatedTestCase;
 use function PHPUnit\Framework\assertNotEquals;
-use GDO\Account\Method\Settings;
-use GDO\Forum\Method\BoardImage;
 
 /**
  * Test if all methods have a title and description.
