@@ -324,6 +324,11 @@ abstract class Method #extends GDT
 		$transactional = false;
 		try
 		{
+			if ($result = $this->onMethodInit())
+			{
+				$response->addField($result);
+			}
+			
 			# 0) Init
 			$this->applyInput();
 			
@@ -337,10 +342,6 @@ abstract class Method #extends GDT
 				}
 			}
 			
-			if ($result = $this->onMethodInit())
-			{
-				$response->addField($result);
-			}
 			if (Application::isError())
 			{
 				return $response;
