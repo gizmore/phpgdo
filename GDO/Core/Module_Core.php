@@ -198,7 +198,7 @@ final class Module_Core extends GDO_Module
 			return true;
 		}
 		
-		if (preg_match('/\\.(?:ttf|woff|woff2)$/iD', $url))
+		if (preg_match('/\\.(?:ttf|woff|woff2|png|gif|jpg|jpeg)$/iD', $url))
 		{
 			return true;
 		}
