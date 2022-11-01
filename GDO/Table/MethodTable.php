@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Table;
 
-use GDO\Core\Method;
 use GDO\DB\ArrayResult;
 use GDO\Core\GDT;
 use GDO\Core\GDO;
@@ -269,12 +268,12 @@ abstract class MethodTable extends MethodForm
 		$form = $this->getForm();
 		if ($form->isEmpty())
 		{
-			return $this->renderTable();
+			return GDT_Tuple::makeWith(
+				$this->renderTable());
 		}
 		return GDT_Tuple::makeWith(
 			$form,
-			$this->renderTable()
-		);
+			$this->renderTable());
 	}
 	
 	public function validate() : bool
