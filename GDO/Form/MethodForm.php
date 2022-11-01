@@ -129,7 +129,6 @@ abstract class MethodForm extends Method
 			$this->form->inputs($inputs);
 			$this->applyInput();
 			$this->form->actions()->inputs($inputs);
-			$this->form->titleRaw($this->getMethodTitle());
 		}
 		return $this->form;
 	}
@@ -275,7 +274,9 @@ abstract class MethodForm extends Method
 	 */
 	public function renderPage() : GDT
 	{
-		return $this->getForm();
+		$form = $this->getForm();
+		$form->titleRaw($this->getMethodTitle());
+		return $form;
 	}
 	
 }

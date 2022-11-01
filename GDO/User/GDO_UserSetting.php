@@ -71,12 +71,10 @@ class GDO_UserSetting extends GDO
 	{
 		foreach ($gdt->getGDOData() as $key => $var)
 		{
-			static::blank([
-				'uset_user' => $user->getID(),
-				'uset_name' => $key,
-				'uset_var' => $var,
-				$aclField => $aclVar,
-			])->softReplace();
+			if ($row = self::table()->getById($user->getID(), $key))
+			{
+				$row->saveVar($aclField, $aclVar);
+			}
 		}
 	}
 	

@@ -92,6 +92,13 @@ final class GDT_Form extends GDT
 		return $this;
 	}
 	
+	###
+	public function isEmpty(): bool
+	{
+		return (!$this->hasFields()) &&
+			(!$this->actions()->hasFields());
+	}
+	
 	##############
 	### Render ###
 	##############

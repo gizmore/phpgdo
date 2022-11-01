@@ -68,7 +68,8 @@ trait WithModule
 		{
 			return t($key);
 		}
-		return substr($shortname, 7);
+// 		return substr($shortname, 7);
+		return $shortname;
 	}
 	
 	##############

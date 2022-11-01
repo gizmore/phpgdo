@@ -499,12 +499,14 @@ final class GDO_User extends GDO
 	/**
 	 * Save all the ACL settings for a user's setting var.
 	 */
-	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level=null, string $permission=null): self
+	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level=0, string $permission=null): self
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$module->saveUserSettingACLRelation($this, $key, $relation);
 		$module->saveUserSettingACLLevel($this, $key, $level);
 		$module->saveUserSettingACLPermission($this, $key, $permission);
+		$this->tempUnset('gdo_setting');
+		$this->recache();
 		return $this;
 	}
 	

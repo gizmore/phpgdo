@@ -8,6 +8,8 @@ use GDO\Core\GDO;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_SearchField;
 use GDO\Core\GDT_Tuple;
+use GDO\Form\MethodForm;
+use GDO\Form\GDT_Form;
 
 /**
  * A method that displays a table from memory via ArrayResult.
@@ -24,7 +26,7 @@ use GDO\Core\GDT_Tuple;
  * @see GDT_Filter
  * @see GDT_SearchField
  */
-abstract class MethodTable extends Method
+abstract class MethodTable extends MethodForm
 {
 	public GDT_Table $table;
 	
@@ -63,10 +65,8 @@ abstract class MethodTable extends Method
 	{
 		if (!isset($this->parameterCache))
 		{
-			$this->parameterCache = [];
-			$this->addComposeParameters($this->gdoParameters());
+			parent::gdoParameterCache();
 			$this->addComposeParameters($this->gdoTableFeatures());
-// 			$this->addComposeParameters($this->gdoHeaders());
 		}
 		return $this->parameterCache;
 	}
@@ -266,7 +266,15 @@ abstract class MethodTable extends Method
 	###############
 	public function execute()
 	{
-		return GDT_Tuple::makeWith($this->renderTable());
+		$form = $this->getForm();
+		if ($form->isEmpty())
+		{
+			return $this->renderTable();
+		}
+		return GDT_Tuple::makeWith(
+			$form,
+			$this->renderTable()
+		);
 	}
 	
 	public function validate() : bool
@@ -408,6 +416,17 @@ abstract class MethodTable extends Method
 	        $result = $table->pagemenu->paginateResult($result, $this->getPage(), $this->getIPP());
 	    }
 	    $table->result($result);
+	}
+	
+	### Form
+	
+	public function isUserRequired(): bool
+	{
+		return false;
+	}
+	
+	public function createForm(GDT_Form $form): void
+	{
 	}
 	
 }

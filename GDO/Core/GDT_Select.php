@@ -387,9 +387,14 @@ class GDT_Select extends GDT_ComboBox
 		return $rendered;
 	}
 	
-	public function renderHTML() : string
+	public function renderCell() : string
 	{
 		return $this->displayChoice($this->getVar());
+	}
+	
+	public function renderHTML() : string
+	{
+		return GDT_Template::php('Core', 'select_cell.php', ['field' => $this]);
 	}
 	
 	public function renderForm() : string
@@ -424,7 +429,7 @@ class GDT_Select extends GDT_ComboBox
 					return self::SELECTED;
 				}
 			}
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 		else
 		{
