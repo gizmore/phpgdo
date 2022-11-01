@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Admin\Test;
+namespace GDO\Tests\Test;
 
 use GDO\Tests\GDT_MethodTest;
 use GDO\Tests\TestCase;
@@ -13,7 +13,6 @@ use GDO\Core\ModuleLoader;
 use function PHPUnit\Framework\assertEmpty;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
-use GDO\Session\Module_Session;
 
 /**
  * Test method form for module admin configuration.

@@ -328,6 +328,7 @@ abstract class Method #extends GDT
 	public function executeWithInit(bool $checkPermission=true)
 	{
 		$db = Database::instance();
+		$app = Application::$INSTANCE;
 		$response = GDT_Response::make();
 		$transactional = false;
 		try
@@ -392,7 +393,7 @@ abstract class Method #extends GDT
 			}
 			
 			# 4b) Error
-			if ($response->hasError())
+			if (Application::isError())
 			{
 				if ($transactional)
 				{

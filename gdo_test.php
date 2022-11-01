@@ -170,7 +170,6 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 	
 	if ($argv[2] === '-s')
 	{
-		Arrays::remove($modules, 'Admin');
 		Arrays::remove($modules, 'CountryCoordinates');
 		Arrays::remove($modules, 'IP2Country');
 	}
