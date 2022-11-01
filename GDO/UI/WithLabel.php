@@ -162,4 +162,12 @@ trait WithLabel
 		return " for=\"{$this->getName()}\"";
 	}
 
+	##############
+	### Render ###
+	##############
+	public function renderTHead() : string
+	{
+		return $this->renderLabelText();
+	}
+	
 }
