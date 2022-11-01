@@ -48,8 +48,8 @@ final class Javascript
 		$minify = $minify === 'concat';
 		
 		$back = '';
-// 	    if (Application::$INSTANCE->allowJavascript())
-// 	    {
+		if (GDO_Module::config_var('Core', 'allow_javascript', '1'))
+	    {
 	        $back .= self::displayJavascriptPreInline();
 	        $javascripts = $minify ? MinifyJS::minified(self::$_JAVASCRIPTS) : self::$_JAVASCRIPTS;
     		foreach ($javascripts as $js)
@@ -57,7 +57,7 @@ final class Javascript
     			$back .= sprintf('<script src="%s"></script>'."\n", $js);
     		}
     		$back .= self::displayJavascriptPostInline();
-// 	    }
+	    }
 		return $back;
 	}
 	

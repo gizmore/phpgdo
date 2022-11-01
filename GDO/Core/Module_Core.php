@@ -97,6 +97,7 @@ final class Module_Core extends GDO_Module
 			GDT_Checkbox::make('show_impressum')->initial('1'), # show impressum in footer.
 			GDT_Checkbox::make('show_privacy')->initial('1'), # show privacy link in footer.
 			GDT_Checkbox::make('allow_guests')->initial('1'), # generally allow guests.
+			GDT_Checkbox::make('allow_javascript')->initial('1'), # generally allow javascript.
 			GDT_Version::make('asset_revision')->initial($this->version), # append this version to asset include urls?v=.
 			GDT_Checkbox::make('siteshort_title_append')->initial('1'),
 			GDT_Checkbox::make('mail_403')->initial('1'), # mail 403 error mails?
@@ -112,6 +113,7 @@ final class Module_Core extends GDO_Module
 	public function cfgShowPrivacy() : string { return $this->getConfigVar('show_privacy'); }
 	public function cfgAssetVersion() : Version { return $this->getConfigValue('asset_revision'); }
 	public function cfgAllowGuests() : string { return $this->getConfigVar('allow_guests'); }
+	public function cfgAllowJavascript() : string { return $this->getConfigVar('allow_javascript'); }
 	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
 	public function cfgMail403() : string { return $this->getConfigVar('mail_404'); }
 	public function cfgMail404() : string { return $this->getConfigVar('mail_404'); }
