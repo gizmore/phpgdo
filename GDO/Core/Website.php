@@ -163,16 +163,18 @@ final class Website
 		{
 			Logger::logMessage(ten($key, $args));
 		}
-		if ($app->isUnitTests())
-		{
-			echo Color::red(TextStyle::bold(t($key, $args)));
-			echo "\n";
-		}
 		$error = GDT_Error::make()->
 			code($code)->
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($error);
+		if ($app->isUnitTests())
+		{
+			echo Color::red(TextStyle::bold(t($key, $args)));
+			echo "\n";
+// 			return $error;
+		}
+		return GDT_Response::make()->code($code);
 	}
 	
 	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200)
@@ -183,16 +185,18 @@ final class Website
 		{
 			Logger::logMessage(ten($key, $args));
 		}
-		if ($app->isUnitTests())
-		{
-			echo Color::green(TextStyle::bold(t($key, $args)));
-			echo "\n";
-		}
 		$success = GDT_Success::make()->
 			code($code)->
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($success);
+		if ($app->isUnitTests())
+		{
+			echo Color::green(TextStyle::bold(t($key, $args)));
+			echo "\n";
+// 			return $success;
+		}
+		return GDT_Response::make()->code($code);
 	}
 	
 }

@@ -172,8 +172,6 @@ final class Arrays
 
 	/**
 	 * Remove a single element from an array.
-	 * 
-	 * @param mixed $object
 	 */
 	public static function remove(array &$array, $object): array
 	{
@@ -182,6 +180,7 @@ final class Arrays
 			if ($element === $object)
 			{
 				unset($array[$key]);
+				break;
 			}
 		}
 		return $array;

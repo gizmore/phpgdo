@@ -14,6 +14,8 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertFalse;
+use GDO\Language\Method\SwitchLanguage;
+use function PHPUnit\Framework\assertStringContainsString;
 
 /**
  * Configure the Language module for 3 test languages.
@@ -140,4 +142,14 @@ final class LanguageTest extends TestCase
     	])->replace();
     	assertTrue($user->isMember(), "Test if darla is a member.");
     }
+
+    public function testSetToEnglish()
+    {
+    	$inputs = [
+    		'lang' => 'en',
+    	];
+    	$this->callMethod(SwitchLanguage::make(), $inputs);
+    	assertStringContainsString('German', t('lang_de'), "Assert if english is used.");
+    }
+    
 }

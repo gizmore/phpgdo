@@ -23,6 +23,7 @@ use GDO\Core\WithModule;
 use GDO\Form\GDT_Form;
 use function PHPUnit\Framework\assertLessThan;
 use GDO\Core\Debug;
+use GDO\UI\GDT_Page;
 
 /**
  * A GDO test case knows a few helper functions.
@@ -247,8 +248,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	protected function user(GDO_User $user): GDO_User
 	{
 		$this->session($user);
-		// Trans::setISO($user->getLangISO());
-		// Time::setTimezone($user->getTimezone());
+		Trans::setISO($user->getLangISO());
+		Time::setTimezone($user->getTimezone());
 		return GDO_User::setCurrent($user);
 	}
 
@@ -338,7 +339,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	protected function callMethod(Method $method, array $inputs, bool $assertOk=true)
 	{
 		$m = GDT_MethodTest::make()->method($method);
-		$m->inputs(null);
+		$m->inputs($inputs);
 		$r = $m->execute();
 		if ($assertOk)
 		{
@@ -385,7 +386,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$app->cli(true);
 		$expression = GDT_Expression::fromLine($command);
 		$response = $expression->execute();
-		$result = $response->renderCLI();
+		$result = GDT_Page::instance()->topResponse()->renderCLI();
+		$result .= $response->renderCLI();
+		$app->cli(false);
 		return $result;
 	}
 

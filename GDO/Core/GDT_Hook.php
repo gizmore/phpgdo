@@ -26,7 +26,12 @@ final class GDT_Hook extends GDT
 	/**
 	 * @var string[string]
 	 */
-	private static array $CACHE;
+	private static ?array $CACHE = null;
+	
+	public static function clearCache(): void
+	{
+		self::$CACHE = null;
+	}
 	
 	# Performance counter
 	public static int $CALLS = 0;     # Num Hook calls.

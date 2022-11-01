@@ -220,37 +220,45 @@ abstract class Method #extends GDT
 		
 		if ($mt = $this->getUserType())
 		{
-			$mt = explode(',', $mt);
-			$ut = $user->getType();
-			if (!in_array($ut, $mt, true))
+			if (!$user->isAdmin())
 			{
-				return $this->error('err_user_type', [Arrays::implodeHuman($mt, 'or')]);
+				$mt = explode(',', $mt);
+				$ut = $user->getType();
+				if (!in_array($ut, $mt, true))
+				{
+					return $this->error('err_user_type', [Arrays::implodeHuman($mt, 'or')]);
+				}
 			}
 		}
 		
 		if ($mp = $this->getPermission())
 		{
-			$mp = explode(',', $mp);
-			$has = false;
-			foreach ($mp as $permission)
+			if (!$user->isAdmin())
 			{
-				if ($user->hasPermission($permission))
+				$mp = explode(',', $mp);
+				$has = false;
+				foreach ($mp as $permission)
 				{
-					$has = true;
-					break;
+					if ($user->hasPermission($permission))
+					{
+						$has = true;
+						break;
+					}
 				}
-			}
-			if (!$has)
-			{
-// 				return $this->error('err_permission_required', [Arrays::implodeHuman($mp, 'or')]);
-				return $this->error('err_permission_required');
+				if (!$has)
+				{
+					return $this->error('err_permission_required');
+				}
 			}
 		}
 		
-		if (!$this->hasPermission($user))
-		{
-			return $this->error('err_permission_required');
-		}
+// 		if (!$user->isAdmin())
+// 		{
+			if (!$this->hasPermission($user))
+			{
+				return $this->error('err_permission_required');
+			}
+// 		}
 		
 		return true;
 	}
@@ -648,15 +656,13 @@ abstract class Method #extends GDT
 	public function message(string $key, array $args = null, int $code = 200, bool $log = true) : GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
-		Website::message($titleRaw, $key, $args, $log, $code);
-		return GDT_Response::make();
+		return Website::message($titleRaw, $key, $args, $log, $code);
 	}
 	
 	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
-		Website::error($titleRaw, $key, $args, $log, $code);
-		return GDT_Response::make()->code($code);
+		return Website::error($titleRaw, $key, $args, $log, $code);
 	}
 	
 	################

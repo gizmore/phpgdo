@@ -60,6 +60,7 @@ final class ClearCache extends Method
 	    # More caches
 	    GDT_MethodTest::$TEST_USERS = [];
 	    # Call hook
+	    GDT_Hook::clearCache();
 	    GDT_Hook::callWithIPC('ClearCache');
 	}
 

@@ -13,6 +13,7 @@ use GDO\DB\Query;
 use GDO\DB\Result;
 use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
+use GDO\Language\Trans;
 use GDO\Core\GDT;
 use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Error;
@@ -147,8 +148,8 @@ final class GDO_User extends GDO
 	public static function setCurrent(GDO_User $user) : self
 	{
 		self::$CURRENT = $user;
-// 		Time::setTimezone($user->getTimezone());
-// 		Trans::setISO($user->getLangISO());
+		Time::setTimezone($user->getTimezone());
+		Trans::setISO($user->getLangISO());
 		return $user;
 	}
 	

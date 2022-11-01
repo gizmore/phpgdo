@@ -17,6 +17,8 @@ use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
 use GDO\UI\TextStyle;
 use GDO\Core\ModuleProviders;
+use GDO\Core\Method\ClearCache;
+use GDO\Util\Arrays;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -146,8 +148,7 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 		}, $modules);
 	
 	$modules = array_unique($modules);
-
-	# While loading...
+	
 	while ($count != count($modules))
 	{
 		$count = count($modules);
@@ -166,7 +167,16 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 
 		$modules = array_unique($modules);
 	}
-
+	
+	if ($argv[2] === '-s')
+	{
+		Arrays::remove($modules, 'Admin');
+		Arrays::remove($modules, 'CountryCoordinates');
+		Arrays::remove($modules, 'IP2Country');
+	}
+	
+	# While loading...
+	
 	# Map
 	$modules = array_map(function ($m)
 	{
@@ -196,6 +206,7 @@ else
 # ######################
 if (Installer::installModules($modules))
 {
+	ClearCache::make()->clearCache();
 	$loader->loadLangFiles();
 	$loader->initModules();
 	Trans::inited(true);
