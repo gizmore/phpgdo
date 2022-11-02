@@ -66,6 +66,11 @@ final class Timezone extends MethodForm
         $new = $timezone->getID();
         if ($old != $new)
         {
+        	if (!is_numeric($new))
+        	{
+        		xdebug_break();
+        	}
+        	
             if ($user->isPersisted())
             {
 	        	Module_Date::instance()->saveUserSetting($user, 'timezone', $new);

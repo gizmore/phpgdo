@@ -12,6 +12,7 @@ use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Form;
 use GDO\Date\Time;
 use GDO\Util\Arrays;
+use GDO\UI\GDT_Error;
 
 /**
  * Abstract baseclass for all methods.
@@ -389,6 +390,11 @@ abstract class Method #extends GDT
 			# 4) Execute
 			if ($result = $this->executeB())
 			{
+				if ($result->hasError())
+				{
+					$response->code(GDO_Error::DEFAULT_ERROR_CODE);
+					$response->errorRaw($result->renderError());
+				}
 				$response->addField($result);
 			}
 			

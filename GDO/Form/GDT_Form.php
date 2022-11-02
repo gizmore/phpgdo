@@ -18,6 +18,7 @@ use GDO\Core\WithGDO;
 use GDO\UI\WithPHPJQuery;
 use GDO\UI\Color;
 use GDO\Core\GDO;
+use GDO\Core\GDO_Exception;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
@@ -182,6 +183,7 @@ final class GDT_Form extends GDT
 	public function errorFormInvalid()
 	{
 		$numErrors = $this->countErrors();
+		Application::setResponseCode(GDO_Exception::DEFAULT_ERROR_CODE);
 		if (Application::instance()->isUnitTests())
 		{
 			echo $this->renderCLI();

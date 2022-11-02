@@ -134,7 +134,7 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
-	if ($argv[2] !== '-s')
+	if (@$argv[2] !== '-s')
 	{
 		$modules[] = 'Tests';
 	}
@@ -168,7 +168,7 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 		$modules = array_unique($modules);
 	}
 	
-	if ($argv[2] === '-s')
+	if (@$argv[2] === '-s')
 	{
 		Arrays::remove($modules, 'CountryCoordinates');
 		Arrays::remove($modules, 'IP2Country');

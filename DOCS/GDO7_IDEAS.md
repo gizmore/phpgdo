@@ -80,6 +80,6 @@ Your playlists are ACL sharable.
  
  - the seo game. you get a unique name to seo. Monthly google, duckduckgo rankings for the best SEO company.
  
- 
+ - KassiererChallenge. Find a way to create more than N stzars.
  
  

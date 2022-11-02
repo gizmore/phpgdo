@@ -7,6 +7,7 @@ use GDO\Util\Strings;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\UI\GDT_Page;
+use GDO\Session\GDO_Session;
 
 /**
  * Debug backtrace and error handler.
@@ -50,15 +51,19 @@ final class Debug
 	/**
 	 * Trigger a breakpoint and gather global variables.
 	 */
-	public static function breakpoint() : bool
+	public static function break() : bool
 	{
 		global $me;
 		$app = Application::$INSTANCE;
 		$page = GDT_Page::instance();
 		$user = GDO_User::current();
 		$modules = ModuleLoader::instance()->getModules();
+		if (module_enabled('Session'))
+		{
+			$session = GDO_Session::instance();
+		}
 		xdebug_break();
-		return $me && $app && $page && $user && $modules;
+		return $me && $app && $page && $user && $modules && isset($session);
 	}
 	
 	###############

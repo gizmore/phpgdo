@@ -110,19 +110,28 @@ abstract class GDT_Field extends GDT
 	{
 		if (is_string($input))
 		{
-// 			$input = trim($input);
-			return $input === '' ? null : $input;
+			return $input; # === GDT::EMPTY_STRING ? null : $input;
 		}
-		if ($input instanceof GDT_Method)
+		elseif ($input instanceof GDT_Method)
 		{
 			return $input->execute()->renderCLI();
 		}
-		if (is_array($input))
+		elseif (is_array($input))
 		{
 			return json_encode($input);
 		}
-		return null;
-// 		return $this->initial;
+		elseif (is_numeric($input))
+		{
+			return (string)$input;
+		}
+		elseif (is_bool($input))
+		{
+			return $input ? '1' : '0';
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public function getVar()

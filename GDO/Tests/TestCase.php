@@ -5,7 +5,6 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 use GDO\CLI\CLI;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\User\GDO_User;
 use GDO\Session\GDO_Session;
@@ -341,6 +340,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$m = GDT_MethodTest::make()->method($method);
 		$m->inputs($inputs);
 		$r = $m->execute();
+// 		$r->render(); # This will trigger 409 to be set -.-
 		if ($assertOk)
 		{
 			$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");

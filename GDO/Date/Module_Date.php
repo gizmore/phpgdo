@@ -100,7 +100,7 @@ final class Module_Date extends GDO_Module
         $user = GDO_User::current();
         $timezone = $user->hasTimezone() ?
         	$user->getTimezone() :
-        	$this->cfgTimezone()->getName();
+        	$this->cfgTimezone()->getID();
         Time::setTimezone($timezone);
     }
     

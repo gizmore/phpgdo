@@ -62,19 +62,36 @@ final class Time
 	 */
 	const UTC = '1';
 	public static $UTC; # UTC Timezone object
+
+	/**
+	 * The timezone as GDO db row id.
+	 * @var string
+	 */
 	public static string $TIMEZONE = self::UTC; # default timezone id
+	
+	/**
+	 * Timezone object cache: @TODO Remove?
+	 * @var \DateTimeZone[]
+	 */
 	public static array $TIMEZONE_OBJECTS = [];
-	public static function getTimezoneObject($timezone=null)
+	
+	public static function getTimezoneObject(string $timezoneId=null)
 	{
-	    $timezone = $timezone ? $timezone : self::$TIMEZONE;
-	    if (!isset(self::$TIMEZONE_OBJECTS[$timezone]))
-	    {
-	    	$timezone = GDO_Timezone::findById($timezone);
-	        $tz = new \DateTimeZone($timezone->getName());
-	        self::$TIMEZONE_OBJECTS[$timezone->getID()] = $tz;
-	        return $tz;
-	    }
-	    return self::$TIMEZONE_OBJECTS[$timezone];
+		if ($timezoneId === null)
+		{
+			return self::$TIMEZONE;
+		}
+		$timezone = GDO_Timezone::findById($timezoneId);
+		$tz = new \DateTimeZone($timezone->getName());
+		return $tz;
+// 		if (!isset(self::$TIMEZONE_OBJECTS[$timezoneId]))
+// 	    {
+// 	    	$timezone = GDO_Timezone::findById($timezoneId);
+// 	        $tz = new \DateTimeZone($timezone->getName());
+// 	        self::$TIMEZONE_OBJECTS[$timezone->getID()] = $tz;
+// 	        return $tz;
+// 	    }
+// 	    return self::$TIMEZONE_OBJECTS[$timezoneId];
 	}
 	
 	public static function setTimezoneNamed(string $timezoneName) : void
@@ -83,10 +100,13 @@ final class Time
 		self::setTimezoneGDO(GDO_Timezone::getByName($timezoneName));
 	}
 	
-	public static function setTimezone(string $timezone)
+	public static function setTimezone(string $timezoneId)
 	{
-	    self::$TIMEZONE = $timezone;
-// 	    Module_Date::instance()->timezone = $timezone;
+		if (!is_numeric($timezoneId))
+		{
+			xdebug_break();
+		}
+	    self::$TIMEZONE = $timezoneId;
 	}
 	
 	public static function setTimezoneGDO(GDO_Timezone $tz) : void
@@ -316,22 +336,32 @@ final class Time
 	}
 	
 	/**
-	 * Actual display of a \DateTime.
-	 * 
-	 * @param string $iso
-	 * @param DateTime $datetime
-	 * @param string $format
-	 * @return string
+	 * Display a localized datetime.
 	 */
-	public static function displayDateTimeISO($iso, DateTime $datetime=null, $format='short', $default_return='---', $timezone=null) : string
+	public static function displayDateTimeISO(string $iso, DateTime $datetime=null, $format='short', ?string $default_return='---', string $timezoneId=null) : string
+	{
+		$format = tiso($iso, "df_$format");
+		return self::displayDateTimeFormat(
+			$datetime, $format, $default_return, $timezoneId);
+	}
+	
+	public static function displayTimeISO(string $iso, $time=null, string $format='short', string $default_return='---', string $timezoneId=null): string
+	{
+		$dt = self::getDateTime($time);
+		return self::displayDateTimeISO($iso, $dt, $format, $default_return, $timezoneId);
+	}
+	
+	/**
+	 * Display a formatted datetime.
+	 */
+	public static function displayDateTimeFormat(DateTime $datetime=null, string $format='Y-m-d H:i:s.v', ?string $default_return='---', string $timezoneId=null): string
 	{
 		if (!$datetime)
 		{
 			return $default_return;
 		}
-	    $timezone = $timezone ? $timezone : self::$TIMEZONE;
-        $datetime->setTimezone(self::getTimezoneObject($timezone));
-	    $format = tiso($iso, "df_$format");
+		$timezoneId = $timezoneId ? $timezoneId : self::$TIMEZONE;
+		$datetime->setTimezone(self::getTimezoneObject($timezoneId));
 	    return $datetime->format($format);
 	}
 	
@@ -593,6 +623,33 @@ final class Time
 	public static function getMonth(string $date) { return substr($date, 5 , 2); }
 	public static function getDay(string $date) { return substr($date, 8 , 2); }
 	
+	##############
+	### Is-Day ###
+	##############
+	
+	const MONDAY = '1';
+	const TUESDAY = '2';
+	const WEDNESDAY = '3';
+	const THURSDAY = '4';
+	const FRIDAY = '5';
+	const SATURDAY = '6';
+	const SUNDAY = '7';
+	
+	/**
+	 * Is a timestamp a Sunday (UTC)
+	 */
+	public static function isSunday($time=0, string $timezoneId=self::UTC): bool
+	{
+		return self::isDay(self::SUNDAY, $time, $timezoneId);
+	}
+	
+	public static function isDay(string $day, $time=0, string $timezoneId=self::UTC): bool
+	{
+		$time = $time ? $time : Application::$MICROTIME;
+		$dt = Time::getDateTime($time);
+		return self::displayDateTimeFormat($dt, 'N', Time::MONDAY, /**UTC**/) === $day;
+	}
+
 }
 	
 Time::$UTC = new \DateTimeZone('UTC');

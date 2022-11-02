@@ -955,38 +955,15 @@ abstract class GDO extends GDT
 	 */
 	public function softReplace(bool $withHooks=true): self
 	{
-		$query = $this->query()->
-			softReplace($this->gdoTableIdentifier())->
-			values($this->gdoPrimaryKeyValues())->
-			updateValues($this->getDirtyVars(false));
-
-		# Exec and check affected rows.
-		$query->exec();
-		$db = Database::instance();
-		$affected = $db->affectedRows();
-		# Update?
-		if ($affected === 2)
+		if ($gdo = $this->table()->getWhere($this->getPKWhere()))
 		{
-			if ($withHooks)
-			{
-				$this->afterUpdate();
-			}
-		}
-		# Insert?
-		elseif ($affected === 1)
-		{
-			if ($withHooks)
-			{
-				$this->afterCreate();
-			}
+			$gdo->dirty = true;
+			return $gdo->save($withHooks);
 		}
 		else
 		{
-			# no cache action required
-			return $this;
+			return $this->insert($withHooks);
 		}
-		$this->cache();
-		return $this;
 	}
 	
 	public function replace(bool $withHooks=true) : self

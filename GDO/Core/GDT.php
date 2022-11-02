@@ -202,7 +202,7 @@ abstract class GDT
 			# HTML table submodes
 			case self::RENDER_THEAD: return $this->renderTHead();
 			case self::RENDER_ORDER: return $this->renderOrder();
-			case self::RENDER_FILTER: return self::EMPTY_STRING;
+			case self::RENDER_FILTER: return GDT::EMPTY_STRING;
 			case self::RENDER_CELL: return $this->renderHTML();
 			case self::RENDER_TFOOT: return $this->renderTFoot();
 		}
@@ -216,13 +216,13 @@ abstract class GDT
 	 */
 	public function render() { return $this->renderGDT(); }
 	public function renderNIL() : ?string { return null; }
-	public function renderBinary() : string { return self::EMPTY_STRING; }
+	public function renderBinary() : string { return GDT::EMPTY_STRING; }
 	public function renderCLI() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderXML() : string { return $this->renderHTML(); }
 	public function renderJSON() { return $this->renderCLI(); }
 	public function renderGTK() { return null; }
-	public function renderWebsite() : string { return self::EMPTY_STRING; }
+	public function renderWebsite() : string { return GDT::EMPTY_STRING; }
 	# HTML rendering
 	public function renderHTML() : string { return $this->renderVar(); }
 	public function renderCard() : string { return $this->renderHTML(); }
@@ -230,8 +230,8 @@ abstract class GDT
 	public function renderForm() : string { return $this->renderHTML(); }
 	public function renderOption() : string { return $this->renderHTML(); }
 	# HTML table rendering
-	public function renderTHead() : string { return self::EMPTY_STRING; }
-	public function renderFilter(GDT_Filter $f) : string { return self::EMPTY_STRING; }
+	public function renderTHead() : string { return GDT::EMPTY_STRING; }
+	public function renderFilter(GDT_Filter $f) : string { return GDT::EMPTY_STRING; }
 	public function renderCell() : string { return $this->renderHTML(); }
 	public function renderTFoot() : string { return $this->renderHTML(); }
 	# Various rendering
@@ -413,7 +413,7 @@ abstract class GDT
 	
 	public function classError() : string
 	{
-		return self::EMPTY_STRING;
+		return GDT::EMPTY_STRING;
 	}
 	
 	##############
@@ -526,7 +526,7 @@ abstract class GDT
 	
 	public function gdoColumnDefine() : string
 	{
-		return self::EMPTY_STRING;
+		return GDT::EMPTY_STRING;
 	}
 	
 	/**
@@ -601,7 +601,7 @@ abstract class GDT
 		{
 			return " name=\"{$name}\"";
 		}
-		return self::EMPTY_STRING;
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function htmlClass() : string
@@ -616,7 +616,7 @@ abstract class GDT
 		{
 			return " id=\"{$name}\"";
 		}
-		return self::EMPTY_STRING;
+		return GDT::EMPTY_STRING;
 	}
 	
 	/**
@@ -624,7 +624,7 @@ abstract class GDT
 	 */
 	public function htmlAttributes() : string
 	{
-		return self::EMPTY_STRING;
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function initial(string $initial = null) : self

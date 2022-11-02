@@ -94,6 +94,10 @@ class GDT_String extends GDT_DBField
 		{
 			return $this->errorLength();
 		}
+		if ($this->max < $this->min)
+		{
+			return $this->error('err_min_max_confusion');
+		}
 		return true;
 	}
 	

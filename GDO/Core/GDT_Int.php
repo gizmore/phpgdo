@@ -93,7 +93,10 @@ class GDT_Int extends GDT_DBField
 // 				{
 // 					return $this->numericError();
 // 				}
-				
+				if ($this->max < $this->min)
+				{
+					return $this->error('err_min_max_confusion');
+				}
 				if ( (($this->min !== null) && ($value < $this->min)) ||
 					 (($this->max !== null) && ($value > $this->max)) )
 				{

@@ -361,7 +361,7 @@ trait WithFields
 	public function renderForm() : string { return $this->renderFields(GDT::RENDER_FORM); }
 	public function renderOption() : string { return $this->renderFields(GDT::RENDER_OPTION); }
 	# html table rendering
-	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
+// 	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
 	public function renderOrder() : string { return $this->renderFields(GDT::RENDER_ORDER); }
 	public function renderFilter(GDT_Filter $f) : string { return $this->renderFields(GDT::RENDER_FILTER); }
 	public function renderCell() : string { return $this->renderFields(GDT::RENDER_CELL); }

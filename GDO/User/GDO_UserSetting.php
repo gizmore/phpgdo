@@ -136,19 +136,10 @@ class GDO_UserSetting extends GDO
 	 */
 	public static function whereSettingVisible(Query $query, string $moduleName, string $key, GDO_User $user, string $userFieldName='gdo_user.user_id'): Query
 	{
-// 		$user = GDO_User::current();
 		$module = GDO_Module::getByName($moduleName);
 		$settingACL = $module->getSettingACL($key);
 		$settingACL->queryWhereVisible($query, $moduleName, $key, $user);
-// 		$settingRel = $settingACL->aclRelation;
-// 		$settingRel->aclQuery($query, $user, $userFieldName);
 		return $query;
-// 		$validACLVars = [];
-// 		$defaultACL = 
-// 		$aclField = "_acl_{$key}_relation";
-// 		$query->select("(SELECT uset_var FROM gdo_usersetting WHERE uset_name={$aclField} AND uset_var IN ($validACLVars) ) ");
-// 		$query->where("( SELECT 1 FROM gdo_usersetting ust WHERE ust.uset_user={$userFieldName} AND _acl_favorite_religion_relation )")
-// 		return $query;
 	}
 	
 }
