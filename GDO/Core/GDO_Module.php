@@ -755,11 +755,6 @@ class GDO_Module extends GDO
 
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
-		if ($var === 'str<i>ng</i>s')
-		{
-			xdebug_break();
-		}
-		
 		$gdt = $this->getSetting($key);
 		$old = $gdt->var;
 		if ($old === $var)
@@ -775,7 +770,7 @@ class GDO_Module extends GDO
 		if (!$gdt->validate($gdt->toValue($var)))
 		{
 			Website::error($this->gdoHumanName(), 'err_invalid_user_setting', [
-				$gdt->getName(), html($var)]);
+				$this->gdoHumanName(), $gdt->getName(), html($var), $gdt->renderError()]);
 			return $gdt;
 		}
 		

@@ -12,7 +12,6 @@ use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Form;
 use GDO\Date\Time;
 use GDO\Util\Arrays;
-use GDO\UI\GDT_Error;
 
 /**
  * Abstract baseclass for all methods.
@@ -196,7 +195,7 @@ abstract class Method #extends GDT
 	{
 		if (!($this->isEnabled()))
 		{
-			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()]);
+			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()], 403);
 		}
 		
 		if ( ($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()) )
@@ -329,7 +328,7 @@ abstract class Method #extends GDT
 	public function executeWithInit(bool $checkPermission=true)
 	{
 		$db = Database::instance();
-		$app = Application::$INSTANCE;
+// 		$app = Application::$INSTANCE;
 		$response = GDT_Response::make();
 		$transactional = false;
 		try
@@ -482,6 +481,10 @@ abstract class Method #extends GDT
 		}
 		finally
 		{
+			foreach ($this->gdoParameterCache() as $gdt)
+			{
+				$gdt->inputs(null);
+			}
 			$this->unlock();
 		}
 	}

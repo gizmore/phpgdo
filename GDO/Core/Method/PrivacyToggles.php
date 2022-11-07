@@ -19,6 +19,12 @@ use GDO\Install\Config;
  */
 final class PrivacyToggles extends Method
 {
+	public function isTrivial(): bool
+	{
+		# This method messes with setting fields instead!!!
+		return false;
+	}
+	
 	public function getMethodTitle(): string
 	{
 		return t('privacy_settings');

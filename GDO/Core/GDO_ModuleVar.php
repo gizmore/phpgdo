@@ -42,12 +42,30 @@ final class GDO_ModuleVar extends GDO
 		{
 		    self::table()->blank([
     			'mv_module' => $module->getID(),
-    		    'mv_name' => $gdt->name,
+    		    'mv_name' => $key,
     			'mv_value' => $var,
-    		])->replace();
+    		])->softReplace();
 			$inputs[$key] = $var;
 		}
 		return $gdt->setGDOData($inputs);
 	}
 	
+	#############
+	### Hooks ###
+	#############
+	public function gdoAfterCreate(GDO $gdo): void
+	{
+		$gdo->reset(true);
+	}
+	
+	public function gdoAfterUpdate(GDO $gdo): void
+	{
+		$gdo->reset(true);
+	}
+	
+	public function gdoAfterDelete(GDO $gdo): void
+	{
+		$gdo->reset(true);
+	}
+
 }

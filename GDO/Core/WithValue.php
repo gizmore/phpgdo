@@ -67,7 +67,7 @@ trait WithValue
 	{
 		if ($removeInput)
 		{
-			unset($this->inputs[$this->name]);
+			unset($this->inputs);
 		}
 		return $this->var($this->initial);
 	}

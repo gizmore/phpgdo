@@ -191,15 +191,16 @@ abstract class GDO extends GDT
 	/**
 	 * @TODO: Reset this GDO like it came from the cache (initial/var/dirty)
 	 */
-// 	public function reset(bool $removeInput=false) : self
-// 	{
-// 		$this->dirty = false;
-// 		foreach ($this->gdoColumnsCache() as $gdt)
-// 		{
-			
-// 		}
-// 		parent::reset($removeInput);
-// 	}
+	public function reset(bool $removeInput=false) : self
+	{
+		$this->dirty = false;
+		foreach ($this->gdoColumnsCache() as $gdt)
+		{
+			$gdt->reset($removeInput);
+		}
+		parent::reset($removeInput);
+		return $this;
+	}
 	
 	##############
 	### Render ###
@@ -474,7 +475,7 @@ abstract class GDO extends GDT
 				$gdt = $this->gdoColumn($name);
 				if ($withPrimaryKeys || (!$gdt->isPrimary()))
 				{
-					$data = $gdt->getGDOData();
+					$data = $gdt->gdo($this)->getGDOData();
 					foreach ($data as $k => $v)
 					{
 						$vars[$k] = $v;
@@ -957,7 +958,11 @@ abstract class GDO extends GDT
 	{
 		if ($gdo = $this->table()->getWhere($this->getPKWhere()))
 		{
+			$gdo->persisted = true;
 			$gdo->dirty = true;
+			$gdo->gdoVars = $this->gdoVars;
+			$gdo->dirty = array_keys($gdo->getDirtyVars(false));
+			$gdo->dirty = array_combine($gdo->dirty, $gdo->dirty);
 			return $gdo->save($withHooks);
 		}
 		else
@@ -978,7 +983,7 @@ abstract class GDO extends GDT
 		
 		$query = $this->query()->
 			replace($this->gdoTableIdentifier())->
-			values($this->gdoPrimaryKeyValues())->
+// 			values($this->gdoPrimaryKeyValues())->
 			values($this->getDirtyVars());
 		
 		return $this->insertOrReplace($query, $withHooks);
@@ -1236,6 +1241,8 @@ abstract class GDO extends GDT
 		$gdoVars = [];
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
+// 			$gdt->inputs(null);
+			
 			# Pass 1) Plug initial var
 			$name = $gdt->getName();
 			if (isset($initial[$name]))

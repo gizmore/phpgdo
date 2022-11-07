@@ -69,7 +69,7 @@ class GDO_UserSetting extends GDO
 
 	public static function updateACL(GDO_User $user, GDT $gdt, string $aclField, ?string $aclVar): void
 	{
-		foreach ($gdt->getGDOData() as $key => $var)
+		foreach (array_keys($gdt->getGDOData()) as $key)
 		{
 			if ($row = self::table()->getById($user->getID(), $key))
 			{
@@ -140,6 +140,24 @@ class GDO_UserSetting extends GDO
 		$settingACL = $module->getSettingACL($key);
 		$settingACL->queryWhereVisible($query, $moduleName, $key, $user);
 		return $query;
+	}
+	
+	#############
+	### Hooks ###
+	#############
+	public function gdoAfterCreate(GDO $gdo): void
+	{
+		$gdo->reset(true);
+	}
+
+	public function gdoAfterUpdate(GDO $gdo): void
+	{
+		$gdo->reset(true);
+	}
+	
+	public function gdoAfterDelete(GDO $gdo): void
+	{
+		$gdo->reset(true);
 	}
 	
 }

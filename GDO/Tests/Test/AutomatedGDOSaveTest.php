@@ -128,7 +128,7 @@ final class AutomatedGDOSaveTest extends TestCase
 		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
-			$gdt->inputs(null); # clear input
+// 			$gdt->inputs(null); # clear input
 			$this->addPlugVars($gdt->plugVars());
 		}
 		

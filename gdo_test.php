@@ -199,6 +199,8 @@ else
 	echo "Loading and install all modules from filesystem again...\n";
 	$modules = $loader->loadModules(false, true, true);
 }
+$loader->loadLangFiles(true);
+Trans::inited(true);
 
 # ######################
 # ## Install and run ###
@@ -206,10 +208,8 @@ else
 if (Installer::installModules($modules))
 {
 	ClearCache::make()->clearCache();
-	$loader->loadLangFiles();
 	$loader->initModules();
 	Trans::inited(true);
-// 	Trans::inited(true);
 	if (module_enabled('Session'))
 	{
 		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);

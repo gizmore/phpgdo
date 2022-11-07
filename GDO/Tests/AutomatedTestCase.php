@@ -334,6 +334,8 @@ abstract class AutomatedTestCase extends TestCase
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $plugVars)
 		{
+			# This fixes old input in method from previous permutations.
+			$method = call_user_func([get_class($method), 'make']);
 			$this->tryTrivialMethodVariant($method, $plugVars);
 		}
 	}
@@ -362,6 +364,7 @@ abstract class AutomatedTestCase extends TestCase
 			$mt = GDT_MethodTest::make()->inputs($plugVars);
 			$mt->runAs($method->plugUser());
 			$mt->method($method);
+			$method->inputs($plugVars);
 			$this->runMethodTest($mt);
 			$this->automatedPassed++;
 			$this->message('%4d.) %s: %s (%s)', $n, CLI::bold(CLI::green('SUCCESS')), $this->boldmome($mt->method),

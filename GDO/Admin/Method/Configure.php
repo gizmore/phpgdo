@@ -172,7 +172,28 @@ class Configure extends MethodForm
 		$form->addField(GDT_AntiCSRF::make());
 		$form->action($this->href("&module={$mod->getName()}"));
 	}
+	
+// 	private function resetConfig()
+// 	{
+// 		$mod = $this->configModule();
+// 		foreach ($mod->getConfigCache() as $gdt)
+// 		{
+// 			$gdt->reset(true);
+// 		}
+// 	}
+	
+// 	public function formInvalid(GDT_Form $form)
+// 	{
+// 		$this->resetConfig();
+// 		return parent::formInvalid($form);
+// 	}
 
+// 	public function afterExecute(): void
+// 	{
+// 		$this->resetConfig();
+// 		parent::afterExecute();
+// 	}
+	
 	public function formValidated(GDT_Form $form)
 	{
 		$mod = $this->configModule();
@@ -202,6 +223,8 @@ class Configure extends MethodForm
 			Cache::fileFlush();
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);
 		}
+		
+// 		$this->resetConfig();
 		
 		# Announce
 		return $this->message('msg_module_saved',

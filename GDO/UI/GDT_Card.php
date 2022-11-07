@@ -35,6 +35,11 @@ class GDT_Card extends GDT
 	use WithActions;
 	use WithPHPJQuery;
 	
+	public function isTestable(): bool
+	{
+		return false;
+	}
+	
 	###############
 	### Content ###
 	###############

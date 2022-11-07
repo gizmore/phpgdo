@@ -19,6 +19,11 @@ final class GDT_SVGImage extends GDT_Image
 	
 	const SVG = 'image/svg+xml';
 	
+	public function isTestable(): bool
+	{
+		return false;
+	}
+	
 	##############
 	### Render ###
 	##############

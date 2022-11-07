@@ -26,16 +26,16 @@ final class OnInstall
 	        GDO_Permission::create($perm, $level);
 	    }
 	    
-		if (!($user = GDO_User::getByName('system')))
-		{
+// 		if (!($user = GDO_User::getByName('system')))
+// 		{
 			$user = GDO_User::blank([
 				'user_id' => 1,
 				'user_name' => 'system',
 				'user_email' => GDO_BOT_EMAIL,
 				'user_type' => 'system',
 				'user_password' => BCrypt::create('system')->__toString(),
-			])->replace();
-		}
+			])->softReplace();
+// 		}
 
 		Module_Core::instance()->saveConfigVar('system_user', $user->getID());
 	}

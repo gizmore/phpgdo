@@ -64,6 +64,11 @@ abstract class MethodForm extends Method
 		$this->message('msg_form_validated');
 		return $this->renderPage();
 	}
+	
+	public function formInvalid(GDT_Form $form)
+	{
+		return $this->renderPage();
+	}
 
 	/**
 	 * Reset a form.
@@ -246,7 +251,7 @@ abstract class MethodForm extends Method
 				else
 				{
 					$form->errorFormInvalid();
-					return $this->renderPage();
+					return $this->formInvalid($form);
 				}
 			}
 		}

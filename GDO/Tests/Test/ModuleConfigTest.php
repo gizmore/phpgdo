@@ -13,6 +13,7 @@ use GDO\Core\ModuleLoader;
 use function PHPUnit\Framework\assertEmpty;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use function PHPUnit\Framework\assertTrue;
 
 /**
  * Test method form for module admin configuration.
@@ -24,20 +25,34 @@ final class ModuleConfigTest extends TestCase
 {
     public function testModuleOverview()
     {
-        $method = Modules::make();
-        $checky = GDT_MethodTest::make()->method($method);
-        $result = $checky->execute();
-        $html = $result->render();
-        $this->assert200("Check Admin::Modules for errors");
-        assertStringContainsString(', Core', $html, 'Test if Module table can be rendered in HTML.');
+    	if (module_enabled('Admin'))
+    	{
+	    	$method = Modules::make();
+	        $checky = GDT_MethodTest::make()->method($method);
+	        $result = $checky->execute();
+	        $html = $result->render();
+	        $this->assert200("Check Admin::Modules for errors");
+	        assertStringContainsString(', Core', $html, 'Test if Module table can be rendered in HTML.');
+    	}
+    	else
+    	{
+    		assertTrue(true, 'stub');
+    	}
     }
     
     public function testAllEnabledModulesToConfigure()
     {
-    	$this->message("Testing all enabled modules to configure.");
-    	foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+    	if (module_enabled('Admin'))
     	{
-    		$this->configureTest($module);
+	    	$this->message("Testing all enabled modules to configure.");
+	    	foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+	    	{
+	    		$this->configureTest($module);
+	    	}
+    	}
+    	else
+    	{
+    		assertTrue(true, 'stub');
     	}
     }
     

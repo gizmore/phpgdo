@@ -163,10 +163,11 @@ final class ModuleLoader
 		$this->modules = $cache;
 	}
 	
-	public function loadLangFiles() : void
+	public function loadLangFiles(bool $all=false) : void
 	{
 		Trans::inited(false);
-		foreach ($this->getEnabledModules() as $module)
+		$modules = $all ? $this->modules : $this->getEnabledModules();
+		foreach ($modules as $module)
 		{
 	        $module->onLoadLanguage();
 		}

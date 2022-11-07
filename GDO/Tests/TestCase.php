@@ -290,7 +290,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$this->assertCode(409, $message);
 	}
-
+	
+	protected function assert403(string $message)
+	{
+		$this->assertCode(403, $message);
+	}
+	
 	protected function assertCode(int $code, string $message)
 	{
 		try
