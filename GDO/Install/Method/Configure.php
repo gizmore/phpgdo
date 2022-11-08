@@ -22,6 +22,11 @@ use GDO\Core\GDT_String;
 class Configure extends MethodForm
 {
 
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+	
 	public function isEnabled(): bool
 	{
 		return true;

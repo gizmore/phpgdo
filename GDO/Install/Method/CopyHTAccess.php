@@ -14,6 +14,12 @@ use GDO\Util\FileUtil;
  */
 final class CopyHTAccess extends MethodForm
 {
+
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+
 	public function getMethodTitle() : string
 	{
 		return t('install_title_9');

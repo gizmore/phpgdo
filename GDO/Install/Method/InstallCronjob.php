@@ -13,6 +13,12 @@ use GDO\UI\GDT_Container;
  */
 final class InstallCronjob extends Method
 {
+	
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('install_title_5');

@@ -18,6 +18,12 @@ use GDO\Core\GDT_String;
  */
 final class ImportBackup extends MethodForm
 {
+	
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('install_title_8');

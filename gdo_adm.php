@@ -159,7 +159,7 @@ switch ($argv[1])
 }
 
 $loader->loadModules($db, true);
-$loader->loadLangFiles();
+$loader->loadLangFiles(true);
 $loader->initModules();
 
 if ($argv[1] === 'systemtest')

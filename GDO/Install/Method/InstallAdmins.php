@@ -20,11 +20,17 @@ use GDO\Crypto\GDT_PasswordHash;
  * Install an admin account.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 3.0.5
  */
 class InstallAdmins extends MethodForm
 {
+	
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('install_title_6');

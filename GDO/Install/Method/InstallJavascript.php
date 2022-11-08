@@ -13,6 +13,12 @@ use GDO\Core\ModuleLoader;
  */
 final class InstallJavascript extends Method
 {
+	
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('install_title_7');

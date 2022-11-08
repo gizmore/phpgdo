@@ -25,7 +25,12 @@ final class InstallModules extends Method
 	/**
 	 * @var GDO_Module[]
 	 */
-	private $modules;
+	private array $modules;
+	
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
 	
 	public function getMethodTitle() : string
 	{

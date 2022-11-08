@@ -17,6 +17,12 @@ use GDO\UI\GDT_Redirect;
  */
 final class Security extends MethodForm
 {
+	
+	public function isUserRequired() : bool
+	{
+		return false;
+	}
+	
 	public function getMethodTitle() : string
 	{
 		return t('install_title_10');

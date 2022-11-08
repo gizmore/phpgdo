@@ -193,11 +193,11 @@ abstract class Method #extends GDT
 	############
 	public function checkPermission(GDO_User $user)
 	{
-		if ($user->isSystem())
-		{
-			# This, f.e., is needed for the gdo_adm.sh configure installer.
-			return true;
-		}
+// 		if ($user->isSystem())
+// 		{
+// 			# This, f.e., is needed for the gdo_adm.sh configure installer.
+// 			return true;
+// 		}
 		
 		if (!($this->isEnabled()))
 		{
