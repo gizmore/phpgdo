@@ -15,12 +15,22 @@ trait WithGDO
 {
 	public GDO $gdo;
 	
+	public function isTestable(): bool
+	{
+		return false;
+	}
+	
 	/**
 	 * Assign the current GDO to this GDT. Copy it's data.
 	 */
 	public function gdo(GDO $gdo = null) : self
 	{
 		return $this->gdoVarInitial($gdo, false);
+	}
+	
+	public function getGDO(): ?GDO
+	{
+		return isset($this->gdo) ? $this->gdo : null;
 	}
 	
 	/**

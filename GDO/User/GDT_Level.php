@@ -28,6 +28,7 @@ final class GDT_Level extends GDT_Badge
 		parent::__construct();
 		$this->initial('0');
 		$this->notNull();
+		$this->writeable(true);
 		$this->icon('level');
 	}
 	

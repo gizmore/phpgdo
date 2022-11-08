@@ -19,6 +19,7 @@ use GDO\UI\WithPHPJQuery;
 use GDO\UI\Color;
 use GDO\Core\GDO;
 use GDO\Core\GDO_Exception;
+use GDO\UI\GDT_Repeat;
 
 /**
  * A form has a title, a text, fields, menu actions and an http action/target.
@@ -222,9 +223,16 @@ final class GDT_Form extends GDT
 		$back = [];
 		foreach ($this->getAllFields() as $gdt)
 		{
-			if ($data = $gdt->var($gdt->getVar())->getGDOData())
+			if ($gdt instanceof GDT_Repeat)
 			{
-				$back = array_merge($back, $data);
+				$back[$gdt->getName()] = $gdt->getRepeatInput();
+			}
+			else
+			{
+				if ($data = $gdt->var($gdt->getVar())->getGDOData())
+				{
+					$back = array_merge($back, $data);
+				}
 			}
 		}
 		return $back;

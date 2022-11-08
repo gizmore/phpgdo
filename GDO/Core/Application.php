@@ -106,6 +106,11 @@ class Application extends GDT
 			self::$RESPONSE_CODE = $code;
 		}
 	}
+	
+	public static function isCrash() : bool
+	{
+		return self::$RESPONSE_CODE >= 500;
+	}
 
 	public static function isError() : bool
 	{

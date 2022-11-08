@@ -18,13 +18,6 @@ trait WithValue
 	################
 	### Required ###
 	################
-	/**
-	 * @deprecated use notNull().
-	 */
-	public function required(bool $required = true) : self
-	{
-		return $this->notNull($required);
-	}
 	
 	/**
 	 * Render HTML required attribute.

@@ -102,6 +102,19 @@ abstract class GDT
 		}
 	}
 	
+	public function gdtCopy(string $name=null): self
+	{
+		$copy = call_user_func([$this, 'make'], $name);
+		foreach (get_object_vars($this) as $k => $v)
+		{
+			if ($k !== 'name')
+			{
+				$copy->$k = $v;
+			}
+		}
+		return $copy;
+	}
+	
 	###########################
 	# --- GDT Render Core --- #
 	###########################

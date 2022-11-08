@@ -38,13 +38,42 @@ class GDT_Date extends GDT_Timestamp
 	    return $value ? $value->format('Y-m-d') : null;
 	}
 	
-	public function _inputToVar($input)
+	public function inputToVar($input) : ?string
 	{
-		$input = str_replace('T', ' ', $input);
-		$input = str_replace('Z', '', $input);
-		$time = Time::parseDate($input, Time::UTC);
-		$input = Time::getDate($time, 'Y-m-d');
-		return $input;
+		if ($input === null)
+		{
+			return null;
+		}
+
+		# Not JS timestamp?
+		if (!is_numeric($input))
+		{
+			$input = str_replace('T', ' ', $input);
+			$input = str_replace('Z', '', $input);
+			if (preg_match('#^\\d{4}-\\d{2}-\\d{2}#', $input))
+			{
+				$input = Time::parseDateTimeDB($input, Time::UTC);
+			}
+			else
+			{
+				$input = Time::parseDateTime($input, Time::UTC);
+			}
+		}
+		else
+		{
+			# JS timestamp ms
+			$input /= 1000.0;
+			$input = Time::getDateTime($input);
+		}
+		
+		return $input ? Time::displayDateTimeFormat($input, 'Y-m-d', '', Time::UTC) : null;
+		
+// 		$input = str_replace('T', ' ', $input);
+// 		$input = str_replace('Z', '', $input);
+// 		$time = Time::parseDate($input, Time::UTC);
+// // 		$time = Time::parseDate($input);
+// 		$input = Time::getDate($time, 'Y-m-d');
+// 		return parent::inputToVar($input);
 	}
 	
 	public function toValue($var = null)

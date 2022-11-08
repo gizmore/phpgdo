@@ -218,13 +218,13 @@ final class GDT_ACL extends GDT
 // 		}
 		$rels = "'" . implode("', '", $rels) . "'"; 
 		$conditions[] = "uset_relation IN (" . $rels . ")";
+		$conditions = implode(' AND ', $conditions);
 		
-		$conditions[] = "uset_name=" . quote($key); 
-		
-		$query->where("uset_user={$user->getID()}");
-		$query->orWhere(implode(' AND ', $conditions));
+		$query->where("uset_name=" . quote($key));
+		$and = "(uset_user={$user->getID()}) OR ($conditions)";
+		$query->where($and);
 // 		
-$q  = $query->buildQuery();
+// $q  = $query->buildQuery();
 
 		
 // 		switch ($rel)

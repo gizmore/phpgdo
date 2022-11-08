@@ -310,7 +310,10 @@ $content = $result->render();
 ##############
 if (isset($session) && $session)
 {
-	$session->commit(); # setting headers sometimes
+	if (!Application::isCrash())
+	{
+		$session->commit(); # setting headers sometimes
+	}
 }
 # The last thing we do before any output
 $app->timingHeader(); # :) so every GDO request can be measured quickly.

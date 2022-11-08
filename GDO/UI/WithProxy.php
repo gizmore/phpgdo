@@ -16,9 +16,7 @@ use GDO\Table\GDT_Filter;
  */
 trait WithProxy
 {
-	/**
-	 * @var GDT
-	 */
+
 	public GDT $proxy;
 
 	public function proxy(GDT $proxy) : self

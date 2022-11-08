@@ -172,7 +172,12 @@ class GDT_Timestamp extends GDT_DBField
 	 */
 	public function validate($value) : bool
 	{
-		if ( ($value === null) && (!$this->notNull) )
+		if (!parent::validate($value))
+		{
+			return false;
+		}
+		
+		if ($value === null)
 		{
 			return true;
 		}
@@ -180,7 +185,11 @@ class GDT_Timestamp extends GDT_DBField
 		/** @var $value \DateTime **/
 		if (isset($this->minDate))
 		{
-			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->minDate)))->s < 0)
+			$t = Time::getTimestamp($this->minDate);
+			$dt = Time::getDateTime($t);
+			$dif = $value->diff($dt);
+			$neg = $dif->invert; # Set to 1 if negative / 0 otherwise
+			if (!$neg)
 		    {
     		    return $this->error('err_min_date', [
     		        Time::displayDate($this->minDate, $this->format)]);
@@ -189,14 +198,18 @@ class GDT_Timestamp extends GDT_DBField
 		
 		if (isset($this->maxDate))
 		{
-			if ($value->diff(Time::getDateTime(Time::getTimestamp($this->maxDate)))->s > 0)
+			$t = Time::getTimestamp($this->maxDate);
+			$dt = Time::getDateTime($t);
+			$dif = $value->diff($dt);
+			$neg = $dif->invert; # Set to 1 if negative / 0 otherwise
+			if ($neg)
 		    {
 		        return $this->error('err_max_date', [
 		            Time::displayDate($this->maxDate, $this->format)]);
 		    }
 		}
 
-		return parent::validate($value);
+		return true;
 	}
 	
 	public function plugVars() : array

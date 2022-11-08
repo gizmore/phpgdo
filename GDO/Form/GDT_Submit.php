@@ -18,6 +18,8 @@ class GDT_Submit extends GDT_Button
 	use WithClickHandler;
 	use WithFormAttributes;
 	
+	public string $icon = 'check';
+	
 	public function getDefaultName() : ?string
 	{
 		return 'submit';

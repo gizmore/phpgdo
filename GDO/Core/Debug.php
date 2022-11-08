@@ -532,7 +532,7 @@ REQUEST: %s\n\n";
 				$len = mb_strlen($func);
 				$func .= ' ' . str_repeat('.', $longest - $len);
 			}
-			$copy[] = sprintf(' - %s %s line %s.', $func, self::shortpath($file, "\n"), $line);
+			$copy[] = sprintf(' - %s %s line %s.', html($func), self::shortpath($file, "\n"), $line);
 		}
 		
 		$back .= $html ? '<div class="gdt-hr"></div><pre>' : "\n";

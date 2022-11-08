@@ -161,6 +161,7 @@ return [
 	'unknown_user' => 'Unknown User',
 	
 	# GDTs
+	'expires' => 'Expires At',
 	'website_content' => 'Website Content',
 	'exception' => 'Exception',
 	'reason' => 'Reason',

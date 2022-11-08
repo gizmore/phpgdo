@@ -92,7 +92,7 @@ final class Strings
 	        	case "\n":
 		            if (!$open)
 		            {
-		                $back .= "<br/>\n"; # safe to convert
+		                $back .= "<br/>"; # safe to convert
 		            }
 		            else
 		            {

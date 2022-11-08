@@ -53,9 +53,27 @@ final class GDT_Repeat extends GDT
 		return $vars;
 	}
 	
-	protected function getRepeatInput() : array
+	public function getRepeatInput() : array
 	{
-		return $this->inputs[$this->getName()];
+		$name = $this->getName();
+		return isset($this->inputs[$name]) ? $this->arrayed((array)$this->inputs[$name]) : GDT::EMPTY_ARRAY;
+	}
+	
+	private function arrayed(array $array): array
+	{
+		$back = array_reverse($array);
+		foreach($back as $i => $el)
+		{
+			if ($el === '')
+			{
+				unset($back[$i]);
+			}
+			else
+			{
+				break;
+			}
+		}
+		return array_reverse($back);
 	}
 	
 	public function getValue()
@@ -85,5 +103,85 @@ final class GDT_Repeat extends GDT
 		}
 		return $back;
 	}
+	
+	##############
+	### Repeat ###
+	##############
+	public int $minRepeat = 1;
+	public function minRepeat(int $minRepeat): self
+	{
+		$this->minRepeat = $minRepeat;
+		return $this;
+	}
+	
+	public int $maxRepeat = 10;
+	public function maxRepeat(int $maxRepeat): self
+	{
+		$this->maxRepeat = $maxRepeat;
+		return $this;
+	}
+	
+	##############
+	### Render ###
+	##############
+	public function renderLabel(): string
+	{
+		return $this->proxy->renderLabel();
+	}
+	
+	public function renderForm(): string
+	{
+		$html = '';
+		$in = $this->getRepeatInput();
+		$i = count($in);
+		if ($i < $this->maxRepeat)
+		{
+			$in[] = '';
+		}
+		for ($i = count($in); $i < $this->minRepeat; $i++)
+		{
+			$in[] = '';
+		}
+		foreach ($in as $i => $var)
+		{
+			$gdt = $this->getRepeatProxyElement($i);
+			if ($i > 0)
+			{
+				$gdt->notNull(false);
+			}
+			$html2 = $gdt->var($var)->renderForm();
+			$html .= $html2;
+		}
+		return $html;
+	}
+	
+	private function getRepeatProxyElement(int $i): GDT
+	{
+		$newName = "{$this->getName()}[{$i}]";
+		return $this->proxy->gdtCopy($newName);
+	}
+	
+	
+	public function validate($value): bool
+	{
+		$p = $this->proxy;
 
+		if (empty($value))
+		{
+			return $p->validate(null);
+		}
+		
+		$in = $this->getRepeatInput();
+		foreach ($in as $input)
+		{
+			$var = $p->inputToVar($input);
+			$val = $p->toValue($var);
+			if (!$p->validate($val))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
 }

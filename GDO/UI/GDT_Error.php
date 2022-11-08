@@ -17,7 +17,7 @@ final class GDT_Error extends GDT_Panel
 {
 	public static function fromException(\Throwable $t) : self
 	{
-		return self::make()->exception($t);
+		return self::make()->exception($t)->code(500);
 	}
 	
 	############

@@ -351,6 +351,16 @@ final class GDO_User extends GDO
 		return $level + $permLevel;
 	}
 	
+	public function getLevelSpent(): int
+	{
+		return $this->settingVar('User', 'level_spent');
+	}
+	
+	public function getLevelAvailable(): int
+	{
+		return $this->getLevel() - $this->getLevelSpent();
+	}
+	
 	/**
 	 * Get the highest level for all permissions.
 	 */

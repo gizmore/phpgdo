@@ -481,10 +481,10 @@ abstract class Method #extends GDT
 		}
 		finally
 		{
-			foreach ($this->gdoParameterCache() as $gdt)
-			{
-				$gdt->inputs(null);
-			}
+// 			foreach ($this->gdoParameterCache() as $gdt)
+// 			{
+// 				$gdt->inputs(null);
+// 			}
 			$this->unlock();
 		}
 	}
