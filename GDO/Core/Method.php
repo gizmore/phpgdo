@@ -193,6 +193,12 @@ abstract class Method #extends GDT
 	############
 	public function checkPermission(GDO_User $user)
 	{
+		if ($user->isSystem())
+		{
+			# This, f.e., is needed for the gdo_adm.sh configure installer.
+			return true;
+		}
+		
 		if (!($this->isEnabled()))
 		{
 			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()], 403);
@@ -200,11 +206,8 @@ abstract class Method #extends GDT
 		
 		if ( ($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()) )
 		{
-			if (!$user->isSystem())
-			{
-				$hrefAuth = href('Login', 'Form', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
-				return $this->error('err_members_only', [$hrefAuth]);
-			}
+			$hrefAuth = href('Login', 'Form', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
+			return $this->error('err_members_only', [$hrefAuth]);
 		}
 		
 		if ( ($this->isUserRequired()) && (!$user->isUser()) )
