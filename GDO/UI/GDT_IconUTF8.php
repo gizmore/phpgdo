@@ -102,6 +102,7 @@ final class GDT_IconUTF8
     	'position' => '🗺',
     	'print' => '🖶',
     	'qrcode' => '╬',
+    	'question' => '?',
         'quote' => '↶',
         'remove' => '✕',
         'reply' => '☞',

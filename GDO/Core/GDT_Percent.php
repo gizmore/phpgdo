@@ -13,7 +13,8 @@ class GDT_Percent extends GDT_Decimal
 	
 	public function displayVar(string $var=null): string
 	{
-		return parent::displayVar($var) . '%';
+		$back = $var === null ? '∞' : parent::displayVar($var);
+		return  $back . '%';
 	}
 	
 }

@@ -1103,12 +1103,6 @@ abstract class GDO extends GDT
 			return $this;
 		}
 
-// 		# Not persisted, insert it.
-// 		if (!$this->persisted)
-// 		{
-// 			return $this->insert($withHooks);
-// 		}
-		
 		# Call hooks even when not needed. Because its needed on GDT_Files
 		if ($withHooks)
 		{
@@ -1119,7 +1113,7 @@ abstract class GDO extends GDT
 		
 		foreach ($vars as $key => $var)
 		{
-			$this->gdoVars[$key] = $var;
+			$this->gdoVars[$key] = (string) $var;
 		}
 	
 		if ($withHooks)
