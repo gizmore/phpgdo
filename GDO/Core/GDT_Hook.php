@@ -91,6 +91,11 @@ final class GDT_Hook extends GDT
 		return self::call($event, false, $args);
 	}
 	
+	/**
+	 * Call a hook with IPC(InterProcessCommunication) events.
+	 * This will call the hook an all probably gdo daemons and server technologies for your setup.
+	 * Fallback is an IPC emulation via Database/Filecache.
+	 */
 	public static function callWithIPC(string $event, ...$args)
 	{
 		return self::call($event, true, $args);
