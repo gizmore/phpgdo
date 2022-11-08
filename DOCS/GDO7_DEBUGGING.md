@@ -5,6 +5,15 @@ In this page i want to explain the debugging techniques available in GDOv7.
 
 ## GDOv7 Debugging: Database
 
+We all want to know what the raw queries are.
+
+The easiest to debug a query is set a
+[Query](../GDO/DB/Query.php)
+into `->debug()` mode.
+This will print the raw query to stdout on execution.
+
+If you want to log all queries, you can enable GDO_DB_DEBUG in your protected/config.php.
+
 To enable Query logging set GDO_DB_DEBUG to 1 or 2.
 
 If set to 2, every query is logged with an additional backtrace.

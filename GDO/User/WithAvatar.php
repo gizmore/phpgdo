@@ -2,6 +2,7 @@
 namespace GDO\User;
 
 use GDO\Avatar\GDT_Avatar;
+use GDO\Core\GDT;
 
 /**
  * Add an avatar to a GDT.
@@ -59,7 +60,7 @@ trait WithAvatar
 				return $this->renderAvatarFor($this->avatarUser);
 			}
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	protected function renderAvatarFor(GDO_User $user) : string
@@ -68,7 +69,7 @@ trait WithAvatar
 		{
 			self::$AVATAR_DUMMY = GDT_Avatar::make();
 		}
-		return self::$AVATAR_DUMMY->imageSize($this->avatarSize)->user($user)->renderHTML();
+		return self::$AVATAR_DUMMY->imageSize($this->avatarSize)->user($user)->render();
 	}
 	
 }

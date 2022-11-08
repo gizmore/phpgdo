@@ -19,6 +19,11 @@ class Cronjob extends MethodForm
 {
 	use MethodAdmin;
 	
+	public function isTrivial(): bool
+	{
+		return false;
+	}
+	
 	public function isTransactional() : bool { return false; }
 	public function getPermission() : ?string { return 'admin'; }
 	

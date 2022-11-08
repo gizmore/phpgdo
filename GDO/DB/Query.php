@@ -100,7 +100,11 @@ final class Query
 	/**
 	 * Enable logging and verbose output.
 	 */
-	public function debug($debug=true) : self { $this->debug = $debug; return $this; }
+	public function debug($debug=true) : self
+	{
+		$this->debug = $debug;
+		return $this;
+	}
 	
 	#############
 	### Clone ###
@@ -131,7 +135,7 @@ final class Query
             $clone->limit = $this->limit;
     		$clone->from = $this->from;
     		$clone->write = $this->write;
-    		$clone->debug = $this->debug;
+//     		$clone->debug = $this->debug; # not cool to copy
     		$clone->cached = $this->cached;
     		return $clone;
 		}
@@ -581,7 +585,7 @@ final class Query
 
 		if ($this->debug)
 		{
-			echo "{$query}\n";
+			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
 			Logger::rawLog('query', $query);
 		}
 		

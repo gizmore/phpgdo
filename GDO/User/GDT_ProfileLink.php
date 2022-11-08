@@ -3,6 +3,7 @@ namespace GDO\User;
 
 use GDO\UI\GDT_Link;
 use GDO\Core\GDT_Template;
+use GDO\Core\WithGDO;
 use GDO\UI\TextStyle;
 use GDO\Core\GDO;
 
@@ -22,19 +23,19 @@ use GDO\Core\GDO;
  */
 final class GDT_ProfileLink extends GDT_Link
 {
-	use WithUser;
+	use WithGDO;
 	use WithAvatar;
 	
 	public string $icon = 'user';
 	
 	public function hrefProfile() : string
 	{
-		return $this->getUser()->hrefProfile();
+		return $this->getGDO()->hrefProfile();
 	}
 	
-	public function gdo(GDO $gdo=null) : self
+	public function user(GDO $gdo=null) : self
 	{
-		return $this->user($gdo);
+		return $this->gdo($gdo);
 	}
 	
 	################
@@ -44,6 +45,16 @@ final class GDT_ProfileLink extends GDT_Link
 	public function nickname(bool $nickname = true) : self
 	{
 		$this->nickname = $nickname;
+		return $this;
+	}
+	
+	##############
+	### Avatar ###
+	##############
+	public bool $avatar = false;
+	public function avatar(bool $avatar=true): self
+	{
+		$this->avatar = $avatar;
 		return $this;
 	}
 	
@@ -64,7 +75,7 @@ final class GDT_ProfileLink extends GDT_Link
 	{
 		$tVars = [
 			'field' => $this,
-			'user' => $this->getUser(),
+			'user' => $this->getGDO(),
 		];
 		return GDT_Template::php('User', 'profile_link_html.php', $tVars);
 	}
@@ -76,5 +87,9 @@ final class GDT_ProfileLink extends GDT_Link
 			TextStyle::italic(t('unknown_user'));
 	}
 	
+// 	public function renderCell(): string
+// 	{
+// 		return $this->renderHTML();
+// 	}
 	
 }

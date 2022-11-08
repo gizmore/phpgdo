@@ -97,6 +97,7 @@ final class GDT_IconUTF8
     	'numeric' => 'π',
         'password' => '⚷',
         'pause' => '⏸',
+    	'percent' => '%',
         'phone' => '📞',
         'plus' => '+',
     	'position' => '🗺',

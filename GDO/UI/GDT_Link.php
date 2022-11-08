@@ -37,6 +37,8 @@ class GDT_Link extends GDT_Url
 	###########
 	public function isWriteable() : bool { return false; }
 	
+// 	public function getVar() { return $this->href; }
+	
 	###########
 	### URL ###
 	###########

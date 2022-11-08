@@ -220,7 +220,7 @@ final class GDT_ACL extends GDT
 		$conditions[] = "uset_relation IN (" . $rels . ")";
 		$conditions = implode(' AND ', $conditions);
 		
-		$query->where("uset_name=" . quote($key));
+// 		$query->where("uset_name=" . quote($key));
 		$and = "(uset_user={$user->getID()}) OR ($conditions)";
 		$query->where($and);
 // 		

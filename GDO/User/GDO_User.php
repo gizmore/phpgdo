@@ -433,25 +433,24 @@ final class GDO_User extends GDO
 		return $pp . t('guest') . $pp;
 	}
 	
-	public function getProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : GDT_ProfileLink
-	{
-		$link = GDT_ProfileLink::make()->gdo($this);
-		$link->nickname($nickname);
-		if ($avatar > 0)
-		{
-			$link->avatarUser($this, $avatar);
-		}
-		if ($level)
-		{
-			$link->tooltip('tt_user_profile_link', [$this->renderUserName(), $this->getLevel()]);
-		}
-		return $link;
-	}
+// 	public function getProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : GDT_ProfileLink
+// 	{
+// 		$link = GDT_ProfileLink::make()->gdo($this);
+// 		$link->nickname($nickname);
+// 		if ($avatar > 0)
+// 		{
+// 			$link->avatarUser($this, $avatar);
+// 		}
+// 		if ($level)
+// 		{
+// 			$link->tooltip('tt_user_profile_link', [$this->renderUserName(), $this->getLevel()]);
+// 		}
+// 		return $link;
+// 	}
 
 	public function renderProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : string
 	{
-		$link = $this->getProfileLink($nickname, $avatar, $level);
-		return $link->render();
+		return GDT_ProfileLink::make()->gdo($this)->nickname($nickname)->avatarSize($avatar)->level($level)->render();
 	}
 	
 	public function getGender() : ?string
