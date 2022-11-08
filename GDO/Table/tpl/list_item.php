@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Table\tpl;
 use GDO\Table\GDT_ListItem;
+use GDO\Core\GDT;
 /** @var $gdt GDT_ListItem **/
 $gdt->addClass('gdt-list-item');
 ?>
@@ -26,14 +27,19 @@ $gdt->addClass('gdt-list-item');
   </div>
 <?php endif; ?>
 
-<?php if (isset($gdt->image) ||  isset($gdt->content) || isset($gdt->right)) : ?>
+<?php if (isset($gdt->image) || $gdt->hasFields() || isset($gdt->content) || isset($gdt->right)) : ?>
   <div class="gdt-li-main">
 <?php if (isset($gdt->image)) : ?>
     <div class="gdt-li-image"><?=$gdt->image->render()?></div>
 <?php endif; ?>
-<?php if (isset($gdt->content)) : ?>
+<?php if (isset($gdt->content) || $gdt->hasFields()) : ?>
     <div class="gdt-li-content">
+<?php if (isset($gdt->content)) : ?>
       <?=$gdt->content->renderList()?>
+<?php endif; ?>
+<?php if ($gdt->hasFields()) : ?>
+      <?=$gdt->renderFields(GDT::RENDER_LIST)?>
+<?php endif; ?>
     </div>
 <?php endif; ?>
 <?php if (isset($gdt->right)) : ?>

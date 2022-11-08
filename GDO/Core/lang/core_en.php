@@ -135,6 +135,7 @@ return [
 	'btn_edit' => 'Edit',
 	'btn_modules' => 'Modules',
 	'btn_overview' => 'Overview',
+	'btn_participate' => 'Participate',
 	'btn_preview' => 'Preview',
 	'btn_print' => 'Print',
 	'btn_save' => 'Save',

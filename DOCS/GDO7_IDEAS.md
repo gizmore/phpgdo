@@ -82,4 +82,6 @@ Your playlists are ACL sharable.
  
  - KassiererChallenge. Find a way to create more than N stzars.
  
+ - New Challenge: Stream Chaoz. A streaming provider that offers only one mp4: 100GB of data you need to sha256().
+ If you close the browser window or open dev console it dies.
  
