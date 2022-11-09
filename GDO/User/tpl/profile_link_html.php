@@ -2,7 +2,6 @@
 namespace GDO\User\tpl;
 use GDO\User\GDT_ProfileLink;
 use GDO\User\GDO_User;
-use GDO\Core\GDT_Field;
 use GDO\Avatar\GDT_Avatar;
 /** @var $field GDT_ProfileLink **/
 /** @var $user GDO_User **/

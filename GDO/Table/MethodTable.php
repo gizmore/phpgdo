@@ -45,6 +45,7 @@ abstract class MethodTable extends MethodForm
 	 */
 	public function onCreateTable(GDT_Table $table) : void {}
 	protected function onInitTable() : void {}
+	public function useFetchInto(): bool { return true; }
 	
 	/**
 	 * Override this.
@@ -350,6 +351,7 @@ abstract class MethodTable extends MethodForm
 	    $table->deletable($this->isDeleteable($user));
 	    
 	    # 1 speedup
+	    $table->fetchInto($this->useFetchInto());
 	    $table->fetchAs($this->gdoFetchAs());
 	}
 	

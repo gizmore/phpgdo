@@ -13,10 +13,7 @@ namespace GDO\Core;
  */
 trait WithTemp
 {
-	/**
-	 * Temp variables.
-	 */
-	public ?array $temp = null;
+	public array $temp;
 	
 	/**
 	 * Check if we have a temp var.

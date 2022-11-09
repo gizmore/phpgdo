@@ -19,11 +19,6 @@ use GDO\Core\GDO_Exception;
 abstract class MethodQueryTable extends MethodTable
 {
 
-	public function useFetchInto(): bool
-	{
-		return true;
-	}
-
 	public function gdoHeaders(): array
 	{
 		return array_merge($this->gdoButtonHeaders(), $this->gdoTable()->gdoColumnsCache());

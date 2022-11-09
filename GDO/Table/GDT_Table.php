@@ -387,6 +387,16 @@ class GDT_Table extends GDT
 		return $this->pagemenu;
 	}
 
+	##################
+	### Fetch Into ###
+	##################
+	public bool $fetchInto = false;
+	public function fetchInto(bool $fetchInto=true): self
+	{
+		$this->fetchInto = $fetchInto;
+		return $this;
+	}
+	
 	################
 	### Fetch As ###
 	################
