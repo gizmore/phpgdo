@@ -20,7 +20,7 @@ $htmlTitle = isset($htmlTitle) ? " title=\"{$htmlTitle}\"" : '';
 ?>
 <span class="gdt-profile-link"<?=$htmlTitle?>>
 <?php if ($field->avatar) : ?>
-<a href="<?=$href?>" class="gdt-avatar"><?=GDT_Avatar::make()->user($user)->render()?></a>
+<a href="<?=$href?>" class="gdt-avatar"><?=GDT_Avatar::make()->user($user)->imageSize(24)->render()?></a>
 <?php endif; ?>
 <?php if ($field->nickname) : ?>
 <a href="<?=$href?>" class="gdt-nickname"><?=$field->getGDO()->renderUserName()?></a>
