@@ -69,7 +69,7 @@ final class Random
 		# Take 4 bytes and unpack to a signed int
 		$n = unpack('L', substr($BUFFER, 0, 4));
 		# thx to dloser we convert to unsigned on 32 bit arch
-		$n = PHP_INT_SIZE === 4 ? $n[1] + 2147483648 : $n[1]; # @TODO get rid of the branch with branchless programming.
+		$n = $n[1] + 2147483648 * (PHP_INT_SIZE === 4);
 		
 		# Eat from random buffer
 		$BUFFER = substr($BUFFER, 4);
