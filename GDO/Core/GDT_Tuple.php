@@ -16,8 +16,12 @@ class GDT_Tuple extends GDT
 	use WithError;
 	use WithFields;
 	
-	public function addField(GDT $gdt, GDT $after=null, bool $last=true) : self
+	public function addField(?GDT $gdt, GDT $after=null, bool $last=true) : self
 	{
+		if ($gdt === null)
+		{
+			return $this;
+		}
 		if ($gdt instanceof self)
 		{
 			return $this->addFields(...array_values($gdt->getFields()));

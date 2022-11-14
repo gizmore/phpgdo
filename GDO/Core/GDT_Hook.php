@@ -139,7 +139,7 @@ final class GDT_Hook extends GDT
 		# Count num calls up.
 		self::$CALLS++;
 
-		$response = null;
+		$response = GDT_Response::make();
 		
 		# Call hooks for this HTTP/www process.
 		if ($moduleNames = self::getHookModuleNames($event))
@@ -153,14 +153,8 @@ final class GDT_Hook extends GDT
 					if ($module->isEnabled())
 					{
 						$callable = [$module, $method_name];
-						if ($result = call_user_func_array($callable, $args))
-						{
-							if ($response === null)
-							{
-								$response = GDT_Response::make();
-							}
-							$response->addField($result);
-						}
+						$result = call_user_func_array($callable, $args);
+						$response->addField($result);
 					}
 				}
 			}
