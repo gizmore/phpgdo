@@ -110,7 +110,7 @@ abstract class GDT_Field extends GDT
 	{
 		if (is_string($input))
 		{
-			return $input; # === GDT::EMPTY_STRING ? null : $input;
+			return $input === GDT::EMPTY_STRING ? null : $input;
 		}
 		elseif ($input instanceof GDT_Method)
 		{

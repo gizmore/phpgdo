@@ -19,6 +19,7 @@ I want to thank a lot of people sometimes :)
 
  - space: [gdo_todo.sh](https://github.com/gizmore/gdo6/blob/master/gdo_todo.sh) to generate a todo list.
 
+ - fsharp: Minor performance improvement in Random::rand()
 
 ##### GDOv7 Donators
 
