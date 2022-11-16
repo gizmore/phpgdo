@@ -4,8 +4,6 @@ namespace GDO\Core;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Success;
-use GDO\UI\TextStyle;
-use GDO\UI\Color;
 
 /**
  * General Website utility and storage for header and javascript elements.
@@ -168,12 +166,12 @@ final class Website
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($error);
-		if ($app->isUnitTests())
-		{
-			echo Color::red(TextStyle::bold(t($key, $args)));
-			echo "\n";
-// 			return $error;
-		}
+// 		if ($app->isUnitTests())
+// 		{
+// 			echo Color::red(TextStyle::bold(t($key, $args)));
+// 			echo "\n";
+// // 			return $error;
+// 		}
 		return GDT_Response::make()->code($code);
 	}
 	
@@ -190,12 +188,12 @@ final class Website
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($success);
-		if ($app->isUnitTests())
-		{
-			echo Color::green(TextStyle::bold(t($key, $args)));
-			echo "\n";
-// 			return $success;
-		}
+// 		if ($app->isUnitTests())
+// 		{
+// 			echo Color::green(TextStyle::bold(t($key, $args)));
+// 			echo "\n";
+// // 			return $success;
+// 		}
 		return GDT_Response::make()->code($code);
 	}
 	

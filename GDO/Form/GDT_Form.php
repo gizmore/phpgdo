@@ -185,10 +185,10 @@ final class GDT_Form extends GDT
 	{
 		$numErrors = $this->countErrors();
 		Application::setResponseCode(GDO_Exception::DEFAULT_ERROR_CODE);
-		if (Application::instance()->isUnitTests())
-		{
-			echo $this->renderCLI();
-		}
+// 		if (Application::instance()->isUnitTests())
+// 		{
+// 			echo $this->renderCLI();
+// 		}
 		return $this->error('err_form_invalid', [$numErrors]);
 	}
 	

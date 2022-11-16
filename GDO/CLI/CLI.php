@@ -192,9 +192,8 @@ final class CLI
     /**
      * Render help line for gdt parameters.
      * @param GDT[] $fields
-     * @return string
      */
-    public static function renderCLIHelp(Method $method) : string
+    public static function renderCLIHelp(Method $method): string
     {
         $usage1 = [];
         $usage2 = [];

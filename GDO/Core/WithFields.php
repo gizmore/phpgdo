@@ -256,7 +256,9 @@ trait WithFields
 	 */
 	public function getAllFields() : array
 	{
-		return isset($this->fieldsFlat) ? $this->fieldsFlat : GDT::EMPTY_ARRAY;
+		return isset($this->fieldsFlat) ?
+			$this->fieldsFlat :
+			GDT::EMPTY_ARRAY;
 	}
 	
 	###########################

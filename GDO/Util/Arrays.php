@@ -200,4 +200,18 @@ final class Arrays
 		}
 		return $array;
 	}
+	
+	/**
+	 * Sum all elements of an array via a callable.
+	 */
+	public static function sum(array $array, $callable): int
+	{
+		$back = 0;
+		foreach ($array as $element)
+		{
+			$back += $callable($element);
+		}
+		return $back;
+	}
+	
 }

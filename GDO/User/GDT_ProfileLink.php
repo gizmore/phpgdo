@@ -82,8 +82,8 @@ final class GDT_ProfileLink extends GDT_Link
 	
 	public function renderCLI() : string
 	{
-		return isset($this->user) ? 
-			$this->user->renderUserName() :
+		return isset($this->gdo) ? 
+			$this->gdo->renderUserName() :
 			TextStyle::italic(t('unknown_user'));
 	}
 	

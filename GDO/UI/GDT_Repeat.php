@@ -184,4 +184,9 @@ final class GDT_Repeat extends GDT
 		return true;
 	}
 	
+	public function renderError(): string
+	{
+		return $this->proxy->renderError();
+	}
+
 }

@@ -11,6 +11,10 @@ use GDO\Core\Module_Core;
 use GDO\DB\Database;
 use GDO\Core\Application;
 use GDO\UI\GDT_Redirect;
+use GDO\Form\GDT_Form;
+use GDO\Form\MethodForm;
+use GDO\Form\GDT_Submit;
+use GDO\Form\GDT_AntiCSRF;
 
 /**
  * Clears all client and server caches.
@@ -24,7 +28,7 @@ use GDO\UI\GDT_Redirect;
  * @see Cache
  * @see Module_Core
  */
-final class ClearCache extends Method
+final class ClearCache extends MethodForm
 {
 	use MethodAdmin;
 	
@@ -33,6 +37,12 @@ final class ClearCache extends Method
 	public function isSavingLastUrl() : bool { return false; }
 	
 	public function getPermission() : ?string { return 'staff'; }
+	
+	public function createForm(GDT_Form $form): void
+	{
+		$form->addField(GDT_AntiCSRF::make());
+		$form->actions()->addField(GDT_Submit::make());
+	}
 	
 	public function execute()
 	{

@@ -94,7 +94,12 @@ abstract class MethodForm extends Method
 		unset($this->parameterCache); # :)
 	}
 	
-	public function &gdoParameterCache() : array
+	/**
+	 * Get the parameter cache.
+	 * 
+	 * @return GDT[]
+	 */
+	public function &gdoParameterCache(): array
 	{
 		if (!isset($this->parameterCache))
 		{
@@ -142,7 +147,7 @@ abstract class MethodForm extends Method
 // 	{
 // 		if (count($_POST))
 // 		{
-// 			foreach ($this->getForm()->getFieldsRec() as $field)
+// 			foreach ($this->getForm()->getAllFields() as $field)
 // 			{
 // 				if ($field instanceof GDT_File)
 // 				{

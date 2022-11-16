@@ -73,6 +73,7 @@ return [
 // 	'err_duplicate_field_name' => 'A field has been added twice: `%s`.',
 	'err_url_not_reachable' => 'This URL is not reachable: `%s`.',
 	'err_cli_form_gdt' => '%s has an error: %s',
+	'err_cli_exception' => 'The command caused an error: %s in %s line %s.',
 	'err_path_not_exists' => 'The %2$s `%1$s` does not exist or is not readable.',
 	'err_token' => 'Your authenticity token is invalid or has been used already.',
 	'err_exception' => '%s: `%s`.',

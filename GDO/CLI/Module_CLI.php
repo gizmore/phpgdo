@@ -14,7 +14,7 @@ use GDO\Core\Method;
  */
 final class Module_CLI extends GDO_Module
 {
-	public int $priority = 49;
+	public int $priority = 25;
 	
     public function onLoadLanguage() : void
     {

@@ -236,5 +236,22 @@ abstract class GDT_Field extends GDT
 		return sprintf("<label>%s%s:&nbsp;</label><span>%s</span>\n",
 			$this->htmlIcon(), $this->renderLabelText(), $var);
 	}
+	
+	##################
+	### Positional ###
+	##################
+	public ?bool $positional = null;
+	public function positional(?bool $positional=true): self
+	{
+		$this->positional = $positional;
+		return $this;
+	}
+	
+	public function isPositional(): bool
+	{
+		return ($this->positional === null) ?
+			($this->isRequired() && ($this->initial === null)) :
+			($this->positional);
+	}
 
 }
