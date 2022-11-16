@@ -15,6 +15,16 @@ use GDO\User\GDT_ProfileLink;
 final class WhoAmI extends Method
 {
 	
+	public function isShownInSitemap(): bool
+	{
+		return false;
+	}
+	
+	public function getMethodTitle(): string
+	{
+		return t('gdo_user');
+	}
+	
 	public function execute()
 	{
 		return GDT_ProfileLink::make('user')->user(GDO_User::current())->nickname();

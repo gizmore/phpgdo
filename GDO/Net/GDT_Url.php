@@ -131,7 +131,7 @@ class GDT_Url extends GDT_String
 	
 	public function allSchemes()
 	{
-	    $this->schemes = null;
+	    unset($this->schemes);
 	    return $this;
 	}
 	
