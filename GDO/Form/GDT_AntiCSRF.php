@@ -82,7 +82,7 @@ class GDT_AntiCSRF extends GDT_String
 	    $time = 1337;
 	    $hash = sprintf('%s_%s_%s_%s_%s',
 	        GDO_SALT, $user->renderUserName(),
-	    	GDO_SALT, $user->gdoVar('user_password'), $time);
+	    	GDO_SALT, $user->gdoVar('user_id'), $time);
 	    return substr(sha1($hash), 0, self::KEYLEN);
 	}
 	

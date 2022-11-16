@@ -41,9 +41,9 @@ $result = $field->getResult();
 	  </tr>
 	</thead>
 	<tbody>
-<?php $dummy = $result->table->cache->getDummy(); ?>
+<?php $gdo = $result->table->cache->getDummy(); ?>
 <?php while (true) : ?>
-<?php if (!($gdo = $field->fetchInto ? $result->fetchInto($dummy) : $result->fetchObject())) break; ?>
+<?php if (!($gdo = $field->fetchInto ? $result->fetchInto($gdo) : $result->fetchObject())) break; ?>
 	<tr data-gdo-id="<?=$gdo->getID()?>">
 <?php foreach($headers as $gdt) :
 	        if (!$gdt->isHidden()) :

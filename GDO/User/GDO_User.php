@@ -5,7 +5,6 @@ use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_Hook;
-use GDO\Crypto\GDT_PasswordHash;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Core\GDT_DeletedAt;
@@ -22,8 +21,6 @@ use GDO\UI\GDT_Card;
 /**
  * The holy user class.
  * Most user related fields are in other module settings.
- * 
- * @TODO Move user_password into a separate table or Module_User settings.
  * 
  * @author gizmore
  * @version 7.0.1
@@ -75,7 +72,6 @@ final class GDO_User extends GDO
 			GDT_Level::make('user_level'),
 			GDT_DeletedAt::make('user_deleted'),
 			GDT_DeletedBy::make('user_deletor'),
-			GDT_PasswordHash::make('user_password'),
 		];
 	}
 	

@@ -342,7 +342,7 @@ class Cache
 		{
 			$this->cache[$key] = (new $this->klass())->setGDOVars($assoc)->setPersisted();
 		}
-		elseif ($useCache)
+		else #if ($useCache)
 		{
 			$this->cache[$key]->setGDOVars($assoc);
 		}
