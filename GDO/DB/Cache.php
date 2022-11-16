@@ -8,7 +8,6 @@ use GDO\Core\Module_Core;
 use GDO\Core\Application;
 use GDO\Core\Logger;
 use GDO\Core\Debug;
-use GDO\Core\GDO_Exception;
 
 /**
  * Cache is a global object cache, where each fetched object (with the same key) from the database results in the same instance.
@@ -438,6 +437,10 @@ class Cache
 					self::set($gkey, $mcached, GDO_MEMCACHE_TTL);
 				}
 				$this->newDummy();
+			}
+			else
+			{
+				$mcached->setGDOVars($assoc)->setPersisted();
 			}
 			$this->cache[$key] = $mcached;
 		}
