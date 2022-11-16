@@ -8,6 +8,7 @@ use GDO\Core\Module_Core;
 use GDO\Core\Application;
 use GDO\Core\Logger;
 use GDO\Core\Debug;
+use GDO\Core\GDO_Exception;
 
 /**
  * Cache is a global object cache, where each fetched object (with the same key) from the database results in the same instance.
@@ -440,7 +441,7 @@ class Cache
 			}
 			$this->cache[$key] = $mcached;
 		}
-		elseif ($useCache)
+		else #if ($useCache)
 		{
 			$this->cache[$key]->setGDOVars($assoc)->setPersisted();
 		}
@@ -553,7 +554,7 @@ class Cache
 			$filename = self::filePath($key);
 			if (FileUtil::isFile($filename))
 			{
-				return @unlink($filename);
+				return unlink($filename);
 			}
 		}
 		return true; 
