@@ -12,7 +12,11 @@ use GDO\Core\GDT;
  */
 class GDT_PasswordHash extends GDT_Password
 {
-    public function isSerializable() : bool { return false; }
+	
+    public function isSerializable() : bool
+    {
+    	return false;
+    }
     
     public function toValue($var = null)
 	{
@@ -37,6 +41,11 @@ class GDT_PasswordHash extends GDT_Password
 	 * Do not show previous input!
 	 */
 	public function renderCell(): string
+	{
+		return GDT::EMPTY_STRING;
+	}
+	
+	public function htmlValue(): string
 	{
 		return GDT::EMPTY_STRING;
 	}
