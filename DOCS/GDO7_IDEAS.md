@@ -85,3 +85,7 @@ Your playlists are ACL sharable.
  - New Challenge: Stream Chaoz. A streaming provider that offers only one mp4: 100GB of data you need to sha256().
  If you close the browser window or open dev console it dies.
  
+ - Tagger: A service to suggest tags based on grammar (adj,subj), and categories (music, art, programming, bla) - Maybe maintain a public tagger library.
+ 
+ - ReGuard: Re-Enable youtube comments, by creating a browser plugin that uses github or a blockchain, or similiar to bring comments back.
+ 

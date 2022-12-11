@@ -235,6 +235,7 @@ final class ModuleProviders
 'VPNDetect' => 'phpgdo-vpn-detect',
 'Websocket' => 'phpgdo-websocket',
 'YouTube' => 'phpgdo-youtube',
+'YTBest' => 'phpgdo-ytbest',
 'ZIP' => 'phpgdo-zip',
 ### END_PROVIDERS ###
 	];
@@ -367,7 +368,8 @@ final class ModuleProviders
 'Votes' => [],
 'VPNDetect' => [],
 'Websocket' => ['Session'],
-'YouTube' => [],
+'YouTube' => ['File'],
+'YTBest' => ['Admin', 'Classic', 'Comments', 'Login', 'Recovery', 'Register', 'Votes', 'YouTube'],
 'ZIP' => [],
 ### END_DEPENDENCIES ###
 	];
