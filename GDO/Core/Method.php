@@ -717,4 +717,10 @@ abstract class Method #extends GDT
 		return GDT_Template::make()->template($this->getModuleName(), $path, $tVars);
 	}
 
+	public function tempPath(string $path = ''): string
+	{
+		$module = $this->getModule();
+		return $module->tempPath($this->getMethodName().'/'.$path);
+	}
+
 }
