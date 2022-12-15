@@ -22,7 +22,7 @@ class GDT_Username extends GDT_Name
 	public string $icon = 'face';
 	
 	# Allow - _ LETTERS DIGITS
-	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]{1,".(self::LENGTH-1)."}$/iuD";
+	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]+$/iuD";
 
 	public function defaultLabel() : self { return $this->label('username'); }
 	

@@ -4,7 +4,8 @@ namespace GDO\Core;
 use GDO\User\GDT_User;
 
 /**
- * GDT signals deletion for a row. Some stuff auto-detects that.
+ * GDT signals deletion for a row.
+ * Some stuff auto-detects that.
  * Not often used yet.
  * 
  * @author gizmore
