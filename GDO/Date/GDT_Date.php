@@ -91,7 +91,7 @@ class GDT_Date extends GDT_Timestamp
 	
 	public function renderForm() : string
 	{
-		return GDT_Template::php('Date', 'form/date.php', ['field'=>$this]);
+		return GDT_Template::php('Date', 'date_form.php', ['field'=>$this]);
 	}
 	
 	public function htmlValue() : string

@@ -214,11 +214,11 @@ final class FileUtil
 		if ($i === 0)
 		{
 		    # empty?
-		    return sprintf("%s%s", $bytes, $txt[$i]);
+		    return sprintf('%s %s', $bytes, $txt[$i]);
 		}
 		
 		$var = $bytes + ($rem / $factor);
-		return GDT_Float::displayS($var, $digits) . $txt[$i];
+		return GDT_Float::displayS($var, $digits) . ' ' . $txt[$i];
 	}
 	
 	private static function getTextArray() : array

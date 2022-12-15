@@ -12,6 +12,8 @@ final class GDT_Success extends GDT_Panel
 	{
 		parent::__construct();
 		$this->addClass('gdt-success');
+		$this->addClass('alert');
+		$this->addClass('alert-success');
 		$this->icon = 'check';
 	}
 	

@@ -8,7 +8,7 @@ use GDO\Core\GDT_Field;
  * A numeric slider with min and max values. 
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.0.0
  */
 class GDT_Slider extends GDT_Field
@@ -16,7 +16,10 @@ class GDT_Slider extends GDT_Field
 	##############
 	### Render ###
 	##############
-	public function renderForm() : string { return GDT_Template::php('UI', 'form/slider.php', ['field' => $this]); }
+	public function renderForm() : string
+	{
+		return GDT_Template::php('UI', 'slider.php', ['field' => $this]);
+	}
 
 	###############
 	### Options ###

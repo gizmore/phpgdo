@@ -222,6 +222,11 @@ class GDT_Int extends GDT_DBField
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
 	
+	public function renderJSON()
+	{
+		return $this->getValue();
+	}
+	
 	public function configJSON() : array
 	{
 		return array_merge(parent::configJSON(), [

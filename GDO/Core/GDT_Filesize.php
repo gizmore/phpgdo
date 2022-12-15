@@ -7,7 +7,7 @@ use GDO\Util\FileUtil;
  * Display int as human readable filesize.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.1
  * @since 6.1.0
  */
 final class GDT_Filesize extends GDT_UInt
@@ -20,7 +20,12 @@ final class GDT_Filesize extends GDT_UInt
 		{
 			return FileUtil::humanFilesize($size);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
+	}
+	
+	public function renderJSON()
+	{
+		return $this->getValue();
 	}
 	
 	public function toValue($var = null)

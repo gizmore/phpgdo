@@ -18,7 +18,7 @@ class GDT_Menu extends GDT_Container
 	
 	public bool $flex = true;
 	public bool $flexWrap = true;
-	public bool $flexShrink = true;
+	public bool $flexShrink = false;
 	
 	public function getDefaultName() : string
 	{

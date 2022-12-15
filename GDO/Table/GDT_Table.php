@@ -428,6 +428,16 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
+	#####################
+	### Zebra stripes ###
+	#####################
+	public bool $striped = true;
+	public function striped(bool $striped): self
+	{
+		$this->striped = $striped;
+		return $this;
+	}
+	
 	# #############
 	# ## Render ###
 	# #############

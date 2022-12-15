@@ -200,7 +200,7 @@ class GDT_User extends GDT_Object
 	{
 	    if ($user = $this->getUser())
 	    {
-	        return $user->renderUserName();
+	        return $user->renderProfileLink();
 	    }
 	    return t('unknown');
 	}

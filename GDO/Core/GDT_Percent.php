@@ -16,5 +16,5 @@ class GDT_Percent extends GDT_Decimal
 		$back = $var === null ? '∞' : parent::displayVar($var);
 		return  $back . '%';
 	}
-	
+
 }

@@ -1,4 +1,7 @@
-<?php /** @var $field \GDO\UI\GDT_Slider **/ ?>
+<?php
+namespace GDO\UI\tpl;
+/** @var $field \GDO\UI\GDT_Slider **/
+?>
 <div class="gdt-container<?= $field->classError(); ?>">
   <?= $field->htmlIcon(); ?>
   <label <?=$field->htmlForID()?>><?= $field->renderLabel(); ?></label>

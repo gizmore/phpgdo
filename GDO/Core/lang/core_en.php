@@ -357,6 +357,7 @@ The %2$s System',
 	'creator_header' => '%s added this on %s.',
 	
 	'please_choose' => 'Please choose...',
+	'required' => 'This field is required and has to be filled out.',
 	
 	# Privacy
 	'info_privacy_related_module' => '%s is a privacy related module that is currently enabled.',
@@ -369,4 +370,11 @@ The %2$s System',
 
 	'err_nothing_happened' => 'No error occured, but unexpectedly nothing happened.',
 	
+	# Health
+	'gdo_revision' => 'GDO-Revision',
+	'health_cpus' => 'Cores',
+	'health_load' => 'Load',
+	'health_free' => 'Avail',
+	'health_mem' => 'Memory',
+
 ];

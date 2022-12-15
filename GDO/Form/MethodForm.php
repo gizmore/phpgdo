@@ -139,6 +139,7 @@ abstract class MethodForm extends Method
 			$this->form->inputs($inputs);
 			$this->applyInput();
 			$this->form->actions()->inputs($inputs);
+// 			$this->form->titleRaw($this->getMethodTitle());
 		}
 		return $this->form;
 	}
@@ -196,6 +197,8 @@ abstract class MethodForm extends Method
 		$form = $this->getForm();
 		
 		$this->appliedInputs($this->getInputs());
+		
+		$form->titleRaw($this->getMethodTitle());
 		
 // 		if (isset($this->inputs))
 // 		{

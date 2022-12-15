@@ -21,7 +21,7 @@ final class Privacy extends MethodPage
 	
 	public function getMethodDescription() : string
 	{
-		return t('md_privacy', [sitename()]);
+		return t('privacy_settings');
 	}
 	
 	public function execute()

@@ -133,7 +133,7 @@ final class Module_Language extends GDO_Module
 	public function onIncludeScripts() : void
 	{
 	    # If enabled include js trans data and translation engine.
-	    if ($this->cfgJavascript())
+	    if ($this->cfgJavascript() || Application::$INSTANCE->hasTheme('bs5'))
 	    {
     		# Add js trans
     		$href = sprintf(

@@ -51,7 +51,7 @@ trait WithLabel
 	{
 		if (!isset(self::$requiredIcon))
 		{
-			self::$requiredIcon = '<span class="gdt-required">'.GDT_Icon::iconS('required').'</span>';
+			self::$requiredIcon = '<span class="gdt-required">'.GDT_Icon::iconS('required', t('required')).'</span>';
 		}
 		return self::$requiredIcon;
 	}

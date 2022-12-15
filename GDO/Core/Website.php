@@ -104,7 +104,7 @@ final class Website
 			list($name, $content, $equiv) = $meta;
             if ($content)
             {
-                $back .= sprintf("\t<meta %s=\"%s\" content=\"%s\" />\n",
+                $back .= sprintf("\t<meta %s=\"%s\" content=\"%s\" >\n",
                 	$equiv, $name, $content);
             }
 		}

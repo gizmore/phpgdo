@@ -54,10 +54,10 @@ final class GDT_Form extends GDT
 	use WithActions;
 	use WithPHPJQuery;
 	
-	const GET = 'GET';
-	const POST = 'POST';
-	const HEAD = 'HEAD';
-	const OPTIONS = 'OPTIONS';
+	const GET = 'get';
+	const POST = 'post';
+	const HEAD = 'head';
+	const OPTIONS = 'options';
 	
 	public static ?self $CURRENT = null; # required to handle focus requester engine.
 	

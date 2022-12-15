@@ -170,7 +170,7 @@ class GDT_Card extends GDT
 	    # Add avatar
 	    if (module_enabled('Avatar')) # ugly bridge
 	    {
-	    	$this->avatarUser($user);
+	    	$this->avatarUser($user, 52);
 	    }
 	    
 	    # Add created by / at to subtitle

@@ -35,6 +35,7 @@ final class GDT_ProfileLink extends GDT_Link
 	
 	public function user(GDO $gdo=null) : self
 	{
+// 		$this->avatarUser($gdo);
 		return $this->gdo($gdo);
 	}
 	
@@ -73,6 +74,10 @@ final class GDT_ProfileLink extends GDT_Link
 	##############
 	public function renderHTML() : string
 	{
+		if ($this->avatar)
+		{
+			$this->avatarUser($this->getGDO(), $this->avatarSize);
+		}
 		$tVars = [
 			'field' => $this,
 			'user' => $this->getGDO(),

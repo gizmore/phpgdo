@@ -2,10 +2,13 @@
 namespace GDO\Form;
 
 use GDO\UI\WithTarget;
+use GDO\Core\GDT;
 
 /**
  * Add an html action attribute to a GDT.
+ * 
  * @author gizmore
+ * @version 7.0.1
  * @since 7.0.0
  */
 trait WithAction
@@ -13,6 +16,7 @@ trait WithAction
 	use WithTarget;
 	
 	public string $action;
+
 	public function action(string $action) : self
 	{
 		$this->action = $action;
@@ -21,11 +25,7 @@ trait WithAction
 	
 	public function htmlAction() : string
 	{
-		if (isset($this->action))
-		{
-			return sprintf(' action="%s"', html($this->action));
-		}
-		return '';
+		return isset($this->action) ? ' action="'.html($this->action).'"' : GDT::EMPTY_STRING;
 	}
 	
 }

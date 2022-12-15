@@ -1137,10 +1137,14 @@ class GDO_Module extends GDO
 	private function _ucacl(string $key, GDT_ACL $acl, GDO_User $user): GDT_ACL
 	{
 		$gdt = $this->userSetting($user, $key);
-		$data = $this->getACLDataFor($user, $gdt, $key);
-		$acl->aclRelation->var($data[0]);
-		$acl->aclLevel->var($data[1]);
-		$acl->aclPermission->var($data[2]);
+		foreach (array_keys($gdt->getGDOData()) as $k)
+		{
+			$data = $this->getACLDataFor($user, $gdt, $k);
+			$acl->aclRelation->var($data[0]);
+			$acl->aclLevel->var($data[1]);
+			$acl->aclPermission->var($data[2]);
+			break;
+		}
 		return $acl;
 	}
 

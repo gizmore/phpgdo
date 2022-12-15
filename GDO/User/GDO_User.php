@@ -446,7 +446,7 @@ final class GDO_User extends GDO
 
 	public function renderProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : string
 	{
-		return GDT_ProfileLink::make()->gdo($this)->nickname($nickname)->avatarSize($avatar)->level($level)->render();
+		return GDT_ProfileLink::make()->gdo($this)->nickname($nickname)->avatarUser($this, $avatar)->level($level)->render();
 	}
 	
 	public function getGender() : ?string
@@ -568,8 +568,7 @@ final class GDO_User extends GDO
 	public function getMail(bool $confirmed=true) : ?string
 	{
 		$email = $this->settingVar('Mail', 'email');
-		$confi = $this->settingVar('Mail', 'email_confirmed');
-		return (!$confi) ? ($confirmed ? null : $email) : $email;
+		return $confirmed ? ($this->settingVar('Mail', 'email_confirmed') ? $email : null) : $email;
 	}
 
 	public function getMailFormat() : string

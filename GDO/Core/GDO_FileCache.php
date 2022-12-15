@@ -25,8 +25,7 @@ final class GDO_FileCache extends GDO
 	public static function md5For(string $path, int $last_modified_time) : string
 	{
 		$table = self::table();
-		$path = GDO::quoteS($path);
-		if ($file = $table->select()->where("fc_name={$path}")->where("fc_mtime>=$last_modified_time")->first()->exec()->fetchObject())
+		if ($file = $table->select()->where("fc_name=".quote($path))->where("fc_mtime>=$last_modified_time")->first()->exec()->fetchObject())
 		{
 			return $file->gdoVar('fc_md5');
 		}
