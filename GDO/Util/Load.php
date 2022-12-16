@@ -3,47 +3,46 @@ namespace GDO\Util;
 
 /**
  * Gather System metrics.
+ * Call Load::init() to include.
  * 
  * @author gizmore
+ * @version 7.0.2
  * @since 7.0.1
  */
 final class Load
 {
+	# Prefilled with fictive values.
 	public static array $STATE = [
+		# PERF
 		'cpus' => 1,
 		'load' => 0.00,
+		'clock' => 4.22, # GHz
+		# MEM
 		'avail' => 1024 * 1024 * 1024,
 		'used' => 1024 * 1024 * 512,
 		'free' => 1024 * 1024 * 512,
+		# HDD
+		'hdda' => 256 * 1024 * 1024 * 1024, # avail
+		'hddu' => 128 * 1024 * 1024 * 1024, # used
+		'hddf' => 128 * 1024 * 1024 * 1024, # free
 	];
+
+	public static function init(): void
+	{
+		self::update();
+	}
 	
 	public static function update(): void
 	{
 		self::$STATE['cpus'] = self::_getCPUCores();
 		self::$STATE['load'] = self::_getServerLoad();
+		self::$STATE['clock'] = self::_getServerClock();
 		self::$STATE['avail'] = $a = self::_getAvail();
 		self::$STATE['used'] = $u = self::_getUsed();
 		self::$STATE['free'] = $a - $u;
-	}
-	
-	public static function getLoadAvg(): float
-	{
-		return self::$STATE['load'];
-	}
-	
-	public static function getLoadMax(): float
-	{
-		return self::$STATE['cpus'];
-	}
-	
-	public static function getMemFree(): int
-	{
-		return self::$STATE['free'];
-	}
-
-	public static function getMemAvail(): int
-	{
-		return self::$STATE['avail'];
+		self::$STATE['hddf'] = $f = self::_getHDDFree();
+		self::$STATE['hdda'] = $a = self::_getHDDAvail();
+		self::$STATE['hddu'] = $a - $f;
 	}
 	
 	######################
@@ -60,9 +59,9 @@ final class Load
 	{
 		$load = null;
 		
-		if (stristr(PHP_OS, "win"))
+		if (stristr(PHP_OS, 'win'))
 		{
-			$cmd = "wmic cpu get loadpercentage /all";
+			$cmd = 'wmic cpu get loadpercentage /all';
 			$load = self::_windowsStats($cmd);
 			$load /= 100.0;
 		}
@@ -75,6 +74,11 @@ final class Load
 		}
 		
 		return $load;
+	}
+	
+	private static function _getServerClock(): float
+	{
+		return 0.00;
 	}
 	
 	private static function _windowsStats(string $cmd): ?string
@@ -96,14 +100,14 @@ final class Load
 
 	private static function _getAvail(): int
 	{
-		return stristr(PHP_OS, "win") ?
+		return stristr(PHP_OS, 'win') ?
 			self::_getAvailWindows() :
 			self::_getAvailLinux();
 	}
 	
 	private static function _getUsed(): int
 	{
-		return stristr(PHP_OS, "win") ?
+		return stristr(PHP_OS, 'win') ?
 			self::_getUsedWindows() :
 			self::_getUsedLinux();
 	}
@@ -137,7 +141,17 @@ final class Load
 	{
 		$ptrn = '/'.$key.':\s*([0-9]+) kB/';
 		$info = file_get_contents('/proc/meminfo');
-		return Regex::firstMatch($ptrn, $info);
+		return Regex::firstMatch($ptrn, $info) * 1024;
+	}
+	
+	private static function _getHDDAvail(): int
+	{
+		return disk_total_space(GDO_PATH);
+	}
+	
+	private static function _getHDDFree(): int
+	{
+		return disk_free_space(GDO_PATH);
 	}
 	
 }

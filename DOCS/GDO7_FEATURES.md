@@ -8,7 +8,7 @@
  
  - Composer still not required. Used for PHPUnit and DOMPDF.
  
- - Blazing fast (8ms) for a PHP application with a good memory footprint (4MB). For some very simple pages that is.
+ - Blazing fast (12ms) for a PHP application with a good memory footprint (2MB). For some very simple pages that is.
 
  - Code driven database. Never write a single migration file again.
 
@@ -16,4 +16,4 @@
  
  - 2/3 Layer Single Identity Cache. Every Row is unique in memory, backed by memcached and a per process memory cache. An additional cache in the file system is also available. Caching that actually works, is easy to use, and actually speeds the application up.
 
- - Very clean code. In [EclipsePDT](https://www.eclipse.org/downloads/packages/release/2022-03/r/eclipse-ide-php-developers) there are almost no warnings. Other editors are, sadly, untested.
+ - Very clean code. In [EclipsePDT](https://www.eclipse.org/downloads/packages/release/2022-03/r/eclipse-ide-php-developers) there are almost no warnings for any GDO code. Other IDE are, sadly, untested.

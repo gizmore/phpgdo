@@ -91,3 +91,4 @@ Your playlists are ACL sharable.
  
  - ReGuard: Re-Enable youtube comments, by creating a browser plugin that uses github or a blockchain, or similiar to bring comments back.
  
+ - BlindSnake: Snakeline im IRC. Der bot gibt die kategorie und du antworstet. bereits genannte sind unbekannt.

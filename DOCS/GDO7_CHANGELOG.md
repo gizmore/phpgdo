@@ -3,10 +3,16 @@
 
 Welcome to the GDOv7 changelog + combined roadmap.
 
+7.0.2 is almost finished. 7.0.3 is roadmap.
+
 Please read it upside down, from bottom to top and sometimes again.
 
 
 ## 7.0.3
+
+ - Files versioned with 7.0.3 are unit tested in `gdo_test.sh --speed` mode.
+ 
+ - The gdo_test.sh fuzzer now only tries up to a valid value for a parameter. This is faster but misses conjunctured parameters.
 
  - Support for SQLite **or** Postgres support. What shall i try first?
 
@@ -18,8 +24,14 @@ Please read it upside down, from bottom to top and sometimes again.
  
  [MySQL](https://github.com/gizmore/phpgdo-dbms-mysql), [SQLite](https://github.com/gizmore/phpgdo-dbms-sqlite) and [Postgres](https://github.com/gizmore/phpgdo-dbms-postgres).
  
+ - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
 
-## 7.0.2 / scheduled 9.Nov.2022
+
+## 7.0.2 / scheduled 31.Dec.2022
+
+ - the defaultName() method has been removed. The way for default names is to use ->name() in the constructor.
+
+ - Files versioned with 7.0.2 are fully type annotated. (TODO)
 
  - ACL settings for user settings are now stored more efficiently beside the settings data.
 
@@ -27,32 +39,36 @@ Please read it upside down, from bottom to top and sometimes again.
 
  - New LGPL [Module_FFMpeg](https://github.com/gizmore/phpgdo-ffmpeg) which offers MP3 encoding and ffmpeg wrappers.
 
- - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
-
  - Refurbished [Module_Boostrap5](https://github.com/gizmore/phpgdo-bootstrap5) and [Module_Boostrap5Theme](https://github.com/gizmore/phpgdo-bootstrap5-theme).
  
- - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again.
+ - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again. (TODO)
 
+ - The only core dependency was htmlpurifier. This has changed by moving it to [phpgdo-html](https://github.com/gizmore/phpgdo-html), which is a message provider using it. The core now simply htmlspecialchars() the input for the output. All more enhanced message providers, like [CKEditor](https://github.com/gizmore/phpgdo-ckeditor) or [Markdown](https://github.com/gizmore/phpgdo-markdown), depend on it for security reasons.
+
+ - New Website Module [Hydra](https://github.com/gizmore/phpgdo-hydra) to monitor services. Implemented [core.health](https://github.com/gizmore/phpgdo/blob/main/GDO/Core/Method/Health.php) for a phpgdo compatible endpoint that renders a [health card](https://github.com/gizmore/phpgdo/blob/main/GDO/Core/GDT_HealthCard.php). You can see it in action [here](https://kassierercard.org/core/health): [html](https://kassierercard.org/core/health?_fmt=html&_ajax=1) [json](https://kassierercard.org/core/health?_fmt=json) [cli](https://kassierercard.org/core/health?_fmt=cli).
+ 
+ - New Website Module [KassiererCard](https://github.com/gizmore/phpgdo-kassierer-card) - A website about local worker and customer bonus point systems. [Demo](https://kassierercard.org)
+ 
 
 ## 7.0.1 / released 01.Sep.2022
 
-GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API.
+ - GDOv7.0.1 will try to convert all worthy gdo6 modules into the GDOv7 API. Quite accomplished now.
 
- - [GDO_Country]() now tries to render UTF8 country flags in CLI mode.
+ - [GDO_Country](https://github.com/gizmore/phpgdo-country/blob/main/GDO_Country.php#L93) now tries to render UTF8 country flags in CLI mode.
 
- - [Module_Perf](../GDO/Perf/Module_Perf.php) now additionally utilizes PHP [getrusage](https://www.php.net/manual/en/function.getrusage.php). 
+ - [Module_Perf](../GDO/Perf/Module_Perf.php) now additionally utilizes PHP [getrusage](https://www.php.net/manual/en/function.getrusage.php)
 
  - Memcached now does a fallback to filecache API, if config.php GDO_MEMCACHED ist set to 2. GDO_MEMCACHED is now an INT from 0-2.
 
  - New Account settings with all module settings on one page.
 
- - New [GDT_UserType](../GDO/User/GDT_UserType.php), "link", to link various input sources together.
+ - New [GDT_UserType](../GDO/User/GDT_UserType.php), "link", to link various input sources together. It will be used to link accounts together.
 
  - A working website: HTTP/WWW support beside CLI and JSON. Write methods once and use them everywhere!
 
  - New demo sites, like [Fineprint](https://fineprint.phpgdo.com) which is a web exploit hacking challenge.
 
- - [Module_DOMPDF](https://github.com/gizmore/phpgdo-dompdf) replaces [Module_TCPDPF](https://github.com/gizmore/phpgdo-dompdf) (which never got finished). We are now using a HTML to PDF strategy. New GDT render method renderPDF() which defaults renderHTML(). It's the first module to use composer as 3rd party library provider.
+ - [Module_DOMPDF](https://github.com/gizmore/phpgdo-dompdf) replaces [Module_TCPDPF](https://github.com/gizmore/phpgdo-dompdf) (which never got finished). We are now using a HTML to PDF strategy. New GDT render method renderPDF() which defaults renderHTML(). It's the first module to use composer as 3rd party library provider. (STALLED)
  
  - [GDT_ACL](../GDO/User/GDT_ACL.php) is now a core GDT and 
 has been moved to
@@ -102,7 +118,7 @@ GDOv7.0.0 comes with *only* the core modules, but all of them cleaned up and *no
  
  - Support for the bower package manager has been dropped.
 
- - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name and more...
+ - [GDO_User](../GDO/User/GDO_User.php) got these fields moved to separate modules via module setting engine; user_email, user_country, user_credits, user_gender, user_real_name, user_password and more...
 
  - [Module_Tests](https://github.com/gizmore/gdo6-tests) *is* now a core module. See [Module_TestMethods](https://github.com/gizmore/phpgdo-test-methods) for auto-generated testing. All test cases now pass for the very core and testing modules.
 
@@ -114,9 +130,9 @@ GDOv7.0.0 comes with *only* the core modules, but all of them cleaned up and *no
 
  - [Module_Javascript](https://github.com/gizmore/phpgdo-javascript) is *not* a core module anymore.
 
- - [Module_Country](https://github.com/gizmore/phpgdo-country) is not a core module anymore.
+ - [Module_Country](https://github.com/gizmore/phpgdo-country) is *not* a core module anymore.
 
- - [Module_Mail](https://github.com/gizmore/phpgdo-mail) is not a core module anymore.
+ - [Module_Mail](https://github.com/gizmore/phpgdo-mail) is *not* a core module anymore.
  
  - [Module_Admin](https://github.com/gizmore/gdo6-admin) *is* now a core module.
  
@@ -126,11 +142,11 @@ GDOv7.0.0 comes with *only* the core modules, but all of them cleaned up and *no
  
  - A slightly changed bunch of [core modules](../GDO/). As their stuff is almost always needed anyway. These do not require an additional module repository.
  
- - [Module_Websocket](../GDO/Websocket/Module Websocket.php) makes now use of the new rendering method ´´´renderBinary´´´ - seems perfect to fuse websocket szenarios with a binary GDT driven protocol.
+ - [Module_Websocket](../GDO/Websocket/Module Websocket.php) makes now use of the new rendering method `renderBinary` - seems perfect to fuse websocket szenarios with a binary GDT driven protocol.
  
- - There is no more global GDT_Response with hacks and quirks. Methods can return any GDT or a string  now. The response code is stored in Application.
+ - There is no more global GDT_Response with hacks and quirks. Methods can return any GDT now. The response code is stored in Application.
  
- - [Module_Mail](https://github.com/gizmore/phpgdo-mail) now takes care of all email setting and configuration stuff. Users can approve emails on their behalf. No more email stuff in [Module_Account](https://github.com/gizmore/phpgdo-account) or elsewhere. Similiar goes for other user settings like gender or geoposition.
+ - [Module_Mail](https://github.com/gizmore/phpgdo-mail) now takes care of all email setting and configuration stuff. Users can approve emails on their behalf. No more email stuff in [Module_Account](https://github.com/gizmore/phpgdo-account) or elsewhere. Similiar goes for other user settings like password or last activity.
  
  - [Module_Mail](https://github.com/gizmore/phpgdo-mail) now needs a [Mailer Provider](https://github.com/gizmore/phpgdo-mailer) module to actually send mails. (TODO). Planned is to use own mailer until i find time to write a better 3rd party module.
 

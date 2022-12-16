@@ -4,13 +4,11 @@ namespace GDO\Util;
 /**
  * Random utility functions.
  * 
- * @TODO: Write a fantasy name generator that works with syllabels.
- * 
  * @author gizmore
  * @author noother
  * @author dloser
  * 
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.5
  */
 final class Random
@@ -28,40 +26,16 @@ final class Random
 	const ALPHANUMUPLOWSPECIAL = '!"\'_.,%&/()=<>;:#+-*~@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	
 	/**
-	 * Get a single random item from an array.
-	 * This is not cryptographically safe!
-	 */
-	public static function arrayItem(array $array)
-	{
-		return count($array) ? $array[array_rand($array, 1)] : null;
-	}
-
-	/**
-	 * Generate a randomkey from a charset. A bit slow but should be random.
-	 */
-	public static function randomKey(int $len=self::TOKEN_LEN, string $alpha=self::ALPHANUMUPLOW) : string
-	{
-		$alphalen = strlen($alpha) - 1;
-		$key = '';
-		for($i = 0; $i < $len; $i++)
-		{
-			$key .= $alpha[self::rand(0, $alphalen)];
-		}
-		return $key;
-	}
-	
-	
-	/**
 	 * Secure and evenly distributed random generator.
 	 * @author dloser
 	 * @author noother
 	 * @author gizmore
 	 */
-	public static function rand(int $min=0, int $max=self::RAND_MAX) : int
+	public static function rand(int $min=0, int $max=self::RAND_MAX): int
 	{
 		# Generate random numbers
-		static $BUFFER;
-		if (empty($BUFFER) || (strlen($BUFFER) < 4))
+		static $BUFFER = '';
+		if (strlen($BUFFER) < 4)
 		{
 			$BUFFER = openssl_random_pseudo_bytes(1024);
 		}
@@ -78,32 +52,50 @@ final class Random
 		return (int) ( $min + ($max-$min) * ($n/(self::RAND_MAX+1.0)) );
 	}
 	
+	/**
+	 * Generate a randomkey from a charset. A bit slow but should be secure random.
+	 */
+	public static function randomKey(int $len=self::TOKEN_LEN, string $alpha=self::ALPHANUMUPLOW): string
+	{
+		$alphalen = strlen($alpha) - 1;
+		$key = '';
+		for($i = 0; $i < $len; $i++)
+		{
+			$key .= $alpha[self::rand(0, $alphalen)];
+		}
+		return $key;
+	}
+	
+	/**
+	 * Pick a random array item securely.
+	 * @param array $array
+	 */
+	public static function randomItem(array $array)
+	{
+		# Implement me :)
+		# @TODO Create a new utility: FantasyNameGenerator. Use syllables and implement Random::randomItem() like Random::MrandomItem().
+	}
+	
 	################
 	### Insecure ### but faster
 	################
-	public static function srand($seed) : void
+	public static function srand(int $seed): void
 	{
 		srand($seed);
 	}
 	
 	/**
 	 * Get an insecure random number.
-	 * @param int $min
-	 * @param int $max
-	 * @return int
 	 */
-	public static function mrand(int $min=null, int $max=null) : int
+	public static function mrand(int $min=null, int $max=null): int
 	{
 	    return rand($min, $max);
 	}
 	
 	/**
 	 * Get an insecure random key.
-	 * @param int $len
-	 * @param string $alpha
-	 * @return string
 	 */
-	public static function mrandomKey(int $len=self::TOKEN_LEN, string $alpha=self::ALPHANUMUPLOW) : string
+	public static function mrandomKey(int $len=self::TOKEN_LEN, string $alpha=self::ALPHANUMUPLOW): string
 	{
 	    $alphalen = strlen($alpha) - 1;
 	    $key = '';
@@ -114,4 +106,12 @@ final class Random
 	    return $key;
 	}
 
+	/**
+	 * Get an insecure random item from an array.
+	 */
+	public static function mrandomItem(array $array)
+	{
+		return count($array) ? $array[array_rand($array, 1)] : null;
+	}
+	
 }

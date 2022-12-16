@@ -1,12 +1,11 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT_Template;
 use GDO\Core\GDO;
+use GDO\Core\GDT_Template;
+use GDO\Core\GDT_Text;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
-use GDO\Core\GDT_Text;
-use GDO\Util\Strings;
 
 /**
  * A message is a GDT_Text with an editor.
@@ -15,11 +14,10 @@ use GDO\Util\Strings;
  * This way messages can be searched nicely, rendered quickly and beeing edited nicely.
  * 
  * Classic uses a textarea when no editor module is installed.
- * I.e. the default HTML as-is renderer is used.
- * There is also a TEXT renderer which is just htmlspecialchars($input).
+ * I.e. the default TEXT renderer is used, which is just htmlspecialchars($input).
  * 
  * The saved pre-rendered content is just final HTML,
- * filtered through a whitelist with html-purifier.
+ * filtered through a whitelist with html-purifier, when using appropiate modules.
  * There are various editor modules available.
  * 
  * An editor has to provide a renderer and a quotemsg generator (quoty by foo at 13:37)
@@ -27,6 +25,7 @@ use GDO\Util\Strings;
  * 
  * @TODO: Allow users to choose an editor of the installed ones. Currently only 1 editor can be installed.
  *
+ * @see \GDO\HTML\Module_HTML
  * @see \GDO\TinyMCE\Module_TinyMCE
  * @see \GDO\BBCode\Module_BBCode
  * @see \GDO\CKEditor\Module_CKEditor
@@ -96,7 +95,7 @@ class GDT_Message extends GDT_Text
 
 	public static function QUOTE(GDO_User $user, string $date, string $text): string
 	{
-		$link = GDT_ProfileLink::make()->nickname()->user($user);
+		$link = GDT_ProfileLink::make()->nickname()->avatar()->user($user);
 		return sprintf(
 			"<div><blockquote>\n<span class=\"quote-by\">%s</span>\n<span class=\"quote-from\">%s</span>\n<br/>%s</blockquote>&nbsp;</div>\n",
 			t('quote_by', [
@@ -113,7 +112,7 @@ class GDT_Message extends GDT_Text
 	 * Current editor name.
 	 * Default is raw HTML with html purifier filter.
 	 */
-	public static string $EDITOR_NAME = 'HTML';
+	public static string $EDITOR_NAME = 'TEXT';
 	
 	public static array $EDITORS = ['HTML' => [self::class, 'DECODE']];
 
@@ -133,10 +132,6 @@ class GDT_Message extends GDT_Text
 		'TEXT' => [
 			self::class,
 			'ESCAPE'
-		],
-		'HTML' => [
-			self::class,
-			'DECODE'
 		],
 	];
 
@@ -175,6 +170,7 @@ class GDT_Message extends GDT_Text
 			$html = preg_replace("#\r?\n#", ' ', $html);
 			$html = preg_replace('#<a .*href="(.*)".*>(.*)</a>#i', ' $2($1) ', $html);
 			$html = preg_replace('#</p>#i', "\n", $html);
+			$html = preg_replace('#</div>#i', "\n", $html);
 			$html = preg_replace('#<[^\\>]*>#', ' ', $html);
 			$html = preg_replace('# +#', ' ', $html);
 			$html = trim($html);
@@ -186,11 +182,6 @@ class GDT_Message extends GDT_Text
 	###############
 	### Editors ###
 	###############
-	public static function DECODE(?string $s): ?string
-	{
-		return self::getPurifier()->purify(Strings::nl2brHTMLSafe($s));
-	}
-
 	public static function ESCAPE(?string $s): ?string
 	{
 		return $s !== null ? html($s) : null;
@@ -199,40 +190,6 @@ class GDT_Message extends GDT_Text
 	# ###############
 	# ## Validate ###
 	# ###############
-	public static function getPurifier(): \HTMLPurifier
-	{
-		static $purifier;
-		if ( !isset($purifier))
-		{
-			require GDO_PATH . 'GDO/UI/htmlpurifier/library/HTMLPurifier.auto.php';
-			$config = \HTMLPurifier_Config::createDefault();
-			$config->set('Cache.SerializerPath', rtrim(Module_UI::instance()->tempPath('htmlpurifier/'), '/'));
-			$config->set('Cache.SerializerPermissions', GDO_CHMOD);
-			$config->set('URI.Host', GDO_DOMAIN);
-			$config->set('HTML.Nofollow', true);
-			$config->set('HTML.Doctype', 'HTML 4.01 Transitional'); # HTML5 not working
-			$config->set('URI.DisableExternalResources', false);
-			$config->set('URI.DisableResources', false);
-			$config->set('HTML.TargetBlank', true);
-			$config->set('HTML.Allowed',
-				'br,a[href|rel|target],p,pre[class],code[class],img[src|alt],figure[style|class],figcaption,center,b,i,div[class],h1,h2,h3,h4,h5,h6,blockquote,span,em,i,b');
-			$config->set('Attr.DefaultInvalidImageAlt', t('err_img_not_found'));
-			$config->set('HTML.SafeObject', true);
-			$config->set('Attr.AllowedRel', [
-				'nofollow'
-			]);
-			$config->set('HTML.DefinitionID', 'gdo6-message');
-			$config->set('HTML.DefinitionRev', 1);
-			if ($def = $config->maybeGetRawHTMLDefinition())
-			{
-				$def->addElement('figcaption', 'Block', 'Flow', 'Common');
-				$def->addElement('figure', 'Block', 'Optional: (figcaption, Flow) | (Flow, figcaption) | Flow', 'Common');
-			}
-			$purifier = new \HTMLPurifier($config);
-		}
-		return $purifier;
-	}
-
 	/**
 	 * Validate via String validation twice, the input and output variants.
 	 *
@@ -240,11 +197,11 @@ class GDT_Message extends GDT_Text
 	 */
 	public function validate($value): bool
 	{
-		# Check raw input for length and pattern etc.
-		if ( !parent::validate($value))
-		{
-			return false;
-		}
+// 		# Check raw input for length and pattern etc.
+// 		if ( !parent::validate($value))
+// 		{
+// 			return false;
+// 		}
 
 		# Decode the message
 		$decoded = self::decodeMessage($this->toVar($value));

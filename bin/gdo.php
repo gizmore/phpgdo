@@ -66,7 +66,7 @@ if (CLI::isInteractive() && $me)
 			/** @var $result \GDO\Core\GDT_Response **/
 			$result = $expression->execute();
 			CLI::flushTopResponse();
-			echo $result->render();
+			echo $result->render() . "\n";
 		}
 		catch (GDO_NoSuchMethodError $ex)
 		{
@@ -93,7 +93,7 @@ if (CLI::isInteractive() && $me)
 	}
 	else
 	{
-		echo "Usage: gdo <gdo_expression>. Example: `gdo module.method param,param2`";
+		echo "Usage: gdo <gdo_expression>. Example: `gdo module.method param,param2`\n";
 		die(0);
 	}
 }

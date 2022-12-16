@@ -374,7 +374,12 @@ The %2$s System',
 	'gdo_revision' => 'GDO-Revision',
 	'health_cpus' => 'Cores',
 	'health_load' => 'Load',
-	'health_free' => 'Avail',
+	'health_clock' => 'GHz',
 	'health_mem' => 'Memory',
-
+	'health_free' => 'Free',
+	'health_used' => 'Used',
+	'health_hdd_avail' => 'HDD',
+	'health_hdd_free' => 'Free',
+	'health_hdd_used' => 'Used',
+	
 ];

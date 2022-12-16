@@ -6,19 +6,22 @@ List various compat aspects of GDOv7.
 ## GDOv7 COMPATIBILITY: Requirements
 
 Requirements and dependencies.
+Proudly i can state that the GDOv7 core
+is now completely free from any third party library,
+except of a few required php core libraries.
 
- - htmlpurifier (required; clone --recursive)
- - MariaDB/MySQL (required) 
- - php_bcrypt (required)
- - php_mb_string (required)
- - PHP >= 8.0 (required)
- - php_mysqli (required) (yes, also a db is required atm)
- - composer (optional)
- - npm (optional)
- - php_curl (optional)
- - php_memcached (optional)
- - php_openssl (optional)
+ - MariaDB/MySQL (**required**) 
+ - php_bcrypt (**required**)
+ - php_mb_string (**required**)
+ - PHP >= 8.0 (**required**)
+ - php_mysqli (**required**) (yes, also a db is required atm)
  - yarn (recommended)
+ - composer (*optional*)
+ - npm (*optional*)
+ - php_curl (*optional*)
+ - php_memcached (*optional*)
+ - php_openssl (*optional*)
+ - phpunit (*optional*)
  
 
 ## GDOv7 COMPATIBILITY : Apache
@@ -44,11 +47,11 @@ Requirements and dependencies.
 
 ## GDOv7 COMPATIBILITY: Linux
 
- - Most likely.
+ - Yes
 
 
 ## GDOv7 COMPATIBILITY: Windows
 
  - 32bit machines *might* work
- - git4windows is *required*?
+ - git4windows is **required**!
 
