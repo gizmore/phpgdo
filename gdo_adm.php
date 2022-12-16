@@ -43,7 +43,7 @@ use GDO\Core\Website;
  * @example ./gdoadm.sh configure perf enabled 1
  *         
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.10.0
  *       
  * @see gdoadm.sh
@@ -65,7 +65,7 @@ use GDO\Core\Website;
  * @example gdoadm.sh install MailGPG
  * @example bin/gdo mail.send giz Hi there, you wanker;This is the mail body. Parameters are separated via semicolon.
  */
-function printUsage(int $code = -1)
+function printUsage(int $code = -1): void
 {
 	global $argv;
 	$exe = $argv[0];
@@ -401,10 +401,10 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 		$mod = ModuleLoader::instance()->getModule($moduleName);
 		$deps2[$moduleName] = $mod->priority;
 	}
+	sort($deps);
 	asort($deps2);
-
 	echo t('msg_installing_modules', [
-		implode(', ', array_keys($deps2))
+		implode(', ', $deps)
 	]) . "\n";
 
 	$modules = array_map(function (string $moduleName)

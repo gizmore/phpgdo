@@ -14,7 +14,7 @@ use GDO\User\GDT_ProfileLink;
  * This way messages can be searched nicely, rendered quickly and beeing edited nicely.
  * 
  * Classic uses a textarea when no editor module is installed.
- * I.e. the default TEXT renderer is used, which is just htmlspecialchars($input).
+ * I.e. the default Text renderer is used, which is just htmlspecialchars($input).
  * 
  * The saved pre-rendered content is just final HTML,
  * filtered through a whitelist with html-purifier, when using appropiate modules.
@@ -112,16 +112,16 @@ class GDT_Message extends GDT_Text
 	 * Current editor name.
 	 * Default is raw HTML with html purifier filter.
 	 */
-	public static string $EDITOR_NAME = 'TEXT';
+	public static string $EDITOR_NAME = 'Text';
 	
-	public static array $EDITORS = ['HTML' => [self::class, 'DECODE']];
+	public static array $EDITORS = ['Text' => [self::class, 'ESCAPE']];
 
 	/**
 	 * @var callable current editor's decoder method.
 	 */
 	public static array $DECODER = [
 		self::class,
-		'DECODE'
+		'ESCAPE'
 	];
 
 	/**
@@ -129,12 +129,23 @@ class GDT_Message extends GDT_Text
 	 * @var callable[string]
 	 */
 	public static array $DECODERS = [
-		'TEXT' => [
+		'Text' => [
 			self::class,
 			'ESCAPE'
 		],
 	];
 
+	/**
+	 * Add a decoder.
+	 * As modules populate this by priortity, the most enhanced one wins the default race.
+	 * @param \Closure $callable
+	 */
+	public static function addDecoder(string $decoder, $callable): void
+	{
+		self::$EDITOR_NAME = $decoder;
+		self::$DECODERS[$decoder] = self::$DECODER = $callable;
+	}
+	
 	/**
 	 * Set the current editor.
 	 */
@@ -147,14 +158,20 @@ class GDT_Message extends GDT_Text
 	/**
 	 * Decode a message with the current editor.
 	 */
-	public static function decodeMessage(?string $s): ?string
+	public static function decodeMessage(GDT_Message $message): ?string
 	{
-		if ($s === null)
+		$s = $message->getVarInput();
+		return self::decodeText($s);
+	}
+	
+	public static function decodeText(?string $s): ?string
+	{
+		$decoded = '';
+		if ($s !== null)
 		{
-			return null;
+			$decoded = call_user_func(self::$DECODER, $s);
+			$decoded = trim($decoded);
 		}
-		$decoded = call_user_func(self::$DECODER, $s);
-		$decoded = trim($decoded);
 		return $decoded === '' ? null : $decoded;
 	}
 	
@@ -172,7 +189,7 @@ class GDT_Message extends GDT_Text
 			$html = preg_replace('#</p>#i', "\n", $html);
 			$html = preg_replace('#</div>#i', "\n", $html);
 			$html = preg_replace('#<[^\\>]*>#', ' ', $html);
-			$html = preg_replace('# +#', ' ', $html);
+			$html = preg_replace('#\s+#', ' ', $html);
 			$html = trim($html);
 			return $html === '' ? null : $html;
 		}
@@ -204,7 +221,7 @@ class GDT_Message extends GDT_Text
 // 		}
 
 		# Decode the message
-		$decoded = self::decodeMessage($this->toVar($value));
+		$decoded = self::decodeText($this->toVar($value));
 		$text = self::plaintext($decoded);
 
 		# Check decoded input for length and pattern etc.
@@ -268,9 +285,9 @@ class GDT_Message extends GDT_Text
 		$this->var = $var;
 // 		$this->valueConverted = false;
 		$this->msgInput = $var;
-		$this->msgOutput = self::decodeMessage($var);
+		$this->msgOutput = self::decodeText($var);
 		$this->msgText = self::plaintext($this->msgOutput);
-		$this->msgEditor = $this->nowysiwyg ? 'HTML' : self::$EDITOR_NAME;
+// 		$this->msgEditor = $this->nowysiwyg ? 'HTML' : self::$EDITOR_NAME;
 		return $this;
 	}
 

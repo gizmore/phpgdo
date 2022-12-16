@@ -2,8 +2,13 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT_Select;
-use GDO\Core\GDT_Enum;
 
+/**
+ * A select for a message editor.
+ * Used as a user setting in module UI.
+ * 
+ * @author gizmore
+ */
 final class GDT_MessageEditor extends GDT_Select
 {
 	public function defaultLabel() : self { return $this->label('editor'); }
@@ -11,6 +16,7 @@ final class GDT_MessageEditor extends GDT_Select
 	protected function __construct()
 	{
 		parent::__construct();
+// 		$this->initial(GDT_Message::$EDITOR_NAME);
 		$this->notNull();
 	}
 	
