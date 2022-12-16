@@ -81,7 +81,7 @@ class GDT_Message extends GDT_Text
 	# ## Quoter ###
 	# #############
 	/**
-	 * @var callable The quotemsg generator.
+	 * @var \Closure The quotemsg generator.
 	 */
 	public static $QUOTER = [
 		self::class,

@@ -2,9 +2,9 @@
 namespace GDO\Core\tpl\page;
 use GDO\UI\GDT_Error;
 ?>
-<h1>NoNoNo!</h1>
+<h1>NoNoNo!!</h1>
 
-<p>Haxor haben hier nix verloren!.</p>
+<p>Haxor haben hier nix verloren!</p>
 
 <p>In case you think this is an error. It is not.</p>
 

@@ -446,7 +446,7 @@ final class GDO_User extends GDO
 
 	public function renderProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : string
 	{
-		return GDT_ProfileLink::make()->gdo($this)->nickname($nickname)->avatarUser($this, $avatar)->level($level)->render();
+		return GDT_ProfileLink::make()->gdo($this)->avatarSize($avatar)->avatar(!!$avatar)->nickname($nickname)->user($this)->level($level)->render();
 	}
 	
 	public function getGender() : ?string

@@ -64,7 +64,7 @@ return [
 ### Config ###
 	'cfg_asset_revision' => 'Asset-Revision / Client-Cache-Poisoning',	'cfg_system_user' => 'Systembenutzer',	'cfg_show_impressum' => 'Impressum in der Fußzeile anzeigen?',	'cfg_show_privacy' => 'Datenschutzinformationen in der Fußzeile anzeigen?',	'cfg_allow_guests' => 'GDOv7-Gastbenutzersystem aktivieren?',	'cfg_siteshort_title_append' => 'Kurznamen der Website in Seitentitel einfügen?',	'cfg_mail_403' => 'E-Mail bei 403-Fehlern senden?',	'cfg_mail_404' => 'E-Mail bei 404-Fehlern senden?',	'cfg_directory_indexing' => 'Verzeichnisindizierung aktivieren?',	'cfg_module_assets' => 'Darf Assets aus dem GDO-Quellverzeichnis geladen werden?',	'cfg_dotfiles' => 'Erlauben, versteckte Punktdateien zu lesen und zu indizieren?',	
 ### 403 ###
-	'mail_title_403' => '%s: 403 (%s)',	'mail_body_403' => 'Lieber S,
+	'mail_title_403' => '%s: 403 (%s)',	'mail_body_403' => 'Lieber %s,
 
 Auf %s wurde eine verbotene URL besucht.
 URL: %s
@@ -75,7 +75,7 @@ Das %2$s-System',
 
 	
 ### 404 ###
-	'mail_title_404' => '%s: 404 (%s)',	'mail_body_404' => 'Lieber S,
+	'mail_title_404' => '%s: 404 (%s)',	'mail_body_404' => 'Lieber %s,
 
 Es wurde eine unbekannte URL auf %s besucht.
 URL: %s

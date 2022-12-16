@@ -29,7 +29,7 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.2 / scheduled 31.Dec.2022
 
- - the defaultName() method has been removed. The way for default names is to use ->name() in the constructor.
+ - the defaultName() method has been removed. The way for default names is to use ->name() in the constructor. (TODO)
 
  - Files versioned with 7.0.2 are fully type annotated. (TODO)
 
@@ -44,6 +44,8 @@ Please read it upside down, from bottom to top and sometimes again.
  - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again. (TODO)
 
  - The only core dependency was htmlpurifier. This has changed by moving it to [phpgdo-html](https://github.com/gizmore/phpgdo-html), which is a message provider using it. The core now simply htmlspecialchars() the input for the output. All more enhanced message providers, like [CKEditor](https://github.com/gizmore/phpgdo-ckeditor) or [Markdown](https://github.com/gizmore/phpgdo-markdown), depend on it for security reasons.
+ 
+  Users may now switch their message editor.
 
  - New Website Module [Hydra](https://github.com/gizmore/phpgdo-hydra) to monitor services. Implemented [core.health](https://github.com/gizmore/phpgdo/blob/main/GDO/Core/Method/Health.php) for a phpgdo compatible endpoint that renders a [health card](https://github.com/gizmore/phpgdo/blob/main/GDO/Core/GDT_HealthCard.php). You can see it in action [here](https://kassierercard.org/core/health): [html](https://kassierercard.org/core/health?_fmt=html&_ajax=1) [json](https://kassierercard.org/core/health?_fmt=json) [cli](https://kassierercard.org/core/health?_fmt=cli).
  

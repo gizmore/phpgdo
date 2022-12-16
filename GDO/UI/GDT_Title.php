@@ -28,17 +28,22 @@ class GDT_Title extends GDT_String
 	public int $encoding = self::UTF8;
 	public bool $caseSensitive = false;
 	
+	public function renderCLI() : string
+	{
+	    return $this->renderLabel() . ': ' .
+	       $this->renderTitle();
+	}
+	
 	public function renderHTML() : string
 	{
 	    $text = $this->renderTitle();
 	    $text = $this->titleEscaped ? html($text) : $text;
 	    return '<h3 class="gdt-title">' . $text . '</h3>'; 
 	}
-	
-	public function renderCLI() : string
+
+	public function renderCell(): string
 	{
-	    return $this->renderLabel() . ': ' .
-	       $this->renderTitle();
+		return $this->renderTitle();
 	}
 	
 	public function var(string $var = null) : self

@@ -2,6 +2,7 @@
 namespace GDO\CLI;
 
 use GDO\Core\Debug;
+use GDO\Core\Website;
 
 /**
  * Process utilities.
@@ -42,6 +43,7 @@ final class Process
 	/**
 	 * Get the number of CPU cores.
 	 * Used in Module_FFMpeg.
+	 * @deprecated Use \GDO\Util\Load::$STATS['cores'] instead.
 	 */
 	public static function cores() : int
 	{
@@ -64,17 +66,18 @@ final class Process
 	}
 	
 	/**
-	 * Determines if a command exists on the current environment
+	 * Determines if a command exists on the current environment.
+	 * On success it optionally shows a success message. This method is only used in detection. You can also set a path manually in those settings, if your PATH does not contain a binary.
 	 *
 	 * @param string $command
 	 *        The command to check
 	 * @return bool True if the command has been found; otherwise, false.
 	 * @author https://stackoverflow.com/a/18540185/13599483
 	 */
-	public static function commandPath(string $command, string $windowsSuffix = '.*') : ?string
+	public static function commandPath(string $command, string $windowsSuffix = '.*', bool $alert=true) : ?string
 	{
 		$whereIsCommand = self::isWindows() ? 'where' : 'which';
-		$command = self::isWindows() ? "$command$windowsSuffix" : $command;
+		$command = self::isWindows() ? $command . $windowsSuffix : $command;
 
 		$pipes = [];
 		$process = proc_open("$whereIsCommand $command",
@@ -95,8 +98,14 @@ final class Process
 			# Only return first executeable
 			$stdout = str_replace("\r", '', $stdout);
 			$files = explode("\n", $stdout);
-			$file = trim($files[0]);
-			return $file === '' ? null : $file;
+			if ($file = trim($files[0]))
+			{
+				if ($alert)
+				{
+					Website::message(t('module_cli'), 'msg_binary_detected', [$command]);
+				}
+				return $file;
+			}
 		}
 		return null;
 	}

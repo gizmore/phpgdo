@@ -13,6 +13,8 @@ Hopefully the best todo list ever.
  - Detect VPN/Proxy in Core module, mark user suspicous.
  
  - Double account, mark user suspicous - deny any form.
+ 
+ - 
 
 ## GDOv7_TODO: Automated ToDo List.
 

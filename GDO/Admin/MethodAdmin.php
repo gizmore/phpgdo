@@ -7,36 +7,35 @@ use GDO\UI\GDT_Link;
 
 /**
  * Add the admin bar to page top.
- * Require admin permissions.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  * @see \GDO\Core\Method
  */
 trait MethodAdmin
 {
-	public function isShownInSitemap() : bool
+	public function isShownInSitemap(): bool
 	{
 		return false;
 	}
 	
-	public function getPermission() : ?string
+	public function getPermission(): ?string
 	{
 		return 'staff';
 	}
 	
-	public function onRenderTabs() : void
+	public function onRenderTabs(): void
 	{
 		$this->renderAdminBar();
 	}
 	
-	protected function renderAdminBar() : void
+	protected function renderAdminBar(): void
 	{
 		GDT_Page::instance()->topResponse()->addField(GDT_AdminBar::make());
 	}
 	
-	protected function renderPermissionBar() : void
+	protected function renderPermissionBar(): void
 	{
 		GDT_Page::instance()->topResponse()->addField(
 			GDT_Bar::make()->addFields(

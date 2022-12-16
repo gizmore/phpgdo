@@ -12,7 +12,7 @@ use GDO\User\GDO_User;
  * Send an email if opted-in.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.0
  */
 final class NotAllowed extends MethodPage
@@ -78,7 +78,7 @@ final class NotAllowed extends MethodPage
 			html($user->renderUserName()),
 			sitename(),
 			html($url),
-			GDO_User::current()->renderName(),
+			GDO_User::current()->renderUserName(),
 		];
 		$mail->setBody(t('mail_body_403', $tVars));
 		$mail->sendToUser($user);

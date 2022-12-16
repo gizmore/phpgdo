@@ -96,6 +96,7 @@ final class Fileserver extends Method
 	 */
 	public function checkDotfileAllowed(string $url) : bool
 	{
+		return true;
 		if (Module_Core::instance()->cfgDotfiles())
 		{
 			# All allowed by config
