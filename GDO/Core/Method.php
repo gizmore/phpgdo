@@ -12,6 +12,7 @@ use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_Form;
 use GDO\Date\Time;
 use GDO\Util\Arrays;
+use GDO\UI\GDT_Page;
 
 /**
  * Abstract baseclass for all methods.
@@ -698,15 +699,19 @@ abstract class Method #extends GDT
 	public function redirectMessage(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
 		$href = $href ? $href : GDT_Redirect::hrefBack();
-		return GDT_Redirect::make()->href($href)
+		$redirect = GDT_Redirect::make()->href($href)
 			->redirectMessage($key, $args);
+		GDT_Page::instance()->topResponse()->addField($redirect);
+		return $redirect;
 	}
 	
 	public function redirectError(string $key, array $args = null, string $href=null) : GDT_Redirect
 	{
 		$href = $href ? $href : GDT_Redirect::hrefBack();
-		return GDT_Redirect::make()->href($href)
+		$redirect = GDT_Redirect::make()->href($href)
 			->redirectError($key, $args);
+		GDT_Page::instance()->topResponse()->addField($redirect);
+		return $redirect;
 	}
 	
 	################
