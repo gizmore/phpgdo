@@ -271,7 +271,7 @@ class GDT_Message extends GDT_Text
 	public function initial(string $var = null): self
 	{
 		$this->msgInput = $var;
-		$this->msgOutput = self::decodeMessage($var);
+		$this->msgOutput = self::decodeText($var);
 		$this->msgText = self::plaintext($this->msgOutput);
 		$this->msgEditor = $this->nowysiwyg ? 'HTML' : self::$EDITOR_NAME;
 		return parent::initial($var);
