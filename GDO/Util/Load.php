@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Util;
 
+use GDO\CLI\Process;
+
 /**
  * Gather System metrics.
  * Call Load::init() to include.
@@ -50,7 +52,7 @@ final class Load
 	######################
 	private static function _getCPUCores(): int
 	{
-		return ((PHP_OS_FAMILY == 'Windows') ?
+		return (Process::isWindows() ?
 			getenv('NUMBER_OF_PROCESSORS') :
 			substr_count(file_get_contents('/proc/cpuinfo'), 'processor'));
 	}
@@ -59,7 +61,7 @@ final class Load
 	{
 		$load = null;
 		
-		if (stristr(PHP_OS, 'win'))
+		if (Process::isWindows())
 		{
 			$cmd = 'wmic cpu get loadpercentage /all';
 			$load = self::_windowsStats($cmd);
@@ -100,14 +102,14 @@ final class Load
 
 	private static function _getAvail(): int
 	{
-		return stristr(PHP_OS, 'win') ?
+		return Process::isWindows() ?
 			self::_getAvailWindows() :
 			self::_getAvailLinux();
 	}
 	
 	private static function _getUsed(): int
 	{
-		return stristr(PHP_OS, 'win') ?
+		return Process::isWindows() ?
 			self::_getUsedWindows() :
 			self::_getUsedLinux();
 	}

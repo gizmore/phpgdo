@@ -22,7 +22,7 @@ final class Process
 	 */
 	public static function isWindows() : bool
 	{
-		return PHP_OS === 'WINNT';
+		return stristr(PHP_OS, 'win');
 	}
 
 	/**

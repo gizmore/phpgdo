@@ -95,4 +95,11 @@ Your playlists are ACL sharable.
 
  - Rapid Projectmanagement. The phpgdo workflow.
  
- - 
+ - Training challenge: splitted zip, order unknown.
+ 
+ - Go into the local zoo and give the monkeys a lighter.
+ 
+ - Make an image format that chooses the best algorithm for an image.
+ 
+ - Katzencola
+ 
