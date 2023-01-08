@@ -13,7 +13,7 @@ namespace GDO\Core;
  */
 class GDT_Secret extends GDT_String
 {
-    public bool $hidden = true;
+    public bool $hidden = false;
 	public bool $caseSensitive = true;
 	
     public function isSerializable() : bool { return false; }
