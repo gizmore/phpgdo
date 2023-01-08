@@ -98,18 +98,21 @@ function href(string $module, string $method, string $append = null, bool $seo =
 			$query = $hashparts[0];
 			$hash = isset($hashparts[1]) ? $hashparts[1] : '';
 			$qparts = explode('&', $query);
-			foreach ($qparts as $part)
+			if ($qparts[0])
 			{
-				if (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
+				foreach ($qparts as $part)
 				{
-					$kv = explode('=', $part);
-					$k = $kv[0];
-					$v = seo($kv[1]);
-					$href .= "/{$k}/{$v}";
-				}
-				else
-				{
-					$q[] = $part;
+					if (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
+					{
+						$kv = explode('=', $part);
+						$k = $kv[0];
+						$v = seo($kv[1]);
+						$href .= "/{$k}/{$v}";
+					}
+					else
+					{
+						$q[] = $part;
+					}
 				}
 			}
 			if ($q)
