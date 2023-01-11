@@ -62,6 +62,11 @@ trait WithIcon
 		}
 		return $this;
 	}
+
+	public function iconNone(): self
+	{
+		return $this->icon(null);
+	}
 	
 	public string $iconTextRaw;
 	public string $iconTextKey;
