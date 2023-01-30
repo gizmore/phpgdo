@@ -103,3 +103,21 @@ Your playlists are ACL sharable.
  
  - Katzencola
  
+ - new challenge: ManowaR - Like Factor5 with recovery token pin4 without brute protection
+ 
+ - A new String implementation. Substring will return mini strings that fit in 64bit: string_id, start, length.
+ Strings are never deallocated to avoid any cpu cost.
+ 
+ - New Training challenge: directory listings. (just change index.php to /inc/
+ 
+ - New PHP Challenge: Zend Encryptor / Obfuscator
+ 
+ - KVIRC tutorial CGX
+ 
+ - New challenge: Gods of Egypt. Watermark with 9 bits. Combine Watermarks at bottom.
+ 
+ - Browser plugin that cycles all bitmasks on all images  (auto steganabara)
+ 
+ - new DNS challenge. use wechall DNS over HTTPS.
+ 
+ 

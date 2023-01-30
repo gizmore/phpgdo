@@ -36,6 +36,7 @@ abstract class GDT_DBField extends GDT_Field
 	public function primary(bool $primary = true) : self
 	{
 		$this->primary = $primary;
+		$this->notNull($primary);
 		return $this;
 	}
 	

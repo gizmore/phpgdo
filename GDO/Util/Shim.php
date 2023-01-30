@@ -64,7 +64,7 @@ if ( !function_exists('getallheaders'))
 
 if ( !function_exists('openssl_random_pseudo_bytes'))
 {
-	function openssl_random_pseudo_bytes(int $length, bool $crypto_strong) : string 
+	function openssl_random_pseudo_bytes(int $length, bool $crypto_strong=true) : string 
 	{
 		$rand = '';
 		for ($i = 0; $i < $length; $i++)

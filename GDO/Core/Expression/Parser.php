@@ -176,7 +176,7 @@ final class Parser
 			{
 				continue;
 			}
-			elseif (ctype_alnum($c))
+			elseif (ctype_alnum($c) || ($c === '_'))
 			{
 				$started = true;
 				$parsed .= $c;

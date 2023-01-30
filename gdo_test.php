@@ -127,7 +127,26 @@ if (Application::$INSTANCE->isError())
 if ($argc >= 2) # Specifiy with module names, separated by comma.
 {
 	$count = 0;
-	$modules = explode(',', $argv[1]);
+
+	if ($argv[1] === 'all_dog')
+	{
+		$modules = [
+			'Dog',
+			'DogAuth',
+			'DogBlackjack',
+			'DogGreetings',
+			'DogIRC',
+			'DogIRCAutologin',
+			'DogIRCSpider',
+			'DogShadowdogs',
+			'DogTick',
+			'DogWebsite',
+		];
+	}
+	else
+	{
+		$modules = explode(',', $argv[1]);
+	}
 	
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 
