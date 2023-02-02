@@ -104,6 +104,7 @@ final class ModuleLoader
 	
 	public function getModule(string $moduleName, bool $fs = false, bool $throw = true) : ?GDO_Module
 	{
+		$caseName = $moduleName;
 	    $moduleName = strtolower($moduleName);
 	    if (isset($this->modules[$moduleName]))
 	    {
@@ -111,11 +112,11 @@ final class ModuleLoader
 	    }
 	    if ($fs)
 	    {
-	    	return $this->loadModuleFS($moduleName, $throw);
+	    	return $this->loadModuleFS($caseName, $throw);
 	    }
 	    if ($throw)
 	    {
-	    	throw new GDO_Error('err_module', [html($moduleName)]);
+	    	throw new GDO_Error('err_module', [html($caseName)]);
 	    }
 	    return null;
 	}
