@@ -120,4 +120,7 @@ Your playlists are ACL sharable.
  
  - new DNS challenge. use wechall DNS over HTTPS.
  
+ - Instead of returning 404 for a wordpress exploit, server a 200 honeypot
+ 
+ - Create a global wechall movement to achieve world peace.
  

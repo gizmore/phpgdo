@@ -1,6 +1,7 @@
 <?php
 namespace GDO\User\lang;
 return [
+	'moduler_user' => 'Utente',
 	'gdo_user' => 'Utente',
 	'gdo_session' => 'Sessione',
 	'gender' => 'Sesso',
@@ -39,6 +40,7 @@ return [
 	'md_user_cleanupguests' => 'Cron job per ripulire gli utenti ospiti orfani.',
 	
 	'mt_user_profile' => '%s\'s Profile',
+	'md_user_profile' => '%s\'s Profil auf %s. %s',
 	'tt_user_level' => '%s hält einen Nutzerlevel von %s.',
 	
 	'lbl_acl_level' => '`%s` sichtbar ab Level',

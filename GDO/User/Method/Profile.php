@@ -8,11 +8,13 @@ use GDO\User\GDO_Profile;
 use GDO\UI\GDT_Card;
 use GDO\Core\ModuleLoader;
 use GDO\Core\GDO_Module;
+use GDO\Core\Website;
 use GDO\User\Module_User;
 use GDO\UI\GDT_Tooltip;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Panel;
 use GDO\UI\GDT_Link;
+use GDO\Avatar\GDO_Avatar;
 
 /**
  * Show a user's profile.
@@ -43,6 +45,39 @@ final class Profile extends MethodCard
 	{
 		$user = $this->getUser();
 		return t('mt_user_profile', [$user->renderUserName()]);
+	}
+	
+	public function getMethodDescription(): string
+	{
+		$user = $this->getUser();
+		return t('md_user_profile', [
+			$user->renderUserName(),
+			sitename(),
+			$this->getCLIOutput(),
+		]);
+		return t('md_user_profile');
+	}
+	
+	private function getCLIOutput(): string
+	{
+		$profile = GDO_Profile::forUser($this->getUser());
+		$card = $this->getCard($profile);
+		return $card->renderCLI();
+	}
+	
+	public function afterExecute(): void
+	{
+		if (module_enabled('Avatar'))
+		{
+			$this->addAvatarImageToMeta();
+		}
+	}
+	
+	private function addAvatarImageToMeta()
+	{
+		$user = $this->getUser();
+		$avatar = GDO_Avatar::forUser($user);
+		Website::addMeta(['og:image', $avatar->hrefImage(), 'property']);
 	}
 	
 	public function execute()
@@ -130,6 +165,10 @@ final class Profile extends MethodCard
 		foreach ($cache as $gdt)
 		{
 			$name = $gdt->getName();
+			if (!$gdt->isSerializable())
+			{
+				continue; # skip passwords.
+			}
 			if (!$gdt->isACLCapable())
 			{
 				continue; # skip fields that are not meant to be shown.

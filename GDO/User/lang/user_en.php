@@ -1,6 +1,7 @@
 <?php
 namespace GDO\User\lang;
 return [
+	'module_user' => 'User',
 	'gdo_user' => 'User',
 	'gdo_session' => 'Session',
 	'gender' => 'Gender',
@@ -39,6 +40,7 @@ return [
 	'md_user_cleanupguests' => 'Guest Cleanup Cronjob for GDOv7.',
 
 	'mt_user_profile' => '%s\'s Profile',
+	'md_user_profile' => '%s\'s Profile on %s. %s',
 	'tt_user_level' => '%s holds userlevel %s.',
 	
 	'lbl_acl_level' => '`%s` requires level',
