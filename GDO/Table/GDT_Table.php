@@ -622,7 +622,7 @@ class GDT_Table extends GDT
 					$q->where("{$column} {$cmpop} ( {$subq} )");
 				}
 			}
-			$q->selectOnly('COUNT(*)')->noOrder();
+			$q->selectOnly('COUNT(*)');#->noOrder();
 			$itemsBefore = $q->exec()->fetchValue();
 			return $this->getPageForB($itemsBefore);
 		}

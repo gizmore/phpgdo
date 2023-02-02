@@ -382,4 +382,5 @@ The %2$s System',
 	'health_hdd_free' => 'Free',
 	'health_hdd_used' => 'Used',
 	
+	'edited_info' => 'Edited by %s %s ago',
 ];

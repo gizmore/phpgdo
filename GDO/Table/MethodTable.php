@@ -105,9 +105,8 @@ abstract class MethodTable extends MethodForm
 		$features = [];
 		if ($this->isPaginated())
 		{
-			$features[] = GDT_IPP::make($this->getIPPName());
+			$features[] = GDT_IPP::make($this->getIPPName())->initial($this->getDefaultIPP());
 			$features[] = GDT_PageNum::make($this->getPageName())->initial('1');
-// 			$this->table->paginated(true, null, $this->getIPP());
 		}
 		if ($this->isSearched())
 		{

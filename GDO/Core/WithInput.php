@@ -46,11 +46,11 @@ trait WithInput
 	{
 		if ($key)
 		{
-			$this->inputs[$key] = $var;
+			$this->inputs[$key] = (string) $var;
 		}
 		else
 		{
-			$this->inputs[] = $var;
+			$this->inputs[] = (string) $var;
 		}
 		return $this;
 	}

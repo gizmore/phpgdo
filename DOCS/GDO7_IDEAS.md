@@ -124,3 +124,9 @@ Your playlists are ACL sharable.
  
  - Create a global wechall movement to achieve world peace.
  
+ - New tutorial idea: backup host. A website that allows you to manage backup and strategies
+ 
+ - Automatize wechall email creation. Which user level / challenge should grant this? Money?
+ 
+ - A new HTTP header for meta description of images.
+ 
