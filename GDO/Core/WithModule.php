@@ -20,7 +20,7 @@ use GDO\Util\Regex;
  * Offers static and non static versions.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.0
  * @see WithName
  */
@@ -68,7 +68,6 @@ trait WithModule
 		{
 			return t($key);
 		}
-// 		return substr($shortname, 7);
 		return $shortname;
 	}
 	

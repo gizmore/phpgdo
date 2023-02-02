@@ -12,7 +12,7 @@ use GDO\Core\Logger;
  * File system utilities which are too common for the bigger file handling module.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  */
 final class FileUtil
@@ -64,6 +64,14 @@ final class FileUtil
 	        }
 	    }
 	    return true;
+	}
+	
+	/**
+	 * Turn a string into a file stream.
+	 */
+	public static function openString(string $string)
+	{
+		return fopen("data://text/plain, {$string}", 'r');
 	}
 	
 	/**

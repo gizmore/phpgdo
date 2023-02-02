@@ -42,6 +42,7 @@ final class Query
 	/**
 	 * The fetch into object gdo table / final class.
 	 */
+	public GDO $table;
 	public GDO $fetchTable;
 	
 	# query parts
@@ -122,8 +123,9 @@ final class Query
 		}
 		else
 		{
-            $clone->fetchTable = $this->fetchTable;
-    		$clone->type = $this->type;
+// 			$clone->table = $this->fetchTable;
+			$clone->fetchTable = $this->fetchTable;
+			$clone->type = $this->type;
     		$clone->columns = $this->columns;
     		$clone->from = $this->from;
     		$clone->where = $this->where;

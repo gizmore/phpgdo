@@ -7,7 +7,7 @@ namespace GDO\Core;
  * Add trait WithModule.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  * @see WithModule
  */
@@ -45,31 +45,18 @@ trait WithName
 		return $this;
 	}
 	
-// 	##############
-// 	### Render ###
-// 	##############
-// 	public function htmlName() : string
-// 	{
-// 		if ($name = $this->getName())
-// 		{
-// 			return " name=\"{$name}\"";
-// 		}
-// 		return GDT::EMPTY_STRING;
-// 	}
-	
 	###############
 	### Factory ###
 	###############
 	public static function make(string $name = null) : self
 	{
-		$obj = self::makeNamed($name);
-		return $obj;
+		return self::makeNamed($name);
 	}
 	
 	public static function makeNamed(string $name = null) : self
 	{
 		$obj = new static();
-		$name = $name ? $name : $obj->getDefaultName();
+		$name = $name === null ? $obj->getDefaultName() : $name;
 		$obj->name($name);
 		return $obj;
 	}

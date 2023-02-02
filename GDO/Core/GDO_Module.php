@@ -769,8 +769,11 @@ class GDO_Module extends GDO
 
 		if (!$gdt->validate($gdt->toValue($var)))
 		{
-			Website::error($this->gdoHumanName(), 'err_invalid_user_setting', [
-				$this->gdoHumanName(), $gdt->getName(), html($var), $gdt->renderError()]);
+			$this->error('err_invalid_user_setting', [
+				$this->gdoHumanName(),
+				$gdt->getName(),
+				html($var),
+				$gdt->renderError()]);
 			return $gdt;
 		}
 		
@@ -791,9 +794,7 @@ class GDO_Module extends GDO
 				GDO_UserSetting::blank($data);
 			$entry->softReplace();
 		}
-		
 		GDT_Hook::callHook('UserSettingChanged', $user, $key, $old, $var);
-
 		$user->tempUnset('gdo_setting');
 		$user->recache();
 		return $gdt;
@@ -1365,8 +1366,14 @@ class GDO_Module extends GDO
 	
 	public function error(string $key, array $args = null) : bool
 	{
-		Website::error($this->renderName(), $key, $args);
+		Website::error($this->gdoHumanName(), $key, $args);
 		return false;
 	}
-
+	
+	public function message(string $key, array $args = null) : bool
+	{
+		Website::message($this->gdoHumanName(), $key, $args);
+		return true;
+	}
+	
 }

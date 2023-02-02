@@ -6,21 +6,22 @@ use GDO\Core\GDO_SEO_URL;
 
 /**
  * Network related stuff.
- * 
+ *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.11.0
  */
 final class Module_Net extends GDO_Module
 {
+
 	public int $priority = 9;
-	
-	public function onLoadLanguage() : void
+
+	public function onLoadLanguage(): void
 	{
 		$this->loadLanguage('lang/net');
 	}
-	
-	public function getClasses() : array
+
+	public function getClasses(): array
 	{
 		return [
 			GDO_SEO_URL::class,
@@ -28,8 +29,8 @@ final class Module_Net extends GDO_Module
 			GDO_SubDomain::class,
 		];
 	}
-	
-	public function OnInstall() : void
+
+	public function onInstall(): void
 	{
 		if (GDO_SEO_URLS)
 		{
@@ -37,5 +38,14 @@ final class Module_Net extends GDO_Module
 			GDO_SEO_URL::addRoute('SECURITY.md', 'index.php?_mo=Core&_me=Security');
 		}
 	}
-	
+
+	public function checkSystemDependencies(): bool
+	{
+		if (!function_exists('curl_init'))
+		{
+			return $this->errorSystemDependency('err_php_extension', ['curl']);
+		}
+		return true;
+	}
+
 }

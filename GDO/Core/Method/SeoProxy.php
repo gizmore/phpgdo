@@ -9,7 +9,7 @@ use GDO\Core\ModuleLoader;
  * Is not trivial, means it does not get run in automated tests.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.1
  * @see Method
  */

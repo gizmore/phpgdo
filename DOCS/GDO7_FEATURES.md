@@ -4,6 +4,9 @@
  
  - Write a GDT once and have perfect sanitization and validation on any user input. Re-use your GDT nicely.
  
+ - Excellent Debugging and Error handling. More 
+ Unit tests are needed.
+ 
  - Almost no 3rd party dependency in the core. Only [HTML purifier](https://github.com/ezyang/htmlpurifier) to sanitize user html input. 
  
  - Composer still not required. Used for PHPUnit and DOMPDF.

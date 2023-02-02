@@ -10,6 +10,8 @@ use GDO\User\GDO_User;
 use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDT_User;
+use GDO\Crypto\GDT_Password;
+use GDO\Login\Module_Login;
 
 /**
  * Edit a user. Beside level, password and deletion, nothing much can be changed.
@@ -17,7 +19,7 @@ use GDO\User\GDT_User;
  * @TODO To edit user config and settings, a new module has to be written (or account settings need a god mode).
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.4
  * @see GDO_User
  */
@@ -71,7 +73,7 @@ class UserEdit extends MethodForm
 		
 		# Patch columns a bit
 		$form->getField('user_name')->noPattern(null);
-		$form->getField('user_password')->notNull(false)->initial('');
+		$form->addField(GDT_Password::make('user_password'))->notNull(false)->initial('');
 	}
 	
 	public function formValidated(GDT_Form $form)
@@ -83,7 +85,7 @@ class UserEdit extends MethodForm
 		$user->saveVars($values);
 		if (!empty($password))
 		{
-			$user->saveVar('user_password', BCrypt::create($password)->__toString());
+			$user->saveSettingVar('Login', 'password', BCrypt::create($password)->__toString());
 			return $this->message('msg_user_password_is_now', [$password])->addField(parent::formValidated($form));
 		}
 		return parent::formValidated($form);

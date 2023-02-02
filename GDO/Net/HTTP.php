@@ -7,6 +7,8 @@ use GDO\UI\GDT_Error;
  * Very simple HTTP get/post using curl.
  * Simple HTTP Nocache headers.
  * 
+ * @TODO Recode HTTP util the phpgdo way.
+ * 
  * @author gizmore
  * @version 7.0.1
  * @since 3.0.0
