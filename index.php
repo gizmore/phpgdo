@@ -114,7 +114,7 @@ define('GDO_CORE_STABLE', true); # all fine? @deprecated
 #
 # Remember GET/POST HTTP verb.
 #
-$app->verb($_SERVER['REQUEST_METHOD']);
+$app->verb(strtolower($_SERVER['REQUEST_METHOD']));
 #
 # Detect Content Type and set application render mode.
 # 

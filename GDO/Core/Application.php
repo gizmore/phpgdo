@@ -163,10 +163,6 @@ class Application extends GDT
 		self::$RESPONSE_CODE = 200;
 		GDT_Page::instance()->reset();
 		self::$MODE = self::$MODE_DETECTED;
-// 		if ($removeInput)
-// 		{
-// 			$this->inputs();
-// 		}
 		self::updateTime();
 		return $this;
 	}
@@ -247,32 +243,6 @@ class Application extends GDT
 		}
 		return $this;
 	}
-	
-	####################
-	### Global Input ###
-	####################
-// 	/**
-// 	 * Current input
-// 	 * @deprecated
-// 	 * @var string[string]
-// 	 */
-// 	public array $inputs;
-	
-// 	/**
-// 	 * @deprecated
-// 	 */
-// 	public function inputs(array $inputs=null) : self
-// 	{
-// 		if ($inputs === null)
-// 		{
-// 			unset($this->inputs);
-// 		}
-// 		else
-// 		{
-// 			$this->inputs = $inputs;
-// 		}
-// 		return $this;
-// 	}
 	
 	##############
 	### Themes ###
