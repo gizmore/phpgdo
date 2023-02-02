@@ -1362,5 +1362,11 @@ class GDO_Module extends GDO
 			t($key, $args),
 		]);
 	}
+	
+	public function error(string $key, array $args = null) : bool
+	{
+		Website::error($this->renderName(), $key, $args);
+		return false;
+	}
 
 }
