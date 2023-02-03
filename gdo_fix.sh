@@ -19,7 +19,7 @@ bash gdo_update_module.sh $gdopath "Core"
 # Other modules
 #
 echo "2) Updating all modules with threading."
-find ./GDO/ -maxdepth 2 -iname .git -exec bash gdo_update_module.sh "{}/../" {} \;
+find ./GDO/ -maxdepth 2 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "{}" \;
 #
 # Installation and upgrades
 #

@@ -32,23 +32,24 @@ use GDO\User\GDO_Permission;
 use GDO\Core\Website;
 use gizmore\pp\Preprocessor;
 use GDO\Install\Method\Webserver;
+use GDO\Util\PP;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
  * It shall not be accesible to normal users!
  *
- * @example ./gdoadm.sh systemtest
- * @example ./gdoadm.sh configure
- * @example ./gdoadm.sh provide Helpdesk
- * @example ./gdoadm.sh install_all
- * @example ./gdoadm.sh secure
- * @example ./gdoadm.sh configure perf enabled 1
+ * @example ./gdo_adm.sh systemtest
+ * @example ./gdo_adm.sh configure
+ * @example ./gdo_adm.sh provide Helpdesk
+ * @example ./gdo_adm.sh install_all
+ * @example ./gdo_adm.sh secure
+ * @example ./gdo_adm.sh configure perf enabled 1
  *         
  * @author gizmore
  * @version 7.0.2
  * @since 6.10.0
  *       
- * @see gdoadm.sh
+ * @see gdo_adm.sh
  * @see gdo_update.sh - to update your gdo6 installation
  * @see gdo_reset.sh - to reset your installation to factory defaults. Own files are not deleted
  * @see gdo_test.sh - for unit testing
@@ -92,7 +93,8 @@ function printUsage(int $code = -1): void
 	echo "php $exe update - Is automatically called after gdo_update.sh - it re-installs all installed modules.\n";
 	echo "php $exe confgrade - Upgrade your config.php with new config vars.\n";
 	echo "php $exe migrate <module> - To force-migrate gdo tables for an installed module. Handle with care.\n";
-	echo "php $exe migrate_all> - To force-migrate all gdo tables for all installed modules. Handle with special care.\n";
+	echo "php $exe migrate_all - To force-migrate all gdo tables for all installed modules. Handle with special care.\n";
+	echo "php $exe pp - To run the php-preprocessor on all files in production systems.\n";
 	echo "\n--- Module config ---\n";
 	echo "php $exe config <module> - To show the config variables for a module\n";
 	echo "php $exe config <module> <key> - To show the description for a module variable\n";
@@ -820,13 +822,24 @@ elseif ($argv[1] === 'update')
 		Installer::installModule($module);
 	}
 	
-	if (GDO_PREPROCESSOR)
+	if (GDO_PREPROCESSOR && Application::isProduction())
 	{
-		echo "Running php-preprocessor on all modules.\n";
-		Preprocessor::processFolder(GDO_PATH);
+		system('php gdo_adm.php pp');
 	}
 	
-	echo "Update complete.\n";
+	echo "Update finished.\n";
+}
+
+elseif ($argv[1] === 'pp')
+{
+	echo "Running php-preprocessor on all modules.\n";
+	$pp = PP::init();
+	$pp->input(GDO_PATH)->
+		verbose()->recurse()->replace();
+	if ($pp->execute())
+	{
+		echo "Completed.\n";
+	}
 }
 
 elseif ($argv[1] === 'migrate')
