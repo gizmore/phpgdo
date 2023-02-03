@@ -18,13 +18,18 @@ use GDO\UI\GDT_HTML;
 trait WithFileCache
 {
 	public int $fileCacheExpire = GDO_MEMCACHE_TTL;
+	
 	public function fileCacheExpire(int $expire) : self
 	{
 		$this->fileCacheExpire = $expire;
 		return $this;
 	}
 	
-	protected function fileCacheKey()
+	/**
+	 * The filecache is unique for any parameter combination,
+	 * including language and rendering mode.
+	 */
+	protected function fileCacheKey(): string
 	{
 		$sep = ';';
 		$key = $this->getModuleName();

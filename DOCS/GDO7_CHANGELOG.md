@@ -29,7 +29,7 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.2 / scheduled 31.Dec.2022
 
- - New utility [php-preprocessor](https://github.com/gizmore/php-preprocessor). This build step eliminates debug and profiler calls when enabled via GDO_PREPROCESSOR for zero cost debugging.
+ - A new utility in my automated toolchain; [php-preprocessor](https://github.com/gizmore/php-preprocessor). This build step eliminates debug and profiler calls when enabled via GDO_PREPROCESSOR for zero cost debugging.
 
  - New method Install.Website to generate configurations for various httpd.
 

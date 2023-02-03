@@ -7,10 +7,10 @@ use GDO\Core\GDT_Text;
 use GDO\Form\GDT_Submit;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Core\GDT_String;
-use GDO\Util\FileUtil;
 
 /**
  * PP - The PHP Preprocessor
+ * Public API for the lulz.
  * 
  * For syntax see the official repository.
  * 
@@ -22,6 +22,7 @@ use GDO\Util\FileUtil;
  */
 final class PP extends MethodForm
 {
+	
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
@@ -34,9 +35,8 @@ final class PP extends MethodForm
 	public function formValidated(GDT_Form $form)
 	{
 		$string = $form->getFormVar('text');
-		$string = self::process($string);
+		$string = \GDO\Util\PP::init()->processString($string);
 		return GDT_String::make()->var($string);
 	}
 	
-
 }

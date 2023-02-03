@@ -6,25 +6,33 @@ GDOv7 is highly modular and quick dirty slim. There is no big asset pipeline, ju
 
 ## List of GDOv7 core modules
 
-The core (this repository) comes with quite a lot modules, but not all are required and installed.
+The core (this repository) comes with a few
+[modules](../GDO/),
+but not all are an required core module and always installed.
 
-[Module_Perf](../GDO/Perf), for example.
-The performance metric module, which is tiny, is not a core dependency.
+[Module_Perf](../GDO/Perf), for examplen,
+the performance metric module, is not a core dependency.
 
-List of Core Modules:
+Module code can be used without the need of installation,
+but of course this is rather pointless.
+
+
+List of all the modules in this repository,
+required Core modules are checked.
 
  - Crypto
- - Date/
- - DB/
- - Form/
- - Install/
- - Language/
- - Net/
- - Perf/
- - PHPInfo/
- - Table/
- - Tests/
- - UI/
- - User/
+ [x] Date
+ [x] DB
+ [x] Form
+ - Install
+ [x] Language
+ - Net
+ - Perf
+ - PHPInfo
+ [x] Table
+ - Tests
+ [x] UI
+ [x] User
+ 
 
 ### GDOv7 core modules: Date

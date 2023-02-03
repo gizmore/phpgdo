@@ -207,13 +207,15 @@ elseif ($argv[1] === 'test')
 	}
 	echo \GDO\Install\Method\SystemTest::make()->execute()->renderCLI();
 
+	echo "---\n\n\n";
 	echo "Your configuration seems solid.\n";
 	echo "You can now try to php {$argv[0]} install <module>.\n";
 	echo "A list of official modules is shown via php {$argv[0]} modules.\n";
 	echo "Before you can install a module, you have to clone it.\n";
 	echo "Example: cd GDO; git clone --recursive https://github.com/gizmore/gdo6-session-cookie Session; cd ..\n";
-	echo "Please note that a Session module is *required* and you have to choose between gdo6-session-db and gdo6-session-cookie.\n";
-	echo "The session provider has to be cloned as a folder named GDO/Session/.\n";
+	echo "Please note that some modules have multiple providesrs.";
+	echo "E.g, for the session module, you can choose between phpgdo-session-db and phpgdo-session-cookie.\n";
+	echo "Any Session provider has just to be cloned as a folder named GDO/Session/, voila.\n";
 }
 
 elseif ($argv[1] === 'modules')
@@ -834,12 +836,10 @@ elseif ($argv[1] === 'pp')
 {
 	echo "Running php-preprocessor on all modules.\n";
 	$pp = PP::init();
-	$pp->input(GDO_PATH)->
-		verbose()->recurse()->replace();
+	$pp->input(GDO_PATH)->verbose()->
+		recurse()->replace();
 	if ($pp->execute())
-	{
-		echo "Completed.\n";
-	}
+	echo "Completed.\n";
 }
 
 elseif ($argv[1] === 'migrate')

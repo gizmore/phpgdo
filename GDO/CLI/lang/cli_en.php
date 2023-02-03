@@ -29,5 +29,10 @@ return [
 	'md_cli_collect' => 'Collect all files in subfolders of the target path.',
 	'msg_cli_skip_file' => 'Moving file SKIPPED: %s',
 	'msg_cli_collect_file' => 'Moving file: %s',
+
+	'mt_cli_rename' => 'Mass Rename',
+	'md_cli_rename' => 'Rename multiple files with a pattern and a replacemment. Optionally works on folders.',
+	'msg_file_renamed' => '%s has been renamed to %s.',
+	'msg_files_renamed' => '%s files have been renamed successfully.',
 	
 ];

@@ -3,12 +3,16 @@ namespace GDO\Net;
 
 use GDO\Core\GDT_String;
 
+/**
+ * @author gizmore
+ */
 final class GDT_DomainName extends GDT_String
 {
 	public string $pattern = "/[\\.a-z]+\\.[a-z]+$/iD";
 	
-	public $tldonly = false;
-	public function tldonly($tldonly=true)
+	public bool $tldonly = false;
+	
+	public function tldonly(bool $tldonly=true): self
 	{
 		$this->tldonly = $tldonly;
 		return $this;

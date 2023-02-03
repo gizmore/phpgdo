@@ -16,6 +16,8 @@ printf('<b>%d&nbsp;tmpl</b>|<b title="Hooks">%d&nbsp;hook</b>|<b>%d&nbsp;ipc</b>
 	$i['gdoTemplates'], $i['gdoHooks'], $i['gdoIPC'], $i['gdoMails']);
 printf('<b>%d/%d&nbsp;cache</b> - ',
 	$i['fileCacheHits'], $i['fileCacheRq']);
+printf('%d/%d*%d(%dx|%dX)&nbsp;tcache - ',
+	$i['tempCache'], $i['tempReads'], $i['tempWrites'], $i['tempRemove'], $i['tempFlush']);
 printf('%d/%d(block R/W) - ',
 	$i['blocksReceived'], $i['blocksSent']);
 printf('%d/%d(ipc R/W) - ',

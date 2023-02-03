@@ -35,13 +35,13 @@ final class GDT_PerfBar extends GDT_Panel
 	public static function data() : array
 	{
 		global $GDT_LOADED;
-		$totalTime = xdebug_time_index();
+		$totalTime = Application::getRuntime();
 		$phpTime = $totalTime - Database::$QUERY_TIME;
 		$memphp = memory_get_peak_usage(false);
 		$memreal = memory_get_peak_usage(true);
-		
 		$res = self::getResourceUsage();
-		
+		$fc = 0;
+		$fc = xdebug_get_function_count(); #PP#delete#
 		return [
 			'logWrites' => Logger::$WRITES,
 
@@ -62,6 +62,12 @@ final class GDT_PerfBar extends GDT_Panel
 			'phpClasses' => count(get_declared_classes()),
 			'allocs' => (spl_object_id(GDT_UInt::make())),
 			
+			'tempReads' => Cache::$TEMP_READ,
+			'tempWrites' => Cache::$TEMP_WRITE,
+			'tempCache' => Cache::$TEMP_CACHE,
+			'tempRemove' => Cache::$TEMP_CLEAR,
+			'tempFlush' => Cache::$TEMP_CLEAR_ALL,
+			
 			'fileCacheHits' => Cache::$CACHE_HITS,
 			'fileCacheMiss' => Cache::$CACHE_MISSES,
 			'fileCacheRq' => Cache::$CACHE_HITS + Cache::$CACHE_MISSES,
@@ -71,7 +77,7 @@ final class GDT_PerfBar extends GDT_Panel
 			'gdoPeakCount' => GDO::$GDO_PEAKS,
 			'gdtCount' => GDT::$GDT_COUNT,
 			'gdtPeakCount' => GDT::$GDT_PEAKS,
-			'funcCount' => xdebug_get_function_count(),
+			'funcCount' => $fc,
 		    'gdoModules' => count(ModuleLoader::instance()->getEnabledModules()),
 			'gdoLangFiles' => Trans::numFiles(),
 			'gdoTemplates' => GDT_Template::$CALLS,
@@ -146,19 +152,4 @@ final class GDT_PerfBar extends GDT_Panel
 		return GDT_Template::php('Perf', 'perfbar_html.php', ['bar' => $this]);
 	}
 
-}
-
-# Shim
-if (!function_exists('xdebug_get_function_count'))
-{
-	function xdebug_get_function_count() : int
-	{
-		return 0;
-	}
-	
-	function xdebug_time_index()
-	{
-		return Application::getRuntime();
-	}
-	
 }

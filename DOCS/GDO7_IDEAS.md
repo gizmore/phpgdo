@@ -130,6 +130,21 @@ Your playlists are ACL sharable.
  
  - A new HTTP header for meta description of images.
  
- - A PHP PREPROCESSOR.
+ - a [php-preprocessor](https://github.com/gizmore/php-preprocessor).
  
- - 
+ - gdophp automated unit tests. Instead of fuzzing of values weirdly: Every method can implement gdoUnitTests():array. an array of username => inputs.
+ 
+ - php-preprocessor shall implement #PP#pro# #PP#tes# #PP#dev#.
+ 
+ - 09_88_kvirc_cninety: Download kvirc source and VSC. add an image upload dialog. upload to img service and post link autom. tag image with tehbot AI.
+
+ - A new way to quicktype markdown. maybe js event magic on top of [gdo-markdown]().
+ 
+ - a challenge were you got root via writable 079-gdo-tls.conf vuln
+ 
+ - php -r 'eval(fopen("https://phpgdo.com:1337")); # GL+HF');
+ 
+ - general dog/irc/cli way to match strings for triggers etc: at least 3 letters. if it starts with it and no oter starts: take. Disambigous via middle 3 disamb: take.
+ Do this for all triggers. disam shal go over the dot?
+
+ 

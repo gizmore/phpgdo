@@ -53,7 +53,7 @@ final class GDT_Page extends GDT
 		{
 			$module->onIncludeScripts();
 		}
-		if ($me->isSidebarEnabled())
+		if ($me && $me->isSidebarEnabled())
 		{
 			foreach ($loader->getEnabledModules() as $module)
 			{

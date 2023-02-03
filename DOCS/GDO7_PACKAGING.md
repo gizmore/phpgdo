@@ -19,7 +19,7 @@ On windows, please use [git4windows](https://gitforwindows.org/) - it is great!
 GDOv7 should be psr-4 compliant.
 It has an own minimal and [optimized autoloader](../GDO7.php#L23) in 5 lines of code.
 The composer.json should work and allows to require GDOv7 in your own composer projects.
-This is forbidden by it's [GDOv7-LICENSE](../LICENSE)!
+This is **forbidden** by it's [GDOv7-LICENSE](../LICENSE)!
 
 
 ## GDOv7 Packaging: Providers
@@ -36,18 +36,21 @@ There are actually two Module_Sessios.
 
 This is called providing.
 There is no extra code for this mechanism.
-This just seems to be a simple and natural elegant way of handling packaging :)
+This just seems to be a simple,
+and a natural and elegant way, of handling packages. :)
 
-- gizmore
 
-
-## GDOv7 Packaging: Module Installtion
+## GDOv7 Packaging: Module Installation
 
 Short story:
 
     ./gdo_adm.sh provide <module>
 	
+	
 See a list of modules: [GDO7_MODULES.md](GDO7_MODULES.md)
+
+    ./gdo_adm.sh modules
+
 
 Longer story:
 
@@ -67,19 +70,20 @@ Then you install the module. `./gdo_adm.sh install JQuery`.
 This does install the module to the database, and does some work like triggering hooks and using package managers to download more software.
 
 Please note that GDOv7 always uses the sourcecode for a javascript dependency in debug mode.
-For production the asset pipeline is fully F5, any source is denied by htaccess.
+For production the asset pipeline is fully F5,
+ any source is denied by htaccess.
 
 To reproduce the single steps, this is a good start:
 
 		
 		./gdo_adm.sh install <module>
-		cd phpgdo # go to root folder
         ./gdo_yarn.sh # Install yarn dependencies
 		./gdo_post_install.sh # trigger post install hooks
 		enable the module # HOW?!
     
 
-That's it. Your application now includes the latest jQuery assets via src.
+That's it.
+Your application now includes the latest jQuery assets via src.
 
  
 ## Updating your installation
@@ -96,4 +100,3 @@ This re-installs and upgrades all modules.
 The developers shall assure that all modules stay backwards and forward compatible!
 Luckily there is only one stupid developer.
 
-## 

@@ -158,7 +158,7 @@ class Config
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
 			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull()->tooltipRaw('Default Language setting.'),
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
-			GDT_String::make('themes')->notNull()->initial(implode(',', $themes))->tooltipRaw('Comma separated list of themes / themechain. Example: \'tbs,classic,default\'.'),
+			GDT_String::make('themes')->notNull()->initial(GDO_THEMES)->tooltipRaw('Comma separated themechain list. Tried from left to right. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
 			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),

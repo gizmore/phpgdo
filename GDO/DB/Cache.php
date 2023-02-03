@@ -36,8 +36,18 @@ class Cache
 	############
 	### Perf ###
 	############
+	# file-cache performance stats
 	public static int $CACHE_HITS = 0;
 	public static int $CACHE_MISSES = 0;
+	public static int $CACHE_REMOVE = 0;
+	public static int $CACHE_FLUSH = 0;
+
+	# temp-cache performance stats
+	public static int $TEMP_READ = 0;
+	public static int $TEMP_CACHE = 0;
+	public static int $TEMP_WRITE = 0;
+	public static int $TEMP_CLEAR = 0;
+	public static int $TEMP_CLEAR_ALL = 0;
 	
 	# ################
 	# ## Memcached ###
@@ -554,6 +564,7 @@ class Cache
 	{
 		if ($key === null)
 		{
+			self::$CACHE_FLUSH++; #PP#delete#
 			return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/') && FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
 		}
 		else
@@ -561,6 +572,7 @@ class Cache
 			$filename = self::filePath($key);
 			if (FileUtil::isFile($filename))
 			{
+				self::$CACHE_REMOVE++; #PP#delete#
 				return unlink($filename);
 			}
 		}
@@ -601,7 +613,7 @@ define('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
 define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
 define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));
 #PP#start#
-deff('GDO_FILECACHE', 1);
-deff('GDO_MEMCACHE', 2);
-deff('GDO_CACHE_DEBUG', 0);
+deff('GDO_FILECACHE', 1);   # enable filecache
+deff('GDO_MEMCACHE', 2);    # fallback to filecache 
+deff('GDO_CACHE_DEBUG', 0); # off
 #PP#end#

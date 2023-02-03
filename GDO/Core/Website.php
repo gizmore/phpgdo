@@ -166,12 +166,6 @@ final class Website
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($error);
-// 		if ($app->isUnitTests())
-// 		{
-// 			echo Color::red(TextStyle::bold(t($key, $args)));
-// 			echo "\n";
-// // 			return $error;
-// 		}
 		return GDT_Response::make()->code($code);
 	}
 	
@@ -188,12 +182,6 @@ final class Website
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($success);
-// 		if ($app->isUnitTests())
-// 		{
-// 			echo Color::green(TextStyle::bold(t($key, $args)));
-// 			echo "\n";
-// // 			return $success;
-// 		}
 		return GDT_Response::make()->code($code);
 	}
 	
