@@ -413,6 +413,13 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 		return ModuleLoader::instance()->getModule($moduleName);
 	}, array_keys($deps2));
 	Installer::installModules($modules);
+	
+	if (GDO_PREPROCESSOR)
+	{
+		echo "Running php-preprocessor on all modules.\n";
+		Preprocessor::processFolder(GDO_PATH);
+	}
+	
 	Cache::flush();
 	Cache::fileFlush();
 	echo "Done.\n";
@@ -812,8 +819,8 @@ elseif ($argv[1] === 'update')
 	
 	if (GDO_PREPROCESSOR)
 	{
-		echo "Running php-preprocessor on all GDO modules.\n";
-		Preprocessor::processFolder();
+		echo "Running php-preprocessor on all modules.\n";
+		Preprocessor::processFolder(GDO_PATH);
 	}
 	
 	echo "Update complete.\n";
