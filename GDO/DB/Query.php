@@ -7,6 +7,7 @@ use GDO\Core\GDT_Object;
 use GDO\Core\GDT_ObjectSelect;
 use GDO\Core\Logger;
 use GDO\Core\GDO_Error;
+use GDO\Core\GDT;
 
 /**
  * GDO Query Builder.
@@ -16,7 +17,7 @@ use GDO\Core\GDO_Error;
  * @example GDO_User::table()->select()->execute()->fetchAll();
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  * @see GDO
  * @see Cache
@@ -33,11 +34,6 @@ final class Query
 	const UPDATE = 4;
 	const DELETE = 5;
 	const INSERT_OR_UPDATE = 6;
-
-	/**
-	 * The table to select from
-	 */
-// 	public GDO $table;
 	
 	/**
 	 * The fetch into object gdo table / final class.
@@ -539,7 +535,7 @@ final class Query
 	{
 		switch ($this->type)
 		{
-			case self::RAW: return '';
+			case self::RAW: return GDT::EMPTY_STRING;
 			case self::SELECT: return 'SELECT ';
 			case self::INSERT:
 			case self::INSERT_OR_UPDATE:

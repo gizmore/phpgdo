@@ -29,6 +29,12 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.2 / scheduled 31.Dec.2022
 
+ - The use of .htaccess is now discouraged for performance reasons.
+
+ - There is now an ugly installation
+[post-processor](https://github.com/gizmore/php-preprocessor).
+The sourcecode on production systems can be enhanced by removing performance counters and debug code via comment annotations.
+
  - the defaultName() method has been removed. The way for default names is to use ->name() in the constructor. (TODO)
 
  - Files versioned with 7.0.2 are fully type annotated. (TODO)

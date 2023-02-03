@@ -34,7 +34,7 @@ global $me;
  * GDOv7 - The best PHP Framework on Planet SOL. Really! :)
  * 
  * @author gizmore@wechall.net
- * @version 7.0.1
+ * @version 7.0.2
  * @since 1.0.0
  */
 # Really, the first thing we do is measure performance :)
@@ -118,11 +118,14 @@ $app->verb(strtolower($_SERVER['REQUEST_METHOD']));
 #
 # Detect Content Type and set application render mode.
 # 
-$mode = GDT::RENDER_WEBSITE;
 if (isset($_REQUEST['_fmt']))
 {
 	$mode = $app->detectRenderMode((string)@$_REQUEST['_fmt']);
 	unset($_REQUEST['_fmt']);
+}
+else
+{
+	$mode = GDT::RENDER_WEBSITE;
 }
 $app->modeDetected($mode); # set detected mode.
 

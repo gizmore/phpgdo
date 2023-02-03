@@ -28,7 +28,7 @@ use GDO\Core\GDT_Path;
  * Holds fields for a configuration form.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  */
 class Config
@@ -97,15 +97,15 @@ class Config
 		deff('GDO_WEB_ROOT', Strings::substrTo($_SERVER['SCRIPT_NAME'], 'install/wizard.php'));
 		deff('GDO_FORCE_SSL', false);
 		# Files
-		deff('GDO_CHMOD', 0770);
 		deff('GDO_FILES_DIR', 'files');
+		deff('GDO_CHMOD', 0770);
+		deff('GDO_PREPROCESSOR', false);
 		# Logging
 		deff('GDO_LOG_REQUEST', false);
 		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
 		deff('GDO_ERROR_STACKTRACE', true);
 		deff('GDO_ERROR_DIE', true);
 		deff('GDO_ERROR_MAIL', false);
-		deff('GDO_ERROR_TIMEZONE', 'UTC');
 		# Database
 		deff('GDO_SALT', Random::randomKey(16));
 		deff('GDO_DB_ENABLED', true);
@@ -124,9 +124,9 @@ class Config
 		deff('GDO_MEMCACHE_PORT', 61221);
 		deff('GDO_MEMCACHE_TTL', 1800);
 		# Cookies
-		deff('GDO_SESS_NAME', 'GDO7');
+		deff('GDO_SESS_NAME', 'GDO');
 		deff('GDO_SESS_DOMAIN', GDO_DOMAIN);
-		deff('GDO_SESS_TIME', Time::ONE_DAY*7);
+		deff('GDO_SESS_TIME', Time::ONE_DAY * 7);
 		deff('GDO_SESS_JS', false);
 		deff('GDO_SESS_HTTPS', Application::$INSTANCE->isTLS());
 		deff('GDO_SESS_SAMESITE', 'lax');
@@ -151,66 +151,74 @@ class Config
 			
 			# Site
 			GDT_Divider::make()->label('install_config_section_site'),
-			GDT_String::make('sitename')->initialValue(GDO_SITENAME)->max(16)->label('cfg_sitename'),
-			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro'),
-			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS),
-			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED),
-			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull(),
-			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull(),
-			GDT_Select::make('themes')->multiple()->choices(array_combine($themes, $themes))->notNull()->initialValue(array('default')),
-			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE),
-			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD),
-			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC),
-			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG),
-			GDT_TinyInt::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2),
-			GDT_Checkbox::make('json_debug')->initialValue(!!GDO_JSON_DEBUG),
+			GDT_String::make('sitename')->initialValue(GDO_SITENAME)->max(16)->label('cfg_sitename')->tooltipRaw('should be configured via sitename language key.'),
+			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro')->tooltipRaw('Environment can be dev, tes or pro.'),
+			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS)->tooltipRaw('Enable SEO style URLs. Requires url rewriting for your httpd.'),
+			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
+			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull()->tooltipRaw('Default Language setting.'),
+			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
+			GDT_Select::make('themes')->multiple()->choices(array_combine($themes, $themes))->notNull()->initialValue(array('default'))->tooltipRaw('Comma separated list of themes / themechain. Example: \'tbs,classic,default\'.'),
+			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
+			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
+			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
+			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG)->tooltipRaw('IPC event logging.'),
+			GDT_TinyInt::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2)->tooltipRaw('GDT debugging level. 0: off, 1: counters, 2: instancelog.'),
+			GDT_Checkbox::make('json_debug')->initialValue(!!GDO_JSON_DEBUG)->tooltipRaw('global JSON_PRETTY toggle.'),
+
 			# HTTP
 			GDT_Divider::make()->label('install_config_section_http'),
-			GDT_Enum::make('server')->notNull()->enumValues('none', 'apache2.2', 'apache2.4', 'nginx', 'other')->initialValue(GDO_SERVER),
-			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN),
-			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT),
-			GDT_Port::make('port')->notNull()->initialValue(GDO_PORT),
-			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL),
-			GDT_Checkbox::make('force_ssl')->initial('0'),
+			GDT_Enum::make('server')->notNull()->enumValues('none', 'apache2.2', 'apache2.4', 'nginx', 'other')->initialValue(GDO_SERVER)->tooltipRaw('webserver software; apache2.2, apache2.4, nginx, none.'),
+			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN)->tooltipRaw('Website domain. Should match cookie domain.'),
+			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT)->tooltipRaw('Website root folder. Usually "/" or "/phpgdo/".'),
+			GDT_Port::make('port')->notNull()->initialValue(GDO_PORT)->tooltipRaw('Default port for generating links.'),
+			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL)->tooltipRaw('Website preferred protocol. Either http or https.'),
+			GDT_Checkbox::make('force_ssl')->initial('0')->tooltipRaw('Allow only HTTPS?'),
+			
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
-			GDT_Path::make('files_dir')->label('files_dir')->initial(GDO_FILES_DIR),
-			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initial('0'.base_convert(GDO_CHMOD, 10, 8)),
+			GDT_Path::make('files_dir')->label('files_dir')->initial(GDO_FILES_DIR)->tooltipRaw('Filepath for physical files. Change this in config_test.php'),
+			GDT_Enum::make('chmod')->enumValues("0700", "0770", "0777")->initial('0'.base_convert(GDO_CHMOD, 10, 8))->tooltipRaw('File creation chmod value. Ignore on windows.'),
+			GDT_Checkbox::make('preprocessor')->initial('1')->tooltipRaw('File preprocessor to speed up dev code.'),
+			
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
-			GDT_Checkbox::make('log_request')->initialValue(!!GDO_LOG_REQUEST),
-			GDT_Hidden::make('error_level')->initialValue((int)GDO_ERROR_LEVEL),
-			GDT_Checkbox::make('error_stacktrace')->initialValue(!!GDO_ERROR_STACKTRACE),
-			GDT_Checkbox::make('error_die')->initialValue(!!GDO_ERROR_DIE),
-			GDT_Checkbox::make('error_mail')->initialValue(!!GDO_ERROR_MAIL),
+			GDT_Checkbox::make('log_request')->initialValue(!!GDO_LOG_REQUEST)->tooltipRaw('Log every request?'),
+			GDT_Hidden::make('error_level')->initialValue((int)GDO_ERROR_LEVEL)->tooltipRaw('Log level'),
+			GDT_Checkbox::make('error_stacktrace')->initialValue(!!GDO_ERROR_STACKTRACE)->tooltipRaw('Show stacktrace to users?'),
+			GDT_Checkbox::make('error_die')->initialValue(!!GDO_ERROR_DIE)->tooltipRaw('Die on every little warning and notice?'),
+			GDT_Checkbox::make('error_mail')->initialValue(!!GDO_ERROR_MAIL)->tooltipRaw('Send an email on errors?'),
+			
 			# Database
 			GDT_Divider::make()->label('install_config_section_database'),
-			GDT_Hidden::make('salt')->initialValue(GDO_SALT),
-			GDT_Checkbox::make('db_enabled')->initialValue(!!GDO_DB_ENABLED),
-			GDT_String::make('db_host')->initialValue(GDO_DB_HOST),
-			GDT_Port::make('db_port')->initialValue((int)GDO_DB_PORT),
-			GDT_String::make('db_user')->initialValue(GDO_DB_USER),
-			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS),
-			GDT_String::make('db_name')->initialValue(GDO_DB_NAME),
-			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM),
-			GDT_TinyInt::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2),
+			GDT_Hidden::make('salt')->initialValue(GDO_SALT)->tooltipRaw('Cryptograpycally secure salt to strengthen tokens and passwords.'),
+			GDT_Checkbox::make('db_enabled')->initialValue(!!GDO_DB_ENABLED)->tooltipRaw('DB enabled? (required atm)'),
+			GDT_String::make('db_host')->initialValue(GDO_DB_HOST)->tooltipRaw('DB hostname.'),
+			GDT_Port::make('db_port')->initialValue((int)GDO_DB_PORT)->tooltipRaw('DB port.'),
+			GDT_String::make('db_user')->initialValue(GDO_DB_USER)->tooltipRaw('DB username'),
+			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS)->tooltipRaw('DB password'),
+			GDT_String::make('db_name')->initialValue(GDO_DB_NAME)->tooltipRaw('DB database name'),
+			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM)->tooltipRaw('DB engine: InnoDB or MyIsam.'),
+			GDT_TinyInt::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2)->tooltipRaw('GDO debugging level. 0: off, 1: counters, 2: instancelog.'),
+			
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
-			GDT_UInt::make('cache_debug')->initialValue((int)GDO_CACHE_DEBUG)->min(0)->max(2),
-			GDT_Checkbox::make('filecache')->initialValue(!!GDO_FILECACHE),
-			GDT_TinyInt::make('memcache')->unsigned()->min(0)->max(2)->initialValue((int)GDO_MEMCACHE),
-			GDT_String::make('memcache_host')->initialValue(GDO_MEMCACHE_HOST)->notNull(),
-			GDT_Port::make('memcache_port')->initialValue((int)GDO_MEMCACHE_PORT)->notNull(),
-			GDT_UInt::make('memcache_ttl')->unsigned()->initialValue((int)GDO_MEMCACHE_TTL)->notNull(),
+			GDT_UInt::make('cache_debug')->initialValue((int)GDO_CACHE_DEBUG)->min(0)->max(2)->tooltipRaw('Cache debugging level. 0: off, 1: setters, 2: setter-with-backtraces.'),
+			GDT_Checkbox::make('filecache')->initialValue(!!GDO_FILECACHE)->tooltipRaw('Enable phpgdo filecache?'),
+			GDT_TinyInt::make('memcache')->unsigned()->min(0)->max(2)->initialValue((int)GDO_MEMCACHE)->tooltipRaw('Enable memcached? 0: off, 1: on, 2: fallback via filecache.'),
+			GDT_String::make('memcache_host')->initialValue(GDO_MEMCACHE_HOST)->notNull()->tooltipRaw('memcached host.'),
+			GDT_Port::make('memcache_port')->initialValue((int)GDO_MEMCACHE_PORT)->notNull()->tooltipRaw('memcached port.'),
+			GDT_UInt::make('memcache_ttl')->unsigned()->initialValue((int)GDO_MEMCACHE_TTL)->notNull()->tooltipRaw('memcached time to live.'),
+			
 			# Cookies
 			GDT_Divider::make()->label('install_config_section_cookies'),
-			GDT_String::make('sess_name')->ascii()->caseS()->initialValue(GDO_SESS_NAME)->notNull(),
-			GDT_Hidden::make('sess_domain')->initialValue(GDO_SESS_DOMAIN),
-			GDT_UInt::make('sess_time')->initialValue((int)GDO_SESS_TIME)->notNull()->min(30),
-			GDT_Checkbox::make('sess_js')->initialValue(!!GDO_SESS_JS),
-			GDT_Checkbox::make('sess_https')->initialValue(!!GDO_SESS_HTTPS),
-			GDT_Checkbox::make('sess_lock')->initialValue(!!GDO_SESS_LOCK),
-			GDT_EnumNoI18n::make('sess_samesite')->enumValues('lax', 'none', 'strict')->initialValue(GDO_SESS_SAMESITE),
+			GDT_String::make('sess_name')->ascii()->caseS()->initialValue(GDO_SESS_NAME)->notNull()->tooltipRaw('Cookie name'),
+			GDT_Hidden::make('sess_domain')->initialValue(GDO_SESS_DOMAIN)->tooltipRaw('Cookie domain. Use .domain.com for all subdomains.'),
+			GDT_UInt::make('sess_time')->initialValue((int)GDO_SESS_TIME)->notNull()->min(30)->tooltipRaw('Session lifetime in seconds'),
+			GDT_Checkbox::make('sess_js')->initialValue(!!GDO_SESS_JS)->tooltipRaw('Session cookie only secure via JS?'),
+			GDT_Checkbox::make('sess_https')->initialValue(!!GDO_SESS_HTTPS)->tooltipRaw('Session only for https?'),
+			GDT_Checkbox::make('sess_lock')->initialValue(!!GDO_SESS_LOCK)->tooltipRaw('Lock sessions during request?'),
+			GDT_EnumNoI18n::make('sess_samesite')->enumValues('lax', 'none', 'strict')->initialValue(GDO_SESS_SAMESITE)->tooltipRaw('Session samesite settings. lax: recommended. none: wont work. strict: needs setup.'),
+			
 			# Email
 			GDT_Divider::make()->label('install_config_section_email'),
 			GDT_Checkbox::make('enable_email')->initialValue(GDO_ENABLE_EMAIL),

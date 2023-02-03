@@ -27,7 +27,7 @@ use GDO\UI\TextStyle;
  * - Offers bulk operations
  * 
  * @author gizmore@wechall.net
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.0
  * @see GDT
  * @see Cache
@@ -70,9 +70,9 @@ abstract class GDO extends GDT
 	public static int $GDO_KILLS = 0; # total deallocs
 	public static int $GDO_PEAKS = 0; # max sim. alive
 	
+	#PP#start#
 	public function __construct()
 	{
-// 		parent::__construct(); # DO *NOT* call the GDT perf counter!
 		$this->afterLoaded();
 	}
 	
@@ -109,6 +109,7 @@ abstract class GDO extends GDT
 			Logger::log('gdo', Debug::backtrace('Backtrace', false));
 		}
 	}
+	#PP#end#
 	
 	################
 	### Abstract ###

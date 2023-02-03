@@ -280,18 +280,12 @@ final class Debug
 		{
 		    return "$message\n";
 		}
-// 		if (defined('GDO_CORE_STABLE'))
-// 		{
-// 			$app->ajax(false);
-// 			$error = GDT_Error::make()->titleRaw('Debug')->textRaw($message);
-// 			return GDT_Response::make()->addField($error)->renderWebsite();
-// 		}
 	    return $message;
 	}
 	
 	public static function disableExceptionHandler() : void
 	{
-		if (self::$EXCEPTION === true)
+		if (self::$EXCEPTION)
 		{
 			restore_exception_handler();
 			self::$EXCEPTION = false;

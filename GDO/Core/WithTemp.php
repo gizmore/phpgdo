@@ -36,10 +36,10 @@ trait WithTemp
 	 */
 	public function tempGet(string $key, $default=null)
 	{
-		self::$TEMP_READ++;
+		self::$TEMP_READ++; #PP#delete#
 		if (isset($this->temp[$key]))
 		{
-			self::$TEMP_CACHE++;
+			self::$TEMP_CACHE++; #PP#delete#
 			return $this->temp[$key];
 		}
 		return $default;
@@ -50,7 +50,7 @@ trait WithTemp
 	 */
 	public function tempSet(string $key, $value) : self
 	{
-		self::$TEMP_WRITE++;
+		self::$TEMP_WRITE++; #PP#delete#
 		if (!isset($this->temp))
 		{
 			$this->temp = [];
@@ -64,7 +64,7 @@ trait WithTemp
 	 */
 	public function tempUnset(string $key) : self
 	{
-		self::$TEMP_CLEAR++;
+		self::$TEMP_CLEAR++; #PP#delete#
 		unset($this->temp[$key]);
 		return $this;
 	}
@@ -74,7 +74,7 @@ trait WithTemp
 	 */
 	public function tempReset() : self
 	{
-		self::$TEMP_CLEAR_ALL++;
+		self::$TEMP_CLEAR_ALL++; #PP#delete#
 		unset($this->temp);
 		return $this;
 	}

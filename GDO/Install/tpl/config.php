@@ -16,7 +16,7 @@ echo '<';echo '?';echo "php\n";
 ################################
 if (defined('GDO_CONFIGURED')) return; // double include
 
-error_reporting(<?=error_reporting()?>);
+error_reporting('<?=ini_get('error_reporting')?>');
 ini_set('display_errors', <?=ini_get('display_errors')?>);
 
 /**
@@ -25,7 +25,6 @@ ini_set('display_errors', <?=ini_get('display_errors')?>);
  * phpGDOv<?=Module_Core::GDO_REVISION; ?>
  **/
 <?php
-// $tz = $form->getField('timezone')->var;
 $created = Time::getDate(microtime(true));
 $form->getField('sitecreated')->var($created);
 
@@ -34,9 +33,7 @@ foreach ($form->getAllFields() as $field) :
 if ($field instanceof GDT_Divider)
 {
 	echo "\n";
-	echo str_repeat('#', mb_strlen($field->renderLabel()) + 8) . "\n";
-	echo "### {$field->renderLabel()} ###\n";
-	echo str_repeat('#', mb_strlen($field->renderLabel()) + 8) . "\n";
+	echo $field->renderCodeBlock();
 }
 elseif ($field instanceof GDT_Submit)
 {
@@ -75,6 +72,8 @@ else
 		$value = $value ? 'true' : 'false';
 	}
 	
-	printf("define('GDO_%s', %s);\n", strtoupper($name), $value);
+	$comment = $field->renderIconText();
+	
+	printf("define('GDO_%s', %s); # %s\n", strtoupper($name), $value, $comment);
 }
 endforeach;

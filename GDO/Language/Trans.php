@@ -17,7 +17,7 @@ use GDO\Core\Logger;
  * @TODO: Trans: In early loading state errors are handled badly.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 1.0.0
  * @see Cache
  */
@@ -286,6 +286,8 @@ final class Trans
 #############
 ### Setup ###
 #############
+#PP#start#
 deff('GDO_LANGUAGE', 'en');
 deff('GDO_FILECACHE', false);
+#PP#end#
 Trans::$FILE_CACHE = (bool) GDO_FILECACHE;

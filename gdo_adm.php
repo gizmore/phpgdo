@@ -30,6 +30,7 @@ use GDO\Form\GDT_Form;
 use GDO\Core\GDT_Method;
 use GDO\User\GDO_Permission;
 use GDO\Core\Website;
+use gizmore\pp\Preprocessor;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -411,14 +412,9 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 	{
 		return ModuleLoader::instance()->getModule($moduleName);
 	}, array_keys($deps2));
-
-// 	$deps2 = Arrays::implodeHuman(array_keys($deps2));
-// 	echo "Installing modules {$deps2}.\n";
 	Installer::installModules($modules);
-
 	Cache::flush();
 	Cache::fileFlush();
-
 	echo "Done.\n";
 }
 
@@ -808,12 +804,18 @@ elseif ($argv[1] === 'secure')
 
 elseif ($argv[1] === 'update')
 {
-	echo "Did you mean ./gdo_update.sh\n";
 	$modules = ModuleLoader::instance()->getEnabledModules();
 	foreach ($modules as $module)
 	{
 		Installer::installModule($module);
 	}
+	
+	if (GDO_PREPROCESSOR)
+	{
+		echo "Running php-preprocessor on all GDO modules.\n";
+		Preprocessor::processFolder();
+	}
+	
 	echo "Update complete.\n";
 }
 

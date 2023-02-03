@@ -25,7 +25,7 @@ use GDO\Core\GDO_Exception;
  * @TODO: Sometimes functions take a formatstring sometimes a formatname t(df_). Always use formatstring. fix all bugs.
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 2.0.0
  * @see GDT_Week
  * @see GDT_Date
@@ -96,17 +96,19 @@ final class Time
 	
 	public static function setTimezoneNamed(string $timezoneName) : void
 	{
-// 		$tz = self::getTimezoneObject($timezoneName);
 		self::setTimezoneGDO(GDO_Timezone::getByName($timezoneName));
 	}
 	
 	public static function setTimezone(string $timezoneId)
 	{
+		#PP#start#
 		if (!is_numeric($timezoneId))
 		{
+			die('FATAL');
 			xdebug_break();
 		}
-	    self::$TIMEZONE = $timezoneId;
+		#PP#end#
+		self::$TIMEZONE = $timezoneId;
 	}
 	
 	public static function setTimezoneGDO(GDO_Timezone $tz) : void

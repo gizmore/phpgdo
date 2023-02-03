@@ -6,7 +6,7 @@ namespace GDO\Core;
  * Buffered.
  * One logfile per user.
  * 
- * @version 7.0.1
+ * @version 7.0.2
  * @since 1.0.0
  * @author gizmore
  * @author spaceone
@@ -30,8 +30,9 @@ final class Logger
 	const _ALL = 0x37ff;
 	const _DEFAULT = self::_ALL;
 
-	public static int $WRITES = 0;
+	public static int $WRITES = 0; #PP#delete#
 	public static string $POST_DELIMITER = '.::.';
+	public static ?\DateTimeZone $TIMEZONE;
 
 	private static ?string $username;
 	private static string $basedir = GDO_PATH . 'protected/logs';
@@ -51,6 +52,7 @@ final class Logger
 		self::$username = $username;
 		self::$logbits = $logbits;
 		self::$basedir = GDO_PATH . $basedir;
+		self::$TIMEZONE = new \DateTimeZone(GDO_TIMEZONE);
 	}
 
 	public static function isEnabled(int $bits) : bool { return ($bits === (self::$logbits & $bits)); }
@@ -136,10 +138,7 @@ final class Logger
 		self::rawLog('cron', $message, 0);
 		if (!Application::$INSTANCE->isUnitTests())
 		{
-// 			if (Application::$INSTANCE->isCLI())
-// 			{
-				echo $message.PHP_EOL;
-// 			}
+			echo $message.PHP_EOL;
 		}
 	}
 	public static function logWebsocket($message) { self::rawLog('websocket', $message, 0); echo $message.PHP_EOL; }
@@ -168,7 +167,7 @@ final class Logger
 	 */
 	private static function getFullPath(string $filename, string $username=null)
 	{
-	    $dt = new \DateTime('now', self::tz());
+	    $dt = new \DateTime('now', self::$TIMEZONE);
 	    $date = $dt->format('Ymd');
 		return is_string($username)
 			? sprintf('%s/memberlog/%s/%s_%s.txt', self::$basedir, $username, $date, $filename)
@@ -183,7 +182,7 @@ final class Logger
 	private static function createLogDir($filename)
 	{
 		$dir = dirname($filename);
-		return is_dir($dir) ? true : @mkdir($dir, GDO_CHMOD, true);
+		return is_dir($dir) ? true : mkdir($dir, GDO_CHMOD, true);
 	}
 
 	/**
@@ -215,25 +214,14 @@ final class Logger
 		# log it?
 		if (self::isEnabled($logmode))
 		{
-		    $dt = new \DateTime("now", self::tz());
+		    $dt = new \DateTime("now", self::$TIMEZONE);
 		    $time = $dt->format('H:i');
 			$ip = self::isDisabled(self::IP) ? '' : @$_SERVER['REMOTE_ADDR'];
 			$username = self::$username === false ? ':~guest~' : ':'.self::$username;
-
 			self::logB($filename, sprintf(self::$logformat, $time, $ip, $username, $message));
 		}
 	}
 	
-	private static function tz()
-	{
-	    static $tz;
-	    if ($tz === null)
-	    {
-	        $tz = new \DateTimeZone(def('GDO_ERROR_TIMEZONE', 'UTC'));
-	    }
-	    return $tz;
-	}
-
 	public static function rawLog($filename, $message, $logmode=0)
 	{
 		# log it?
@@ -245,12 +233,12 @@ final class Logger
 
 	private static function logB($filename, $message)
 	{
-		self::$WRITES++;
+		self::$WRITES++; #PP#delete#
 		if (!self::isBuffered())
 		{
 			self::writeLog($filename, $message);
 		}
-		elseif (true === isset(self::$logs[$filename]))
+		elseif (isset(self::$logs[$filename]))
 		{
 			self::$logs[$filename] .= $message;
 		}
@@ -260,7 +248,10 @@ final class Logger
 		}
 	}
 
-	private static function writeLog($filename, $message) : bool
+	/**
+	 * Log a message. maybe twice.
+	 */
+	private static function writeLog(string $filename, string $message): bool
 	{
 		if (self::$username)
 		{
@@ -303,5 +294,5 @@ final class Logger
 	}
 
 }
-
-deff('GDO_LOG_REQUEST', false);
+deff('GDO_TIMEZONE', ini_get('date.timezone')); #PP#delete#
+deff('GDO_LOG_REQUEST', false); #PP#delete#

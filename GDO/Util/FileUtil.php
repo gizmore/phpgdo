@@ -67,7 +67,7 @@ final class FileUtil
 	}
 	
 	/**
-	 * Turn a string into a file stream.
+	 * Turn a string into a filec stream.
 	 */
 	public static function openString(string $string)
 	{

@@ -28,7 +28,7 @@ use GDO\Core\Debug;
  * The other memcached keys work on a per row basis with table_name_id as key.
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  */
 class Cache
@@ -91,10 +91,12 @@ class Cache
 	 */
 	public static function set(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
 	{
+		#PP#start#
 		if (GDO_CACHE_DEBUG)
 		{
 			self::debug('set', $key, $value);
 		}
+		#PP#end#
 		
 		switch (GDO_MEMCACHE)
 		{
@@ -110,16 +112,18 @@ class Cache
 		}
 	}
 	
+	#PP#start#
 	private static function debug(string $event, string $key, $value)
 	{
-		Logger::log('cache', sprintf('%s %s'));
+		Logger::log('cache', sprintf('%s %s', $event, $key));
 		if (GDO_CACHE_DEBUG >= 2)
 		{
 			$isHTML = Application::instance()->isHTML();
 			Logger::log('cache', Debug::backtrace('Backtrace', $isHTML));
 		}
 	}
-
+	#PP#end#
+	
 	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL)
 	{
 		switch (GDO_MEMCACHE)
@@ -261,13 +265,13 @@ class Cache
 			if ($mcached = self::get($this->tableName . $id))
 			{
 				$this->cache[$id] = $mcached;
-				self::$CACHE_HITS++;
+				self::$CACHE_HITS++; #PP#delete#
 				return $mcached;
 			}
 		}
 		else
 		{
-			self::$CACHE_HITS++;
+			self::$CACHE_HITS++; #PP#delete#
 			return $this->cache[$id];
 		}
 		
@@ -277,14 +281,14 @@ class Cache
 			{
 				if ($gdo->getID() === $id)
 				{
-					self::$CACHE_HITS++;
+					self::$CACHE_HITS++; #PP#delete#
 					$this->cache[$id] = $gdo;
 					return $gdo;
 				}
 			}
 		}
 		
-		self::$CACHE_MISSES++;
+		self::$CACHE_MISSES++; #PP#delete#
 		return null;
 	}
 
@@ -302,7 +306,7 @@ class Cache
 			{
 				if ($gdo->gdoVar($key) === $var)
 				{
-					self::$CACHE_HITS++;
+					self::$CACHE_HITS++; #PP#delete#
 					return $gdo;
 				}
 			}
@@ -313,12 +317,12 @@ class Cache
 			{
 				if ($gdo->gdoVar($key) === $var)
 				{
-					self::$CACHE_HITS++;
+					self::$CACHE_HITS++; #PP#delete#
 					return $gdo;
 				}
 			}
 		}
-		self::$CACHE_MISSES++;
+		self::$CACHE_MISSES++; #PP#delete#
 		return null;
 	}
 
@@ -532,13 +536,13 @@ class Cache
 	{
 		if (self::fileHas($key, $expire))
 		{
-			self::$CACHE_HITS++;
+			self::$CACHE_HITS++; #PP#delete#
 			$path = self::filePath($key);
 			return file_get_contents($path);
 		}
 		else
 		{
-			self::$CACHE_MISSES++;
+			self::$CACHE_MISSES++; #PP#delete#
 		}
 		return null;
 	}
@@ -576,9 +580,6 @@ class Cache
 
 	/**
 	 * SanitizeFilename. @TODO Use urlencoding for replaced chars.
-	 * 
-	 * @param string $key
-	 * @return string
 	 */
 	private static function fileKey(string $key): string
 	{
@@ -595,10 +596,12 @@ class Cache
 	}
 
 }
-# config :(
-deff('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
-deff('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
-deff('GDO_CACHE_DEBUG', 0);
+# config
+define('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
+define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
+define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));
+#PP#start#
 deff('GDO_FILECACHE', 1);
 deff('GDO_MEMCACHE', 2);
-deff('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));
+deff('GDO_CACHE_DEBUG', 0);
+#PP#end#

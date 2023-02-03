@@ -149,6 +149,7 @@ class GDT_Template extends GDT
 		try
 		{
 			ob_start();
+			#PP#start#
 			self::$CALLS++;
 			$path = self::getPath($moduleName, $path);
 			if (GDO_GDT_DEBUG)
@@ -160,6 +161,7 @@ class GDT_Template extends GDT
 				}
 				Logger::log('tpl', $message);
 			}
+			#PP#end#
 			if ($tVars)
 			{
 				foreach ($tVars as $__key => $__value)
@@ -199,7 +201,7 @@ class GDT_Template extends GDT
 	 */
 	public static function file(string $moduleName, string $path): string
 	{
-		self::$CALLS++;
+		self::$CALLS++; #PP#delete#
 		$path = self::getPath($moduleName, $path);
 		return file_get_contents($path);
 	}
@@ -214,24 +216,28 @@ class GDT_Template extends GDT
 	 */
 	private static function getPath(string $moduleName, string $path): string
 	{
-		return self::getPathB($moduleName, $path);
-// 		static $cache = [];
-// 		$p = $moduleName . $path . Trans::$ISO;
-// 		if ( !isset($cache[$p]))
-// 		{
-// 			$cache[$p] = self::getPathB($moduleName, $path);
-// 		}
-// 		return $cache[$p];
-	}
+// 		return self::getPathB($moduleName, $path);
+// 	}
 
-	private static function getPathB(string $moduleName, string $path): string
-	{
-		$isos = array_unique([
-			'_' . Trans::$ISO,
-			'_' . GDO_LANGUAGE,
-			'_en',
-			'',
-		]);
+// 	private static function getPathB(string $moduleName, string $path): string
+// 	{
+		static $isosc = [];
+		
+		if (isset($isosc[Trans::$ISO]))
+		{
+			$isos = $isosc[Trans::$ISO];
+		}
+		else
+		{
+			$isos = array_unique([
+				'_' . Trans::$ISO,
+				'_' . GDO_LANGUAGE,
+				'_en',
+				'',
+			]);
+			$isosc[Trans::$ISO] = $isos;
+		}
+		
 
 		# cut at dot.
 		$path12 = Strings::rsubstrTo($path, '.', $path);

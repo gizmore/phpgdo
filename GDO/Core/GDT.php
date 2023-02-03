@@ -19,7 +19,7 @@ use GDO\Util\Arrays;
  * The current rendering mode is stored in @link \GDO\Core\Application
  *  
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  * @see GDO
  * @see GDT_Field
@@ -61,6 +61,7 @@ abstract class GDT
 	public static int $GDT_KILLS = 0; # total deallocs
 	public static int $GDT_PEAKS = 0; # highest simultan. alive
 	
+	#PP#start#
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
 	 */
@@ -101,6 +102,7 @@ abstract class GDT
 			Logger::log('gdt', Debug::backtrace('Backtrace GDT allocation', false));
 		}
 	}
+	#PP#end#
 	
 	public function gdtCopy(string $name=null): self
 	{
@@ -779,6 +781,7 @@ abstract class GDT
 	
 }
 
+#PP#start#
 # Init
 if (GDT::$GDT_DEBUG = deff('GDT_GDO_DEBUG', 0))
 {
@@ -786,3 +789,4 @@ if (GDT::$GDT_DEBUG = deff('GDT_GDO_DEBUG', 0))
 	Logger::log('gdt', '--- NEW RUN ---');
 	Logger::log('gdo', '--- NEW RUN ---');
 }
+#PP#end#

@@ -5,6 +5,7 @@ use GDO\UI\GDT_Page;
 use function GDO\Perf\xdebug_get_function_count;
 use GDO\Core\Method\Stub;
 use GDO\DB\Database;
+use GDO\Date\Time;
 
 /**
  * Application runtime data.
@@ -41,10 +42,12 @@ class Application extends GDT
 	################
 	public static int $TIME;
 	public static float $MICROTIME;
+// 	public static \DateTime $DATETIME;
 	public static function time(float $time) : void
 	{
 		self::$TIME = (int)$time;
 		self::$MICROTIME = $time;
+// 		self::$DATETIME = new \DateTime(Time::getDate($time));
 	}
 	
 	public static function updateTime() : void

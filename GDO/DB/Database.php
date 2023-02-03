@@ -16,7 +16,7 @@ use GDO\Core\GDO_DBException;
  * @TODO support sqlite? This can be achieved by a few string tricks maybe. No foreign keys? no idea.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.0
  * 
  * @see GDO
@@ -38,6 +38,7 @@ class Database
 	private string $host, $user, $pass;
 	private string $usedb, $db; # used and configured db.
 
+	#PP#start#
 	# Debug
 	private int $debug = 0; # Set to 0/off, 1/on, 2/backtraces
 	
@@ -56,6 +57,7 @@ class Database
 	public static int $COMMITS = 0;
 	public static int $QUERIES = 0;
 	public static float $QUERY_TIME = 0.0;
+	#PP#end#
 	
 	/**
 	 * Available GDO classes.
@@ -103,7 +105,7 @@ class Database
 	{
 		if (isset($this->link))
 		{
-			@mysqli_close($this->link);
+			mysqli_close($this->link);
 			unset($this->link);
 		}
 	}
@@ -122,16 +124,12 @@ class Database
 	{
 		try
 		{
-			$t1 = microtime(true);
+			$t1 = microtime(true); #PP#delete#
 			if ($this->link = $this->connect())
 			{
 				# This is more like a read because nothing is written to the disk.
 				$this->queryRead("SET NAMES UTF8");
 				$this->queryRead("SET time_zone = '+00:00'");
-// 				if (isset($this->db))
-// 				{
-// 					$this->useDatabase($this->db);
-// 				}
 				return $this->link;
 			}
 		}
@@ -139,12 +137,14 @@ class Database
 		{
 			throw new GDO_DBException('err_db_connect', [$e->getMessage()]);
 		}
+		#PP#start#
 		finally
 		{
 			$timeTaken = microtime(true) - $t1;
 			$this->queryTime += $timeTaken;
 			self::$QUERY_TIME += $timeTaken;
 		}
+		#PP#end#
 	}
 	
 	public function connect() : mysqli
@@ -157,15 +157,15 @@ class Database
 	#############
 	public function queryRead(string $query, bool $buffered=true)
 	{
-		self::$READS++;
-		$this->reads++;
+		self::$READS++; #PP#delete#
+		$this->reads++; #PP#delete#
 		return $this->query($query, $buffered);
 	}
 	
 	public function queryWrite($query)
 	{
-		self::$WRITES++;
-		$this->writes++;
+		self::$WRITES++; #PP#delete#
+		$this->writes++; #PP#delete#
 		return $this->query($query);
 	}
 	
@@ -183,7 +183,7 @@ class Database
 	
 	private function queryB(string $query, bool $buffered=true)
 	{
-		$t1 = microtime(true);
+		$t1 = microtime(true); #PP#delete#
 		
 		if ($buffered)
 		{
@@ -202,8 +202,8 @@ class Database
 		{
 			if ($this->link)
 			{
-				$error = @mysqli_error($this->link);
-				$errno = @mysqli_errno($this->link);
+				$error = mysqli_error($this->link);
+				$errno = mysqli_errno($this->link);
 				$this->closeLink();
 			}
 			else
@@ -213,6 +213,7 @@ class Database
 			}
 			throw new GDO_DBException("err_db", [$errno, html($error), html($query)]);
 		}
+		#PP#start#
 		$t2 = microtime(true);
 		$timeTaken = $t2 - $t1;
 		$this->queries++;
@@ -230,6 +231,7 @@ class Database
 					Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false));
 			}
 		}
+		#PP#end#
 		return $result;
 	}
 	
@@ -399,7 +401,6 @@ class Database
 		return $this->queryWrite("DROP TABLE IF EXISTS {$tableName}");
 	}
 	
-	
 	public function truncateTable(GDO $gdo)
 	{
 	    $tableName = $gdo->gdoTableIdentifier();
@@ -436,18 +437,18 @@ class Database
 	public function transactionEnd()
 	{
 	    # Perf
-		$this->commits++;
-		self::$COMMITS++;
+		$this->commits++; #PP#delete#
+		self::$COMMITS++; #PP#delete#
 		
 		# Exec and perf
-		$t1 = microtime(true);
+		$t1 = microtime(true); #PP#delete#
 		$result = mysqli_commit($this->getLink());
-		$t2 = microtime(true);
-		$tt = $t2 - $t1;
+		$t2 = microtime(true); #PP#delete#
+		$tt = $t2 - $t1; #PP#delete#
 		
 		# Perf
-		$this->queryTime += $tt;
-		self::$QUERY_TIME += $tt;
+		$this->queryTime += $tt; #PP#delete#
+		self::$QUERY_TIME += $tt; #PP#delete#
 		return $result;
 	}
 	
@@ -461,8 +462,8 @@ class Database
 	############
 	public function lock(string $lock, int $timeout=30) : mysqli_result
 	{
-	    $this->locks++;
-	    self::$LOCKS++;
+		$this->locks++; #PP#delete#
+		self::$LOCKS++; #PP#delete#
 		$query = "SELECT GET_LOCK('{$lock}', {$timeout}) as L";
 		return $this->queryRead($query);
 	}
