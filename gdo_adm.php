@@ -822,7 +822,7 @@ elseif ($argv[1] === 'update')
 		Installer::installModule($module);
 	}
 	
-	if (GDO_PREPROCESSOR && Application::isProduction())
+	if (GDO_PREPROCESSOR)
 	{
 		system('php gdo_adm.php pp');
 	}

@@ -147,7 +147,7 @@ class Application extends GDT
 	public static function isDev() : bool { return self::isEnv('dev'); }
 	public static function isTes() : bool { return self::isEnv('tes'); }
 	public static function isPro() : bool { return self::isEnv('pro'); }
-	private static function isEnv(string $env) : bool { return def('GDO_ENV', 'dev') === $env; }
+	private static function isEnv(string $env) : bool { return GDO_ENV === $env; }
 	
 	/**
 	 * Is a session handler supported?
