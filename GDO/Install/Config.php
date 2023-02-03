@@ -221,12 +221,12 @@ class Config
 			
 			# Email
 			GDT_Divider::make()->label('install_config_section_email'),
-			GDT_Checkbox::make('enable_email')->initialValue(GDO_ENABLE_EMAIL),
+			GDT_Checkbox::make('enable_email')->initialValue(!!GDO_ENABLE_EMAIL),
 			GDT_String::make('bot_name')->notNull()->initialValue(GDO_BOT_NAME)->label('bot_name'),
 			GDT_String::make('bot_email')->notNull()->initialValue(GDO_BOT_EMAIL)->label('bot_mail'),
 			GDT_String::make('admin_email')->notNull()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail'),
 			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail'),
-			GDT_Checkbox::make('debug_email')->initialValue(GDO_DEBUG_EMAIL),
+			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL),
 		];
 	}
 	
