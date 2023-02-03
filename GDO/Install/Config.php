@@ -64,6 +64,7 @@ class Config
 			'ImportBackup',
 		    'CopyHTAccess',
 			'Security',
+			'Webserver',
 		];
 	}
 	
@@ -157,7 +158,7 @@ class Config
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
 			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull()->tooltipRaw('Default Language setting.'),
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
-			GDT_Select::make('themes')->multiple()->choices(array_combine($themes, $themes))->notNull()->initialValue(array('default'))->tooltipRaw('Comma separated list of themes / themechain. Example: \'tbs,classic,default\'.'),
+			GDT_String::make('themes')->notNull()->initial(implode(',', $themes))->tooltipRaw('Comma separated list of themes / themechain. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
 			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
@@ -221,12 +222,12 @@ class Config
 			
 			# Email
 			GDT_Divider::make()->label('install_config_section_email'),
-			GDT_Checkbox::make('enable_email')->initialValue(!!GDO_ENABLE_EMAIL),
-			GDT_String::make('bot_name')->notNull()->initialValue(GDO_BOT_NAME)->label('bot_name'),
-			GDT_String::make('bot_email')->notNull()->initialValue(GDO_BOT_EMAIL)->label('bot_mail'),
-			GDT_String::make('admin_email')->notNull()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail'),
-			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail'),
-			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL),
+			GDT_Checkbox::make('enable_email')->initialValue(!!GDO_ENABLE_EMAIL)->tooltipRaw('Enable E-Mail sending?'),
+			GDT_String::make('bot_name')->notNull()->initialValue(GDO_BOT_NAME)->label('bot_name')->tooltipRaw('Robot Mail sender Name'),
+			GDT_String::make('bot_email')->notNull()->initialValue(GDO_BOT_EMAIL)->label('bot_mail')->tooltipRaw('Robot Mail sender Mail'),
+			GDT_String::make('admin_email')->notNull()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail')->tooltipRaw('Administrator Mail'),
+			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail')->tooltipRaw('Error Mail recipients. separate by comma.'),
+			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL)->tooltipRaw('Enable Print to Screen debugging?'),
 		];
 	}
 	
