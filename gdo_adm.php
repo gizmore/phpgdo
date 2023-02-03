@@ -31,6 +31,7 @@ use GDO\Core\GDT_Method;
 use GDO\User\GDO_Permission;
 use GDO\Core\Website;
 use gizmore\pp\Preprocessor;
+use GDO\Install\Method\Webserver;
 
 /**
  * The gdoadm.php executable manages modules and config via the CLI.
@@ -64,7 +65,7 @@ use gizmore\pp\Preprocessor;
  * Show usage of the gdoadm.sh shell command.
  *
  * @example gdoadm.sh install MailGPG
- * @example bin/gdo mail.send giz Hi there, you wanker;This is the mail body. Parameters are separated via semicolon.
+ * @example bin/gdo mail.send giz,Hi there,, you wanker,This is the mail body. Parameters are separated via comma.
  */
 function printUsage(int $code = -1): void
 {
@@ -77,6 +78,8 @@ function printUsage(int $code = -1): void
 	echo "php $exe test [<config.php>] - To test your protected/config.php\n";
 	echo "php $exe admin <username> <password> - to (re)set an admin account\n";
 	echo "php $exe cronjob - To print cronjob instructions\n";
+	echo "php $exe apache - To print apache-2.4 configuration suggestions\n";
+	echo "php $exe nginx(todo) - To print nginx configuration suggestions\n";
 	echo "php $exe secure - To secure your installation after install.\n";
 	echo "\n--- Modules ---\n";
 	echo "php $exe modules [<module>] - To show a list of modules or show module details\n";
@@ -902,6 +905,12 @@ elseif ($argv[1] === 'confgrade')
 	Installer::refreshConfig("protected/{$path}");
 	
 	echo "All done!\n";
+}
+
+elseif ($argv[1] === 'apache')
+{
+	$docs = Webserver::make()->apache24();
+	echo $docs->render();
 }
 
 else
