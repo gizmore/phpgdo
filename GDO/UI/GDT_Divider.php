@@ -44,7 +44,7 @@ class GDT_Divider extends GDT
 	{
 		$len = mb_strlen($title) + 8;
 		$row = str_repeat('#', $len) . "\n";
-		return sprintf("%s%s\n%1\$s", $row, html($title));
+		return sprintf("%s### %s ###\n%1\$s", $row, html($title));
 	}
 
 }
