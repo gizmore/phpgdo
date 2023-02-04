@@ -28,7 +28,7 @@ spl_autoload_register(function(string $name) : void
 {
 	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
 	{   # 2 lines path
-		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php'; #PP#windows# This line is only kept on windows machines.
+		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php';
 		require $name;
 		# 2 lines perf, but removed by #PP# PreProcessor
 		global $GDT_LOADED; # #PP#delete#

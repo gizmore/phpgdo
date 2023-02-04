@@ -147,4 +147,6 @@ Your playlists are ACL sharable.
  - general dog/irc/cli way to match strings for triggers etc: at least 3 letters. if it starts with it and no oter starts: take. Disambigous via middle 3 disamb: take.
  Do this for all triggers. disam shal go over the dot?
 
+ - [php-ytmd](https://github.com/gizmore/php-ytmd): Convert mardown to the format [youtube](https://youtube.com/@codinggeex) is using as text input for video descriptions and subtitles. Also add smiley support to [phpgdo-markdown](https://github.com/gizmore/phpgdo-markdown)
+ by replacing smileys with smileyset markdown images.
  
