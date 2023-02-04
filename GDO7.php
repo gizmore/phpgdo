@@ -22,17 +22,27 @@ define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 ### GDOv7 Autoloader ###
 ########################
 global $GDT_LOADED;
-$GDT_LOADED = 0;
+$GDT_LOADED = 0; #PP#delete#
 #
+/**
+ * The infamous 5 line phpgdo autoloader.
+ * 
+ * 1. Check if classname starts with GDO\ - @TODO: make branchless
+ * 2. Turn GDO\Module\classname into a fullpath.php
+ * 3. Include the fullpath
+ * 4. Increase performance counter, which is removed in production CI.
+ * 
+ * @author gizmore
+ */
 spl_autoload_register(function(string $name) : void
 {
-	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
-	{   # 2 lines path
+	#if (unpack('L', $name) ^ 0x48444F5C) # 1 line for an "if"
+	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for an "if"
+	{   # 2 lines for path + include
 		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php';
-		require $name;
-		# 2 lines perf, but removed by #PP# PreProcessor
+		include $name; # 2 lines perf, removed by PreProcessor
 		global $GDT_LOADED; # #PP#delete#
-		$GDT_LOADED++; # #PP#delete#
+		$GDT_LOADED++;      # #PP#delete#
 	}
 });
 
