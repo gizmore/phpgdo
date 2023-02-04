@@ -14,8 +14,8 @@ use GDO\Util\Regex;
  * @version 7.0.2
  * @since 6.0.0
  */
-define('GDO_PATH', __DIR__ . '/'); #PP#linux#
-define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/'); #PP#windows#
+// define('GDO_PATH', __DIR__ . '/'); #PP#linux#
+define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 #
 ##
 ########################
