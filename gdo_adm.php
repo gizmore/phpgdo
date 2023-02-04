@@ -446,7 +446,10 @@ elseif ($argv[1] === 'admin')
 		])->insert();
 		GDT_Hook::callWithIPC('UserActivated', $user, null);
 	}
-	$user->saveSettingVar('Login', 'password', BCrypt::create($argv[3])->__toString());
+	if (module_enabled('Login'))
+	{
+		$user->saveSettingVar('Login', 'password', BCrypt::create($argv[3])->__toString());
+	}
 // 	$user->saveVar('user_password', BCrypt::create($argv[3])->__toString());
 	$user->saveVar('user_deleted', null);
 	$user->saveVar('user_deletor', null);
