@@ -38,7 +38,6 @@ class Database
 	private string $host, $user, $pass;
 	private string $usedb, $db; # used and configured db.
 
-	#PP#start#
 	# Debug
 	private int $debug = 0; # Set to 0/off, 1/on, 2/backtraces
 	
@@ -57,7 +56,6 @@ class Database
 	public static int $COMMITS = 0;
 	public static int $QUERIES = 0;
 	public static float $QUERY_TIME = 0.0;
-	#PP#end#
 	
 	/**
 	 * Available GDO classes.
