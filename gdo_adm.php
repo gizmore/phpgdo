@@ -424,7 +424,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 	if (GDO_PREPROCESSOR)
 	{
 		echo "Running php-preprocessor on all modules.\n";
-		Preprocessor::processFolder(GDO_PATH);
+		PP::init()->processFolder(GDO_PATH);
 	}
 	
 	Cache::flush();
