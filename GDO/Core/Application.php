@@ -5,7 +5,6 @@ use GDO\UI\GDT_Page;
 use function GDO\Perf\xdebug_get_function_count;
 use GDO\Core\Method\Stub;
 use GDO\DB\Database;
-use GDO\Date\Time;
 
 /**
  * Application runtime data.
@@ -292,3 +291,5 @@ class Application extends GDT
 
 # Init
 Application::updateTime();
+
+deff('PHP_ENV', 'dev'); #PP#delete#
