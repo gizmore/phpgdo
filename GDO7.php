@@ -11,32 +11,28 @@ use GDO\Util\Regex;
  * GDO Autoloader and global functions.
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  */
-# Verbose error handling is default
-define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
+define('GDO_PATH', __DIR__ . '/'); #PP#linux#
+define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/'); #PP#windows#
 #
 ##
 ########################
 ### GDOv7 Autoloader ###
 ########################
 global $GDT_LOADED;
-$GDT_LOADED = 0; # perf
-// global $GDT_PATHES;
-// $GDT_PATHES = [];
+$GDT_LOADED = 0;
 #
 spl_autoload_register(function(string $name) : void
 {
 	if ( ($name[0]==='G') && ($name[3]==='\\') ) # 1 line if
 	{   # 2 lines path
-		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php';
+		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php'; #PP#windows# This line is only kept on windows machines.
 		require $name;
-		# 4 lines perf
-		global $GDT_LOADED;
-		$GDT_LOADED++;
-// 		global $GDT_PATHES;
-// 		$GDT_PATHES[] = $name;
+		# 2 lines perf, but removed by #PP# PreProcessor
+		global $GDT_LOADED; # #PP#delete#
+		$GDT_LOADED++; # #PP#delete#
 	}
 });
 

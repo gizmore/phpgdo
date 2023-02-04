@@ -1,6 +1,22 @@
 # GDOv7 Conventions
 
-This document describes quirks and conventions for implementation details.
+This file describes quirks, conventions and some implementation details.
+
+---
+
+# GDOv7 Conventions: Wording and Definition of Terms.
+
+With *Wording* i mostly mean function name conventions.
+
+ - var means db serialized string; value means deserialized object.
+[GDT_String](../GDO/Core/GDT_String.php)
+simply does nothing for var/value conversion.
+[GDT_Int](../GDO/Core/GDT_Int.php)'s
+value type is `int`.
+
+ - Output functions: renderXXX() shall return a the GDT's state. displayXXX($var) shall return a parmeterized $var state.
+
+ - GDT's shall make use of my accessor pattern for public accessible member variables. (@TODO: elaborate)
 
 ---
 
@@ -43,4 +59,3 @@ SEO urls can be enabled in config.php.
 The convention is that variables with a leading dash (_) are not put into url.
 Array variables are also not put into the url.
 else all variables are appended to the url like /key/value/key/value.
-

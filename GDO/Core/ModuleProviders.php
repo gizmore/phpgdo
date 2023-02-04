@@ -121,6 +121,14 @@ final class ModuleProviders
 	 */
 	public static array $PROVIDERS = [
 		### BEGIN_PROVIDERS ###
+
+Warning: Constant GDO_PATH already defined in C:\ProjektPHPGDO\phpgdo\GDO7.php on line 18
+
+Call Stack:
+    0.0090     409736   1. {main}() C:\ProjektPHPGDO\phpgdo\providers.php:0
+    0.0100     450440   2. require('C:\ProjektPHPGDO\phpgdo\GDO7.php') C:\ProjektPHPGDO\phpgdo\providers.php:11
+    0.0100     450520   3. define($constant_name = 'GDO_PATH', $value = 'C:/ProjektPHPGDO/phpgdo/') C:\ProjektPHPGDO\phpgdo\GDO7.php:18
+
 'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],
 'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],
 'Mailer' => ['phpgdo-mailer', 'phpgdo-mailer-symfony'],
@@ -248,6 +256,14 @@ final class ModuleProviders
 
 	public static $DEPENDENCIES = [
 		### BEGIN_DEPENDENCIES ###
+
+Warning: Constant GDO_PATH already defined in C:\ProjektPHPGDO\phpgdo\GDO7.php on line 18
+
+Call Stack:
+    0.0091     411392   1. {main}() C:\ProjektPHPGDO\phpgdo\provider_dependencies.php:0
+    0.0097     447680   2. include('C:\ProjektPHPGDO\phpgdo\GDO7.php') C:\ProjektPHPGDO\phpgdo\provider_dependencies.php:14
+    0.0098     447760   3. define($constant_name = 'GDO_PATH', $value = 'C:/ProjektPHPGDO/phpgdo/') C:\ProjektPHPGDO\phpgdo\GDO7.php:18
+
 'AboutMe' => ['Account'],
 'Account' => ['Login'],
 'ACME' => ['Net'],

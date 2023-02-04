@@ -2,7 +2,7 @@
 // use GDO\Core\GDO_Exception;
 
 /**
- * Backwards compatibility.
+ * Backwards compatibility. @TODO make use of the php preprocessor to make shim zero cost.
  * PHP7.4 will not work though :(
  */
 
@@ -94,10 +94,10 @@ if ( !function_exists('str_ends_with'))
 /**
  * Dangling breakpoints throw an exception.
  */
-if ( !function_exists('xdebug_break'))
-{
-	function xdebug_break() : void
-	{
-// 		throw new GDO_Exception('A breakpoint has been encountered. OOPS!');
-	}
-}
+// if ( !function_exists('xdebug_break'))
+// {
+// 	function xdebug_break() : void
+// 	{
+// // 		throw new GDO_Exception('A breakpoint has been encountered. OOPS!');
+// 	}
+// }
