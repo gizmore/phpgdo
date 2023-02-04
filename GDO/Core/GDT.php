@@ -61,6 +61,11 @@ abstract class GDT
 	public static int $GDT_KILLS = 0; # total deallocs
 	public static int $GDT_PEAKS = 0; # highest simultan. alive
 	
+	protected function __construct()
+	{
+		$this->afterLoaded(); #PP#delete#
+	}
+	
 	public function __destruct()
 	{
 		self::$GDT_KILLS++; #PP#delete#
@@ -70,11 +75,6 @@ abstract class GDT
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
 	 */
-	protected function __construct()
-	{
-		$this->afterLoaded();
-	}
-	
 	public function __wakeup()
 	{
 		$this->afterLoaded();
