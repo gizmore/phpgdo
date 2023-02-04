@@ -454,7 +454,7 @@ class Installer
 			$matches = null;
 			if (preg_match("/^#.*[\\r\\n]+([^#]+)/", $readme, $matches))
 			{
-				$back .= trim($matches[1])."\n\n";
+				$back .= trim($matches[1])."<br/>\n<br/>\n";
 			}
 		}
 		
@@ -496,7 +496,7 @@ class Installer
 			$matches = null;
 			if (preg_match_all("/[\r\n]\/\*\*[\s\*\r\n]*([\.\s\w]+)/", $sourcecode, $matches))
 			{
-				return trim($matches[1][0])."\n";
+				return trim($matches[1][0])."<br/>\n";
 			}
 		}
 		return null;

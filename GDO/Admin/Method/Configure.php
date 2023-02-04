@@ -21,6 +21,7 @@ use GDO\Util\Arrays;
 use GDO\UI\GDT_Container;
 use GDO\Core\GDT_Tuple;
 use GDO\Core\GDT_Path;
+use GDO\UI\TextStyle;
 
 /**
  * Configure a module.
@@ -210,8 +211,8 @@ class Configure extends MethodForm
 				$info[] = t('msg_modulevar_changed',
 					[
 						$gdt->renderLabel(),
-						$gdt->displayVar($gdt->initial),
-						$gdt->displayVar($gdt->getVar()),
+						TextStyle::italic($gdt->displayVar($gdt->initial)),
+						TextStyle::italic($gdt->displayVar($gdt->getVar())),
 					]);
 				$moduleVarsChanged = true;
 			}

@@ -5,20 +5,19 @@ namespace GDO\Core;
  * Add composer support to a module.
  *  
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.0
  */
 trait WithComposer
 {
-	private bool $composerIncluded = false;
 	
-	public function includeVendor() : void
+	public function includeVendor(): void
 	{
-		if (!$this->composerIncluded)
+		static $composerIncluded = false;
+		if (!$composerIncluded)
 		{
-			$path = $this->filePath('vendor/autoload.php');
-			require $path;
-			$this->composerIncluded = true;
+			$composerIncluded = true;
+			require $this->filePath('vendor/autoload.php');
 		}
 	}
 	

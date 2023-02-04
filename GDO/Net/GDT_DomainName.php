@@ -10,11 +10,11 @@ final class GDT_DomainName extends GDT_String
 {
 	public string $pattern = "/[\\.a-z]+\\.[a-z]+$/iD";
 	
-	public bool $tldonly = false;
+	public bool $tldOnly = false;
 	
-	public function tldonly(bool $tldonly=true): self
+	public function tldOnly(bool $tldOnly=true): self
 	{
-		$this->tldonly = $tldonly;
+		$this->tldOnly = $tldOnly;
 		return $this;
 	}
 	
@@ -30,7 +30,7 @@ final class GDT_DomainName extends GDT_String
 		}
 		
 		$parts = explode('.', $value);
-		if ($this->tldonly && count($parts) !== 2)
+		if ($this->tldOnly && count($parts) !== 2)
 		{
 			return $this->error('err_domain_no_tld');
 		}
@@ -40,7 +40,7 @@ final class GDT_DomainName extends GDT_String
 	
 	public function plugVars(): array
 	{
-		if ($this->tldonly)
+		if ($this->tldOnly)
 		{
 			return [
 				[$this->getName() => 'wechall.net'],

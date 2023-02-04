@@ -113,8 +113,11 @@ cd www/phpgdo<br/>
 'mt_install_security' => 'Installation abschließen und den Zugang zum Installer und protected Ordner verhindern.',
 'protect_folders' => 'Ordner schützen',
 
+'install_title_11' => 'Webserver',
+'mt_install_webserver' => 'Konfigurieren Sie Ihren Webserver weiter. Hier ist ein Konfigurationsvorschlag für %s.',
+	
 # gdo6 binary
-'msg_config_written' => 'Eine Standard-Konfigurationsdatei wurde unter protected/%s abgelegt. Sie können diese nun editieren.',
+'msg_config_written' => 'Eine Konfigurationsdatei wurde unter protected/%s abgelegt. Sie können diese weiter editieren.',
 'msg_available_config' => 'Konfigurationsvariablen für Modul %s: %s.',
 'msg_set_config' => 'Die Konfiguration für %s im Modul %s ist zur Zeit auf %s gesetzt. Vorschlagswerte: %s',
 'msg_changed_config' => 'Die Konfiguration für %s im Modul %s wurde von %s auf %s gesetzt.',

@@ -42,10 +42,7 @@ Optional feature dependencies:
  - php-curl ([the core](https://github.com/gizmore/phpgdo) [module](https://github.com/gizmore/phpgdo/tree/main/GDO/Core(GDO_Module.php) [Net](https://github.com/gizmore/phpgdo/tree/main/GDO/Net) which comes with, e.g. [GDT_Url](https://github.com/gizmore/phpgdo/blob/main/GDO/Net/GDT_Url.php) )
  - 
  
- 
- 
 An up-to-date requirements check should be working meanwhile.
-
 
 
 ## GDOv7 Installation: Web
@@ -69,6 +66,11 @@ Please note that you manually have to edit the protected/config.php file in any 
     # MAKE your PATH point to phpgdo/bin (OPTIONAL)
     gdo core.version # test version method
     gdo mail.send gizmore,hi,there # test mail
+    
+
+## GDOv7 Installation: Configuration
+
+
     
 
 ## GDOv7 Installation: Modules

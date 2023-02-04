@@ -12,9 +12,15 @@ which are the files you work on.
 For real production builds, use the
 [Javascript](https://github.com/gizmore/phpgdo-javascript)
 module.
-This is still just pressing F5, but the javascript gets minified on the fly.
-Source files are forbidden to be delivered in this mode.
+This is still just pressing *F5*,
+but **all** javascript files get minified,
+obfuscated and cached on the fly.
+
+All JS source files are forbidden to be delivered, when you use this module.
+Which is way better as what other frameworks do *by design* to aid you.
+
+By the way, the same process, and F5 toolchain, also exists for
+[CSS](https://github.com/gizmore/phpgdo-css).
 
 
 ## GDOv7 Javascript: Guideline
-

@@ -250,7 +250,7 @@ final class ModuleProviders
 		### BEGIN_DEPENDENCIES ###
 'AboutMe' => ['Account'],
 'Account' => ['Login'],
-'ACME' => [],
+'ACME' => ['Net'],
 'ActivationAlert' => [],
 'Address' => ['Mail', 'Country'],
 'Admin' => ['Table'],

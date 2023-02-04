@@ -14,10 +14,14 @@ echo '<';echo '?';echo "php\n";
 ################################
 ### GDOv7 Configuration File ###
 ################################
-if (defined('GDO_CONFIGURED')) return; // double include
-
-error_reporting('<?=ini_get('error_reporting')?>');
-ini_set('display_errors', <?=ini_get('display_errors')?>);
+# if (defined('GDO_CONFIGURED')) return; # double include (ok?)
+<?php
+$ep = ini_get('error_reporting');
+$ep = $ep ?? 'E_ALL';
+$de = ini_get('display_errors');
+$de = $de ?? 'On'; ?>
+error_reporting('<?=$ep?>'); # 
+ini_set('display_errors', '<?=$de?>'); # 
 
 /**
  * Please work down each section carefully.
@@ -73,7 +77,8 @@ else
 	}
 	
 	$comment = $field->renderIconText();
+	$comment = $comment ? " # {$comment}" : '';
 	
-	printf("define('GDO_%s', %s); # %s\n", strtoupper($name), $value, $comment);
+	printf("define('GDO_%s', %s);%s\n", strtoupper($name), $value, $comment);
 }
 endforeach;

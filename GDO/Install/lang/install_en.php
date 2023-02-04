@@ -112,6 +112,9 @@ cd www/phpgdo<br/>
 'mt_install_security' => 'Finish installation by removing access to install wizard and the protected folder',
 'protect_folders' => 'Protect Folders',
 	
+'install_title_11' => 'Webserver',
+'mt_install_webserver' => 'Configure your WebServer further. Here is a suggestion for a configuration.',
+	
 # gdo6 binary
 'msg_config_written' => 'A default config file has been written to protected/%s',
 'msg_available_config' => 'Available config vars for module %s: %s.',

@@ -23,9 +23,10 @@ use GDO\Core\GDT_Path;
 
 /**
  * Configuration helper during install wizard.
- * Holds a set of method names for the steps
+ * Holds a set of method names for the steps.
  * Autoconfigures GDO for when no config exists.
  * Holds fields for a configuration form.
+ * Is rendering the final protected/config.php via tpl/config.php.
  * 
  * @author gizmore
  * @version 7.0.2
@@ -48,7 +49,7 @@ class Config
 	
 	public static function linkStepGDT(int $step) : GDT_Link
 	{
-		return GDT_Link::make("step$step")->href(self::hrefStep($step))->label("install_title_$step");
+		return GDT_Link::make("step{$step}")->href(self::hrefStep($step))->label("install_title_$step");
 	}
 	
 	public static function steps() : array
@@ -76,6 +77,8 @@ class Config
 	 */
 	public static function configure() : void
 	{
+		$pro = Application::isPro();
+		
 		# Site
 		deff('GDO_SITENAME', 'GDOv7');
 		deff('GDO_ENV', 'dev');
@@ -100,9 +103,9 @@ class Config
 		# Files
 		deff('GDO_FILES_DIR', 'files');
 		deff('GDO_CHMOD', 0770);
-		deff('GDO_PREPROCESSOR', false);
+		deff('GDO_PREPROCESSOR', $pro);
 		# Logging
-		deff('GDO_LOG_REQUEST', false);
+		deff('GDO_LOG_REQUEST', $pro);
 		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
 		deff('GDO_ERROR_STACKTRACE', true);
 		deff('GDO_ERROR_DIE', true);

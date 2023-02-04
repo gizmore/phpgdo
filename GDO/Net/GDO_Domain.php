@@ -10,7 +10,7 @@ final class GDO_Domain extends GDO
 	{
 		return [
 			GDT_AutoInc::make('domain_id'),
-			GDT_DomainName::make('domain_name')->tldonly(),
+			GDT_DomainName::make('domain_name')->tldOnly(),
 		];
 	}
 	

@@ -1,36 +1,55 @@
-# GDOv7 DBAL
+# GDOv7 DBA*L*
 
-I am very proud of the GDOv7 Database Abstraction Layer. It actually is easier than writing SQL by hand, 
-and i don't have to look up trivial tasks on google,
-like getting an entitiy back from it,
-or creating join conditions.
-The API is very consistent and enjoyable to use.
-It might not have a fancy and quirky *hasMany*,
-this can be realized by adding a GDT_Join to your GDO,
-instead it allows to have composite primary keys.
+This page is a hail to the
+[GDO](../GDO/Core/GDO.php)
+[Database]()
+[Abstraction]()
+[Layer]()
 
-The GDO DBAL consists of the [Module_DB](../GDO/DB) files as well as the [GDO](../GDO/Core/GDO.php) class.
+
+I am very proud of it. Really.
+
+Using GDO is way faster and easier than writing SQL by hand,
+and i don't have to look up easy tasks on google for it.
+Like getting an entity or a single value back from a raw query.
+In every other DBA i saw, creating join conditions,
+or wanting to use a native sql function, was plain horrible.
+The GDO API is very consistent and a joy to use. (for me)
+GDO might not have fancy'n'quirky *hasMany* or *manyToMany* helpers, decorators and it does not use reflection to do havok,
+but such a many2many can be realized by, for example,
+adding a [GDT_Join](../GDO/Core/GDT_Join.php) column to your GDO,
+and simply do `joinObject()` it, when you need it in the query scope.
+Another thing is, often you have to write a special query anyway.
+Decorating models with reflection is totally non-sense!
+
+
+# GDOv7 DBAL: Engine Codebase 
+
+The GDO DBA consists of the [Module_DB](../GDO/DB) files as well as the [GDO](../GDO/Core/GDO.php) class.
 In summary:
 
  - [GDO.php](../GDO/Core/GDO.php) (Main DBAL Logic)
+ - [GDT.php](../GDO/Core/GDO.php) (Main DBAL Logic)
  - [Cache.php](../GDO/DB/Cache.php) (All caches)
  - [Database.php](../GDO/DB/Database.php) (Connection interface)
  - [Query.php](../GDO/DB/Query.php) (Query Builder)
  - [Result.php](../GDO/DB/Result.php) (Result Set)
  - [ArrayResult.php](../GDO/DB/ArrayResult.php) (Result Set, manually filled)
-
-
-## GDOv7 DBAL: Drawbacks
-
-Nothing comes without a tradeoff.
-The GDOv7 code is very basic, yet suprisingly stable and clever.
-The performance is also possible because i simply don't care that you may not have reserved words as identifiers.
-You cannot have this in GDOv7, but in exchange you never need to quote or escape a single table or column name. Deal!
  
  
+# GDOv7 DBAL: Column GDTs
+
+In GDOv7, almost everything is a Gizmore Data Type, even GDOs.
+
+You can plug any Type inside your GDO table,
+and get a lot of repetetive work done by your own datatypes.
+
+Validation has never been *dry* easier.
+
+
 ## GDOv7 DBAL: IDs
 
-In some DBAL it is convention to have an auto inc as the primary key.
+In some DBAL it is convention to *must* have an auto inc as the primary key column.
 In GDOv7, there is no convention or restriction on how to key your tables.
 We sometimes have a CHAR(2) for maybe country, or maybe a composite primary key. All is possible and intuitive.
 Maybe look at the implementation of [GDT_AutoInc](../GDO/Core/GDT_AutoInc.php) and [GDT_Char](../GDO/Core/GDT_Char.php).
@@ -61,7 +80,20 @@ The default cascades are deleting, but with cascadeRestrict() your biggest worri
 Of course the many foreign keys are performance hungry.
 
 
+## GDOv7 DBAL: Transactions
+
+In GDOv7, when using InnoDB as the `GDO_DB_ENGINE`,
+transactions are created appropriately for the request.
+But only when you are doing a *POST*, **and** the method wants it.
+[MethodForm](../GDO/Form/MethodForm.php)
+should be the only generic Method that behaves like this.
+
+
 ## GDOv7 DBAL: GDO examples
+
+I would not be unhappy, if someone would issue a few problems,
+so let's get to work with some examples.
+
 
 1) Get a user by name
 
@@ -72,7 +104,7 @@ Of course the many foreign keys are performance hungry.
     ->fetchObject() # Result fetches GDO_User object
     
 
-2) Select all admins
+2) Select all users of a group by group name
 
     GDO_UserPermission::table()->select('perm_user_id_t.*') # Select only  GDO_User columns. Query the permission relation table.
     ->joinObject('perm_user_id') # Join the user table. perm_user_id is the column that references the user table. it is automatically joined as perm_user_id_t
@@ -81,17 +113,47 @@ Of course the many foreign keys are performance hungry.
     ->exec() # execute the query and get a Result
     ->fetchTable(GDO_User::table()) # Set result fetch class to GDO_User. Else it would fetch GDO_UserPermission objects.
     ->fetchAllObjects() # get an array of GDO_User objects
+    
 
 3) A union select
 
-    $query1 = GDO_User::table()->where('user_type="member"'); # simple query 1
+    $query1 = GDO_User::table()->where('user_type="member"'); #simple query 1
     $query2 = GDO_User::table()->where('user_type="guest"'); # simple query 2
     $query1->union($query2)->exec()->fetchAll(); # Use union to merge the two queries.
 
 
 ## GDOv7 DBAL: GDO vs. Eloquent
 
-Eloquent does not allow composite primary keys.
+ - also does allow composite primary keys.
+ - Eloquent seems harder to learn
 
 
-##
+## GDOv7 DBAL: Drawbacks
+
+Nothing comes without tradeoffs.
+
+The GDOv7 code is very basic, yet suprisingly stable and short.
+The performance is also possible because... as an example...
+i simply *avoid*, better, i **can't** use reserved words as identifiers.
+I don't care! This is by a clever
+[design convention]().
+
+Columns have to use a table specific prefix.
+Only by convention.
+
+You cannot have "*ID*" as an identifier in GDOv7,
+but in exchange, you never need to escape a single identifier,
+have to wrap backticks around them,
+or have to worry too much about duplicate column names.
+
+GDOv7 has
+quite
+a
+few
+similiar
+examples.
+
+Read on!
+
+- (c)2023 gizmore 
+ 
