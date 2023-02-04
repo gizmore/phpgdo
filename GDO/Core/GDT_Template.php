@@ -149,9 +149,11 @@ class GDT_Template extends GDT
 		try
 		{
 			ob_start();
+			
+			$path = self::getPath($moduleName, $path);
+
 			#PP#start#
 			self::$CALLS++;
-			$path = self::getPath($moduleName, $path);
 			if (GDO_GDT_DEBUG)
 			{
 				$message = $path;
