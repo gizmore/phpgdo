@@ -504,7 +504,7 @@ class GDO_Module extends GDO
 	public function __wakeup()
 	{
 		$this->inited = false;
-		parent::__wakeup();
+		parent::__wakeup(); #PP#delete#
 	}
 
 	// public function inited(bool $inited = true): self
