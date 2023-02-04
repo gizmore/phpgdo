@@ -70,12 +70,12 @@ abstract class GDO extends GDT
 	public static int $GDO_KILLS = 0; # total deallocs
 	public static int $GDO_PEAKS = 0; # max sim. alive
 	
-	#PP#start#
 	public function __construct()
 	{
-		$this->afterLoaded();
+		$this->afterLoaded(); #PP#delete#
 	}
 	
+	#PP#start#
 	public function __wakeup()
 	{
 		$this->recache = false;
