@@ -842,7 +842,9 @@ elseif ($argv[1] === 'pp')
 	$pp->input(GDO_PATH)->verbose()->
 		recurse()->replace();
 	if ($pp->execute())
-	echo "Completed.\n";
+	{
+		echo "Completed.\n";
+	}
 }
 
 elseif ($argv[1] === 'migrate')
