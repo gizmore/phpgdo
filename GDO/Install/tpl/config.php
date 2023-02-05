@@ -85,6 +85,6 @@ elseif (!($field instanceof GDT_Submit))
 	$comment = $comment ? " # {$comment}" : '';
 	
 	printf("define('%s', %s);%s\n",
-		Config::getConstantName(), $value, $comment);
+		Config::getConstantName($name), $value, $comment);
 }
 endforeach;

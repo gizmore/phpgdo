@@ -1,4 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-gdoapath="$(dirname "$0")/../gdo_adm.php"
-php $gdoapath $@

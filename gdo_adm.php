@@ -881,7 +881,12 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 			{
 				system("php gdo_adm.php install {$argv[2]}");
 			}
-			system("php gdo_adm.php pp");
+
+			if (GDO_PREPROCESSOR)
+			{
+				system("php gdo_adm.php pp");
+			}
+			
 			system("bash gdo_post_install.sh");
 		}
 	}
@@ -1008,7 +1013,7 @@ elseif ($argv[1] === 'confgrade')
 	
 	Installer::refreshConfig("protected/{$path}");
 	
-	echo "All done!\n";
+	echo "{$path} has been rewritten.\n";
 }
 
 elseif ($argv[1] === 'apache')

@@ -74,6 +74,14 @@ class Config
 	### Config File Generator ###
 	#############################
 	/**
+	 * turn a GDT field name into GDO_FIELD_NAME config constant name.
+	 */
+	public static function getConstantName(string $name): string
+	{
+		return sprintf('GDO_%s', strtoupper($name));
+	}
+	
+	/**
 	 * Auto-configure GDOv7.
 	 */
 	public static function configure() : void
@@ -159,7 +167,7 @@ class Config
 			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro')->tooltipRaw('Environment can be dev, tes or pro.'),
 			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS)->tooltipRaw('Enable SEO style URLs. Requires url rewriting for your httpd.'),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
-			GDT_EnumNoI18n::make('language')->enumValues(...GDO_Language::gdoSupported(CLI::getLocale()))->notNull()->tooltipRaw('Default Language setting. Should be \'en\''),
+			GDT_EnumNoI18n::make('language')->enumValues(...GDO_Language::gdoSupported())->initial(GDO_LANGUAGE)->notNull()->tooltipRaw('Default Language setting. Should be \'en\''),
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
 			GDT_String::make('themes')->notNull()->initial(GDO_THEMES)->tooltipRaw('Comma separated themechain list. Tried from left to right. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
