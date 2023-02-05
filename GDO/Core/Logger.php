@@ -30,7 +30,7 @@ final class Logger
 	const _ALL = 0x37ff;
 	const _DEFAULT = self::_ALL;
 
-	public static int $WRITES = 0; #PP#delete#
+	public static int $WRITES = 0;
 	public static string $POST_DELIMITER = '.::.';
 	public static ?\DateTimeZone $TIMEZONE;
 
