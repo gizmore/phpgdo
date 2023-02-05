@@ -33,7 +33,7 @@ final class Process
 	 */
 	public static function osPath(string $path) : string
 	{
-		#PP#begin#
+		#PP#start#
 		if (self::isWindows())
 		{
 			return str_replace('/', '\\', $path);

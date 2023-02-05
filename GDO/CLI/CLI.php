@@ -236,7 +236,7 @@ final class CLI
 }
 
 # Required gdo constants
-#PP#begin#
+#PP#start#
 deff('GDO_DOMAIN', 'localhost');
 deff('GDO_MODULE', 'Core');
 deff('GDO_METHOD', 'Welcome');
