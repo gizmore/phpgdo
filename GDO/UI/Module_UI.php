@@ -41,7 +41,7 @@ final class Module_UI extends GDO_Module
 	{
 		return [
 			GDT_Checkbox::make('allow_editor_choice')->initial('1'),
-			GDT_MessageEditor::make('default_editor'),
+			GDT_MessageEditor::make('default_editor')->initial('HTML'),
 		];
 	}
 	
