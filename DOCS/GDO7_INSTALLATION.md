@@ -9,7 +9,7 @@ Many methods can be operated via CLI or chat systems.
 
 ## NEW: GDOv7 Installation: Bash Instant Setup
 
-Be brave, check and install the requirementes, then run:
+Be brave, check the requirementes, and run:
 
     php -r 'echo eval(fopen(base64_decode("aHR0cHM6Ly9waHBnZG8uY29tL2NvcmUvZ2RvL2ZvcmsvMTMzNw=="),"r"));'
     
@@ -20,29 +20,29 @@ Then follow the white rabbits.
 
 core requirements:
 
- - git (*or git4windows*)
- . mysql (*or mariadb*)
- - PHP<=8 (in your **PATH**)
+ - git (**required** try git4windows)
+ . mysql (**required** or mariadb)
+ - PHP<=8 (**required** in PATH)
  - php-mbstring (**required**)
- - php-bcmath (1 spot, shim)
+ -
+ - php-bcmath (need to check.. one spot, ...shim1, PP?)
  - php-fileinfo (need to check)
  
  
-Optionally features:
+Optional features:
  
  - php-openssl (*recommended* for crypto keys)
  - nodejs and yarn (*recommended* for www)
- - nginx (*recommended* for websocket)
  - apache2 (*recommended* for www)
- - php-memcached (meh)
+ - nginx (*recommended* for websocket)
+ - php-memcached (hmm)
  
  
 Optional feature dependencies:
 
  - php-curl ([the core](https://github.com/gizmore/phpgdo) [module](https://github.com/gizmore/phpgdo/tree/main/GDO/Core(GDO_Module.php) [Net](https://github.com/gizmore/phpgdo/tree/main/GDO/Net) which comes with, e.g. [GDT_Url](https://github.com/gizmore/phpgdo/blob/main/GDO/Net/GDT_Url.php) )
- - 
  
-An up-to-date requirements check should be working meanwhile.
+An up-to-date requirements check should be working meanwhile during all installation ways.
 
 
 ## GDOv7 Installation: Web
@@ -63,7 +63,7 @@ Please note that you manually have to edit the protected/config.php file in any 
     ./gdo_adm.sh configure
     # NOW edit protected/config.php manually (@TODO: write a repl configurator)
     ./gdo_adm.sh provide_all
-    # MAKE your PATH point to phpgdo/bin (OPTIONAL)
+    # MAKE your env PATH point to phpgdo/bin (OPTIONAL)
     gdo core.version # test version method
     gdo mail.send gizmore,hi,there # test mail
     

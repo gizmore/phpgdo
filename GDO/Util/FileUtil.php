@@ -36,6 +36,15 @@ final class FileUtil
     	return is_file($filename) && is_readable($filename);
 #    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
     }
+    
+    public static function createdDir(string $path, bool $throw=true) : ?string
+    {
+    	if (self::createDir($path, $throw))
+    	{
+    		return $path;
+    	}
+    	return null;
+    }
 
 	public static function createDir(string $path, bool $throw=true) : bool
 	{

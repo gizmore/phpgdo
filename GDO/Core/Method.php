@@ -13,6 +13,7 @@ use GDO\Form\GDT_Form;
 use GDO\Date\Time;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Page;
+use GDO\CLI\CLI;
 
 /**
  * Abstract baseclass for all methods.
@@ -493,6 +494,10 @@ abstract class Method #extends GDT
 // 				$gdt->inputs(null);
 // 			}
 			$this->unlock();
+			if (Application::$INSTANCE->isCLI())
+			{
+				CLI::flushTopResponse();
+			}
 		}
 	}
 	

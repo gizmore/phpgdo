@@ -28,7 +28,7 @@ use GDO\Form\GDT_AntiCSRF;
  * @see Cache
  * @see Module_Core
  */
-final class ClearCache extends MethodForm
+class ClearCache extends MethodForm
 {
 	use MethodAdmin;
 	

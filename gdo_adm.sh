@@ -1,5 +1,5 @@
 #!/bin/bash
-cd "$(dirname "$0")"
 set -euo pipefail
+cd "$(dirname "$0")"
 
 php gdo_adm.php "$@"

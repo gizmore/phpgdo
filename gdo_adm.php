@@ -1,41 +1,44 @@
 <?php
 use GDO\Admin\Method\Install;
+use GDO\CLI\CLI;
+use GDO\CLI\REPL;
 use GDO\Core\Application;
 use GDO\Core\Debug;
+use GDO\Core\GDO_Module;
+use GDO\Core\GDO_ModuleVar;
+use GDO\Core\GDT_Hook;
+use GDO\Core\GDT_Method;
 use GDO\Core\Logger;
 use GDO\Core\ModuleLoader;
 use GDO\Core\ModuleProviders;
+use GDO\Core\Website;
+use GDO\Crypto\BCrypt;
+use GDO\DB\Cache;
 use GDO\DB\Database;
+use GDO\Form\GDT_Form;
+use GDO\Install\Config;
+use GDO\Install\Installer;
+use GDO\Install\Module_Install;
+use GDO\Install\Method\Configure;
+use GDO\Install\Method\InstallCronjob;
+use GDO\Install\Method\Security;
+use GDO\Install\Method\SystemTest;
+use GDO\Install\Method\Webserver;
 use GDO\Language\Trans;
-use GDO\Core\GDO_ModuleVar;
+use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Success;
+use GDO\User\GDO_Permission;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_UserType;
-use GDO\DB\Cache;
-use GDO\Install\Installer;
-use GDO\Core\GDO_Module;
-use GDO\Install\Method\Security;
-use GDO\Core\GDT_Hook;
 use GDO\Util\FileUtil;
-use GDO\CLI\CLI;
-use GDO\Util\Strings;
-use GDO\Install\Module_Install;
-use GDO\Install\Method\InstallCronjob;
-use GDO\Install\Method\SystemTest;
-use GDO\Crypto\BCrypt;
-use GDO\UI\GDT_Error;
-use GDO\Core\GDT_Expression;
-use GDO\Form\GDT_Form;
-use GDO\Core\GDT_Method;
-use GDO\User\GDO_Permission;
-use GDO\Core\Website;
-use gizmore\pp\Preprocessor;
-use GDO\Install\Method\Webserver;
 use GDO\Util\PP;
+use GDO\Util\Strings;
+use GDO\Core\GDT;
+use GDO\Install\GDT_DocsFile;
 
 /**
- * The gdoadm.php executable manages modules and config via the CLI.
+ * The gdo_adm.php CLI application manages administrative tasks.
  * It shall not be accesible to normal users!
  *
  * @example ./gdo_adm.sh systemtest
@@ -74,6 +77,7 @@ function printUsage(int $code = -1): void
 	$exe = $argv[0];
 	echo "Usage:\n";
 	echo "\n--- Spawn ---\n";
+	echo "php $exe docs - Print install instructions from the DOCS folder https://github.com/gizmore/phpgdo/tree/main/DOCS\n";
 	echo "php $exe systemtest - To run the installer system test.\n";
 	echo "php $exe configure [<config.php>] - To generate a protected/config.php.\n";
 	echo "php $exe test [<config.php>] - To test your protected/config.php\n";
@@ -90,11 +94,12 @@ function printUsage(int $code = -1): void
 	echo "php $exe install_all - To install all modules inside the GDO/ folder and their dependencies\n";
 	echo "php $exe wipe <module> - To uninstall modules\n";
 	echo "php $exe wipe_all - To erase the whole database\n";
+	echo "\n--- Updates ---\n";
 	echo "php $exe update - Is automatically called after gdo_update.sh - it re-installs all installed modules.\n";
 	echo "php $exe confgrade - Upgrade your config.php with new config vars.\n";
 	echo "php $exe migrate <module> - To force-migrate gdo tables for an installed module. Handle with care.\n";
 	echo "php $exe migrate_all - To force-migrate all gdo tables for all installed modules. Handle with special care.\n";
-	echo "php $exe pp - To run the php-preprocessor on all files in production systems.\n";
+	echo "php $exe pp - To run the PP php-preprocessor on all files.\n";
 	echo "\n--- Module config ---\n";
 	echo "php $exe config <module> - To show the config variables for a module\n";
 	echo "php $exe config <module> <key> - To show the description for a module variable\n";
@@ -103,6 +108,8 @@ function printUsage(int $code = -1): void
 	echo "Tip: you can have a 'cli-only' protected/config_cli.php\n";
 	die($code);
 }
+
+chdir(__DIR__);
 
 if ($argc === 1)
 {
@@ -132,7 +139,7 @@ final class gdo_adm extends Application
 }
 
 $app = gdo_adm::init();
-$app->cli(true)->verb(GDT_Form::POST);
+$app->modeDetected(GDT::RENDER_CLI)->cli()->verb(GDT_Form::POST);
 
 # Load config defaults
 if ( !defined('GDO_CONFIGURED'))
@@ -168,7 +175,68 @@ $loader->loadModules($db, true);
 $loader->loadLangFiles(true);
 $loader->initModules();
 
-if ($argv[1] === 'systemtest')
+if ($argv[1] === 'docs')
+{
+	echo "Welcome to the GDOv7 interactive installer.\n";
+	$gdt = GDT_DocsFile::make('file');
+	$now = "first";
+	while (REPL::confirm("Do you want, here, to print a few lines of the phpgdo DOCS of https://github.com/gizmore/phpgdo?", false))
+	{
+		while (!$gdt->hasError())
+		{
+			if (REPL::changedGDTVar($gdt, "Which File $now? "))
+			{
+				echo file_get_contents($gdt->getDocsPath());
+				echo "\n";
+				$now = "now";
+			}
+			else
+			{
+				break 2;
+			}
+		}
+	}
+	REPL::confirmOrDie("The biggest requirements are mysql/mariadb, git[4window] and PHP>=8.0, OK?\n", false);
+	if (REPL::confirm("You can check the requirements with `./gdo_adm.sh systemtest`.", false))
+	{
+		system("php gdo_adm.php systemtest");
+		REPL::confirmOrDie("Was the system test OK?\n");
+	}
+	echo "You need a file named `protected/config.php`.\n";
+	if (REPL::confirm("Shall i run `php gdo_adm.php configure` for you?", true))
+	{
+		system("php gdo_adm.php configure -i");
+	}
+	REPL::abortable("Next we will run `php gdo_adm.php test`, Ok? ");
+	if ($code = system("php gdo_adm.php test"))
+	{
+		die("`php gdo_adm.php test` failed with exit code $code");
+	}
+	echo "Good, you can connect to your database.\n";
+	if (REPL::confirm("Do you want to install the core now? ", true))
+	{
+		echo "Ok, running `php gdo_adm.php install core` in a second...\n";
+		sleep(1);
+		echo "Hehe\n";
+		if ($code = system("php gdo_adm.php install core --post-install"))
+		{
+			die("`php gdo_adm.php install core` failed with exit code $code");
+		}
+	}
+	
+	$folder = GDO_PATH . 'bin/';
+	echo "You now can add $folder to your PATH environment variable.\n";
+	if (REPL::acknowledge("Do you want to see instructions?"))
+	{
+		echo "TODO\n";
+	}
+
+	
+	echo "See you around!\n";
+	die(0);
+}
+
+elseif ($argv[1] === 'systemtest')
 {
 	if ($argc !== 2)
 	{
@@ -180,17 +248,34 @@ if ($argv[1] === 'systemtest')
 
 elseif ($argv[1] === 'configure')
 {
-	# @TODO gdoadm.php: write a repl configurator.
 	if ($argc === 2)
 	{
-		$argc = 3;
+		$argc++;
 		$argv[2] = 'config.php'; # default config filename
 	}
-
-	$line = "install.configure --filename={$argv[2]},--save_config";
-	$expr = GDT_Expression::fromLine($line);
-	$response = $expr->execute();
-	echo $response->renderCLI();
+	
+	$inputs = [
+		'filename' => $argv[2],
+		'save_config' => '1',
+	];
+	
+	if (REPL::confirm(t('repl_adm_interactive'), false))
+	{
+		foreach (Config::fields() as $gdt)
+		{
+			if ($gdt->isWriteable())
+			{
+				REPL::changeGDT($gdt);
+				if (!$gdt->validated())
+				{
+					CLI::error('err_adm_iconfig', [$gdt->renderError()]);
+				}
+			}
+		}
+	}
+	
+	$response = Configure::make()->executeWithInputs($inputs, false);
+	echo $response->render();
 	if (Application::isSuccess())
 	{
 		Security::make()->protectFolders();
@@ -421,11 +506,11 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 	}, array_keys($deps2));
 	Installer::installModules($modules);
 	
-	if (GDO_PREPROCESSOR)
-	{
-		echo "Running php-preprocessor on all modules.\n";
-		PP::init()->processFolder(GDO_PATH);
-	}
+// 	if (GDO_PREPROCESSOR)
+// 	{
+// 		echo "Running php-preprocessor on all modules.\n";
+// 		PP::init()->processFolder(GDO_PATH);
+// 	}
 	
 	Cache::flush();
 	Cache::fileFlush();
@@ -450,7 +535,6 @@ elseif ($argv[1] === 'admin')
 	{
 		$user->saveSettingVar('Login', 'password', BCrypt::create($argv[3])->__toString());
 	}
-// 	$user->saveVar('user_password', BCrypt::create($argv[3])->__toString());
 	$user->saveVar('user_deleted', null);
 	$user->saveVar('user_deletor', null);
 	foreach (GDO_Permission::table()->all() as $perm)
@@ -797,6 +881,8 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 			{
 				system("php gdo_adm.php install {$argv[2]}");
 			}
+			system("php gdo_adm.php pp");
+			system("bash gdo_post_install.sh");
 		}
 	}
 }

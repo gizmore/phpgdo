@@ -44,7 +44,7 @@ class GDT_Font extends GDT_Select
 // 		return parent::renderCLI();
 // 	}
 	
-	public function getChoices()
+	public function getChoices(): array
 	{
 // 		static $choices;
 // 		if (!isset($choices))

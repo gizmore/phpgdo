@@ -57,7 +57,7 @@ final class GDT_Module extends GDT_ObjectSelect
 	# ##############
 	# ## Choices ###
 	# ##############
-	public function getChoices()
+	public function getChoices(): array
 	{
 		$choices = [];
 

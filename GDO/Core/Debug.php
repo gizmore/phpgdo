@@ -17,7 +17,7 @@ use GDO\Session\GDO_Session;
  * @example Debug::enableErrorHandler(); fatal_ooops();
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.1
  * @see Mail
  * @see Module_Perf
@@ -50,6 +50,7 @@ final class Debug
 	#############
 	/**
 	 * Trigger a breakpoint and gather global variables.
+	 * @deprecated unused
 	 */
 	public static function break() : bool
 	{
@@ -131,7 +132,6 @@ final class Debug
 	 * @param string $errfile			
 	 * @param int $errline			
 	 * @param mixed $errcontext
-	 * @return false
 	 */
 	public static function error_handler($errno, $errstr, $errfile, $errline, $errcontext=null)
 	{

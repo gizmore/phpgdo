@@ -15,7 +15,7 @@ use GDO\UI\MethodPage;
  * @version 7.0.2
  * @since 7.0.2
  */
-final class Fork extends MethodPage
+final class OnWindows extends MethodPage
 {
 	
 }

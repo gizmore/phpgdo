@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Language\tpl\cell;
+namespace GDO\Language\tpl;
 use GDO\Language\GDO_Language;
 use GDO\Language\Module_Language;
 use GDO\Language\Trans;

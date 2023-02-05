@@ -1,11 +1,11 @@
 # GDOv7: Work in progress
 
 Please note that this is heavily work in progress.
-The API might change a bit here and there,
-but it will be quite compatible to [gdo6](https://github.com/gizmore/gdo6).
-Some links might not exist yet and some dates are pre-dated to the future.
-The [changelog](GDO7_CHANGELOG.md) might be worth a read.
-Or maybe, if you are [combatible](GDO7_COMPATIBILITY.md), you might just want to...
+The API *might* change a bit here and there,
+but it will still be quite compatible to [gdo6](https://github.com/gizmore/gdo6).
+Some links here might not exist yet.
+The [changelog](GDO7_CHANGELOG.md) might be worth a read,
+or maybe, if you are [compatible](GDO7_COMPATIBILITY.md), you might just want to...
 
     git clone --recursive gizmore/phpgdo # clone the code
     cd phpgdo

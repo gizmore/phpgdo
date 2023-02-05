@@ -164,7 +164,7 @@ class Cache
 				}
 				break;
 			case 2:
-				self::fileFlush($key);
+				self::fileRemove($key);
 				break;
 		}
 	}
@@ -558,25 +558,26 @@ class Cache
 	}
 
 	/**
-	 * Flush the whole or part of the filecache.
+	 * Remove a file from filecache if it exists.
+	 */
+	public static function fileRemove(string $key = null): bool
+	{
+		$filename = self::filePath($key);
+		if (FileUtil::isFile($filename))
+		{
+			self::$CACHE_REMOVE++; #PP#delete#
+			return unlink($filename);
+		}
+		return true; 
+	}
+
+	/**
+	 * Remove the whole filecache.
 	 */
 	public static function fileFlush(string $key = null) : bool
 	{
-		if ($key === null)
-		{
-			self::$CACHE_FLUSH++; #PP#delete#
-			return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/') && FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
-		}
-		else
-		{
-			$filename = self::filePath($key);
-			if (FileUtil::isFile($filename))
-			{
-				self::$CACHE_REMOVE++; #PP#delete#
-				return unlink($filename);
-			}
-		}
-		return true; 
+		self::$CACHE_FLUSH++; #PP#delete#
+		return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/') && FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
 	}
 
 	/**

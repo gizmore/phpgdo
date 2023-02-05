@@ -128,5 +128,12 @@ cd www/phpgdo<br/>
 'bot_name' => 'Bot Name',
 'admin_mail' => 'Administrator Email',
 'error_mail' => 'Fehler Email',
-'msg_install_security' => 'Ihre gdo6 Installation ist nun als Webserver abgesichert.',
+'msg_install_security' => 'Ihre phpgdo Installation ist nun als Webserver abgesichert.',
+
+# 7.0.1 - gdo_adm.sh
+'msg_gdoadm_migrated_all' => 'Alle GDO Datenbanken wurden automatisch migriert.',
+
+# 7.0.2 - interactive config
+'repl_adm_interactive' => 'Möchten Sie interactive Unterstützung?',
+'err_adm_iconfig' => '%s ist fehlerhaft: "%s".',
 ];

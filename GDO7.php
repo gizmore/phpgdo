@@ -37,6 +37,7 @@ $GDT_LOADED = 0; #PP#delete#
 spl_autoload_register(function(string $name) : void
 {
 	#if (unpack('L', $name) ^ 0x48444F5C) # 1 line for an "if"
+	#include_magic($name, 0x48444F5C); # @TODO: branchless autoloader for magic long value.
 	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for an "if"
 	{   # 2 lines for path + include
 		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php';

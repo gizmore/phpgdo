@@ -35,7 +35,7 @@ final class GDT_Permission extends GDT_ObjectSelect
 	##############
 	### Select ###
 	##############
-	public function getChoices()
+	public function getChoices(): array
 	{
 		$choices = parent::getChoices();
 		if ($this->onlyPermitted)

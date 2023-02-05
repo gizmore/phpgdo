@@ -30,7 +30,7 @@ class GDT_ObjectSelect extends GDT_Select
 // 		return parent::multiple($multiple);
 // 	}
 	
-	public function getChoices()
+	public function getChoices(): array
 	{
 		return isset($this->table) ? $this->table->allCached() : GDT::EMPTY_ARRAY;
 	}

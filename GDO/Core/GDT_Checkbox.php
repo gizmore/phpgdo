@@ -32,7 +32,7 @@ class GDT_Checkbox extends GDT_Select
 		$this->caseS();
 	}
 	
-	public function getChoices()
+	public function getChoices(): array
 	{
 		$choices = [
 			'0' => t('enum_no'),

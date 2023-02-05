@@ -8,9 +8,10 @@ use GDO\Table\GDT_Filter;
  * An HTML select.
  * Can autocomplete input, like `./gdo.sh mail.send giz <.....>`.
  * Validates min/max selected.
+ * Fill choices in getChoices()
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  */
 class GDT_Select extends GDT_ComboBox
@@ -128,7 +129,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 	
-	public function getChoices()
+	public function getChoices(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}

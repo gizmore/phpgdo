@@ -349,6 +349,7 @@ final class ModuleProviders
 'PaymentPaypal' => ['Payment'],
 'PaypalDonations' => [],
 'Perf' => [],
+'PHPGDO' => [],
 'PM' => ['Account'],
 'PMA' => [],
 'Poll' => [],

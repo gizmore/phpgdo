@@ -6,6 +6,7 @@ use GDO\Form\MethodForm;
 use GDO\Form\GDT_Submit;
 use GDO\Install\Config;
 use GDO\Util\FileUtil;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\DB\Database;
 use GDO\Form\GDT_Hidden;
@@ -16,17 +17,17 @@ use GDO\Core\GDT_String;
  * Create a GDO config with this form.
  *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.2
  * @since 3.0.0
  */
 class Configure extends MethodForm
 {
 
-	public function isUserRequired() : bool
+	public function isUserRequired(): bool
 	{
 		return false;
 	}
-	
+
 	public function isEnabled(): bool
 	{
 		return true;
@@ -45,12 +46,12 @@ class Configure extends MethodForm
 		];
 	}
 
-	public function cfgConfigName()
+	public function cfgConfigName(): string
 	{
 		return $this->gdoParameterVar('filename');
 	}
 
-	public function configPath()
+	public function configPath(): string
 	{
 		return GDO_PATH . 'protected/' . $this->cfgConfigName();
 	}
@@ -66,17 +67,18 @@ class Configure extends MethodForm
 			'onSaveConfig'
 		]));
 		$enabled = FileUtil::isFile($this->configPath());
-		$form->actions()->addField(GDT_Submit::make('test_config')->enabled($enabled)
-			->onclick([
-			$this,
-			'onTestConfig'
-		]));
+		$form->actions()->addField(
+			GDT_Submit::make('test_config')->enabled($enabled)
+				->onclick([
+				$this,
+				'onTestConfig'
+			]));
 	}
 
 	# ############
 	# ## Write ###
 	# ############
-	public function onSaveConfig()
+	public function onSaveConfig(): GDT
 	{
 		$this->writeConfig($this->configPath());
 		return GDT_Redirect::make()->redirectTime(2)
@@ -86,20 +88,20 @@ class Configure extends MethodForm
 		], Config::hrefStep(3));
 	}
 
-	public function writeConfig(string $path)
+	public function writeConfig(string $path): bool
 	{
 		$form = $this->getForm();
 		$content = GDT_Template::php('Install', 'config.php', [
-			'form' => $form
+			'form' => $form,
 		]);
 		FileUtil::createDir(dirname($path));
-		file_put_contents($path, $content);
+		return ! !file_put_contents($path, $content);
 	}
 
 	# ###########
 	# ## Test ###
 	# ###########
-	public function onTestConfig()
+	public function onTestConfig(): GDT
 	{
 		if (GDO_DB_ENABLED)
 		{
@@ -116,7 +118,7 @@ class Configure extends MethodForm
 
 		$link = Config::linkStep(4);
 		return $this->message('install_config_boxinfo_success', [
-			$link
+			$link,
 		]);
 	}
 

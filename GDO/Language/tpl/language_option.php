@@ -1,5 +1,5 @@
 <?php
-namespace GDO\Language\tpl\choice;
+namespace GDO\Language\tpl;
 use GDO\Language\GDO_Language;
 /** @var $language GDO_Language **/
 if ($language)

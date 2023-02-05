@@ -9,36 +9,11 @@ use GDO\Core\GDT_Template;
  * Language table.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.1
  */
 final class GDO_Language extends GDO
 {
-// 	public static function iso() { return Trans::$ISO; }
-	
-// 	/**
-// 	 * Wrap a callback in a temporary changed ISO. Esthetics.
-// 	 * @param string $iso
-// 	 * @param callable $callback
-// 	 * @return mixed
-// 	 */
-// 	public static function withIso($iso, $callback)
-// 	{
-// 		$old = self::iso();
-// 	    try 
-// 	    {
-//     		Trans::setISO($iso);
-//     		return call_user_func($callback);
-// 	    }
-// 	    catch (\Throwable $t)
-// 	    {
-// 	        throw $t;
-// 	    }
-// 	    finally
-// 	    {
-//     		Trans::setISO($old);
-// 	    }
-// 	}
 
 	###########
 	### GDO ###
@@ -112,9 +87,19 @@ final class GDO_Language extends GDO
 		return Module_Language::instance()->cfgSupported();
 	}
 	
-// 	public static function getMainLanguage() : self
-// 	{
-// 		return self::findById(GDO_LANGUAGE);
-// 	}
+	/**
+	 * Get all language isos that are officially supported by phpgdo.
+	 * @return string[]
+	 */
+	public static function gdoSupported(): array
+	{
+		return ['en', 'de', 'it', 'fr'];
+	}
+	
+	public static function bestSupported(string $prefer, string $default=GDO_LANGUAGE): string
+	{
+		$all = self::gdoSupported();
+		return in_array($prefer, $all) ? $prefer : $default;
+	}
 	
 }

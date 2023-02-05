@@ -6,7 +6,7 @@ namespace GDO\Util;
  * 
  * @deprecated
  * @author gizmore
- * @version 6.11.0
+ * @version 7.0.2
  * @since 1.0.0
  */
 final class Common
@@ -31,56 +31,5 @@ final class Common
 	public static function getRequestFloat($var, $default=0.0) { return isset($_REQUEST[$var]) ? (float)$_REQUEST[$var] : $default; }
 	public static function getRequestString($var, $default=null) { return isset($_REQUEST[$var]) ? (string)$_REQUEST[$var] : $default; }
 	public static function getRequestArray($var, $default=[]) { return (isset($_REQUEST[$var]) && is_array($_REQUEST[$var])) ? $_REQUEST[$var] : $default; }
-	
-// 	public static function getForm($var, $default=null) { $vars = self::getRequestArray('form'); return isset($vars[$var]) ? $vars[$var] : $default; }
-// 	public static function getFormInt($var, $default=0) { return (int) self::getForm($var, $default); }
-// 	public static function getFormString($var, $default=null) { return (string)self::getForm($var, $default); }
-// 	public static function getFormFloat($var, $default=0) { return (int) self::getForm($var, $default); }
-// 	public static function getFormArray($var, $default=[]) { $f = self::getRequestArray('form', null); return is_array($f) ? $f : $default; }
-	
-	/**
-	 * Return the first match of capturing regex.
-	 * @TODO Move to another file?
-	 * @param string $pattern
-	 * @param string $s
-	 * @return string|false
-	 */
-	public static function regex($pattern, $s)
-	{
-	    $matches = null;
-	    if (preg_match($pattern, $s, $matches))
-	    {
-	    	if (isset($matches[1]))
-	    	{
-	    		return $matches[1];
-	    	}
-	    	return true;
-	    }
-	    return false;
-	}
-	
-	/**
-	 * Clamp a numeric value.
-	 * null as min or max disables a check.
-	 * $val should be an int or float.
-	 * No conversion is done when something is in range.
-	 * 
-	 * @param $val number
-	 * @param $min number
-	 * @param $max number
-	 * @return number
-	 */
-	public static function clamp($val, $min=null, $max=null)
-	{
-	    if ($min !== null && $val < $min)
-	    {
-	        return $min;
-	    }
-	    if ($max !== null && $val > $max)
-	    {
-	        return $max;
-	    }
-        return $val;
-	}
 	
 }

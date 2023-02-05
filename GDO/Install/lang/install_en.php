@@ -131,5 +131,8 @@ cd www/phpgdo<br/>
 	
 # 7.0.1 - gdo_adm.sh
 'msg_gdoadm_migrated_all' => 'All GDO database tables have been automatically migrated.',
-	
+
+# 7.0.2 - interactive config
+'repl_adm_interactive' => 'Do you want an interactive configuration assistant?',
+'err_adm_iconfig' => '%s has an error: "%s".',
 ];

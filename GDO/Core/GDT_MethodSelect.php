@@ -24,7 +24,7 @@ final class GDT_MethodSelect extends GDT_Select
 	###############
 	### Choices ###
 	###############
-	public function getChoices()
+	public function getChoices(): array
 	{
 		return [
 			'foo' => 'bar',

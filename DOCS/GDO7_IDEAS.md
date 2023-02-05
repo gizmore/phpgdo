@@ -150,3 +150,6 @@ Your playlists are ACL sharable.
  - [php-ytmd](https://github.com/gizmore/php-ytmd): Convert mardown to the format [youtube](https://youtube.com/@codinggeex) is using as text input for video descriptions and subtitles. Also add smiley support to [phpgdo-markdown](https://github.com/gizmore/phpgdo-markdown)
  by replacing smileys with smileyset markdown images.
  
+- new website, typo of the day. about funny typos.
+
+- new website, baras-one-liners, good short quotes.

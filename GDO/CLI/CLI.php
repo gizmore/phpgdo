@@ -14,12 +14,17 @@ use GDO\Session\GDO_Session;
  * CLI utility.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.10.2
  * @see Method
  */
 final class CLI
 {
+	public static function getLocale(): string
+	{
+		return getenv('LANG');
+	}
+	
     public static function isCLI() : bool
     {
     	return php_sapi_name() === 'cli';
@@ -178,7 +183,6 @@ final class CLI
         
         $methods = array_filter($methods, function(Method $method) {
         	return $method->isCLI();
-//         	return (!$method->isAjax()) && $method->isCLI();
         });
         
         $methods = array_map(function(Method $m) {
@@ -232,6 +236,8 @@ final class CLI
 }
 
 # Required gdo constants
-deff('GDO_DOMAIN', 'gdo7.localhost');
+#PP#begin#
+deff('GDO_DOMAIN', 'localhost');
 deff('GDO_MODULE', 'Core');
 deff('GDO_METHOD', 'Welcome');
+#PP#end#

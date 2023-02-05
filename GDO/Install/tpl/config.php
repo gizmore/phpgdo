@@ -6,27 +6,36 @@ use GDO\UI\GDT_Divider;
 use GDO\Form\GDT_Submit;
 use GDO\Util\Numeric;
 use GDO\Core\Module_Core;
+use GDO\Install\Config;
 /**
  * @var $form GDT_Form
  */
-echo '<';echo '?';echo "php\n";
+echo '<';echo '?';echo "php\n"; # it's a php script
 ?>
-################################
-### GDOv7 Configuration File ###
-################################
-# if (defined('GDO_CONFIGURED')) return; # double include (ok?)
+####################
+### GDOv7 Config ###
+####################
+# if (defined('GDO_CONFIGURED')) return; # double include (needed?)
 <?php
 $ep = ini_get('error_reporting');
 $ep = $ep ?? 'E_ALL';
 $de = ini_get('display_errors');
 $de = $de ?? 'On'; ?>
-error_reporting('<?=$ep?>'); # 
-ini_set('display_errors', '<?=$de?>'); # 
+error_reporting('<?=$ep?>'); # Should be not less than E_All & ~E_DEPRECATED & ~E_STRICT.
+ini_set('display_errors', '<?=$de?>'); # Should be enabled / does not matter because of \GDO\Core\Debug. 
 
 /**
  * Please work down each section carefully.
- * Common pitfall is that there are 2 domains to set: GDO_DOMAIN and GDO_SESS_DOMAIN.
- * phpGDOv<?=Module_Core::GDO_REVISION; ?>
+ *
+ * Common pitfalls:
+ *
+ * - The config rewrites itself upon gdo_update.sh!
+ * - 
+ * - There are 2 domain settings: GDO_DOMAIN and GDO_SESS_DOMAIN.
+ * - GDO_DB_ENABLED is easily overlooked.
+ * 
+ * (c)2021-2023 - gizmore@wechall.net
+ * re-created by GDOv<?=Module_Core::GDO_REVISION; ?> on <?=Time::displayDate()?>.
  **/
 <?php
 $created = Time::getDate(microtime(true));
@@ -36,13 +45,9 @@ foreach ($form->getAllFields() as $field) :
 
 if ($field instanceof GDT_Divider)
 {
-	echo "\n";
-	echo $field->renderCodeBlock();
+	echo "\n" . $field->renderCodeBlock();
 }
-elseif ($field instanceof GDT_Submit)
-{
-}
-else
+elseif (!($field instanceof GDT_Submit))
 {
     $name = $field->name;
     
@@ -79,6 +84,7 @@ else
 	$comment = $field->renderIconText();
 	$comment = $comment ? " # {$comment}" : '';
 	
-	printf("define('GDO_%s', %s);%s\n", strtoupper($name), $value, $comment);
+	printf("define('%s', %s);%s\n",
+		Config::getConstantName(), $value, $comment);
 }
 endforeach;

@@ -19,14 +19,13 @@ use GDO\UI\GDT_Error;
  * @var $argv string[]
  */
 # The GDOv7 CLI bootstrap.
-define('GDO_BIN_PATH', str_replace('\\', '/', __DIR__) . '/');
-require GDO_BIN_PATH . '../protected/config.php';
+require __DIR__ . '../protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
 	echo "GDOv7 is not installed here.\n";
 	die(1);
 }
-require GDO_BIN_PATH . '../GDO7.php';
+require __DIR__ . '../GDO7.php';
 
 class gdo extends Application
 {

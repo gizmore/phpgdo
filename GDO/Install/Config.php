@@ -1,25 +1,26 @@
 <?php
 namespace GDO\Install;
 
-use GDO\UI\GDT_Link;
-use GDO\UI\GDT_Divider;
-use GDO\Core\GDT_Enum;
-use GDO\Core\GDT_Select;
-use GDO\Form\GDT_Hidden;
-use GDO\Util\Strings;
-use GDO\Date\Time;
-use GDO\Core\GDT_Checkbox;
-use GDO\Util\Random;
-use GDO\Net\GDT_Port;
+use GDO\CLI\CLI;
 use GDO\Core\Application;
-use GDO\Core\GDT_String;
-use GDO\Core\GDT_Template;
-use GDO\Core\Logger;
-use GDO\Core\GDT_UInt;
-use GDO\Core\GDT_TinyInt;
-use GDO\Core\GDT_EnumNoI18n;
 use GDO\Core\GDO;
+use GDO\Core\GDT_Checkbox;
+use GDO\Core\GDT_Enum;
+use GDO\Core\GDT_EnumNoI18n;
 use GDO\Core\GDT_Path;
+use GDO\Core\GDT_Select;
+use GDO\Core\GDT_String;
+use GDO\Core\GDT_TinyInt;
+use GDO\Core\GDT_UInt;
+use GDO\Core\Logger;
+use GDO\Date\Time;
+use GDO\Form\GDT_Hidden;
+use GDO\Language\GDO_Language;
+use GDO\Net\GDT_Port;
+use GDO\UI\GDT_Divider;
+use GDO\UI\GDT_Link;
+use GDO\Util\Random;
+use GDO\Util\Strings;
 
 /**
  * Configuration helper during install wizard.
@@ -149,7 +150,6 @@ class Config
 	 */
 	public static function fields() : array
 	{
-		$themes = GDT_Template::themeNames();
 		return [
 			GDT_Hidden::make('configured')->var('1'),
 			
@@ -159,7 +159,7 @@ class Config
 			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro')->tooltipRaw('Environment can be dev, tes or pro.'),
 			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS)->tooltipRaw('Enable SEO style URLs. Requires url rewriting for your httpd.'),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
-			GDT_Enum::make('language')->enumValues('en','de','it','fr')->initialValue(GDO_LANGUAGE)->notNull()->tooltipRaw('Default Language setting.'),
+			GDT_EnumNoI18n::make('language')->enumValues(...GDO_Language::gdoSupported(CLI::getLocale()))->notNull()->tooltipRaw('Default Language setting. Should be \'en\''),
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
 			GDT_String::make('themes')->notNull()->initial(GDO_THEMES)->tooltipRaw('Comma separated themechain list. Tried from left to right. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
@@ -257,7 +257,7 @@ class Config
 		{
 			return 'nginx';
 		}
-		return 'other';
+		return 'none';
 	}
 	
 }

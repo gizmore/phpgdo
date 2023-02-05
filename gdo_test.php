@@ -19,6 +19,7 @@ use GDO\UI\TextStyle;
 use GDO\Core\ModuleProviders;
 use GDO\Core\Method\ClearCache;
 use GDO\Util\Arrays;
+use GDO\CLI\REPL;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -77,9 +78,8 @@ Database::init(null);
 echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) . ".\n";
 echo "Is this correct? (Y/n)";
 flush();
-$c = fread(STDIN, 1);
 
-if (($c !== 'y') && ($c !== 'Y') && ($c !== "\x0D") && ($c !== "\x0A"))
+if (!REPL::confirm('Is this correct?', true))
 {
 	echo "Abort!\n";
 	die(0);

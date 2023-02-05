@@ -18,7 +18,7 @@ class GDT_Enum extends GDT_Select
 		return $this;
 	}
 	
-	public function getChoices()
+	public function getChoices(): array
 	{
 		if (isset($this->enumValues))
 		{

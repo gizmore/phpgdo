@@ -20,16 +20,18 @@ value type is `int`.
 
 ---
 
-# GDOv7 Conventions: Magic Behaviour, Constants and Methods
+## GDOv7 Conventions, Magic behaviour, constants and methods
 
  - The **foldernames** */inc3p/*, */node_modules/*,
  */bower_components/* and */vendor/*;
  are the default third party library foldernames,
  and ignored at some occassions and processes.
+ 
+ - **Filepathes** distingush their type between file and folder by the last character. Directories end with a `/`.
 
 ---
 
-# GDOv7 Conventions: DB identifiers
+## GDOv7 Conventions: DB identifiers
 
 **Table names**, by default, equal their lowercased simple classnames.
 E.g. GDO_User has the table name gdo_user.
@@ -41,21 +43,36 @@ Or GDO_UserSetting gets 'uset_' for beeing user settings.
 
 ---
 
-# GDOv7 Conventions: CLI Syntax
+## GDOv7 Conventions: CLI Syntax
 
 phpdgo does not use [getopt]().
 
 Instead i wrote an own
-[ugly state machine]().
+[ugly state machine]()
+.
 
+Let's learn by a few examples...
 
-#### examples
+```
+gdo core.version # specify method with `module.method` as first parameter.
+
+gdo cli.echo "hello world" # The first and second parameter are separated by a space.
+
+gdo cli.echo hello,world # But from the second on, they are seperated by comma `,`.
+
+# To escape them, try this.
+
+gdo mail.send giz,hi there,this is  the third paramter,, the mail body. \
+You escape a comma by doubling it,, you know?
+```
 
 ---
 
-# GDOv7 Conventions: URLs
+## GDOv7 Conventions: SEO URLs
 
-SEO urls can be enabled in config.php.
-The convention is that variables with a leading dash (_) are not put into url.
-Array variables are also not put into the url.
-else all variables are appended to the url like /key/value/key/value.
+SEO urls can be enabled in config.php by setting `GDO_SEO_URLS` to true.
+
+The convention is that variables with a leading dash `_` and arrays are not put into the path.
+All other variables are appended to the url,
+like `/key/value/key/value`.
+

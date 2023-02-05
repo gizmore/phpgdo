@@ -20,7 +20,7 @@ final class GDT_MessageEditor extends GDT_Select
 		$this->notNull();
 	}
 	
-	public function getChoices()
+	public function getChoices(): array
 	{
 		$decoders = [];
 		foreach (array_keys(GDT_Message::$DECODERS) as $name)
