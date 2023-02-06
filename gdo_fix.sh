@@ -7,9 +7,9 @@
 # @since 6.0.1
 #
 set -euo pipefail
+cd "$(dirname "$0")"
 #
-gdopath="$(dirname $0)"
-cd $gdopath
+gdopath="$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
 #
