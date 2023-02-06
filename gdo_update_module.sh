@@ -9,9 +9,9 @@
 #
 #
 set -euo pipefail
+cd "$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
-cd $(realpath $1)
 # Update phpgdo module
 echo "$2"
 echo "Update module folder $1."
