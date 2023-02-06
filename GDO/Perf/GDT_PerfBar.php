@@ -153,3 +153,13 @@ final class GDT_PerfBar extends GDT_Panel
 	}
 
 }
+
+#PP#start#
+if (!function_exists('xdebug_get_function_count'))
+{
+	function xdebug_get_function_count()
+	{
+		return 0;
+	}
+}
+#PP#end#
