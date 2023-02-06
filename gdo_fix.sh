@@ -23,7 +23,7 @@ find ./GDO/ -maxdepth 2 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "
 #
 # Installation and upgrades
 #
-cd $gdopath
+cd "$(dirname "$0")"
 #
 echo "3) Rewriting config."
 php ./gdo_adm.php confgrade
