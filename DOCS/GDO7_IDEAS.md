@@ -153,3 +153,6 @@ Your playlists are ACL sharable.
 - new website, typo of the day. about funny typos.
 
 - new website, baras-one-liners, good short quotes.
+
+- php-markdown-preprocessor
+Convert and edit markdown files; extend with Smileys. Custom rules like [username_to_link], Transpile to asciicode, convert to YouTube video description format.

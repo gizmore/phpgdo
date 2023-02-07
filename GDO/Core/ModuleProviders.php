@@ -368,7 +368,7 @@ final class ModuleProviders
 'Statistics' => [],
 'Table' => [],
 'Tags' => [],
-'TBS' => ['Admin', 'Avatar', 'Captcha', 'Classic', 'Country', 'Contact', 'CSS', 'Favicon', 'FontAwesome', 'Forum', 'Javascript', 'JQueryAutocomplete', 'Login', 'Markdown', 'Mibbit', 'News', 'OnlineUsers', 'Perf', 'PM', 'Python', 'Recovery', 'Register', 'Statistics'],
+'TBS' => ['Admin', 'Avatar', 'Captcha', 'Classic', 'Country', 'Contact', 'Cronjob', 'CSS', 'Favicon', 'FontAwesome', 'Forum', 'Javascript', 'JQueryAutocomplete', 'Login', 'Markdown', 'Mibbit', 'News', 'OnlineUsers', 'Perf', 'PM', 'Python', 'Recovery', 'Register', 'Statistics'],
 'TCPDF' => [],
 'Tests' => [],
 'Todo' => [],

@@ -39,4 +39,4 @@ Trans::setISO('en');
 
 /** @var $argv string[] **/
 $force = in_array('--force', $argv, true);
-Cronjob::run($me && $force);
+Cronjob::run($me && $force); # '$me &&' removes a warning for unused $me
