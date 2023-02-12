@@ -2,6 +2,8 @@
 namespace GDO\CLI;
 
 use GDO\Core\GDT;
+use GDO\Core\Website;
+use GDO\UI\TextStyle;
 
 /**
  * Helper class for interactive CLI applications.
@@ -67,7 +69,7 @@ final class REPL
 	 */
 	public static function changeGDT(GDT $gdt, string $prompt=''): bool
 	{
-		$xmplvars = $gdt->gdoExampleVars();
+		$xmplvars = (string) $gdt->gdoExampleVars();
 		$prompt = $prompt ? "$prompt " : '';
 		if ($label = $gdt->renderLabel())
 		{
@@ -79,8 +81,9 @@ final class REPL
 			$prompt .= $tooltip;
 			$prompt .= ' ';
 		}
-		$prompt .= "({$xmplvars})";
+		$prompt .= self::xmplDefaults($gdt, $xmplvars);
 		echo $prompt;
+		echo "?: ";
 		$response = rtrim(readline(), "\r\n");
 		if ($response === '')
 		{
@@ -88,7 +91,35 @@ final class REPL
 		}
 		$response = $response === '' ? null : $response;
 		$gdt->var($response);
-		return $gdt->validate($gdt->getValue());
+		if ($gdt->validate($gdt->getValue()))
+		{
+			return true;
+		}
+		Website::error('GDOv7', 'err_adm_iconfig', [$gdt->getName(), $gdt->renderError()]);
+		return false;
+	}
+	
+	private static function xmplDefaults(GDT $gdt, string $xmplvars): string 
+	{
+		$back = '';
+		$xmplvars = str_replace('|', ',', $xmplvars);
+		$xmplvars2 = ",{$xmplvars},";
+		$initial = $gdt->getInitial();
+		if ( ($initial !== null) &&
+			 (strpos($xmplvars2, ",{$initial},") !== false) )
+		{
+			$back = str_replace(",{$initial},", sprintf(',%s,', TextStyle::bold($initial)), $xmplvars2);
+		}
+		elseif ($initial !== null)
+		{
+			$initial = TextStyle::bold($initial);
+			$back = ",{$xmplvars},$initial,";
+		}
+		else
+		{
+			$back = $xmplvars;
+		}
+		return trim($back, ",");
 	}
 	
 	/**

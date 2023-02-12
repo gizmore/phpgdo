@@ -548,4 +548,15 @@ class GDT_Select extends GDT_ComboBox
 		return $back;
 	}
 	
+	public function gdoExampleVars(): ?string
+	{
+		$back = [];
+		$choices = $this->initChoices();
+		foreach ($choices as $var => $choice)
+		{
+			$back[] = $var;
+		}
+		return implode('|', $back);
+	}
+		
 }

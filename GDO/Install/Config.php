@@ -158,7 +158,12 @@ class Config
 	 */
 	public static function fields() : array
 	{
-		return [
+		static $fields = [];
+		if (count($fields))
+		{
+			return $fields;
+		}
+		$fields = [
 			GDT_Hidden::make('configured')->var('1'),
 			
 			# Site
@@ -181,7 +186,7 @@ class Config
 			GDT_Divider::make()->label('install_config_section_http'),
 			GDT_Enum::make('server')->notNull()->enumValues('none', 'apache2.2', 'apache2.4', 'nginx', 'other')->initialValue(GDO_SERVER)->tooltipRaw('webserver software; apache2.2, apache2.4, nginx, none.'),
 			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN)->tooltipRaw('Website domain. Should match cookie domain.'),
-			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT)->tooltipRaw('Website root folder. Usually "/" or "/phpgdo/".'),
+			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT)->tooltipRaw('Website root folder. Usually "/" or "/phpgdo/".')->pattern('/^(\\/[^\\/]*)+$/'),
 			GDT_Port::make('port')->notNull()->initialValue(GDO_PORT)->tooltipRaw('Default port for generating links.'),
 			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL)->tooltipRaw('Website preferred protocol. Either http or https.'),
 			GDT_Checkbox::make('force_ssl')->initial('0')->tooltipRaw('Allow only HTTPS?'),
@@ -240,6 +245,8 @@ class Config
 			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail')->tooltipRaw('Error Mail recipients. separate by comma.'),
 			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL)->tooltipRaw('Enable Print to Screen debugging?'),
 		];
+		
+		return $fields;
 	}
 	
 	private static function detectServerSoftware() : string

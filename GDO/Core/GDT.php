@@ -397,8 +397,8 @@ abstract class GDT
 	
 	public function validated(bool $throw=false) : ?self
 	{
-// 		$var = $this->getVar();
-		$value = $this->getValue();
+		$var = $this->getVar();
+		$value = $this->toValue($var);
 		if ($this->validate($value))
 		{
 			$this->onValidated();

@@ -156,3 +156,10 @@ Your playlists are ACL sharable.
 
 - php-markdown-preprocessor
 Convert and edit markdown files; extend with Smileys. Custom rules like [username_to_link], Transpile to asciicode, convert to YouTube video description format.
+
+ - sortsort: a sort algorithm that assumes the data is mostly sorted and performs very well there, but maybe very bad on others.
+ 
+ - ask.gizmore.org - live recordings where we solve a problem.
+ 
+ - Session config: max num simultan. connections.
+ 

@@ -184,6 +184,7 @@ if ($argv[1] === 'docs')
 	{
 		while (!$gdt->hasError())
 		{
+			$gdt->reset(true);
 			if (REPL::changedGDTVar($gdt, "Which File $now? "))
 			{
 				echo file_get_contents($gdt->getDocsPath());
@@ -261,14 +262,23 @@ elseif ($argv[1] === 'configure')
 	
 	if (REPL::confirm(t('repl_adm_interactive'), false))
 	{
-		foreach (Config::fields() as $gdt)
+		$n = 0;
+		$fields = Config::fields();
+		$count = count($fields);
+		while ($n < $count)
 		{
-			if ($gdt->isWriteable())
+			$gdt = $fields[$n];
+			$gdt->reset(true);
+			if (!$gdt->isWriteable())
+			{
+				$n++;
+			}
+			else
 			{
 				REPL::changeGDT($gdt);
-				if (!$gdt->validated())
+				if (!$gdt->hasError())
 				{
-					CLI::error('err_adm_iconfig', [$gdt->renderError()]);
+					$n++;
 				}
 			}
 		}

@@ -335,7 +335,7 @@ class GDO_Module extends GDO
 	{
 		if (GDO_DB_ENABLED)
 		{
-			return ! !$this->gdoVar('module_enabled');
+			return $this->gdoValue('module_enabled');
 		}
 		return true;
 	}

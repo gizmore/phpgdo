@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core;
 
+use GDO\CLI\CLI;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Success;
@@ -166,6 +167,10 @@ final class Website
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($error);
+		if (Application::$INSTANCE->isCLI())
+		{
+			CLI::flushTopResponse();
+		}
 		return GDT_Response::make()->code($code);
 	}
 	

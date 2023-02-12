@@ -19,7 +19,7 @@ final class GDT_DocsFile extends GDT_Select
 	{
 		if (!self::$DOCS)
 		{
-			Filewalker::traverse(GDO_PATH . 'DOCS/', "/^_GDO7_/", [$this, '_buildEnum']);
+			Filewalker::traverse(GDO_PATH . 'DOCS/', "/^GDO7_/", [$this, '_buildEnum']);
 		}
 		return self::$DOCS;
 	}
@@ -29,7 +29,7 @@ final class GDT_DocsFile extends GDT_Select
 	 */
 	public function _buildEnum(string $entry, string $fullpath): void
 	{
-		$key = substr($entry, 5, -3);
+		$key = substr($entry, 0, -3);
 		self::$DOCS[$key] = $fullpath;
 	}
 	

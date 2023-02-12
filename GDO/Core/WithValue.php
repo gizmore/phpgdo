@@ -62,6 +62,12 @@ trait WithValue
 		{
 			unset($this->inputs);
 		}
+		if ($this->hasError())
+		{
+			unset($this->errorRaw);
+			unset($this->errorKey);
+			unset($this->errorArgs);
+		}
 		return $this->var($this->initial);
 	}
 	
