@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
 use GDO\Core\Module_Core;
 use GDO\Date\Time;
@@ -38,6 +39,13 @@ final class Fileserver extends Method
 		$url = ltrim($url, '/');
 		
 		# Deny by asset rule?
+		GDT_Hook::callHook('BeforeServeAsset', $url);
+		
+		if (Application::isError())
+		{
+			return NotAllowed::make()->executeWithInputs($this->inputs);
+		}
+		
 		if (!Module_Core::instance()->checkAssetAllowed($url))
 		{
 			return NotAllowed::make()->executeWithInputs($this->inputs);
@@ -48,6 +56,11 @@ final class Fileserver extends Method
 			return NotAllowed::make()->executeWithInputs($this->inputs);
 		}
 
+// 		if (Application::isError())
+// 		{
+// 			return NotAllowed::make()->executeWithInputs($this->inputs);
+// 		}
+		
 		# Deny PHP source
 		$type = FileUtil::mimetype($url);
 		if ($type === 'text/x-php')
@@ -96,7 +109,6 @@ final class Fileserver extends Method
 	 */
 	public function checkDotfileAllowed(string $url) : bool
 	{
-		return true;
 		if (Module_Core::instance()->cfgDotfiles())
 		{
 			# All allowed by config

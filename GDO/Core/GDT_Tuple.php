@@ -39,4 +39,12 @@ class GDT_Tuple extends GDT
 		return $this;
 	}
 	
+	public function hasError(): bool
+	{
+		$error = $this->withFields(function(GDT $gdt) {
+			return $gdt->hasError();
+		}, true);
+		return $error || parent::hasError();
+	}
+	
 }

@@ -280,6 +280,7 @@ final class ModuleProviders
 'Currency' => ['Cronjob'],
 'Date' => [],
 'DBMS' => [],
+'Diary' => ['Admin', 'Birthday', 'Classic', 'Contact', 'Login', 'News'],
 'Dog' => ['Cronjob'],
 'DogAuth' => ['Dog'],
 'DogBlackjack' => [],

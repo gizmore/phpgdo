@@ -191,6 +191,21 @@ class GDT_Method extends GDT
 		return $this->result->render();
 	}
 	
+// 	public function renderHTML(): string
+// 	{
+// 		if (!isset($this->result))
+// 		{
+// 			$this->execute(false);
+// 		}
+// 		return $this->result->renderHTML();
+// 	}
+// 		if (!isset($this->result))
+// 		{
+// 			$this->execute(false);
+// 		}
+// 		return $this->result->render();
+// 	}
+	
 	public function addInput(?string $key, $var) : self
 	{
 		if (!isset($this->inputs))

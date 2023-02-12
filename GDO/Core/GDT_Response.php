@@ -55,7 +55,8 @@ final class GDT_Response extends GDT_Tuple
 	
 	public function hasError() : bool
 	{
-		return Application::isError();
+		return Application::isError() ||
+			parent::hasError();
 	}
 	
 }
