@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 echo "Running the gdo_fix.sh because argh. This will take a while"
-bash gdo_fix.sh
+#bash gdo_fix.sh
 
 # THREADS: number of parallel executing  processes
 # default: THREADS=15
