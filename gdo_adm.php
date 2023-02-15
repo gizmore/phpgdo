@@ -133,11 +133,22 @@ final class gdo_adm extends Application
 
 	public function parseOptions(): void
 	{
+		global $argv, $argc;
 		$i = 0;
-		$o = getopt('aqs', ['all::', 'quiet::', 'ssh::'], $i);
+		$old = $argv;
+// 		$argv = array_slice($argv, 2);
+// 		array_unshift($argv, $old[0]);
+		$argc = count($argv);
+		$o = getopt('qs', ['quiet', 'ssh'], $i);
+		$argv = $old;
+		$argc = count($argv);
 		if (isset($o['q'])||isset($o['quiet']))
 		{
 			$this->quiet();
+		}
+		if (isset($o['s'])||isset($o['ssh']))
+		{
+			$this->ssh();
 		}
 	}
 	
@@ -149,17 +160,6 @@ final class gdo_adm extends Application
 	###############
 	### Options ###
 	###############
-	/**
-	 * @deprecated
-	 * @var boolean
-	 */
-	public bool $all = false;
-	public function all(bool $all=true): self
-	{
-		$this->all = $all;
-		return $this;
-	}
-	
 	public bool $quiet = false;
 	public function quiet(bool $quiet=true): self
 	{
@@ -760,9 +760,9 @@ elseif ( ($command === 'config') || ($command === 'conf') )
 
 elseif (($command === 'provide') || ($command === 'provide_all'))
 {
-	if (($argc !== 3) && ($argc !== 2))
+	if ($argc < 3)
 	{
-		if (($argc !== 2) || ($command !== 'provide_all'))
+		if (($argc < 2) || ($command !== 'provide_all'))
 		{
 			printUsage( -1);
 		}
@@ -964,17 +964,17 @@ elseif ($command === 'secure')
 
 elseif ($command === 'update')
 {
-	$modules = ModuleLoader::instance()->getEnabledModules();
+	system("php gdo_adm.php --quiet provide_all");
+	$loader->loadModules(true, true, true);
+	$modules = ModuleLoader::instance()->getModules();
 	foreach ($modules as $module)
 	{
 		Installer::installModule($module);
 	}
-	
 	if (GDO_PREPROCESSOR)
 	{
 		system('php gdo_adm.php pp');
 	}
-	
 	echo "Update finished.\n";
 }
 
@@ -982,8 +982,7 @@ elseif ($command === 'pp')
 {
 	echo "Running php-preprocessor on all modules.\n";
 	$pp = PP::init();
-	$pp->input(GDO_PATH)->verbose()->
-		recurse()->replace();
+	$pp->input(GDO_PATH)->recurse()->replace();
 	if ($pp->execute())
 	{
 		echo "Completed.\n";
