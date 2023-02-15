@@ -1,7 +1,6 @@
 <?php
 namespace GDO\DB;
 
-use mysqli;
 use GDO\Core\GDO;
 use GDO\Core\Logger;
 use GDO\Core\GDT;
@@ -40,7 +39,7 @@ class Database
 	private $link; # any dbms provider link. remove?
 	private int $port = 3306;
 	private string $host, $user, $pass;
-	private string $usedb, $db; # used and configured db.
+	private ?string $usedb, $db; # used and configured db.
 
 	# Debug
 	private int $debug = 0; # Set to 0/off, 1/on, 2/backtraces
@@ -92,7 +91,7 @@ class Database
 		}
 	}
 	
-	public function db(string $db)
+	public function db(string $db): self
 	{
 		$this->db = $db;
 		return $this;
@@ -112,12 +111,15 @@ class Database
 		}
 	}
 	
-	public function getLink() : mysqli
+	public function getLink()
 	{
-		$this->link = isset($this->link) ? $this->link : $this->openLink();
-		if ( (!isset($this->usedb)) && (isset($this->db)) )
+		if (!isset($this->link))
 		{
-			$this->useDatabase($this->db);
+			$this->link = $this->openLink();
+			if ( (!isset($this->usedb)) && (isset($this->db)) )
+			{
+				$this->useDatabase($this->db);
+			}
 		}
 		return $this->link;
 	}
@@ -149,7 +151,7 @@ class Database
 	public function connect()
 	{
 		self::$DBMS = Module_DBMS::instance();
-		return self::$DBMS->dbmsOpen($this->host, $this->user, $this->pass, $this->usedb, $this->port);
+		return self::$DBMS->dbmsOpen($this->host, $this->user, $this->pass, null, $this->port);
 	}
 	
 	#############
@@ -184,6 +186,8 @@ class Database
 	private function queryB(string $query, bool $buffered=true)
 	{
 		$t1 = microtime(true); #PP#delete#
+		
+		$this->getLink();
 		
 		$result = self::$DBMS->dbmsQuery($query, $buffered);
 		
@@ -367,7 +371,7 @@ class Database
 	public function useDatabase(string $databaseName): void
 	{
 		$this->usedb = $databaseName;
-		self::$DBMS->dbmsUse($databaseName);
+		self::$DBMS->dbmsUseDB($databaseName);
 	}
 	
 	###################
@@ -420,6 +424,7 @@ class Database
 	###############
 	public function enableForeignKeyCheck(bool $bool = true): void
 	{
+		$this->getLink();
 		Database::$DBMS->dbmsForeignKeys($bool);
 	}
 

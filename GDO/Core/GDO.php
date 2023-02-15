@@ -75,18 +75,20 @@ abstract class GDO extends GDT
 		$this->afterLoaded(); #PP#delete#
 	}
 	
-	#PP#start#
+	#############
+	#PP#start####
+	#############
+	### DEBUG ###
+	#############
 	public function __wakeup()
 	{
 		$this->recache = false;
 		$this->afterLoaded();
 	}
-	
 	public function __destruct()
 	{
 		self::$GDO_KILLS++;
 	}
-	
 	private function afterLoaded() : void
 	{
 		self::$GDO_COUNT++;
@@ -100,7 +102,6 @@ abstract class GDO extends GDT
 			$this->logDebug();
 		}
 	}
-	
 	private function logDebug() : void
 	{
 		Logger::log('gdo', sprintf('%d: %s', self::$GDO_COUNT, self::gdoClassNameS()));
@@ -109,8 +110,8 @@ abstract class GDO extends GDT
 			Logger::log('gdo', Debug::backtrace('Backtrace', false));
 		}
 	}
-	#PP#end#
-	
+	#########
+	#PP#end##
 	################
 	### Abstract ###
 	################

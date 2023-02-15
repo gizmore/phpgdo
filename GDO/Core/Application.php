@@ -275,15 +275,12 @@ class Application extends GDT
 	 */
 	public function handleJSONRequests() : void
 	{
-		if (isset($_SERVER['CONTENT_TYPE']))
+		if ($_SERVER["CONTENT_TYPE"] === 'application/json')
 		{
-			if ($_SERVER["CONTENT_TYPE"] === 'application/json')
+			$data = file_get_contents('php://input');
+			if ($data = json_decode($data, true))
 			{
-				$data = file_get_contents('php://input');
-				if ($data = json_decode($data, true))
-				{
-					$_REQUEST = array_merge($_REQUEST, $data);
-				}
+				$_REQUEST = array_merge($_REQUEST, $data);
 			}
 		}
 	}

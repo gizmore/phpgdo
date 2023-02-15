@@ -52,7 +52,6 @@ return [
 'install_config_section_cache' => 'Cache',
 'install_config_section_cookies' => 'Cookies',
 'install_config_section_email' => 'Email',
-'err_db_connect' => 'Die Verbindung zur Datenbank ist fehlgeschlagen.',
 'install_config_boxinfo_success' => 'Dieses System sieht gut aus. Sie können hier fortfahren: %s',
 'save_config' => 'Speichern',
 'test_config' => 'Testen',

@@ -112,7 +112,7 @@ class Configure extends MethodForm
 			}
 			catch (\Throwable $ex)
 			{
-				return $this->error('err_db_connect')->addField($this->renderPage());
+				return $this->error('err_db_connect', [$ex->getMessage()])->addField($this->renderPage());
 			}
 		}
 

@@ -161,6 +161,7 @@ final class CLI
         $_SERVER['SCRIPT_NAME'] = '/index.php';
         $_SERVER['SERVER_SOFTWARE']	= 'Apache/2.4.41 (Win64) PHP/7.4.0';
         $_SERVER['HTTPS'] = 'off';
+        $_SERVER['CONTENT_TYPE'] = 'application/gdo';
         $_SERVER['PHP_SELF'] = '/index.php';
         $_SERVER['REQUEST_URI'] = '/index.php';
         $_SERVER['QUERY_STRING'] = '_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;

@@ -72,9 +72,6 @@ if ($app->hasSession())
 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 	$session = GDO_Session::instance();
 }
-// if ($app->hasSession())
-// {
-// }
 $loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 $user = GDO_User::current();
 Logger::init($user->getName(), GDO_ERROR_LEVEL);

@@ -51,7 +51,6 @@ return [
 'install_config_section_cache' => 'Cache',
 'install_config_section_cookies' => 'Cookies',
 'install_config_section_email' => 'Mail',
-'err_db_connect' => 'The connection to the database server failed. Note that only mysql/maria is supported.',
 'install_config_boxinfo_success' => 'Your system looks solid. You can continue with %s',
 'save_config' => 'Save',
 'test_config' => 'Test',

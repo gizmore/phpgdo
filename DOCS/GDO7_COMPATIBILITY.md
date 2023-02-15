@@ -10,14 +10,14 @@ Proudly i can state that the GDOv7 core
 is now completely free from any third party library,
 except of a few required php core libraries.
 
- - MariaDB/MySQL (**required**) 
- - php_bcrypt (**required**)
- - php_mb_string (**required**)
  - PHP >= 8.0 (**required**)
- - php_mysqli (**required**) (yes, also a db is required atm)
- - yarn (recommended)
- - composer (*optional*)
- - npm (*optional*)
+ - git (**required**) (or git4windows)
+ - php_mb_string (**required**)
+ - A DBMS (MariaDB/MySQL or SQLite) (**required**) 
+ - *Packages*
+ - yarn (recommended) (for assets)
+ - composer (*optional*) (for unit tests)
+ - *OPTIONAL*
  - php_curl (*optional*)
  - php_memcached (*optional*)
  - php_openssl (*optional*)
