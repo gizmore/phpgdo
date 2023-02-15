@@ -89,6 +89,7 @@ function printUsage(int $code = -1): void
 	echo "\n--- Modules ---\n";
 	echo "php $exe modules [<module>] - To show a list of modules or show module details\n";
 	echo "php $exe provide <module> - To download all modules that are required to provide a module\n";
+	echo "php $exe provide_me - To download the current installed module dependencies for updates.\n";
 	echo "php $exe provide_all - To download and install all available modules. This for devs who work on global module stuff and unit testing\n";
 	echo "php $exe install <module> - To install a module and it's dependencies\n";
 	echo "php $exe install_all - To install all modules inside the GDO/ folder and their dependencies\n";
@@ -763,22 +764,23 @@ elseif ( ($command === 'config') || ($command === 'conf') )
 	}
 }
 
-elseif (($command === 'provide') || ($command === 'provide_all'))
+elseif (($command === 'provide') || ($command === 'provide_me') || ($command === 'provide_all'))
 {
 	if ($argc < 3)
 	{
-		if (($argc < 2) || ($command !== 'provide_all'))
+		if (($argc < 2) && ($command === 'provide'))
 		{
 			printUsage( -1);
 		}
 	}
 
-	$isall = strpos($command, '_all') !== false;
+	$isme = $command === 'provide_me';
+	$isall = $command === 'provide_all';
 	$isssh = $app->ssh;
 
 	$loader = ModuleLoader::instance();
 
-	$loader->loadModules(false, true, true);
+	$loader->loadModules($isme, !$isme, true);
 
 	# Get all dependencies
 	$cd = 0;
@@ -793,6 +795,13 @@ elseif (($command === 'provide') || ($command === 'provide_all'))
 			{
 				$deps[] = $name;
 			}
+		}
+	}
+	elseif ($isme)
+	{
+		foreach ($loader->getModules() as $module)
+		{
+			$deps[] = $module->getModuleName();
 		}
 	}
 	else # Single
@@ -969,7 +978,7 @@ elseif ($command === 'secure')
 
 elseif ($command === 'update')
 {
-	system("php gdo_adm.php --quiet provide_all");
+	system("php gdo_adm.php --quiet provide_me");
 	$loader->loadModules(true, true, true);
 	$modules = ModuleLoader::instance()->getModules();
 	foreach ($modules as $module)
