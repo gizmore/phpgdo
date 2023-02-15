@@ -140,7 +140,7 @@ final class gdo_adm extends Application
 		global $argv, $argc;
 		
 		$i = 0;
-		$o = getopt('qs', ['quiet', 'ssh'], $i);
+		$o = getopt('qsv', ['quiet', 'ssh', 'verbose'], $i);
 
 		if (isset($o['q'])||isset($o['quiet']))
 		{
@@ -150,6 +150,11 @@ final class gdo_adm extends Application
 		if (isset($o['s'])||isset($o['ssh']))
 		{
 			$this->ssh();
+		}
+		
+		if (isset($o['v'])||isset($o['verbose']))
+		{
+			$this->verbose();
 		}
 		
 		# Fix argc/argv
@@ -179,6 +184,13 @@ final class gdo_adm extends Application
 	public function ssh(bool $ssh=true): self
 	{
 		$this->ssh = $ssh;
+		return $this;
+	}
+	
+	public bool $verbose = false;
+	public function verbose(bool $verbose=true): self
+	{
+		$this->verbose = $verbose;
 		return $this;
 	}
 	
@@ -902,7 +914,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 			}
 			echo "You should now have all dependencies cloned in your GDO/ folder.\n";
 			
-			if ($isall)
+			if ($isall || $isme)
 			{
 				echo "You can now:\n./gdoadm.sh install_all\n";
 			}
@@ -915,7 +927,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 			if (($r[0] === 'y') || ($r[0] === 'Y'))
 			{
 				
-				if ($isall)
+				if ($isall || $isme)
 				{
 					system("php gdo_adm.php install_all");
 				}
@@ -928,7 +940,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 	}
 	else
 	{
-		if ($isall)
+		if ($isall || $isme)
 		{
 			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install_all\n";
 		}
@@ -940,7 +952,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 		$r = $r ? $r : 'y';
 		if (($r[0] === 'y') || ($r[0] === 'Y'))
 		{
-			if ($isall)
+			if ($isall || $isme)
 			{
 				system("php gdo_adm.php install_all");
 			}
@@ -951,6 +963,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 
 			if (GDO_PREPROCESSOR)
 			{
+				echo "Running PP php-preprocessor on GDOv7 files.";
 				system("php gdo_adm.php pp");
 			}
 			
