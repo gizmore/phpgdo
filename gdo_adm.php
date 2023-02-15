@@ -227,6 +227,9 @@ switch ($command)
 	case 'configure':
 	case 'systemtest':
 	case 'wipe_all':
+	case 'provide':
+	case 'provide_me':
+	case 'provide_all':
 		$db = false;
 		break;
 }
