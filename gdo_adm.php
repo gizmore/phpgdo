@@ -131,11 +131,49 @@ else # try :]
 final class gdo_adm extends Application
 {
 
+	public function parseOptions(): void
+	{
+		$i = 0;
+		$o = getopt('aqs', ['all::', 'quiet::', 'ssh::'], $i);
+		if (isset($o['q'])||isset($o['quiet']))
+		{
+			$this->quiet();
+		}
+	}
+	
 	public function isInstall(): bool
 	{
 		return true;
 	}
-
+	
+	###############
+	### Options ###
+	###############
+	/**
+	 * @deprecated
+	 * @var boolean
+	 */
+	public bool $all = false;
+	public function all(bool $all=true): self
+	{
+		$this->all = $all;
+		return $this;
+	}
+	
+	public bool $quiet = false;
+	public function quiet(bool $quiet=true): self
+	{
+		$this->quiet = $quiet;
+		return $this;
+	}
+	
+	public bool $ssh = false;
+	public function ssh(bool $ssh=true): self
+	{
+		$this->ssh = $ssh;
+		return $this;
+	}
+	
 }
 
 $app = gdo_adm::init();
@@ -161,8 +199,10 @@ $loader = ModuleLoader::instance();
 
 define('GDO_CORE_STABLE', true);
 
+$command = $argv[1];
+
 $db = !!GDO_DB_ENABLED;
-switch ($argv[1])
+switch ($command)
 {
 	case 'configure':
 	case 'systemtest':
@@ -175,7 +215,10 @@ $loader->loadModules($db, true);
 $loader->loadLangFiles(true);
 $loader->initModules();
 
-if ($argv[1] === 'docs')
+# Run!
+$app->parseOptions();
+
+if ($command === 'docs')
 {
 	echo "Welcome to the GDOv7 interactive installer.\n";
 	$gdt = GDT_DocsFile::make('file');
@@ -237,7 +280,7 @@ if ($argv[1] === 'docs')
 	die(0);
 }
 
-elseif ($argv[1] === 'systemtest')
+elseif ($command === 'systemtest')
 {
 	if ($argc !== 2)
 	{
@@ -247,7 +290,7 @@ elseif ($argv[1] === 'systemtest')
 	echo PHP_EOL;
 }
 
-elseif ($argv[1] === 'configure')
+elseif ($command === 'configure')
 {
 	if ($argc === 2)
 	{
@@ -294,7 +337,7 @@ elseif ($argv[1] === 'configure')
 	}
 }
 
-elseif ($argv[1] === 'test')
+elseif ($command === 'test')
 {
 	if (GDO_DB_ENABLED)
 	{
@@ -313,7 +356,7 @@ elseif ($argv[1] === 'test')
 	echo "Any Session provider has just to be cloned as a folder named GDO/Session/, voila.\n";
 }
 
-elseif ($argv[1] === 'modules')
+elseif ($command === 'modules')
 {
 	if ($argc == 2)
 	{
@@ -379,7 +422,7 @@ elseif ($argv[1] === 'modules')
 	}
 }
 
-elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
+elseif (($command === 'install') || ($command === 'install_all'))
 {
 	if ( !GDO_DB_ENABLED)
 	{
@@ -389,7 +432,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 
 	$deps = [];
 
-	if ($argv[1] === 'install')
+	if ($command === 'install')
 	{
 		$mode = 1;
 		if ($argc !== 3)
@@ -397,7 +440,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 			printUsage();
 		}
 	}
-	elseif ($argv[1] === 'install_all')
+	elseif ($command === 'install_all')
 	{
 		$mode = 2;
 		if ($argc !== 2)
@@ -527,7 +570,7 @@ elseif (($argv[1] === 'install') || ($argv[1] === 'install_all'))
 	echo "Done.\n";
 }
 
-elseif ($argv[1] === 'admin')
+elseif ($command === 'admin')
 {
 	if ($argc !== 4)
 	{
@@ -557,7 +600,7 @@ elseif ($argv[1] === 'admin')
 	]) . "\n";
 }
 
-elseif ($argv[1] === 'wipe_all')
+elseif ($command === 'wipe_all')
 {
 	if ($argc !== 2)
 	{
@@ -568,7 +611,7 @@ elseif ($argv[1] === 'wipe_all')
 	printf("The database has been killed completely and created empty.\n");
 }
 
-elseif ($argv[1] === 'wipe')
+elseif ($command === 'wipe')
 {
 	if ($argc !== 3)
 	{
@@ -607,7 +650,7 @@ elseif ($argv[1] === 'wipe')
 	}
 }
 
-elseif ( ($argv[1] === 'config') || ($argv[1] === 'conf') )
+elseif ( ($command === 'config') || ($command === 'conf') )
 {
 	if (($argc < 2) || ($argc > 5))
 	{
@@ -715,19 +758,18 @@ elseif ( ($argv[1] === 'config') || ($argv[1] === 'conf') )
 	}
 }
 
-elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] === 'provide_ssh') ||
-	($argv[1] === 'provide_all_ssh'))
+elseif (($command === 'provide') || ($command === 'provide_all'))
 {
 	if (($argc !== 3) && ($argc !== 2))
 	{
-		if (($argc !== 2) || (($argv[1] !== 'provide_all') && ($argv[1] !== 'provide_all_ssh')))
+		if (($argc !== 2) || ($command !== 'provide_all'))
 		{
 			printUsage( -1);
 		}
 	}
 
-	$isall = strpos($argv[1], '_all') !== false;
-	$isssh = strpos($argv[1], '_ssh') !== false;
+	$isall = strpos($command, '_all') !== false;
+	$isssh = $app->ssh;
 
 	$loader = ModuleLoader::instance();
 
@@ -796,7 +838,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 		echo "The following modules are not in your filesystem:\n";
 		echo implode(', ', $missing) . "\n";
 		echo "Shall i git clone those modules? (y/n) [y]: ";
-		$input = readline();
+		$input = $app->quiet ? '' : readline();
 		$input = trim(strtolower($input));
 		if (($input === 'y') || ($input === ''))
 		{
@@ -821,7 +863,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 						echo "{$n}: {$provider}\n";
 					}
 					echo "Please choose: [1-{$n}]: ";
-					$n = (int) readline();
+					$n = $app->quiet ? 1 : ((int) readline());
 					if (($n < 1) || ($n > count($providers)))
 					{
 						echo "Invalid choice!\nExit 1\n";
@@ -853,7 +895,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 			{
 				echo "You can now:\n./gdoadm.sh install {$argv[2]}\n";
 			}
-			$r = readline("Shall i do this now? [Y/n]");
+			$r = $app->quiet ? 'y' : readline("Shall i do this now? [Y/n]");
 			$r = $r ? $r : 'y';
 			if (($r[0] === 'y') || ($r[0] === 'Y'))
 			{
@@ -879,7 +921,7 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 		{
 			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install {$argv[2]}\n";
 		}
-		$r = readline("Shall i do this now? [Y/n]");
+		$r = $app->quiet ? 'y' : readline("Shall i do this now? [Y/n]");
 		$r = $r ? $r : 'y';
 		if (($r[0] === 'y') || ($r[0] === 'Y'))
 		{
@@ -897,12 +939,12 @@ elseif (($argv[1] === 'provide') || ($argv[1] === 'provide_all') || ($argv[1] ==
 				system("php gdo_adm.php pp");
 			}
 			
-			system("bash gdo_post_install.sh");
+			system("bash gdo_post_install.sh --quiet");
 		}
 	}
 }
 
-elseif ($argv[1] === 'cronjob')
+elseif ($command === 'cronjob')
 {
 	$module = Module_Install::instance();
 	$method = InstallCronjob::make();
@@ -910,7 +952,7 @@ elseif ($argv[1] === 'cronjob')
 	echo $result->renderCLI();
 }
 
-elseif ($argv[1] === 'secure')
+elseif ($command === 'secure')
 {
 	$module = Module_Install::instance();
 	$method = GDT_Method::make()->method(Security::make());
@@ -920,7 +962,7 @@ elseif ($argv[1] === 'secure')
 	echo $result->renderCLI();
 }
 
-elseif ($argv[1] === 'update')
+elseif ($command === 'update')
 {
 	$modules = ModuleLoader::instance()->getEnabledModules();
 	foreach ($modules as $module)
@@ -936,7 +978,7 @@ elseif ($argv[1] === 'update')
 	echo "Update finished.\n";
 }
 
-elseif ($argv[1] === 'pp')
+elseif ($command === 'pp')
 {
 	echo "Running php-preprocessor on all modules.\n";
 	$pp = PP::init();
@@ -948,7 +990,7 @@ elseif ($argv[1] === 'pp')
 	}
 }
 
-elseif ($argv[1] === 'migrate')
+elseif ($command === 'migrate')
 {
 	if (count($argv) !== 3)
 	{
@@ -969,7 +1011,7 @@ elseif ($argv[1] === 'migrate')
 	}
 }
 
-elseif ($argv[1] === 'migrate_all')
+elseif ($command === 'migrate_all')
 {
 	$modules = ModuleLoader::instance()->getEnabledModules();
 	foreach ($modules as $module)
@@ -979,7 +1021,7 @@ elseif ($argv[1] === 'migrate_all')
 	echo GDT_Success::make()->text('msg_gdoadm_migrated_all')->renderCLI();
 }
 
-elseif ($argv[1] === 'gizmore_setup')
+elseif ($command === 'gizmore_setup')
 {
 	$special = ModuleProviders::getMultiProviders();
 	foreach ($special as $moduleName => $providers)
@@ -1009,11 +1051,11 @@ elseif ($argv[1] === 'gizmore_setup')
 	echo "All done, gizmore sire o\"! =)\n";
 }
 
-elseif ($argv[1] === 'confgrade')
+elseif ($command === 'confgrade')
 {
 	switch ($argc)
 	{
-		default: # fallthrough chaoz?
+		default:
 			printUsage();
 		case 2:
 			$argv[2] = 'config.php';
@@ -1023,10 +1065,10 @@ elseif ($argv[1] === 'confgrade')
 	
 	Installer::refreshConfig("protected/{$path}");
 	
-	echo "{$path} has been rewritten.\n";
+	echo "Config file `{$path}` has been rewritten.\n";
 }
 
-elseif ($argv[1] === 'apache')
+elseif ($command === 'apache')
 {
 	$docs = Webserver::make()->apache24();
 	echo $docs->render();
@@ -1034,7 +1076,7 @@ elseif ($argv[1] === 'apache')
 
 else
 {
-	echo "Unknown command {$argv[1]}\n\n";
+	echo "Unknown command {$command}\n\n";
 	printUsage();
 }
 

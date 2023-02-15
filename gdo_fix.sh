@@ -29,7 +29,7 @@ echo "3) Rewriting config."
 php ./gdo_adm.php confgrade
 #
 echo "4) Updating gdo modules."
-php gdo_adm.php update
+php gdo_adm.php update --quiet
 #
 echo "5) Updating assets."
 bash ./gdo_yarn.sh
