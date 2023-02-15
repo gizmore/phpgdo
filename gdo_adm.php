@@ -153,9 +153,10 @@ final class gdo_adm extends Application
 		}
 		
 		# Fix argc/argv
+		$exe = $argv[0];
 		$cmd = $argv[$i];
 		$argv = array_slice($argv, $i);
-		array_unshift($argv, $cmd);
+		array_unshift($argv, $cmd, $exe);
 		$argc = count($argv);
 	}
 	
@@ -827,7 +828,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 				{
 					$moreDeps = ModuleProviders::getDependencies($dep);
 				}
-				$deps = array_unique(array_merge($deps, $moreDeps));
+				$deps = array_merge($deps, $moreDeps);
 			}
 		}
 	}
