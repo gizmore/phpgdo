@@ -224,39 +224,7 @@ class Installer
 					$gdo = $classname::table();
 					if ($gdo->gdoIsTable())
 					{
-						# Remove old temp table
-						$tablename = $gdo->gdoTableName();
-						$temptable = "zzz_temp_{$tablename}";
-						$db->dropTableName($temptable);
-						
-						# create temp and copy as old
-						$db->disableForeignKeyCheck();
-						# Do not! drop the temp table. It might contain live data from a failed upgrade
-						$query = "SHOW CREATE TABLE $tablename";
-						$result = Database::instance()->queryRead($query);
-						$query = mysqli_fetch_row($result)[1];
-						$query = str_replace($tablename, $temptable, $query);
-						$db->queryWrite($query);
-						$query = "INSERT INTO $temptable SELECT * FROM $tablename";
-						$db->queryWrite($query);
-
-						# drop existing and recreate as new
-						$query = "DROP TABLE $tablename";
-						$db->queryWrite($query);
-						$gdo->createTable(); # CREATE TABLE IF NOT EXIST
-						$db->disableForeignKeyCheck();
-
-						# calculate columns and copy back in new
-						if ($columns = self::getColumnNames($gdo, $temptable))
-						{
-							$columns = implode(',', $columns);
-							$query = "INSERT INTO $tablename ($columns) SELECT $columns FROM $temptable";
-							$db->queryWrite($query);
-							
-							# drop temp after all succeded.
-							$query = "DROP TABLE $temptable";
-							$db->queryWrite($query);
-						}
+						Database::$DBMS->dbmsAutoMigrate($gdo);
 					}
 				}
 			}
@@ -271,29 +239,13 @@ class Installer
 		}
 	}
 	
-	/**
-	 * Get intersecting columns of old and new table creatoin schema.
-	 * @return string[]
-	 */
-	private static function getColumnNames(GDO $gdo, string $temptable) : array
-	{
-		$db = GDO_DB_NAME;
-		
-		$query = "SELECT group_concat(COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS " .
-		         "WHERE TABLE_SCHEMA = '{$db}' AND TABLE_NAME = '{$temptable}'";
-		$result = Database::instance()->queryRead($query);
-		$old = mysqli_fetch_array($result)[0];
-		$old = explode(',', $old);
-		
-		$query = "SELECT group_concat(COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS " .
-		"WHERE TABLE_SCHEMA = '{$db}' AND TABLE_NAME = '{$gdo->gdoTableName()}'";
-		$result = Database::instance()->queryRead($query);
-		$new = mysqli_fetch_array($result)[0];
-		$new = explode(',', $new);
-		
-		return ($old && $new) ? 
-			array_intersect($old, $new) : [];
-	}
+// 	/**
+// 	 * Get intersecting columns of old and new table creatoin schema.
+// 	 * @return string[]
+// 	 */
+// 	private static function getColumnNames(GDO $gdo, string $temptable) : array
+// 	{
+// 	}
 	
 	public static function includeUpgradeFile(GDO_Module $module, string $version) : void
 	{

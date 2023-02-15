@@ -8,15 +8,20 @@ use GDO\Core\GDO;
  * Use fetchTable() to control the object type for fetching objects. 
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  * @see ArrayResult
  */
 class Result
 {
 	public GDO $table;
+	
 	private bool $useCache;
-	private \mysqli_result $result;
+	
+	/**
+	 * @var resource
+	 */
+	private $result;
 	
 	###################
 	### Instanciate ###
@@ -40,7 +45,7 @@ class Result
 	{
 	    if (isset($this->result))
 	    {
-	        mysqli_free_result($this->result);
+	    	Database::$DBMS->dbmsFree($this->result);
 	        unset($this->result);
 	    }
 	}
@@ -50,12 +55,12 @@ class Result
 	################
 	public function numRows() : int
 	{
-		return mysqli_num_rows($this->result);
+		return Database::$DBMS->dbmsNumRows($this->result);
 	}
 	
 	public function affectedRows() : int
 	{
-	    return Database::instance()->affectedRows();
+	    return Database::$DBMS->dbmsAffected();
 	}
 	
 	#############
@@ -75,33 +80,22 @@ class Result
 	
 	public function fetchRow() : ?array
 	{
-		return mysqli_fetch_row($this->result);
+		return Database::$DBMS->dbmsFetchRow($this->result);
 	}
 	
-	public function fetchAllRows() : array
+	public function fetchAllRows(): array
 	{
-		$allRows = [];
-		while ($row = mysqli_fetch_row($this->result))
-		{
-			$allRows[] = $row;
-		}
-		return $allRows;
+		return Database::$DBMS->dbmsFetchAll($this->result);
 	}
-	
 	
 	public function fetchAssoc() : ?array
 	{
-		return mysqli_fetch_assoc($this->result);
+		return Database::$DBMS->dbmsFetchAssoc($this->result);
 	}
 	
 	public function fetchAllAssoc() : ?array
 	{
-		$data = [];
-		while ($row = $this->fetchAssoc())
-		{
-			$data[] = $row;
-		}
-		return $data;
+		return Database::$DBMS->dbmsFetchAll($this->result);
 	}
 
 	public function fetchObject() : ?GDO

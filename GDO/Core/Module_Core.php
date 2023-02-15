@@ -25,13 +25,13 @@ use GDO\Language\Module_Language;
  * Very basic vanilla JS can be loaded.
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.0
  */
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1739';
+	const GDO_REVISION = '7.0.1-r1741';
 	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############
@@ -62,7 +62,15 @@ final class Module_Core extends GDO_Module
 	
 	public function getDependencies() : array
 	{
-		return ['Language', 'Crypto', 'Date', 'UI', 'User', 'Form'];
+		return [
+			'Crypto',
+			'Date',
+			'DBMS',
+			'Form',
+			'Language',
+			'UI',
+			'User',
+		];
 	}
 	
 	public function onInstall() : void

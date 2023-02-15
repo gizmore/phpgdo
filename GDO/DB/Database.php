@@ -2,12 +2,12 @@
 namespace GDO\DB;
 
 use mysqli;
-use mysqli_result;
 use GDO\Core\GDO;
 use GDO\Core\Logger;
 use GDO\Core\GDT;
 use GDO\Core\Debug;
 use GDO\Core\GDO_DBException;
+use GDO\DBMS\Module_DBMS;
 
 /**
  * mySQLi abstraction layer.
@@ -32,9 +32,13 @@ class Database
 	# Instance
 	private static Database $INSTANCE;
 	public static function instance() : self { return self::$INSTANCE; }
+
+	# DBMS
+	public static ?Module_DBMS $DBMS = null;
 	
 	# Connection
-	private mysqli $link;
+	private $link; # any dbms provider link. remove?
+	private int $port = 3306;
 	private string $host, $user, $pass;
 	private string $usedb, $db; # used and configured db.
 
@@ -101,9 +105,9 @@ class Database
 	
 	public function closeLink() : void
 	{
-		if (isset($this->link))
+		if ($this->link)
 		{
-			mysqli_close($this->link);
+			self::$DBMS->dbmsClose($this->link);
 			unset($this->link);
 		}
 	}
@@ -118,16 +122,13 @@ class Database
 		return $this->link;
 	}
 	
-	private function openLink() : mysqli
+	private function openLink()
 	{
 		try
 		{
 			$t1 = microtime(true); #PP#delete#
 			if ($this->link = $this->connect())
 			{
-				# This is more like a read because nothing is written to the disk.
-				$this->queryRead("SET NAMES UTF8");
-				$this->queryRead("SET time_zone = '+00:00'");
 				return $this->link;
 			}
 		}
@@ -145,9 +146,10 @@ class Database
 		#PP#end#
 	}
 	
-	public function connect() : mysqli
+	public function connect()
 	{
-		return mysqli_connect($this->host, $this->user, $this->pass);
+		self::$DBMS = Module_DBMS::instance();
+		return self::$DBMS->dbmsOpen($this->host, $this->user, $this->pass, $this->usedb, $this->port);
 	}
 	
 	#############
@@ -173,7 +175,7 @@ class Database
 		{
 			return $this->queryB($query);
 		}
-		catch (\mysqli_sql_exception $ex)
+		catch (\Throwable $ex)
 		{
 			throw new GDO_DBException("err_db", [$ex->getCode(), $ex->getMessage(), html($query)]);
 		}
@@ -183,25 +185,14 @@ class Database
 	{
 		$t1 = microtime(true); #PP#delete#
 		
-		if ($buffered)
-		{
-			$result = mysqli_query($this->getLink(), $query);
-		}
-		else
-		{
-			$result = false;
-			if (mysqli_real_query($this->getLink(), $query))
-			{
-				$result = mysqli_use_result($this->getLink());
-			}
-		}
+		$result = self::$DBMS->dbmsQuery($query, $buffered);
 		
 		if (!$result)
 		{
 			if ($this->link)
 			{
-				$error = mysqli_error($this->link);
-				$errno = mysqli_errno($this->link);
+				$error = self::$DBMS->dbmsError($this->link);
+				$error = self::$DBMS->dbmsErrno($this->link);
 				$this->closeLink();
 			}
 			else
@@ -211,6 +202,7 @@ class Database
 			}
 			throw new GDO_DBException("err_db", [$errno, html($error), html($query)]);
 		}
+		
 		#PP#start#
 		$t2 = microtime(true);
 		$timeTaken = $t2 - $t1;
@@ -230,17 +222,18 @@ class Database
 			}
 		}
 		#PP#end#
+		
 		return $result;
 	}
 	
 	public function insertId() : string
 	{
-		return (string) mysqli_insert_id($this->getLink());
+		return self::$DBMS->dbmsInsertId();
 	}
 	
 	public function affectedRows() : int
 	{
-		return mysqli_affected_rows($this->getLink());
+		return self::$DBMS->dbmsAffected();
 	}
 	
 	###################
@@ -260,7 +253,6 @@ class Database
 			
 		    # Always init a cache item.
 			$gdo->initCache();
-// 			$gdo->setInited();
 
 			# Store hashed columns.
 			self::$COLUMNS[$classname] = self::hashedColumns($gdo);
@@ -319,69 +311,23 @@ class Database
 	####################
 	public function tableExists(string $tableName) : bool
 	{
-// 		return DBMS::tableExists($tableName);
-		$query = "SELECT EXISTS (SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'music' AND TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Artists');";
-		$result = $this->queryRead($query);
-		return !!$result;
+		return Database::$DBMS->dbmsTableExists($tableName);
 	}
 	
-	public function createTableCode(GDO $gdo) : string
-	{
-		$columns = [];
-		$primary = [];
-		
-		foreach ($gdo->gdoColumnsCache() as $column)
-		{
-// 			if ($column instanceof GDT_DBField)
-// 			{
-				if ($define = $column->gdoColumnDefine())
-				{
-					$columns[] = $define;
-				}
-				if (isset($column->primary) && $column->primary) # isPrimary() not used, because of AutoInc hack.
-				{
-					$primary[] = $column->identifier();
-				}
-// 			}
-		}
-		
-		if (count($primary))
-		{
-			$primary = implode(',', $primary);
-			$columns[] = "PRIMARY KEY ($primary) " . self::PRIMARY_USING;
-		}
-		
-		foreach ($gdo->gdoColumnsCache() as $column)
-		{
-			if ($column->isUnique())
-			{
-				$columns[] = "UNIQUE({$column->identifier()})";
-			}
-		}
-		
-		$columnsCode = implode(",\n", $columns);
-		
-		$query = "CREATE TABLE IF NOT EXISTS {$gdo->gdoTableIdentifier()} ".
-		         "(\n$columnsCode\n) ENGINE = {$gdo->gdoEngine()}";
-		
-		return $query;
-	}
+// 	public function createTableCode(GDO $gdo) : string
+// 	{
+// 		return self::$DBMS->dbmsCreateTableCode($gdo);
+// 	}
 	
 	/**
 	 * Create a database table from a GDO. 
 	 */
-	public function createTable(GDO $gdo) : bool
+	public function createTable(GDO $gdo) : void
 	{
 		try
 		{
-		    $this->disableForeignKeyCheck();
-    		$query = $this->createTableCode($gdo);
-    		$this->queryWrite($query);
-    		return true;
-		}
-		catch (\Throwable $ex)
-		{
-		    throw $ex;
+			$this->disableForeignKeyCheck();
+			self::$DBMS->dbmsCreateTable($gdo);
 		}
 		finally
 		{
@@ -396,43 +342,43 @@ class Database
 	
 	public function dropTableName(string $tableName)
 	{
-		return $this->queryWrite("DROP TABLE IF EXISTS {$tableName}");
+		return self::$DBMS->dbmsDropTable($tableName);
 	}
 	
 	public function truncateTable(GDO $gdo)
 	{
 	    $tableName = $gdo->gdoTableIdentifier();
-	    return $this->queryWrite("TRUNCATE TABLE {$tableName}");
+	    return self::$DBMS->dbmsTruncateTable($tableName);
 	}
 	
 	###################
 	### DB Creation ###
 	###################
-	public function createDatabase(string $databaseName)
+	public function createDatabase(string $databaseName): void
 	{
-		return $this->queryWrite("CREATE DATABASE $databaseName");
+		self::$DBMS->dbmsCreateDB($databaseName);
 	}
 	
-	public function dropDatabase(string $databaseName)
+	public function dropDatabase(string $databaseName): void
 	{
-		return $this->queryWrite("DROP DATABASE $databaseName");
+		self::$DBMS->dbmsDropDB($databaseName);
 	}
 	
-	public function useDatabase(string $databaseName)
+	public function useDatabase(string $databaseName): void
 	{
 		$this->usedb = $databaseName;
-		return $this->queryRead("USE $databaseName");
+		self::$DBMS->dbmsUse($databaseName);
 	}
 	
 	###################
 	### Transaction ###
 	###################
-	public function transactionBegin()
+	public function transactionBegin(): void
 	{
-		return mysqli_begin_transaction($this->getLink());
+		self::$DBMS->dbmsBegin();
 	}
 	
-	public function transactionEnd()
+	public function transactionEnd(): void
 	{
 	    # Perf
 		$this->commits++; #PP#delete#
@@ -440,45 +386,41 @@ class Database
 		
 		# Exec and perf
 		$t1 = microtime(true); #PP#delete#
-		$result = mysqli_commit($this->getLink());
+		self::$DBMS->dbmsCommit();
 		$t2 = microtime(true); #PP#delete#
 		$tt = $t2 - $t1; #PP#delete#
 		
 		# Perf
 		$this->queryTime += $tt; #PP#delete#
 		self::$QUERY_TIME += $tt; #PP#delete#
-		return $result;
 	}
 	
 	public function transactionRollback()
 	{
-		return mysqli_rollback($this->getLink());
+		self::$DBMS->dbmsRollback();
 	}
 	
 	############
 	### Lock ###
 	############
-	public function lock(string $lock, int $timeout=30) : mysqli_result
+	public function lock(string $lock, int $timeout=30): void
 	{
 		$this->locks++; #PP#delete#
 		self::$LOCKS++; #PP#delete#
-		$query = "SELECT GET_LOCK('{$lock}', {$timeout}) as L";
-		return $this->queryRead($query);
+		self::$DBMS->dbmsLock($lock, $timeout);
 	}
 	
-	public function unlock(string $lock) : mysqli_result
+	public function unlock(string $lock): void
 	{
-		$query = "SELECT RELEASE_LOCK('{$lock}') as L";
-		return $this->queryRead($query);
+		self::$DBMS->dbmsUnlock($lock);
 	}
 	
 	###############
 	### FKCheck ###
 	###############
-	public function enableForeignKeyCheck(bool $bool = true)
+	public function enableForeignKeyCheck(bool $bool = true): void
 	{
-		$check = $bool ? '1' : '0';
-		return $this->query("SET foreign_key_checks = $check");
+		Database::$DBMS->dbmsForeignKeys($bool);
 	}
 
 	public function disableForeignKeyCheck()
@@ -492,31 +434,9 @@ class Database
 	/**
 	 * Import a large SQL file.
 	 */
-	public function parseSQLFile(string $path) : bool
+	public function parseSQLFile(string $path) : void
 	{
-	    $fh = fopen($path, 'r');
-	    $command = '';
-	    while ($line = fgets($fh))
-	    {
-	        if ( (str_starts_with($line, '-- ')) ||
-	             (str_starts_with($line, '/*')) )
-	        {
-	            # skip comments
-	            continue;
-	        }
-	        
-	        # Append to command
-	        $command .= $line;
-	        
-	        # Finished command
-	        if (str_ends_with(trim($line), ';'))
-	        {
-	            # Most likely a write
-    	        $this->queryWrite($command);
-    	        $command = '';
-	        }
-	    }
-	    return true;
+		Database::$DBMS->dbmsExecFile($path);
 	}
 	
 }

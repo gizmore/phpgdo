@@ -269,7 +269,7 @@ final class ModuleProviders
 'CLI' => [],
 'Comments' => ['Votes', 'File'],
 'Contact' => ['Mail'],
-'Core' => ['Language', 'Crypto', 'Date', 'UI', 'User', 'Form'],
+'Core' => ['Crypto', 'Date', 'DBMS', 'Form', 'Language', 'UI', 'User'],
 'CORS' => [],
 'Country' => [],
 'CountryCoordinates' => ['Country', 'Maps'],
