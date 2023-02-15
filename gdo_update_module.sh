@@ -13,8 +13,9 @@ cd "$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
 # Update phpgdo module
-echo "$2"
+echo "Updating $2"
 echo "Update module folder $1."
+cd $1
 git checkout main 2>/dev/null || true
 git checkout master 2>/dev/null || true
 git reset --hard

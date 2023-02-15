@@ -14,12 +14,12 @@ gdopath="$(dirname "$0")"
 #LC_ALL=en_GB
 #
 echo "1) Updating phpgdo."
-bash gdo_update_module.sh $gdopath "Core"
+bash gdo_update_module.sh $gdopath "Core" "1"
 #
 # Other modules
 #
 echo "2) Updating all modules with threading."
-find ./GDO/ -maxdepth 2 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "{}" \;
+find ./GDO/ -maxdepth 2 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "{}" "0" \;
 #
 # Installation and upgrades
 #
