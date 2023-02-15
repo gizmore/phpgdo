@@ -844,6 +844,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 					$moreDeps = ModuleProviders::getDependencies($dep);
 				}
 				$deps = array_merge($deps, $moreDeps);
+				$deps = array_unique($deps);
 			}
 		}
 	}
