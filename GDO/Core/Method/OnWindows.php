@@ -17,5 +17,14 @@ use GDO\UI\MethodPage;
  */
 final class OnWindows extends MethodPage
 {
+	public function getMethodTitle(): string
+	{
+		return "phpgdo on Windows";
+	}
+	
+	public function getMethodDescription(): string
+	{
+		return t('md_on_windows');
+	}
 	
 }

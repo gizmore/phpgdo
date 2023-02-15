@@ -383,4 +383,6 @@ The %2$s System',
 	'health_hdd_used' => 'Used',
 	
 	'edited_info' => 'Edited by %s %s ago',
+	
+	'md_on_windows' => 'Run this script to install phpgdo on windows. Caution: git4windows and PHP8.0 is required. Warning: Do not run untrusted code!',
 ];

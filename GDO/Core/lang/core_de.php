@@ -102,4 +102,4 @@ Das %2$s-System',
 	'health_hdd_used' => 'Used',
 	
 	'edited_info' => 'Geändert von %s vor %s',
-];
+	'md_on_windows' => 'Führen Sie dieses Skript aus, um phpgdo unter Windows zu installieren. Achtung: git4windows und PHP8.0 werden benötigt. Warnung: Führen Sie nicht blind fremden code aus!',];
