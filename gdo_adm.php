@@ -152,8 +152,8 @@ final class gdo_adm extends Application
 		}
 		
 		# Fix argc/argv
-		$cmd = $argv[0];
-		$argv = array_slice($argv, $i + 1);
+		$cmd = $argv[$i];
+		$argv = array_slice($argv, $i);
 		array_unshift($argv, $cmd);
 		$argc = count($argv);
 	}
@@ -843,7 +843,7 @@ elseif (($command === 'provide') || ($command === 'provide_all'))
 		echo "The following modules are not in your filesystem:\n";
 		echo implode(', ', $missing) . "\n";
 		echo "Shall i git clone those modules? (y/n) [y]: ";
-		$input = $app->quiet ? '' : readline();
+		$input = $app->quiet ? "\n" : readline();
 		$input = trim(strtolower($input));
 		if (($input === 'y') || ($input === ''))
 		{
