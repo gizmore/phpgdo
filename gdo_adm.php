@@ -153,7 +153,7 @@ final class gdo_adm extends Application
 		
 		# Fix argc/argv
 		$cmd = $argv[0];
-		$argv = array_slice($argv, $i);
+		$argv = array_slice($argv, $i + 1);
 		array_unshift($argv, $cmd);
 		$argc = count($argv);
 	}
