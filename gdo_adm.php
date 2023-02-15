@@ -205,8 +205,8 @@ $loader = ModuleLoader::instance();
 
 define('GDO_CORE_STABLE', true);
 
-$command = $argv[1];
-
+$app->parseOptions();
+$command = $argv[0];
 $db = !!GDO_DB_ENABLED;
 switch ($command)
 {
@@ -222,7 +222,6 @@ $loader->loadLangFiles(true);
 $loader->initModules();
 
 # Run!
-$app->parseOptions();
 
 if ($command === 'docs')
 {
