@@ -112,11 +112,6 @@ function printUsage(int $code = -1): void
 
 chdir(__DIR__);
 
-if ($argc === 1)
-{
-	printUsage(0);
-}
-
 require 'GDO7.php';
 
 # forced?
@@ -220,7 +215,13 @@ $loader = ModuleLoader::instance();
 define('GDO_CORE_STABLE', true);
 
 $app->parseOptions();
-$command = $argv[0];
+if ($argc === 1)
+{
+	printUsage(0);
+}
+
+
+$command = $argv[1];
 $db = !!GDO_DB_ENABLED;
 switch ($command)
 {
