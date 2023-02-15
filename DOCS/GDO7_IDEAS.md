@@ -163,3 +163,6 @@ Convert and edit markdown files; extend with Smileys. Custom rules like [usernam
  
  - Session config: max num simultan. connections.
  
+ - WeChall Rankings by programming language.
+ 
+ - 

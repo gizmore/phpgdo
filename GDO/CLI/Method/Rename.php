@@ -24,6 +24,14 @@ use GDO\Core\Website;
 final class Rename extends MethodCLI
 {
 	
+	/**
+	 * Disable unit test fuzzer. dangerous for mass rename!
+	 */
+	public function isTrivial(): bool
+	{
+		return false;
+	}
+	
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(

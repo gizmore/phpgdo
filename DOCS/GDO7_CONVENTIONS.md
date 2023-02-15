@@ -76,3 +76,30 @@ The convention is that variables with a leading dash `_` and arrays are not put 
 All other variables are appended to the url,
 like `/key/value/key/value`.
 
+---
+
+## GDOv7 Conventions: HTML escaping
+
+These conventions exist for performance reasons,
+and *can* lead to **insecure code**!
+
+HTML attributes **must** be using double quotes `"`, to safe the replacement of `'`.
+Double quotes are replaced by a single quote.
+This way, we replace always the same character count,
+and can *theoretically* safe lots of clock cycles in a hot-spot... But we need to replace more.
+
+The brackets `<>` are replaced by `{}`.
+
+The ampersand `&` is replaced by a plus `+`.
+
+That's it, for a nice performance stunt. :)
+
+Sample Code in [GDOv7.php](../GDO7.php)
+
+````
+return Application::$INSTANCE->isHTML() ?
+str_replace(['&','"','<','>'],
+            ['+','\'','{','}'], $html) : $html;
+````
+
+(c)2023 by wechall.net

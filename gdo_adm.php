@@ -131,25 +131,31 @@ else # try :]
 final class gdo_adm extends Application
 {
 
+	/**
+	 * Parse options and purge them from argv.
+	 */
 	public function parseOptions(): void
 	{
 		global $argv, $argc;
+		
 		$i = 0;
-		$old = $argv;
-// 		$argv = array_slice($argv, 2);
-// 		array_unshift($argv, $old[0]);
-		$argc = count($argv);
 		$o = getopt('qs', ['quiet', 'ssh'], $i);
-		$argv = $old;
-		$argc = count($argv);
+
 		if (isset($o['q'])||isset($o['quiet']))
 		{
 			$this->quiet();
 		}
+		
 		if (isset($o['s'])||isset($o['ssh']))
 		{
 			$this->ssh();
 		}
+		
+		# Fix argc/argv
+		$cmd = $argv[0];
+		$argv = array_slice($argv, $i);
+		array_unshift($argv, $cmd);
+		$argc = count($argv);
 	}
 	
 	public function isInstall(): bool

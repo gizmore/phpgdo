@@ -7,6 +7,7 @@ use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
 use GDO\Date\Time;
 use GDO\Util\Regex;
+use GDO\Core\GDT;
 /**
  * GDO Autoloader and global functions.
  *
@@ -182,6 +183,7 @@ function json($value) : string
 
 /**
  * HTML escaping.
+ * *Performance stunt*: Replace only the same character count to safe clock cycles. the func is probably a hot spot.
  * In CLI mode, no escaping is done.
  * @see \htmlspecialchars()
  */
@@ -189,24 +191,20 @@ function html(string $html=null) : string
 {
 	if ($html === null)
 	{
-		return '';
+		return GDT::EMPTY_STRING;
 	}
-	$app = Application::$INSTANCE;
-	$is_html = $app->isHTML();
-	$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
-	return $is_html ? str_replace(
+	return Application::$INSTANCE->isHTML() ?
+	str_replace(
 	[
 		'&',
 		'"',
-// 		"'",
 		'<',
-		'>'
+		'>',
 	], [
-		'&amp;',
-		'&quot;',
-// 		'&#39;',
-		'&lt;',
-		'&gt;'
+		'+',
+		'\'',
+		'{',
+		'}',
 	], $html) : $html;
 }
 
