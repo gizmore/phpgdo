@@ -7,34 +7,39 @@
 # @since 6.0.1
 #
 set -euo pipefail
-cd "$(dirname "$0")"
 #
+orgpath="$(pwd)"
 gdopath="$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
 #
-echo "1) Updating phpgdo."
+cd $gdopath
+echo "1) Updating phpgdo core."
 bash gdo_update_module.sh $gdopath "Core" "1"
 #
 # Other modules
 #
-echo "2) Updating all modules with threading."
+cd $gdopath
+echo "2) Updating all modules."
 find ./GDO/ -maxdepth 2 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "{}" "0" \;
 #
 # Installation and upgrades
 #
-cd "$(dirname "$0")"
-#
+cd $gdopath
 echo "3) Rewriting config."
-php ./gdo_adm.php confgrade
+php gdo_adm.php confgrade
 #
+cd $gdopath
 echo "4) Updating gdo modules."
 php gdo_adm.php --quiet update
 #
+cd $gdopath
 echo "5) Updating assets."
 bash ./gdo_yarn.sh
 #
+cd $gdopath
 echo "6) Triggering post install scripts."
 bash ./gdo_post_install.sh
 #
 echo "7) Done!"
+cd $orgpath
