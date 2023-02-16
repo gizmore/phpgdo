@@ -49,10 +49,12 @@ Validation has never been *dry* easier.
 
 ## GDOv7 DBAL: IDs
 
-In some DBAL it is convention to *must* have an auto inc as the primary key column.
-In GDOv7, there is no convention or restriction on how to key your tables.
+In quite some DBAL, it is convention, you *must* have an auto inc as the primary key column.
+Here is no convention or restriction on how to key your tables.
 We sometimes have a CHAR(2) for maybe country, or maybe a composite primary key. All is possible and intuitive.
-Maybe look at the implementation of [GDT_AutoInc](../GDO/Core/GDT_AutoInc.php) and [GDT_Char](../GDO/Core/GDT_Char.php).
+Maybe look at the implementation of
+[GDT_AutoInc](../GDO/Core/GDT_AutoInc.php) and
+[GDT_Char](../GDO/Core/GDT_Char.php).
 
 
 ## GDOv7 DBAL: Migrations
@@ -64,11 +66,11 @@ Return an array of GDT in all flavours and combinations. That's it.
 Changed your DB layout?
 GDOv7 got you covered by changing the DB layout on the fly with a single click.
 Admitted, this is quite risky and may be not the best technique to manage DB migrations, but for me it works great!
-Background info: In an auto-migration the table is **exported**, **dropped** and then **re-imported** to avoid hackery with SQL.
+Background info: In an auto-migration the table is **exported**, **dropped** and then **re-imported** to avoida any hackery with SQL. The auto migration code for mysql is around 100 lines.
 Works charmy!
-It probably is slow and too risky in real production environments.
-We will see :)
+But it probably is slow and too risky in real production environments.
 
+We will see :)
 
 ## GDOv7 DBAL: Foreign Keys
 

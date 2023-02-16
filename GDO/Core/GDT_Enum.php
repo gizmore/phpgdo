@@ -61,13 +61,4 @@ class GDT_Enum extends GDT_Select
 		return implode('|', $this->enumValues);
 	}
 
-	################
-	### DB Field ###
-	################
-	public function gdoColumnDefine() : string
-	{
-		$values = implode(',', array_map(array('GDO\Core\GDO', 'quoteS'), $this->enumValues));
-		return "{$this->identifier()} ENUM ($values) CHARSET ascii COLLATE ascii_bin {$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-
 }

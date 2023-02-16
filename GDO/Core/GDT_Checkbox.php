@@ -46,18 +46,6 @@ class GDT_Checkbox extends GDT_Select
 		return $choices;
 	}
 	
-	################
-	### Database ###
-	################
-	/**
-	 * Get TINYINT(1) column define.
-	 */
-	public function gdoColumnDefine() : string
-	{
-		return "{$this->identifier()} TINYINT(1) UNSIGNED ".
-		  "{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-	
 	####################
 	### Undetermined ###
 	####################

@@ -6,6 +6,8 @@ use GDO\Core\GDT_Template;
 use GDO\Core\GDT_Text;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
+use GDO\Core\GDT_String;
+use GDO\DBMS\Module_DBMS;
 
 /**
  * A message is a GDT_Text with an editor.
@@ -23,8 +25,6 @@ use GDO\User\GDT_ProfileLink;
  * An editor has to provide a renderer and a quotemsg generator (quoty by foo at 13:37)
  * An HTML to editor back-encoder is not required or used / supported.
  * 
- * @TODO: Allow users to choose an editor of the installed ones. Currently only 1 editor can be installed.
- *
  * @see \GDO\HTML\Module_HTML
  * @see \GDO\TinyMCE\Module_TinyMCE
  * @see \GDO\BBCode\Module_BBCode
@@ -33,7 +33,7 @@ use GDO\User\GDT_ProfileLink;
  * @see \GDO\SimpleMDE\Module_SimpleMDE
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 4.0.0
  */
 class GDT_Message extends GDT_Text
@@ -257,12 +257,16 @@ class GDT_Message extends GDT_Text
 		];
 	}
 
+	/**
+	 * Re-Using GDT_Text and GDT_String.
+	 */
 	public function gdoColumnDefine(): string
 	{
-		return "{$this->name}_input {$this->gdoColumnDefineB()},\n" .
-			"{$this->name}_output {$this->gdoColumnDefineB()},\n" .
-			"{$this->name}_text {$this->gdoColumnDefineB()},\n" .
-			"{$this->name}_editor VARCHAR(16) CHARSET ascii COLLATE ascii_bin\n";
+		$dbms = Module_DBMS::instance();
+		return "{$this->name}_input {$dbms->Core_GDT_TextB($this)},\n" .
+			"{$this->name}_output {$dbms->Core_GDT_TextB($this)},\n" .
+			"{$this->name}_text {$dbms->Core_GDT_TextB($this)},\n" .
+			GDT_String::make("{$this->name}_editor")->max(16)->ascii()->gdoColumnDefine();
 	}
 
 	# #####################

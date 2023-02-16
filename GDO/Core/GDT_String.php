@@ -191,37 +191,6 @@ class GDT_String extends GDT_DBField
 		return true;
 	}
 	
-	##########
-	### DB ###
-	##########
-	public function gdoColumnDefine() : string
-	{
-		$charset = $this->gdoCharsetDefine();
-		$collate = $this->gdoCollateDefine($this->caseSensitive);
-		$null = $this->gdoNullDefine();
-		return "{$this->identifier()} VARCHAR({$this->max}) CHARSET {$charset}{$collate}{$null}";
-	}
-	
-	protected function gdoCharsetDefine() : string
-	{
-		switch ($this->encoding)
-		{
-			case self::UTF8: return 'utf8mb4';
-			case self::ASCII: return 'ascii';
-			case self::BINARY: return 'binary';
-		}
-	}
-	
-	protected function gdoCollateDefine(bool $caseSensitive) : string
-	{
-		if (!$this->isBinary())
-		{
-			$append = $caseSensitive ? '_bin' : '_general_ci';
-			return ' COLLATE ' . $this->gdoCharsetDefine() . $append;
-		}
-		return GDT::EMPTY_STRING;
-	}
-	
 	###########
 	### GDT ###
 	###########

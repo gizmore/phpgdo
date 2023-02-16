@@ -336,40 +336,6 @@ trait WithObject
 		return $this->notNull();
 	}
 
-	# ###############
-	# ## Database ###
-	# ###############
-	/**
-	 * Take the foreign key primary key definition and use str_replace to convert to foreign key definition.
-	 */
-	public function gdoColumnDefine(): string
-	{
-		if ( !($table = $this->table))
-		{
-			throw new GDO_Error('err_gdo_object_no_table', [
-				$this->identifier()
-			]);
-		}
-		$tableName = $table->gdoTableIdentifier();
-		if ( !($primaryKey = $table->gdoPrimaryKeyColumn()))
-		{
-			throw new GDO_Error('err_gdo_no_primary_key', [
-				$tableName,
-				$this->identifier()
-			]);
-		}
-		$define = $primaryKey->gdoColumnDefine();
-		$define = str_replace($primaryKey->identifier(), $this->identifier(), $define);
-		$define = str_replace(' NOT NULL', '', $define);
-		$define = str_replace(' PRIMARY KEY', '', $define);
-		$define = str_replace(' AUTO_INCREMENT', '', $define);
-		$define = preg_replace('#,FOREIGN KEY .* ON UPDATE (?:CASCADE|RESTRICT|SET NULL)#', '', $define);
-		// $on = $this->fkOn ? $this->fkOn : $primaryKey->identifier();
-		$on = $primaryKey->identifier();
-		return "$define{$this->gdoNullDefine()}" .
-			",FOREIGN KEY ({$this->identifier()}) REFERENCES $tableName($on) ON DELETE {$this->cascade} ON UPDATE CASCADE";
-	}
-
 	# #############
 	# ## Filter ###
 	# #############

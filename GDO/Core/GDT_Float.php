@@ -21,15 +21,6 @@ class GDT_Float extends GDT_Int
 		return $var === '' ? null : floatval($var);
 	}
 
-	##########
-	### DB ###
-	##########
-	public function gdoColumnDefine() : string
-	{
-		$unsigned = $this->unsigned ? " UNSIGNED" : "";
-		return "{$this->identifier()} FLOAT{$unsigned}{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-		
 	public function htmlClass() : string
 	{
 		return sprintf(' gdt-float %s', parent::htmlClass());

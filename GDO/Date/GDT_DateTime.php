@@ -14,11 +14,6 @@ class GDT_DateTime extends GDT_Date
 {
 	public string $format = Time::FMT_SHORT;
 	
-	public function gdoColumnDefine() : string
-	{
-		return "{$this->identifier()} DATETIME({$this->millis}) {$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Date', 'datetime_form.php', ['field'=>$this]);

@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Query;
+use GDO\DBMS\Module_DBMS;
 use GDO\Table\GDT_Filter;
 use GDO\UI\TextStyle;
 use GDO\Util\Arrays;
@@ -539,8 +540,16 @@ abstract class GDT
 		return self::EMPTY_ARRAY;
 	}
 	
+	/**
+	 * If we are a DB column, a DBMS can get the column define for this.
+	 * @TODO: What about composites like GDT_GeoPos?
+	 */
 	public function gdoColumnDefine() : string
 	{
+		if ($this->gdoColumnNames() && $this->isSerializable())
+		{
+			return Module_DBMS::instance()->dbmsSchema($this);
+		}
 		return GDT::EMPTY_STRING;
 	}
 	

@@ -9,7 +9,7 @@ use GDO\Form\WithFormAttributes;
  * A composite is a container that proxies certain methods to all it's fields.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.1
  */
 class GDT_Composite extends GDT_Container
@@ -46,14 +46,6 @@ class GDT_Composite extends GDT_Container
 	
 	public function inputs(?array $inputs) : self
 	{
-// 		if ($inputs === null)
-// 		{
-// 			unset($this->inputs);
-// 		}
-// 		else
-// 		{
-// 			$this->inputs = $inputs;
-// 		}
 		parent::inputs($inputs);
 		foreach ($this->getAllFields() as $gdt)
 		{

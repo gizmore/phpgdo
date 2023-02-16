@@ -11,6 +11,7 @@ use GDO\Core\GDT;
 
 /**
  * GDO Query Builder.
+ * Is it SQL compliant? I have no clue :)
  * Part of the GDO DBAL code.
  * You should use GDO Classes to create queries.
  * 

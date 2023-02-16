@@ -182,28 +182,6 @@ class GDT_Int extends GDT_DBField
 	    return t('number');
 	}
 	
-	
-	##########
-	### DB ###
-	##########
-	public function gdoColumnDefine() : string
-	{
-		$unsigned = $this->unsigned ? " UNSIGNED" : "";
-		return "{$this->identifier()} {$this->gdoSizeDefine()}INT{$unsigned}{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-	
-	protected function gdoSizeDefine()
-	{
-		switch ($this->bytes)
-		{
-			case 1: return 'TINY';
-			case 2: return 'MEDIUM';
-			case 4: return '';
-			case 8: return 'BIG';
-			default: throw new GDO_Error('err_int_bytes_length', [$this->bytes]);
-		}
-	}
-	
 	##############
 	### Render ###
 	##############

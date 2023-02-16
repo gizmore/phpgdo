@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Install;
 
-use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Checkbox;
@@ -90,6 +89,7 @@ class Config
 		
 		# Site
 		deff('GDO_SITENAME', 'GDOv7');
+		deff('GDO_HOSTNAME', gethostname());
 		deff('GDO_ENV', 'dev');
 		deff('GDO_SITECREATED', Time::getDate());
 		deff('GDO_LANGUAGE', 'en');
@@ -169,6 +169,7 @@ class Config
 			# Site
 			GDT_Divider::make()->label('install_config_section_site'),
 			GDT_String::make('sitename')->initialValue(GDO_SITENAME)->max(16)->label('cfg_sitename')->tooltipRaw('should be configured via sitename language key.'),
+			GDT_String::make('hostname')->notNull()->initialValue(GDO_HOSTNAME)->tooltipRaw('Server hostname. Used in error emails so you can distingush different servers.'),
 			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro')->tooltipRaw('Environment can be dev, tes or pro.'),
 			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS)->tooltipRaw('Enable SEO style URLs. Requires url rewriting for your httpd.'),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
@@ -184,6 +185,7 @@ class Config
 
 			# HTTP
 			GDT_Divider::make()->label('install_config_section_http'),
+			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN)->tooltipRaw('Website domain. Should match cookie domain.'),
 			GDT_Enum::make('server')->notNull()->enumValues('none', 'apache2.2', 'apache2.4', 'nginx', 'other')->initialValue(GDO_SERVER)->tooltipRaw('webserver software; apache2.2, apache2.4, nginx, none.'),
 			GDT_String::make('domain')->notNull()->initialValue(GDO_DOMAIN)->tooltipRaw('Website domain. Should match cookie domain.'),
 			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT)->tooltipRaw('Website root folder. Usually "/" or "/phpgdo/".')->pattern('/^(\\/[^\\/]*)+$/'),

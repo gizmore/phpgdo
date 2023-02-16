@@ -9,7 +9,7 @@ use GDO\Core\GDT;
  * An example is the release date of a book, or a birthdate.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  * @see GDT_Time
  * @see GDT_DateTime
@@ -22,14 +22,6 @@ class GDT_Date extends GDT_Timestamp
 	public string $format = Time::FMT_DAY;
 	public string $dateStartView = 'year';
 	
-	##########
-	### DB ###
-	##########
-	public function gdoColumnDefine() : string
-	{
-		return "{$this->identifier()} DATE {$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-
 	###################
 	### Var / Value ###
 	###################
@@ -67,13 +59,6 @@ class GDT_Date extends GDT_Timestamp
 		}
 		
 		return $input ? Time::displayDateTimeFormat($input, 'Y-m-d', '', Time::UTC) : null;
-		
-// 		$input = str_replace('T', ' ', $input);
-// 		$input = str_replace('Z', '', $input);
-// 		$time = Time::parseDate($input, Time::UTC);
-// // 		$time = Time::parseDate($input);
-// 		$input = Time::getDate($time, 'Y-m-d');
-// 		return parent::inputToVar($input);
 	}
 	
 	public function toValue($var = null)

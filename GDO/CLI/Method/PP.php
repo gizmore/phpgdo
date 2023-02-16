@@ -23,6 +23,11 @@ use GDO\Core\GDT_String;
 final class PP extends MethodForm
 {
 	
+	public function isTrivial(): bool
+	{
+		return false; # better not change code on dev Oo
+	}
+	
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(

@@ -221,14 +221,6 @@ class GDT_Timestamp extends GDT_DBField
 	}
 	
 	##############
-	### Column ###
-	##############
-	public function gdoColumnDefine() : string
-	{
-		return "{$this->identifier()} TIMESTAMP({$this->millis}){$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-	
-	##############
 	### Render ###
 	##############
 	public function renderHTML() : string

@@ -194,7 +194,7 @@ final class Debug
 		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
 		
 		$messageHTML = sprintf('<p>%s(EH %s):&nbsp;%s&nbsp;in&nbsp;<b style=\"font-size:16px;\">%s</b>&nbsp;line&nbsp;<b style=\"font-size:16px;\">%s</b></p>', $errnostr, $errno, $errstr, $errfile, $errline);
-		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, TextStyle::italic($errstr), TextStyle::bold($errfile), TextStyle::bold($errline));
+		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, TextStyle::boldi($errstr), TextStyle::bold($errfile), TextStyle::bold($errline));
 		$message = $is_html ? $messageHTML : $messageCLI;
 		
 		// Send error to admin
@@ -334,6 +334,7 @@ final class Debug
 		}
 		
 		$args = [
+			GDO_HOSTNAME,
 			isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'NULL',
 			isset($_SERVER['REQUEST_URI']) ? $url : self::getMoMe(),
 			isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'NULL',
@@ -544,10 +545,12 @@ REQUEST: %s\n\n";
 	 */
 	public static function shortpath(string $path, string $newline="") : string
 	{
-		$path = str_replace('\\', '/', $path);
+		$path = str_replace('\\', '/', $path); #PP#windows#
 		$path = str_replace(GDO_PATH, '', $path);
 		$path = trim($path, ' /');
 		return $path;
 	}
 	
 }
+
+deff('GDO_HOSTNAME', gethostname()); #PP#delete#

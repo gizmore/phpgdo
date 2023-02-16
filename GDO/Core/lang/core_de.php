@@ -13,6 +13,7 @@ return [
 	'err_cli_form_gdt' => '%s hat einen Fehler: %s',	'err_path_not_exists' => 'Das %2$s `%1$s` existiert nicht oder ist nicht lesbar.',	'err_token' => 'Ihr Authentizitätstoken ist ungültig oder wurde bereits verwendet.',	'err_exception' => '%s: `%s`.',	'err_is_deleted' => 'Dieser Eintrag wurde gelöscht und kann nicht mehr geändert werden.',	'err_session_required' => 'Sie benötigen ein Sitzungscookie, um diese Methode zu verwenden.',	'err_invalid_ipc' => 'Die IPC Bridge-Einstellungen in config.php sind ungültig.',	'err_positional_after_named_parameter' => 'Sie können keine benannten Parameter nach erforderlichen Positionsangaben angeben.',	'err_gdo_is_not_table' => 'Ein %s-Tabellen-GDO ist keine Tabelle, sondern eine Instanz.',	'err_db_unique' => 'Dieser Eintrag existiert bereits.',
 	'err_min_max_confusion' => 'Das Maximum ist kleiner als das Minimum.',
 	'err_invalid_user_setting' => 'Modul %s hat eine ungültige Nutzereinstellung namens %s: %s (%s)',
+	'err_gdt_column_define_missing' => 'Ihr DBMS Modul kann keinen Datenbankcode für das Feld `%s` generieren; GDT Datentyp: `%s`.',
 	
 # err_path
 	'is_dir' => 'Verzeichnis',	'is_file' => 'Datei',	

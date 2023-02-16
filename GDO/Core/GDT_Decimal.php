@@ -5,7 +5,7 @@ namespace GDO\Core;
  * A fixed decimal, database driven field.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.2
  * @since 6.1.0
  * 
  * @see GDT_Float
@@ -13,15 +13,6 @@ namespace GDO\Core;
  */
 class GDT_Decimal extends GDT_Int
 {
-	##########
-	### DB ###
-	##########
-	public function gdoColumnDefine() : string
-	{
-		$digits = sprintf("%d,%d", $this->digitsBefore + $this->digitsAfter, $this->digitsAfter);
-		return "{$this->identifier()} DECIMAL($digits){$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
-	
 	##############
 	### Digits ###
 	##############
@@ -58,12 +49,13 @@ class GDT_Decimal extends GDT_Int
 	#############
 	### Value ###
 	#############
-	public function _inputToVar($input)
+	public function _inputToVar(?string $input): ?string
 	{
 		if ($input = parent::_inputToVar($input))
 		{
 			return GDT_Float::inputToVarS($input);
 		}
+		return null;
 	}
 	
 	public function plugVars() : array

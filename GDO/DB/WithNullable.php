@@ -3,47 +3,38 @@ namespace GDO\DB;
 
 /**
  * Add nullable option to a GDT.
- * 
+ *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  */
 trait WithNullable
 {
-	################
-	### Not null ###
-	################
+
+	# ###############
+	# ## Not null ###
+	# ###############
 	public bool $notNull = false;
-	
+
 	/**
 	 * Change nullable setting.
 	 */
-	public function notNull(bool $notNull = true) : self
+	public function notNull(bool $notNull = true): self
 	{
 		$this->notNull = $notNull;
 		return $this;
 	}
-	
-	##########
-	### DB ###
-	##########
-	public function gdoNullDefine() : string
+
+	# ###############
+	# ## Validate ###
+	# ###############
+	public function validateNull($value): bool
 	{
-		return $this->notNull ? ' NOT NULL' : ' NULL';
-	}
-	
-	################
-	### Validate ###
-	################
-	public function validateNull($value) : bool
-	{
-		return $this->notNull ?
-			($value === null ? $this->errorNull() : true) :
-			true;
+		return $this->notNull ? ($value === null ? $this->errorNull() : true) : true;
 	}
 
-	protected function errorNull() : bool
+	protected function errorNull(): bool
 	{
 		return $this->error('err_null_not_allowed');
 	}
-	
+
 }

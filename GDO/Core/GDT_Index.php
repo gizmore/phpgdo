@@ -26,21 +26,6 @@ class GDT_Index extends GDT
 		return false;
 	}
 	
-	public function gdoColumnDefine() : string
-	{
-	    return "{$this->fulltextDefine()} INDEX({$this->indexColumns}) {$this->usingDefine()}";
-	}
-	
-	private function fulltextDefine(): string
-	{
-		return isset($this->indexFulltext) ? $this->indexFulltext : GDT::EMPTY_STRING;
-	}
-	
-	private function usingDefine()
-	{
-	    return $this->indexUsing === false ? '' : $this->indexUsing;
-	}
-	
 	public function renderHTML(): string
 	{
 		return GDT::EMPTY_STRING;

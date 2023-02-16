@@ -3,9 +3,12 @@ namespace GDO\CLI\Test;
 
 use GDO\Tests\TestCase;
 use GDO\Core\GDT_Expression;
+use GDO\Core\Expression\Parser;
+use GDO\Util\PP;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertEquals;
-use GDO\Core\Expression\Parser;
+use function PHPUnit\Framework\assertEmpty;
+use function PHPUnit\Framework\assertFalse;
 
 final class CLITest extends TestCase
 {
@@ -35,6 +38,19 @@ final class CLITest extends TestCase
 	{
 		$result = $this->cli("cli.concat --glue=,, ,a,b,$(cli.concat c,d),e");
 		assertEquals("a, b, cd, e", $result, 'Test if nested concat with a weird ,, glue works.');
+	}
+
+	public function testPP()
+	{
+		if (ini_get('allow_url_fopen'))
+		{
+			$empty = PP::init()->processString("#PP#start#\n");
+			assertEmpty($empty, 'Test if #PP#start works without end.');
+		}
+		else
+		{
+			assertFalse((bool)ini_get('allow_url_fopen'), 'Warning removal urlfopen.');
+		}
 	}
 	
 }

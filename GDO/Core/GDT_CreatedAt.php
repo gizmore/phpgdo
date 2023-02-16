@@ -22,11 +22,6 @@ class GDT_CreatedAt extends GDT_Timestamp
 
 	public function isDefaultAsc() : bool { return false; }
 	
-	public function gdoColumnDefine() : string
-	{
-		return "{$this->identifier()} TIMESTAMP({$this->millis}){$this->gdoNullDefine()} DEFAULT CURRENT_TIMESTAMP({$this->millis})";
-	}
-	
 	public function blankData() : array
 	{
 	    $var = $this->var !== null ? $this->var : Time::getDate();

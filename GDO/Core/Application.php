@@ -34,7 +34,7 @@ class Application extends GDT
 	################################
 	### HREF COLLECTOR FOR TESTS ###
 	################################
-// 	public static array $HREFS = []; # @TODO In UnitTest, collect all calls to href(). Click every generated link :)
+	public static array $HREFS = []; #PP#delete#
 
 	################
 	### App Time ###

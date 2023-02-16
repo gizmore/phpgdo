@@ -9,8 +9,10 @@ use GDO\Core\GDT;
  * It is included in the core, and a reference for possible icons.
  * However, the possible icons are not limited to the ones defined here.
  * 
+ * @TODO: Speed up icon rendering by assigning constants.
+ * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.5.0
  * @see https://www.utf8icons.com/
  * @see https://unicode.org/emoji/charts/full-emoji-list.html

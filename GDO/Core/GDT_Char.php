@@ -21,14 +21,6 @@ class GDT_Char extends GDT_String
 		return $this;
 	}
 
-	public function gdoColumnDefine() : string
-	{
-		$collate = $this->gdoCollateDefine($this->caseSensitive);
-		return
-			"{$this->identifier()} CHAR({$this->max}) CHARSET {$this->gdoCharsetDefine()} {$collate}" .
-			$this->gdoNullDefine() . $this->gdoInitialDefine();
-	}
-	
 	public function plugVars() : array
 	{
 		return [

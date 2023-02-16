@@ -7,14 +7,14 @@
 # @version 7.0.2
 # @since 6.0.1
 #
-#
 set -euo pipefail
 cd "$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
-# Update phpgdo module
-echo "Updating $2"
-echo "Update module folder $1."
+
+# Update the phpgdo module
+echo "Updating module $2..."
+echo "Folder: $1"
 cd $1
 git checkout main 2>/dev/null || true
 git checkout master 2>/dev/null || true
@@ -23,8 +23,12 @@ git pull
 
 # Update submodules
 echo "Updating and fixing submodules."
+git submodule foreach git reset --hard
 git submodule foreach git checkout main 2>/dev/null || true
 git submodule foreach git checkout master 2>/dev/null || true
-git submodule foreach git reset --hard
 git submodule foreach git pull
 
+# Save the update
+cd $1
+git commit -am "GDOv7 Autosync $2"
+git push

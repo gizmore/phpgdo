@@ -85,6 +85,7 @@ return [
 	'err_db_unique' => 'This entry already exists.',
 	'err_min_max_confusion' => 'The maximum is smaller than the minimum.',
 	'err_invalid_user_setting' => 'Module %s has an invalid user setting named %s: %s (%s)',
+	'err_gdt_column_define_missing' => 'Your DBMS module cannot create database definitions for the field `%s`, which is a `%s`.',
 	
 	# err_path
 	'is_dir' => 'directory',

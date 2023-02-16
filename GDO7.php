@@ -1,13 +1,14 @@
 <?php
-use GDO\Language\Trans;
+use GDO\Core\Application;
 use GDO\Core\GDO;
+use GDO\Core\GDT;
+use GDO\Core\ModuleLoader;
+use GDO\Date\Time;
+use GDO\Language\Trans;
 use GDO\Net\GDT_Url;
 use GDO\User\GDO_User;
-use GDO\Core\ModuleLoader;
-use GDO\Core\Application;
-use GDO\Date\Time;
 use GDO\Util\Regex;
-use GDO\Core\GDT;
+use GDO\Util\Strings;
 /**
  * GDO Autoloader and global functions.
  *
@@ -26,26 +27,40 @@ global $GDT_LOADED;
 $GDT_LOADED = 0; #PP#delete#
 #
 /**
- * The infamous 5 line phpgdo autoloader.
+ * The infamous 5 line phpgdo autoloader... was cancelled.
+ * I present now: the branchless autoloader! :)
  * 
- * 1. Check if classname starts with GDO\ - @TODO: make branchless
- * 2. Turn GDO\Module\classname into a fullpath.php
+ * Generally both loaders work like this:
+ * 1. Check if classname starts with `GDO\`
+ * 2. Turn GDO\Module\Classname into a /fullpath.php (a tad faster on windows because a non required str_replace)
  * 3. Include the fullpath
- * 4. Increase performance counter, which is removed in production CI.
+ * 4. Increase performance counter, which is removed in production.
  * 
  * @author gizmore
  */
 spl_autoload_register(function(string $name) : void
 {
-	#if (unpack('L', $name) ^ 0x48444F5C) # 1 line for an "if"
-	#include_magic($name, 0x48444F5C); # @TODO: branchless autoloader for magic long value.
-	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for an "if"
-	{   # 2 lines for path + include
-		$name = GDO_PATH . str_replace('\\', '/', $name) . '.php';
-		include $name; # 2 lines perf, removed by PreProcessor
-		global $GDT_LOADED; # #PP#delete#
-		$GDT_LOADED++;      # #PP#delete#
-	}
+	$call = [
+		function() { }, # ignore
+		function($name){ # include
+			$name = str_replace('\\', '/', $name); #PP#linux (only on linux) :)
+			include(GDO_PATH . "{$name}.php"); # the worlds fastest autoloader.
+			global $GDT_LOADED; # #PP#delete# performance metrics (only in dev)
+			$GDT_LOADED++;      # #PP#delete#
+		},
+	];
+	# Worlds first branchless autoloader! 
+	$call[((((ord($name[0]) << 8) |
+		ord($name[3])) ^ 0xB8A3) + 1) >> 16]($name);
+	
+	# The original autoloader seems faster ;)
+// 	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for an "if"
+// 	{   # 2 lines for path + include
+// 		$name = str_replace('\\', '/', $name); #PP#linux (only on linux) :)
+// 		include(GDO_PATH . $name . '.php'); # the worlds fastest autoloader.
+// 		global $GDT_LOADED; # #PP#delete#
+// 		$GDT_LOADED++;      # #PP#delete#
+// 	}
 });
 
 ######################
@@ -99,6 +114,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 		$href = GDO_WEB_ROOT . "{$module}/{$method}";
 		$q = [];
 		$hash = '';
+		$fmt = 'html';
 		if ($append)
 		{
 			$append = ltrim($append, '&');
@@ -110,6 +126,10 @@ function href(string $module, string $method, string $append = null, bool $seo =
 			{
 				foreach ($qparts as $part)
 				{
+					if (str_starts_with($part, '_fmt'))
+					{
+						$fmt = Strings::substrFrom($part, '=');
+					}
 					if (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
 					{
 						$kv = explode('=', $part);
@@ -123,12 +143,14 @@ function href(string $module, string $method, string $append = null, bool $seo =
 					}
 				}
 			}
-			if ($q)
-			{
-				$href .= '?' . implode('&', $q);
-			}
 		}
 		
+		$href .= ".{$fmt}";
+		if ($q)
+		{
+			$href .= '?' . implode('&', $q);
+		}
+
 		if ($lang)
 		{
 			$href .= $q ? '&' : '?';
@@ -151,7 +173,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 		$href .= $append;
 	}
 	
-// 	Application::$HREFS[] = $href;
+	Application::$HREFS[] = $href; #PP#delete#
 	
 	return $href;
 }
@@ -213,13 +235,13 @@ function def(string $key, $default = null)
 	return defined($key) ? constant($key) : $default;
 }
 
+/**
+ * Define a constant unless defined and return constants value.
+ */
 function deff(string $key, $value)
 {
-	if (!defined($key))
-	{
-		define($key, $value);
-	}
-	return constant($key);
+	return defined($key) ? constant($key) :
+	(define($key, $value) ? constant($key) : constant($key));
 }
 
 function hdrc(string $header, bool $replace = true)

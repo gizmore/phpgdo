@@ -37,9 +37,10 @@ class Database
 	
 	# Connection
 	private $link; # any dbms provider link. remove?
-	private int $port = 3306;
-	private string $host, $user, $pass;
-	private ?string $usedb, $db; # used and configured db.
+	private int $port = 3306; # config
+	private string $host, $user, $pass; # config
+	private ?string $db; # configured db.
+	public  ?string $usedb; # current db in use.
 
 	# Debug
 	private int $debug = 0; # Set to 0/off, 1/on, 2/backtraces

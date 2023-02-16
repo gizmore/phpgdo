@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\DBMS\Module_DBMS;
+
 /**
  * The GDT_Text exceeds the limits of a GDT_String.
  * It is **not** displayed as a textarea.
@@ -18,20 +20,6 @@ class GDT_Text extends GDT_String
 	public int $max = 65535;
 	
 	public function defaultLabel() : self { return $this->label('message'); }
-	
-	##########
-	### DB ###
-	##########
-	public function gdoColumnDefine() : string
-	{
-		return "{$this->identifier()} {$this->gdoColumnDefineB()}";
-	}
-	
-	protected function gdoColumnDefineB() : string
-	{
-	    $collate = $this->gdoCollateDefine($this->caseSensitive);
-	    return "TEXT({$this->max}) CHARSET {$this->gdoCharsetDefine()}{$collate}{$this->gdoNullDefine()}{$this->gdoInitialDefine()}";
-	}
 	
 	################
 	### Validate ###
