@@ -17,12 +17,11 @@ use GDO\Language\Module_Language;
 /**
  * The core module holds some generic config as well as the global revision string.
  * The first module by priority, and it *HAS* to be installed for db driven sites,
- * simply because it installs the module table.
  *
  * Also this module provides the default theme,
  * which is almost empty and is using the default tpl of the modules.
  *
- * Very basic vanilla JS can be loaded.
+ * Very basic vanilla JS is optionally loaded.
  *
  * @author gizmore
  * @version 7.0.2
@@ -31,7 +30,7 @@ use GDO\Language\Module_Language;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1748';
+	const GDO_REVISION = '7.0.1-r1749';
 	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############
@@ -124,7 +123,7 @@ final class Module_Core extends GDO_Module
 	public function cfgAllowGuests() : string { return $this->getConfigVar('allow_guests'); }
 	public function cfgAllowJavascript() : string { return $this->getConfigVar('allow_javascript'); }
 	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
-	public function cfgMail403() : string { return $this->getConfigVar('mail_404'); }
+	public function cfgMail403() : string { return $this->getConfigVar('mail_403'); }
 	public function cfgMail404() : string { return $this->getConfigVar('mail_404'); }
 	public function cfgDirectoryIndex() : string { return $this->getConfigVar('directory_indexing'); }
 	public function cfgModuleAssets() : string { return $this->getConfigVar('module_assets'); }

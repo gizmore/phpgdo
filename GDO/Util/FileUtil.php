@@ -156,7 +156,7 @@ final class FileUtil
 	{
 		if (is_file($path))
 		{
-			return unlink($path);
+			return @unlink($path);
 		}
 		elseif (is_dir($path))
 		{
@@ -188,7 +188,7 @@ final class FileUtil
 					}
 					else
 					{
-					    if (!unlink($obj))
+					    if (!@unlink($obj))
 					    {
 					    	if ($throw)
 					    	{
