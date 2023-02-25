@@ -50,10 +50,9 @@ spl_autoload_register(function(string $name) : void
 		},
 	];
 	# Worlds first branchless autoloader! 
-	$call[((((ord($name[0]) << 8) |
-		ord($name[3])) ^ 0xB8A3) + 1) >> 16]($name);
+	$call[((((ord($name[0]) << 8) | ord($name[3])) ^ 0xB8A3) + 1) >> 16]($name);
 	
-	# The original autoloader seems faster ;)
+// 	# The original autoloader seems faster ;)
 // 	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for an "if"
 // 	{   # 2 lines for path + include
 // 		$name = str_replace('\\', '/', $name); #PP#linux (only on linux) :)
