@@ -454,6 +454,10 @@ abstract class GDO extends GDT
 			$vars = [];
 			foreach ($this->gdoColumnsCache() as $gdt)
 			{
+				if ($gdt instanceof GDT_AutoInc)
+				{
+					continue;
+				}
 				if ($withPrimaryKeys || (!$gdt->isPrimary()))
 				{
 					$data = $gdt->gdo($this)->getGDOData();

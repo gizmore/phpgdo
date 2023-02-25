@@ -85,7 +85,7 @@ class Result
 	
 	public function fetchAllRows(): array
 	{
-		return Database::$DBMS->dbmsFetchAll($this->result);
+		return Database::$DBMS->dbmsFetchAllRows($this->result);
 	}
 	
 	public function fetchAssoc() : ?array
@@ -95,7 +95,7 @@ class Result
 	
 	public function fetchAllAssoc() : ?array
 	{
-		return Database::$DBMS->dbmsFetchAll($this->result);
+		return Database::$DBMS->dbmsFetchAllAssoc($this->result);
 	}
 
 	public function fetchObject() : ?GDO

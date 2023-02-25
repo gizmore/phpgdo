@@ -181,6 +181,7 @@ class Application extends GDT
 	{
 		switch (strtoupper($fmt))
 		{
+			case 'TXT':
 			case 'CLI': return GDT::RENDER_CLI;
 			case 'WS': return GDT::RENDER_BINARY;
 			case 'PDF': return GDT::RENDER_PDF;

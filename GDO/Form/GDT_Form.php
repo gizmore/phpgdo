@@ -149,17 +149,16 @@ final class GDT_Form extends GDT
 		return $html;
 	}
 	
-	/**
-	 * Render html hidden fields for mo/me.
-	 * @deprecated Feels not nice.
-	 */
-	public static function htmlHiddenMoMe() : string
-	{
-		return
-			"<input type=\"hidden\" name=\"_mo\" value=\"{}\" />\n".
-			"<input type=\"hidden\" name=\"_me\" value=\"{}\" />\n";
-	}
-	
+// 	/**
+// 	 * Render html hidden fields for mo/me.
+// 	 * @deprecated Feels not nice.
+// 	 */
+// 	public static function htmlHiddenMoMe() : string
+// 	{
+// 		return
+// 			"<input type=\"hidden\" name=\"_mo\" value=\"{}\" />\n".
+// 			"<input type=\"hidden\" name=\"_me\" value=\"{}\" />\n";
+// 	}
 	
 	################
 	### Validate ###

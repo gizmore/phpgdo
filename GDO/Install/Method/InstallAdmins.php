@@ -14,13 +14,13 @@ use GDO\Core\ModuleLoader;
 use GDO\Crypto\BCrypt;
 use GDO\Session\GDO_Session;
 use GDO\Core\GDT;
-use GDO\Crypto\GDT_PasswordHash;
+use GDO\Crypto\GDT_Password;
 
 /**
  * Install an admin account.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.5
  */
 class InstallAdmins extends MethodForm
@@ -52,26 +52,30 @@ class InstallAdmins extends MethodForm
 		$form->text('info_install_admins');
 		$form->addFields(
 			$users->gdoColumn('user_name')->exists(false),
-			$users->gdoColumn('user_password'),
+			GDT_Password::make('pass'),
 		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
 	
 	public function renderPage() : GDT
 	{
-		return GDT_Template::templatePHP('Install', 'page/installadmins.php', ['form' => $this->getForm()]);
+		return GDT_Template::make()->template('Install', 'page/installadmins.php', ['form' => $this->getForm()]);
 	}
 	
 	public function formValidated(GDT_Form $form)
 	{
-		/** @var $password GDT_PasswordHash **/
-		$password = $form->getField('user_password');
-		$password->input(BCrypt::create($password->getVar())->__toString());
+// 		/** @var $password GDT_PasswordHash **/
+// 		$password = $form->getField('user_password');
+// 		$password->input(BCrypt::create($password->getVar())->__toString());
 		
 		$user = GDO_User::blank($this->getInputs());
 		$user->setVar('user_type', 'member');
-		$user->setVar('user_password', $password->getHash());
 		$user->insert();
+		
+		if (module_enabled('Login'))
+		{
+			$user->saveSettingVar('Login', 'password', BCrypt::create($form->getFormVar('pass'))->__toString());
+		}
 		
 		$permissions = ['admin' => 1000, 'staff' => 500, 'cronjob' => 500];
 		foreach ($permissions as $permission => $level)

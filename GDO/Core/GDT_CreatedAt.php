@@ -10,7 +10,7 @@ use GDO\Date\Time;
  * It has a default label and the default order is descending.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.2
  * @since 5.0
  */
 class GDT_CreatedAt extends GDT_Timestamp

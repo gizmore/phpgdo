@@ -441,6 +441,13 @@ class GDT_Table extends GDT
 	# #############
 	# ## Render ###
 	# #############
+	public bool $noFormWrap = false;
+	public function noFormWrap(bool $noWrap=true): self
+	{
+		$this->noFormWrap = $noWrap;
+		return $this;
+	}
+	
 	public function renderHTML() : string
 	{
 		if (($this->hideEmpty) && ($this->getResult()->numRows() === 0))
@@ -454,7 +461,7 @@ class GDT_Table extends GDT
 			return GDT_Template::php('Table', 'table_html.php',
 			[
 				'field' => $this,
-				'form' => false,
+				'form' => $this->noFormWrap,
 			]);
 		}
 		finally

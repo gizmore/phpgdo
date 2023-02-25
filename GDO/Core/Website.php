@@ -91,7 +91,7 @@ final class Website
 	{
 		/** @var \GDO\Core\Method $me **/
 		global $me;
-		if ($me->isIndexed())
+		if ($me && $me->isIndexed())
 		{
     	    self::$META[] = ['robots', 'index, follow', 'name'];
 	    }

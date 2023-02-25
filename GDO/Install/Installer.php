@@ -332,9 +332,9 @@ class Installer
 	 * Used in phpgdo-docs to generate a module list for a single module documentation output.
 	 * @return GDO_Module[]
 	 */
-	public static function getDependencyModuleNames(string $moduleName, bool $friendencies=false) : array
+	public static function getDependencyModuleNames(string $moduleName, bool $friendencies=false, bool $noCore=true) : array
 	{
-	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, true, true);
+	    $module = ModuleLoader::instance()->loadModuleFS($moduleName, true, false);
 	    $moduleName = $module->getModuleName();
 	    $deps = $module->getDependencies();
 	    $frds = $module->getFriendencies();
@@ -347,7 +347,7 @@ class Installer
 	        $cnt = count($deps);
 	        foreach ($deps as $dep)
 	        {
-	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, true, true);
+	            $depmod = ModuleLoader::instance()->loadModuleFS($dep, true, false);
 	            if (!$depmod)
 	            {
 	                continue;
@@ -363,15 +363,18 @@ class Installer
 	    
 	    $deps = $friendencies ? $frds : $deps;
 	    
-	    $deps = array_filter($deps,
-	    	function (string $name) use ($moduleName)
-	    	{
-	    		if (ModuleProviders::isCoreModule($name))
-	    		{
-	    			return false;
-	    		}
-	    		return $name !== $moduleName;
-	    });
+	    if ($noCore)
+	    {
+		    $deps = array_filter($deps,
+		    	function (string $name) use ($moduleName)
+		    	{
+		    		if (ModuleProviders::isCoreModule($name))
+		    		{
+		    			return false;
+		    		}
+		    		return $name !== $moduleName;
+		    });
+	    }
 	    
 	    sort($deps);
 	    

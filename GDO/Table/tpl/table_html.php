@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Table\tpl;
 use GDO\Form\GDT_Form;
+use GDO\Core\GDT;
 /** @var $field \GDO\Table\GDT_Table **/
 /** @var $form bool **/
 $headers = $field->getHeaderFields();
@@ -9,8 +10,8 @@ $result = $field->getResult();
 ?>
 <div class="gdt-table"<?=$field->htmlID()?>>
 <?php if (!$form) : ?>
- <form method="get"<?=$field->htmlAction()?>>
-<?=GDT_Form::htmlHiddenMoMe()?>
+ <form method="post"<?=$field->htmlAction()?>>
+<?#GDT_Form::htmlHiddenMoMe()?>
 <?php endif; ?>
 <?php if ($field->hasTitle()) : ?>
   <div class="gdo-table-caption">
@@ -60,7 +61,7 @@ $result = $field->getResult();
   </table>
   <input type="submit" class="n" />
 <?php if ($actions = $field->getActions()) : ?>
-<?=$actions->render()?>
+<?=$actions->renderMode(GDT::RENDER_FORM)?>
 <?php endif; ?>
 <?php if (!$form) : ?>
  </form>

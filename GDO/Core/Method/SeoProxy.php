@@ -3,6 +3,9 @@ namespace GDO\Core\Method;
 
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
+use GDO\Core\Application;
+use GDO\Core\GDT;
+use GDO\Util\Strings;
 
 /**
  * Proxy an HTTP request / URL to a Method via GDOv7 SEO url rules.
@@ -42,6 +45,13 @@ final class SeoProxy extends Method
 		{
 			$_REQUEST['url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
+		}
+		
+		if ($suffix = Strings::rsubstrFrom($me, '.'))
+		{
+			$me = Strings::rsubstrTo($me, '.');
+			$app = Application::$INSTANCE;
+			$app->modeDetected($app->detectRenderMode($suffix));
 		}
 		
 		if (!($method = $module->getMethodByName($me, false)))

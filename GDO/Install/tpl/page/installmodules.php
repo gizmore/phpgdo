@@ -19,19 +19,19 @@ $table = GDT_Table::make()->result(new ArrayResult($modules, GDO_Module::table()
 $table->addHeaderField(GDT_Template::make()->template('Install', 'cell/installcbx.php')->templateHead('Install', 'cell/installcbx_head.php'));
 $table->addHeaderField(GDO_Module::table()->gdoColumn('module_name'));
 $table->addHeaderField(GDT_Template::make('module_license')->label('license')->template('Install', 'cell/modulelicense.php'));
-$table->addField(GDT_Template::make('module_name')->template('Install', 'modulename_html.php'));
+$table->addHeaderField(GDT_Template::make('module_name')->template('Install', 'modulename_html.php'));
 $table->addHeaderField(GDO_Module::table()->gdoColumn('module_priority'));
 // $table->addHeader(GDT_ModuleFeature::make('module_features'));
 // $table->addHeader(GDT_Text::make('module_description')->method('displayModuleDescription'));
 // $table->fetchAs();
 $table->fetchInto(false);
-$install = GDT_Submit::make('btn_install');
+$install = GDT_Submit::make('btn_install')->label('install');
 $skip = Config::linkStepGDT('5');
 $hiddenStep = GDT_Hidden::make('step')->var('4');
 $table->actions()->addFields($install, $skip, $hiddenStep);
-$table->ordered(true);
-$table->multisort($table->getResult(), 'module_name');
-echo $table->gdo(GDO_Module::table())->renderHTML();
+// $table->noFormWrap();
+$table->multisort('module_name');
+echo $table->gdo(GDO_Module::table())->render();
 ?>
 <script type="text/javascript">
 var modules = <?=json_encode($moduleNames)?>;

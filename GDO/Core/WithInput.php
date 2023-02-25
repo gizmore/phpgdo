@@ -60,6 +60,14 @@ trait WithInput
 		return isset($this->inputs) ? $this->inputs : GDT::EMPTY_ARRAY;
 	}
 	
+	/**
+	 * @deprecated not type safe
+	 */
+	public function getInputFor(string $key)
+	{
+		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
+	}
+	
 	public function hasInput() : bool
 	{
 		if ($name = $this->getName())

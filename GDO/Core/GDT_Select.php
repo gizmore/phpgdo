@@ -552,7 +552,7 @@ class GDT_Select extends GDT_ComboBox
 	{
 		$back = [];
 		$choices = $this->initChoices();
-		foreach ($choices as $var => $choice)
+		foreach (array_keys($choices) as $var)
 		{
 			$back[] = $var;
 		}

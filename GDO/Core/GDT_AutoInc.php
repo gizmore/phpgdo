@@ -18,7 +18,6 @@ final class GDT_AutoInc extends GDT_UInt
 	############
 	### Base ###
 	############
-// 	public bool $hidden = true; # hide in tables
 	public bool $notNull = true;
 	public bool $writeable = false;
 
@@ -30,8 +29,7 @@ final class GDT_AutoInc extends GDT_UInt
 	public function primary(bool $primary=true) : self { return $this; } 
 	public function isPrimary() : bool { return true; } # Weird workaround for mysql primary key defs.
 	public function validate($value) : bool { return true; } # We simply do nothing in the almighty validate.
-	
-// 	public function gdoColumnDefine() : string { return "{$this->identifier()} {$this->gdoSizeDefine()}INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY"; }
+
 	##############
 	### Events ###
 	##############
@@ -47,7 +45,7 @@ final class GDT_AutoInc extends GDT_UInt
 	public function blankData() : array
 	{
 		# prevent old values to be used.
-	    return [$this->name => null];
+		return [$this->name => null];
 	}
 	
 	/**

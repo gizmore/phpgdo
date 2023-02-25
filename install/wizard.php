@@ -12,6 +12,7 @@ use GDO\Core\Logger;
 use GDO\User\GDO_User;
 use GDO\Install\Config;
 use GDO\Core\GDT_Response;
+use GDO\Core\GDT;
 @include 'protected/config.php';
 require 'GDO7.php';
 final class wizard extends Application
@@ -26,7 +27,7 @@ final class wizard extends Application
     	return $this->wizardThemes;
     }
 }
-wizard::instance();
+wizard::instance()->modeDetected(GDT::RENDER_WEBSITE);
 Config::configure();
 Logger::init('install');
 Debug::init(0, false);
@@ -35,6 +36,7 @@ $loader = ModuleLoader::instance();
 $loader->loadModuleFS('Core');
 $install = $loader->loadModuleFS('Install');
 Trans::$ISO = GDO_LANGUAGE;
+$loader->loadLangFiles(true);
 Trans::inited(true);
 define('GDO_CORE_STABLE', 1);
 try

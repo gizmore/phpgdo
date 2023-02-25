@@ -32,7 +32,9 @@ final class CopyHTAccess extends MethodForm
 	
 	public function renderPage() : GDT
     {
-        return GDT_Template::templatePHP('Install', 'page/copyhtaccess.php', ['form' => $this->getForm()]);
+        return GDT_Template::make()->
+        	template('Install', 'page/copyhtaccess.php', [
+        		'form' => $this->getForm()]);
     }
 
     public function createForm(GDT_Form $form) : void

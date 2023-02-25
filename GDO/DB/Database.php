@@ -105,7 +105,7 @@ class Database
 	
 	public function closeLink() : void
 	{
-		if ($this->link)
+		if (isset($this->link))
 		{
 			self::$DBMS->dbmsClose($this->link);
 			unset($this->link);
@@ -117,10 +117,10 @@ class Database
 		if (!isset($this->link))
 		{
 			$this->link = $this->openLink();
-			if ( (!isset($this->usedb)) && (isset($this->db)) )
-			{
-				$this->useDatabase($this->db);
-			}
+// 			if ( (!isset($this->usedb)) && (isset($this->db)) )
+// 			{
+// 				$this->useDatabase($this->db);
+// 			}
 		}
 		return $this->link;
 	}
@@ -152,7 +152,7 @@ class Database
 	public function connect()
 	{
 		self::$DBMS = Module_DBMS::instance();
-		return self::$DBMS->dbmsOpen($this->host, $this->user, $this->pass, null, $this->port);
+		return self::$DBMS->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
 	}
 	
 	#############
@@ -174,14 +174,14 @@ class Database
 	
 	private function query(string $query, bool $buffered=true)
 	{
-		try
-		{
+// 		try
+// 		{
 			return $this->queryB($query);
-		}
-		catch (\Throwable $ex)
-		{
-			throw new GDO_DBException("err_db", [$ex->getCode(), $ex->getMessage(), html($query)]);
-		}
+// 		}
+// 		catch (\Throwable $ex)
+// 		{
+// 			throw new GDO_DBException("err_db", [$ex->getCode(), $ex->getMessage(), html($query)]);
+// 		}
 	}
 	
 	private function queryB(string $query, bool $buffered=true)
@@ -197,8 +197,8 @@ class Database
 			if ($this->link)
 			{
 				$error = self::$DBMS->dbmsError($this->link);
-				$error = self::$DBMS->dbmsErrno($this->link);
-				$this->closeLink();
+				$errno = self::$DBMS->dbmsErrno($this->link);
+// 				$this->closeLink();
 			}
 			else
 			{
@@ -380,6 +380,7 @@ class Database
 	###################
 	public function transactionBegin(): void
 	{
+		$this->getLink();
 		self::$DBMS->dbmsBegin();
 	}
 	

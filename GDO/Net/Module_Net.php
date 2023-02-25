@@ -24,7 +24,6 @@ final class Module_Net extends GDO_Module
 	public function getClasses(): array
 	{
 		return [
-			GDO_SEO_URL::class,
 			GDO_Domain::class,
 			GDO_SubDomain::class,
 		];

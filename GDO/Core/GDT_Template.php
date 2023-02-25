@@ -100,7 +100,31 @@ class GDT_Template extends GDT
 		$tVars = isset($this->templateVars) ? array_merge($this->templateVars, $tVars) : $tVars;
 		return self::php($this->templateModule, $this->templatePath, $tVars);
 	}
+	
+	#####################
+	### Template Head ###
+	#####################
+	public string $templateHeadModule;
+	public string $templateHeadPath;
+	public ?array $templateHeadVars;
+	
+	public function templateHead(string $module, string $path, array $vars=null): self
+	{
+		$this->templateHeadModule = $module;
+		$this->templateHeadPath = $path;
+		$this->templateHeadVars = $vars;
+		return $this;
+	}
 
+	public function renderTHead(): string
+	{
+		if (isset($this->templateHeadPath))
+		{
+			return self::php($this->templateHeadModule, $this->templateHeadPath, $this->templateHeadVars);
+		}
+		return GDT::EMPTY_STRING;
+	}
+	
 	# ###########
 	# ## Type ###
 	# ###########

@@ -36,7 +36,7 @@ final class ImportBackup extends MethodForm
 	
 	public function renderPage() : GDT
 	{
-		return GDT_Template::templatePHP('Install', 'page/importbackup.php', ['form' => $this->getForm()]);
+		return GDT_Template::make()->template('Install', 'page/importbackup.php', ['form' => $this->getForm()]);
 	}
 	
 	public function createForm(GDT_Form $form) : void

@@ -178,18 +178,10 @@ function gdoRouteMoMe(string $mo, string $me) : Method
 	return $method;
 }
 
-if ( (def('GDO_FORCE_SSL', false)) &&
-	(!Application::$INSTANCE->isTLS()) )
+if (GDO_FORCE_SSL && (!Application::$INSTANCE->isTLS()) )
 {
 	$me = ForceSSL::make();
 }
-// elseif (!($me instanceof Stub))
-// {
-// 	# Some initModule did set a $me
-// 	unset($_REQUEST['_mo']);
-// 	unset($_REQUEST['_me']);
-// 	unset($_REQUEST['_url']);
-// }
 elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 {
 	$me = gdoRouteMoMe((string)@$_REQUEST['_mo'], (string)@$_REQUEST['_me']);
