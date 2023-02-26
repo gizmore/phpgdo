@@ -5,7 +5,7 @@ namespace GDO\Util;
  * String utility class.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.0
  */
 final class Strings
@@ -57,7 +57,6 @@ final class Strings
 		if (false !== ($index = strrpos($s, $from)))
 		{
 			return substr($s, $index + strlen($from));
-// 			return substr($s, $index);
 		}
 		return $default;
 	}
@@ -126,7 +125,6 @@ final class Strings
 	###################
 	/**
 	 * UTF8 capable string comparison.
-// 	 * @deprecated Slow.
 	 */
 	public static function compare(string $a, string $b, bool $caseS=false) : int
 	{
@@ -135,19 +133,19 @@ final class Strings
 		return $caseS ? strnatcmp($a, $b) : strnatcasecmp($a, $b);
 	}
 	
-	#####################
-	### HTML Shrinker ###
-	#####################
-	/**
-	 * Remove uncessary whitespace from html output.
-	 * @deprecated slow
-	 */
-	public static function shrinkHTML(string $html) : string
-	{
-		$html = preg_replace('/\s+/', ' ', $html);
-		$html = str_replace('> <', '><', $html);
-		return $html;
-	}
+// 	#####################
+// 	### HTML Shrinker ###
+// 	#####################
+// 	/**
+// 	 * Remove uncessary whitespace from html output.
+// 	 * @deprecated slow
+// 	 */
+// 	public static function shrinkHTML(string $html) : string
+// 	{
+// 		$html = preg_replace('/\s+/', ' ', $html);
+// 		$html = str_replace('> <', '><', $html);
+// 		return $html;
+// 	}
 	
 	###############
 	### Explode ###
@@ -158,7 +156,7 @@ final class Strings
 	public static function explode(string $string, string $delimiter = ',') : array
 	{
 		$array = array_map('trim', explode($delimiter, $string));
-		return array_filter($array, function($s){
+		return array_filter($array, function(string $s) {
 			return $s !== '';
 		});
 	}

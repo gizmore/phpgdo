@@ -29,17 +29,11 @@ final class Process
 	 * Convert DIR separator for operating System.
 	 * On Windows we use backslash.
 	 * On Linux we keep forward slash, which is default in GDOv7.
-	 * @deprecated Nobody cares?
 	 */
 	public static function osPath(string $path) : string
 	{
-		#PP#start#
-		if (self::isWindows())
-		{
-			return str_replace('/', '\\', $path);
-		}
-		#PP#end#
-		return $path;
+		return str_replace('/', '\\', $path); #PP#windows#
+		return $path; #PP#linux#
 	}
 
 	/**
@@ -78,7 +72,7 @@ final class Process
 	 */
 	public static function commandPath(string $command, string $windowsSuffix = '.*', bool $alert=true) : ?string
 	{
-		$whereIsCommand = self::isWindows() ? 'where' : 'which';
+		$whereIsCommand = self::isWindows() ? 'where /R %userprofile% ' : 'which';
 		$command = self::isWindows() ? $command . $windowsSuffix : $command;
 
 		$pipes = [];
@@ -92,7 +86,7 @@ final class Process
 		if ($process !== false)
 		{
 			$stdout = stream_get_contents($pipes[1]);
-			// $stderr = stream_get_contents($pipes[2]);
+// 			$stderr = stream_get_contents($pipes[2]);
 			fclose($pipes[1]);
 			fclose($pipes[2]);
 			proc_close($process);

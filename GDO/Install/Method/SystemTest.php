@@ -7,7 +7,9 @@ use GDO\CLI\Process;
 
 /**
  * Do some tests and output in page.
+ * 
  * @author gizmore
+ * @version 7.0.2
  */
 final class SystemTest extends Method
 {
@@ -23,8 +25,8 @@ final class SystemTest extends Method
 	
 	public function execute()
 	{
-		$tVars = array(
-			'tests' => array(
+		$tVars = [
+			'tests' => [
 				$this->testPHPVersion(),
 				FileUtil::createDir(GDO_PATH . 'protected'),
 				FileUtil::createDir(GDO_PATH . 'files'),
@@ -34,15 +36,15 @@ final class SystemTest extends Method
 			    function_exists('mime_content_type'),
 				function_exists('bcadd'),
 				function_exists('iconv'),
-			),
-			'optional' => array(
+			],
+			'optional' => [
 			    function_exists('curl_init'),
 			    function_exists('imagecreate'),
 			    class_exists('\\Memcached', false),
 				function_exists('openssl_cipher_iv_length'),
 				$this->testYarn(),
-			),
-		);
+			],
+		];
 		return $this->templatePHP('page/systemtest.php', $tVars);
 	}
 	
@@ -51,11 +53,10 @@ final class SystemTest extends Method
 		$version = floatval(PHP_MAJOR_VERSION. '.' . PHP_MINOR_VERSION);
 		return $version >= 8.0;
 	}
-
-	private function testYarn() : bool
+	
+	private function testYarn(): bool
 	{
-		$lines = Process::exec("yarn --version");
-		return !!$lines;
+		return !!Process::commandPath('yarn', '');
 	}
 	
 }

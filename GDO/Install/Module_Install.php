@@ -3,6 +3,7 @@ namespace GDO\Install;
 
 use GDO\Core\GDO_Module;
 use GDO\Core\Method\ClearCache;
+use GDO\Core\GDT_Template;
 
 /**
  * Installer module.
@@ -10,22 +11,42 @@ use GDO\Core\Method\ClearCache;
  * Offers install theme.
  * Offers WWW Installer
  * Offers install utility.
- * 
+ *
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.2
  * @since 3.0.0
  */
 final class Module_Install extends GDO_Module
 {
-	public function getTheme() : ?string	{ return 'install'; }
-	public function isInstallable() : bool { return false; }
-	public function defaultEnabled() : bool { return false; }
-	
-	public function onLoadLanguage() : void { $this->loadLanguage('lang/install'); }
 
+	public function getTheme(): ?string
+	{
+		return 'install';
+	}
+
+	public function isInstallable(): bool
+	{
+		return false;
+	}
+
+	public function defaultEnabled(): bool
+	{
+		return false;
+	}
+
+	public function onLoadLanguage(): void
+	{
+		$this->loadLanguage('lang/install');
+	}
+
+	/**
+	 * Forcefully register install theme.
+	 */
 	public function onModuleInit()
 	{
+		$path = $this->filePath('thm/install/');
+		GDT_Template::registerTheme('install', $path);
 		ClearCache::make()->clearCache();
 	}
-	
+
 }

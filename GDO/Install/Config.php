@@ -122,6 +122,7 @@ class Config
 		# Database
 		deff('GDO_SALT', Random::randomKey(16));
 		deff('GDO_DB_ENABLED', true);
+		deff('GDO_DB_READONLY', false);
 		deff('GDO_DB_HOST', 'localhost');
 		deff('GDO_DB_PORT', 3306);
 		deff('GDO_DB_USER', '');
@@ -211,14 +212,15 @@ class Config
 			GDT_Divider::make()->label('install_config_section_database'),
 			GDT_Hidden::make('salt')->initialValue(GDO_SALT)->tooltipRaw('Cryptograpycally secure salt to strengthen tokens and passwords.'),
 			GDT_Checkbox::make('db_enabled')->initialValue(!!GDO_DB_ENABLED)->tooltipRaw('DB enabled? (required atm)'),
-// 			GDT_Checkbox::make('db_readonly')->initialValue(!!GDO_DB_ENABLED)->tooltipRaw('DB enabled? (required atm)'),
+			GDT_Checkbox::make('db_readonly')->initialValue(!!GDO_DB_READONLY)->tooltipRaw('DB in read only mode? (except installers)'),
 			GDT_String::make('db_host')->initialValue(GDO_DB_HOST)->tooltipRaw('DB hostname.'),
 			GDT_Port::make('db_port')->initialValue((int)GDO_DB_PORT)->tooltipRaw('DB port.'),
 			GDT_String::make('db_user')->initialValue(GDO_DB_USER)->tooltipRaw('DB username'),
 			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS)->tooltipRaw('DB password'),
-			GDT_String::make('db_name')->initialValue(GDO_DB_NAME)->tooltipRaw('DB database name'),
-			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM)->tooltipRaw('DB engine: InnoDB or MyIsam.'),
+			GDT_String::make('db_name')->initialValue(GDO_DB_NAME)->tooltipRaw('DB database name or SQLite filename'),
+			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM, GDO::SQL3_PERSIST, GDO::SQL3_WAL)->tooltipRaw('DB engine: InnoDB,MyIsam(MySQL), JournalMode(SQLite).'),
 			GDT_TinyInt::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2)->tooltipRaw('GDO debugging level. 0: off, 1: counters, 2: instancelog.'),
+			
 			
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),

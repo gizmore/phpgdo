@@ -303,7 +303,8 @@ class GDO_Module extends GDO
 	// private static array $nameCache = [];
 	public static function getNameS()
 	{
-		return strtolower(substr(self::gdoShortNameS(), 7));
+// 		return strtolower(substr(self::gdoShortNameS(), 7));
+		return substr(self::gdoShortNameS(), 7);
 		// if (isset(self::$nameCache[static::class]))
 		// {
 		// return self::$nameCache[static::class];

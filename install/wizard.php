@@ -1,5 +1,6 @@
 <?php
 namespace install;
+define('GDO_TIME_START', microtime(true));
 chdir('../');
 use GDO\Core\Application;
 use GDO\UI\GDT_Error;
@@ -13,6 +14,7 @@ use GDO\User\GDO_User;
 use GDO\Install\Config;
 use GDO\Core\GDT_Response;
 use GDO\Core\GDT;
+use GDO\Core\Method;
 @include 'protected/config.php';
 require 'GDO7.php';
 final class wizard extends Application
@@ -34,18 +36,20 @@ Debug::init(0, false);
 GDO_User::setCurrent(GDO_User::ghost());
 $loader = ModuleLoader::instance();
 $loader->loadModuleFS('Core');
-$install = $loader->loadModuleFS('Install');
+$install = $loader->loadModuleFS('Install', true, true);
 Trans::$ISO = GDO_LANGUAGE;
 $loader->loadLangFiles(true);
 Trans::inited(true);
 define('GDO_CORE_STABLE', 1);
+global $me;
+/** @var Method $me **/
 try
 {
     # Execute Step
     $steps = Config::steps();
     $step = Math::clampInt(Common::getGetInt('step'), 1, count($steps));
-    $method = $install->getMethod($steps[$step-1]);
-    $result = $method->appliedInputs($_REQUEST)->execute();
+    $me = $install->getMethod($steps[$step-1]);
+    $result = $me->appliedInputs($_REQUEST)->execute();
 }
 catch (\Throwable $ex)
 {

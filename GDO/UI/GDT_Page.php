@@ -12,7 +12,7 @@ use GDO\Session\GDO_Session;
  * Adds 4 sidebars and 1 top response box.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  */
 final class GDT_Page extends GDT
@@ -49,13 +49,14 @@ final class GDT_Page extends GDT
 	{
 		global $me;
 		$loader = ModuleLoader::instance();
-		foreach ($loader->getEnabledModules() as $module)
+		$modules = $loader->getEnabledModules();
+		foreach ($modules as $module)
 		{
 			$module->onIncludeScripts();
 		}
 		if ($me && $me->isSidebarEnabled())
 		{
-			foreach ($loader->getEnabledModules() as $module)
+			foreach ($modules as $module)
 			{
 				$module->onInitSidebar();
 			}

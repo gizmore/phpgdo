@@ -397,7 +397,8 @@ final class ModuleLoader
 		{
 			$module = $this->modules[$lowerName];
 // 			$module->buildConfigCache();
-			$this->initModuleVars($module->getName());
+// 			$this->initModuleVars($module->getName());
+			$module->onModuleInit();
 		}
 		return $this->modules[$lowerName];
 	}

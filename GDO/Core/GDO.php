@@ -46,12 +46,21 @@ abstract class GDO extends GDT
 	#################
 	### Constants ###
 	#################
-	const LICENSE = 'GDOv7-LICENSE';
+	const LICENSE = 'GDOv7';
 	const TOKEN_LENGTH = 16; # length of gdoHashcode and GDT_Token
 	
+	# mysql
 	const MYISAM = 'MyIsam'; # Faster writes
 	const INNODB = 'InnoDB'; # Foreign keys
-	const MEMORY = 'Memory'; # Temp tables @TODO Temp memory tables not working? => remove
+// 	const MEMORY = 'Memory'; # Temp tables @TODO Temp memory tables not working? => remove
+	
+	# sqlite
+// 	const SQL3_DELETE = 'DELETE';
+// 	const SQL3_TRUNCATE = 'TRUNCATE';
+	const SQL3_PERSIST = 'PERSIST';
+// 	const SQL3_MEMORY = 'MEMORY';
+	const SQL3_WAL = 'WAL';
+// 	const SQL3_OFF = 'OFF';
 	
 	##############
 	### Static ###

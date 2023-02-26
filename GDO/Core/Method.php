@@ -715,7 +715,8 @@ abstract class Method #extends GDT
 		$href = $href ? $href : GDT_Redirect::hrefBack();
 		$redirect = GDT_Redirect::make()->href($href)
 			->redirectError($key, $args);
-		GDT_Page::instance()->topResponse()->addField($redirect);
+		GDT_Page::instance()->topResponse()->
+			addField($redirect);
 		return $redirect;
 	}
 	
@@ -724,7 +725,8 @@ abstract class Method #extends GDT
 	################
 	public function templatePHP(string $path, array $tVars=null) : GDT_Template
 	{
-		return GDT_Template::make()->template($this->getModuleName(), $path, $tVars);
+		return GDT_Template::make()->template(
+			$this->getModuleName(), $path, $tVars);
 	}
 
 	public function tempPath(string $path = ''): string

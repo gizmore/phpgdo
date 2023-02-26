@@ -32,14 +32,12 @@ trait WithModule
 	# #################
 	public function gdoShortName(): string
 	{
-		$k = get_class($this);
-		return Strings::rsubstrFrom($k, '\\');
+		return Strings::rsubstrFrom(get_class($this), '\\');
 	}
 
 	public static function gdoShortNameS(): string
 	{
-		$k = static::class;
-		return Strings::rsubstrFrom($k, '\\');
+		return Strings::rsubstrFrom(static::class, '\\');
 	}
 
 	# #################

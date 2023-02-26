@@ -20,6 +20,7 @@ use GDO\Core\ModuleProviders;
 use GDO\Core\Method\ClearCache;
 use GDO\Util\Arrays;
 use GDO\CLI\REPL;
+use GDO\DBMS\Module_DBMS;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -95,12 +96,12 @@ CLI::setServerVars();
 
 echo "Dropping Test Database: " . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
-Database::instance()->queryWrite("DROP DATABASE IF EXISTS " . GDO_DB_NAME);
-Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
-Database::instance()->useDatabase(GDO_DB_NAME);
-
+$dbms = Module_DBMS::instance();
+$dbms->dbmsDropDB(GDO_DB_NAME);
 FileUtil::removeDir(GDO_PATH . 'files_test/');
 FileUtil::removeDir(GDO_TEMP_PATH);
+$dbms->dbmsCreateDB(GDO_DB_NAME);
+$dbms->dbmsUseDB(GDO_DB_NAME);
 
 # 1. Try the install process if mode all.
 if ($argc === 1)

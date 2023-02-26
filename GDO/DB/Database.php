@@ -26,7 +26,7 @@ use GDO\DBMS\Module_DBMS;
 class Database
 {
 	# Const
-	const PRIMARY_USING = 'USING HASH'; # Default index algorithm for primary keys.
+// 	const PRIMARY_USING = 'USING HASH'; # Default index algorithm for primary keys.
 	
 	# Instance
 	private static Database $INSTANCE;
@@ -36,7 +36,7 @@ class Database
 	public static ?Module_DBMS $DBMS = null;
 	
 	# Connection
-	private $link; # any dbms provider link. remove?
+// 	private $link; # any dbms provider link. remove?
 	private int $port = 3306; # config
 	private string $host, $user, $pass; # config
 	private ?string $db; # configured db.
@@ -114,10 +114,6 @@ class Database
 		if (!isset($this->link))
 		{
 			$this->link = $this->openLink();
-// 			if ( (!isset($this->usedb)) && (isset($this->db)) )
-// 			{
-// 				$this->useDatabase($this->db);
-// 			}
 		}
 		return $this->link;
 	}

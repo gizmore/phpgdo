@@ -3,7 +3,6 @@ namespace GDO\Core\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDT_Hook;
-use GDO\Core\Method;
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
 use GDO\Tests\GDT_MethodTest;
@@ -22,7 +21,7 @@ use GDO\Form\GDT_AntiCSRF;
  * Does not save last url. Calls last url.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.0.1
  * @see GDO
  * @see Cache
@@ -50,19 +49,24 @@ class ClearCache extends MethodForm
 	    return GDT_Redirect::make()->redirectMessage('msg_cache_flushed')->back();
 	}
 	
-	public function clearCache()
+	public function clearCache(): void
 	{
-	    # Retrigger assets
-	    $core = Module_Core::instance();
-	    $assetVersion = $core->cfgAssetVersion();
-	    $assetVersion->increase();
-	    $core->saveConfigVar('asset_revision', $assetVersion->__toString());
+	    # Retrigger assets (requires db)
+	    if (!Application::$INSTANCE->isInstall())
+	    {
+		    $core = Module_Core::instance();
+	    	# needs a db set up.
+		    $assetVersion = $core->cfgAssetVersion();
+		    $assetVersion->increase();
+		    $core->saveConfigVar('asset_revision', $assetVersion->__toString());
+			# needs a db set up :/
+		    Database::instance()->clearCache();
+	    }
 	    # Flush memcached.
 	    Cache::flush();
 	    # Flush filecache
 	    Cache::fileFlush();
 	    # Flush GDO cache
-	    Database::instance()->clearCache();
 	    # Reset application state
 	    Application::$INSTANCE->reset();
 	    # Remove minified JS

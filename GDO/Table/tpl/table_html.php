@@ -1,6 +1,5 @@
 <?php
 namespace GDO\Table\tpl;
-use GDO\Form\GDT_Form;
 use GDO\Core\GDT;
 /** @var $field \GDO\Table\GDT_Table **/
 /** @var $form bool **/
