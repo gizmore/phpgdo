@@ -346,13 +346,14 @@ final class Debug
 		];
 		foreach ($args as $i => $arg)
 		{
-			if ($i !== 6)
+			if ($i !== 7)
 			{
 				$arg = html($arg);
 			}
 			$args[$i] = $arg;
 		}
-		$pattern = "RequestMethod: %s\n
+		$pattern = "Hostname: %s\n
+RequestMethod: %s\n
 RequestURI: %s\n
 Referer: %s\n
 IP: %s\n

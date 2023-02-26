@@ -8,7 +8,7 @@ p { word-break: break-word; }
 .b { display: block; }
 .ib { display: inline-block; }
 .n { display: none!important; }
-.ce { text-align: center; margin: auto; }
+.ce { text-align: center; margin: 8px auto; }
 .cb { clear: both; }
 .dn { display: none; }
 .dc { display: none; }

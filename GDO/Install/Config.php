@@ -211,6 +211,7 @@ class Config
 			GDT_Divider::make()->label('install_config_section_database'),
 			GDT_Hidden::make('salt')->initialValue(GDO_SALT)->tooltipRaw('Cryptograpycally secure salt to strengthen tokens and passwords.'),
 			GDT_Checkbox::make('db_enabled')->initialValue(!!GDO_DB_ENABLED)->tooltipRaw('DB enabled? (required atm)'),
+// 			GDT_Checkbox::make('db_readonly')->initialValue(!!GDO_DB_ENABLED)->tooltipRaw('DB enabled? (required atm)'),
 			GDT_String::make('db_host')->initialValue(GDO_DB_HOST)->tooltipRaw('DB hostname.'),
 			GDT_Port::make('db_port')->initialValue((int)GDO_DB_PORT)->tooltipRaw('DB port.'),
 			GDT_String::make('db_user')->initialValue(GDO_DB_USER)->tooltipRaw('DB username'),

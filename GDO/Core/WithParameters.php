@@ -55,13 +55,13 @@ trait WithParameters
 	private function gdoParameterB(string $key, bool $throw=true) : ?GDT
 	{
 		$cache = $this->gdoParameterCache();
-		$repeater = null;
+		
 		if (isset($cache[$key]))
 		{
 			return $cache[$key];
 		}
 		
-		elseif (is_numeric($key))
+		if (is_numeric($key))
 		{
 			$pos = -1;
 			foreach ($cache as $gdt)
@@ -77,17 +77,12 @@ trait WithParameters
 				
 				if ($gdt instanceof GDT_Repeat)
 				{
-					$repeater = $gdt;
+					return $gdt;
 				}
 			}
 		}
 		
-		if (isset($repeater))
-		{
-			return $repeater;
-		}
-		
-		elseif ($throw)
+		if ($throw)
 		{
 			throw new GDO_Error('err_unknown_parameter', [html($key), $this->gdoHumanName()]);
 		}

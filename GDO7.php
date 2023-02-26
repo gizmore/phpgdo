@@ -40,26 +40,26 @@ $GDT_LOADED = 0; #PP#delete#
  */
 spl_autoload_register(function(string $name) : void
 {
-	$call = [
-		function() { }, # ignore
-		function($name){ # include
-			$name = str_replace('\\', '/', $name); #PP#linux (only on linux) :)
-			include(GDO_PATH . "{$name}.php"); # the worlds fastest autoloader.
-			global $GDT_LOADED; # #PP#delete# performance metrics (only in dev)
-			$GDT_LOADED++;      # #PP#delete#
-		},
-	];
-	# Worlds first branchless autoloader! 
-	$call[((((ord($name[0]) << 8) | ord($name[3])) ^ 0xB8A3) + 1) >> 16]($name);
+	# Branchless autoloader v7.02. slow
+// 	$call = [
+// 		function() { }, # ignore
+// 		function($name){ # include
+// 			$name = str_replace('\\', '/', $name); #PP#linux (only on linux) :)
+// 			include(GDO_PATH . "{$name}.php"); # the worlds fastest autoloader.
+// 			global $GDT_LOADED; # #PP#delete# performance metrics (only in dev)
+// 			$GDT_LOADED++;      # #PP#delete#
+// 		},
+// 	];
+// 	$call[((((ord($name[0]) << 8) | ord($name[3])) ^ 0xB8A3) + 1) >> 16]($name);
 	
-// 	# The original autoloader seems faster ;)
-// 	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for an "if"
-// 	{   # 2 lines for path + include
-// 		$name = str_replace('\\', '/', $name); #PP#linux (only on linux) :)
-// 		include(GDO_PATH . $name . '.php'); # the worlds fastest autoloader.
-// 		global $GDT_LOADED; # #PP#delete#
-// 		$GDT_LOADED++;      # #PP#delete#
-// 	}
+	# The original autoloader seems faster ;)
+	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for two if's
+	{   # 2 lines for path + include
+		$name = str_replace('\\', '/', $name); #PP#linux (i line only for linux systems)
+		include(GDO_PATH . $name . '.php'); # load it!
+		global $GDT_LOADED; # #PP#delete#
+		$GDT_LOADED++;      # #PP#delete# - # Remove performance counter on production boxes via #PP#
+	}
 });
 
 ######################
@@ -129,7 +129,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 					{
 						$fmt = Strings::substrFrom($part, '=');
 					}
-					if (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
+					elseif (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
 					{
 						$kv = explode('=', $part);
 						$k = $kv[0];
@@ -145,6 +145,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 		}
 		
 		$href .= ".{$fmt}";
+		
 		if ($q)
 		{
 			$href .= '?' . implode('&', $q);

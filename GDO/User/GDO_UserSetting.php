@@ -106,7 +106,7 @@ class GDO_UserSetting extends GDO
 		$key = quote($key);
 		$all = $var === $gdt->initial;
 		
-		$query = GDO_User::table()->select('gdo_user.*');
+		$query = GDO_User::table()->select("gdo_user.*, uset_var AS {$key}");
 		$query->join("LEFT JOIN gdo_usersetting ON user_id=uset_user AND uset_name={$key}");
 		
 		$op = strtoupper($op);

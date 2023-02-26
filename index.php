@@ -29,17 +29,17 @@ use GDO\Core\GDO_SEO_URL;
 /**
  * @var $me Method
  */
-global $me;
+global $me; # one of the very few globals, required a lot in index.
 /**
- * GDOv7 - The best PHP Framework on Planet SOL. Really! :)
+ * GDOv7 - The best PHP Framework in the solar system. Really!
  * 
  * @author gizmore@wechall.net
  * @version 7.0.2
  * @since 1.0.0
  */
 # Really, the first thing we do is measure performance :)
-# Go Go Go GDO7!
-#gc_disable(); # GC slows things down? => Nope... GDO is just slow.
+# Go Go Go GDOv7!
+#gc_disable(); # GC slows things down? => Nope...
 define('GDO_TIME_START', microtime(true));
 #
 #######################
@@ -58,7 +58,7 @@ global $me;
 $app = Application::init();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
-Database::init();
+$db = Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
@@ -320,3 +320,4 @@ echo $content; # asap
 #Logger::flush(); # Done in Application
 # @TODO On application exit, send mails
 Cache::recacheHooks(); # we have time to recache now.
+unset($db);

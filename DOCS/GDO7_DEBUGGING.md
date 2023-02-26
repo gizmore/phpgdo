@@ -3,6 +3,19 @@
 In this page i want to explain the debugging techniques available in GDOv7.
 
 
+## GDOv7 Debugging: Core/Debug
+
+The [Debug.php](../GDO/Core/Debug.php)
+class enables an own error handler,
+which is sending an error mail to configured recipients.
+
+Error messages are written to `STDERR`.
+
+Javascript errors are similiar and trigger an GDOv7 Method to send E-Mails, also on client errors.
+
+This is quite useful, but *can* also cause mail havoc on frequented hosts. Handle with care.
+
+
 ## GDOv7 Debugging: Database
 
 We all want to know what the raw queries are.
@@ -36,12 +49,12 @@ I use [xdebug](https://pecl.php.net/package/xdebug).
 In [Eclipse PDT](https://www.eclipse.org/pdt/),
 i have xDebug configured and can set breakpoints to step the application at any time.
 This works from bash as well as from chrome.
-I do not know what i did without a debugger for soo long.
+I do not know what i did without a debugger for *sooo* long.
 
 Here is an example php.ini for xdebug:
 
     zend_extension="c:/wamp64/bin/php/php8.1.8/zend_ext/php_xdebug-3.1.5-8.1-vs16-x86_64.dll"
-    xdebug.mode = develop,debug,profile
+    xdebug.mode = develop,debug,profile # profile is optional.
     xdebug.client_port = 9003
     xdebug.start_with_request = yes
     xdebug.discover_client_host = true
@@ -62,7 +75,7 @@ On production sites it is recommended to install
 and
 [CSS](https://github.com/gizmore/phpgdo-css)
 to create minfied asset builds on the fly,
-also blocking all source files so you scripts are safe.
+also blocking all source files so your scripts are safe.
 
 
 ## GDOv7 Debugging: Performance

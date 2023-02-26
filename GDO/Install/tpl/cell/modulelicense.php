@@ -1,4 +1,5 @@
 <?php
+namespace GDO\Install\tpl\cell;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDO_Module;
 /** @var $field GDT_Template **/

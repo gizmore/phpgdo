@@ -116,6 +116,7 @@ abstract class MethodTable extends MethodForm
 		{
 			$features[] = GDT_Order::make($this->getOrderName())->
 				initial($this->getDefaultOrder())->
+				extraFields($this->getExtraFieldNames())->
 				setFields($this->gdoHeaderCache());
 		}
 		if ($this->isFiltered())
@@ -224,6 +225,11 @@ abstract class MethodTable extends MethodForm
 	        }
 	    }
 	    return null;
+	}
+	
+	public function getExtraFieldNames(): array
+	{
+		return GDT::EMPTY_ARRAY;
 	}
 	
 	public function getIPP() : int

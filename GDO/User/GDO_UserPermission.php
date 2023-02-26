@@ -25,7 +25,7 @@ final class GDO_UserPermission extends GDO
 	public function gdoColumns() : array
 	{
 		return [
-			GDT_User::make('perm_user_id')->primary()->cascade(),
+			GDT_User::make('perm_user_id')->primary()->cascade()->withCompletion(),
 			GDT_Permission::make('perm_perm_id')->primary()->cascadeRestrict(),
 			GDT_CreatedAt::make('perm_created_at'),
 			GDT_CreatedBy::make('perm_created_by'),

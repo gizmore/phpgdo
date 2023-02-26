@@ -4,7 +4,6 @@ namespace GDO\Core\Method;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Application;
-use GDO\Core\GDT;
 use GDO\Util\Strings;
 
 /**
@@ -19,7 +18,8 @@ use GDO\Util\Strings;
 final class SeoProxy extends Method
 {
 	/**
-	 * Makes no sense to test this in the usual stack, as it builds method params. @TODO Write a test for 403, 404 and SEOProxy.
+	 * Makes no sense to test this in the usual stack, as it builds method params.
+	 * @TODO Write a test for 403, 404 and SEOProxy.
 	 */
 	public function isTrivial() : bool { return false; }
 
@@ -71,6 +71,12 @@ final class SeoProxy extends Method
 				$_REQUEST[$key] = @$args[$i];
 			}
 			$i++;
+		}
+
+		# Remove filetype suffix from last parameter.
+		if ($i)
+		{
+			$_REQUEST[$key] = Strings::rsubstrTo($_REQUEST[$key], '.', $_REQUEST[$key]);
 		}
 		
 		return $method;

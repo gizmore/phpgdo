@@ -1,9 +1,10 @@
 <?php
-use GDO\Core\GDT_Template;
-use GDO\Core\GDO_Module;
-$field instanceof GDT_Template;
+namespace GDO\Install\tpl\cell;
+/**
+ * @var $field \GDO\Core\GDT_Template
+ * @var $module \GDO\Core\GDO_Module
+ */
 $module = $field->gdo;
-$module instanceof GDO_Module;
 $name = $module->getName();
 $checked = isset($_REQUEST['module'][$name]) || $module->isInstalled() || $module->isCoreModule();
 $checked = $checked ? 'checked="checked"' : '';

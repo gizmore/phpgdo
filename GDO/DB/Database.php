@@ -86,10 +86,7 @@ class Database
 		$this->host = $host;
 		$this->user = $user;
 		$this->pass = $pass;
-		if ($db)
-		{
-			$this->db = $db;
-		}
+		$this->db = $db;
 	}
 	
 	public function db(string $db): self
@@ -107,8 +104,8 @@ class Database
 	{
 		if (isset($this->link))
 		{
-			self::$DBMS->dbmsClose($this->link);
 			unset($this->link);
+			self::$DBMS->dbmsClose();
 		}
 	}
 	

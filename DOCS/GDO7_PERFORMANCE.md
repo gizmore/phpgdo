@@ -1,10 +1,17 @@
 # GDOv7 Performance
 
-Performance shall be O(N)! :D
-
-Of course performance is one of the main reasons i lost interest in many other frameworks.
+Performance is one of the main reasons why i lost interest in many other frameworks.
 The performance of GDOv7 is quite good already,
 but I do not want to start optimizing too early.
+
+While composer projects are still booting an optimized autoloader, GDOv7 might be doing heavy data work already.
+
+I tried to compare roughly with Laravel8 and a recent Wordpress,
+and both systems were beaten, even thought GDO had way more to load (empty laravel + wordpress, small gdo install iirc)
+
+Real benchmarks are planned.
+
+However, Laravel8 was only beaten marginally in memory and CPU footprint.
 
 
 ## GDOv7 Performance: Headers
@@ -55,7 +62,7 @@ The module is collecting metrics in
  - 4005 Wr - database writes
  - 5 Tr - database transactions
  - Timings and memory should be obvious
- - 13200328 Func - function calls, needs xdebug
+ - 13200328 Func - function calls - needs xdebug
  - 5243 Alloc - allocations, this is a bad estimation using spl_object_id(). This returns the max id, kinda stack max. It's a metric!
  - @TODO List more GDT_Perf metrics
 

@@ -1,3 +1,6 @@
+<?php
+namespace GDO\Install\tpl\cell;
+?>
 <input
  type="checkbox"
  id="toggle_all"

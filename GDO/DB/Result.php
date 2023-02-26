@@ -33,22 +33,17 @@ class Result
 		$this->useCache = $useCache;
 	}
 	
-	/**
-	 * Shouldn't it be as safe and as fast to just rely on their destructors?
-	 */
-	public function __destruct()
-	{
-	    $this->free();
-	}
-	
-	public function free() : void
-	{
-	    if (isset($this->result))
-	    {
-	    	Database::$DBMS->dbmsFree($this->result);
-	        unset($this->result);
-	    }
-	}
+// 	/**
+// 	 * Shouldn't it be as safe and as fast to just rely on their destructors?
+// 	 */
+// 	public function __destruct()
+// 	{
+// 	    if (isset($this->result))
+// 	    {
+// 	    	Database::$DBMS->dbmsFree($this->result);
+// 	        unset($this->result);
+// 	    }
+// 	}
 	
 	################
 	### Num rows ###

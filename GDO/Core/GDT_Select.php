@@ -398,6 +398,12 @@ class GDT_Select extends GDT_ComboBox
 		return GDT_Template::php('Core', 'select_cell.php', ['field' => $this]);
 	}
 	
+	public function renderCard(): string
+	{
+		$rendered = $this->displayVar($this->getVar());
+		return $this->displayCard($rendered);
+	}
+	
 	public function renderForm() : string
 	{
 		return GDT_Template::php('Core', 'select_form.php', ['field' => $this]);
@@ -415,7 +421,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 		else
 		{
-			return ' - none - ';
+			return t('none');
 		}
 	}
 	
@@ -450,14 +456,14 @@ class GDT_Select extends GDT_ComboBox
 			$mul = $this->multiple ? '[]' : '';
 			return sprintf(' name="%s%s"', $name, $mul);
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 	
 	public function htmlChoiceVar($var, $value) : string
 	{
 		if ($value === null)
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 		if (is_string($value))
 		{

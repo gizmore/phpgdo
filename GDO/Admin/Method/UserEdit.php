@@ -11,7 +11,6 @@ use GDO\Crypto\BCrypt;
 use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDT_User;
 use GDO\Crypto\GDT_Password;
-use GDO\Login\Module_Login;
 
 /**
  * Edit a user. Beside level, password and deletion, nothing much can be changed.
@@ -73,7 +72,7 @@ class UserEdit extends MethodForm
 		
 		# Patch columns a bit
 		$form->getField('user_name')->noPattern(null);
-		$form->addField(GDT_Password::make('user_password'))->notNull(false)->initial('');
+		$form->addField(GDT_Password::make('user_password')->notNull(false)->initial(''));
 	}
 	
 	public function formValidated(GDT_Form $form)

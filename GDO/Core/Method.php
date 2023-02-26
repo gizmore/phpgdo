@@ -21,7 +21,7 @@ use GDO\CLI\CLI;
  * Sets up SEO method meta data.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.1
  * @see GDT
  * @see GDO

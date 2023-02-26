@@ -29,6 +29,8 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.2 / scheduled 31.Dec.2022
 
+ - SEO URLs now control their rendering mode via a file suffix like `.txt`, `.html`, `.json` and `.xml`. (thx spaceone)
+
  - A new Core module *DBMS*, which is provided by two packages now; [phpgdo-mysql](https://github.com/gizmore/phpgdo-mysql) and [phpgdo-sqlite](https://github.com/gizmore/phpgdo-sqlite).
 
  - A new utility in my automated toolchain; [php-preprocessor](https://github.com/gizmore/php-preprocessor). This build step eliminates debug and profiler calls when enabled via GDO_PREPROCESSOR for zero cost debugging.

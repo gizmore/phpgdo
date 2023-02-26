@@ -8,6 +8,7 @@ use GDO\DB\Result;
 use GDO\Date\Time;
 use GDO\User\GDO_User;
 use GDO\UI\TextStyle;
+use GDO\DBMS\Module_DBMS;
 
 /**
  * A data exchange object, and...
@@ -154,27 +155,46 @@ abstract class GDO extends GDT
 	################
 	### Escaping ###
 	################
-	public static function escapeIdentifierS(string $identifier) : string { return str_replace("`", "\\`", $identifier); }
-	public static function quoteIdentifierS(?string $identifier) : string { return $identifier; } # performance for features
-	public static function escapeSearchS(?string $var) : string { return str_replace(['%', "'", '"'], ['\\%', "\\'", '\\"'], $var); }
-	public static function escapeS(?string $var) : string { return str_replace(['\\', "'", '"'], ['\\\\', '\\\'', '\\"'], $var); }
-	public static function quoteS(?string $var) : string
+	public static function escapeIdentifierS(string $identifier) : string
+	{
+		return str_replace("`", "\\`", $identifier);
+	}
+	
+	public static function quoteIdentifierS(string $identifier) : string
+	{
+		return $identifier;  # performance for features
+	}
+	
+	public static function escapeSearchS(string $var): string
+	{
+		return str_replace(
+			['%', "'", '"', '\\'],
+			['\\%', "\\'", '\\"', '\\\\'],
+			$var);
+	}
+
+	public static function escapeS(string $var) : string
+	{
+		return Module_DBMS::instance()->dbmsEscape($var);
+	}
+	
+	public static function quoteS($var): string
 	{
 		if (is_string($var))
 		{
-			return '"' . self::escapeS($var) . '"';
+			return Module_DBMS::instance()->dbmsQuote($var);
 		}
 		elseif ($var === null)
 		{
 			return "NULL";
 		}
-		elseif (is_bool($var))
-		{
-			return $var ? '1' : '0';
-		}
 		elseif (is_numeric($var))
 		{
 			return $var;
+		}
+		elseif (is_bool($var))
+		{
+			return $var ? '1' : '0';
 		}
 	}
 	

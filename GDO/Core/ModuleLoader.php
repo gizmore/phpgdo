@@ -12,7 +12,7 @@ use GDO\Language\Trans;
  * Uses memcached for fast modulecache loading.
  *
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 3.0.0
  */
 final class ModuleLoader
@@ -414,7 +414,7 @@ final class ModuleLoader
 		{
     		$instance = new $klass();
     		$moduleData['module_priority'] = $instance->priority;
-    		$moduleData['module_enabled'] = $dirty ? '0' : '1';
+    		$moduleData['module_enabled'] = $dirty ? '0' : $moduleData['module_enabled'];
     		$instance->setGDOVars($moduleData, $dirty);
     		return $instance;
 		}

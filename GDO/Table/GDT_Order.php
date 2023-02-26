@@ -33,7 +33,17 @@ final class GDT_Order extends GDT_String
 	public function isTestable() : bool { return false; }
 	
 	public function getDefaultName() : string { return 'order'; }
-
+	
+	####################
+	### Extra Fields ###
+	####################
+	public array $extraFields;
+	public function extraFields(array $fields): self
+	{
+		$this->extraFields = $fields;
+		return $this;
+	}
+	
 	################
 	### Validate ###
 	################
@@ -47,7 +57,7 @@ final class GDT_Order extends GDT_String
 			}
 			foreach ($value as $order)
 			{
-				if (!$this->validateOrder($order))
+				if (!$this->validateOrder(trim($order)))
 				{
 					return false;
 				}
@@ -62,6 +72,10 @@ final class GDT_Order extends GDT_String
 		$dir = stripos($dir, 'desc') === false ? 'ASC' : 'DESC';
 		$by = Strings::substrTo($order, ' ', $order);
 		$by = Strings::rsubstrFrom($by, '.', $by);
+		if (isset($this->extraFields) && in_array($by, $this->extraFields, true))
+		{
+			return true;
+		}
 		if (!($gdt = $this->getField($by, false)))
 		{
 			return $this->error('err_unknown_order_column', [html($by)]);
@@ -223,14 +237,16 @@ final class GDT_Order extends GDT_String
 	{
 		$name = $gdt->getName();
 		$href = preg_replace("#,? *{$name} *(?:DESC|ASC)#", '', urldecode($this->href));
-		$matches = [];
+		$matches = null;
 		$old = '';
-		if (preg_match("#(&{$this->name}=[^&]*)#", $href, $matches))
+		$con = strpos($href, '?') ? '&' : '?';
+		if (preg_match("#(&\\?)({$this->name}=[^&]*)#", $href, $matches))
 		{
-			$old = $matches[1];
+			$con = $matches[1];
+			$old = $matches[2];
 		}
 		$href = str_replace($old, '', $href);
-		$href .= $old ? $old : "&{$this->name}=";
+		$href .= $old ? "{$con}{$old}" : "{$con}{$this->name}=";
 		if ($replace)
 		{
 			$href .= ",{$replace}";
