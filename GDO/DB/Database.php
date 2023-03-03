@@ -26,7 +26,7 @@ use GDO\DBMS\Module_DBMS;
 class Database
 {
 	# Const
-// 	const PRIMARY_USING = 'USING HASH'; # Default index algorithm for primary keys.
+	const PRIMARY_USING = 'USING HASH'; # Default index algorithm for primary keys.
 	
 	# Instance
 	private static Database $INSTANCE;
