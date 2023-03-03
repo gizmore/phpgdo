@@ -56,7 +56,7 @@ final class SystemTest extends Method
 	
 	private function testYarn(): bool
 	{
-		return !!Process::commandPath('yarn', '');
+		return !!Process::commandPath('yarn');
 	}
 	
 }

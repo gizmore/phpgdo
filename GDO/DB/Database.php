@@ -36,7 +36,7 @@ class Database
 	public static ?Module_DBMS $DBMS = null;
 	
 	# Connection
-// 	private $link; # any dbms provider link. remove?
+	private $link; # any dbms provider link. remove?
 	private int $port = 3306; # config
 	private string $host, $user, $pass; # config
 	private ?string $db; # configured db.
