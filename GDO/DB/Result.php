@@ -33,29 +33,29 @@ class Result
 		$this->useCache = $useCache;
 	}
 	
-// 	/**
-// 	 * Shouldn't it be as safe and as fast to just rely on their destructors?
-// 	 */
-// 	public function __destruct()
-// 	{
-// 	    if (isset($this->result))
-// 	    {
-// 	    	Database::$DBMS->dbmsFree($this->result);
-// 	        unset($this->result);
-// 	    }
-// 	}
+	/**
+	 * Shouldn't it be as safe and as fast to just rely on their destructors?
+	 */
+	public function __destruct()
+	{
+	    if (isset($this->result))
+	    {
+	    	Database::DBMS()->dbmsFree($this->result);
+	        unset($this->result);
+	    }
+	}
 	
 	################
 	### Num rows ###
 	################
 	public function numRows() : int
 	{
-		return Database::$DBMS->dbmsNumRows($this->result);
+		return Database::DBMS()->dbmsNumRows($this->result);
 	}
 	
 	public function affectedRows() : int
 	{
-	    return Database::$DBMS->dbmsAffected();
+	    return Database::DBMS()->dbmsAffected();
 	}
 	
 	#############
@@ -75,22 +75,22 @@ class Result
 	
 	public function fetchRow() : ?array
 	{
-		return Database::$DBMS->dbmsFetchRow($this->result);
+		return Database::DBMS()->dbmsFetchRow($this->result);
 	}
 	
 	public function fetchAllRows(): array
 	{
-		return Database::$DBMS->dbmsFetchAllRows($this->result);
+		return Database::DBMS()->dbmsFetchAllRows($this->result);
 	}
 	
 	public function fetchAssoc() : ?array
 	{
-		return Database::$DBMS->dbmsFetchAssoc($this->result);
+		return Database::DBMS()->dbmsFetchAssoc($this->result);
 	}
 	
 	public function fetchAllAssoc() : ?array
 	{
-		return Database::$DBMS->dbmsFetchAllAssoc($this->result);
+		return Database::DBMS()->dbmsFetchAllAssoc($this->result);
 	}
 
 	public function fetchObject() : ?GDO

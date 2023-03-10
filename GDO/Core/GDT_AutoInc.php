@@ -45,6 +45,7 @@ final class GDT_AutoInc extends GDT_UInt
 	public function blankData() : array
 	{
 		# prevent old values to be used.
+// 		return GDT::EMPTY_ARRAY;
 		return [$this->name => null];
 	}
 	

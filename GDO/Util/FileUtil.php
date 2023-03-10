@@ -7,6 +7,7 @@ use RecursiveIteratorIterator;
 use GDO\Core\GDT_Float;
 use GDO\Core\GDO_Error;
 use GDO\Core\Logger;
+use GDO\Core\GDO_Exception;
 
 /**
  * File system utilities which are too common for the bigger file handling module.
@@ -152,11 +153,22 @@ final class FileUtil
 	/**
 	 * Delete a single file.
 	 */
-	public static function removeFile(string $path) : bool
+	public static function removeFile(string $path, bool $throw=true) : bool
 	{
 		if (is_file($path))
 		{
-			return unlink($path);
+			if (@unlink($path))
+			{
+				return true;
+			}
+			elseif ($throw)
+			{
+				throw new GDO_Error('err_delete_file', [html($path)]);
+			}
+			else
+			{
+				return false;
+			}
 		}
 		elseif (is_dir($path))
 		{

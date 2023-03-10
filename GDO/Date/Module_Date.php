@@ -8,6 +8,7 @@ use GDO\UI\GDT_Divider;
 use GDO\UI\GDT_Page;
 use GDO\Date\Method\Timezone;
 use GDO\User\GDT_ACLRelation;
+use GDO\Core\Application;
 
 /**
  * Date specific stuff.
@@ -97,11 +98,15 @@ final class Module_Date extends GDO_Module
     
     public function onModuleInit()
     {
-        $user = GDO_User::current();
-        $timezone = $user->hasTimezone() ?
-        	$user->getTimezone() :
-        	$this->cfgTimezone()->getID();
-        Time::setTimezone($timezone);
+    	if ((!Application::$INSTANCE->isInstall()) &&
+    		((!Application::$INSTANCE->isUnitTests())))
+    	{
+	        $user = GDO_User::current();
+	        $timezone = $user->hasTimezone() ?
+	        	$user->getTimezone() :
+	        	$this->cfgTimezone()->getID();
+	        Time::setTimezone($timezone);
+    	}
     }
     
     public function onIncludeScripts() : void

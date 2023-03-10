@@ -135,8 +135,13 @@ final class gdo_adm extends Application
 		global $argv, $argc;
 		
 		$i = 0;
-		$o = getopt('qsv', ['quiet', 'ssh', 'verbose'], $i);
+		$o = getopt('iqsv', ['interactive', 'quiet', 'ssh', 'verbose'], $i);
 
+		if (isset($o['i'])||isset($o['interactive']))
+		{
+			$this->quiet();
+		}
+		
 		if (isset($o['q'])||isset($o['quiet']))
 		{
 			$this->quiet();
@@ -168,6 +173,13 @@ final class gdo_adm extends Application
 	###############
 	### Options ###
 	###############
+	public bool $interactive = false;
+	public function interactive(bool $interactive=true): self
+	{
+		$this->interactive = $interactive;
+		return $this;
+	}
+	
 	public bool $quiet = false;
 	public function quiet(bool $quiet=true): self
 	{
@@ -204,7 +216,7 @@ if ( !defined('GDO_CONFIGURED'))
 
 // new ModuleLoader(GDO_PATH . 'GDO/');
 CLI::setServerVars();
-Database::init();
+Database::init(GDO_DB_NAME);
 Cache::flush();
 Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
@@ -233,6 +245,8 @@ switch ($command)
 	case 'provide_all':
 		$db = false;
 		break;
+// 	default:
+// 		Database::instance()->connect();
 }
 
 $loader->loadModules($db, true);
@@ -326,7 +340,7 @@ elseif ($command === 'configure')
 		'save_config' => '1',
 	];
 	
-	if (REPL::confirm(t('repl_adm_interactive'), false))
+	if ($app->interactive)
 	{
 		$n = 0;
 		$fields = Config::fields();
@@ -581,13 +595,7 @@ elseif (($command === 'install') || ($command === 'install_all'))
 		return ModuleLoader::instance()->getModule($moduleName);
 	}, array_keys($deps2));
 	Installer::installModules($modules);
-	
-// 	if (GDO_PREPROCESSOR)
-// 	{
-// 		echo "Running php-preprocessor on all modules.\n";
-// 		PP::init()->processFolder(GDO_PATH);
-// 	}
-	
+
 	Cache::flush();
 	Cache::fileFlush();
 	echo "Done.\n";
@@ -629,8 +637,9 @@ elseif ($command === 'wipe_all')
 	{
 		printUsage();
 	}
-	Database::instance()->queryWrite("DROP DATABASE " . GDO_DB_NAME);
-	Database::instance()->queryWrite("CREATE DATABASE " . GDO_DB_NAME);
+	
+	Database::instance()->dropDatabase(GDO_DB_NAME);
+	Database::instance()->createDatabase(GDO_DB_NAME);
 	printf("The database has been killed completely and created empty.\n");
 }
 

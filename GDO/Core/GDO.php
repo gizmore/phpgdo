@@ -384,7 +384,7 @@ abstract class GDO extends GDT
 // 		{
 			foreach ($data as $k => $v)
 			{
-				if ($this->gdoVars[$k] !== $v)
+				if (@$this->gdoVars[$k] !== $v)
 				{
 					$this->gdoVars[$k] = $v === null ? null : (string)$v;
 					$d = true;

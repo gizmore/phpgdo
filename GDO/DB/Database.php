@@ -30,10 +30,17 @@ class Database
 	
 	# Instance
 	private static Database $INSTANCE;
-	public static function instance() : self { return self::$INSTANCE; }
+	
+	public static function instance() : self
+	{
+		return self::$INSTANCE;
+	}
 
 	# DBMS
-	public static ?Module_DBMS $DBMS = null;
+	public static function DBMS(): Module_DBMS
+	{
+		return Module_DBMS::instance();
+	}
 	
 	# Connection
 	private $link; # any dbms provider link. remove?
@@ -102,11 +109,11 @@ class Database
 	
 	public function closeLink() : void
 	{
-		if (isset($this->link))
-		{
+// 		if (isset($this->link))
+// 		{
 			unset($this->link);
-			self::$DBMS->dbmsClose();
-		}
+			self::DBMS()->dbmsClose();
+// 		}
 	}
 	
 	public function getLink()
@@ -144,8 +151,7 @@ class Database
 	
 	public function connect()
 	{
-		self::$DBMS = Module_DBMS::instance();
-		return self::$DBMS->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
+		return self::DBMS()->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
 	}
 	
 	#############
@@ -183,14 +189,14 @@ class Database
 		
 		$this->getLink();
 		
-		$result = self::$DBMS->dbmsQuery($query, $buffered);
+		$result = self::DBMS()->dbmsQuery($query, $buffered);
 		
 		if (!$result)
 		{
 			if ($this->link)
 			{
-				$error = self::$DBMS->dbmsError($this->link);
-				$errno = self::$DBMS->dbmsErrno($this->link);
+				$error = self::DBMS()->dbmsError($this->link);
+				$errno = self::DBMS()->dbmsErrno($this->link);
 // 				$this->closeLink();
 			}
 			else
@@ -226,12 +232,12 @@ class Database
 	
 	public function insertId() : string
 	{
-		return self::$DBMS->dbmsInsertId();
+		return self::DBMS()->dbmsInsertId();
 	}
 	
 	public function affectedRows() : int
 	{
-		return self::$DBMS->dbmsAffected();
+		return self::DBMS()->dbmsAffected();
 	}
 	
 	###################
@@ -309,12 +315,12 @@ class Database
 	####################
 	public function tableExists(string $tableName) : bool
 	{
-		return Database::$DBMS->dbmsTableExists($tableName);
+		return Database::DBMS()->dbmsTableExists($tableName);
 	}
 	
 // 	public function createTableCode(GDO $gdo) : string
 // 	{
-// 		return self::$DBMS->dbmsCreateTableCode($gdo);
+// 		return self::DBMS()->dbmsCreateTableCode($gdo);
 // 	}
 	
 	/**
@@ -325,7 +331,7 @@ class Database
 		try
 		{
 			$this->disableForeignKeyCheck();
-			self::$DBMS->dbmsCreateTable($gdo);
+			self::DBMS()->dbmsCreateTable($gdo);
 		}
 		finally
 		{
@@ -340,13 +346,13 @@ class Database
 	
 	public function dropTableName(string $tableName)
 	{
-		return self::$DBMS->dbmsDropTable($tableName);
+		return self::DBMS()->dbmsDropTable($tableName);
 	}
 	
 	public function truncateTable(GDO $gdo)
 	{
 	    $tableName = $gdo->gdoTableIdentifier();
-	    return self::$DBMS->dbmsTruncateTable($tableName);
+	    return self::DBMS()->dbmsTruncateTable($tableName);
 	}
 	
 	###################
@@ -354,18 +360,18 @@ class Database
 	###################
 	public function createDatabase(string $databaseName): void
 	{
-		self::$DBMS->dbmsCreateDB($databaseName);
+		self::DBMS()->dbmsCreateDB($databaseName);
 	}
 	
 	public function dropDatabase(string $databaseName): void
 	{
-		self::$DBMS->dbmsDropDB($databaseName);
+		self::DBMS()->dbmsDropDB($databaseName);
 	}
 	
 	public function useDatabase(string $databaseName): void
 	{
 		$this->usedb = $databaseName;
-		self::$DBMS->dbmsUseDB($databaseName);
+		self::DBMS()->dbmsUseDB($databaseName);
 	}
 	
 	###################
@@ -374,7 +380,7 @@ class Database
 	public function transactionBegin(): void
 	{
 		$this->getLink();
-		self::$DBMS->dbmsBegin();
+		self::DBMS()->dbmsBegin();
 	}
 	
 	public function transactionEnd(): void
@@ -385,7 +391,7 @@ class Database
 		
 		# Exec and perf
 		$t1 = microtime(true); #PP#delete#
-		self::$DBMS->dbmsCommit();
+		self::DBMS()->dbmsCommit();
 		$t2 = microtime(true); #PP#delete#
 		$tt = $t2 - $t1; #PP#delete#
 		
@@ -396,7 +402,7 @@ class Database
 	
 	public function transactionRollback()
 	{
-		self::$DBMS->dbmsRollback();
+		self::DBMS()->dbmsRollback();
 	}
 	
 	############
@@ -406,12 +412,12 @@ class Database
 	{
 		$this->locks++; #PP#delete#
 		self::$LOCKS++; #PP#delete#
-		self::$DBMS->dbmsLock($lock, $timeout);
+		self::DBMS()->dbmsLock($lock, $timeout);
 	}
 	
 	public function unlock(string $lock): void
 	{
-		self::$DBMS->dbmsUnlock($lock);
+		self::DBMS()->dbmsUnlock($lock);
 	}
 	
 	###############
@@ -420,11 +426,12 @@ class Database
 	public function enableForeignKeyCheck(bool $bool = true): void
 	{
 		$this->getLink();
-		Database::$DBMS->dbmsForeignKeys($bool);
+		Database::DBMS()->dbmsForeignKeys($bool);
 	}
 
 	public function disableForeignKeyCheck()
 	{
+		$this->getLink();
 		return $this->enableForeignKeyCheck(false);
 	}
 	
@@ -436,7 +443,7 @@ class Database
 	 */
 	public function parseSQLFile(string $path) : void
 	{
-		Database::$DBMS->dbmsExecFile($path);
+		Database::DBMS()->dbmsExecFile($path);
 	}
 	
 }

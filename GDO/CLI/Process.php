@@ -72,7 +72,8 @@ final class Process
 	 */
 	public static function commandPath(string $command, string $windowsSuffix = '.*', bool $alert=true) : ?string
 	{
-		$whereIsCommand = self::isWindows() ? 'where /R %userprofile% ' : 'which';
+// 		$whereIsCommand = self::isWindows() ? 'where /R %userprofile% ' : 'which';
+		$whereIsCommand = self::isWindows() ? 'where' : 'which';
 		$command = self::isWindows() ? $command . $windowsSuffix : $command;
 
 		$pipes = [];

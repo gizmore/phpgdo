@@ -376,6 +376,12 @@ final class Query
 		return $this;
 	}
 	
+	public function orderRand() : self
+	{
+		$rand = Database::DBMS()->dbmsRandom();
+		return $this->order($rand);
+	}
+	
 	public function join(string $join) : self
 	{
 		if (isset($this->join))

@@ -303,6 +303,7 @@ final class ModuleLoader
 				else
 				{
 					$module = $this->modules[$moduleName];
+					$module->setVars($moduleData, false);
 					$module->setPersisted(true);
 				}
 			}
