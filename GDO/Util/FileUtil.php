@@ -196,7 +196,7 @@ final class FileUtil
 				    $obj = "{$dir}/{$object}";
 					if (is_dir($obj))
 					{
-						self::removeDir($obj);
+						self::removeDir($obj, $throw);
 					}
 					else
 					{
@@ -209,6 +209,7 @@ final class FileUtil
 					    	Logger::logError(ten('err_delete_file', [html($obj)]));
 					        return false;
 					    }
+					    return true;
 					}
 				}
 			}
@@ -216,7 +217,11 @@ final class FileUtil
 		}
 		elseif (is_file($dir))
 		{
-			throw new GDO_Error('err_delete_file', [html($dir)]);
+			if ($throw)
+			{
+				throw new GDO_Error('err_delete_file', [html($dir)]);
+			}
+			return false;
 		}
 		return true;
 	}
