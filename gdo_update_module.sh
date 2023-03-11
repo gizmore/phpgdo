@@ -8,6 +8,7 @@
 # @since 6.0.1
 #
 set -euo pipefail
+orgpath="$(pwd)"
 cd "$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
@@ -32,3 +33,5 @@ git submodule foreach git pull
 cd $1
 git commit -am "GDOv7 Autosync $2"
 git push
+
+cd $orgpath
