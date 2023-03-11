@@ -42,12 +42,12 @@ final class GDT_AutoInc extends GDT_UInt
 		$gdo->setVar($this->name, $id, false);
 	}
 	
-	public function blankData() : array
-	{
-		# prevent old values to be used.
-// 		return GDT::EMPTY_ARRAY;
-		return [$this->name => null];
-	}
+// 	public function blankData() : array
+// 	{
+// 		# prevent old values to be used.
+// // 		return GDT::EMPTY_ARRAY;
+// 		return [$this->name => null];
+// 	}
 	
 	/**
 	 * Better not plug anything,
