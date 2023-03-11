@@ -86,6 +86,10 @@ class Installer
 	
 	public static function installModule(GDO_Module $module, bool $forceMigrate=false) : void
 	{
+		if (!$module->isInstallable())
+		{
+			return;
+		}
 		self::installModuleClasses($module, $forceMigrate);
 		
 		if (!$module->isPersisted())
