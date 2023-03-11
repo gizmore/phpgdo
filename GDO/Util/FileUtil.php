@@ -212,7 +212,7 @@ final class FileUtil
 					}
 				}
 			}
-			return rmdir($dir);
+			return @rmdir($dir);
 		}
 		elseif (is_file($dir))
 		{
