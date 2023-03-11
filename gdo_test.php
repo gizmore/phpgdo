@@ -68,11 +68,68 @@ final class gdo_test extends Application
 	{
 		return $this->install;
 	}
-
+	
+	public bool $all = false;
+	public function all(bool $all=true): self
+	{
+		$this->all = $all;
+		return $this;
+	}
+	
+	public bool $quick = false;
+	public function quick(bool $quick=true): self
+	{
+		$this->quick = $quick;
+		return $this;
+	}
+	
+	public function showHelp(): int
+	{
+		echo "HELP!\n";
+		return 0;
+	}
 }
 $app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init(GDO_DB_NAME);
+
+// $app->parseOptions();
+$index = 0;
+$options = getopt('ahqt', ['all', 'help', 'quick', 'tests'], $index);
+
+if (isset($options['a']) || isset($options['all']))
+{
+	$app->all();
+}
+
+if (isset($options['h']) || isset($options['help']))
+{
+	$app->showHelp();
+}
+
+if (isset($options['q']) || isset($options['quick']))
+{
+	$app->quick();
+}
+
+/** @var array $argv **/
+$argv = array_slice($argv, $index);
+$argc = count($argv);
+
+switch (count($argv))
+{
+	case 0:
+		if (!$app->all)
+		{
+			return $app->showHelp();
+		}
+	case 1:
+		break;
+	default:
+		return $app->showHelp();
+		
+}
+
 
 # Confirm
 echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) . ".\n";
@@ -103,7 +160,7 @@ $db->createDatabase(GDO_DB_NAME);
 $db->useDatabase(GDO_DB_NAME);
 
 # 1. Try the install process if mode all.
-if ($argc === 1)
+if ($app->all)
 {
 	echo "NOTICE: Running install all first... for a basic include check.\n";
 	$install = $loader->loadModuleFS('Install', true, true);
@@ -124,11 +181,11 @@ if (Application::$INSTANCE->isError())
 # #############
 # ## Single ###
 # #############
-if ($argc >= 2) # Specifiy with module names, separated by comma.
+if ($argc === 1) # Specifiy with module names, separated by comma.
 {
 	$count = 0;
 
-	if ($argv[1] === 'all_dog')
+	if ($argv[0] === 'all_dog')
 	{
 		$modules = [
 			'Dog',
@@ -145,7 +202,7 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 	}
 	else
 	{
-		$modules = explode(',', $argv[1]);
+		$modules = explode(',', $argv[0]);
 	}
 	
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
@@ -153,7 +210,7 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
-	if (@$argv[2] !== '-s')
+	if (!$app->quick)
 	{
 		$modules[] = 'Tests';
 	}
@@ -187,12 +244,6 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 		$modules = array_unique($modules);
 	}
 	
-	if (@$argv[2] === '-s')
-	{
-		Arrays::remove($modules, 'CountryCoordinates');
-		Arrays::remove($modules, 'IP2Country');
-	}
-	
 	# While loading...
 	
 	# Map
@@ -213,10 +264,14 @@ if ($argc >= 2) # Specifiy with module names, separated by comma.
 # ##################
 # ## All modules ###
 # ##################
-else
+elseif ($app->all)
 {
 	echo "Loading and install all modules from filesystem again...\n";
 	$modules = $loader->loadModules(false, true, true);
+}
+else
+{
+	return $app->showHelp();
 }
 $loader->loadLangFiles(true);
 Trans::inited(true);
@@ -226,6 +281,12 @@ Trans::inited(true);
 # ######################
 if (Installer::installModules($modules))
 {
+	if ($app->quick)
+	{
+		Arrays::remove($modules, 'CountryCoordinates');
+		Arrays::remove($modules, 'IP2Country');
+	}
+	
 	ClearCache::make()->clearCache();
 	$loader->initModules();
 	Trans::inited(true);
