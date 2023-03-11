@@ -31,8 +31,8 @@ git submodule foreach git checkout master 2>/dev/null || true
 git submodule foreach git pull
 
 # Save the update
-cd $mpath
-git commit -am "GDOv7 Autosync $2"
-git push
+#cd $mpath
+#git commit -am "GDOv7 Autosync $2"
+#git push
 
 cd $orgpath
