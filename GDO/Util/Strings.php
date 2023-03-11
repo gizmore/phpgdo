@@ -133,19 +133,19 @@ final class Strings
 		return $caseS ? strnatcmp($a, $b) : strnatcasecmp($a, $b);
 	}
 	
-// 	#####################
-// 	### HTML Shrinker ###
-// 	#####################
-// 	/**
-// 	 * Remove uncessary whitespace from html output.
-// 	 * @deprecated slow
-// 	 */
-// 	public static function shrinkHTML(string $html) : string
-// 	{
-// 		$html = preg_replace('/\s+/', ' ', $html);
-// 		$html = str_replace('> <', '><', $html);
-// 		return $html;
-// 	}
+	#####################
+	### HTML Shrinker ###
+	#####################
+	/**
+	 * Remove uncessary whitespace from html output.
+	 * @deprecated slow
+	 */
+	public static function shrinkHTML(string $html) : string
+	{
+		$html = preg_replace('/\s+/', ' ', $html);
+		$html = str_replace('> <', '><', $html);
+		return $html;
+	}
 	
 	###############
 	### Explode ###
