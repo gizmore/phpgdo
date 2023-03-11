@@ -15,7 +15,7 @@ include "GDO7.php";
 include "protected/config.php";
 Application::instance();
 Debug::init();
-Database::init();
+Database::init(GDO_DB_NAME);
 Logger::init('system_provider_dependencies', GDO_ERROR_LEVEL); # 1st init as guest
 // GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS);
 
