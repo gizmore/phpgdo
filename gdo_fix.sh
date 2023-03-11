@@ -21,7 +21,7 @@ bash gdo_update_module.sh $gdopath "Core" "1"
 #
 cd $gdopath
 echo "2) Updating all modules."
-find ./GDO/ -maxdepth 2 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "{}" "0" \;
+find ./GDO/ -maxdepth 3 -iname ".git" -exec bash gdo_update_module.sh "{}/../" "{}" "0" \;
 #
 # Installation and upgrades
 #

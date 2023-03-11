@@ -405,6 +405,11 @@ final class ModuleLoader
 	}
 	
 	/**
+	 * @var GDO_Module[]
+	 */
+	private static array $INSTANCES = [];
+	
+	/**
 	 * Instanciate a module from gdoVars/loaded data.
 	 */
 	private static function instanciate(array $moduleData, bool $dirty = false) : GDO_Module
@@ -414,7 +419,14 @@ final class ModuleLoader
 		/** @var $instance GDO_Module **/
 		if (class_exists($klass))
 		{
-    		$instance = new $klass();
+			if (isset(self::$INSTANCES[$name]))
+			{
+				$instance = self::$INSTANCES[$name];
+			}
+			else
+			{
+				$instance = self::$INSTANCES[$name] = new $klass();
+			}
     		$moduleData['module_priority'] = $instance->priority;
     		$moduleData['module_enabled'] = $dirty ? '0' : $moduleData['module_enabled'];
     		$instance->setGDOVars($moduleData, $dirty);

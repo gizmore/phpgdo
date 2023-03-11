@@ -330,6 +330,7 @@ class Database
 	{
 		try
 		{
+			$this->getLink();
 			$this->disableForeignKeyCheck();
 			self::DBMS()->dbmsCreateTable($gdo);
 		}
@@ -341,6 +342,7 @@ class Database
 	
 	public function dropTable(GDO $gdo)
 	{
+		$this->getLink();
 		return $this->dropTableName($gdo->gdoTableIdentifier());
 	}
 	
@@ -360,11 +362,13 @@ class Database
 	###################
 	public function createDatabase(string $databaseName): void
 	{
+		$this->getLink();
 		self::DBMS()->dbmsCreateDB($databaseName);
 	}
 	
 	public function dropDatabase(string $databaseName): void
 	{
+		$this->getLink();
 		self::DBMS()->dbmsDropDB($databaseName);
 	}
 	
@@ -431,7 +435,6 @@ class Database
 
 	public function disableForeignKeyCheck()
 	{
-		$this->getLink();
 		return $this->enableForeignKeyCheck(false);
 	}
 	
