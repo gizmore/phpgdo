@@ -9,6 +9,7 @@
 #
 set -euo pipefail
 orgpath="$(pwd)"
+mpath="$(realpath "$1")"
 cd "$(dirname "$0")"
 #LANG=en_GB
 #LC_ALL=en_GB
@@ -16,7 +17,7 @@ cd "$(dirname "$0")"
 # Update the phpgdo module
 echo "Updating module $2..."
 echo "Folder: $1"
-cd $1
+cd $mpath
 git checkout main 2>/dev/null || true
 git checkout master 2>/dev/null || true
 git reset --hard
@@ -30,7 +31,7 @@ git submodule foreach git checkout master 2>/dev/null || true
 git submodule foreach git pull
 
 # Save the update
-cd $1
+cd $mpath
 git commit -am "GDOv7 Autosync $2"
 git push
 
