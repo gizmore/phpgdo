@@ -43,7 +43,7 @@ class Database
 	}
 	
 	# Connection
-	private $link; # any dbms provider link. remove?
+	public $link; # any dbms provider link. remove?
 	private int $port = 3306; # config
 	private string $host, $user, $pass; # config
 	private ?string $db; # configured db.
@@ -102,19 +102,19 @@ class Database
 		return $this;
 	}
 	
-	public function __destruct()
-	{
-		$this->closeLink();
-	}
+// 	public function __destruct()
+// 	{
+// 		$this->closeLink();
+// 	}
 	
-	public function closeLink() : void
-	{
-// 		if (isset($this->link))
-// 		{
-			unset($this->link);
-			self::DBMS()->dbmsClose();
-// 		}
-	}
+// 	public function closeLink() : void
+// 	{
+// // 		if (isset($this->link))
+// // 		{
+// 			unset($this->link);
+// 			self::DBMS()->dbmsClose();
+// // 		}
+// 	}
 	
 	public function getLink()
 	{
@@ -368,7 +368,6 @@ class Database
 	
 	public function dropDatabase(string $databaseName): void
 	{
-		$this->getLink();
 		self::DBMS()->dbmsDropDB($databaseName);
 	}
 	

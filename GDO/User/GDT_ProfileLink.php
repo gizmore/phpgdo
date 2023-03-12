@@ -55,7 +55,7 @@ final class GDT_ProfileLink extends GDT_Link
 	public bool $avatar = false;
 	public function avatar(bool $avatar=true): self
 	{
-		$this->avatar = $avatar;
+		$this->avatar = $avatar && module_enabled('Avatar');
 		return $this;
 	}
 	

@@ -73,6 +73,12 @@ if ( !function_exists('openssl_random_pseudo_bytes'))
 		}
 		return $rand;
 	}
+	
+// 	function openssl_cipher_iv_length()
+// 	{
+		
+// 	}
+	
 }
 
 if ( !function_exists('str_starts_with'))

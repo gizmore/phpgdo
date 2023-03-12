@@ -13,7 +13,6 @@ use GDO\Form\GDT_Form;
 use GDO\Date\Time;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Page;
-use GDO\CLI\CLI;
 
 /**
  * Abstract baseclass for all methods.
@@ -195,12 +194,6 @@ abstract class Method #extends GDT
 	############
 	public function checkPermission(GDO_User $user)
 	{
-// 		if ($user->isSystem())
-// 		{
-// 			# This, f.e., is needed for the gdo_adm.sh configure installer.
-// 			return true;
-// 		}
-		
 		if (!($this->isEnabled()))
 		{
 			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()], 403);
@@ -260,13 +253,10 @@ abstract class Method #extends GDT
 			}
 		}
 		
-// 		if (!$user->isAdmin())
-// 		{
-			if (!$this->hasPermission($user))
-			{
-				return $this->error('err_permission_required');
-			}
-// 		}
+		if (!$this->hasPermission($user))
+		{
+			return $this->error('err_permission_required');
+		}
 		
 		return true;
 	}
@@ -276,20 +266,8 @@ abstract class Method #extends GDT
 	 */
 	public function exec()
 	{
-// 		$user = GDO_User::current();
-		
-// 		if (true !== ($error = $this->checkPermission($user)))
-// 		{
-// 			return $error;
-// 		}
-		
 		return $this->execWrap();
 	}
-	
-// 	public function execMethod()
-// 	{
-// 		return $this->execWrap();
-// 	}
 	
 	/**
 	 * Detect if we should start a transaction. # @TODO only mark DB transaction ready / lazily
@@ -494,10 +472,10 @@ abstract class Method #extends GDT
 // 				$gdt->inputs(null);
 // 			}
 			$this->unlock();
-			if (Application::$INSTANCE->isCLI())
-			{
-				CLI::flushTopResponse();
-			}
+// 			if (Application::$INSTANCE->isCLI())
+// 			{
+// 				CLI::flushTopResponse();
+// 			}
 		}
 	}
 	

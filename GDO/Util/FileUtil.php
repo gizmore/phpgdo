@@ -209,9 +209,17 @@ final class FileUtil
 					    	Logger::logError(ten('err_delete_file', [html($obj)]));
 					        return false;
 					    }
-					    return true;
 					}
 				}
+			}
+			if (!@rmdir($dir))
+			{
+				if ($throw)
+				{
+					throw new GDO_Error('err_delete_dir', [html($dir)]);
+				}
+				Logger::logError(ten('err_delete_dir', [html($dir)]));
+				return false;
 			}
 			return @rmdir($dir);
 		}

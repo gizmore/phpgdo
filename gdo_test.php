@@ -18,7 +18,6 @@ use GDO\Session\GDO_Session;
 use GDO\UI\TextStyle;
 use GDO\Core\ModuleProviders;
 use GDO\Core\Method\ClearCache;
-use GDO\Util\Arrays;
 use GDO\CLI\REPL;
 
 define('GDO_TIME_START', microtime(true));
@@ -91,7 +90,7 @@ final class gdo_test extends Application
 }
 $app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
-$db = Database::init(GDO_DB_NAME);
+$db = Database::init();
 
 // $app->parseOptions();
 $index = 0;
@@ -133,9 +132,6 @@ switch (count($argv))
 
 # Confirm
 echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) . ".\n";
-echo "Is this correct? (Y/n)";
-flush();
-
 if (!REPL::confirm('Is this correct?', true))
 {
 	echo "Abort!\n";
@@ -210,11 +206,10 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
-	if (!$app->quick)
-	{
-		$modules[] = 'Tests';
-	}
-
+	
+	# Tests Module as a finisher
+	$modules[] = 'Tests';
+	
 	# Fix lowercase names
 	$modules = array_map(
 		function (string $moduleName)
@@ -267,7 +262,7 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 elseif ($app->all)
 {
 	echo "Loading and install all modules from filesystem again...\n";
-	$modules = $loader->loadModules(false, true, true);
+	$modules = $loader->loadModules(true, false, true);
 }
 else
 {
@@ -276,17 +271,22 @@ else
 $loader->loadLangFiles(true);
 Trans::inited(true);
 
+if ($app->quick)
+{
+	$modules = array_filter($modules, function(GDO_Module $module) {
+		return !in_array($module->getName(), [
+			'CountryCoordinates',
+			'IP2Country',
+			'Tests',
+		]);
+	});
+}
+
 # ######################
 # ## Install and run ###
 # ######################
 if (Installer::installModules($modules))
 {
-	if ($app->quick)
-	{
-		Arrays::remove($modules, 'CountryCoordinates');
-		Arrays::remove($modules, 'IP2Country');
-	}
-	
 	ClearCache::make()->clearCache();
 	$loader->initModules();
 	Trans::inited(true);

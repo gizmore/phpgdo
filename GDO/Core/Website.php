@@ -187,6 +187,10 @@ final class Website
 			titleRaw($titleRaw)->
 			text($key, $args);
 		GDT_Page::instance()->topResponse()->addField($success);
+		if (Application::$INSTANCE->isCLI())
+		{
+			CLI::flushTopResponse();
+		}
 		return GDT_Response::make()->code($code);
 	}
 	

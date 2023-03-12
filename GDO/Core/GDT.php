@@ -137,8 +137,8 @@ abstract class GDT
 	const RENDER_XML = 4;     # xml (@TODO XML Render Mode)
 	const RENDER_JSON= 5;     # json
 	const RENDER_GTK = 6;     #### Enjoy!
-// 	const RENDER_RESERVED_7 = 7; # who
-// 	const RENDER_RESERVED_8 = 8; # knows
+	const RENDER_IRC = 7;     # irc
+// 	const RENDER_RESERVED_8 = 8; # who knows
 // 	const RENDER_RESERVED_9 = 9; # :) ... maybe soap? maybe the new safe JSON?
 	# HTML format rendering   #### Your Flight!
 	const RENDER_WEBSITE= 10; # <html> page skeleton, html init mode that switches to RENDER_HTML.
@@ -207,7 +207,8 @@ abstract class GDT
 			case self::RENDER_XML: return $this->renderXML();
 			case self::RENDER_JSON: return $this->renderJSON();
 			case self::RENDER_GTK: return $this->renderGTK();
-			# Reserved 1-3
+			case self::RENDER_IRC: return $this->renderCLI();
+			# Reserved 1-2
 			case self::RENDER_WEBSITE: return $this->renderHTML(); # HTML start mode
 			# HTML submodes
 			case self::RENDER_HTML: return $this->renderHTML();
@@ -546,7 +547,7 @@ abstract class GDT
 	 */
 	public function gdoColumnDefine() : string
 	{
-		if ($this->gdoColumnNames() && $this->isSerializable())
+		if ($this->gdoColumnNames())
 		{
 			return Module_DBMS::instance()->dbmsSchema($this);
 		}

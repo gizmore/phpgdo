@@ -53,6 +53,8 @@ final class TextStyle
 		$app = Application::$INSTANCE;
 		switch (Application::$MODE)
 		{
+// 			case GDT::RENDER_IRC:
+// 				return call_user_func([CLI::class, $cliMethod], $s);
 			case GDT::RENDER_CLI:
 				return call_user_func([CLI::class, $cliMethod], $s);
 			default:

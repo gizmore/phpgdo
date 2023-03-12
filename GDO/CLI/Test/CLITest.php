@@ -44,8 +44,8 @@ final class CLITest extends TestCase
 	{
 		if (ini_get('allow_url_fopen'))
 		{
-			$empty = PP::init()->processString("#PP#start#\n");
-			assertEmpty($empty, 'Test if #PP#start works without end.');
+			$empty = PP::init()->processString("<?php\n#PP#start#\n");
+			assertEmpty(trim($empty), 'Test if #PP#start works without end.');
 		}
 		else
 		{

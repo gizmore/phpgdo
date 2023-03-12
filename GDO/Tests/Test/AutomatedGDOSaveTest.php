@@ -10,7 +10,6 @@ use GDO\Core\Application;
 use GDO\Core\GDO_Exception;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
-use GDO\IP2Country\GDO_IPCountry;
 
 /**
  * Try to save all GDO.

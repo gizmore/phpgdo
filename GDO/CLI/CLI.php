@@ -9,6 +9,7 @@ use GDO\UI\Color;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Page;
 use GDO\Session\GDO_Session;
+use GDO\Core\Application;
 
 /**
  * CLI utility.
@@ -69,13 +70,16 @@ final class CLI
     ##############
     public static function flushTopResponse()
     {
-    	# Get
-    	$response = GDT_Page::instance()->topResponse();
-    	# Render
-    	echo $response->renderCLI();
-    	@ob_flush();
-    	# Clear
-    	self::clearFlash($response);
+    	if (!Application::$INSTANCE->isUnitTests())
+    	{
+	    	# Get
+	    	$response = GDT_Page::instance()->topResponse();
+	    	# Render
+	    	echo $response->renderCLI();
+	    	@ob_flush();
+	    	# Clear
+	    	self::clearFlash($response);
+    	}
     }
 
     public static function getTopResponse() : string

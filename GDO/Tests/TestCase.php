@@ -360,12 +360,17 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	protected function fakeFileUpload($fieldName, $fileName, $path)
 	{
 		$dest = Module_Tests::instance()->tempPath($fileName);
-		copy($path, $dest);
+		$error = 5;
+		if (FileUtil::isFile($path))
+		{
+			copy($path, $dest);
+			$error = 0;
+		}
 		$_FILES[$fieldName] = [
 			'name' => $fileName,
 			'type' => FileUtil::mimetype($dest),
 			'tmp_name' => $dest,
-			'error' => 0,
+			'error' => $error,
 			'size' => filesize($dest),
 		];
 	}

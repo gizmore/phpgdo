@@ -164,6 +164,7 @@ class Application extends GDT
 	public function reset(bool $removeInput=false) : self
 	{
 		self::$RESPONSE_CODE = 200;
+		$_FILES = [];
 		GDT_Page::instance()->reset();
 		self::$MODE = self::$MODE_DETECTED;
 		self::updateTime();

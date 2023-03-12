@@ -37,7 +37,7 @@ final class AES
 	 */
 	public static function encryptIV(string $data, string $password)
 	{
-	    $iv_size = openssl_cipher_iv_length(self::CIPHER);
+	    $iv_size = \openssl_cipher_iv_length(self::CIPHER);
 	    $iv = openssl_random_pseudo_bytes($iv_size);
 		$key = hash('SHA256', $password, true);
         $encrypted = base64_encode($iv).openssl_encrypt($data, self::CIPHER, $key, 0, $iv);
@@ -53,7 +53,7 @@ final class AES
 	 */
 	public static function decryptIV($data, $password)
 	{
-	    $iv_size = openssl_cipher_iv_length(self::CIPHER);
+	    $iv_size = \openssl_cipher_iv_length(self::CIPHER);
 	    $iv64 = ((int)((4 * $iv_size / 3) + 3)) & ~3;
         $hmac = substr($data, -64);
         $data = substr($data, 0, -64);

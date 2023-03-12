@@ -58,7 +58,7 @@ global $me;
 $app = Application::init();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
-$db = Database::init();
+Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
@@ -320,4 +320,3 @@ echo $content; # asap
 #Logger::flush(); # Done in Application
 # @TODO On application exit, send mails
 Cache::recacheHooks(); # we have time to recache now.
-unset($db);

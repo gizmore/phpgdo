@@ -478,6 +478,12 @@ final class GDO_User extends GDO
 		return $module->userSetting($this, $key);
 	}
 	
+	public function hasSetting(string $moduleName, string $key): bool
+	{
+		$module = ModuleLoader::instance()->getModule($moduleName);
+		return $module->hasSetting($key);
+	}
+	
 	public function settingVar(string $moduleName, string $key) : ?string
 	{
 		return $this->setting($moduleName, $key)->getVar();
