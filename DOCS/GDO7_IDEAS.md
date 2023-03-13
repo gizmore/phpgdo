@@ -165,4 +165,4 @@ Convert and edit markdown files; extend with Smileys. Custom rules like [usernam
  
  - WeChall Rankings by programming language.
  
- - 
+ - Cloppy: Like sniping tool but drag target (textfields+?) is supported by confiugrable pasteimg service. like sniping tool, but copy+paste sends a link to uploaded cut.

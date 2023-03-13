@@ -9,6 +9,9 @@
 .project
 .settings/
 
+# PHPStorm
+.idea/
+
 # Web3.0
 .well-known/
 favicon.*

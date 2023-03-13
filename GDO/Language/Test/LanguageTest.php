@@ -66,13 +66,14 @@ final class LanguageTest extends TestCase
     public function testUserGeneration()
     {
     	echo "Creating 4 users for testing\n";
+		$hash = BCrypt::create('11111111')->__toString();
     	# User 2 is gizmore
     	$user = GDO_User::blank([
     		'user_id' => '2',
     		'user_name' => 'gizmore',
     		'user_type' => 'member',
-    		'user_password' => BCrypt::create('11111111')->__toString(),
     	])->replace();
+		$user->saveSettingVar('Login', 'password', $hash);
     	GDO_UserPermission::table()->grant($user, 'admin');
     	GDO_UserPermission::table()->grant($user, 'cronjob');
     	GDO_UserPermission::table()->grant($user, 'staff');
@@ -85,9 +86,9 @@ final class LanguageTest extends TestCase
     		'user_id' => '3',
     		'user_name' => 'Peter',
     		'user_type' => 'member',
-    		'user_password' => BCrypt::create('11111111')->__toString(),
     	])->replace();
-    	GDO_UserPermission::table()->grant($user, 'staff');
+		$user->saveSettingVar('Login', 'password', $hash);
+		GDO_UserPermission::table()->grant($user, 'staff');
     	GDT_MethodTest::$TEST_USERS[] = $user;
     	$user->changedPermissions();
     	assertFalse($user->isAdmin(), "Test if admin permissions are assigned correctly.");
@@ -98,8 +99,8 @@ final class LanguageTest extends TestCase
     		'user_id' => '4',
     		'user_name' => 'Monica',
     		'user_type' => 'member',
-    		'user_password' => BCrypt::create('11111111')->__toString(),
     	])->replace();
+		$user->saveSettingVar('Login', 'password', $hash);
     	GDT_MethodTest::$TEST_USERS[] = $user;
     	$user->changedPermissions();
     	assertFalse($user->isAdmin(), "Test if admin permissions are assigned correctly.");

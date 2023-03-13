@@ -71,7 +71,8 @@ window.GDO.toggleAll = function(toggler) {
 };
 
 window.GDO.responseError = function(response, title) {
-	
+
+	debugger;
 	let message = JSON.stringify(response);
 
 	if (typeof response === 'string' || response instanceof String) {

@@ -428,10 +428,16 @@ class GDO_Module extends GDO
 	public function tempPath(string $path = ''): string
 	{
 		$base = Application::$INSTANCE->isUnitTests() ? 'temp_test' : 'temp';
-		$path = GDO_PATH . "{$base}/" . $this->getName() . '/' . $path;
-		$dir = Strings::rsubstrTo($path, "/");
+		$dir = GDO_PATH . "{$base}/" . $this->getLowerName() . '/';
 		FileUtil::createDir($dir);
-		return $path;
+		return $dir . $path;
+	}
+
+	public function storagePath(string $path=''): string
+	{
+		$dir = GDO_PATH . GDO_FILES_DIR . '/' . $this->getLowerName() . '/';
+		FileUtil::createDir($dir);
+		return $dir . $path;
 	}
 
 	# ################
@@ -710,7 +716,10 @@ class GDO_Module extends GDO
 			}
 // 			$acl->setGDOData($settings);
 		}
-		$gdt->setGDOData($settings);
+		if ($settings)
+		{
+			$gdt->setGDOData($settings);
+		}
 		return $gdt;
 	}
 
@@ -743,7 +752,7 @@ class GDO_Module extends GDO
 
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
-		$gdt = $this->getSetting($key);
+		$gdt = $this->userSetting($user, $key);
 		$old = $gdt->var;
 		if ($old === $var)
 		{

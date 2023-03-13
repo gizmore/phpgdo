@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core;
 
+use GDO\CLI\CLI;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
 
@@ -18,6 +19,7 @@ class GDO_Exception extends \Exception
 	{
 		parent::__construct($message, $code, $previous);
 		Application::setResponseCode($code);
+		hdr('X-GDO-ERROR: ' . CLI::removeColorCodes(str_replace("\n", " | ", $message)));
 		Logger::logException($this);
 	}
 	

@@ -16,7 +16,7 @@ use GDO\Util\Strings;
  * @version 7.0.2
  * @since 6.0.0
  */
-define('GDO_PATH', __DIR__ . '/'); #PP#linux#
+define('GDO_PATH', __DIR__ . '/');
 // define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 // define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 #
@@ -231,7 +231,7 @@ function html(string $html=null) : string
 	switch (Application::$MODE)
 	{
 		case GDT::RENDER_CLI:
-			return escapeshellarg($html);
+			return \GDO\CLI\CLI::removeColorCodes($html);
 		default:
 			return str_replace(
 			[
@@ -256,24 +256,24 @@ function def(string $key, $default = null)
 /**
  * Define a constant unless defined and return constants value.
  */
-function deff(string $key, $value)
+function deff(string $key, $value): mixed
 {
-	return defined($key) ? constant($key) :
-	(define($key, $value) ? constant($key) : constant($key));
+	if (!defined($key))
+	{
+		define($key, $value);
+		return $value;
+	}
+	return constant($key);
 }
 
-function hdrc(string $header, bool $replace = true)
+function hdrc(string $header, bool $replace = true): void
 {
 	hdr($header, $replace);
 	$code = (int) Regex::firstMatch('#HTTP/1.1 (\\d+)#', $header);
-// 	if ($code === 500)
-// 	{
-// 		xdebug_break();
-// 	}
 	Application::setResponseCode($code);
 }
 
-function hdr(string $header, bool $replace = true)
+function hdr(string $header, bool $replace = true): void
 {
 	$app = Application::$INSTANCE;
 	if ($app->isUnitTests())

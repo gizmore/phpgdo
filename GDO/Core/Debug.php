@@ -40,11 +40,20 @@ final class Debug
 	public static function init(bool $die=false, bool $mail=false) : void
 	{
 		self::enableErrorHandler();
+//		self::enableShutdownHandler();
 		self::enableExceptionHandler();
 		self::setDieOnError($die);
 		self::setMailOnError($mail);
 	}
-	
+
+	################
+	### Shutdown ###
+	################
+	public static function enableShutdownHandler(): void
+	{
+		register_shutdown_function([self::class, 'shutdown_function']);
+	}
+
 	#############
 	### Break ###
 	#############
@@ -111,12 +120,13 @@ final class Debug
 		if ($error = error_get_last())
 		{
 			$type = $error['type'];
-			if ($type === 64)
-			{
+//			if ($type === 64)
+//			{
 				self::error_handler($type, $error['message'], self::shortpath($error['file']), $error['line'], null);
-			}
-			die(-1);
+//			}
+//			die(-1);
 		}
+		die(11112);
 	}
 	
 	public static function error(\Throwable $ex)

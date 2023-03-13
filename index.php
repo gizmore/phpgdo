@@ -296,6 +296,7 @@ if (!($result instanceof GDT_Response))
 ##############
 ### Finish ###
 ##############
+# Commit session changes.
 if (isset($session) && $session)
 {
 	if (!Application::isCrash())

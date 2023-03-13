@@ -237,7 +237,36 @@ final class CLI
         return ' ' . t('cli_usage', [
             trim(strtolower($mome).' '.$usage), $method->getMethodDescription()]);
     }
-    
+
+    ##############
+	### Escape ###
+	##############
+	/**
+	 * Remove any terminal control characters.
+	 */
+	public static function removeColorCodes(string $s): string
+	{
+		return preg_replace('/\x1B\[[0-9;]\{1,\}[A-Za-z]/', '', $s);
+	}
+
+	/**
+	 * Own implementation of escapeshellarg, because PHP limits it to 8kb.
+	 */
+	public static function escapeShell(string $s): string
+	{
+		return Process::isWindows() ? self::escapeShellWindows($s) : self::escapeShellLinux($s);
+	}
+
+	private static function escapeShellWindows(string $s): string
+	{
+		return '"' . addcslashes($s, '\\"') . '"';
+	}
+
+	private static function escapeShellLinux(string $s): string
+	{
+		return '\'' . str_replace('\'', '\\', $s) . '\'';
+	}
+
 }
 
 # Required gdo constants

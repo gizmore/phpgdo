@@ -85,16 +85,16 @@ final class ModuleLoader
 		unset($this->enabledModules);
 	}
 	
-	/**
-	 * Get all enabled and loaded modules.
-	 * @return GDO_Module[]
-	 */
-	public function getInstallableModules() : array
-	{
-		return array_filter($this->modules, function(GDO_Module $module){
-			return $module->isInstallable();
-		});
-	}
+// 	/**
+// 	 * Get all enabled and loaded modules.
+// 	 * @return GDO_Module[]
+// 	 */
+// 	public function getInstallableModules() : array
+// 	{
+// 		return array_filter($this->modules, function(GDO_Module $module){
+// 			return $module->isInstallable();
+// 		});
+// 	}
 	
 	public function setModule(GDO_Module $module)
 	{

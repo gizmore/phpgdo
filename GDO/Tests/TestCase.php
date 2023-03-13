@@ -59,7 +59,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	private int $ipd = 0;
 
-	private function nextIP()
+	private function nextIP(): string
 	{
 		$this->ipd++;
 		if ($this->ipd > 254)
@@ -77,7 +77,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 		$app = Application::$INSTANCE;
 		$app->reset(true);
-		$app->verb(GDT_Form::POST);
+		$app->verb(GDT_Form::GET);
 
 		# Increase IP
 		GDT_IP::$CURRENT = $this->nextIP();
@@ -257,28 +257,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ##############
 	protected function assertNoCrash(string $message)
 	{
-		try
-		{
-			assertLessThan(500, Application::$RESPONSE_CODE, $message);
-		}
-		catch (\Throwable $ex)
-		{
-			echo Debug::debugException($ex);
-			throw $ex;
-		}
+		assertLessThan(500, Application::$RESPONSE_CODE, $message);
 	}
 	
 	protected function assertOK(string $message)
 	{
-		try
-		{
-			assertLessThan(400, Application::$RESPONSE_CODE, $message);
-		}
-		catch (\Throwable $ex)
-		{
-			echo Debug::debugException($ex);
-			throw $ex;
-		}
+		assertLessThan(400, Application::$RESPONSE_CODE, $message);
 	}
 	
 	protected function assert200(string $message)

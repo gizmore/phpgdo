@@ -3,6 +3,9 @@ namespace GDO\Tests\Test;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT;
+use GDO\Language\Method\SwitchLanguage;
+use GDO\PM\Method\Quote;
+use GDO\TBS\Method\Tutorials;
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertLessThan;
@@ -31,6 +34,14 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		$method = $mt->method;
+
+		if ($method instanceof SwitchLanguage)
+		{
+//			xdebug_break();
+		}
+
+		$this->message('Running command: ' . $method->getCLITrigger());
+
 		$mt->runAs($mt->method->plugUser());
 		$result = $mt->execute(null, false);
 		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
@@ -49,6 +60,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		$response->renderMode(GDT::RENDER_XML);
 		$response->renderMode(GDT::RENDER_JSON);
 		$response->renderMode(GDT::RENDER_GTK);
+		$response->renderMode(GDT::RENDER_IRC);
 		$response->renderMode(GDT::RENDER_WEBSITE);
 		return true;
 	}

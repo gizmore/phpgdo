@@ -7,7 +7,7 @@ use GDO\Core\GDT;
  * Bcrypt hash form and database value
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 5.0.0
  */
 class GDT_PasswordHash extends GDT_Password

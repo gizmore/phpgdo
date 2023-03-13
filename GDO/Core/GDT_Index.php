@@ -39,9 +39,9 @@ class GDT_Index extends GDT
 	###############
 	### Columns ###
 	###############
-	private string $indexColumns;
+	public string $indexColumns;
 	
-	public function indexColumns(string... $indexColumns)
+	public function indexColumns(string... $indexColumns): self
 	{
 	    $this->indexColumns = implode(',', $indexColumns);
 	    # Default name if none is given?
@@ -53,10 +53,23 @@ class GDT_Index extends GDT
 	##################
 	### Index Type ###
 	##################
-	private string $indexFulltext;
-	private $indexUsing = self::HASH;
-	public function hash() { $this->indexUsing = self::HASH; return $this; }
-	public function btree() { $this->indexUsing = self::BTREE; return $this; }
-	public function fulltext() { $this->indexFulltext = self::FULLTEXT; return $this; }
+	public string $indexFulltext;
+	public string $indexUsing = self::HASH;
+	public function hash(): static
+	{
+		$this->indexUsing = self::HASH;
+		return $this;
+	}
+
+	public function btree(): static
+	{
+		$this->indexUsing = self::BTREE; return $this;
+	}
+
+	public function fulltext()
+	{
+		$this->indexFulltext = self::FULLTEXT;
+		return $this;
+	}
 	
 }

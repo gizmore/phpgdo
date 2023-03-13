@@ -2,6 +2,7 @@
 namespace GDO\DB;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_Error;
 use GDO\Core\GDT_Hook;
 use GDO\Util\FileUtil;
 use GDO\Core\Module_Core;
@@ -559,6 +560,7 @@ class Cache
 
 	/**
 	 * Remove a file from filecache if it exists.
+	 * @throws GDO_Error
 	 */
 	public static function fileRemove(string $key = null): bool
 	{
@@ -566,7 +568,7 @@ class Cache
 		if (FileUtil::isFile($filename))
 		{
 			self::$CACHE_REMOVE++; #PP#delete#
-			return unlink($filename);
+			return FileUtil::removeFile($filename);
 		}
 		return true; 
 	}

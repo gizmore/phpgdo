@@ -32,6 +32,8 @@ class GDT_AntiCSRF extends GDT_String
 	public function isHidden() : bool { return true; }
 	public function isSerializable() : bool { return false; }
 	
+	public string $token;
+	
 	###########
 	### GDT ###
 	###########
@@ -44,6 +46,7 @@ class GDT_AntiCSRF extends GDT_String
 			$this->fixed();
 		}
 		$this->csrfExpire($mod->cfgXSRFDuration());
+		$this->token = $this->csrfToken();
 	}
 	
 	public function getGDOData() : array
@@ -91,22 +94,19 @@ class GDT_AntiCSRF extends GDT_String
 	#################
 	public function csrfToken()
 	{
-	    if ($this->fixed)
+		if ($this->fixed || (!module_enabled('Session')))
 	    {
 	        return self::fixedToken();
 	    }
 	    
 	    $token = '';
-	    if (module_enabled('Session'))
-	    {
-			if (GDO_Session::instance())
-			{
-			    $token = Random::randomKey(self::KEYLEN);
-			    $csrf = $this->loadCSRFTokens();
-			    $csrf[$token] = Application::$TIME;
-			    $this->saveCSRFTokens($csrf);
-			}
-	    }
+		if (GDO_Session::instance())
+		{
+		    $token = Random::randomKey(self::KEYLEN);
+		    $csrf = $this->loadCSRFTokens();
+		    $csrf[$token] = Application::$TIME;
+		    $this->saveCSRFTokens($csrf);
+		}
 		return $token;
 	}
 	
@@ -159,14 +159,7 @@ class GDT_AntiCSRF extends GDT_String
 	        return true;
 	    }
 	    
-	    # No session, no token
-// 	    if (!module_enabled('Session'))
-// 		{
-// 			return true;
-// // 			return $this->error('err_session_required');
-// 		}
-		
-		if ($this->fixed)
+		if ($this->fixed || (!module_enabled('Session')))
 		{
 		    if ($value === self::fixedToken())
 		    {

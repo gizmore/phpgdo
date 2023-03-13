@@ -51,7 +51,7 @@ trait WithAvatar
 	##############
 	### Render ###
 	##############
-	public function renderAvatar() : string
+	public function renderAvatar() : ?string
 	{
 		if (module_enabled('Avatar'))
 		{
@@ -63,7 +63,7 @@ trait WithAvatar
 		return GDT::EMPTY_STRING;
 	}
 	
-	protected function renderAvatarFor(GDO_User $user) : string
+	protected function renderAvatarFor(GDO_User $user) : ?string
 	{
 		if (!isset(self::$AVATAR_DUMMY))
 		{

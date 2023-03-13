@@ -186,7 +186,10 @@ abstract class GDO extends GDT
 	{
 		return Module_DBMS::instance()->dbmsEscape($var);
 	}
-	
+
+	/**
+	 * @throws GDO_Exception
+	 */
 	public static function quoteS($var): string
 	{
 		if (is_string($var))
@@ -204,6 +207,10 @@ abstract class GDO extends GDT
 		elseif (is_bool($var))
 		{
 			return $var ? '1' : '0';
+		}
+		else
+		{
+			throw new GDO_Exception("Unquoteable var: " . print_r($var, true));
 		}
 	}
 	
@@ -725,7 +732,7 @@ abstract class GDO extends GDT
 	/**
 	 * Copy a GDT column and assign my values.
 	 */
-	public function gdoColumnCopy(string $key, bool $throw=true) : GDT
+	public function gdoColumnCopy(string $key, bool $throw=true) : ?GDT
 	{
 		if ($gdt = $this->gdoColumnsCache()[$key])
 		{
@@ -1031,8 +1038,8 @@ abstract class GDO extends GDT
 		if ($withHooks)
 		{
 			$this->afterCreate();
-			$this->cache(); # not needed for new rows?
 		}
+		$this->cache(); # not needed for new rows?
 		return $this;
 	}
 	
@@ -1472,8 +1479,9 @@ abstract class GDO extends GDT
 				$query->where($gdt->identifier() . '=' . self::quoteS($id[$i++]));
 			}
 			$object = $query->uncached()->first()->exec()->fetchObject();
-			return $object ? $table->cache->recache($object) : null;
+			return $table->cache->recache($object);
 		}
+		return $this;
 	}
 	
 	/**
@@ -1516,6 +1524,7 @@ abstract class GDO extends GDT
 		if ($this->table()->cache)
 		{
 			$this->table()->cache->uncache($this);
+//			Cache::fi
 		}
 	}
 	

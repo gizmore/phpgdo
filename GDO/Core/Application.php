@@ -41,12 +41,10 @@ class Application extends GDT
 	################
 	public static int $TIME;
 	public static float $MICROTIME;
-// 	public static \DateTime $DATETIME;
 	public static function time(float $time) : void
 	{
 		self::$TIME = (int)$time;
 		self::$MICROTIME = $time;
-// 		self::$DATETIME = new \DateTime(Time::getDate($time));
 	}
 	
 	public static function updateTime() : void
@@ -62,11 +60,26 @@ class Application extends GDT
 	/**
 	 * Call this at least.
 	 */
-	public static function init()
+	public static function init(): self
 	{
 		global $me;
 		$me = Stub::make();
-		return $me ? self::instance() : null;
+		return self::instance();
+	}
+
+
+	/**
+	 * Exit the application. On UnitTests we continue...
+	 */
+	public static function exit(int $code=0): void
+	{
+		if (self::$INSTANCE->isUnitTests())
+		{
+			echo "The application would exit with code {$code}\n";
+			flush();
+			return;
+		}
+		die($code);
 	}
 
 	/**
@@ -80,10 +93,6 @@ class Application extends GDT
 		hdr(sprintf('X-GDO-DB: %d', Database::$QUERIES));
 		hdr(sprintf('X-GDO-MEM: %s', max([$m1, $m2])));
 		hdr(sprintf('X-GDO-TIME: %.01fms', $this->getRuntime() * 1000.0));
-		if (function_exists('xdebug_get_function_count'))
-		{
-			hdr(sprintf('X-GDO-FUNC: %d', \xdebug_get_function_count()));
-		}
 	}
 	
 	#################
@@ -101,10 +110,6 @@ class Application extends GDT
 	{
 		if ($code > self::$RESPONSE_CODE)
 		{
-// 			if (defined('GDO_CORE_STABLE'))
-// 			{
-// 				xdebug_break();
-// 			}
 			self::$RESPONSE_CODE = $code;
 		}
 	}
@@ -184,6 +189,7 @@ class Application extends GDT
 		{
 			case 'TXT':
 			case 'CLI': return GDT::RENDER_CLI;
+			case 'IRC': return GDT::RENDER_IRC;
 			case 'WS': return GDT::RENDER_BINARY;
 			case 'PDF': return GDT::RENDER_PDF;
 			case 'JSON': return GDT::RENDER_JSON;

@@ -306,6 +306,17 @@ abstract class Method #extends GDT
 		$this->inputs = $inputs;
 		return $this->executeWithInit($checkPermission);
 	}
+
+	/**
+	 * Execute this method without any checks or events.
+	 * Used when invoking methods inside other methods.
+	 */
+	public function execWithInputs(array $inputs=null)
+	{
+		$this->inputs = $inputs;
+		$this->applyInput();
+		return $this->executeB();
+	}
 	
 	/**
 	 * Execute this method with all hooks.
@@ -420,14 +431,6 @@ abstract class Method #extends GDT
 			
 			return $response;
 		}
-		catch (GDO_ErrorFatal $e)
-		{
-			if ($transactional)
-			{
-				$db->transactionRollback();
-			}
-			throw $e;
-		}
 		catch (GDO_Error $e)
 		{
 			if ($transactional)
@@ -525,7 +528,7 @@ abstract class Method #extends GDT
 	###########
 	### SEO ###
 	###########
-	public function setupSEO()
+	public function setupSEO(): void
 	{
 		# SEO
 		$description = $this->getMethodDescription();
@@ -533,15 +536,7 @@ abstract class Method #extends GDT
 		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
 		Website::addMeta(['description', $description, 'name']);
 		Website::addMeta(['og:description', $description, 'property']);
-		
-		# Store last URL in session
-		if ( ($this->isSavingLastUrl()) &&
-			(Module_Core::instance()->cfgLogURLs()) &&
-			(Application::$INSTANCE->isWebserver()) )
-		{
-			$this->storeLastURL();
-			$this->storeLastActivity();
-		}
+		$this->storeLastActivity();
 	}
 	
 	public function getMethodTitle() : string
@@ -573,28 +568,18 @@ abstract class Method #extends GDT
 		}
 		return implode(', ', $keywords);
 	}
+
+	/**
+	 * Return a @see \GDO\Core\Website compatible meta data, for an image in teams links.
+	 */
+	public function seoMetaImage(): array
+	{
+		return GDT::EMPTY_ARRAY;
+	}
 	
 	##################
 	### Statistics ###
 	##################
-	/**
-	 * Store last url if they was reading the website.
-	 */
-	private function storeLastURL() : void
-	{
-		$app = Application::$INSTANCE;
-// 		$user = GDO_User::current();
-// 		if ( ($app->verb === GDT_Form::GET) &&
-// 			($app->isWebserver())  &&
-// 			($app->isHTML()) &&
-// 			(!$app->isAjax()) &&
-// 			($user->isPersisted()) )
-// 		{
-			Logger::log('last_url', $app->verb . ': ' . $_SERVER['REQUEST_URI']);
-// 			$user->saveSettingVar('User', 'last_url', $_SERVER['REQUEST_URI']);
-// 		}
-	}
-
 	/**
 	 * Update user last activity timestamp, for persisted users/guests.
 	 * Basically only store POST requests to non-ajax methods. And exceptions.

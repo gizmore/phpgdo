@@ -2,6 +2,7 @@
 namespace GDO\Tests\Test;
 
 use GDO\Tests\TestCase;
+use GDO\User\GDO_UserPermission;
 use function PHPUnit\Framework\assertTrue;
 use GDO\User\GDO_User;
 use GDO\Core\GDO_DBException;
@@ -13,6 +14,7 @@ use function PHPUnit\Framework\assertIsObject;
  * 
  * @version 7.0.2
  * @since 7.0.0
+ * @see GDO_UserPermission
  */
 final class CascadeTest extends TestCase
 {
@@ -24,7 +26,8 @@ final class CascadeTest extends TestCase
 		try
 		{
 			GDO_Permission::getById('1')->delete();
-			assertIsObject(GDO_Permission::findById('1'), 'Test if permissions cannot be deleted.');
+			$perm = GDO_Permission::table()->select()->where('perm_id=1')->uncached()->first()->exec()->fetchObject();
+			assertIsObject($perm, 'Test if permissions cannot be deleted.');
 		}
 		catch (GDO_DBException $ex)
 		{

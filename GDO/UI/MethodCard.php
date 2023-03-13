@@ -29,7 +29,7 @@ abstract class MethodCard extends Method
 	public function gdoParameters(): array
 	{
 		return [
-			GDT_Object::make($this->idName())->table($this->gdoTable()),
+			GDT_Object::make($this->idName())->table($this->gdoTable())->notNull(),
 		];
 	}
 

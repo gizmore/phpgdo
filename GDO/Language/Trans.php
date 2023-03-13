@@ -180,12 +180,14 @@ final class Trans
 	 */
 	private static function missing(string $iso, string $key, bool $logMissing=false) : bool
 	{
+		#PP#start#
 		if (self::$INITED && $logMissing)
 		{
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
 			Logger::log("i18n_{$iso}", $key);
 		}
+		#PP#end#
 		return false;
 	}
 

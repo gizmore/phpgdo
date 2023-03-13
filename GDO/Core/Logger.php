@@ -115,7 +115,6 @@ final class Logger
 			elseif (is_array($v) === true)
 			{
 				$v = 'Array(' . count($v) . ')';
-// 				$v = Arrays::implode(',', $v); # can fail horribly here
 			}
 			$back .= self::$POST_DELIMITER.$k.'=>'.$v;
 		}
@@ -125,7 +124,7 @@ final class Logger
 	/**
 	 * Log the request.
 	 */
-	public static function logRequest()
+	public static function logRequest(): void
 	{
 		self::log('request', self::getRequest());
 	}
@@ -133,7 +132,7 @@ final class Logger
 	########################
 	### Default logfiles ###
 	########################
-	public static function logCron($message)
+	public static function logCron($message): void
 	{
 		self::rawLog('cron', $message, 0);
 		if (!Application::$INSTANCE->isUnitTests())
@@ -187,6 +186,7 @@ final class Logger
 
 	/**
 	 * Flush all logfiles.
+	 * @throws GDO_Exception
 	 */
 	public static function flush() : void
 	{
@@ -198,7 +198,7 @@ final class Logger
 			}
 			else
 			{
-				throw $e;
+				throw new GDO_Exception('Cannot write log to ' . $file);
 			}
 		}
 	}
@@ -209,7 +209,7 @@ final class Logger
 	 * Raw mode will not write any datestamps or IP/username.
 	 * format: $time, $ip, $username, $message
 	 */
-	public static function log(string $filename, string $message, int $logmode=0)
+	public static function log(string $filename, string $message, int $logmode=0): void
 	{
 		# log it?
 		if (self::isEnabled($logmode))
@@ -287,12 +287,13 @@ final class Logger
 		# Write to file
 		if (!file_put_contents($filename, $message, FILE_APPEND))
 		{
-			return new GDO_Exception(sprintf('Cannot write logs: logfile "%s" in %s line %s.', $filename, __METHOD__, __LINE__));
+			throw new GDO_Exception(sprintf('Cannot write logs: logfile "%s" in %s line %s.', $filename, __METHOD__, __LINE__));
 		}
 
 		return true;
 	}
 
 }
+
 deff('GDO_TIMEZONE', ini_get('date.timezone')); #PP#delete#
 deff('GDO_LOG_REQUEST', false); #PP#delete#

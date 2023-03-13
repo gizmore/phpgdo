@@ -5,6 +5,7 @@ use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_Hook;
+use GDO\Core\GDT_Index;
 use GDO\Date\Time;
 use GDO\Session\GDO_Session;
 use GDO\Core\GDT_DeletedAt;
@@ -72,6 +73,7 @@ final class GDO_User extends GDO
 			GDT_Level::make('user_level'),
 			GDT_DeletedAt::make('user_deleted'),
 			GDT_DeletedBy::make('user_deletor'),
+			GDT_Index::make('usertype_index')->indexColumns('user_type'),
 		];
 	}
 	
@@ -97,7 +99,13 @@ final class GDO_User extends GDO
 	 */
 	public static function admins() : array
 	{
-		return self::withPermission('admin');
+		static $admins;
+		if ($admins === null)
+		{
+
+			$admins = self::withPermission('admin');
+		}
+		return $admins;
 	}
 	
 	/**
@@ -105,7 +113,12 @@ final class GDO_User extends GDO
 	 */
 	public static function staff() : array
 	{
-		return self::withPermission('staff');
+		static $staff;
+		if ($staff === null)
+		{
+			$staff = self::withPermission('staff');
+		}
+		return $staff;
 	}
 	
 	/**
@@ -474,7 +487,7 @@ final class GDO_User extends GDO
 	################
 	public function setting(string $moduleName, string $key) : GDT
 	{
-		$module = ModuleLoader::instance()->getModule($moduleName);
+		$module = ModuleLoader::instance()->getModule($moduleName, true, false);
 		return $module->userSetting($this, $key);
 	}
 	
@@ -496,8 +509,10 @@ final class GDO_User extends GDO
 	
 	public function saveSettingVar(string $moduleName, string $key, ?string $var) : self
 	{
-		$module = ModuleLoader::instance()->getModule($moduleName);
-		$module->saveUserSetting($this, $key, $var);
+		if ($module = ModuleLoader::instance()->getModule($moduleName, true, false))
+		{
+			$module->saveUserSetting($this, $key, $var);
+		}
 		return $this;
 	}
 	

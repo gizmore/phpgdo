@@ -41,7 +41,7 @@ if ($return_var != 0)
 $deps = implode("\n", $output);
 $bd = '### BEGIN_DEPENDENCIES ###';
 $ed = '### END_DEPENDENCIES ###';
-$file = preg_replace("/{$bd}.*{$ed}/s", "${bd}\n{$deps}\n{$ed}", $file);
+$file = preg_replace("/{$bd}.*{$ed}/s", "{$bd}\n{$deps}\n{$ed}", $file);
 
 ##############
 ### Output ###

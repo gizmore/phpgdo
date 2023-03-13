@@ -99,6 +99,12 @@ final class Website
 	    {
     	    self::$META[] = ['robots', 'noindex', 'name'];
 	    }
+
+		if ($meta = $me->seoMetaImage())
+		{
+			self::$META[] = $meta;
+		}
+
 	    $back = '';
 		foreach (self::$META as $meta)
 		{

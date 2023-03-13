@@ -182,7 +182,7 @@ class Database
 		}
 		self::$WRITES++; #PP#delete#
 		$this->writes++; #PP#delete#
-		return $this->query($query);
+		return $this->query($query, false);
 	}
 	
 	private function query(string $query, bool $buffered=true)
@@ -221,8 +221,8 @@ class Database
 			if ($this->debug > 1)
 			{
 				$trace = Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false);
-				$sep = str_repeat('-', 80);
-				Logger::log('queries', "{$trace}\n{$sep}\n");
+				$sep = str_repeat('- ', 80);
+				Logger::log('queries', "{$trace}\n\n{$sep}\n\n");
 			}
 		}
 		#PP#end#
@@ -401,16 +401,16 @@ class Database
 	############
 	### Lock ###
 	############
-	public function lock(string $lock, int $timeout=30): void
+	public function lock(string $lock, int $timeout=30): bool
 	{
 		$this->locks++; #PP#delete#
 		self::$LOCKS++; #PP#delete#
-		self::DBMS()->dbmsLock($lock, $timeout);
+		return self::DBMS()->dbmsLock($lock, $timeout);
 	}
 	
-	public function unlock(string $lock): void
+	public function unlock(string $lock): bool
 	{
-		self::DBMS()->dbmsUnlock($lock);
+		return self::DBMS()->dbmsUnlock($lock);
 	}
 	
 	###############

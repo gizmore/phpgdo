@@ -36,6 +36,7 @@ use GDO\Util\PP;
 use GDO\Util\Strings;
 use GDO\Core\GDT;
 use GDO\Install\GDT_DocsFile;
+use GDO\Core\Method\ClearCache;
 
 /**
  * The gdo_adm.php CLI application manages administrative tasks.
@@ -96,6 +97,7 @@ function printUsage(int $code = -1): void
 	echo "php $exe wipe <module> - To uninstall modules\n";
 	echo "php $exe wipe_all - To erase the whole database\n";
 	echo "\n--- Updates ---\n";
+	echo "php $exe cc - Clear the cache.\n";
 	echo "php $exe update - Is automatically called after gdo_update.sh - it re-installs all installed modules.\n";
 	echo "php $exe confgrade - Upgrade your config.php with new config vars.\n";
 	echo "php $exe migrate <module> - To force-migrate gdo tables for an installed module. Handle with care.\n";
@@ -254,8 +256,13 @@ $loader->loadLangFiles(true);
 $loader->initModules();
 
 # Run!
+if ($command === 'cc')
+{
+	ClearCache::make()->execute();
+	echo "Caches cleared!\n";
+}
 
-if ($command === 'docs')
+elseif ($command === 'docs')
 {
 	echo "Welcome to the GDOv7 interactive installer.\n";
 	$gdt = GDT_DocsFile::make('file');
@@ -975,7 +982,7 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 				system("php gdo_adm.php install {$argv[2]}");
 			}
 
-			if (GDO_PREPROCESSOR)
+			if (GDO_PREPROCESSOR && Application::isPro())
 			{
 				echo "Running PP php-preprocessor on GDOv7 files.";
 				system("php gdo_adm.php pp");
@@ -1013,7 +1020,7 @@ elseif ($command === 'update')
 	{
 		Installer::installModule($module);
 	}
-	if (GDO_PREPROCESSOR)
+	if (GDO_PREPROCESSOR && Application::isPro())
 	{
 		system('php gdo_adm.php pp');
 	}
