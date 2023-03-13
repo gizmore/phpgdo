@@ -9,6 +9,7 @@ use GDO\Util\FileUtil;
 use GDO\Core\Application;
 use GDO\Net\GDT_Url;
 use GDO\Core\GDO_FileCache;
+use GDO\DB\Cache;
 
 /**
  * Serve a static file from the webserver.
@@ -100,7 +101,13 @@ final class Fileserver extends Method
 	 */
 	private function md5_file(string $path, int $last_modified_time) : string
 	{
-		return GDO_FileCache::md5For($path, $last_modified_time);
+		$key = "FSMD5." . str_replace('/', '.', $path) . '.' . $last_modified_time;
+		if (null === ($md5 = Cache::fileGet($key)))
+		{
+			$md5 = GDO_FileCache::md5For($path, $last_modified_time);
+			Cache::fileSet($key, $md5);
+		}
+		return $md5;
 	}
 	
 	/**

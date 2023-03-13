@@ -33,9 +33,14 @@ abstract class MethodCard extends Method
 		];
 	}
 
+	private GDO $object;
 	public function getObject(): ?GDO
 	{
-		return $this->gdoParameterValue($this->idName());
+		if (!isset($this->object))
+		{
+			$this->object = $this->gdoParameterValue($this->idName());
+		}
+		return $this->object;
 	}
 
 	# ###########

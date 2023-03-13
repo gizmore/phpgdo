@@ -30,7 +30,7 @@ use GDO\Language\Module_Language;
 final class Module_Core extends GDO_Module
 {
 	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1757';
+	const GDO_REVISION = '7.0.1-r1758';
 	const GDO_CODENAME = 'Garlic-Gremlin';
 	
 	##############
@@ -113,6 +113,7 @@ final class Module_Core extends GDO_Module
 			GDT_Checkbox::make('directory_indexing')->initial('1'),
 			GDT_Checkbox::make('module_assets')->initial('1'),
 			GDT_Checkbox::make('dotfiles')->initial('0'),
+			GDT_Checkbox::make('log_urls')->initial('1'),
 		];
 	}
 	public function cfgSystemUser() : GDO_User { return $this->getConfigValue('system_user'); }
@@ -128,6 +129,7 @@ final class Module_Core extends GDO_Module
 	public function cfgDirectoryIndex() : string { return $this->getConfigVar('directory_indexing'); }
 	public function cfgModuleAssets() : string { return $this->getConfigVar('module_assets'); }
 	public function cfgDotfiles() : bool { return $this->getConfigValue('dotfiles'); }
+	public function cfgLogURLs() : bool { return $this->getConfigValue('log_urls'); }
 	
 	#############
 	### Hooks ###

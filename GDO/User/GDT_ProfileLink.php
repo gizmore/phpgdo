@@ -18,7 +18,7 @@ use GDO\Core\GDO;
  *  - Optional nickname()
  *  
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.2.0
  */
 final class GDT_ProfileLink extends GDT_Link
@@ -35,7 +35,6 @@ final class GDT_ProfileLink extends GDT_Link
 	
 	public function user(GDO $gdo=null) : self
 	{
-// 		$this->avatarUser($gdo);
 		return $this->gdo($gdo);
 	}
 	
@@ -91,10 +90,5 @@ final class GDT_ProfileLink extends GDT_Link
 			$this->gdo->renderUserName() :
 			TextStyle::italic(t('unknown_user'));
 	}
-	
-// 	public function renderCell(): string
-// 	{
-// 		return $this->renderHTML();
-// 	}
 	
 }

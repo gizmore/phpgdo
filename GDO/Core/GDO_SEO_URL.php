@@ -8,7 +8,7 @@ use GDO\Util\Strings;
  * An URL to index.php URL mapping.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 7.0.1
  */
 final class GDO_SEO_URL extends GDO
@@ -42,9 +42,15 @@ final class GDO_SEO_URL extends GDO
 	
 	public static function getSEOUrl(string $file) : ?string
 	{
-		return self::table()->select('su_url')->first()
-			->where('su_file='.quote($file))
-			->exec()->fetchValue();
+		$cache = self::table()->allCached();
+		foreach ($cache as $gdo)
+		{
+			if ($gdo->gdoVar('su_file') === $file)
+			{
+				return $gdo->gdoVar('su_url');
+			}
+		}
+		return null;
 	}
 	
 	public static function getSEOMethod(string $url) : ?Method

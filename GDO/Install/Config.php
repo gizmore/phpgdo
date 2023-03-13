@@ -115,6 +115,7 @@ class Config
 		deff('GDO_PREPROCESSOR', $pro);
 		# Logging
 		deff('GDO_LOG_REQUEST', $pro);
+		deff('GDO_LOG_PROFILE', '');
 		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
 		deff('GDO_ERROR_STACKTRACE', true);
 		deff('GDO_ERROR_DIE', true);
@@ -203,6 +204,7 @@ class Config
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
 			GDT_Checkbox::make('log_request')->initialValue(!!GDO_LOG_REQUEST)->tooltipRaw('Log every request?'),
+			GDT_String::make('log_profile')->initialValue(GDO_LOG_PROFILE)->tooltipRaw('Generate URLs with xdebug profiler trigger?'),
 			GDT_Hidden::make('error_level')->initialValue((int)GDO_ERROR_LEVEL)->tooltipRaw('Log level'),
 			GDT_Checkbox::make('error_stacktrace')->initialValue(!!GDO_ERROR_STACKTRACE)->tooltipRaw('Show stacktrace to users?'),
 			GDT_Checkbox::make('error_die')->initialValue(!!GDO_ERROR_DIE)->tooltipRaw('Die on every little warning and notice?'),

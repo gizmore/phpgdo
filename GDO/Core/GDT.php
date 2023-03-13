@@ -622,11 +622,8 @@ abstract class GDT
 	 */
 	public function htmlName() : string
 	{
-		if ($name = $this->getName())
-		{
-			return " name=\"{$name}\"";
-		}
-		return GDT::EMPTY_STRING;
+		$name = $this->getName();
+		return $name ? " name=\"{$name}\"" : GDT::EMPTY_STRING;
 	}
 	
 	public function htmlClass() : string

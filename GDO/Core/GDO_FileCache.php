@@ -7,9 +7,16 @@ use GDO\Crypto\GDT_MD5;
  * A cache for static file md5 sums.
  * 
  * @author gizmore
+ * @version 7.0.2
  */
 final class GDO_FileCache extends GDO
 {
+	
+	public function gdoCached(): bool
+	{
+		return false;
+	}
+	
 	public function gdoColumns(): array
 	{
 		return [

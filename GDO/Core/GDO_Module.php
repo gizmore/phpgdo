@@ -295,22 +295,9 @@ class GDO_Module extends GDO
 		return self::getByName(self::getNameS());
 	}
 
-	// /**
-	// * Modulename cache.
-	// * @TODO: delete?
-	// * @var string[string]
-	// */
-	// private static array $nameCache = [];
 	public static function getNameS()
 	{
-// 		return strtolower(substr(self::gdoShortNameS(), 7));
 		return substr(self::gdoShortNameS(), 7);
-		// if (isset(self::$nameCache[static::class]))
-		// {
-		// return self::$nameCache[static::class];
-		// }
-		// self::$nameCache[static::class] = $cache = strtolower(substr(self::gdoShortNameS(), 7));
-		// return $cache;
 	}
 
 	# #############
@@ -796,7 +783,9 @@ class GDO_Module extends GDO
 			$entry->softReplace();
 		}
 		GDT_Hook::callHook('UserSettingChanged', $user, $key, $old, $var);
-		$user->tempUnset('gdo_setting');
+		$settings = $user->tempGet('gdo_setting');
+		$settings[$key] = $var;
+		$user->tempSet('gdo_setting', $settings);
 		$user->recache();
 		return $gdt;
 	}
@@ -831,18 +820,24 @@ class GDO_Module extends GDO
 	
 	private function getACLDataFor(GDO_User $user, GDT $gdt, string $key): array
 	{
-		$table = ($gdt instanceof GDT_Text) ?
-			GDO_UserSettingBlob::table() :
-			GDO_UserSetting::table();
-		
-		if ($fullRow = $table->getWhere("uset_user={$user->getID()} AND uset_name='{$key}'"))
-		{
-			return $fullRow->toACLData();
-		}
-		
-		return $this->getACLDefaultsFor($gdt->getName());
+		$cache = $this->_getACLDataCacheFor($user);
+		return isset($cache[$key]) ?
+			$cache[$key]->toACLData() :
+			$this->getACLDefaultsFor($key);
 	}
 	
+	private function _getACLDataCacheFor(GDO_User $user)
+	{
+		$key = "uset_acl_{$user->getID()}";
+		if (null === ($cache = Cache::get($key)))
+		{
+			$query1 = GDO_UserSetting::table()->select('uset_name, gdo_usersetting.*')->where('uset_user='.$user->getID());
+			$query2 = GDO_UserSettingBlob::table()->select('uset_name, gdo_usersettingblob.*')->where('uset_user='.$user->getID());
+			$cache = $query1->union($query2)->exec()->fetchAllArray2dObject();
+			Cache::set($key, $cache);
+		}
+		return $cache;
+	}
 	
 	public function increaseSetting($key, $by = 1)
 	{
@@ -1090,7 +1085,7 @@ class GDO_Module extends GDO
 		{
 			$settings = self::loadUserSettingsB($user);
 			$user->tempSet('gdo_setting', $settings);
-			// $user->recache();
+			$user->recache();
 		}
 		return $settings;
 	}

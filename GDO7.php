@@ -16,8 +16,9 @@ use GDO\Util\Strings;
  * @version 7.0.2
  * @since 6.0.0
  */
-// define('GDO_PATH', __DIR__ . '/'); #PP#linux#
-define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
+define('GDO_PATH', __DIR__ . '/'); #PP#linux#
+// define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
+// define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
 #
 ##
 ########################
@@ -157,7 +158,13 @@ function href(string $module, string $method, string $append = null, bool $seo =
 			$href .= '_lang=';
 			$href .= Trans::$ISO;
 		}
-	
+
+		#PP#start#
+		if (GDO_LOG_PROFILE)
+		{
+			$href .= '&XDEBUG_TRIGGER=' . GDO_LOG_PROFILE;
+		}
+		#PP#end#
 		if ($hash)
 		{
 			$href .= "#{$hash}";
@@ -170,6 +177,12 @@ function href(string $module, string $method, string $append = null, bool $seo =
 		{
 			$href .= '&_lang=' . Trans::$ISO;
 		}
+		#PP#start#
+		if (GDO_LOG_PROFILE)
+		{
+			$href .= '&XDEBUG_TRIGGER=' . GDO_LOG_PROFILE;
+		}
+		#PP#end#
 		$href .= $append;
 	}
 	
@@ -213,21 +226,26 @@ function html(string $html=null) : string
 {
 	if ($html === null)
 	{
-		return GDT::EMPTY_STRING;
+		return '';
 	}
-	return Application::$INSTANCE->isHTML() ?
-	str_replace(
-	[
-		'&',
-		'"',
-		'<',
-		'>',
-	], [
-		'+',
-		'\'',
-		'{',
-		'}',
-	], $html) : $html;
+	switch (Application::$MODE)
+	{
+		case GDT::RENDER_CLI:
+			return escapeshellarg($html);
+		default:
+			return str_replace(
+			[
+				'&',
+				'"',
+				'<',
+				'>',
+			], [
+				'&amp;',
+				'&quot;',
+				'&lt;',
+				'&gt;',
+			], $html);
+	}
 }
 
 function def(string $key, $default = null)

@@ -70,7 +70,7 @@ class ClearCache extends MethodForm
 	    # Reset application state
 	    Application::$INSTANCE->reset();
 	    # Remove minified JS
-	    FileUtil::removeDir(GDO_PATH . 'assets/');
+	    FileUtil::removeDir(GDO_PATH . 'assets/', false);
 	    # More caches
 	    GDT_MethodTest::$TEST_USERS = [];
 	    # Call hook

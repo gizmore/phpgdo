@@ -371,7 +371,6 @@ abstract class GDO extends GDT
 	 */
 	public function setVar(string $key, string $var=null, bool $markDirty=true) : self
 	{
-		# @TODO: Better use temp? @see Vote/Up
 		if (!$this->hasColumn($key))
 		{
 			$this->gdoVars[$key] = $var;
@@ -381,16 +380,14 @@ abstract class GDO extends GDT
 		$gdt = $this->gdoColumn($key)->var($var);
 		$d = false;
 		$data = $gdt->getGDOData();
-// 		{
-			foreach ($data as $k => $v)
+		foreach ($data as $k => $v)
+		{
+			if (@$this->gdoVars[$k] !== $v)
 			{
-				if (@$this->gdoVars[$k] !== $v)
-				{
-					$this->gdoVars[$k] = $v === null ? null : (string)$v;
-					$d = true;
-				}
+				$this->gdoVars[$k] = $v === null ? null : (string)$v;
+				$d = true;
 			}
-// 		}
+		}
 		return ($markDirty && $d) ? $this->markDirty($key) : $this;
 	}
 	
@@ -412,7 +409,6 @@ abstract class GDO extends GDT
 	
 	public function setGDOVars(array $vars, bool $dirty=false) : self
 	{
-// 		unset($this->id);
 		$this->gdoVars = $vars;
 		return $this->dirty($dirty);
 	}
@@ -483,10 +479,6 @@ abstract class GDO extends GDT
 			$vars = [];
 			foreach ($this->gdoColumnsCache() as $gdt)
 			{
-// 				if ($gdt instanceof GDT_AutoInc)
-// 				{
-// 					continue;
-// 				}
 				if ($withPrimaryKeys || (!$gdt->isPrimary()))
 				{
 					$data = $gdt->gdo($this)->getGDOData();
@@ -1322,36 +1314,16 @@ abstract class GDO extends GDT
 	### Get ID ###
 	##############
 	/**
-	 * Id cache
-	 */
-// 	private string $id;
-
-	/**
 	 * Get the ID for this entity.
 	 */
 	public function getID() : ?string
 	{
-// 		if (isset($this->id))
-// 		{
-// 			return $this->id;
-// 		}
 		$id = '';
 		foreach ($this->gdoPrimaryKeyColumnNames() as $name)
 		{
-// 			if ($name === null)
-// 			{
-// 				xdebug_break();
-// 			}
-// 			if ($name)
-// 			{
-				$id2 = $this->gdoVar($name);
-				$id = $id ? "{$id}:{$id2}" : $id2;
-// 			}
+			$id2 = $this->gdoVar($name);
+			$id = $id ? "{$id}:{$id2}" : $id2;
 		}
-// 		if ($id)
-// 		{
-// 			$this->id = $id;
-// 		}
 		return $id;
 	}
 	

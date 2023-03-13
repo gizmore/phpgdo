@@ -69,6 +69,7 @@ final class GDT_IconUTF8
         'female' => '♀',
         'file' => '🗎',
         'flag' => '⚑',
+    	'flash' => '🗲',
         'folder' => '📁',
     	'font' => 'ᴫ',
     	'format' => 'F',

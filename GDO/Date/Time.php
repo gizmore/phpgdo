@@ -6,6 +6,7 @@ use DateTime;
 use GDO\Core\Application;
 use GDO\Core\GDO_Error;
 use GDO\Core\GDO_Exception;
+use GDO\DB\Cache;
 
 /**
  * Time helper class.
@@ -75,24 +76,39 @@ final class Time
 	 */
 	public static array $TIMEZONE_OBJECTS = [];
 	
+	private static array $TZ_CACHE; # Internal cache
+	
 	public static function getTimezoneObject(string $timezoneId=null)
 	{
-		if ($timezoneId === null)
-		{
-			return self::$TIMEZONE;
-		}
-		$timezone = GDO_Timezone::findById($timezoneId);
-		$tz = new \DateTimeZone($timezone->getName());
-		return $tz;
-// 		if (!isset(self::$TIMEZONE_OBJECTS[$timezoneId]))
-// 	    {
-// 	    	$timezone = GDO_Timezone::findById($timezoneId);
-// 	        $tz = new \DateTimeZone($timezone->getName());
-// 	        self::$TIMEZONE_OBJECTS[$timezone->getID()] = $tz;
-// 	        return $tz;
-// 	    }
-// 	    return self::$TIMEZONE_OBJECTS[$timezoneId];
+		return $timezoneId === null ? 
+			self::$TIMEZONE : 
+			self::_getTZCached($timezoneId);
 	}
+	
+	private static function _getTZCached(string $timezoneId)
+	{
+		if (isset(self::$TIMEZONE_OBJECTS[$timezoneId]))
+		{
+			return self::$TIMEZONE_OBJECTS[$timezoneId];
+		}
+
+		if (!isset(self::$TZ_CACHE))
+		{
+			$key = 'gdo_timezones';
+			if (null === ($cache = Cache::get($key)))
+			{
+				if ($cache = GDO_Timezone::table()->allCached())
+				{
+					Cache::set($key, $cache);
+				}
+			}
+			self::$TZ_CACHE = $cache;
+		}
+		$timezone = self::$TZ_CACHE[$timezoneId];
+		self::$TZ_CACHE[$timezoneId] = $tz = new \DateTimeZone($timezone->getName());
+		return $tz;
+	}
+	
 	
 	public static function setTimezoneNamed(string $timezoneName) : void
 	{

@@ -45,10 +45,10 @@ class GDT_Select extends GDT_ComboBox
 	
 	public function getValue()
 	{
-// 		if ($this->valueConverted)
-// 		{
-// 			return $this->value;
-// 		}
+		if ($this->valueConverted)
+		{
+			return $this->value;
+		}
 		$var = $this->getVar();
 		if ($var === null)
 		{
@@ -58,8 +58,8 @@ class GDT_Select extends GDT_ComboBox
 		{
 			$value = $this->toValue($var);
 		}
-// 		$this->valueConverted = true;
-// 		$this->value = $value;
+		$this->valueConverted = true;
+		$this->value = $value;
 		return $value;
 	}
 	

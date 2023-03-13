@@ -7,7 +7,6 @@ use RecursiveIteratorIterator;
 use GDO\Core\GDT_Float;
 use GDO\Core\GDO_Error;
 use GDO\Core\Logger;
-use GDO\Core\GDO_Exception;
 
 /**
  * File system utilities which are too common for the bigger file handling module.

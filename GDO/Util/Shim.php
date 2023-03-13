@@ -1,11 +1,9 @@
 <?php
-// use GDO\Core\GDO_Exception;
 
 /**
  * Backwards compatibility. @TODO make use of the php preprocessor to make shim zero cost.
  * PHP7.4 will not work though :(
  */
-
 if ( !function_exists('getallheaders'))
 {
 	/**
@@ -73,12 +71,6 @@ if ( !function_exists('openssl_random_pseudo_bytes'))
 		}
 		return $rand;
 	}
-	
-// 	function openssl_cipher_iv_length()
-// 	{
-		
-// 	}
-	
 }
 
 if ( !function_exists('str_starts_with'))
@@ -96,14 +88,3 @@ if ( !function_exists('str_ends_with'))
 		return substr_compare($haystack, $needle, -strlen($needle)) === 0;
 	}
 }
-
-/**
- * Dangling breakpoints throw an exception.
- */
-// if ( !function_exists('xdebug_break'))
-// {
-// 	function xdebug_break() : void
-// 	{
-// // 		throw new GDO_Exception('A breakpoint has been encountered. OOPS!');
-// 	}
-// }

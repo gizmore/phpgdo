@@ -36,10 +36,20 @@ class Database
 		return self::$INSTANCE;
 	}
 
+	private static ?Module_DBMS $DBMS = null;
+	
 	# DBMS
-	public static function DBMS(): Module_DBMS
+	public static function DBMS(bool $withLink=true): Module_DBMS
 	{
-		return Module_DBMS::instance();
+		if (!self::$DBMS)
+		{
+			self::$DBMS = Module_DBMS::instance();
+		}
+		if ($withLink)
+		{
+			self::$INSTANCE->getLink();
+		}
+		return self::$DBMS;
 	}
 	
 	# Connection
@@ -102,19 +112,19 @@ class Database
 		return $this;
 	}
 	
-// 	public function __destruct()
-// 	{
-// 		$this->closeLink();
-// 	}
+	public function __destruct()
+	{
+		$this->closeLink();
+	}
 	
-// 	public function closeLink() : void
-// 	{
-// // 		if (isset($this->link))
-// // 		{
-// 			unset($this->link);
-// 			self::DBMS()->dbmsClose();
-// // 		}
-// 	}
+	private function closeLink() : void
+	{
+		if (isset($this->link))
+		{
+			self::DBMS(false)->dbmsClose();
+			unset($this->link);
+		}
+	}
 	
 	public function getLink()
 	{
@@ -151,7 +161,7 @@ class Database
 	
 	public function connect()
 	{
-		return self::DBMS()->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
+		return self::DBMS(false)->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
 	}
 	
 	#############
@@ -166,6 +176,10 @@ class Database
 	
 	public function queryWrite($query)
 	{
+		if (GDO_DB_READONLY)
+		{
+			throw new GDO_DBException('err_db_ro');
+		}
 		self::$WRITES++; #PP#delete#
 		$this->writes++; #PP#delete#
 		return $this->query($query);
@@ -173,21 +187,7 @@ class Database
 	
 	private function query(string $query, bool $buffered=true)
 	{
-// 		try
-// 		{
-			return $this->queryB($query);
-// 		}
-// 		catch (\Throwable $ex)
-// 		{
-// 			throw new GDO_DBException("err_db", [$ex->getCode(), $ex->getMessage(), html($query)]);
-// 		}
-	}
-	
-	private function queryB(string $query, bool $buffered=true)
-	{
 		$t1 = microtime(true); #PP#delete#
-		
-		$this->getLink();
 		
 		$result = self::DBMS()->dbmsQuery($query, $buffered);
 		
@@ -197,7 +197,6 @@ class Database
 			{
 				$error = self::DBMS()->dbmsError($this->link);
 				$errno = self::DBMS()->dbmsErrno($this->link);
-// 				$this->closeLink();
 			}
 			else
 			{
@@ -221,12 +220,12 @@ class Database
 				": ({$timeTaken}s) ".$query);
 			if ($this->debug > 1)
 			{
-				Logger::log('queries',
-					Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false));
+				$trace = Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false);
+				$sep = str_repeat('-', 80);
+				Logger::log('queries', "{$trace}\n{$sep}\n");
 			}
 		}
 		#PP#end#
-		
 		return $result;
 	}
 	
@@ -318,11 +317,6 @@ class Database
 		return Database::DBMS()->dbmsTableExists($tableName);
 	}
 	
-// 	public function createTableCode(GDO $gdo) : string
-// 	{
-// 		return self::DBMS()->dbmsCreateTableCode($gdo);
-// 	}
-	
 	/**
 	 * Create a database table from a GDO. 
 	 */
@@ -330,7 +324,6 @@ class Database
 	{
 		try
 		{
-			$this->getLink();
 			$this->disableForeignKeyCheck();
 			self::DBMS()->dbmsCreateTable($gdo);
 		}
@@ -342,7 +335,6 @@ class Database
 	
 	public function dropTable(GDO $gdo)
 	{
-		$this->getLink();
 		return $this->dropTableName($gdo->gdoTableIdentifier());
 	}
 	
@@ -362,7 +354,6 @@ class Database
 	###################
 	public function createDatabase(string $databaseName): void
 	{
-		$this->getLink();
 		self::DBMS()->dbmsCreateDB($databaseName);
 	}
 	
@@ -382,7 +373,6 @@ class Database
 	###################
 	public function transactionBegin(): void
 	{
-		$this->getLink();
 		self::DBMS()->dbmsBegin();
 	}
 	
@@ -428,7 +418,6 @@ class Database
 	###############
 	public function enableForeignKeyCheck(bool $bool = true): void
 	{
-		$this->getLink();
 		Database::DBMS()->dbmsForeignKeys($bool);
 	}
 

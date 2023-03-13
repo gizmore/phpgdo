@@ -31,6 +31,12 @@ abstract class GDT_Field extends GDT
 	use WithPlaceholder;
 	use WithFormAttributes;
 	
+	public function __wakeup()
+	{
+		$this->valueConverted = false;
+		parent::__wakeup(); #PP#delete#
+	}
+	
 	##################
 	### Name Label ###
 	##################

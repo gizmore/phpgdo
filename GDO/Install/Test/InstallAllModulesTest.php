@@ -4,9 +4,7 @@ namespace GDO\Install\Test;
 use GDO\Tests\TestCase;
 use GDO\Core\ModuleLoader;
 use GDO\Install\Installer;
-use GDO\DB\Database;
 use function PHPUnit\Framework\assertTrue;
-use GDO\Core\Method\ClearCache;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
 
 /**

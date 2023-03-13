@@ -293,10 +293,6 @@ if (!($result instanceof GDT_Response))
 {
 	$result = GDT_Response::make()->addFields($result);
 }
-#
-# Render the response.
-$content = $result->render();
-#
 ##############
 ### Finish ###
 ##############
@@ -307,6 +303,8 @@ if (isset($session) && $session)
 		$session->commit(); # setting headers sometimes
 	}
 }
+# Render the response.
+$content = $result->render();
 # The last thing we do before any output
 $app->timingHeader(); # :) so every GDO request can be measured quickly.
 ##############.

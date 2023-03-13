@@ -536,6 +536,7 @@ abstract class Method #extends GDT
 		
 		# Store last URL in session
 		if ( ($this->isSavingLastUrl()) &&
+			(Module_Core::instance()->cfgLogURLs()) &&
 			(Application::$INSTANCE->isWebserver()) )
 		{
 			$this->storeLastURL();
@@ -582,15 +583,16 @@ abstract class Method #extends GDT
 	private function storeLastURL() : void
 	{
 		$app = Application::$INSTANCE;
-		$user = GDO_User::current();
-		if ( ($app->verb === GDT_Form::GET) &&
-			($app->isWebserver())  &&
-			($app->isHTML()) &&
-			(!$app->isAjax()) &&
-			($user->isPersisted()) )
-		{
-			$user->saveSettingVar('User', 'last_url', $_SERVER['REQUEST_URI']);
-		}
+// 		$user = GDO_User::current();
+// 		if ( ($app->verb === GDT_Form::GET) &&
+// 			($app->isWebserver())  &&
+// 			($app->isHTML()) &&
+// 			(!$app->isAjax()) &&
+// 			($user->isPersisted()) )
+// 		{
+			Logger::log('last_url', $app->verb . ': ' . $_SERVER['REQUEST_URI']);
+// 			$user->saveSettingVar('User', 'last_url', $_SERVER['REQUEST_URI']);
+// 		}
 	}
 
 	/**

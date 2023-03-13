@@ -577,18 +577,19 @@ class Cache
 	public static function fileFlush(string $key = null) : bool
 	{
 		self::$CACHE_FLUSH++; #PP#delete#
-		return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/') && FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
+		return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/')
+			&& FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
 	}
 
 	/**
 	 * Get the path of a filecache entry.
 	 */
-	public static function filePath(string $key = ''): string
+	public static function filePath(string $key=''): string
 	{
 		$domain = GDO_DOMAIN;
 		$version = Module_Core::GDO_REVISION;
-		$key = self::fileKey($key);
-		return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}.gdo";
+		$key = $key ? self::fileKey($key).'.gdo' : '';
+		return GDO_TEMP_PATH . "cache/{$domain}_{$version}/{$key}";
 	}
 
 	/**

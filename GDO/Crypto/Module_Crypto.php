@@ -4,7 +4,6 @@ namespace GDO\Crypto;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_Checkbox;
-use GDO\UI\GDT_Panel;
 use GDO\UI\GDT_Divider;
 use GDO\UI\TextStyle;
 
@@ -12,7 +11,8 @@ use GDO\UI\TextStyle;
  * Cryptographic functionality.
  * 
  * @author gizmore
- * @version 7.0.0
+ * @version 7.0.2
+ * 
  * @see GDT_Password
  * @see GDT_PasswordHash
  */

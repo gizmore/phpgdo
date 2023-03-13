@@ -31,6 +31,15 @@ value type is `int`.
 
 ---
 
+## GDOv7 Conventions: DB Keys
+
+GDO does not make any conventions of rowids or auto increments.
+Composite keys can be used nicely.
+However, your primary keys have to be the first field(s) in your GDO columns,
+for a little performance gain.
+
+---
+
 ## GDOv7 Conventions: DB identifiers
 
 **Table names**, by default, equal their lowercased simple classnames.

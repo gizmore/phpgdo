@@ -15,7 +15,6 @@ use GDO\Util\Strings;
 use GDO\Core\Application;
 use GDO\Install\Method\Configure;
 use GDO\Core\ModuleProviders;
-use GDO\DBMS\Module_DBMS;
 
 /**
  * Install helper.
