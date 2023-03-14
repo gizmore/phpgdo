@@ -182,8 +182,8 @@ final class AutomatedGDOSaveTest extends TestCase
 		if (!$success)
 		{
 			$this->error("%s: %s",
-				Color::red(get_class($ex)),
-				TextStyle::bold($ex->getMessage()));
+				Color::red('Cannot save blank GDO'),
+				TextStyle::bold($gdo->gdoClassName()));
 		}
 
 		return $success;

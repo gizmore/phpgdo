@@ -218,11 +218,11 @@ if ( !defined('GDO_CONFIGURED'))
 
 // new ModuleLoader(GDO_PATH . 'GDO/');
 CLI::setServerVars();
+Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Database::init(GDO_DB_NAME);
 Cache::flush();
 Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
-Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Debug::init(false, false);
 $loader = ModuleLoader::instance();
 
