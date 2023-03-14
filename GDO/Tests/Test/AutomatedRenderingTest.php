@@ -66,6 +66,7 @@ final class AutomatedRenderingTest extends TestCase
 				}
 				try
 				{
+					$t1 = microtime(true);
 					if (in_array('GDO\\Core\\GDO', $parents, true))
 					{
 						$this->fieldsGDOTested++;
@@ -76,10 +77,12 @@ final class AutomatedRenderingTest extends TestCase
 						$this->fieldsGDTTested++;
 						$this->fieldTestGDT($gdt);
 					}
-					$this->message("%4d.) %s: %s",
+					$t1 = microtime(true) - $t1;
+					$this->message("%4d.) %s: %s (%.03f)",
 						$this->fieldsTested,
 						CLI::bold(CLI::green("SUCCESS")),
-						get_class($gdt));
+						get_class($gdt),
+						$t1 / 1000.0);
 					$this->fieldsSuccess++;
 				}
 				catch (\Throwable $t)
@@ -146,6 +149,7 @@ final class AutomatedRenderingTest extends TestCase
 			return false; # true? not used
 		}
 // 		$this->renderAllUnplugged($gdo);
+		$this->plugVariants = [];
 		foreach ($gdo->gdoColumnsCache() as $gdt)
 		{
 // 			if ($name = $g<dt->getName())
