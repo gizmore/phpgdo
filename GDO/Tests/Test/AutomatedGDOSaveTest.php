@@ -175,11 +175,17 @@ final class AutomatedGDOSaveTest extends TestCase
 			}
 			catch (\Throwable $ex)
 			{
-				$this->error("%s: %s",
-					Color::red(get_class($ex)),
-					TextStyle::bold($ex->getMessage()));
+				$this->message('Warning: Failed a null GDO save test for: %s', $gdo->gdoClassName());
 			}
 		}
+
+		if (!$success)
+		{
+			$this->error("%s: %s",
+				Color::red(get_class($ex)),
+				TextStyle::bold($ex->getMessage()));
+		}
+
 		return $success;
 	}
 

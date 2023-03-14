@@ -22,7 +22,7 @@ final class GDT_PackedIP extends GDT_String
 	protected function __construct()
 	{
 		parent::__construct();
-		$this->binary()->min(4)->max(16);
+		$this->binary()->min(1)->max(16);
 		$this->icon = 'url';
 	}
 	
