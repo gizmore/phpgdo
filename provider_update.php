@@ -25,7 +25,7 @@ if ($return_var != 0)
 $deps = implode("\n", $output);
 $bd = '### BEGIN_PROVIDERS ###';
 $ed = '### END_PROVIDERS ###';
-$file = preg_replace("/{$bd}.*{$ed}/s", "${bd}\n{$deps}\n{$ed}", $file);
+$file = preg_replace("/{$bd}.*{$ed}/s", "{$bd}\n{$deps}\n{$ed}", $file);
 
 ############
 ### Deps ###
