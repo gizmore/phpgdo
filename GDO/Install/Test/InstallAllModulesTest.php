@@ -13,7 +13,7 @@ use function PHPUnit\Framework\assertGreaterThanOrEqual;
  * The real testing begins afterwards.
  * 
  * @author gizmore
- * @version 7.0.1
+ * @version 7.0.2
  * @since 6.10.0
  */
 final class InstallAllModulesTest extends TestCase
@@ -21,8 +21,7 @@ final class InstallAllModulesTest extends TestCase
 	public function testInstallAllModules()
 	{
 		$loader = ModuleLoader::instance();
-		$loader->loadModules(false, true, true);
-		$modules = $loader->getInstallableModules();
+		$modules = $loader->loadModules(false, true, true);
 		Installer::installModules($modules);
 		$this->assertOK('Check if all modules can be installed.');
 		$installed = $loader->getEnabledModules();

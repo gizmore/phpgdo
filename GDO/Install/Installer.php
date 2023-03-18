@@ -70,6 +70,7 @@ class Installer
 			if ( ($isInstall && $isCLI) || ($isTest) )
 			{
 				echo "Installing {$module->getName()}\n";
+				flush();
 			}
 			self::installModule($module, $forceMigrate);
 		}

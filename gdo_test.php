@@ -45,8 +45,8 @@ if ((is_file('protected/config_test2.php')) && ( !is_file('protected/config_test
 
 # Bootstrap GDOv7 with PHPUnit support.
 require 'protected/config_test.php';
-require 'GDO7.php';
 require 'vendor/autoload.php';
+require 'GDO7.php';
 Debug::init();
 Logger::init('gdo_test');
 
@@ -126,7 +126,6 @@ switch (count($argv))
 		break;
 	default:
 		return $app->showHelp();
-		
 }
 
 
@@ -287,7 +286,6 @@ if ($app->quick)
 # ######################
 if (Installer::installModules($modules))
 {
-	ClearCache::make()->clearCache();
 	$loader->initModules();
 	Trans::inited(true);
 	if (module_enabled('Session'))

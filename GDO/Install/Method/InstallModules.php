@@ -48,8 +48,7 @@ final class InstallModules extends Method
 		Cache::fileFlush();
 		Database::init();
 		$loader = ModuleLoader::instance();
-		$loader->loadModules(true, true, true);
-		$this->modules = $loader->getInstallableModules();
+		$this->modules = $loader->loadModules(true, true, true);
 
 		if ($modules = $this->getInputFor('module'))
 		{
