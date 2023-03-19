@@ -17,17 +17,20 @@ final class GDT_PageNum extends GDT_UInt
     public bool $hidden = true;
 
     public function isOrderable() : bool { return false; }
+
+	public function isCLIHidden() : bool { return false; }
+
     public function isSearchable() : bool { return false; }
     public function isFilterable() : bool { return false; }
     public function isSerializable() : bool { return false; }
     
     public function getDefaultName() : string { return 'page'; }
-    public function defaultLabel() : self { return $this->label('page'); }
+    public function defaultLabel(): static { return $this->label('page'); }
 
     #############
     ### Table ###
     #############
-    public $table;
+    public GDT_Table $table;
     public function table(GDT_Table $table)
     {
         $this->table = $table;
@@ -37,7 +40,7 @@ final class GDT_PageNum extends GDT_UInt
     #############
     ### Query ###
     #############
-//     public function filterQuery(Query $query, $rq=null) : self
+//     public function filterQuery(Query $query, $rq=null): static
 //     {
 //     	$ipp = $this->table->getPageMenu()->ipp;
 //     	$page = $this->table->getPageMenu()->getPage();

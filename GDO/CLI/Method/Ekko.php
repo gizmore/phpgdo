@@ -13,6 +13,12 @@ use GDO\Core\GDT_String;
  */
 final class Ekko extends Method
 {
+
+	public function getCLITrigger()
+	{
+		return 'echo';
+	}
+
 	public function gdoParameters() : array
 	{
 		return [

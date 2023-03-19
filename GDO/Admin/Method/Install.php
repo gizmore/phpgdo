@@ -4,6 +4,7 @@ namespace GDO\Admin\Method;
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Module;
+use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -129,8 +130,8 @@ class Install extends MethodForm
 	public function executeButton($button)
 	{
 		$response = call_user_func([$this, "execute_$button"]);
-// 		Cache::flush();
-// 		Cache::fileFlush();
+ 		Cache::flush();
+ 		Cache::fileFlush();
 		$this->resetForm();
 		return $response;
 	}

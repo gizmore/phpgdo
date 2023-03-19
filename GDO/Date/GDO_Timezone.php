@@ -27,7 +27,7 @@ final class GDO_Timezone extends GDO
 	 * Get a timezone by name.
 	 * @example Europe/Berlin
 	 */
-	public static function getByName($name) : self
+	public static function getByName($name): static
 	{
 		return self::getBy('tz_name', $name);
 	}
@@ -41,7 +41,7 @@ final class GDO_Timezone extends GDO
 			GDT_AutoInc::make('tz_id')->bytes(2),
 			GDT_Name::make('tz_name')->notNull(),
 			GDT_Int::make('tz_offset')->bytes(2)->notNull()->initial('0'),
-			GDT_Index::make('tz_index_name')->indexColumns('tz_name')->btree(),
+//			GDT_Index::make('tz_index_name')->indexColumns('tz_name')->btree(),
 		];
 	}
 	

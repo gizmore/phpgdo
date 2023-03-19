@@ -38,7 +38,7 @@ final class GDT_Order extends GDT_String
 	### Extra Fields ###
 	####################
 	public array $extraFields;
-	public function extraFields(array $fields): self
+	public function extraFields(array $fields): static
 	{
 		$this->extraFields = $fields;
 		return $this;
@@ -99,7 +99,7 @@ final class GDT_Order extends GDT_String
 	 * @var GDT[]
 	 */
 	public array $orders;
-	public function orders(array $orders) : self
+	public function orders(array $orders): static
 	{
 		$this->orders = $orders;
 		return $this;
@@ -153,13 +153,13 @@ final class GDT_Order extends GDT_String
 	#############
 	### Query ###
 	#############
-// 	public function filterQuery(Query $query, GDT_Filter $f) : self
+// 	public function filterQuery(Query $query, GDT_Filter $f): static
 // 	{
 // 		$query->order($this->getVar());
 // 		return $this;
 // 	}
 	
-	public function orderQuery(Query $query) : self
+	public function orderQuery(Query $query): static
 	{
 		$query->order($this->getVar());
 		return $this;

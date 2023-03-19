@@ -13,7 +13,7 @@ use GDO\Core\GDT;
 trait WithImage
 {
 	public GDT $image;
-	public function image(GDT $image) : self
+	public function image(GDT $image): static
 	{
 		$this->image = $image;
 		return $this;

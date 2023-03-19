@@ -19,7 +19,7 @@ trait WithFileCache
 {
 	public int $fileCacheExpire = GDO_MEMCACHE_TTL;
 	
-	public function fileCacheExpire(int $expire) : self
+	public function fileCacheExpire(int $expire): static
 	{
 		$this->fileCacheExpire = $expire;
 		return $this;

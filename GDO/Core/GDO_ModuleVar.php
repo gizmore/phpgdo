@@ -37,7 +37,7 @@ final class GDO_ModuleVar extends GDO
 	 */
 	public static function createModuleVar(GDO_Module $module, GDT $gdt) : GDT
 	{
-		$inputs = [];
+//		$inputs = [];
 		foreach ($gdt->getGDOData() as $key => $var)
 		{
 		    self::table()->blank([
@@ -45,9 +45,9 @@ final class GDO_ModuleVar extends GDO
     		    'mv_name' => $key,
     			'mv_value' => $var,
     		])->softReplace();
-			$inputs[$key] = $var;
+//			$inputs[$key] = $var;
 		}
-		return $gdt->setGDOData($inputs);
+		return $gdt;
 	}
 	
 	#############

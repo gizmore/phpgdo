@@ -29,7 +29,7 @@ Of course you have to try things first.
 Here is an example of how this code pattern looks like.
 
     public string $label = 'test';
-    public function label(string $label) : self
+    public function label(string $label): static
     {
         $this->label = $label;
         return $this;

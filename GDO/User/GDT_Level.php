@@ -20,7 +20,7 @@ final class GDT_Level extends GDT_Badge
 {
 	use WithGDO;
 	
-	public function defaultLabel() : self { return $this->label('user_level'); }
+	public function defaultLabel(): static { return $this->label('user_level'); }
 	public function isSearchable() : bool { return false; }
 	
 	protected function __construct()

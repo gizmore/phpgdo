@@ -19,7 +19,7 @@ final class GDT_Headline extends GDT
     ### H-Level ###
     ###############
 	public int $level = 1;
-	public function level(int $level) : self
+	public function level(int $level): static
 	{
 		$this->level = $level;
 		return $this;

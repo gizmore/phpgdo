@@ -12,7 +12,7 @@ use GDO\Core\GDT_String;
  */
 final class GDT_Trap extends GDT_String
 {
-	public function defaultLabel() : self
+	public function defaultLabel(): static
 	{
 		return $this->label('trap');
 	}

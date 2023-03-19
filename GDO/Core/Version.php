@@ -13,9 +13,9 @@ use GDO\Util\Strings;
  */
 final class Version
 {
-	const MAX_MAJOR = 8;
-	const MAX_MINOR = 14;
-	const MAX_PATCH = 28;
+	const MAX_MAJOR = 9;
+	const MAX_MINOR = 99;
+	const MAX_PATCH = 99;
 	
 	public int $major = 0;
 	public int $minor = 0;
@@ -40,7 +40,7 @@ final class Version
 	/**
 	 * Increase the version by 1 patch level.
 	 */
-	public function increase() : self
+	public function increase(): static
 	{
 		$this->patch++;
 		if ($this->patch > self::MAX_PATCH)

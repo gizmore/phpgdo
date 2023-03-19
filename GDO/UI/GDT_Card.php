@@ -44,7 +44,7 @@ class GDT_Card extends GDT
 	### Content ###
 	###############
 	public GDT $content;
-	public function content($content) : self
+	public function content($content): static
 	{
 		$this->content = $content;
 		return $this;
@@ -54,7 +54,7 @@ class GDT_Card extends GDT
 	### Image ###
 	#############
 	public GDT $image;
-	public function image($image) : self
+	public function image($image): static
 	{
 		$this->image = $image;
 		return $this;
@@ -64,7 +64,7 @@ class GDT_Card extends GDT
 	### Footer ###
 	##############
 	public GDT $footer;
-	public function footer(?GDT $footer) : self
+	public function footer(?GDT $footer): static
 	{
 		if ($footer)
 		{
@@ -141,7 +141,7 @@ class GDT_Card extends GDT
 	 * You can override the ago subtitle.
 	 * If you do not want anything, just don't use this method.
 	 */
-	public function creatorHeader(string $byField=null, string $atField=null, string $subtitleOverride=null, bool $subtitleNoUser=false) : self
+	public function creatorHeader(string $byField=null, string $atField=null, string $subtitleOverride=null, bool $subtitleNoUser=false): static
 	{
 	    /** @var $user GDO_User **/
 	    if ($byField)
@@ -198,7 +198,7 @@ class GDT_Card extends GDT
 	/**
 	 * Create a last 'edited by' footer.
 	 */
-	public function editorFooter() : self
+	public function editorFooter(): static
 	{
 	    /** @var $user GDO_User **/
 	    if ($user = $this->gdo->gdoColumnOf(GDT_EditedBy::class)->getValue())

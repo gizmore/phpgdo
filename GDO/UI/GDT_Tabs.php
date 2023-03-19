@@ -33,7 +33,7 @@ final class GDT_Tabs extends GDT
 		return $this->getFields();
 	}
 
-	public function addTab(GDT_Tab $tab) : self
+	public function addTab(GDT_Tab $tab): static
 	{
 		return $this->addField($tab);
 // 		$this->tabs[] = $tab;

@@ -19,7 +19,7 @@ trait WithProxy
 
 	public GDT $proxy;
 
-	public function proxy(GDT $proxy) : self
+	public function proxy(GDT $proxy): static
 	{
 		$this->proxy = $proxy;
 		return $this;
@@ -27,7 +27,7 @@ trait WithProxy
 	
 	public function getDefaultName() : string { return 'proxy'; }
 
-	public static function makeAs(string $name=null, GDT $proxy) : self
+	public static function makeAs(string $name=null, GDT $proxy): static
 	{
 		$obj = parent::make($name);
 		$proxy->name($name);

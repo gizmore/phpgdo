@@ -61,22 +61,22 @@ abstract class MethodQueryTable extends MethodTable
 
 	/**
 	 * Override this function to return a query for your table.
-	 * Defaults to select all from your GDO table.
+	 * Defaults to "select all" from your GDO table.
 	 */
 	public function getQuery(): Query
 	{
 		return $this->gdoTable()->select();
 	}
 
-	/**
-	 * Return a query to count items for pagination.
-	 * Usually you can leave this to gdo, letting it transform your query above.
-	 * But it's possible to return an own CountQuery.
-	 */
-	public function getCountQuery(): Query
-	{
-		return $this->getQuery();
-	}
+//	/**
+//	 * Return a query to count items for pagination.
+//	 * Usually you can leave this to gdo, letting it transform your query above.
+//	 * But it's possible to return an own CountQuery.
+//	 */
+//	public function getCountQuery(): Query
+//	{
+//		return $this->getQuery();
+//	}
 
 	# ###########
 	# ## Exec ###
@@ -92,6 +92,17 @@ abstract class MethodQueryTable extends MethodTable
 	{
 		$query = $table->query;
 		// $table->fetchAs($this->gdoFetchAs());
+
+		if ($this->isSearched())
+		{
+			if ($s = $this->gdoParameter($this->getSearchName())->getVar())
+			{
+				foreach ($this->gdoHeaderCache() as $gdt)
+				{
+					$gdt->searchQuery($query, $s);
+				}
+			}
+		}
 
 		if ($this->isFiltered())
 		{
@@ -117,7 +128,7 @@ abstract class MethodQueryTable extends MethodTable
 
 		if ($this->isPaginated())
 		{
-			$table->countQuery($this->getCountQuery());
+			$table->countQuery($query->copy());
 			$table->paginated(true, $this->getCurrentHREF(), $this->getIPP());
 			$table->pagemenu->page($this->getPage());
 			$table->pagemenu->numItems($table->countItems());

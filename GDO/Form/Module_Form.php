@@ -23,7 +23,12 @@ final class Module_Form extends GDO_Module
 			'Session',
 		];
 	}
-	
+
+	public function onLoadLanguage(): void
+	{
+		$this->loadLanguage('lang/form');
+	}
+
 	##############
 	### Config ###
 	##############

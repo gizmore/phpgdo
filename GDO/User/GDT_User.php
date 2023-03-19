@@ -24,7 +24,7 @@ use GDO\Table\GDT_Filter;
  */
 class GDT_User extends GDT_Object
 {
-	public function defaultLabel() : self { return $this->label('user'); }
+	public function defaultLabel(): static { return $this->label('user'); }
 	
 	protected function __construct()
 	{
@@ -44,7 +44,7 @@ class GDT_User extends GDT_Object
 	### Ghost ###
 	#############
 	private bool $ghost = false;
-	public function ghost(bool $ghost=true) : self
+	public function ghost(bool $ghost=true): static
 	{
 		$this->ghost = $ghost;
 		return $this;
@@ -58,7 +58,7 @@ class GDT_User extends GDT_Object
 	/**
 	 * Allow deleted users to be selected.
 	 */
-	public function deleted(bool $deleted=true) : self
+	public function deleted(bool $deleted=true): static
 	{
 		$this->deleted = $deleted;
 		return $this;
@@ -68,7 +68,7 @@ class GDT_User extends GDT_Object
 	### Current ###
 	###############
 	public bool $fallbackCurrentUser = false;
-	public function fallbackCurrentUser(bool $fallbackCurrentUser=true) : self
+	public function fallbackCurrentUser(bool $fallbackCurrentUser=true): static
 	{
 	    $this->fallbackCurrentUser = $fallbackCurrentUser;
 	    return $this;
@@ -78,7 +78,7 @@ class GDT_User extends GDT_Object
 	### Type ###
 	############
 	public string $withType;
-	public function withType(string $withType) : self
+	public function withType(string $withType): static
 	{
 	    $this->withType = $withType;
 	    return $this;
@@ -88,7 +88,7 @@ class GDT_User extends GDT_Object
 	### Perm ###
 	############
 	public string $withPermission;
-	public function withPermission(string $withPermission) : self
+	public function withPermission(string $withPermission): static
 	{
 	    $this->withPermission = $withPermission;
 	    return $this;
@@ -220,7 +220,7 @@ class GDT_User extends GDT_Object
 		return $this;
 	}
 	
-	public function filterQuery(Query $query, GDT_Filter $f) : self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		if (!$this->noFilter)
 		{

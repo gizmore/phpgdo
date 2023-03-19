@@ -23,7 +23,7 @@ trait WithGDO
 	/**
 	 * Assign the current GDO to this GDT. Copy it's data.
 	 */
-	public function gdo(GDO $gdo = null) : self
+	public function gdo(GDO $gdo = null): static
 	{
 		return $this->gdoVarInitial($gdo, false);
 	}
@@ -36,7 +36,7 @@ trait WithGDO
 	/**
 	 * Assign the current GDO to this GDT. Copy it's data and load it as intial var.
 	 */
-	public function gdoInitial(GDO $gdo = null) : self
+	public function gdoInitial(GDO $gdo = null): static
 	{
 		return $this->gdoVarInitial($gdo, true);
 	}

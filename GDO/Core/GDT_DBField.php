@@ -20,7 +20,7 @@ abstract class GDT_DBField extends GDT_Field
 	### Primary ###
 	###############
 	public bool $primary = false;
-	public function primary(bool $primary = true) : self
+	public function primary(bool $primary = true): static
 	{
 		$this->primary = $primary;
 		$this->notNull($primary);
@@ -36,7 +36,7 @@ abstract class GDT_DBField extends GDT_Field
 	### Unique ###
 	##############
 	public bool $unique = false;
-	public function unique(bool $unique = true): self
+	public function unique(bool $unique = true): static
 	{
 		$this->unique = $unique;
 		return $this;

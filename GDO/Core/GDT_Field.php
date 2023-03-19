@@ -40,7 +40,7 @@ abstract class GDT_Field extends GDT
 	##################
 	### Name Label ###
 	##################
-	public function defaultLabel() : self
+	public function defaultLabel(): static
 	{
 		if ($name = $this->getName())
 		{
@@ -75,7 +75,7 @@ abstract class GDT_Field extends GDT
 		return [$this->name => $this->getVar()];
 	}
 
-	public function setGDOData(array $data) : self
+	public function setGDOData(array $data): static
 	{
 		if (isset($data[$this->name]))
 		{
@@ -165,30 +165,30 @@ abstract class GDT_Field extends GDT
 	public function isFilterable() : bool { return $this->filterable; }
 	public function isSerializable():bool { return true; }
 	
-	public function orderable(bool $orderable) : self
+	public function orderable(bool $orderable): static
 	{
 		$this->orderable = $orderable;
 		return $this;
 	}
 	
-	public function noacl() : self
+	public function noacl(): static
 	{
 		return $this->aclcapable(false);
 	}
 	
-	public function aclcapable(bool $aclcapable) : self
+	public function aclcapable(bool $aclcapable): static
 	{
 		$this->aclcapable = $aclcapable;
 		return $this;
 	}
 	
-	public function searchable(bool $searchable) : self
+	public function searchable(bool $searchable): static
 	{
 		$this->searchable = $searchable;
 		return $this;
 	}
 	
-	public function filterable(bool $filterable) : self
+	public function filterable(bool $filterable): static
 	{
 		$this->filterable = $filterable;
 		return $this;
@@ -259,7 +259,7 @@ abstract class GDT_Field extends GDT
 	### Positional ###
 	##################
 	public ?bool $positional = null;
-	public function positional(?bool $positional=true): self
+	public function positional(?bool $positional=true): static
 	{
 		$this->positional = $positional;
 		return $this;
@@ -270,6 +270,21 @@ abstract class GDT_Field extends GDT
 		return ($this->positional === null) ?
 			($this->isRequired() && ($this->initial === null)) :
 			($this->positional);
+	}
+
+	##########
+	### As ###
+	##########
+	public string $as;
+	public function as(string $as): static
+	{
+		$this->as = $as;
+		return $this;
+	}
+
+	public function getParameterAlias(): ?string
+	{
+		return $this->as ?? $this->name;
 	}
 
 }

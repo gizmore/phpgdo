@@ -253,7 +253,7 @@ class GDT_Select extends GDT_ComboBox
 	{
 		if ( ($value === null) || ($value === $this->emptyVar) )
 		{
-		    if ($this->getVar() && ($value !== $this->emptyVar))
+		    if ($this->getVar() && ($this->getVar() !== $this->emptyVar))
 		    {
 		        return $this->errorInvalidChoice();
 		    }
@@ -303,7 +303,7 @@ class GDT_Select extends GDT_ComboBox
 	### Empty ###
 	#############
 	public string $emptyVar = '0';
-	public function emptyVar(string $emptyVar) : self
+	public function emptyVar(string $emptyVar): static
 	{
 		$this->emptyVar = $emptyVar;
 		return $this;
@@ -312,7 +312,7 @@ class GDT_Select extends GDT_ComboBox
 	public string $emptyLabelRaw;
 	public string $emptyLabelKey;
 	public ?array $emptyLabelArgs;
-	public function emptyLabel(string $key, $args=null) : self
+	public function emptyLabel(string $key, $args=null): static
 	{
 		unset($this->emptyLabelRaw);
 		$this->emptyLabelKey = $key;
@@ -320,7 +320,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this;
 	}
 	
-	public function emptyLabelRaw(string $text) : self
+	public function emptyLabelRaw(string $text): static
 	{
 		$this->emptyLabelRaw = $text;
 		unset($this->emptyLabelKey);
@@ -355,7 +355,7 @@ class GDT_Select extends GDT_ComboBox
 	### Multiple ###
 	################
 	public bool $multiple = false;
-	public function multiple(bool $multiple=true) : self
+	public function multiple(bool $multiple=true): static
 	{
 		$this->multiple = $multiple;
 		return $this->initial($this->initial);
@@ -363,13 +363,13 @@ class GDT_Select extends GDT_ComboBox
 	
 	public int $minSelected = 0;
 	public ?int $maxSelected = null;
-	public function minSelected(int $minSelected) : self
+	public function minSelected(int $minSelected): static
 	{
 		$this->minSelected = $minSelected;
 		return $this;
 	}
 	
-	public function maxSelected(int $maxSelected) : self
+	public function maxSelected(int $maxSelected): static
 	{
 		$this->maxSelected = $maxSelected;
 		return $this->multiple($maxSelected > 1);

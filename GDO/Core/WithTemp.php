@@ -43,7 +43,7 @@ trait WithTemp
 	/**
 	 * Set a temp var.
 	 */
-	public function tempSet(string $key, $value) : self
+	public function tempSet(string $key, $value): static
 	{
 		Cache::$TEMP_WRITE++; #PP#delete#
 		if (!isset($this->temp))
@@ -57,7 +57,7 @@ trait WithTemp
 	/**
 	 * Remove a temp var.
 	 */
-	public function tempUnset(string $key) : self
+	public function tempUnset(string $key): static
 	{
 		Cache::$TEMP_CLEAR++; #PP#delete#
 		unset($this->temp[$key]);
@@ -67,7 +67,7 @@ trait WithTemp
 	/**
 	 * Remove all temp vars.
 	 */
-	public function tempReset() : self
+	public function tempReset(): static
 	{
 		Cache::$TEMP_CLEAR_ALL++; #PP#delete#
 		unset($this->temp);

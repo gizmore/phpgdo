@@ -32,7 +32,7 @@ trait WithName
 		return null;
 	}
 	
-	public function name(string $name = null) : self
+	public function name(string $name = null): static
 	{
 		if ($name)
 		{
@@ -48,12 +48,12 @@ trait WithName
 	###############
 	### Factory ###
 	###############
-	public static function make(string $name = null) : self
+	public static function make(string $name = null): static
 	{
 		return self::makeNamed($name);
 	}
 	
-	public static function makeNamed(string $name = null) : self
+	public static function makeNamed(string $name = null): static
 	{
 		$obj = new static();
 		$name = $name === null ? $obj->getDefaultName() : $name;

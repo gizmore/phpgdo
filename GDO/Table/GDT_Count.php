@@ -18,7 +18,7 @@ class GDT_Count extends GDT_UInt
 	
 	public function isOrderable() : bool { return false; }
 	
-	public function defaultLabel() : self { return $this; }
+	public function defaultLabel(): static { return $this; }
 
 	public function render() : string
 	{

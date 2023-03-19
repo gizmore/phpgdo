@@ -45,13 +45,13 @@ class GDT_Icon extends GDT
 		}
 	}
 	
-	public function var(string $var = null) : self
+	public function var(string $var = null): static
 	{
 	    parent::var($var);
 	    return $this->icon($var);
 	}
 	
-	public function value($value) : self
+	public function value($value): static
 	{
 	    parent::value($value);
 	    return $this->icon($value);

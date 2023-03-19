@@ -382,7 +382,7 @@ final class ModuleProviders
 'TBS' => ['Admin', 'Avatar', 'Captcha', 'Classic', 'Country', 'Contact', 'Cronjob', 'CSS', 'Favicon', 'FontAwesome', 'Forum', 'Javascript', 'JQueryAutocomplete', 'Login', 'Markdown', 'Mibbit', 'News', 'OnlineUsers', 'Perf', 'PM', 'Python', 'Recovery', 'Register', 'Statistics'],
 'TCPDF' => [],
 'Tests' => [],
-'Todo' => [],
+'Todo' => ['Table'],
 'TorDetection' => ['Net'],
 'Tradestation' => ['Account', 'Admin', 'CLI'],
 'UI' => [],

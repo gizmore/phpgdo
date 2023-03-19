@@ -13,6 +13,6 @@ class GDT_FontWeight extends GDT_EnumNoI18n
 {
     public string $icon = 'font';
     
-	public function defaultLabel() : self { return $this->label('font_weight'); }
+	public function defaultLabel(): static { return $this->label('font_weight'); }
 	
 }

@@ -12,7 +12,7 @@ use GDO\Core\GDT_ObjectSelect;
  */
 final class GDT_Permission extends GDT_ObjectSelect
 {
-	public function defaultLabel() : self { return $this->label('permission'); }
+	public function defaultLabel(): static { return $this->label('permission'); }
 	
 	protected function __construct()
 	{
@@ -26,7 +26,7 @@ final class GDT_Permission extends GDT_ObjectSelect
 	### Permitted ###
 	#################
 	public $onlyPermitted = false;
-	public function onlyPermitted(bool $onlyPermitted=true) : self
+	public function onlyPermitted(bool $onlyPermitted=true): static
 	{
 		$this->onlyPermitted = $onlyPermitted;
 		return $this;

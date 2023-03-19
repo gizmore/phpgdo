@@ -10,7 +10,7 @@ namespace GDO\Core;
  */
 class GDT_Classname extends GDT_String
 {
-	public function defaultLabel() : self { return $this->label('classname'); }
+	public function defaultLabel(): static { return $this->label('classname'); }
 
 	const LENGTH = 255;
 	

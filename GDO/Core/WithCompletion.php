@@ -19,13 +19,13 @@ trait WithCompletion
 	############
 	public string $completionHref;
 	
-	public function completionHref(string $completionHref) : self
+	public function completionHref(string $completionHref): static
 	{
 		$this->completionHref = $completionHref;
 		return $this;
 	}
 	
-	public function noCompletion() : self
+	public function noCompletion(): static
 	{
 		unset($this->completionHref);
 		return $this;

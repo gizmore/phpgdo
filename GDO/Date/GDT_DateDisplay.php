@@ -24,13 +24,13 @@ final class GDT_DateDisplay extends GDT
 	### Render Switch ###
 	#####################
 	public int $showDateAfterSeconds = 172800;
-	public function onlyAgo() : self
+	public function onlyAgo(): static
 	{
 		$this->showDateAfterSeconds = PHP_INT_MAX;
 		return $this;
 	}
 	
-	public function onlyDate() : self
+	public function onlyDate(): static
 	{
 		$this->showDateAfterSeconds = -1;
 		return $this;
@@ -43,14 +43,14 @@ final class GDT_DateDisplay extends GDT
 	public array $emptyTextArgs;
 	public string $emptyTextRaw = '---';
 	
-	public function emptyText(string $key, array $args = null) : self
+	public function emptyText(string $key, array $args = null): static
 	{
 		$this->emptyTextKey = $key;
 		$this->emptyTextArgs = $args;
 		return $this;
 	}
 	
-	public function emptyTextRaw(string $emptyText) : self
+	public function emptyTextRaw(string $emptyText): static
 	{
 		unset($this->emptyTextKey);
 		unset($this->emptyTextArgs);
@@ -58,7 +58,7 @@ final class GDT_DateDisplay extends GDT
 		return $this;
 	}
 	
-	public function noEmptyText() : self
+	public function noEmptyText(): static
 	{
 		unset($this->emptyTextKey);
 		unset($this->emptyTextArgs);
@@ -70,7 +70,7 @@ final class GDT_DateDisplay extends GDT
 	### Format ###
 	##############
 	public string $dateformat = 'short';
-	public function dateformat(string $dateformat): self
+	public function dateformat(string $dateformat): static
 	{
 		$this->dateformat = $dateformat;
 		return $this;
@@ -79,7 +79,7 @@ final class GDT_DateDisplay extends GDT
 	# ##########
 	# ## Now ###
 	# ##########
-	public function initialNow(): self
+	public function initialNow(): static
 	{
 		return $this->initial(Time::getDate());
 	}

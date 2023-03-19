@@ -17,12 +17,12 @@ trait WithLabel
 {
 	use WithName;
 	
-	public static function make(string $name = null) : self
+	public static function make(string $name = null): static
 	{
 		return self::makeWithLabel($name);
 	}
 	
-	public static function makeWithLabel(string $name = null) : self
+	public static function makeWithLabel(string $name = null): static
 	{
 		$obj = self::makeNamed($name);
 		if ($name = $obj->getName())
@@ -64,7 +64,7 @@ trait WithLabel
 	public string $labelKey;
 	public ?array $labelArgs = null;
 	
-	public function labelNone(bool $none = true) : self
+	public function labelNone(bool $none = true): static
 	{
 		$this->labelNone = $none;
 		if ($none)
@@ -76,7 +76,7 @@ trait WithLabel
 		return $this;
 	}
 	
-	public function label(string $key, array $args = null) : self
+	public function label(string $key, array $args = null): static
 	{
 		unset($this->labelRaw);
 		$this->labelKey = $key;
@@ -84,13 +84,13 @@ trait WithLabel
 		return $this->labelNone(false);
 	}
 	
-	public function labelArgs(...$args) : self
+	public function labelArgs(...$args): static
 	{
 		$this->labelArgs = $args;
 		return $this;
 	}
 	
-	public function labelRaw(string $label) : self
+	public function labelRaw(string $label): static
 	{
 		$this->labelRaw = $label;
 		unset($this->labelKey);

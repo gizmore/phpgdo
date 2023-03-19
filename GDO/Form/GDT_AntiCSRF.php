@@ -58,7 +58,7 @@ class GDT_AntiCSRF extends GDT_String
 	### Expire ###
 	##############
 	public int $csrfExpire = 60 * 60; # 1 hour is maybe sensible default.
-	public function csrfExpire(int $csrfExpire) : self
+	public function csrfExpire(int $csrfExpire): static
 	{
 		$this->csrfExpire = $csrfExpire;
 		return $this;
@@ -68,8 +68,8 @@ class GDT_AntiCSRF extends GDT_String
 	### Fixed ###
 	#############
 	public bool $fixed = false;
-	public function complex() : self { return $this->fixed(false); }
-	public function fixed(bool $fixed=true) : self
+	public function complex(): static { return $this->fixed(false); }
+	public function fixed(bool $fixed=true): static
 	{
 	    $this->fixed = $fixed;
 	    return $this;

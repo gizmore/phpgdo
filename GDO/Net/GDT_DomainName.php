@@ -12,7 +12,7 @@ final class GDT_DomainName extends GDT_String
 	
 	public bool $tldOnly = false;
 	
-	public function tldOnly(bool $tldOnly=true): self
+	public function tldOnly(bool $tldOnly=true): static
 	{
 		$this->tldOnly = $tldOnly;
 		return $this;

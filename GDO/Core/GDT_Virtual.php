@@ -34,7 +34,7 @@ class GDT_Virtual extends GDT
     ### Query ###
     #############
     public string $subquery;
-    public function subquery(string $subquery) : self
+    public function subquery(string $subquery): static
     {
     	$this->subquery = $subquery;
     	return $this;
@@ -81,7 +81,7 @@ class GDT_Virtual extends GDT
     	return $gdt;
     }
     
-    public function gdtType(GDT $gdt) : self
+    public function gdtType(GDT $gdt): static
     {
         $this->gdtType = $gdt;
         $this->gdtType->name($this->getName());
@@ -113,7 +113,7 @@ class GDT_Virtual extends GDT
         return $this->proxy()->displayTableOrder($table);
     }
     
-    public function filterQuery(Query $query, GDT_Filter $f) : self
+    public function filterQuery(Query $query, GDT_Filter $f): static
     {
         $this->proxy()->filterQuery($query, $f);
         return $this;

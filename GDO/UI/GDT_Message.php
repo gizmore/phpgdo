@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_Text;
+use GDO\DB\Query;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
 use GDO\Core\GDT_String;
@@ -68,7 +69,7 @@ class GDT_Message extends GDT_Text
 	/**
 	 * On make, setup order and search field.
 	 */
-	public static function make(string $name = null): self
+	public static function make(string $name = null): static
 	{
 		$gdt = parent::make($name);
 		$gdt->num = self::$NUM++;
@@ -272,7 +273,7 @@ class GDT_Message extends GDT_Text
 	# #####################
 	# ## 4 columns hack ###
 	# #####################
-	public function initial(string $var = null): self
+	public function initial(string $var = null): static
 	{
 		$this->msgInput = $var;
 		$this->msgOutput = self::decodeText($var);
@@ -284,7 +285,7 @@ class GDT_Message extends GDT_Text
 	/**
 	 * If we set a var, value and plaintext get's precomputed.
 	 */
-	public function var(string $var = null): self
+	public function var(string $var = null): static
 	{
 		$this->var = $var;
 // 		$this->valueConverted = false;
@@ -321,7 +322,7 @@ class GDT_Message extends GDT_Text
 		return $this->msgInput;
 	}
 
-	public function gdo(GDO $gdo = null): self
+	public function gdo(GDO $gdo = null): static
 	{
 		return $this->var($gdo->gdoVar("{$this->name}_input"));
 	}
@@ -336,7 +337,7 @@ class GDT_Message extends GDT_Text
 	 * Set GDO Data is called when the GDO sets up the GDT.
 	 * We copy the 3 text columns and revert a special naming hack in module news; 'iso][en][colum_name' could be it's name.
 	 */
-	public function setGDOData(array $data): self
+	public function setGDOData(array $data): static
 	{
 // 		$name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
 		$name = $this->name;
@@ -428,7 +429,7 @@ class GDT_Message extends GDT_Text
 	### Rows ###
 	############
 	public int $textRows = 5;
-	public function textRows(int $rows) : self
+	public function textRows(int $rows): static
 	{
 		$this->textRows = $rows;
 		return $this;
@@ -448,7 +449,7 @@ class GDT_Message extends GDT_Text
 	 */
 	public bool $nowysiwyg = false;
 
-	public function nowysiwyg(bool $nowysiwyg = true): self
+	public function nowysiwyg(bool $nowysiwyg = true): static
 	{
 		$this->nowysiwyg = $nowysiwyg;
 		return $this;
@@ -463,5 +464,19 @@ class GDT_Message extends GDT_Text
 	{
 		return strtolower(self::$EDITOR_NAME);
 	}
-	
+
+	##############
+	### Search ###
+	##############
+	public function searchQuery(Query $query, string $searchTerm): static
+	{
+		if ($this->isSearchable())
+		{
+			$name = $this->getName();
+			$search = GDO::escapeSearchS($searchTerm);
+			$query->orWhere("{$name}_text LIKE '%{$search}%'");
+		}
+		return $this;
+	}
+
 }

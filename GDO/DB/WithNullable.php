@@ -18,7 +18,7 @@ trait WithNullable
 	/**
 	 * Change nullable setting.
 	 */
-	public function notNull(bool $notNull = true): self
+	public function notNull(bool $notNull = true): static
 	{
 		$this->notNull = $notNull;
 		return $this;

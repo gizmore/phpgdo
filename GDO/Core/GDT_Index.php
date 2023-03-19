@@ -41,7 +41,7 @@ class GDT_Index extends GDT
 	###############
 	public string $indexColumns;
 	
-	public function indexColumns(string... $indexColumns): self
+	public function indexColumns(string... $indexColumns): static
 	{
 	    $this->indexColumns = implode(',', $indexColumns);
 	    # Default name if none is given?

@@ -15,7 +15,7 @@ final class Color
 	###############
 	### Utility ###
 	###############
-	public static function fromHex(string $hex) : self
+	public static function fromHex(string $hex): static
 	{
 		$matches = null;
 		if (preg_match("/^#?([a-f0-9]{1,2})([a-f0-9]{1,2})([a-f0-9]{1,2})$/iD", $hex, $matches))

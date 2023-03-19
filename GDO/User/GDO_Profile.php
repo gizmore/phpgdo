@@ -22,7 +22,7 @@ final class GDO_Profile extends DTO
 	
 	public function getUser() : GDO_User { return $this->gdoValue('profile_user'); }
 
-	public static function forUser(GDO_User $user) : self
+	public static function forUser(GDO_User $user): static
 	{
 		$profile = self::blank([
 			'profile_user' => $user->getID(),

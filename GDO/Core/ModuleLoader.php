@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Cache;
+use GDO\TBS\Module_TBS;
 use GDO\Util\Filewalker;
 use GDO\Util\FileUtil;
 use GDO\Language\Trans;
@@ -19,7 +20,7 @@ final class ModuleLoader
 {
 	private static self $INSTANCE;
 
-	public static function instance() : self { return self::$INSTANCE; }
+	public static function instance(): static { return self::$INSTANCE; }
 	
 	/**
 	 * Base modules path, the modules folder.
@@ -162,6 +163,7 @@ final class ModuleLoader
 	private function initFromCache(array $cache) : void
 	{
 		$this->modules = $cache;
+		$this->setupCLIAliases();;
 	}
 	
 	public function loadLangFiles(bool $all=false) : void
@@ -199,6 +201,7 @@ final class ModuleLoader
 				$module->initOnce();
 			}
 		}
+		$this->setupCLIAliases();;
 	}
 	
 	private bool $scriptsIncluded = false;
@@ -256,16 +259,53 @@ final class ModuleLoader
 		# Loaded one?
 		if ($loaded)
 		{
-			$order = 'module_priority ASC, module_name ASC';
-			$this->modules = $this->sortModules($order);
+			$this->modules = $this->sortModules();
+			$this->setupCLIAliases();;
 		}
 		return $this->modules;
 	}
-	
+
+	/**
+	 * @throws GDO_Exception
+	 */
+	private function setupCLIAliases(): void
+	{
+		if (null === ($cache = Cache::get('cli_aliases')))
+		{
+			$cache = $this->generateCLIAliases();
+			Cache::set('cli_aliases', $cache);
+		}
+		Method::$CLI_ALIASES = $cache;
+	}
+
+	/**
+	 * @throws GDO_Exception
+	 */
+	private function generateCLIAliases(): array
+	{
+		$cache = [];
+		foreach ($this->getEnabledModules() as $module)
+		{
+			foreach ($module->getMethods(false) as $method)
+			{
+				if ($method->isCLI())
+				{
+					$alias = $method->getCLITrigger();
+					if (isset($cache[$alias]))
+					{
+						throw new GDO_Exception('Duplicate method CLI Trigger: ' . $alias);
+					}
+					$cache[$alias] = get_class($method);
+				}
+			}
+		}
+		return $cache;
+	}
+
 	/**
 	 * Force module reloading.
 	 */
-	public function reset() : self
+	public function reset(): static
 	{
 		$this->loadedDB = false;
 		$this->loadedFS = false;
@@ -358,7 +398,7 @@ final class ModuleLoader
 	 * @param boolean $throw If it shall throw an exception if not found.
 	 * @return \GDO\Core\GDO_Module
 	 */
-	public function loadModuleFS(string $name, bool $throw=true, bool $init=false)
+	public function loadModuleFS(string $name, bool $throw=true, bool $init=false): ?GDO_Module
 	{
 	    $lowerName = strtolower($name);
 	    
@@ -369,7 +409,9 @@ final class ModuleLoader
 // 			{
 				if (@class_exists($className, true))
 				{
-					$moduleData = GDO_Module::table()->getBlankData(['module_name' => $name]);
+					$moduleData = GDO_Module::table()->getBlankData([
+						'module_name' => $name,
+					]);
 					if ($module = self::instanciate($moduleData, true))
 					{
 						$this->modules[$lowerName] = $module;
@@ -399,9 +441,14 @@ final class ModuleLoader
 			$module = $this->modules[$lowerName];
 // 			$module->buildConfigCache();
 // 			$this->initModuleVars($module->getName());
-			$module->onModuleInit();
+			$this->initModule($module);
 		}
 		return $this->modules[$lowerName];
+	}
+
+	private function initModule(GDO_Module $module): void
+	{
+		$module->onModuleInit();
 	}
 	
 	/**
@@ -428,7 +475,9 @@ final class ModuleLoader
 				$instance = self::$INSTANCES[$name] = new $klass();
 			}
     		$moduleData['module_priority'] = $instance->priority;
-    		$moduleData['module_enabled'] = $dirty ? '0' : $moduleData['module_enabled'];
+    		$moduleData['module_enabled'] = $dirty ?
+				($instance->defaultEnabled() ? '1': '0') :
+				($moduleData['module_enabled']);
     		$instance->setGDOVars($moduleData, $dirty);
     		return $instance;
 		}
@@ -513,7 +562,7 @@ final class ModuleLoader
 // 		}
 	}
 	
-	public function sortModules(string $orders) : array
+	public function sortModules() : array
 	{
 		uasort($this->modules, function(GDO_Module $a, GDO_Module $b) {
 			return $a->priority - $b->priority;

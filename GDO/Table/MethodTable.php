@@ -345,6 +345,7 @@ abstract class MethodTable extends MethodForm
 	    if ($this->isPaginated())
 	    {
 	    	$table->paginated(true, $this->gdoTableHREF(), $this->getIPP());
+			$this->gdoParameter($this->getPageName())->table($this->table);
 	    	$table->pagemenu->page($this->getPage());
 	    }
 	    
@@ -369,7 +370,12 @@ abstract class MethodTable extends MethodForm
 		}
 		return $this->table;
 	}
-	
+
+	public function onMethodInit()
+	{
+		$this->getTable();
+	}
+
 	private function initTable()
 	{
 		$table = $this->table;

@@ -12,7 +12,7 @@ trait WithDescription
 {
 	public $descrKey;
 	public $descrArgs;
-	public function description(string $key, array $args=null) : self
+	public function description(string $key, array $args=null): static
 	{
 		$this->descrRaw = null;
 	    $this->descrKey = $key;
@@ -53,7 +53,7 @@ trait WithDescription
 		return $this->descrRaw;
 	}
 	
-	public function noDescription() : self
+	public function noDescription(): static
 	{
 		return $this->descrRaw(null);
 	}

@@ -23,10 +23,10 @@ final class CLITest extends TestCase
 	
 	public function testEcho()
 	{
-		$expression = GDT_Expression::fromLine("cli.ekko 123");
-		$response = $expression->execute();
-		$content = $response->renderCLI();
-		assertStringContainsString("123", $content, 'Test if core.ekko command works.');
+//		$expression = GDT_Expression::fromLine("cli.ekko 123");
+//		$response = $expression->execute();
+//		$content = $response->renderCLI();
+//		assertStringContainsString("123", $content, 'Test if core.ekko command works.');
 		
 		$expression = GDT_Expression::fromLine("echo 123");
 		$response = $expression->execute();

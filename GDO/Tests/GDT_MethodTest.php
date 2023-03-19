@@ -1,6 +1,9 @@
 <?php
 namespace GDO\Tests;
 
+use GDO\Core\Application;
+use GDO\Core\GDT;
+use GDO\Form\GDT_Form;
 use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertEquals;
@@ -33,19 +36,19 @@ final class GDT_MethodTest extends GDT_Method
     ############
     ### Exec ###
     ############
-    public function execute(string $button=null, bool $cliButton=true)
+    public function execute(string $button=null): mixed
     {
     	$this->inputs = isset($this->inputs) ? $this->inputs : [];
-    	if ($button)
+    	if (!$button)
     	{
-    		$this->inputs[$button] = '1';
-    	}
-    	else
-    	{
-    		$this->clibutton($cliButton);
-    	}
-    	$result = parent::execute();
-    	return $result;
+			$button = $this->method->getAutoButton();
+		}
+		if ($button)
+		{
+			$this->inputs[$button] = '1';
+			Application::instance()->verb(GDT_Form::POST);
+		}
+		return parent::execute();
     }
 
 }

@@ -11,7 +11,7 @@ namespace GDO\UI;
  */
 final class GDT_DownloadButton extends GDT_Button
 {
-    public function defaultLabel() : self { return $this->label('btn_download'); }
+    public function defaultLabel(): static { return $this->label('btn_download'); }
     
     protected function __construct()
     {

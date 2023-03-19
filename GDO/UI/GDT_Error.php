@@ -15,7 +15,7 @@ use GDO\Core\GDO_Exception;
  */
 final class GDT_Error extends GDT_Panel
 {
-	public static function fromException(\Throwable $t) : self
+	public static function fromException(\Throwable $t): static
 	{
 		return self::make()->exception($t)->code(500);
 	}
@@ -24,7 +24,7 @@ final class GDT_Error extends GDT_Panel
 	### Code ###
 	############
 	public int $code = GDO_Exception::DEFAULT_ERROR_CODE;
-	public function code(int $code) : self
+	public function code(int $code): static
 	{
 		$this->code = $code;
 		return $this;
@@ -42,7 +42,7 @@ final class GDT_Error extends GDT_Panel
 		$this->addClass('alert-danger');
 	}
 	
-	public function exception(\Throwable $t) : self
+	public function exception(\Throwable $t): static
 	{
 		$is_html = Application::$INSTANCE->isHTML();
 		$this->title("exception");
@@ -60,7 +60,7 @@ final class GDT_Error extends GDT_Panel
 	
 	public function renderCLI() : string
 	{
-		return Color::red($this->renderText()) . "\n";
+		return Color::red($this->renderText());
 	}
 	
 }

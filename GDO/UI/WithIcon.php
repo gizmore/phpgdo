@@ -50,7 +50,7 @@ trait WithIcon
 	### Icon ###
 	############
 	public string $icon;
-	public function icon(string $icon=null) : self
+	public function icon(string $icon=null): static
 	{
 		if ($icon)
 		{
@@ -63,7 +63,7 @@ trait WithIcon
 		return $this;
 	}
 
-	public function iconNone(): self
+	public function iconNone(): static
 	{
 		return $this->icon(null);
 	}
@@ -71,7 +71,7 @@ trait WithIcon
 	public string $iconTextRaw;
 	public string $iconTextKey;
 	public ?array $iconTextArgs;
-	public function iconText(string $textKey, array $textArgs=null) : self
+	public function iconText(string $textKey, array $textArgs=null): static
 	{
 		unset($this->iconTextRaw);
 		$this->iconTextKey = $textKey;
@@ -80,14 +80,14 @@ trait WithIcon
 	}
 	
 	public string $rawIcon;
-	public function rawIcon(string $rawIcon) : self
+	public function rawIcon(string $rawIcon): static
 	{
 		$this->rawIcon = $rawIcon;
 		return $this;
 	}
 
 	public ?int $iconSize = null;
-	public function iconSize(int $size) : self
+	public function iconSize(int $size): static
 	{
 		$this->iconSize = $size;
 		return $this;
@@ -100,7 +100,7 @@ trait WithIcon
 		return $this;
 	}
 	
-	public function tooltip(string $textKey, array $textArgs=null) : self
+	public function tooltip(string $textKey, array $textArgs=null): static
 	{
 		if (!isset($this->icon))
 	    {
@@ -109,7 +109,7 @@ trait WithIcon
 	    return $this->iconText($textKey, $textArgs);
 	}
 	
-	public function tooltipRaw(string $tooltipText) : self
+	public function tooltipRaw(string $tooltipText): static
 	{
 		$this->iconTextRaw = $tooltipText;
 		unset($this->iconTextKey);

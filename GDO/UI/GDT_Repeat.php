@@ -23,7 +23,7 @@ final class GDT_Repeat extends GDT
 	use WithInput;
 	use WithProxy;
 	
-	public function proxy(GDT $proxy) : self
+	public function proxy(GDT $proxy): static
 	{
 		$this->proxy = $proxy;
 		$proxy->notNull();
@@ -108,14 +108,14 @@ final class GDT_Repeat extends GDT
 	### Repeat ###
 	##############
 	public int $minRepeat = 1;
-	public function minRepeat(int $minRepeat): self
+	public function minRepeat(int $minRepeat): static
 	{
 		$this->minRepeat = $minRepeat;
 		return $this;
 	}
 	
 	public int $maxRepeat = 10;
-	public function maxRepeat(int $maxRepeat): self
+	public function maxRepeat(int $maxRepeat): static
 	{
 		$this->maxRepeat = $maxRepeat;
 		return $this;

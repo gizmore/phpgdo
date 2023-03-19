@@ -35,20 +35,20 @@ trait WithValue
 	public ?string $var = null; # dbinput var
 	public         $value; # output value
 	
-	public function initial(string $initial = null) : self
+	public function initial(string $initial = null): static
 	{
 		$this->initial = $initial;
 		return $this->var($initial);
 	}
 
-	public function var(string $var = null) : self
+	public function var(string $var = null): static
 	{
 		$this->var = $var;
 		$this->valueConverted = false;
 		return $this;
 	}
 	
-	public function value($value) : self
+	public function value($value): static
 	{
 		$this->var = $this->toVar($value);
 		$this->value = $value;
@@ -56,7 +56,7 @@ trait WithValue
 		return $this;
 	}
 	
-	public function reset(bool $removeInput=false) : self
+	public function reset(bool $removeInput=false): static
 	{
 		if ($removeInput)
 		{
@@ -112,7 +112,7 @@ trait WithValue
 	/**
 	 * Setup this GDT from a GDO.
 	 */
-	public function gdo(GDO $gdo = null) : self
+	public function gdo(GDO $gdo = null): static
 	{
 		if ($gdo)
 		{
@@ -128,7 +128,7 @@ trait WithValue
 		return $this->var(null);
 	}
 	
-	public function gdoInitial(GDO $gdo = null) : self
+	public function gdoInitial(GDO $gdo = null): static
 	{
 		if ($gdo)
 		{
@@ -140,7 +140,7 @@ trait WithValue
 		return $this->initial(null);
 	}
 	
-	public function setGDOData(array $data) : self
+	public function setGDOData(array $data): static
 	{
 		$n = $this->name;
 		$this->var = isset($data[$n]) ? $data[$n] : null;

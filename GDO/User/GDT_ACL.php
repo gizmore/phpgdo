@@ -36,8 +36,8 @@ final class GDT_ACL extends GDT
 // 	public function isTestable(): bool { return false; }
 	public function isACLCapable() : bool { return $this->aclcapable; }
 	public bool $aclcapable = false;
-	public function noacl() : self { return $this->aclcapable(false); }
-	public function aclcapable(bool $aclcapable=true) : self
+	public function noacl(): static { return $this->aclcapable(false); }
+	public function aclcapable(bool $aclcapable=true): static
 	{
 		$this->aclcapable = $aclcapable;
 		return $this;
@@ -48,7 +48,7 @@ final class GDT_ACL extends GDT
 		return true;
 	}
 	
-	public static function make(string $name=null) : self
+	public static function make(string $name=null): static
 	{
 		$obj = self::makeNamed($name);
 		$obj->initACLFields();
@@ -58,7 +58,7 @@ final class GDT_ACL extends GDT
 	###########
 	### ACL ###
 	###########
-	public function initialACL(string $relation, int $level=0, string $permission=null) : self
+	public function initialACL(string $relation, int $level=0, string $permission=null): static
 	{
 		$this->aclLevel->initial($level);
 		$this->aclRelation->initial($relation);
@@ -75,8 +75,8 @@ final class GDT_ACL extends GDT
 	}
 	
 	public bool $withPermission = true;
-	public function noPermission() : self { return $this->withPermission(false); }
-	public function withPermission(bool $withPermission=true) : self
+	public function noPermission(): static { return $this->withPermission(false); }
+	public function withPermission(bool $withPermission=true): static
 	{
 		$this->withPermission = $withPermission;
 		return $this;
@@ -96,7 +96,7 @@ final class GDT_ACL extends GDT
 		);
 	}
 	
-	public function setGDOData(array $data) : self
+	public function setGDOData(array $data): static
 	{
 		$this->aclLevel->setGDOData($data);
 		$this->aclRelation->setGDOData($data);
@@ -112,7 +112,7 @@ final class GDT_ACL extends GDT
 			$this->aclPermission->hasChanged();
 	}
 	
-	public function inputs(?array $inputs): self
+	public function inputs(?array $inputs): static
 	{
 		$this->aclLevel->inputs($inputs);
 		$this->aclRelation->inputs($inputs);
@@ -187,7 +187,7 @@ final class GDT_ACL extends GDT
 		return true;
 	}
 	
-	public function queryWhereVisible(Query $query, string $moduleName, string $key, GDO_User $user): self
+	public function queryWhereVisible(Query $query, string $moduleName, string $key, GDO_User $user): static
 	{
 // 		$module = ModuleLoader::instance()->getModule($moduleName);
 // 		$gdt = $module->setting($key);

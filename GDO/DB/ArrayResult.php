@@ -35,13 +35,13 @@ final class ArrayResult extends Result
 		$this->reset();
 	}
 	
-	public function data(array &$data) : self
+	public function data(array &$data): static
 	{
 	    $this->data = &$data;
 	    return $this;
 	}
 	
-	public function fullData(array &$fullData) : self
+	public function fullData(array &$fullData): static
 	{
 	    $this->fullData = &$fullData;
 	    return $this;
@@ -60,7 +60,7 @@ final class ArrayResult extends Result
 	#############
 	### Table ###
 	#############
-	public function reset() : self { $this->index = 0; return $this; }
+	public function reset(): static { $this->index = 0; return $this; }
 	public function numRows() :int { return count($this->data); }
 	public function fetchRow() : array { return array_values($this->fetchAssoc()); }
 	public function fetchAssoc() : array { return $this->fetchObject()->getGDOVars(); }
@@ -95,7 +95,7 @@ final class ArrayResult extends Result
 	 * @param GDT[] $filters
 	 * @param string[] $filter
 	 */
-	public function filterResult(array $data, array $filters, GDT_Filter $f) : self
+	public function filterResult(array $data, array $filters, GDT_Filter $f): static
 	{
 	    foreach ($filters as $gdt)
 	    {
@@ -128,7 +128,7 @@ final class ArrayResult extends Result
 	 * @param GDO[] $data
 	 * @param GDT[] $filters
 	 */
-	public function searchResult(array $data, GDO $table, array $filters, string $searchTerm) : self
+	public function searchResult(array $data, GDO $table, array $filters, string $searchTerm): static
 	{
 	    if ($searchTerm !== null)
 	    {

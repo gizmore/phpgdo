@@ -26,7 +26,7 @@ class GDT_Link extends GDT_Url
 		unset($this->icon); # @TODO: Optionally give a global icon for all links, like TBS did like the enter key.
 	}
 	
-	public static function make(string $name = null) : self
+	public static function make(string $name = null): static
 	{
 		$obj = self::makeWithLabel($name);
 		return $obj->text($name);

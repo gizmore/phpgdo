@@ -5,7 +5,7 @@ trait WithParent
 {
 	public GDT $parent;
 	
-	public function parent(GDT $parent) : self
+	public function parent(GDT $parent): static
 	{
 		$this->parent = $parent;
 		return $this;

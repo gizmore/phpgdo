@@ -17,7 +17,7 @@ use GDO\Core\GDT;
 final class GDT_ListItem extends GDT_Card
 {
 	public GDT $right;
-	public function right(GDT $content) : self
+	public function right(GDT $content): static
 	{
 		$this->right = $content;
 		return $this;

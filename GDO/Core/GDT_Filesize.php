@@ -12,7 +12,7 @@ use GDO\Util\FileUtil;
  */
 final class GDT_Filesize extends GDT_UInt
 {
-	public function defaultLabel() : self { return $this->label('filesize'); }
+	public function defaultLabel(): static { return $this->label('filesize'); }
 	
 	public function renderHTML() : string
 	{

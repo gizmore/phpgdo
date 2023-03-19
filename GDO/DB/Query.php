@@ -75,19 +75,19 @@ final class Query
 	 * Use this to avoid using the GDO cache. This means the memcache might be still used? This means no single identity?
 	 * @return \GDO\DB\Query
 	 */
-	public function uncached() : self { return $this->cached(false); }
-	public function cached(bool $cached=true) : self { $this->cached = $cached; return $this; }
+	public function uncached(): static { return $this->cached(false); }
+	public function cached(bool $cached=true): static { $this->cached = $cached; return $this; }
 
 	/**
 	 * Mark this query's buffered mode.
 	 */
-	public function buffered(bool $buffered) : self
+	public function buffered(bool $buffered): static
 	{
 	    $this->buffered = $buffered;
 	    return $this;
 	}
 	
-	public function unbuffered() : self
+	public function unbuffered(): static
 	{
 	    return $this->buffered(false);
 	}
@@ -98,7 +98,7 @@ final class Query
 	/**
 	 * Enable logging and verbose output.
 	 */
-	public function debug($debug=true) : self
+	public function debug($debug=true): static
 	{
 		$this->debug = $debug;
 		return $this;
@@ -111,7 +111,7 @@ final class Query
 	 * Copy this query.
 	 * @return self
 	 */
-	public function copy() : self
+	public function copy(): static
 	{
 		$clone = new self($this->table);
 		if (isset($this->raw))
@@ -143,47 +143,47 @@ final class Query
 	/**
 	 * Specify which GDO class is used for fetching. @TODO Rename function.
 	 */
-	public function fetchTable(GDO $fetchTable) : self
+	public function fetchTable(GDO $fetchTable): static
 	{
 		$this->fetchTable = $fetchTable;
 		return $this;
 	}
 	
-	public function update(string $tableName) : self
+	public function update(string $tableName): static
 	{
 		$this->type = self::UPDATE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
 	
-	public function insert(string $tableName) : self
+	public function insert(string $tableName): static
 	{
 		$this->type = self::INSERT;
 		$this->write = true;
 		return $this->from($tableName);
 	}
 
-	public function softReplace(string $tableName) : self
+	public function softReplace(string $tableName): static
 	{
 		$this->type = self::INSERT_OR_UPDATE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
 	
-	public function replace(string $tableName) : self
+	public function replace(string $tableName): static
 	{
 		$this->type = self::REPLACE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
 	
-	public function where(string $condition, string $op="AND") : self
+	public function where(string $condition, string $op="AND"): static
 	{
 		$this->where = isset($this->where) ? $this->where . " $op ($condition)" : "($condition)";
 		return $this;
 	}
 	
-	public function orWhere($condition) : self
+	public function orWhere($condition): static
 	{
 		return $this->where($condition, 'OR');
 	}
@@ -193,7 +193,7 @@ final class Query
 		return isset($this->where) ? " WHERE {$this->where}" : "";
 	}
 	
-	public function having(string $condition, string $op="AND") : self
+	public function having(string $condition, string $op="AND"): static
 	{
 		if (isset($this->having))
 		{
@@ -211,19 +211,19 @@ final class Query
 		return isset($this->having) ? " HAVING {$this->having}" : "";
 	}
 	
-	public function from(string $tableName) : self
+	public function from(string $tableName): static
 	{
 		$this->from = isset($this->from) ? $this->from . ", $tableName" : $tableName;
 		return $this;
 	}
 	
-	public function onlyFrom(string $tableName) : self
+	public function onlyFrom(string $tableName): static
 	{
 		$this->from = $tableName;
 		return $this;
 	}
 	
-	public function fromSelf() : self
+	public function fromSelf(): static
 	{
 		return $this->from($this->table->gdoTableIdentifier());
 	}
@@ -236,7 +236,7 @@ final class Query
 	/**
 	 * Build a select.
 	 */
-	public function select(string $columns=null) : self
+	public function select(string $columns=null): static
 	{
 		$this->type = self::SELECT;
 		if ($columns) # ignore empty
@@ -254,7 +254,7 @@ final class Query
 	 * @param string $columns
 	 * @return self
 	 */
-	public function selectAtFirst(string $columns="COUNT(*)") : self
+	public function selectAtFirst(string $columns="COUNT(*)"): static
 	{
 	    if ($columns)
 	    {
@@ -271,7 +271,7 @@ final class Query
 	 * @param string $columns
 	 * @return self
 	 */
-	public function selectOnly(string $columns=null) : self
+	public function selectOnly(string $columns=null): static
 	{
 		unset($this->columns);
 	    return $this->select($columns);
@@ -282,13 +282,13 @@ final class Query
 	 * @param int $start
 	 * @return self
 	 */
-	public function limit(int $count, int $start=0) : self
+	public function limit(int $count, int $start=0): static
 	{
 		$this->limit = " LIMIT {$start}, {$count}";
 		return $this;
 	}
 	
-	public function noLimit() : self
+	public function noLimit(): static
 	{
 	    unset($this->limit);
 	    return $this;
@@ -298,7 +298,7 @@ final class Query
 	 * Limit results to one.
 	 * @return self
 	 */
-	public function first() : self
+	public function first(): static
 	{
 		return $this->limit(1);
 	}
@@ -318,7 +318,7 @@ final class Query
 		return isset($this->columns) ? $this->columns : ' *';
 	}
 	
-	public function delete(string $tableName) : self
+	public function delete(string $tableName): static
 	{
 		$this->type = self::DELETE;
 		$this->write = true;
@@ -330,7 +330,7 @@ final class Query
 	 * @param string $set
 	 * @return self
 	 */
-	public function set(string $set) : self
+	public function set(string $set): static
 	{
 		if (isset($this->set))
 		{
@@ -349,7 +349,7 @@ final class Query
 	}
 
 	
-	public function noOrder() : self
+	public function noOrder(): static
 	{
 	    unset($this->order);
 	    return $this;
@@ -360,7 +360,7 @@ final class Query
 	 * @param string $order
 	 * @return self
 	 */
-	public function order(string $order=null) : self
+	public function order(string $order=null): static
 	{
 		if ($order)
 		{
@@ -376,13 +376,13 @@ final class Query
 		return $this;
 	}
 	
-	public function orderRand() : self
+	public function orderRand(): static
 	{
 		$rand = Database::DBMS()->dbmsRandom();
 		return $this->order($rand);
 	}
 	
-	public function join(string $join) : self
+	public function join(string $join): static
 	{
 		if (isset($this->join))
 		{
@@ -409,7 +409,7 @@ final class Query
 	 * @param string $join type
 	 * @return Query
 	 */
-	public function joinObject(string $key, string $join='JOIN', string $tableAlias=null) : self
+	public function joinObject(string $key, string $join='JOIN', string $tableAlias=null): static
 	{
 		if (in_array($key, $this->joinedObjects, true))
 		{
@@ -445,19 +445,19 @@ final class Query
 		return $this->join($join);
 	}
 	
-	public function group(string $group) : self
+	public function group(string $group): static
 	{
 		$this->group = isset($this->group) ? "{$this->group},{$group}" : $group;
 		return $this;
 	}
 	
-	public function values(array $values) : self
+	public function values(array $values): static
 	{
 		$this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
 		return $this;
 	}
 	
-	public function updateValues(array $values) : self
+	public function updateValues(array $values): static
 	{
 		$this->nonPKValues = isset($this->nonPKValues) ? array_merge($this->nonPKValues, $values) : $values;
 		return $this->values($values);
@@ -499,7 +499,7 @@ final class Query
 		return isset($this->join) ? " {$this->join}" : "";
 	}
 	
-	public function noJoins() : self
+	public function noJoins(): static
 	{
 	    $this->join = null;
 	    return $this;
@@ -515,7 +515,7 @@ final class Query
 		return isset($this->order) ? ' ORDER BY ' . implode(', ', $this->order) : '';
 	}
 	
-	public function raw(string $raw) : self
+	public function raw(string $raw): static
 	{ 
 	    $this->write = !str_starts_with($raw, 'SELECT');
 	    $this->raw = $raw;
@@ -525,7 +525,7 @@ final class Query
 	#############
 	### Union ###
 	#############
-	public function union(self $query) : self
+	public function union(self $query): static
 	{
 		$this->union = $query;
 		return $this;

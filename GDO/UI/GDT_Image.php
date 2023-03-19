@@ -26,7 +26,7 @@ class GDT_Image extends GDT
 	### Vars ###
 	############
 	public string $src;
-	public function src(string $src) : self
+	public function src(string $src): static
 	{
 		$this->src = $src;
 		return $this;

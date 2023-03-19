@@ -25,7 +25,7 @@ trait WithFlex
 	/**
 	 * Enable flex for this container.
 	 */
-	public function flex(int $direction = self::HORIZONTAL, bool $wrap = true, bool $shrink = false): self
+	public function flex(int $direction = self::HORIZONTAL, bool $wrap = true, bool $shrink = false): static
 	{
 		$this->flex = true;
 		$this->flexDirection = $direction;
@@ -34,13 +34,13 @@ trait WithFlex
 		return $this;
 	}
 
-	public function noflex(): self
+	public function noflex(): static
 	{
 		$this->flex = false;
 		return $this;
 	}
 
-	public function horizontal(bool $wrap = true, bool $shrink = false): self
+	public function horizontal(bool $wrap = true, bool $shrink = false): static
 	{
 		$this->flex = true;
 		$this->flexDirection = self::HORIZONTAL;
@@ -48,7 +48,7 @@ trait WithFlex
 		return $this->shrink($shrink);
 	}
 
-	public function vertical(bool $wrap = false, bool $shrink = false): self
+	public function vertical(bool $wrap = false, bool $shrink = false): static
 	{
 		$this->flex = true;
 		$this->flexDirection = self::VERTICAL;
@@ -56,18 +56,18 @@ trait WithFlex
 		return $this->shrink($shrink);
 	}
 
-	public function wrap(bool $wrap = true): self
+	public function wrap(bool $wrap = true): static
 	{
 		$this->flexWrap = $wrap;
 		return $this;
 	}
 
-	public function grow(bool $grow = true): self
+	public function grow(bool $grow = true): static
 	{
 		return $this->shrink( !$grow);
 	}
 
-	public function shrink(bool $shrink = true): self
+	public function shrink(bool $shrink = true): static
 	{
 		$this->flexShrink = $shrink;
 		return $this;

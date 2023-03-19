@@ -26,7 +26,7 @@ trait WithObject
 	/**
 	 * The GDO table to operate on.
 	 */
-	public function table(GDO $table): self
+	public function table(GDO $table): static
 	{
 // 		if (!$table->gdoIsTable()) # requires cache too early
 // 		{
@@ -299,19 +299,19 @@ trait WithObject
 	 */
 	public $cascade = 'SET NULL';
 
-	public function cascade(): self
+	public function cascade(): static
 	{
 		$this->cascade = 'CASCADE';
 		return $this;
 	}
 
-	public function cascadeNull(): self
+	public function cascadeNull(): static
 	{
 		$this->cascade = 'SET NULL';
 		return $this;
 	}
 
-	public function cascadeRestrict(): self
+	public function cascadeRestrict(): static
 	{
 		$this->cascade = 'RESTRICT';
 		return $this;
@@ -321,7 +321,7 @@ trait WithObject
 	/**
 	 * If object columns are not null, they cascade upon deletion.
 	 */
-	public function notNull(bool $notNull = true): self
+	public function notNull(bool $notNull = true): static
 	{
 		$this->notNull = $notNull;
 		return $this->cascade();
@@ -330,7 +330,7 @@ trait WithObject
 	/**
 	 * If object columns are primary, they cascade upon deletion.
 	 */
-	public function primary(bool $primary = true): self
+	public function primary(bool $primary = true): static
 	{
 		$this->primary = $primary;
 		return $this->notNull();
@@ -358,7 +358,7 @@ trait WithObject
 	 * @see GDT_Int::filterQuery()
 	 * @see GDT_String::filterQuery()
 	 */
-	public function filterQuery(Query $query, GDT_Filter $f): self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		if (isset($this->filterField))
 		{
@@ -382,32 +382,34 @@ trait WithObject
 	 * @param boolean $first
 	 * @return string
 	 */
-	public function searchQuery(Query $query, $searchTerm, $first)
+	public function searchQuery(Query $query, $searchTerm): static
 	{
+		return $this;
 		$table = $this->table;
 		$nameT = GDO::escapeIdentifierS('t_' . $this->name);
 
-		if ($first) // first time joined this table?
-		{
-			$name = GDO::escapeIdentifierS($this->name);
-			$fk = $table->gdoPrimaryKeyColumn()->name;
-			$fkI = GDO::escapeIdentifierS($fk);
-			$myT = $this->gdtTable->gdoTableName();
-			$query->join("LEFT JOIN {$table->gdoTableName()} {$nameT} ON {$myT}.{$name} = {$nameT}.{$fkI}");
-		}
+//		if ($first) // first time joined this table?
+//		{
+//			$name = GDO::escapeIdentifierS($this->name);
+//			$fk = $table->gdoPrimaryKeyColumn()->name;
+//			$fkI = GDO::escapeIdentifierS($fk);
+//			$myT = $this->gdtTable->gdoTableName();
+//			$query->join("LEFT JOIN {$table->gdoTableName()} {$nameT} ON {$myT}.{$name} = {$nameT}.{$fkI}");
+//		}
 
 		$where = [];
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
-			if ($gdt->searchable)
-			{
-				if ($condition = $gdt->searchCondition($searchTerm, $nameT))
-				{
-					$where[] = $condition;
-				}
-			}
+//			if ($gdt->isSearchable())
+//			{
+				$gdt->searchQuery($query, $searchTerm);
+//				if ($condition =
+//				{
+//					$where[] = $condition;
+//				}
+//			}
 		}
-		return implode(' OR ', $where);
+		return $this;
 	}
 
 }

@@ -14,7 +14,7 @@ final class GDT_Confirm extends GDT_String
 {
 	public string $confirmation = 'iconfirm';
 	
-	public function confirmation(string $confirmation) : self
+	public function confirmation(string $confirmation): static
 	{
 		$this->confirmation = $confirmation;
 		return $this->label('please_confirm_with', [t($confirmation)]);

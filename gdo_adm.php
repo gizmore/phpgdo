@@ -176,28 +176,28 @@ final class gdo_adm extends Application
 	### Options ###
 	###############
 	public bool $interactive = false;
-	public function interactive(bool $interactive=true): self
+	public function interactive(bool $interactive=true): static
 	{
 		$this->interactive = $interactive;
 		return $this;
 	}
 	
 	public bool $quiet = false;
-	public function quiet(bool $quiet=true): self
+	public function quiet(bool $quiet=true): static
 	{
 		$this->quiet = $quiet;
 		return $this;
 	}
 	
 	public bool $ssh = false;
-	public function ssh(bool $ssh=true): self
+	public function ssh(bool $ssh=true): static
 	{
 		$this->ssh = $ssh;
 		return $this;
 	}
 	
 	public bool $verbose = false;
-	public function verbose(bool $verbose=true): self
+	public function verbose(bool $verbose=true): static
 	{
 		$this->verbose = $verbose;
 		return $this;

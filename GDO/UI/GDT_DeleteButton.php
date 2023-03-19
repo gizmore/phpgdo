@@ -13,7 +13,7 @@ use GDO\Form\GDT_Submit;
 class GDT_DeleteButton extends GDT_Submit
 {
 	public string $icon = 'delete';
-	public function defaultLabel() : self { return $this->label('btn_delete'); }
+	public function defaultLabel(): static { return $this->label('btn_delete'); }
 	public function getDefaultName() : string { return 'delete'; }
 	
 	############

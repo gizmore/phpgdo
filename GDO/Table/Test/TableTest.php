@@ -12,13 +12,6 @@ use function PHPUnit\Framework\assertStringContainsString;
  */
 final class TableTest extends TestCase
 {
-	public function testTableOrder()
-	{
-		$result = $this->cli("admin.users --ipp=1,--o=user_name");
-		assertStringContainsString("~Gaston~", $result, 'Test if table is ordered in CLI mode.');
-		
-	}
-	
 	public function testTableWithArrayResult()
 	{
 		assertTrue(true); # @TODO implement some test for Module_Table

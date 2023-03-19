@@ -40,7 +40,7 @@ final class GDT_RangeSlider extends GDT_Slider
 	private function getVal($i) { $v = $this->getValue(); return $v ? $v[$i] : $v; }
 	public function initialLow() { return $this->var ? json_decode($this->var)[0] : null; }
 	public function initialHigh() { return $this->var ? json_decode($this->var)[1] : null; }
-	public function initialValue($value) : self { $this->initial = $this->var = $this->toVar($value); return parent::initialValue($value); }
+	public function initialValue($value): static { $this->initial = $this->var = $this->toVar($value); return parent::initialValue($value); }
 // 	public function getValue()
 // 	{
 // 		$this->getVar();

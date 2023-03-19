@@ -13,7 +13,7 @@ use GDO\Core\GDT_String;
  */
 class GDT_Duration extends GDT_String
 {
-	public function defaultLabel() : self { return $this->label('duration'); }
+	public function defaultLabel(): static { return $this->label('duration'); }
 	
 	public int $max = 16;
 	public int $encoding = self::ASCII;
@@ -24,14 +24,14 @@ class GDT_Duration extends GDT_String
 	### Min / Max ###
 	#################
 	public int $minDuration = 0;
-	public function min(int $minDuration) : self
+	public function min(int $minDuration): static
 	{
 		$this->minDuration = $minDuration;
 		return $this;
 	}
 	
 	public int $maxDuration;
-	public function max(int $maxDuration) : self
+	public function max(int $maxDuration): static
 	{
 		$this->maxDuration = $maxDuration;
 		return $this;

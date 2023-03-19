@@ -44,7 +44,7 @@ abstract class GDT
 	 * Create a GDT instance.
 	 * The very basic GDT don't know anything, don't have attributes or much functions.
 	 */
-	public static function make(string $name = null) : self
+	public static function make(string $name = null): static
 	{
 		return new static();
 	}
@@ -105,7 +105,7 @@ abstract class GDT
 	}
 	#PP#end#
 	
-	public function gdtCopy(string $name=null): self
+	public function gdtCopy(string $name=null): static
 	{
 		$copy = call_user_func([$this, 'make'], $name);
 		foreach (get_object_vars($this) as $k => $v)
@@ -320,6 +320,7 @@ abstract class GDT
 	### Permissions ###
 	###################
 	public function isHidden() : bool { return false; }
+	public function isCLIHidden() : bool { return $this->isHidden(); }
 	public function isReadable() : bool { return false; }
 	public function isWriteable() : bool { return false; }
 	public function isSerializable() : bool { return false; }
@@ -423,7 +424,7 @@ abstract class GDT
 		return false;
 	}
 	
-	public function noError() : self
+	public function noError(): static
 	{
 		return $this;
 	}
@@ -467,12 +468,15 @@ abstract class GDT
 	/**
 	 * Get the input for this GDTs filter var. 
 	 */
-	public function filterVar(GDT_Filter $f)
+	public function filterVar(GDT_Filter $f): ?string
 	{
 		if ( ($flt = $f->getVar()) && ($name = $this->getName()) )
 		{
-			$fv = trim((string)@$flt[$name]);
-			return $fv === '' ? null : $fv;
+			if (isset($flt[$name]))
+			{
+				$fv = trim($flt[$name]);
+				return $fv === '' ? null : $fv;
+			}
 		}
 		return null;
 	}
@@ -490,7 +494,7 @@ abstract class GDT
 		return stripos($var, $filterInput) !== false;
 	}
 	
-	public function filterQuery(Query $query, GDT_Filter $f) : self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		if (null !== ($var = $this->filterVar($f)))
 		{
@@ -501,7 +505,7 @@ abstract class GDT
 		return $this;
 	}
 	
-	public function filterQueryCondition(Query $query, string $condition) : self
+	public function filterQueryCondition(Query $query, string $condition): static
 	{
 		$query->where($condition);
 		return $this;
@@ -518,6 +522,20 @@ abstract class GDT
 		}
 		return false;
 	}
+
+	public function searchQuery(Query $query, string $searchTerm): static
+	{
+//		if ()
+//		{
+			if ($this->isSearchable())
+			{
+				$name = $this->getName();
+				$search = GDO::escapeSearchS($searchTerm);
+				$query->orWhere("{$name} LIKE '%{$search}%'");
+			}
+//		}
+		return $this;
+	}
 	
 	#########################
 	### Bridge for traits ###
@@ -530,6 +548,11 @@ abstract class GDT
 	public function getName() : ?string
 	{
 		return null;
+	}
+
+	public function getParameterAlias(): ?string
+	{
+		return $this->getName();
 	}
 	
 	/**
@@ -557,7 +580,7 @@ abstract class GDT
 	/**
 	 * Setup the default label. None by default.
 	 */
-	public function defaultLabel() : self
+	public function defaultLabel(): static
 	{
 		return $this;
 	}
@@ -582,7 +605,7 @@ abstract class GDT
 		return null;
 	}
 	
-	public function inputs(?array $inputs) : self
+	public function inputs(?array $inputs): static
 	{
 		return $this;
 	}
@@ -612,7 +635,7 @@ abstract class GDT
 		return self::EMPTY_ARRAY;
 	}
 	
-	public function gdo(GDO $gdo = null) : self
+	public function gdo(GDO $gdo = null): static
 	{
 		return $this;
 	}
@@ -649,17 +672,17 @@ abstract class GDT
 		return GDT::EMPTY_STRING;
 	}
 	
-	public function initial(string $initial = null) : self
+	public function initial(string $initial = null): static
 	{
 		return $this;
 	}
 	
-	public function initialValue($value) : self
+	public function initialValue($value): static
 	{
 		return $this->initial($this->toVar($value));
 	}
 	
-	public function var(string $var = null) : self
+	public function var(string $var = null): static
 	{
 		return $this;
 	}
@@ -672,12 +695,12 @@ abstract class GDT
 		return GDT::EMPTY_ARRAY;
 	}
 	
-	public function setGDOData(array $data) : self
+	public function setGDOData(array $data): static
 	{
 		return $this;
 	}
 	
-	public function value($value) : self
+	public function value($value): static
 	{
 		return $this;
 	}
@@ -712,7 +735,7 @@ abstract class GDT
 		return 0;
 	}
 	
-	public function writeable(bool $writeable) : self
+	public function writeable(bool $writeable): static
 	{
 		return $this;
 	}
@@ -722,7 +745,7 @@ abstract class GDT
 		return false;
 	}
 	
-	public function reset(bool $removeInput=false) : self
+	public function reset(bool $removeInput=false): static
 	{
 		return $this;
 	}

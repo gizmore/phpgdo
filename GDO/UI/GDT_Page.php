@@ -28,7 +28,7 @@ final class GDT_Page extends GDT
 	/**
 	 * Reset the global page object.
 	 */
-	public function reset(bool $removeInput=false) : self
+	public function reset(bool $removeInput=false): static
 	{
 		unset($this->topBar);
 		unset($this->leftBar);

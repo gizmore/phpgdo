@@ -1,6 +1,9 @@
 <?php
 namespace GDO\CLI\Method;
 
+use GDO\CLI\CLI;
+use GDO\Core\GDT_String;
+use GDO\Core\Method;
 use GDO\Form\GDT_Form;
 use GDO\CLI\MethodCLI;
 use GDO\Form\GDT_Submit;
@@ -26,10 +29,17 @@ final class Help extends MethodCLI
 			GDT_Submit::make(),
 		);
 	}
+
+	private function getParameterMethod(): Method
+	{
+		return $this->gdoParameterValue('method');
+	}
 	
 	public function formValidated(GDT_Form $form)
 	{
-		
+		$method = $this->getParameterMethod();
+		$help = CLI::renderCLIHelp($method);
+		return GDT_String::make()->var($help);
 	}
 	
 }

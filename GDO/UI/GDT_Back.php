@@ -11,7 +11,7 @@ namespace GDO\UI;
  */
 final class GDT_Back extends GDT_Link
 {
-	public function defaultLabel() : self { return $this->label('btn_back'); }
+	public function defaultLabel(): static { return $this->label('btn_back'); }
 
 	protected function __construct()
 	{

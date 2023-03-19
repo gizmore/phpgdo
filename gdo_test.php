@@ -67,16 +67,23 @@ final class gdo_test extends Application
 	{
 		return $this->install;
 	}
-	
+
 	public bool $all = false;
-	public function all(bool $all=true): self
+	public function all(bool $all=true): static
 	{
 		$this->all = $all;
 		return $this;
 	}
-	
+
+	public bool $dog = false;
+	public function dog(bool $dog=true): static
+	{
+		$this->dog = $dog;
+		return $this;
+	}
+
 	public bool $quick = false;
-	public function quick(bool $quick=true): self
+	public function quick(bool $quick=true): static
 	{
 		$this->quick = $quick;
 		return $this;
@@ -92,13 +99,17 @@ $app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
-// $app->parseOptions();
 $index = 0;
-$options = getopt('ahqt', ['all', 'help', 'quick', 'tests'], $index);
+$options = getopt('adhq', ['all', 'dog', 'help', 'quick'], $index);
 
 if (isset($options['a']) || isset($options['all']))
 {
 	$app->all();
+}
+
+if (isset($options['d']) || isset($options['dog']))
+{
+	$app->dog();
 }
 
 if (isset($options['h']) || isset($options['help']))
@@ -118,7 +129,7 @@ $argc = count($argv);
 switch (count($argv))
 {
 	case 0:
-		if (!$app->all)
+		if ( (!$app->all) && (!$app->dog))
 		{
 			return $app->showHelp();
 		}
@@ -173,33 +184,37 @@ if (Application::$INSTANCE->isError())
 	die(1);
 }
 
+if ($app->dog)
+{
+	if ($argc === 0)
+	{
+		$argc = 1;
+		$argv[0] = '';
+	}
+	else
+	{
+		$argv[0] .= ',';
+	}
+	$dogs = [];
+	$folders = scandir(GDO_PATH.'GDO');
+	foreach ($folders as $folder)
+	{
+		if (str_starts_with($folder, 'Dog'))
+		{
+			$dogs[] = $folder;
+		}
+	}
+	$argv[0] .= implode(',', $dogs);
+}
+
 # #############
 # ## Single ###
 # #############
 if ($argc === 1) # Specifiy with module names, separated by comma.
 {
 	$count = 0;
+	$modules = explode(',', $argv[0]);
 
-	if ($argv[0] === 'all_dog')
-	{
-		$modules = [
-			'Dog',
-			'DogAuth',
-			'DogBlackjack',
-			'DogGreetings',
-			'DogIRC',
-			'DogIRCAutologin',
-			'DogIRCSpider',
-			'DogShadowdogs',
-			'DogTick',
-			'DogWebsite',
-		];
-	}
-	else
-	{
-		$modules = explode(',', $argv[0]);
-	}
-	
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 
 	# Add Tests, Perf and CLI as dependencies on unit tests.
@@ -234,6 +249,8 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 			$modules = array_merge($modules, $more);
 			$modules[] = $module->getModuleName();
 		}
+
+//		$loader->initModules();
 
 		$modules = array_unique($modules);
 	}

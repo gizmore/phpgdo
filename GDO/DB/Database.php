@@ -31,7 +31,7 @@ class Database
 	# Instance
 	private static Database $INSTANCE;
 	
-	public static function instance() : self
+	public static function instance(): static
 	{
 		return self::$INSTANCE;
 	}
@@ -90,7 +90,7 @@ class Database
 	 */
 	private static array $COLUMNS = [];
 	
-	public static function init(?string $databaseName=GDO_DB_NAME) : self
+	public static function init(?string $databaseName=GDO_DB_NAME): static
 	{
 		Cache::init();
 	    return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, $databaseName, intval(GDO_DB_DEBUG));
@@ -106,7 +106,7 @@ class Database
 		$this->db = $db;
 	}
 	
-	public function db(string $db): self
+	public function db(string $db): static
 	{
 		$this->db = $db;
 		return $this;

@@ -65,7 +65,7 @@ final class GDO_Language extends GDO
 	/**
 	 * Get a language by ISO or return a stub object with name "Unknown".
 	 */
-	public static function getByISOOrUnknown(string $iso=null) : self
+	public static function getByISOOrUnknown(string $iso=null): static
 	{
 		if ( ($iso === null) || (!($language = self::getById($iso))) )
 		{
@@ -74,7 +74,7 @@ final class GDO_Language extends GDO
 		return $language;
 	}
 	
-	public static function current() : self
+	public static function current(): static
 	{
 		return self::getByISOOrUnknown(Trans::$ISO);
 	}

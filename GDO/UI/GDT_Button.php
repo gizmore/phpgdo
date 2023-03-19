@@ -37,7 +37,7 @@ class GDT_Button extends GDT
 	### Secondary ###
 	#################
 	public bool $secondary = false;
-	public function secondary(bool $secondary=true) : self
+	public function secondary(bool $secondary=true): static
 	{
 		$this->secondary = $secondary;
 		return $this;
@@ -138,7 +138,7 @@ class GDT_Button extends GDT
 	 * @var callable
 	 */
 	public $checkEnabled;
-	public function checkEnabled(callable $checkEnabled) : self
+	public function checkEnabled(callable $checkEnabled): static
 	{
 	    $this->checkEnabled = $checkEnabled;
 	    return $this;

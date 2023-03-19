@@ -72,7 +72,7 @@ class GDT_Timestamp extends GDT_DBField
 	    return $this->initialAgo(0);
 	}
 	
-	public function initialAgo(int $secondsAgo) : self
+	public function initialAgo(int $secondsAgo): static
 	{
 	    return $this->initial(Time::getDate(Application::$MICROTIME - $secondsAgo));
 	}
@@ -96,7 +96,7 @@ class GDT_Timestamp extends GDT_DBField
 	### Format ###
 	##############
 	public string $format = Time::FMT_SHORT;
-	public function format(string $format) : self
+	public function format(string $format): static
 	{
 		$this->format = $format;
 		return $this;
@@ -105,8 +105,8 @@ class GDT_Timestamp extends GDT_DBField
 	###############
 	### Min/Max ###
 	###############
-	public function minAge(int $duration) : self { return $this->minTimestamp(Application::$TIME - $duration); }
-	public function maxAge(int $duration) : self { return $this->maxTimestamp(Application::$TIME + $duration); }
+	public function minAge(int $duration): static { return $this->minTimestamp(Application::$TIME - $duration); }
+	public function maxAge(int $duration): static { return $this->maxTimestamp(Application::$TIME + $duration); }
 	
 	public string $minDate;
 	public string $maxDate;
@@ -138,7 +138,7 @@ class GDT_Timestamp extends GDT_DBField
 	    return $this->maxDate(Time::getDate());
 	}
 	
-	public function minNow() : self
+	public function minNow(): static
 	{
 		return $this->minTimestamp(Application::$TIME);
 	}
@@ -148,7 +148,7 @@ class GDT_Timestamp extends GDT_DBField
 	##############
 	# @TODO rename $millis to $precision or $decimals in GDT_Timestamp.
 	public int $millis = 3;
-	public function millis(int $millis=3) : self
+	public function millis(int $millis=3): static
 	{
 	    $this->millis = $millis;
 	    return $this;
@@ -305,7 +305,7 @@ class GDT_Timestamp extends GDT_DBField
 		return GDT_Template::php('Date', 'timestamp_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
-	public function filterQuery(Query $query, GDT_Filter $f) : self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		$filter = $this->filterVar($f);
 		if ($filter)
@@ -318,18 +318,18 @@ class GDT_Timestamp extends GDT_DBField
 		return $this;
 	}
 	
-	##############
-	### Search ###
-	##############
-	public function searchQuery(Query $query, $searchTerm, $first)
-	{
-		return $this->searchCondition($searchTerm);
-	}
-	
-	protected function searchCondition($searchTerm)
-	{
-		$searchTerm = GDO::escapeSearchS($searchTerm);
-		return "{$this->name} LIKE '%{$searchTerm}%'";
-	}
+//	##############
+//	### Search ###
+//	##############
+//	public function searchQuery(Query $query, $searchTerm, $first)
+//	{
+//		return $this->searchCondition($searchTerm);
+//	}
+//
+//	protected function searchCondition($searchTerm)
+//	{
+//		$searchTerm = GDO::escapeSearchS($searchTerm);
+//		return "{$this->name} LIKE '%{$searchTerm}%'";
+//	}
 	
 }

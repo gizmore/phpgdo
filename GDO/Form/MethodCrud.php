@@ -2,6 +2,9 @@
 namespace GDO\Form;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_ArgException;
+use GDO\Core\GDO_CRUDException;
+use GDO\Core\GDO_Error;
 use GDO\Core\GDO_PermissionException;
 use GDO\UI\GDT_DeleteButton;
 use GDO\User\GDO_User;
@@ -46,7 +49,12 @@ abstract class MethodCrud extends MethodForm
 	public function isUserRequired() : bool { return true; }
 	public function isCaptchaRequired() { return !GDO_User::current()->isMember(); }
 	public function isShownInSitemap() : bool { return false; }
-	
+
+	public function featureCreate(): bool { return true; }
+	public function featureRead(): bool { return true; }
+	public function featureUpdate(): bool { return true; }
+	public function featureDelete(): bool { return true; }
+
 	public function canRead(GDO $gdo)
 	{
 	    return true;
@@ -104,7 +112,7 @@ abstract class MethodCrud extends MethodForm
 	
 	public function getCRUDID() : ?string
 	{
-	    return $this->gdoParameterVar($this->crudName());
+	    return $this->gdoParameterVar($this->crudName(), true, false);
 	}
 
 	##############
@@ -113,11 +121,14 @@ abstract class MethodCrud extends MethodForm
 	public function gdoParameters() : array
 	{
 	    $p = [
-	        GDT_Object::make($this->crudName())->table($this->gdoTable()),
+	        GDT_Object::make($this->crudName())->table($this->gdoTable())->notNull(!$this->featureCreate()),
 	    ];
 	    return array_merge($p, parent::gdoParameters());
 	}
-	
+
+	/**
+	 * @throws GDO_PermissionException
+	 */
 	public function onMethodInit()
 	{
 		parent::onMethodInit();
@@ -127,24 +138,34 @@ abstract class MethodCrud extends MethodForm
 	    {
 	        $this->gdo = $table->find($id); # throws
 
-	        if (!$this->canRead($this->gdo))
+	        if ($this->featureRead() && (!$this->canRead($this->gdo)))
 	        {
-	            throw new GDO_PermissionException('err_permission_read');
+	            throw new GDO_CRUDException('err_permission_read');
 	        }
-	        elseif (!$this->canUpdate($this->gdo))
-	        {
-	            $this->crudMode = self::READ;
-	        }
+
+			if ($this->featureUpdate() && (!$this->canUpdate($this->gdo)))
+			{
+				$this->crudMode = self::READ;
+			}
 	        else
 	        {
 	            $this->crudMode = self::EDITED;
 	        }
+
+			if ($this->featureDelete() && $this->hasInputFor('delete'))
+			{
+				if (!$this->canDelete($this->gdo))
+				{
+					throw new GDO_CRUDException('err_permission_delete', [$this->gdo->gdoHumanName()]);
+				}
+			}
+
 	    }
-	    elseif (!$this->canCreate($table))
+	    elseif ($this->featureCreate() && (!$this->canCreate($table)))
 	    {
 	    	return $this->error('err_permission_create', [$table->gdoHumanName()]);
 	    }
-	    
+
 	    $this->resetForm();
 	}
 	
@@ -196,19 +217,19 @@ abstract class MethodCrud extends MethodForm
 		
 		$gdo = isset($this->gdo) ? $this->gdo : null;
 		
-		if (!$gdo)
+		if ( (!$gdo) && ($this->featureCreate()))
 		{
 			$c = GDT_Submit::make('create')->label('btn_create')->icon('create')->onclick([$this, 'onCreate']);
 		    $form->actions()->addField($c);
 		}
 
-		if ($gdo && $this->canUpdate($this->gdo))
+		if ($gdo && $this->canUpdate($this->gdo) && $this->featureUpdate())
 		{
 			$u = GDT_EditButton::make('edit')->label('btn_edit')->icon('edit')->onclick([$this, 'onUpdate']);
     		$form->actions()->addField($u);
 		}
 
-		if ($gdo && $this->canDelete($this->gdo))
+		if ($gdo && $this->canDelete($this->gdo) && $this->featureDelete())
 		{
 			$d = GDT_DeleteButton::make()->onclick([$this, 'onDelete']);
 			$form->actions()->addField($d);
@@ -278,7 +299,8 @@ abstract class MethodCrud extends MethodForm
 		}
 		
 		$this->gdo->table()->clearCache();
-		$this->messageRedirect('msg_crud_deleted', [$this->gdo->gdoHumanName()], $this->hrefList());
+		$this->redirectMessage('msg_crud_deleted', [
+			$this->gdo->gdoHumanName()], $this->hrefList());
 		return $this->afterDelete($form, $this->gdo);
 	}
 	

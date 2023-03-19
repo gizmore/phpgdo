@@ -18,7 +18,7 @@ trait WithTitle
 	public string $titleKey;
 	public ?array $titleArgs;
 	
-	public function title(string $key, array $args=null) : self
+	public function title(string $key, array $args=null): static
 	{
 		unset($this->titleRaw);
 	    $this->titleKey = $key;
@@ -26,7 +26,7 @@ trait WithTitle
 	    return $this;
 	}
 	
-	public function titleRaw(?string $title) : self
+	public function titleRaw(?string $title): static
 	{
 		unset($this->titleRaw);
 	    unset($this->titleKey);
@@ -39,13 +39,13 @@ trait WithTitle
 	}
 
 	public bool $titleEscaped = false;
-	public function titleEscaped(bool $escaped) : self
+	public function titleEscaped(bool $escaped): static
 	{
 	    $this->titleEscaped = $escaped;
 	    return $this;
 	}
 	
-	public function noTitle() : self
+	public function noTitle(): static
 	{
 		unset($this->titleRaw);
 		unset($this->titleKey);

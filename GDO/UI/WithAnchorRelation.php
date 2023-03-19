@@ -14,7 +14,7 @@ trait WithAnchorRelation
 {
     public string $relation;
     
-	public function relation(string $relation) : self
+	public function relation(string $relation): static
 	{
 		if (isset($this->relation))
 		{
@@ -32,7 +32,7 @@ trait WithAnchorRelation
 		return isset($this->relation) ? " rel=\"{$this->relation}\"" : '';
 	}
 
-	public function noFollow() : self
+	public function noFollow(): static
 	{
 		return $this->relation(GDT_Link::REL_NOFOLLOW);
 	}

@@ -17,7 +17,7 @@ use GDO\Core\GDT;
 trait WithTarget
 {
 	public string $target;
-	public function target(string $target=null) : self
+	public function target(string $target=null): static
 	{
 		if ($target === null)
 		{
@@ -33,7 +33,7 @@ trait WithTarget
 	/**
 	 * @deprecated Is often blocked on User devices (chrome).
 	 */
-	public function targetBlank() : self
+	public function targetBlank(): static
 	{
 		return $this->target('_blank');
 	}

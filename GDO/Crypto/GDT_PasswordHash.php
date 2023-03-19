@@ -28,14 +28,14 @@ class GDT_PasswordHash extends GDT_Password
 		return $this->getValue()->__toString();
 	}
 	
-	public function inputToVar($input) : ?string
-	{
-		if ($input === null)
-		{
-			return null;
-		}
-		return (new BCrypt($input))->__toString();
-	}
+//	public function inputToVar($input) : ?string
+//	{
+//		if ($input === null)
+//		{
+//			return null;
+//		}
+//		return (new BCrypt($input))->__toString();
+//	}
 	
 	/**
 	 * Do not show previous input!

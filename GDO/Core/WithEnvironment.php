@@ -26,7 +26,7 @@ trait WithEnvironment
 	/**
 	 * Optional user for running the method. Default is GDO_User::current()
 	 */
-	public function runAs(GDO_User $runAs=null) : self
+	public function runAs(GDO_User $runAs=null): static
 	{
 		$this->runAs = $runAs ? $runAs : GDO_User::current();
 		return $this;
@@ -36,7 +36,7 @@ trait WithEnvironment
 	### Method ###
 	##############
 	public Method $method;
-	public function method(Method $method) : self
+	public function method(Method $method): static
 	{
 		$this->method = $method;
 		return $this;
@@ -46,7 +46,7 @@ trait WithEnvironment
 	### Result ###
 	##############
 	public GDT $result;
-	public function result(GDT $result) : self
+	public function result(GDT $result): static
 	{
 		$this->result = $result;
 		return $this;
@@ -55,7 +55,7 @@ trait WithEnvironment
 	###############
 	### Execute ###
 	###############
-	protected function changeUser() : self
+	protected function changeUser(): static
 	{
 		$user = isset($this->runAs) ? $this->runAs : GDO_User::current();
 		GDO_User::setCurrent($user);

@@ -14,7 +14,7 @@ trait WithHTML
 {
 	public string $html;
 	
-	public function html(string $html) : self
+	public function html(string $html): static
 	{
 		$this->html = $html;
 		return $this;

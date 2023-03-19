@@ -19,17 +19,17 @@ class GDT_Decimal extends GDT_Int
 	public int $digitsBefore = 9;
 	public int $digitsAfter = 4;
 	
-	public function digitsBefore(int $before) : self
+	public function digitsBefore(int $before): static
 	{
 		return $this->digits($before, $this->digitsAfter);
 	}
 	
-	public function digitsAfter(int $after) : self
+	public function digitsAfter(int $after): static
 	{
 		return $this->digits($this->digitsBefore, $after);
 	}
 	
-	public function digits(int $before, int $after) : self
+	public function digits(int $before, int $after): static
 	{
 		$this->digitsBefore = $before;
 		$this->digitsAfter = $after;

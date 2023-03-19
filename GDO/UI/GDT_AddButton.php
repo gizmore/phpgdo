@@ -13,7 +13,7 @@ use GDO\Form\GDT_Submit;
  */
 class GDT_AddButton extends GDT_Submit
 {
-	public function defaultLabel() : self
+	public function defaultLabel(): static
 	{
 		return $this->label('btn_add');
 	}

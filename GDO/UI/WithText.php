@@ -22,7 +22,7 @@ trait WithText
 	public ?array $textArgs;
 	public bool $textEscaped = false;
 	
-	public function text(?string $key, array $args=null) : self
+	public function text(?string $key, array $args=null): static
 	{
 		unset($this->textRaw);
 		if (!$key)
@@ -43,7 +43,7 @@ trait WithText
 		return $this;
 	}
 	
-	public function textRaw(?string $text) : self
+	public function textRaw(?string $text): static
 	{
 		unset($this->textRaw);
 		if ($text)
@@ -55,7 +55,7 @@ trait WithText
 	    return $this->textUnescaped();
 	}
 
-	public function textNone() : self
+	public function textNone(): static
 	{
 		unset($this->textRaw);
 		unset($this->textKey);
@@ -63,13 +63,13 @@ trait WithText
 		return $this;
 	}
 	
-	public function textEscaped(bool $escaped=true) : self
+	public function textEscaped(bool $escaped=true): static
 	{
 	    $this->textEscaped = $escaped;
 	    return $this;
 	}
 	
-	public function textUnescaped(bool $unescaped=true) : self
+	public function textUnescaped(bool $unescaped=true): static
 	{
 		return $this->textEscaped(!$unescaped);
 	}

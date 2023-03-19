@@ -16,28 +16,28 @@ final class GDT_Expression extends GDT
 	###############
 	### Factory ###
 	###############
-	public static function fromLine(string $line) : self
+	public static function fromLine(string $line): static
 	{
-		$parser = new Parser();
+		static $parser = new Parser();
 		return $parser->parse($line);
 	}
 	
 	public self $parent;
-	public function parent(self $parent) : self
+	public function parent(self $parent): static
 	{
 		$this->parent = $parent;
 		return $this;
 	}
 	
 	public GDT_Method $method;
-	public function method(Method $method) : self
+	public function method(Method $method): static
 	{
 		$this->method = GDT_Method::make()->method($method);
 		return $this;
 	}
 
 	public string $line;
-	public function line(string $line) : self
+	public function line(string $line): static
 	{
 		$this->line = $line;
 		return $this;
@@ -48,17 +48,18 @@ final class GDT_Expression extends GDT
 	############
 	public function execute()
 	{
-		if (GDO_LOG_REQUEST)
+		try
 		{
-			Logger::log('cli', $this->line);
+			if (GDO_LOG_REQUEST)
+			{
+				Logger::log('cli', $this->line);
+			}
+			return $this->method->execute();
 		}
-		$response = $this->method->execute();
-		if ($response->hasError())
+		catch (GDO_ArgException|GDO_CRUDException $ex)
 		{
-			$help = trim(CLI::renderCLIHelp($this->method->method));
-			$response->addField(GDT_String::make()->var($help));
+			return $ex->renderCLI() . trim(CLI::renderCLIHelp($this->method->method));
 		}
-		return $response;
 	}
 	
 	#############

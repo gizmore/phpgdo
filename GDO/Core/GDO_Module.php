@@ -215,10 +215,10 @@ class GDO_Module extends GDO
 			if ( !Application::$INSTANCE->isInstall())
 			{
 				$this->onModuleInit();
-				if (CLI::isCLI())
-				{
-					$this->onModuleInitCLI();
-				}
+//				if (CLI::isCLI())
+//				{
+//					$this->onModuleInitCLI();
+//				}
 				$this->inited = true;
 			}
 		}
@@ -228,9 +228,9 @@ class GDO_Module extends GDO
 	{
 	}
 
-	public function onModuleInitCLI(): void
-	{
-	}
+//	public function onModuleInitCLI(): void
+//	{
+//	}
 
 	public function onInitSidebar(): void
 	{
@@ -290,7 +290,7 @@ class GDO_Module extends GDO
 		return ModuleLoader::instance()->getModule($moduleName, $throw);
 	}
 	
-	public static function instance(): self
+	public static function instance(): static
 	{
 		return self::getByName(self::getNameS());
 	}
@@ -328,7 +328,7 @@ class GDO_Module extends GDO
 		return true;
 	}
 
-	public function enabled(bool $enabled): self
+	public function enabled(bool $enabled): static
 	{
 		$this->saveValue('module_enabled', $enabled);
 		return $this;
@@ -501,12 +501,12 @@ class GDO_Module extends GDO
 		parent::__wakeup(); #PP#delete#
 	}
 
-	// public function inited(bool $inited = true): self
+	// public function inited(bool $inited = true): static
 	// {
 	// $this->inited = true;
 	// return $this;
 	// }
-	public function loadLanguage($path): self
+	public function loadLanguage($path): static
 	{
 		Trans::addPath($this->filePath($path));
 		return $this;

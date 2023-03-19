@@ -14,7 +14,7 @@ trait WithPlaceholder
 	public string $placeholderKey;
 	public array $placeholderArgs;
 	
-	public function placeholder(string $key, array $args=null) : self
+	public function placeholder(string $key, array $args=null): static
 	{
 		unset($this->placeholderRaw);
 		$this->placeholderKey = $key;
@@ -22,7 +22,7 @@ trait WithPlaceholder
 		return $this;
 	}
 	
-	public function placeholderRaw(string $placeholder) : self
+	public function placeholderRaw(string $placeholder): static
 	{
 		$this->placeholderRaw = $placeholder;
 		unset($this->placeholderKey);
@@ -33,7 +33,7 @@ trait WithPlaceholder
 	/**
 	 * Remove any placeholder.
 	 */
-	public function placeholderNone() : self
+	public function placeholderNone(): static
 	{
 		unset($this->placeholderRaw);
 		unset($this->placeholderKey);

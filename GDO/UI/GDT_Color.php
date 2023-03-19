@@ -13,7 +13,7 @@ use GDO\Core\GDT_String;
  */
 class GDT_Color extends GDT_String
 {
-	public function defaultLabel() : self
+	public function defaultLabel(): static
 	{
 		return $this->label('color');
 	}

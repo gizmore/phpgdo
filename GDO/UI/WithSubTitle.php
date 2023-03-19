@@ -19,7 +19,7 @@ trait WithSubTitle
 	public string $subtitleRaw;
 	public string $subtitleKey;
 	public ?array $subtitleArgs;
-	public function subtitle(string $key, array $args=null) : self
+	public function subtitle(string $key, array $args=null): static
 	{
 		unset($this->subtitleRaw);
 		$this->subtitleKey = $key;
@@ -27,7 +27,7 @@ trait WithSubTitle
 	    return $this;
 	}
 	
-	public function subtitleRaw(?string $subtitle) : self
+	public function subtitleRaw(?string $subtitle): static
 	{
 		unset($this->subtitleRaw);
 		if ($subtitle)
@@ -39,7 +39,7 @@ trait WithSubTitle
 	    return $this;
 	}
 
-	public function noSubTitle() : self
+	public function noSubTitle(): static
 	{
 		unset($this->subtitleRaw);
 		unset($this->subtitleKey);

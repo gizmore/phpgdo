@@ -219,7 +219,7 @@ abstract class GDO extends GDT
 	#################
 	private bool $persisted = false;
 	public function isPersisted() : bool { return $this->persisted; }
-	public function setPersisted(bool $persisted=true) : self
+	public function setPersisted(bool $persisted=true): static
 	{
 // 		unset($this->id);
 		$this->persisted = $persisted;
@@ -229,7 +229,7 @@ abstract class GDO extends GDT
 	/**
 	 * @TODO: Reset this GDO like it came from the cache (initial/var/dirty)
 	 */
-	public function reset(bool $removeInput=false) : self
+	public function reset(bool $removeInput=false): static
 	{
 		$this->dirty = false;
 		foreach ($this->gdoColumnsCache() as $gdt)
@@ -315,10 +315,8 @@ abstract class GDO extends GDT
 	 * false for none,
 	 * or an assoc array with field mappings.
 	 * One of the very few mixed fields.
-	 * 
-	 * @var mixed $dirty
 	 */
-	private $dirty = false;
+	private mixed $dirty = false;
 	
 	/**
 	 * DB entity vars.
@@ -376,7 +374,7 @@ abstract class GDO extends GDT
 	 * @param boolean $markDirty
 	 * @return self
 	 */
-	public function setVar(string $key, string $var=null, bool $markDirty=true) : self
+	public function setVar(string $key, string $var=null, bool $markDirty=true): static
 	{
 		if (!$this->hasColumn($key))
 		{
@@ -398,7 +396,7 @@ abstract class GDO extends GDT
 		return ($markDirty && $d) ? $this->markDirty($key) : $this;
 	}
 	
-	public function setVars(array $vars=null, $markDirty=true) : self
+	public function setVars(array $vars=null, $markDirty=true): static
 	{
 		foreach ($vars as $key => $value)
 		{
@@ -407,14 +405,14 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function setValue(string $key, $value, bool $markDirty=true) : self
+	public function setValue(string $key, $value, bool $markDirty=true): static
 	{
 		$vars = $this->gdoColumn($key)->value($value)->getGDOData();
 		$this->setVars($vars, $markDirty);
 		return $this;
 	}
 	
-	public function setGDOVars(array $vars, bool $dirty=false) : self
+	public function setGDOVars(array $vars, bool $dirty=false): static
 	{
 		$this->gdoVars = $vars;
 		return $this->dirty($dirty);
@@ -430,7 +428,7 @@ abstract class GDO extends GDT
 		return $this->gdoColumn($key)->getValue();
 	}
 	
-	public function inputs(?array $inputs) : self
+	public function inputs(?array $inputs): static
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
@@ -442,7 +440,7 @@ abstract class GDO extends GDT
 	#############
 	### Dirty ###
 	#############
-	public function markClean(string $key) : self
+	public function markClean(string $key): static
 	{
 		if ($this->dirty === false)
 		{
@@ -456,7 +454,7 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function markDirty(string $key) : self
+	public function markDirty(string $key): static
 	{
 		if ($this->dirty === false)
 		{
@@ -711,10 +709,11 @@ abstract class GDO extends GDT
 	{
 		return $this->gdoColumnsCache()[$key];
 	}
-	
+
 	/**
 	 * Get the GDT column for a key.
 	 * Assign my GDO values to the GDT.
+	 * @throws GDO_ErrorFatal
 	 */
 	public function gdoColumn(string $key, bool $throw=true) : ?GDT
 	{
@@ -731,6 +730,7 @@ abstract class GDO extends GDT
 
 	/**
 	 * Copy a GDT column and assign my values.
+	 * @throws GDO_Error
 	 */
 	public function gdoColumnCopy(string $key, bool $throw=true) : ?GDT
 	{
@@ -794,7 +794,7 @@ abstract class GDO extends GDT
 	 * @param string $id
 	 * @return static
 	 */
-	public function find(string $id=null, bool $throw=true) : self
+	public function find(string $id=null, bool $throw=true): static
 	{
 		if ($id && ($gdo = $this->getById($id)))
 		{
@@ -871,7 +871,7 @@ abstract class GDO extends GDT
 	/**
 	 * Delete this entity.
 	 */
-	public function delete(bool $withHooks=true) : self
+	public function delete(bool $withHooks=true): static
 	{
 		return $this->deleteB($withHooks);
 	}
@@ -895,7 +895,7 @@ abstract class GDO extends GDT
 	/**
 	 * Mark this GDO as deleted, or delete physically.
 	 */
-	public function markDeleted(bool $withHooks=true) : self
+	public function markDeleted(bool $withHooks=true): static
 	{
 		if ($gdt = $this->gdoColumnOf(GDT_DeletedAt::class))
 		{
@@ -951,7 +951,7 @@ abstract class GDO extends GDT
 		return $deleted;
 	}
 	
-	private function deleteB(bool $withHooks=true) : self
+	private function deleteB(bool $withHooks=true): static
 	{
 		if ($this->persisted)
 		{
@@ -974,7 +974,7 @@ abstract class GDO extends GDT
 	###############
 	### Replace ###
 	###############
-	public function insert(bool $withHooks=true) : self
+	public function insert(bool $withHooks=true): static
 	{
 		$query = $this->query()->
 			insert($this->gdoTableIdentifier())->
@@ -988,7 +988,7 @@ abstract class GDO extends GDT
 	 * @param bool $withHooks
 	 * @return self
 	 */
-	public function softReplace(bool $withHooks=true): self
+	public function softReplace(bool $withHooks=true): static
 	{
 		if ($gdo = $this->table()->getWhere($this->getPKWhere()))
 		{
@@ -1005,7 +1005,7 @@ abstract class GDO extends GDT
 		}
 	}
 	
-	public function replace(bool $withHooks=true) : self
+	public function replace(bool $withHooks=true): static
 	{
 		# Check for empty id.
 		# Checking for $persisted is wrong, as replace rows can be constructed from scratch.
@@ -1023,7 +1023,7 @@ abstract class GDO extends GDT
 		return $this->insertOrReplace($query, $withHooks);
 	}
 	
-	private function insertOrReplace(Query $query, bool $withHooks) : self
+	private function insertOrReplace(Query $query, bool $withHooks): static
 	{
 		if ($withHooks)
 		{
@@ -1071,7 +1071,7 @@ abstract class GDO extends GDT
 	/**
 	 * Save this entity.
 	 */
-	public function save(bool $withHooks=true) : self
+	public function save(bool $withHooks=true): static
 	{
 		if (!$this->persisted)
 		{
@@ -1102,12 +1102,12 @@ abstract class GDO extends GDT
 	########################
 	### Var manipulation ###
 	########################
-	public function increase(string $key, float $by=1) : self
+	public function increase(string $key, float $by=1): static
 	{
 		return $by == 0 ? $this : $this->saveVar($key, $this->gdoVar($key) + $by);
 	}
 	
-	public function saveVar(string $key, ?string $var, bool $withHooks=true, bool &$worthy=false) : self
+	public function saveVar(string $key, ?string $var, bool $withHooks=true, bool &$worthy=false): static
 	{
 		return $this->saveVars([$key => $var], $withHooks, $worthy);
 	}
@@ -1115,7 +1115,7 @@ abstract class GDO extends GDT
 	/**
 	 * @param string[string] $vars
 	 */
-	public function saveVars(array $vars, bool $withHooks=true, bool &$worthy=false) : self
+	public function saveVars(array $vars, bool $withHooks=true, bool &$worthy=false): static
 	{
 		$worthy = false; # Anything changed?
 		$query = $this->updateQuery();
@@ -1147,7 +1147,7 @@ abstract class GDO extends GDT
 		
 		foreach ($vars as $key => $var)
 		{
-			$this->gdoVars[$key] = (string) $var;
+			$this->gdoVars[$key] = $var;
 		}
 	
 		if ($withHooks)
@@ -1164,13 +1164,13 @@ abstract class GDO extends GDT
 		return $this;
 	}
 	
-	public function saveValue(string $key, $value, bool $withHooks=true) : self
+	public function saveValue(string $key, $value, bool $withHooks=true): static
 	{
 		$var = $this->gdoColumn($key)->toVar($value);
 		return $this->saveVar($key, $var, $withHooks);
 	}
 	
-	public function saveValues(array $values, bool $withHooks=true) : self
+	public function saveValues(array $values, bool $withHooks=true): static
 	{
 		$vars = [];
 		foreach ($values as $key => $value)
@@ -1241,7 +1241,7 @@ abstract class GDO extends GDT
 	################
 	### Instance ###
 	################
-	public static function make(string $name=null) : GDT
+	public static function make(string $name=null): static
 	{
 		return new static();
 	}
@@ -1249,7 +1249,7 @@ abstract class GDO extends GDT
 	/**
 	 * @param string[string] $gdoVars
 	 */
-	public static function entity(array $gdoVars) : self
+	public static function entity(array $gdoVars): static
 	{
 		$instance = new static();
 		$instance->gdoVars = $gdoVars;
@@ -1290,7 +1290,7 @@ abstract class GDO extends GDT
 					if (isset($initial[$k]))
 					{
 						# override with initial
-						$gdoVars[$k] = (string) $initial[$k];
+						$gdoVars[$k] = $initial[$k];
 					}
 					else
 					{
@@ -1306,12 +1306,12 @@ abstract class GDO extends GDT
 	/**
 	 * Create a new entity instance.
 	 */
-	public static function blank(array $initial = null) : self
+	public static function blank(array $initial = null): static
 	{
 		return self::entity(self::getBlankData($initial))->dirty()->setPersisted(false);
 	}
 	
-	public function dirty($dirty=true) : self
+	public function dirty($dirty=true): static
 	{
 		$this->dirty = $dirty;
 		return $this;
@@ -1359,7 +1359,7 @@ abstract class GDO extends GDT
 	 * Get a row by a single column value.
 	 * Throw exception if not found.
 	 */
-	public static function findBy(string $key, string $var) : self
+	public static function findBy(string $key, string $var): static
 	{
 		if (!($gdo = self::getBy($key, $var)))
 		{
@@ -1403,7 +1403,7 @@ abstract class GDO extends GDT
 		return $object;
 	}
 	
-	public static function findById(string...$id) : self
+	public static function findById(string...$id): static
 	{
 		if ($object = self::getById(...$id))
 		{
@@ -1412,7 +1412,7 @@ abstract class GDO extends GDT
 		self::notFoundException(implode(':', $id));
 	}
 	
-	public static function findByGID(string $id) : self
+	public static function findByGID(string $id): static
 	{
 		return self::findById(...explode(':', $id));
 	}
@@ -1453,7 +1453,7 @@ abstract class GDO extends GDT
 		$this->cache = new Cache($this);
 	}
 	
-	public function initCached(array $row, bool $useCache=true) : self
+	public function initCached(array $row, bool $useCache=true): static
 	{
 		return $this->memCached() ?
 			$this->cache->initGDOMemcached($row, $useCache) :
@@ -1466,7 +1466,7 @@ abstract class GDO extends GDT
 		return $gkey;
 	}
 	
-	public function reload($id) : self
+	public function reload($id): static
 	{
 		$table = self::table();
 		if ($table->cached() && $table->cache->hasID($id))
@@ -1487,7 +1487,7 @@ abstract class GDO extends GDT
 	/**
 	 * This function triggers a recache, also over IPC, if IPC is enabled.
 	 */
-	public function recache() : self
+	public function recache(): static
 	{
 		if ($this->cached())
 		{
@@ -1505,7 +1505,7 @@ abstract class GDO extends GDT
 	}
 	
 	public bool $recache; // @TODO move GDO->$recache to the Cache to reduce GDO by one field
-	public function recaching() : self
+	public function recaching(): static
 	{
 		$this->recache = true;
 		return $this;
@@ -1528,7 +1528,7 @@ abstract class GDO extends GDT
 		}
 	}
 	
-	public function clearCache() : self
+	public function clearCache(): static
 	{
 // 		unset($this->id);
 		if ($this->cached())
@@ -1562,7 +1562,7 @@ abstract class GDO extends GDT
 		exec()->fetchAllArray2dObject(null, $json);
 	}
 	
-	public function uncacheAll() : self
+	public function uncacheAll(): static
 	{
 		unset($this->table()->cache->all);
 		Cache::remove($this->cacheAllKey());
@@ -1711,7 +1711,7 @@ abstract class GDO extends GDT
 		$this->beforeEvent('gdoBeforeDelete', $query);
 	}
 	
-	private function beforeEvent(string $methodName, Query $query) : self
+	private function beforeEvent(string $methodName, Query $query): static
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{

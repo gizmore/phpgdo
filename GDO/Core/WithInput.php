@@ -25,16 +25,16 @@ trait WithInput
 	 * Set all inputs to the fixed inputs parameter.
 	 * @param GDT|string[] $inputs
 	 */
-	public function inputs(?array $inputs) : self
+	public function inputs(?array $inputs): static
 	{
 		if ($inputs === null)
 		{
 			unset($this->inputs);
 		}
-		elseif (isset($this->inputs))
-		{
-			$this->inputs = array_merge($this->inputs, $inputs);
-		}
+//		elseif (isset($this->inputs))
+//		{
+//			$this->inputs = array_merge($this->inputs, $inputs);
+//		}
 		else
 		{
 			$this->inputs = $inputs;
@@ -42,7 +42,7 @@ trait WithInput
 		return $this;
 	}
 	
-	public function addInput(?string $key, $var) : self
+	public function addInput(?string $key, $var): static
 	{
 		if ($key)
 		{
@@ -79,7 +79,12 @@ trait WithInput
 		}
 		return false;
 	}
-	
+
+	public function hasInputFor(string $key): bool
+	{
+		return isset($this->inputs[$key]);
+	}
+
 	public function getInput() : ?string
 	{
 		$key = $this->getName();

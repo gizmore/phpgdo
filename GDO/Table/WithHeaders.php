@@ -48,13 +48,13 @@ trait WithHeaders
 		return $this->getHeaders()->getField($name);
 	}
 	
-	public function addHeaderField(GDT $gdt) : self
+	public function addHeaderField(GDT $gdt): static
 	{
 		$this->getHeaders()->addField($gdt);
 		return $this;
 	}
 	
-	public function addHeaderFields(GDT...$gdt) : self
+	public function addHeaderFields(GDT...$gdt): static
 	{
 		$this->getHeaders()->addFields(...$gdt);
 		return $this;

@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Expression;
 
+use GDO\Core\GDO_NoSuchMethodError;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Util\Strings;
@@ -11,16 +12,16 @@ use GDO\Core\GDO_Error;
  * A grad student probably would have pulled a lexer and AST stuff ;)
  * 
  * The syntax is a bit weird, first named params, then positional required params.
- * Required params are seperated by comma.
+ * All parameters are seperated by comma.
  * 
  * Syntax:
  * 
  * @example gdo cli.echo hi there.
  * @example gdo math.calc 1+2+3
- * @example concat a,$(wget https://google.de) # => a<!DOCTYPE....
- * @example add $(add 1,2),$(add 3,4) # => 10
+ * @example gdo cli.concat a,$(wget https://google.de) # => a<!DOCTYPE....
+ * @example gdo math.add $(add 1,2),$(add 3,4) # => 10
  * 
- * @example mail giz;hi there(howdy;$(concat );   wget --abc ssh://)
+ * @example gdo mail giz,hi there(howdy;$(concat );   wget --abc ssh://)
  * 
  * @author gizmore
  * @version 7.0.1
@@ -59,9 +60,9 @@ final class Parser
 		$len = mb_strlen($l);
 		$method = $this->parseMethod($l, $i, $len);
 		$current->method($method);
-		$current->method->clibutton();
+//		$current->method->clibutton();
 		$arg = '';
-		for (; $i < $len;)
+		while ($i < $len)
 		{
 			$c = $l[$i++];
 			
@@ -121,13 +122,15 @@ final class Parser
 					break;
 			}
 		}
-		if ($arg)
+		if (trim($arg) !== '')
 		{
 			$this->addArg($current, $arg);
 		}
 		
 		$current->applyInputs();
-		
+
+		$current->method->setupCLIButton();
+
 		return $current;
 	}
 	
@@ -135,10 +138,10 @@ final class Parser
 	{
 		if (str_starts_with($arg, '--'))
 		{
-			if ($expression->hasPositionalInput())
-			{
-				throw new GDO_Error('err_positional_after_named_parameter', [html($arg)]);
-			}
+//			if ($expression->hasPositionalInput())
+//			{
+//				throw new GDO_Error('err_positional_after_named_parameter', [html($arg)]);
+//			}
 			$arg = substr($arg, 2);
 // 			$arg = Strings::substrTo($arg, self::ARG_SEPARATOR, $arg);
 			$key = Strings::substrTo($arg, self::VAL_SEPERATOR, $arg);
@@ -158,6 +161,9 @@ final class Parser
 		$expression->addInput(null, $arg->method);
 	}
 
+	/**
+	 * @throws GDO_NoSuchMethodError
+	 */
 	private function parseMethod(string $line, int &$i, int $len) : Method
 	{
 		$parsed = '';
@@ -190,9 +196,27 @@ final class Parser
 				break;
 			}
 		}
-		
+
+		# Get method and button
+		$button = null;
+		if (substr_count($parsed, '.') === 2)
+		{
+			$button = Strings::rsubstrFrom($parsed, '.');
+			$parsed = Strings::rsubstrTo($parsed, '.');
+		}
+
 		$method = Method::getMethod($parsed, true);
-		
+
+//		if (!$button)
+//		{
+//			$button = $method->getAutoButton();
+//		}
+
+		if ($button)
+		{
+			$method->cliButton($button);
+		}
+
 		return $method;
 	}
 	

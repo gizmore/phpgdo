@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\DB\Cache;
+use GDO\UI\GDT_Page;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
 use GDO\Language\Trans;
@@ -27,14 +28,36 @@ class GDT_Method extends GDT
 	
 	public GDT $result;
 	
-	private function getCLIAutoButton(array $inputs) : ?string
+//	private function getCLIAutoButton(array $inputs) : ?string
+//	{
+//		return $this->method->appliedInputs($inputs)->getAutoButton(array_keys($inputs));
+//	}
+
+	public function setupCLIButton(): static
 	{
-		return $this->method->appliedInputs($inputs)->getAutoButton(array_keys($inputs));
+		try
+		{
+			if (!isset($this->method->button))
+			{
+				if ($initResponse = $this->method->onMethodInit())
+				{
+//				GDT_Page::instance()->topResponse()->addField($initResponse);
+				}
+				if ($button = $this->method->getAutoButton())
+				{
+					$this->method->cliButton($button);
+				}
+			}
+		}
+		catch (GDO_CRUDException $ex)
+		{
+		}
+		return $this;
 	}
 	
 	/**
 	 * Exexute this method.
-	 * 
+	 *
 	 * @return GDT_Response
 	 */
 	public function execute()
@@ -43,37 +66,39 @@ class GDT_Method extends GDT
 		{
 			$this->changeUser();
 			$inputs = $this->getInputs();
-			if ($this->clibutton)
+			if (isset($this->method->button))
 			{
-				if ($button = $this->getCLIAutoButton($inputs))
-				{
-					$inputs[$button] = '1';
-					Application::instance()->verb(GDT_Form::POST);
-				}
-				else
-				{
-					Application::instance()->verb(GDT_Form::GET);
-				}
+				Application::instance()->verb(GDT_Form::POST);
+				$inputs[$this->method->button] = '1';
+//				if ($button = $this->getCLIAutoButton($inputs))
+//				{
+//					$inputs[$button] = '1';
+//					Application::instance()->verb(GDT_Form::POST);
+//				}
+//				else
+//				{
+//					Application::instance()->verb(GDT_Form::GET);
+//				}
 			}
 			$this->result = $this->method->executeWithInputs($inputs, $this->withPermissionCheck);
 		}
 		return $this->result;
 	}
 	
-	###########
-	### CLI ###
-	###########
-	public bool $clibutton = false;
-	
-	/**
-	 * Toggle if we should autodetect a button.
-	 */
-	public function clibutton(bool $clibutton = true) : self
-	{
-		$this->clibutton = $clibutton;
-		return $this;
-	}
-	
+//	###########
+//	### CLI ###
+//	###########
+//	public bool $clibutton = false;
+//
+//	/**
+//	 * Toggle if we should autodetect a button.
+//	 */
+//	public function clibutton(bool $clibutton = true): static
+//	{
+//		$this->clibutton = $clibutton;
+//		return $this;
+//	}
+
 	############
 	### Perm ###
 	############
@@ -82,7 +107,7 @@ class GDT_Method extends GDT
 	/**
 	 * Disable permission checking for executing this method.
 	 */
-	public function noChecks(bool $noChecks=true) : self
+	public function noChecks(bool $noChecks=true): static
 	{
 		$this->withPermissionCheck = !$noChecks;
 		return $this;
@@ -206,7 +231,7 @@ class GDT_Method extends GDT
 // 		return $this->result->render();
 // 	}
 	
-	public function addInput(?string $key, $var) : self
+	public function addInput(?string $key, $var): static
 	{
 		if (!isset($this->inputs))
 		{

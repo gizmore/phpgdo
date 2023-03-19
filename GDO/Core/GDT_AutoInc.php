@@ -21,12 +21,12 @@ final class GDT_AutoInc extends GDT_UInt
 	public bool $notNull = true;
 	public bool $writeable = false;
 
-	public function defaultLabel() : self { return $this->label('id'); }
+	public function defaultLabel(): static { return $this->label('id'); }
 	
 	##############
 	### Column ###
 	##############
-	public function primary(bool $primary=true) : self { return $this; } 
+	public function primary(bool $primary=true): static { return $this; }
 	public function isPrimary() : bool { return true; } # Weird workaround for mysql primary key defs.
 	public function validate($value) : bool { return true; } # We simply do nothing in the almighty validate.
 

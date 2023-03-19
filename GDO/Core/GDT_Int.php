@@ -41,7 +41,7 @@ class GDT_Int extends GDT_DBField
 	### Bytes ###
 	#############
 	public int $bytes = 4;
-	public function bytes(int $bytes) : self
+	public function bytes(int $bytes): static
 	{
 		$this->bytes = $bytes;
 		return $this;
@@ -51,7 +51,7 @@ class GDT_Int extends GDT_DBField
 	### Step ###
 	############
 	public float $step = 1.0;
-	public function step(float $step) : self
+	public function step(float $step): static
 	{
 		$this->step = $step;
 		return $this;
@@ -61,7 +61,7 @@ class GDT_Int extends GDT_DBField
 	### Unsigned ###
 	################
 	public bool $unsigned = false;
-	public function unsigned(bool $unsigned = true) : self
+	public function unsigned(bool $unsigned = true): static
 	{
 		$this->unsigned = $unsigned;
 		return $this;
@@ -72,8 +72,8 @@ class GDT_Int extends GDT_DBField
 	###############
 	public ?float $min = null;
 	public ?float $max = null;
-	public function min(float $min) : self { $this->min = $min; return $this; }
-	public function max(float $max) : self { $this->max = $max; return $this; }
+	public function min(float $min): static { $this->min = $min; return $this; }
+	public function max(float $max): static { $this->max = $max; return $this; }
 	
 	################
 	### Validate ###
@@ -223,7 +223,7 @@ class GDT_Int extends GDT_DBField
 		return GDT_Template::php('Core', 'integer_filter.php', ['field' => $this, 'f' => $f]);
 	}
 	
-	public function filterQuery(Query $query, GDT_Filter $f) : self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 	    if ($filter = $this->filterVar($f))
 	    {
@@ -251,7 +251,7 @@ class GDT_Int extends GDT_DBField
 		return true;
 	}
 	
-	public function filterVar(GDT_Filter $f)
+	public function filterVar(GDT_Filter $f): ?string
 	{
 		$fv = parent::filterVar($f);
 		return Arrays::empty($fv) ? null : self::intFilterVar($fv);
@@ -284,9 +284,12 @@ class GDT_Int extends GDT_DBField
 	##############
 	### Search ###
 	##############
-	public function searchQuery(Query $query, $searchTerm, $first)
+	public function searchQuery(Query $query, string $searchTerm): static
 	{
-	    return $this->searchCondition($searchTerm);
+		$searchTerm = GDO::escapeS($searchTerm);
+		$query->orWhere("{$this->name} = '{$searchTerm}'");
+		return $this;
+//	    return $this->searchCondition($searchTerm);
 	}
 	
 // 	public function searchGDO($searchTerm)
@@ -295,10 +298,10 @@ class GDT_Int extends GDT_DBField
 // 	    return strpos($haystack, $searchTerm) !== false;
 // 	}
 	
-	public function searchCondition($searchTerm) : string
-	{
-		$searchTerm = (int)$searchTerm;
-		return "{$this->name} = {$searchTerm}";
-	}
+//	public function searchCondition($searchTerm) : string
+//	{
+//		$searchTerm = (int)$searchTerm;
+//		return "{$this->name} = {$searchTerm}";
+//	}
 	
 }

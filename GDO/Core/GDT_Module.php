@@ -39,7 +39,7 @@ final class GDT_Module extends GDT_ObjectSelect
 	/**
 	 * Also consider installed modules, or not when false.
 	 */
-	public function installed(bool $installed = true) : self
+	public function installed(bool $installed = true): static
 	{
 		$this->installed = $installed;
 		return $this;
@@ -48,7 +48,7 @@ final class GDT_Module extends GDT_ObjectSelect
 	/**
 	 * Also consider / not consider uninstalled modules.
 	 */
-	public function uninstalled(bool $uninstalled = true) : self
+	public function uninstalled(bool $uninstalled = true): static
 	{
 		$this->uninstalled = $uninstalled;
 		return $this;

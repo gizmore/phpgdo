@@ -12,7 +12,7 @@ namespace GDO\Core;
 trait WithVerb
 {
 	public string $verb;
-	public function verb(string $verb=null) : self
+	public function verb(string $verb=null): static
 	{
 		if ($verb === null)
 		{

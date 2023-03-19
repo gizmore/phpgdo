@@ -13,7 +13,7 @@ use GDO\Util\Random;
 class GDT_Token extends GDT_Char
 {
 	public function getDefaultName() : string { return 'token'; }
-	public function defaultLabel() : self { return $this->label('token'); }
+	public function defaultLabel(): static { return $this->label('token'); }
 	
 	protected function __construct()
 	{
@@ -21,14 +21,14 @@ class GDT_Token extends GDT_Char
 	    $this->length(GDO::TOKEN_LENGTH);
 	}
 	
-	public function length($size) : self
+	public function length($size): static
 	{
 		$this->pattern = '/^[a-zA-Z0-9]{'.$size.'}$/D';
 		return parent::length($size);
 	}
 	
 	public bool $initialNull = false;
-	public function initialNull(bool $initialNull=true) : self
+	public function initialNull(bool $initialNull=true): static
 	{
 		$this->initialNull = $initialNull;
 		return $this;

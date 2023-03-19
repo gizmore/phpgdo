@@ -39,7 +39,7 @@ final class GDT_Redirect extends GDT
 	############
 	### Back ###
 	############
-	public function back(): self
+	public function back(): static
 	{
 		return $this->href(self::hrefBack());
 	}
@@ -74,7 +74,7 @@ final class GDT_Redirect extends GDT
 	### Time ###
 	############
 	public int $redirectTime = 0;
-	public function redirectTime(int $redirectTime=8): self
+	public function redirectTime(int $redirectTime=8): static
 	{
 		$this->redirectTime = $redirectTime;
 		return $this;
@@ -83,7 +83,7 @@ final class GDT_Redirect extends GDT
 	#############
 	### Flash ###
 	#############
-	public function redirectError(string $key, array $args=null, bool $log=true): self
+	public function redirectError(string $key, array $args=null, bool $log=true): static
 	{
 		Website::error(t('redirect'), $key, $args, $log, self::CODE);
 		if (module_enabled('Session'))
@@ -97,7 +97,7 @@ final class GDT_Redirect extends GDT
 		return $this;
 	}
 	
-	public function redirectMessage(string $key, array $args=null, bool $log=true): self
+	public function redirectMessage(string $key, array $args=null, bool $log=true): static
 	{
 		Website::message(t('redirect'), $key, $args, $log, self::CODE);
 		if (module_enabled('Session'))

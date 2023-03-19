@@ -120,7 +120,7 @@ class GDT_Float extends GDT_Int
 	}
 	
 	public int $decimals = 4;
-	public function decimals(int $decimals) : self
+	public function decimals(int $decimals): static
 	{
 	    $this->decimals = $decimals;
 	    return $this;

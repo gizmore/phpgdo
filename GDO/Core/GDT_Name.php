@@ -13,7 +13,7 @@ class GDT_Name extends GDT_String
 {
 	use WithGDO;
 	
-	public function defaultLabel() : self
+	public function defaultLabel(): static
 	{
 		return $this->label('name');
 	}

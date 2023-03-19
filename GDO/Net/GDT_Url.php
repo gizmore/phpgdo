@@ -27,7 +27,7 @@ class GDT_Url extends GDT_String
     	return 'url';
     }
     
-    public function defaultLabel() : self { return $this->label('url'); }
+    public function defaultLabel(): static { return $this->label('url'); }
     
     protected function __construct()
     {
@@ -98,32 +98,32 @@ class GDT_Url extends GDT_String
 	###############
 	### Options ###
 	###############
-	public function allowAll(bool $reachable=true) : self
+	public function allowAll(bool $reachable=true): static
 	{
 		$this->allowInternal = true;
 		$this->allowExternal = true;
 		return $this->reachable($reachable);
 	}
 	
-	public function allowInternal(bool $allowInternal=true) : self
+	public function allowInternal(bool $allowInternal=true): static
 	{
 		$this->allowInternal = $allowInternal;
 		return $this;
 	}
 	
-	public function allowExternal(bool $allowExternal=true, bool $reachable=true) : self
+	public function allowExternal(bool $allowExternal=true, bool $reachable=true): static
 	{
 		$this->allowExternal = $allowExternal;
 		return $this->reachable($reachable);
 	}
 	
-	public function reachable(bool $reachable=true) : self
+	public function reachable(bool $reachable=true): static
 	{
 		$this->reachable = $reachable;
 		return $this;
 	}
 	
-	public function schemes(string...$schemes) : self
+	public function schemes(string...$schemes): static
 	{
 	    $this->schemes = $schemes;
 	    return $this;

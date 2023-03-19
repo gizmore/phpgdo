@@ -28,7 +28,7 @@ final class GDT_Hostname extends GDT_String
 	### Reachable ###
 	#################
 	public bool $reachable = false;
-	public function reachable(bool $reachable=true) : self
+	public function reachable(bool $reachable=true): static
 	{
 		$this->reachable = $reachable;
 		return $this;

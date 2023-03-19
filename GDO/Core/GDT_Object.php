@@ -22,7 +22,7 @@ class GDT_Object extends GDT_UInt
 	}
 	
 	public bool $searchable = true;
-	public function searchable(bool $searchable) : self
+	public function searchable(bool $searchable): static
 	{
 		$this->searchable = $searchable;
 		return $this;

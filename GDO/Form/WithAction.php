@@ -17,7 +17,7 @@ trait WithAction
 	
 	public string $action;
 
-	public function action(string $action) : self
+	public function action(string $action): static
 	{
 		$this->action = $action;
 		return $this;

@@ -21,7 +21,7 @@ final class GDT_Success extends GDT_Panel
 	### Code ###
 	############
 	public int $code = 200;
-	public function code(int $code) : self
+	public function code(int $code): static
 	{
 		$this->code = $code;
 		return $this;

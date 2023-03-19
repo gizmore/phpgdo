@@ -32,7 +32,7 @@ class GDT_Password extends GDT_String
 		$this->tooltip('tt_password');
 	}
 
-	public function defaultLabel() : self { return $this->label('password'); }
+	public function defaultLabel(): static { return $this->label('password'); }
 	
 	public function toValue($var = null)
 	{

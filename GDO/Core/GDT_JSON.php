@@ -28,7 +28,7 @@ class GDT_JSON extends GDT_Text
 		return $this->getValue();
 	}
 	
-// 	public static function with(array $data) : self
+// 	public static function with(array $data): static
 // 	{
 // 		return self::make()->value($data);
 // 	}

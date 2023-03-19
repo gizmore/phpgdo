@@ -18,7 +18,7 @@ class GDT_Text extends GDT_String
 
 	public int $max = 65535;
 
-	public function defaultLabel(): self
+	public function defaultLabel(): static
 	{
 		return $this->label('message');
 	}

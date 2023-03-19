@@ -24,13 +24,13 @@ final class GDT_Accordeon extends GDT_Container
 	# #############
 	public bool $opened = false;
 
-	public function opened(bool $opened = true): self
+	public function opened(bool $opened = true): static
 	{
 		$this->opened = $opened;
 		return $this;
 	}
 
-	public function closed(bool $closed = true): self
+	public function closed(bool $closed = true): static
 	{
 		return $this->opened( !$closed);
 	}

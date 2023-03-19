@@ -12,7 +12,7 @@ namespace GDO\Core;
 class GDT_Enum extends GDT_Select
 {
 	public array $enumValues;
-	public function enumValues(string...$enumValues) : self
+	public function enumValues(string...$enumValues): static
 	{
 		$this->enumValues = $enumValues;
 		return $this;

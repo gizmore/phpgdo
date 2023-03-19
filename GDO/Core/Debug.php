@@ -502,7 +502,7 @@ REQUEST: %s\n\n";
 		foreach ($stack as $row)
 		{
 		    # Skip debugger trace
-		    if (@$row['class'] !== self::class)
+		    if ((!isset($row['class'])) || ($row['class'] !== self::class))
 		    {
 		        # Build current call
 				$function = sprintf('%s%s(%s)',

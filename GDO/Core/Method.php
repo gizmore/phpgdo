@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core;
 
+use GDO\CLI\CLI;
 use GDO\DB\Database;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
@@ -62,7 +63,7 @@ abstract class Method #extends GDT
 
 	# toggles
 	public function isCLI() : bool { return true; }
-	public function isWeb() : bool { return true; }
+//	public function isWeb() : bool { return true; }
 	public function isAjax() : bool { return false; }
 	/**
 	 * Toggle if method can be trivially fuzz-tested. defaults to yes.
@@ -92,12 +93,12 @@ abstract class Method #extends GDT
 	/**
 	 * @var Method[string]
 	 */
-	public static array $CLI_ALIASES = [];
+	public static array $CLI_ALIASES;
 	
-	public static function addCLIAlias(string $alias, string $className) : void
-	{
-		self::$CLI_ALIASES[$alias] = $className;
-	}
+//	public static function addCLIAlias(string $alias, string $className) : void
+//	{
+//		self::$CLI_ALIASES[$alias] = $className;
+//	}
 	
 	public function getAutoButton(array $keys=null) : ?string
 	{
@@ -109,20 +110,17 @@ abstract class Method #extends GDT
 			{
 				if (in_array($key, $keys, true))
 				{
-					Application::$INSTANCE->verb(GDT_Form::POST);
+//					Application::$INSTANCE->verb(GDT_Form::POST);
 					return $key;
 				}
-				if (!$first)
-				{
-					$first = $gdt->getName();
-				}
+				$first = $first ?? $gdt->getName();
 			}
 		}
 		
-		if ($first)
-		{
-			Application::$INSTANCE->verb(GDT_Form::POST);
-		}
+//		if ($first)
+//		{
+//			Application::$INSTANCE->verb(GDT_Form::POST);
+//		}
 		
 		return $first;
 	}
@@ -184,7 +182,7 @@ abstract class Method #extends GDT
 	###################
 	### Instanciate ###
 	###################
-	public static function make() : self
+	public static function make(): static
 	{
 		return new static();
 	}
@@ -277,14 +275,14 @@ abstract class Method #extends GDT
 	 */
 	public function transactional() : bool
 	{
-		if (Application::instance()->isInstall())
+		if (Application::$INSTANCE->isWebserver())
 		{
-			return false;
+			return
+				($this->isAlwaysTransactional()) ||
+				($this->isTransactional() &&
+					(Application::$INSTANCE->verb === GDT_Form::POST) );
 		}
-		return
-			($this->isAlwaysTransactional()) ||
-			($this->isTransactional() &&
-				(Application::$INSTANCE->verb === GDT_Form::POST) );
+		return false;
 	}
 	
 	public function locking() : bool
@@ -421,7 +419,13 @@ abstract class Method #extends GDT
 			}
 			
 			# 5b)
-			$this->setupSEO();
+			if (Application::$INSTANCE->isWebserver())
+			{
+				$this->setupSEO();
+			}
+
+			# 5c)
+			$this->storeLastActivity();
 
 			# 6) Commit transaction
 			if ($transactional)
@@ -431,42 +435,51 @@ abstract class Method #extends GDT
 			
 			return $response;
 		}
-		catch (GDO_Error $e)
-		{
-			if ($transactional)
-			{
-				$db->transactionRollback();
-			}
-			return $this->error('error', [$e->getMessage()]);
-		}
-		catch (GDO_ArgException $e)
-		{
-			if ($transactional)
-			{
-				$db->transactionRollback();
-			}
-			return $this->error('error', [$e->getMessage()]);
-		}
+//		catch (GDO_Error $e)
+//		{
+//			if ($transactional)
+//			{
+//				$db->transactionRollback();
+//			}
+//			# In CLI/Chat we need to bubble up.
+//			if (!Application::$INSTANCE->isWebserver())
+//			{
+//				throw $e;
+//			}
+//			return $this->error('error', [$e->getMessage()]);
+//		}
+//		catch (GDO_ArgException $e)
+//		{
+//			if ($transactional)
+//			{
+//				$db->transactionRollback();
+//			}
+//			return $this->error('error', [$e->getMessage()]);
+//		}
 		catch (GDO_RedirectError $e)
 		{
-			return GDT_Redirect::make()->redirectErrorRaw($e->getMessage())->href($e->href);
-		}
-		catch (GDO_PermissionException $e)
-		{
 			if ($transactional)
 			{
 				$db->transactionRollback();
 			}
-			Logger::logException($e);
-			return $this->error('error', [$e->getMessage()]);
+			return GDT_Redirect::make()->redirectErrorRaw($e->getMessage())->href($e->href);
 		}
+//		catch (GDO_PermissionException $e)
+//		{
+//			if ($transactional)
+//			{
+//				$db->transactionRollback();
+//			}
+//			Logger::logException($e);
+//			return $this->error('error', [$e->getMessage()]);
+//		}
 		catch (\Throwable $e)
 		{
 			if ($transactional)
 			{
 				$db->transactionRollback();
 			}
-			throw $e;
+			return $this->error('error', [$e->getMessage()]);
 		}
 		finally
 		{
@@ -477,7 +490,7 @@ abstract class Method #extends GDT
 			$this->unlock();
 // 			if (Application::$INSTANCE->isCLI())
 // 			{
-// 				CLI::flushTopResponse();
+// 				return CLI::getTopResponse();
 // 			}
 		}
 	}
@@ -536,7 +549,6 @@ abstract class Method #extends GDT
 		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
 		Website::addMeta(['description', $description, 'name']);
 		Website::addMeta(['og:description', $description, 'property']);
-		$this->storeLastActivity();
 	}
 	
 	public function getMethodTitle() : string
@@ -621,7 +633,7 @@ abstract class Method #extends GDT
 		return GDO_User::findById($this->plugUserID());
 	}
 	
-	public function appliedInputs(array $inputs) : self
+	public function appliedInputs(array $inputs): static
 	{
 		$this->inputs($inputs);
 		$this->applyInput();
@@ -698,6 +710,17 @@ abstract class Method #extends GDT
 	{
 		$module = $this->getModule();
 		return $module->tempPath($this->getMethodName().'/'.$path);
+	}
+
+	##################
+	### CLI Button ###
+	##################
+	public string $button;
+	public function cliButton(string $button): static
+	{
+		$this->button = $button;
+		$this->addInput($button, '1');
+		return $this;
 	}
 
 }

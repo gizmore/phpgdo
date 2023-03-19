@@ -16,7 +16,7 @@ class GDT_Tuple extends GDT
 	use WithError;
 	use WithFields;
 	
-	public function addField(?GDT $gdt, GDT $after=null, bool $last=true) : self
+	public function addField(?GDT $gdt, GDT $after=null, bool $last=true): static
 	{
 		if ($gdt === null)
 		{
@@ -29,7 +29,7 @@ class GDT_Tuple extends GDT
 		return $this->addFieldB($gdt);
 	}
 	
-	protected function addFieldB(GDT $gdt, GDT $after=null, bool $last=true) : self
+	protected function addFieldB(GDT $gdt, GDT $after=null, bool $last=true): static
 	{
 		$this->addFieldA($gdt, $after, $last);
 		if ($gdt->hasError())

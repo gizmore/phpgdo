@@ -12,7 +12,7 @@ use GDO\Core\GDT_String;
  */
 final class GDT_PackedIP extends GDT_String
 {
-	public function defaultLabel() : self { return $this->label('ip'); }
+	public function defaultLabel(): static { return $this->label('ip'); }
 
 	public function isSearchable() : bool { return false; }
 	

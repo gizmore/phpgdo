@@ -19,27 +19,21 @@ trait WithError
 	 */
 	public function error(string $key, array $args=null) : bool
 	{
-// 		if (!$this->hasError())
-// 		{
-			$this->errorKey = $key;
-			$this->errorArgs = $args;
-			unset($this->errorRaw);
-// 		}
+		$this->errorKey = $key;
+		$this->errorArgs = $args;
+		unset($this->errorRaw);
 		return false;
 	}
 	
 	public function errorRaw(string $message) : bool
 	{
-// 		if (!$this->hasError())
-// 		{
-			unset($this->errorKey);
-			$this->errorArgs = null;
-			$this->errorRaw = $message;
-// 		}
+		unset($this->errorKey);
+		$this->errorArgs = null;
+		$this->errorRaw = $message;
 		return false;
 	}
 	
-	public function noError() : self
+	public function noError(): static
 	{
 		unset($this->errorRaw);
 		unset($this->errorKey);
@@ -79,6 +73,18 @@ trait WithError
 		if (isset($this->errorKey))
 		{
 			return t($this->errorKey, $this->errorArgs);
+		}
+		$errors = [];
+		foreach ($this->getFields() as $gdt)
+		{
+			if ($gdt->hasError())
+			{
+				$errors[] = $gdt->renderError();
+			}
+		}
+		if ($errors)
+		{
+			return implode("\n", $errors);
 		}
 		return GDT::EMPTY_STRING;
 	}

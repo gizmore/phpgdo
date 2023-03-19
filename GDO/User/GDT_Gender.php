@@ -16,7 +16,7 @@ class GDT_Gender extends GDT_Enum
 	const MALE = 'male';
 	const FEMALE = 'female';
 	
-// 	public function defaultLabel() : self { return ; }
+// 	public function defaultLabel(): static { return ; }
 	
 	protected function __construct()
 	{

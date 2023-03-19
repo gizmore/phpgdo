@@ -27,7 +27,7 @@ final class GDO_SEO_URL extends GDO
 	###########
 	### API ###
 	###########
-	public static function addRoute(string $path, string $url) : self
+	public static function addRoute(string $path, string $url): static
 	{
 		return self::blank([
 			'su_file' => $path,

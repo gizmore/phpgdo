@@ -34,13 +34,13 @@ class GDT_String extends GDT_DBField
 	#######################
 	public bool $caseSensitive = false;
 	
-	public function caseS(bool $caseSensitive = true) : self
+	public function caseS(bool $caseSensitive = true): static
 	{
 		$this->caseSensitive = $caseSensitive;
 		return $this;
 	}
 	
-	public function caseI() : self
+	public function caseI(): static
 	{
 		return $this->caseS(false);
 	}
@@ -52,14 +52,14 @@ class GDT_String extends GDT_DBField
 	const ASCII = 2;
 	const UTF8 = 3;
 	public int $encoding = self::UTF8;
-	public function encoding(int $encoding) : self
+	public function encoding(int $encoding): static
 	{
 		$this->encoding = $encoding;
 		return $this;
 	}
-	public function utf8() : self { return $this->encoding(self::UTF8); }
-	public function ascii() : self { return $this->encoding(self::ASCII); }
-	public function binary() : self { return $this->encoding(self::BINARY); }
+	public function utf8(): static { return $this->encoding(self::UTF8); }
+	public function ascii(): static { return $this->encoding(self::ASCII); }
+	public function binary(): static { return $this->encoding(self::BINARY); }
 
 // 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
 // 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
@@ -71,13 +71,13 @@ class GDT_String extends GDT_DBField
 	public int $min = 0;
 	public int $max = 191; # utf8mb4 max length for keys
 
-	public function min(int $min) : self
+	public function min(int $min): static
 	{
 		$this->min = $min;
 		return $this;
 	}
 	
-	public function max(int $max) : self
+	public function max(int $max): static
 	{
 		$this->max = $max;
 		return $this;
@@ -110,7 +110,7 @@ class GDT_String extends GDT_DBField
 	### Pattern ###
 	###############
 	public string $pattern;
-	public function pattern(string $pattern=null) : self
+	public function pattern(string $pattern=null): static
 	{
 		if ($pattern === null)
 		{
@@ -123,7 +123,7 @@ class GDT_String extends GDT_DBField
 		return $this;
 	}
 	
-	public function noPattern() : self
+	public function noPattern(): static
 	{
 		unset($this->pattern);
 		return $this;

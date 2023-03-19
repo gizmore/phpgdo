@@ -18,7 +18,7 @@ final class GDT_CreatedBy extends GDT_User
 {
 	public bool $writeable = false;
 	
-	public function defaultLabel() : self { return $this->label('created_by'); }
+	public function defaultLabel(): static { return $this->label('created_by'); }
 	
 	protected function __construct()
 	{

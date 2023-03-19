@@ -21,7 +21,7 @@ final class GDT_IPP extends GDT_UInt
 		return 'ipp';
 	}
 	
-    public function defaultLabel() : self
+    public function defaultLabel(): static
     {
     	return $this->label('ipp');
     }
@@ -35,7 +35,10 @@ final class GDT_IPP extends GDT_UInt
     ### Features ###
     ################
     public function isHidden() : bool { return true; }
-    public function isOrderable() : bool { return false; }
+
+	public function isCLIHidden() : bool { return true; }
+
+	public function isOrderable() : bool { return false; }
     public function isSearchable() : bool { return false; }
     public function isFilterable() : bool { return false; }
     public function isSerializable() : bool { return false; }

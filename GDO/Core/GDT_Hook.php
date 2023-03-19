@@ -40,28 +40,28 @@ final class GDT_Hook extends GDT
 	###########
 	### GDT ###
 	###########
-	public function hook(string $event, ...$args) : self
+	public function hook(string $event, ...$args): static
 	{
 	    $this->eventArgs = $args;
 	    return $this->event($event);
 	}
 	
 	public string $event;
-	public function event(string $event=null) : self
+	public function event(string $event=null): static
 	{
 	    $this->event = $event;
 	    return $this->name($event);
 	}
 	
 	public array $eventArgs;
-	public function eventArgs(...$args) : self
+	public function eventArgs(...$args): static
 	{
 	    $this->eventArgs = $args;
 	    return $this;
 	}
 	
 	public bool $ipc = false;
-	public function ipc(bool $ipc=true) : self
+	public function ipc(bool $ipc=true): static
 	{
 	    $this->ipc = $ipc;
 	    return $this;
@@ -139,8 +139,8 @@ final class GDT_Hook extends GDT
 		# Count num calls up.
 		self::$CALLS++;
 
-		$response = GDT_Response::make();
-		
+		$response = null;
+
 		# Call hooks for this HTTP/www process.
 		if ($moduleNames = self::getHookModuleNames($event))
 		{
@@ -153,8 +153,11 @@ final class GDT_Hook extends GDT
 					if ($module->isEnabled())
 					{
 						$callable = [$module, $method_name];
-						$result = call_user_func_array($callable, $args);
-						$response->addField($result);
+						if ($result = call_user_func_array($callable, $args))
+						{
+							$response = $response ?? GDT_Response::make();
+							$response->addField($result);
+						}
 					}
 				}
 			}

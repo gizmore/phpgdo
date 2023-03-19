@@ -23,14 +23,14 @@ class GDT_PageMenu extends GDT
 	use WithHREF;
 
 	public string $pageName;
-	public function pageName(string $pageName) : self
+	public function pageName(string $pageName): static
 	{
 		$this->pageName = $pageName;
 		return $this;
 	}
 	
 	public int $numItems = 0;
-	public function numItems(int $numItems) : self
+	public function numItems(int $numItems): static
 	{
 		$this->numItems = $numItems;
 		return $this;
@@ -41,7 +41,7 @@ class GDT_PageMenu extends GDT
 	###########
 	public int $ipp = 10;
 	
-	public function ipp(int $ipp) : self
+	public function ipp(int $ipp): static
 	{
 		$this->ipp = $ipp;
 		return $this;
@@ -61,7 +61,7 @@ class GDT_PageMenu extends GDT
 	################
 	public int $page;
 	
-	public function page(int $page) : self
+	public function page(int $page): static
 	{
 		$this->page = $page;
 		return $this;
@@ -77,7 +77,7 @@ class GDT_PageMenu extends GDT
 // 	}
 	
 	public int $shown = 5;
-	public function shown(int $shown) : self
+	public function shown(int $shown): static
 	{
 	    $this->shown = $shown;
 	    return $this;
@@ -87,7 +87,7 @@ class GDT_PageMenu extends GDT
 	 * Set num items via query.
 	 * @deprecated because the query is called twice then.
 	 */
-	public function query(Query $query) : self
+	public function query(Query $query): static
 	{
 		$this->numItems = $query->copy()->selectOnly('COUNT(*)')->exec()->fetchValue();
 		return $this;
@@ -103,7 +103,7 @@ class GDT_PageMenu extends GDT
 		return max(array(intval((($numItems-1) / $ipp)+1), 1));
 	}
 	
-	public function paginateQuery(Query $query) : self
+	public function paginateQuery(Query $query): static
 	{
 		$query->limit($this->ipp, $this->getFrom());
 		return $this;

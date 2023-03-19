@@ -1,10 +1,12 @@
 <?php
 namespace GDO\CLI;
 
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT_Response;
 use GDO\Core\Method;
 use GDO\Core\GDT;
 use GDO\Core\GDO_Module;
+use GDO\Form\GDT_Submit;
 use GDO\UI\Color;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Page;
@@ -70,16 +72,17 @@ final class CLI
     ##############
     public static function flushTopResponse()
     {
-    	if (!Application::$INSTANCE->isUnitTests())
-    	{
-	    	# Get
-	    	$response = GDT_Page::instance()->topResponse();
-	    	# Render
-	    	echo $response->renderCLI();
-	    	@ob_flush();
-	    	# Clear
-	    	self::clearFlash($response);
-    	}
+		echo self::getTopResponse();
+		@ob_flush();
+//		if (!Application::$INSTANCE->isUnitTests())
+//		{
+//			# Get
+//			$response = GDT_Page::instance()->topResponse();
+//			# Render
+//			echo $response->renderCLI();
+//	    	# Clear
+//	    	self::clearFlash($response);
+//    	}
     }
 
     public static function getTopResponse() : string
@@ -206,10 +209,20 @@ final class CLI
     {
         $usage1 = [];
         $usage2 = [];
-        $fields = $method->gdoParameterCache();
+
+		# Ugly
+		try
+		{
+			$method->onMethodInit();
+		}
+		catch (GDO_Exception $ex)
+		{
+		}
+
+		$fields = $method->gdoParameterCache();
         foreach ($fields as $gdt)
         {
-            if ( (!$gdt->isWriteable()) || ($gdt->isHidden()) )
+            if ( (!$gdt->isWriteable()) || ($gdt->isCLIHidden()) )
             {
                 continue;
             }
@@ -224,10 +237,10 @@ final class CLI
             }
             else
             {
-            	if ($gdt->getName() !== 'submit')
+            	if (!($gdt instanceof GDT_Submit))
             	{
 	                $usage2[] = sprintf('[--%s=<%s>(%s)]',
-	                    $gdt->name, $gdt->gdoExampleVars(), $gdt->getVar());
+	                    $gdt->getParameterAlias(), $gdt->gdoExampleVars(), $gdt->getVar());
             	}
             }
         }
@@ -254,7 +267,7 @@ final class CLI
 	 */
 	public static function escapeShell(string $s): string
 	{
-		return Process::isWindows() ? self::escapeShellWindows($s) : self::escapeShellLinux($s);
+		return Process::isWindows() ? self::escapeShellWindows($s): static::escapeShellLinux($s);
 	}
 
 	private static function escapeShellWindows(string $s): string

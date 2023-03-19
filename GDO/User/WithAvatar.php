@@ -25,7 +25,7 @@ trait WithAvatar
 	### User ###
 	############
 	public GDO_User $avatarUser;
-	public function avatarUser(GDO_User $user=null, int $size=42) : self
+	public function avatarUser(GDO_User $user=null, int $size=42): static
 	{
 		if ($user === null)
 		{
@@ -42,7 +42,7 @@ trait WithAvatar
 	### Size ###
 	############
 	public int $avatarSize = 32;
-	public function avatarSize(int $size) : self
+	public function avatarSize(int $size): static
 	{
 		$this->avatarSize = $size;
 		return $this;

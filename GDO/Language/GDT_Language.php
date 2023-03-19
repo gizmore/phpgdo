@@ -12,7 +12,7 @@ use GDO\User\GDO_User;
  */
 final class GDT_Language extends GDT_ObjectSelect
 {
-	public function defaultLabel() : self { return $this->label('language'); }
+	public function defaultLabel(): static { return $this->label('language'); }
 	
 	protected function __construct()
 	{
@@ -43,7 +43,7 @@ final class GDT_Language extends GDT_ObjectSelect
 	###############
 	### Current ###
 	###############
-	public function initialCurrent(bool $bool=true) : self
+	public function initialCurrent(bool $bool=true): static
 	{
 		return $this->initial(GDO_User::current()->getLangISO());
 	}
@@ -64,7 +64,7 @@ final class GDT_Language extends GDT_ObjectSelect
 	### Choices ###
 	###############
 	private bool $all = false;
-	public function all(bool $all=true) : self
+	public function all(bool $all=true): static
 	{
 		$this->all = $all;
 		return $this;
@@ -79,7 +79,7 @@ final class GDT_Language extends GDT_ObjectSelect
 	##################
 	### Completion ###
 	##################
-	public function withCompletion() : self
+	public function withCompletion(): static
 	{
 		return $this->completionHref(href('Language', 'Completion'));
 	}

@@ -24,7 +24,7 @@ class GDT_Username extends GDT_Name
 	# Allow - _ LETTERS DIGITS
 	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]+$/iuD";
 
-	public function defaultLabel() : self { return $this->label('username'); }
+	public function defaultLabel(): static { return $this->label('username'); }
 	
 	protected function __construct()
 	{
@@ -36,7 +36,7 @@ class GDT_Username extends GDT_Name
 	### Exists ###
 	##############
 	public bool $exists;
-	public function exists(bool $exists=true) : self
+	public function exists(bool $exists=true): static
 	{
 		$this->exists = $exists;
 		return $this;

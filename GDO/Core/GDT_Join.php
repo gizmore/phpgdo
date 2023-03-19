@@ -19,7 +19,7 @@ final class GDT_Join extends GDT
 	
 	public function isSearchable() : bool { return true; }
 	
-// 	public static function make(string $name = null) : self
+// 	public static function make(string $name = null): static
 // 	{
 // 		return self::makeNamed($name);
 // 	}
@@ -49,20 +49,22 @@ final class GDT_Join extends GDT
 	###################
 	### Render stub ###
 	###################
-	public function searchQuery(Query $query, $searchTerm, $first)
+	public function searchQuery(Query $query, $searchTerm): static
 	{
-	    if ($this->table)
-	    {
-	        $conditions = [];
+//	    if ($this->table)
+//	    {
+//	        $conditions = [];
 	        foreach ($this->table->gdoColumnsCache() as $gdt)
 	        {
-	            if ($gdt->searchable)
+	            if ($gdt->isSearchable())
 	            {
-	                $conditions[] = $gdt->searchCondition($searchTerm, $this->as);
+					$gdt->searchQuery($query, $searchTerm);
+//	                $conditions[] = $gdt->searchCondition($searchTerm, $this->as);
 	            }
 	        }
-	        return implode(' OR ', $conditions);
-	    }
+//	        return implode(' OR ', $conditions);
+//	    }
+		return $this;
 	}
 	
 }

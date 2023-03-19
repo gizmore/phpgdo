@@ -25,7 +25,7 @@ class GDT_Composite extends GDT_Container
 		return GDT::EMPTY_ARRAY;
 	}
 	
-	public static function make(string $name=null) : self
+	public static function make(string $name=null): static
 	{
 		$obj = self::makeNamed($name);
 		$obj->addFields(...$obj->gdoCompositeFields());
@@ -35,7 +35,7 @@ class GDT_Composite extends GDT_Container
 	###############
 	### NotNull ###
 	###############
-	public function notNull(bool $notNull = true) : self
+	public function notNull(bool $notNull = true): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{
@@ -44,7 +44,7 @@ class GDT_Composite extends GDT_Container
 		return $this;
 	}
 	
-	public function inputs(?array $inputs) : self
+	public function inputs(?array $inputs): static
 	{
 		parent::inputs($inputs);
 		foreach ($this->getAllFields() as $gdt)
@@ -57,7 +57,7 @@ class GDT_Composite extends GDT_Container
 	###################
 	### Var / Value ###
 	###################
-	public function gdo(GDO $gdo = null) : self
+	public function gdo(GDO $gdo = null): static
 	{
 		array_map(function(GDT $gdt) use ($gdo) {
 			$gdt->gdo($gdo);
@@ -79,7 +79,7 @@ class GDT_Composite extends GDT_Container
 		return $gdodata;
 	}
 	
-	public function setGDOData(array $data) : self
+	public function setGDOData(array $data): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{
@@ -114,7 +114,7 @@ class GDT_Composite extends GDT_Container
 	#############
 	### Proxy ###
 	#############
-	public function writeable(bool $writeable): self
+	public function writeable(bool $writeable): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{
@@ -183,7 +183,7 @@ class GDT_Composite extends GDT_Container
 		];
 	}
 	
-	public function tooltip(string $key, array $args=null) : self
+	public function tooltip(string $key, array $args=null): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{

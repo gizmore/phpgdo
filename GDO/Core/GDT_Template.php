@@ -47,7 +47,7 @@ class GDT_Template extends GDT
 	# ###########
 	# ## Base ###
 	# ###########
-	public function defaultLabel(): self
+	public function defaultLabel(): static
 	{
 		return $this->labelNone();
 	}
@@ -108,7 +108,7 @@ class GDT_Template extends GDT
 	public string $templateHeadPath;
 	public ?array $templateHeadVars;
 	
-	public function templateHead(string $module, string $path, array $vars=null): self
+	public function templateHead(string $module, string $path, array $vars=null): static
 	{
 		$this->templateHeadModule = $module;
 		$this->templateHeadPath = $path;
@@ -132,7 +132,7 @@ class GDT_Template extends GDT
 	public string $templatePath;
 	public array  $templateVars;
 
-	public function template(string $moduleName, string $path, array $tVars = null) : self
+	public function template(string $moduleName, string $path, array $tVars = null): static
 	{
 		$this->templateModule = $moduleName;
 		$this->templatePath = $path;
@@ -195,7 +195,11 @@ class GDT_Template extends GDT
 					# make tVars locals for the template.
 					$$__key = $__value;
 				}
+//				unset($tVars);
+//				unset($__key);
+//				unset($__value);
 			}
+
 			include $path; # a hell of a bug is to supress errors here.
 			return ob_get_contents();
 		}
@@ -235,18 +239,13 @@ class GDT_Template extends GDT
 	# ########################
 	# ## Path substitution ###
 	# ########################
-	private static $PATHES = [];
+//	private static $PATHES = [];
 
 	/**
 	 * Get the Path for the GDO Theme Module Path and language.
 	 */
 	private static function getPath(string $moduleName, string $path): string
 	{
-// 		return self::getPathB($moduleName, $path);
-// 	}
-
-// 	private static function getPathB(string $moduleName, string $path): string
-// 	{
 		static $isosc = [];
 		
 		if (isset($isosc[Trans::$ISO]))
@@ -272,8 +271,8 @@ class GDT_Template extends GDT
 		# Try themes first
 		foreach (Application::$INSTANCE->getThemes() as $theme)
 		{
-			if (isset(self::$THEMES[$theme]))
-			{
+//			if (isset(self::$THEMES[$theme]))
+//			{
 				foreach ($isos as $iso)
 				{
 					$path1 = $path12 . $iso . '.' . $path13;
@@ -283,7 +282,7 @@ class GDT_Template extends GDT
 						return $path1;
 					}
 				}
-			}
+//			}
 		}
 
 		foreach ($isos as $iso)

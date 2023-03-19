@@ -51,7 +51,7 @@ final class Javascript
 		if (GDO_Module::config_var('Core', 'allow_javascript', '1'))
 	    {
 	        $back .= self::displayJavascriptPreInline();
-	        $javascripts = $minify ? MinifyJS::minified(self::$_JAVASCRIPTS) : self::$_JAVASCRIPTS;
+	        $javascripts = $minify ? MinifyJS::minified(self::$_JAVASCRIPTS): static::$_JAVASCRIPTS;
     		foreach ($javascripts as $js)
     		{
     			$back .= sprintf('<script src="%s"></script>'."\n", $js);

@@ -37,16 +37,13 @@ trait WithParameters
 	{
 		if ($gdt = $this->gdoParameterB($key, $throw))
 		{
-			if ($validate)
+			if ( ($validate) && (!$gdt->validated()) )
 			{
-				if (!$gdt->validated())
+				if ($throw)
 				{
-					if ($throw)
-					{
-						throw new GDO_ArgException($gdt);
-					}
-					return null;
+					throw new GDO_ArgException($gdt);
 				}
+				return null;
 			}
 		}
 		return $gdt;
@@ -60,7 +57,7 @@ trait WithParameters
 		{
 			return $cache[$key];
 		}
-		
+
 		if (is_numeric($key))
 		{
 			$pos = -1;
@@ -81,7 +78,15 @@ trait WithParameters
 				}
 			}
 		}
-		
+
+		foreach ($cache as $gdt)
+		{
+			if ($gdt->getParameterAlias() === $key)
+			{
+				return $gdt;
+			}
+		}
+
 		if ($throw)
 		{
 			throw new GDO_Error('err_unknown_parameter', [html($key), $this->gdoHumanName()]);

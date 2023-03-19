@@ -11,7 +11,7 @@ use GDO\Core\GDT_Select;
  */
 final class GDT_MessageEditor extends GDT_Select
 {
-	public function defaultLabel() : self { return $this->label('editor'); }
+	public function defaultLabel(): static { return $this->label('editor'); }
 	
 	protected function __construct()
 	{

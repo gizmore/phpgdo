@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Tests;
 
+use GDO\CLI\Method\Help;
+use GDO\Core\Website;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
@@ -380,10 +382,14 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$app->cli(true);
 		$expression = GDT_Expression::fromLine($command);
 		$response = $expression->execute();
-		$result = GDT_Page::instance()->topResponse()->renderCLI();
-		$result .= $response->renderCLI();
 		$app->cli(false);
-		return $result;
+		$res = CLI::getTopResponse();
+		$res .= $response->renderCLI();
+		if (Application::isError())
+		{
+			$res .= CLI::renderCLIHelp($expression->method->method);
+		}
+		return trim($res, "\r\n");
 	}
 
 	# ###########

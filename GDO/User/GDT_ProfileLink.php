@@ -33,7 +33,7 @@ final class GDT_ProfileLink extends GDT_Link
 		return $this->getGDO()->hrefProfile();
 	}
 	
-	public function user(GDO $gdo=null) : self
+	public function user(GDO $gdo=null): static
 	{
 		return $this->gdo($gdo);
 	}
@@ -42,7 +42,7 @@ final class GDT_ProfileLink extends GDT_Link
 	### Nickname ###
 	################
 	public bool $nickname = false;
-	public function nickname(bool $nickname = true) : self
+	public function nickname(bool $nickname = true): static
 	{
 		$this->nickname = $nickname;
 		return $this;
@@ -52,7 +52,7 @@ final class GDT_ProfileLink extends GDT_Link
 	### Avatar ###
 	##############
 	public bool $avatar = false;
-	public function avatar(bool $avatar=true): self
+	public function avatar(bool $avatar=true): static
 	{
 		$this->avatar = $avatar && module_enabled('Avatar');
 		return $this;
@@ -62,7 +62,7 @@ final class GDT_ProfileLink extends GDT_Link
 	### Level ###
 	#############
 	public bool $level = false;
-	public function level(bool $level=true) : self
+	public function level(bool $level=true): static
 	{
 		$this->level = $level;
 		return $this;

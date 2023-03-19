@@ -41,7 +41,7 @@ final class GDO_User extends GDO
 	# Instances
 	private static ?self $SYSTEM = null;
 	private static self $CURRENT;
-	public function clearCache() : self
+	public function clearCache(): static
 	{
 		$currId = self::$CURRENT->getID();
 		self::$SYSTEM = null;
@@ -85,7 +85,7 @@ final class GDO_User extends GDO
 		return $this->isType(GDT_UserType::SYSTEM);
 	}
 	
-	public static function system() : self
+	public static function system(): static
 	{
 		if (!isset(self::$SYSTEM))
 		{
@@ -146,7 +146,7 @@ final class GDO_User extends GDO
 	 * Get current user.
 	 * Not neccisarilly via session!
 	 */
-	public static function current() : self
+	public static function current(): static
 	{
 		return self::$CURRENT;
 	}
@@ -154,7 +154,7 @@ final class GDO_User extends GDO
 	/**
 	 * Set the current user and their environment.
 	 */
-	public static function setCurrent(GDO_User $user) : self
+	public static function setCurrent(GDO_User $user): static
 	{
 		self::$CURRENT = $user;
 		Time::setTimezone($user->getTimezone());
@@ -165,7 +165,7 @@ final class GDO_User extends GDO
 	/**
 	 * Get guest ghost user.
 	 */
-	public static function ghost() : self
+	public static function ghost(): static
 	{
 		return self::blank([
 			'user_id' => '0',
@@ -344,7 +344,7 @@ final class GDO_User extends GDO
 		return $this->hasPermission($permission->getName());
 	}
 	
-	public function changedPermissions() : self
+	public function changedPermissions(): static
 	{
 		$this->tempUnset('gdo_permission');
 		return $this->recache();
@@ -396,16 +396,16 @@ final class GDO_User extends GDO
 	 * Ensure user is persistent.
 	 * This allows LoginAsGuest 
 	 */
-	public function persistent() : self
+	public function persistent(): static
 	{
 		if (!$this->isPersisted())
 		{
+			$this->setVar('user_type', GDT_UserType::GUEST);
+			$this->insert();
 			if (module_enabled('Session'))
 			{
 				if ($session = GDO_Session::instance())
 				{
-					$this->setVar('user_type', GDT_UserType::GUEST);
-					$this->insert();
 					$session->setVar('sess_user', $this->getID());
 				}
 			}
@@ -507,7 +507,7 @@ final class GDO_User extends GDO
 		return $this->setting($moduleName, $key)->getValue();
 	}
 	
-	public function saveSettingVar(string $moduleName, string $key, ?string $var) : self
+	public function saveSettingVar(string $moduleName, string $key, ?string $var): static
 	{
 		if ($module = ModuleLoader::instance()->getModule($moduleName, true, false))
 		{
@@ -516,7 +516,7 @@ final class GDO_User extends GDO
 		return $this;
 	}
 	
-	public function increaseSetting(string $moduleName, string $key, float $by=1) : self
+	public function increaseSetting(string $moduleName, string $key, float $by=1): static
 	{
 		$now = $this->settingVar($moduleName, $key);
 		return $this->saveSettingVar($moduleName, $key, $now + $by);
@@ -525,7 +525,7 @@ final class GDO_User extends GDO
 	/**
 	 * Save all the ACL settings for a user's setting var.
 	 */
-	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level=0, string $permission=null): self
+	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level=0, string $permission=null): static
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$module->saveUserSettingACLRelation($this, $key, $relation);
@@ -557,7 +557,7 @@ final class GDO_User extends GDO
 		return count($users) === 1 ? $users[0] : null;
 	}
 
-	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op='=') : self
+	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op='='): static
 	{
 		$users = self::withSetting($moduleName, $key, $var, $op);
 		$c = count($users);

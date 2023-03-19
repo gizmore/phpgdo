@@ -22,7 +22,7 @@ trait WithClickHandler
 	 * Set the click handler.
 	 * @param callable $onclick
 	 */
-	public function onclick($onclick, ...$args) : self
+	public function onclick($onclick, ...$args): static
 	{
 		$this->onclick = $onclick;
 		$this->args = $args;

@@ -31,7 +31,7 @@ abstract class MethodForm extends Method
 	#################
 	public bool $submitted = false;
 	public ?string $pressedButton = null;
-	public function submitted(bool $submitted=true) : self
+	public function submitted(bool $submitted=true): static
 	{
 		$this->submitted = $submitted;
 		return $this;
@@ -41,7 +41,7 @@ abstract class MethodForm extends Method
 	### Validated ###
 	#################
 	public bool $validated = false;
-	public function validated(bool $validated=true) : self
+	public function validated(bool $validated=true): static
 	{
 		$this->validated = $validated;
 		return $this;
@@ -166,7 +166,7 @@ abstract class MethodForm extends Method
 	############
 	### Init ###
 	############
-	protected function initFromGDO(GDO $gdo): self
+	protected function initFromGDO(GDO $gdo): static
 	{
 		$this->getForm()->initFromGDO($gdo);
 		return $this;

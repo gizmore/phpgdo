@@ -57,7 +57,7 @@ final class GDT_IP extends GDT_String
 	###############
 	### Current ###
 	###############
-	public function useCurrent(bool $useCurrent=true) : self
+	public function useCurrent(bool $useCurrent=true): static
 	{
 		$initial = $useCurrent ? self::$CURRENT : null;
         return $this->initial($initial);
@@ -73,7 +73,7 @@ final class GDT_IP extends GDT_String
 	public string $pattern = "/^[.:0-9a-f]{3,45}$/D";
 	public string $icon = 'url';
 	
-	public function defaultLabel() : self { return $this->label('ip'); }
+	public function defaultLabel(): static { return $this->label('ip'); }
 
 	############
 	### Test ###

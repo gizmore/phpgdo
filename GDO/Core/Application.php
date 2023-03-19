@@ -60,7 +60,7 @@ class Application extends GDT
 	/**
 	 * Call this at least.
 	 */
-	public static function init(): self
+	public static function init(): static
 	{
 		global $me;
 		$me = Stub::make();
@@ -166,7 +166,7 @@ class Application extends GDT
 	 * Call when you create the next command in a loop.
 	 * Optionally remove all input, when a form was sent and wants to get cleared.
 	 */
-	public function reset(bool $removeInput=false) : self
+	public function reset(bool $removeInput=false): static
 	{
 		self::$RESPONSE_CODE = 200;
 		$_FILES = [];
@@ -214,13 +214,13 @@ class Application extends GDT
 	 * Change current rendering mode.
 	 * Optionally set detected mode to this.
 	 */
-	public function mode(int $mode) : self
+	public function mode(int $mode): static
 	{
 		self::$MODE = $mode;
 		return $this;
 	}
 	
-	public function modeDetected(int $mode) : self
+	public function modeDetected(int $mode): static
 	{
 		self::$MODE_DETECTED = $mode;
 		return $this->mode($mode);
@@ -233,7 +233,7 @@ class Application extends GDT
 	 * Ajax mode is website/html without the html boilerplate.
 	 */
 	public bool $ajax = false;
-	public function ajax(bool $ajax) : self
+	public function ajax(bool $ajax): static
 	{
 		$this->ajax = $ajax;
 		return $this;
@@ -246,7 +246,7 @@ class Application extends GDT
 	 * Toggle CLI force mode (mostly for tests)
 	 */
 	public bool $cli = false;
-	public function cli(bool $cli=true) : self
+	public function cli(bool $cli=true): static
 	{
 		if ($this->cli = $cli)
 		{
@@ -293,7 +293,12 @@ class Application extends GDT
 			}
 		}
 	}
-	
+
+	public function hasError(): bool
+	{
+		return self::isError();
+	}
+
 }
 
 # Init

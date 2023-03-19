@@ -79,7 +79,7 @@ class GDT_Table extends GDT
 	# #############
 	public GDT $footer;
 
-	public function footer(GDT $footer): self
+	public function footer(GDT $footer): static
 	{
 		$this->footer = $footer;
 		return $this;
@@ -90,7 +90,7 @@ class GDT_Table extends GDT
 	# #################
 	public bool $hideEmpty = false;
 
-	public function hideEmpty(bool $hideEmpty = true): self
+	public function hideEmpty(bool $hideEmpty = true): static
 	{
 		$this->hideEmpty = $hideEmpty;
 		return $this;
@@ -153,7 +153,7 @@ class GDT_Table extends GDT
 		return $this;
 	}
 	
-// 	public function orderFields(array $fields, string $order) : self
+// 	public function orderFields(array $fields, string $order): static
 // 	{
 // 		$this->order->setFields($fields);
 // 		$this->order->orders($this->getOrders($order));
@@ -196,7 +196,7 @@ class GDT_Table extends GDT
 		Module_Table::instance()->cfgItemsPerPage());
 	}
 
-	public function paginated(bool $paginated = true, string $href = null, int $ipp = 0) : self
+	public function paginated(bool $paginated = true, string $href = null, int $ipp = 0): static
 	{
 		unset($this->pagemenu);
 		if ($paginated)
@@ -221,7 +221,7 @@ class GDT_Table extends GDT
 // 	# ###################
 // // 	public GDT_IPP $ipp;
 	
-// 	public function ipp(int $ipp) : self
+// 	public function ipp(int $ipp): static
 // 	{
 // 		$this->getPageMenu()->ipp($ipp);
 // 		return $this;
@@ -232,7 +232,7 @@ class GDT_Table extends GDT
 	##############
 	public Result $result;
 	
-	public function result(Result $result) : self
+	public function result(Result $result): static
 	{
 		$this->result = $result;
 		return $this;
@@ -378,7 +378,7 @@ class GDT_Table extends GDT
 	/**
 	 * Create the pagemenu.
 	 */
-	private function getPageMenu() : GDT_PageMenu
+	public function getPageMenu() : GDT_PageMenu
 	{
 		if (!isset($this->pagemenu))
 		{
@@ -391,7 +391,7 @@ class GDT_Table extends GDT
 	### Fetch Into ###
 	##################
 	public bool $fetchInto = false;
-	public function fetchInto(bool $fetchInto=true): self
+	public function fetchInto(bool $fetchInto=true): static
 	{
 		$this->fetchInto = $fetchInto;
 		return $this;
@@ -402,7 +402,7 @@ class GDT_Table extends GDT
 	################
 	public GDO $fetchAs;
 
-	public function gdo(GDO $gdo=null) : self
+	public function gdo(GDO $gdo=null): static
 	{
 		if ($gdo === null)
 		{
@@ -415,7 +415,7 @@ class GDT_Table extends GDT
 		return parent::gdo($gdo);
 	}
 	
-	public function fetchAs(GDO $fetchAs = null) : self
+	public function fetchAs(GDO $fetchAs = null): static
 	{
 		if ($fetchAs)
 		{
@@ -432,7 +432,7 @@ class GDT_Table extends GDT
 	### Zebra stripes ###
 	#####################
 	public bool $striped = true;
-	public function striped(bool $striped): self
+	public function striped(bool $striped): static
 	{
 		$this->striped = $striped;
 		return $this;
@@ -442,7 +442,7 @@ class GDT_Table extends GDT
 	# ## Render ###
 	# #############
 	public bool $noFormWrap = false;
-	public function noFormWrap(bool $noWrap=true): self
+	public function noFormWrap(bool $noWrap=true): static
 	{
 		$this->noFormWrap = $noWrap;
 		return $this;

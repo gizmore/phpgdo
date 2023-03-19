@@ -15,7 +15,7 @@ use GDO\UI\GDT_Button;
 final class GDT_LevelPopup extends GDT_Button
 {
 	public int $level = 0;
-	public function level(int $level) : self
+	public function level(int $level): static
 	{
 		$this->level = $level;
 		return $this;

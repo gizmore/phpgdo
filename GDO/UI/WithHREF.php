@@ -12,7 +12,7 @@ trait WithHREF
 {
 	public string $href;
 
-	public function href(string $href=null) : self
+	public function href(string $href=null): static
 	{
 		if ($href)
 		{

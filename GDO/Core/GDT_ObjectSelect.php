@@ -19,13 +19,13 @@ class GDT_ObjectSelect extends GDT_Select
 	use WithObject;
 	
 	public bool $searchable = true;
-	public function searchable(bool $searchable) : self
+	public function searchable(bool $searchable): static
 	{
 		$this->searchable = $searchable;
 		return $this;
 	}
 	
-// 	public function multiple(bool $multiple=true) : self
+// 	public function multiple(bool $multiple=true): static
 // 	{
 // 		return parent::multiple($multiple);
 // 	}

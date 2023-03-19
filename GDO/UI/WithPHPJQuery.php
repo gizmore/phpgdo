@@ -51,7 +51,7 @@ trait WithPHPJQuery
 	###################
 	### CSS Classes ###
 	###################
-	public function addClass(string $class) : self
+	public function addClass(string $class): static
 	{
 		# Old classes
 		$s = ' ';
@@ -96,7 +96,7 @@ trait WithPHPJQuery
 		return $this->updateCSS();
 	}
 	
-	private function updateCSS() : self
+	private function updateCSS(): static
 	{
 		$rules = '';
 		foreach ($this->css as $key => $var)

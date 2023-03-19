@@ -19,7 +19,7 @@ class GDT_Title extends GDT_String
 {
     use WithTitle;
     
-	public function defaultLabel() : self { return $this->label('title'); }
+	public function defaultLabel(): static { return $this->label('title'); }
 	
 	public int $min = 2;
 	public int $max = 128;
@@ -46,7 +46,7 @@ class GDT_Title extends GDT_String
 		return $this->renderTitle();
 	}
 	
-	public function var(string $var = null) : self
+	public function var(string $var = null): static
 	{
 		if ($var === null)
 		{

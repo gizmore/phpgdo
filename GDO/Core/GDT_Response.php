@@ -47,7 +47,7 @@ final class GDT_Response extends GDT_Tuple
 		return $page->html($content)->renderMode(GDT::RENDER_HTML);
 	}
 	
-	public function code(int $code) : self
+	public function code(int $code): static
 	{
 		Application::$INSTANCE->setResponseCode($code);
 		return $this;

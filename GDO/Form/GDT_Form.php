@@ -73,7 +73,7 @@ final class GDT_Form extends GDT
 	### Slim ###
 	############
 	public bool $slim = false;
-	public function slim(bool $slim=true) : self
+	public function slim(bool $slim=true): static
 	{
 		$this->slim = $slim;
 		return $this;
@@ -83,12 +83,12 @@ final class GDT_Form extends GDT
 	### Focus ###
 	#############
 	public bool $focus = true;
-	public function noFocus() : self
+	public function noFocus(): static
 	{
 		return $this->focus(false);
 	}
 	
-	public function focus(bool $focus) : self
+	public function focus(bool $focus): static
 	{
 		$this->focus = $focus;
 		return $this;
@@ -240,7 +240,7 @@ final class GDT_Form extends GDT
 	############
 	### Init ###
 	############
-	public function initFromGDO(?GDO $gdo): self
+	public function initFromGDO(?GDO $gdo): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{

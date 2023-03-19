@@ -20,9 +20,10 @@ class GDT_SearchField extends GDT_String
 	public int $max = 256;
 	
 	public bool $hidden = true;
-    
-    public function getDefaultName() : string { return 'search'; }
-	public function defaultLabel() : self { return $this->label('search'); }
+
+	public function isCLIHidden(): bool { return false; }
+	public function getDefaultName() : string { return 'search'; }
+	public function defaultLabel(): static { return $this->label('search'); }
 	public function getInputType() : string { return 'search'; }
 	
     public function isSerializable() : bool { return false; }
