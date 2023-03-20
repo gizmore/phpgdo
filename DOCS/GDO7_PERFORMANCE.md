@@ -13,12 +13,10 @@ Real benchmarks are planned.
 
 However, Laravel8 was only beaten marginally in memory and CPU footprint.
 
-
 ## GDOv7 Performance: Headers
 
 Watch out for the X-GDO-TIME and X-GDO-MEM headers.
 I am aiming for 5ms pages and 2MB ram on modest complex projects/pages.
-
 
 ## GDOv7 Performance: [GDT_PerfBar](../GDO/Perf/GDT_PerfBar.php)
 
@@ -29,7 +27,6 @@ is a core module that does report this metric beside others.
 
 Here is an example CLI output of the GDT_PerfBar,
 after running all unit tests on all modules.
-
 
     $ ./gdo_test.sh
     ######################################
@@ -46,10 +43,9 @@ after running all unit tests on all modules.
     GDT_PerfBar->render() says:
     939 Log|8270 Qry|4005 Wr|5 Tr - |6.671s DB+32.514s PHP=39.186s - |68.00 MB|13200328 Func|5243 alloc - |1371 Classes|776 gdoClasses|4337(1962) GDT|65678(1531) GDO|100 mod|86 langfs
     - |610 tmpl|45 hook|0 ipc|1 mail - |199/1092 cache
-    
+
 What these values mean is discussed below.
-    
-    
+
 ## GDOv7 Performance: Module_Perf
 
 [Module_Perf](../GDO/Perf/Module_Perf.php) is a tiny core module that adds performance diagnostics. It is not enabled by default.
@@ -57,15 +53,14 @@ What these values mean is discussed below.
 The module is collecting metrics in
 [GDT_PerfBar](../GDO/Perf/GDT_PerfBar.php)
 
- - 939 Log - logfile lines have been written
- - 8270 Qry - database queries total
- - 4005 Wr - database writes
- - 5 Tr - database transactions
- - Timings and memory should be obvious
- - 13200328 Func - function calls - needs xdebug
- - 5243 Alloc - allocations, this is a bad estimation using spl_object_id(). This returns the max id, kinda stack max. It's a metric!
- - @TODO List more GDT_Perf metrics
-
+- 939 Log - logfile lines have been written
+- 8270 Qry - database queries total
+- 4005 Wr - database writes
+- 5 Tr - database transactions
+- Timings and memory should be obvious
+- 13200328 Func - function calls - needs xdebug
+- 5243 Alloc - allocations, this is a bad estimation using spl_object_id(). This returns the max id, kinda stack max. It's a metric!
+- @TODO List more GDT_Perf metrics
 
 ## GDOv7 Performance: HTTP/2.0
 

@@ -1,0 +1,105 @@
+<component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+        <option name="myName" value="Project Default"/>
+        <inspection_tool class="AnonymousFunctionJS" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES"/>
+        <inspection_tool class="CssBrowserCompatibilityForProperties" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="CssMissingSemicolon" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="DuplicateConditionJS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="DuplicatedCode" enabled="false" level="WEAK WARNING" enabled_by_default="false"/>
+        <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="FunctionNamingConventionJS" enabled="true" level="WARNING" enabled_by_default="true">
+            <option name="m_regex" value="[A-Za-z][A-Z\d_a-z]"/>
+            <option name="m_minLength" value="2"/>
+            <option name="m_maxLength" value="24"/>
+        </inspection_tool>
+        <inspection_tool class="GrazieInspection" enabled="false" level="GRAMMAR_ERROR" enabled_by_default="false"/>
+        <inspection_tool class="HtmlRequiredSummaryAttribute" enabled="true" level="INFORMATION" enabled_by_default="true"/>
+        <inspection_tool class="HtmlRequiredTitleAttribute" enabled="true" level="INFORMATION" enabled_by_default="true"/>
+        <inspection_tool class="InnerHTMLJS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="JSClassNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
+            <option name="m_regex" value="[A-Z][a-zA-Z_´\d]+"/>
+            <option name="m_minLength" value="2"/>
+            <option name="m_maxLength" value="24"/>
+        </inspection_tool>
+        <inspection_tool class="JSEqualityComparisonWithCoercion.TS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true"/>
+        <inspection_tool class="LanguageDetectionInspection" enabled="false" level="WARNING" enabled_by_default="false"/>
+        <inspection_tool class="LocalVariableNamingConventionJS" enabled="true" level="WARNING" enabled_by_default="true">
+            <option name="m_regex" value="[a-z][A-Za-z]*"/>
+            <option name="m_minLength" value="1"/>
+            <option name="m_maxLength" value="32"/>
+        </inspection_tool>
+        <inspection_tool class="NegatedConditionalExpressionJS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="NegatedIfStatementJS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="NestedConditionalExpressionJS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="NestedSwitchStatementJS" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="ParameterNamingConventionJS" enabled="true" level="WARNING" enabled_by_default="true">
+            <option name="m_regex" value="[a-z][A-Za-z]*"/>
+            <option name="m_minLength" value="1"/>
+            <option name="m_maxLength" value="32"/>
+        </inspection_tool>
+        <inspection_tool class="PhpAccessStaticViaInstanceInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpClassHasTooManyDeclaredMembersInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpClassNamingConventionInspection" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES">
+            <option name="m_regex" value="[A-Z][A-Z_a-z\d]*"/>
+            <option name="m_minLength" value="2"/>
+            <option name="m_maxLength" value="24"/>
+        </inspection_tool>
+        <inspection_tool class="PhpComplexClassInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpComplexFunctionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpConstantNamingConventionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpFunctionCyclomaticComplexityInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpFunctionNamingConventionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+            <option name="m_regex" value="[a-z][_a-zA-Z\d]*"/>
+        </inspection_tool>
+        <inspection_tool class="PhpLongTypeFormInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpMemberCanBePulledUpInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpMethodNamingConventionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpMethodOrClassCallIsNotCaseSensitiveInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpMissingBreakStatementInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false"/>
+        <inspection_tool class="PhpMissingParentConstructorInspection" enabled="false" level="WARNING" enabled_by_default="false"/>
+        <inspection_tool class="PhpMissingStrictTypesDeclarationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpMissingVisibilityInspection" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES"/>
+        <inspection_tool class="PhpModifierOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpNewClassMissingParameterListInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpNoReturnAttributeCanBeAddedInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false"/>
+        <inspection_tool class="PhpNonCanonicalElementsOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpOverridingMethodVisibilityInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpPropertyNamingConventionInspection" enabled="true" level="WARNING" enabled_by_default="true"
+                         editorAttributes="WARNING_ATTRIBUTES">
+            <option name="m_regex" value="[a-zA-Z][A-Za-z_\d]*"/>
+            <option name="m_minLength" value="2"/>
+        </inspection_tool>
+        <inspection_tool class="PhpSeparateElseIfInspection" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES"/>
+        <inspection_tool class="PhpTernaryExpressionCanBeReducedToShortVersionInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false"/>
+        <inspection_tool class="PhpTooManyParametersInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpTraditionalSyntaxArrayLiteralInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpTraitsUseListInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpUndefinedCallbackInspection" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpUndefinedConstantInspection" enabled="false" level="WARNING" enabled_by_default="false"/>
+        <inspection_tool class="PhpUnhandledExceptionInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false"/>
+        <inspection_tool class="PhpUnnecessaryDoubleQuotesInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpUnnecessarySemicolonInspection" enabled="true" level="WARNING" enabled_by_default="true"
+                         editorAttributes="WARNING_ATTRIBUTES"/>
+        <inspection_tool class="PhpUsageOfSilenceOperatorInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true"/>
+        <inspection_tool class="PhpVarUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES"/>
+        <inspection_tool class="PhpVariableNamingConventionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+            <option name="m_regex" value="[a-zA-Z][a-zA-Z_´\d]*"/>
+            <option name="m_minLength" value="1"/>
+            <option name="m_maxLength" value="12"/>
+        </inspection_tool>
+        <inspection_tool class="PhpVariableVariableInspection" enabled="true" level="TEXT ATTRIBUTES" enabled_by_default="true"
+                         editorAttributes="CONSIDERATION_ATTRIBUTES"/>
+        <inspection_tool class="RegExpAnonymousGroup" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+            <option name="processCode" value="true"/>
+            <option name="processLiterals" value="true"/>
+            <option name="processComments" value="true"/>
+        </inspection_tool>
+        <inspection_tool class="SqlGotoInspection" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="SqlMissingColumnAliasesInspection" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="SqlNamedArgumentsInspection" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="TsLint" enabled="true" level="WARNING" enabled_by_default="true"/>
+        <inspection_tool class="UnusedDefine" enabled="true" level="WARNING" enabled_by_default="true"/>
+    </profile>
+</component>

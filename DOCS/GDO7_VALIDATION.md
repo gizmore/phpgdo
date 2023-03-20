@@ -21,7 +21,6 @@ Simply because the inheritance is smart, the validation is flexible and with onl
 Always funny to hazzle how to validate your email today?
 [GDT_Email](../) is a nice example to show the ease of GDOv7.
 
-
 ## GDOv7 Validation: Customized
 
 In some cases you really have to write a validator.

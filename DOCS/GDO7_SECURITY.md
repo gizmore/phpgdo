@@ -7,7 +7,6 @@ GDOv7 does it's best to protect your GDO ecosystem...
 
 [SECURITY.md](./SECURITY.md)
 
-
 ## GDOv7 SECURITY: PHP
 
 PHP changed a lot the past years and got more secure defaults.
@@ -21,12 +20,6 @@ The passwords use bcrypt as their hash,
 and some salt and pepper to keep the GPUs busy.
 Every request should and can be piped through GDO to enforce ACL on every single file.
 
-
 ## GDOv7 SECURITY: Javascript
 
-
-
-
 ## GDOv7 SECURITY: Dependencies
-
-

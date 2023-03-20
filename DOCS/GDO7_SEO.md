@@ -4,12 +4,10 @@ We shall enforce aria and accessibility accross every component.
 Javascript shall only enrich oldstyle components.
 Automated tests shall point out weak titles and descriptions.
 
-
 ## GDOv7 SEO: SEO URLs
 
 SEO urls are automagically generated.
 It is planned to have an additional canoncial link mapper module.
-
 
 ## GDOv7 SEO: SEO URL generation
 

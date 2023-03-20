@@ -1,8 +1,12 @@
 # GDOv7 Core: modules and functionality
 
-GDOv7 comes with a slim kernel. Basic things are hopefully done right, like timezones, foreign keys, emoticons, input validation, expression parsing, etc.
-GDOv7 is highly modular and quick dirty slim. There is no big asset pipeline, just the F5 toolchain to the max.
-
+GDOv7 comes with a slim kernel.
+Basic things are hopefully done right,
+like timezones, foreign keys, emoticons,
+input validation, expression parsing, etc.
+GDOv7 is highly modular and quick dirty slim.
+There is no big asset pipeline,
+just an **F5 toolchain**, optimized for maximum performance and productivity.
 
 ## List of GDOv7 core modules
 
@@ -16,23 +20,33 @@ the performance metric module, is not a core dependency.
 Module code can be used without the need of installation,
 but of course this is rather pointless.
 
+List of all shipped modules in the core repository.
+**Required** and always installed core modules are bolded.
 
-List of all the modules in this repository,
-required Core modules are checked.
+- [Admin](../GDO/Admin/Module_Admin.php) (*optional*)
+- [CLI](../GDO/CLI/Module_CLI.php) (*optional*)
+- [**Core**](../GDO/Core/Module_Core.php)
+- [Cronjob](../GDO/Cronjob/Module_Cronjob.php) (*optional*)
+- [Crypto](../GDO/Crypto/Module_Crypto.php) (*optional*)
+- [**Date**](../GDO/Date/Module_Date.php)
+- DB (no module) (**required**)
+- Form
+- Install (not installable)
+- Language
+- Net
+- Perf
+- Table
+- Tests (not installable)
+- UI
+- User
+- Util (no module)
 
- - Crypto
- [x] Date
- [x] DB
- [x] Form
- - Install
- [x] Language
- - Net
- - Perf
- - PHPInfo
- [x] Table
- - Tests
- [x] UI
- [x] User
- 
+----
+
+### GDOv7 core modules: Core
+
+### GDOv7 core modules: Date
+
+### GDOv7 core modules: F
 
 ### GDOv7 core modules: Date

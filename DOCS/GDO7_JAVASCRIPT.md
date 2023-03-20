@@ -2,7 +2,6 @@
 
 This is a guideline and documentation for Javascript in GDOv7.
 
-
 ## GDOv7 Javascript: Asset Pipeline
 
 GDOv7 does not have an asset pipeline.
@@ -21,6 +20,5 @@ Which is way better as what other frameworks do *by design* to aid you.
 
 By the way, the same process, and F5 toolchain, also exists for
 [CSS](https://github.com/gizmore/phpgdo-css).
-
 
 ## GDOv7 Javascript: Guideline

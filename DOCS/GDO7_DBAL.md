@@ -6,7 +6,6 @@ This page is a hail to the
 [Abstraction]()
 [Layer]()
 
-
 I am very proud of it. Really.
 
 Using GDO is way faster and easier than writing SQL by hand,
@@ -22,21 +21,19 @@ and simply do `joinObject()` it, when you need it in the query scope.
 Another thing is, often you have to write a special query anyway.
 Decorating models with reflection is totally non-sense!
 
-
-# GDOv7 DBAL: Engine Codebase 
+# GDOv7 DBAL: Engine Codebase
 
 The GDO DBA consists of the [Module_DB](../GDO/DB) files as well as the [GDO](../GDO/Core/GDO.php) class.
 In summary:
 
- - [GDO.php](../GDO/Core/GDO.php) (Main DBAL Logic)
- - [GDT.php](../GDO/Core/GDO.php) (Main DBAL Logic)
- - [Cache.php](../GDO/DB/Cache.php) (All caches)
- - [Database.php](../GDO/DB/Database.php) (Connection interface)
- - [Query.php](../GDO/DB/Query.php) (Query Builder)
- - [Result.php](../GDO/DB/Result.php) (Result Set)
- - [ArrayResult.php](../GDO/DB/ArrayResult.php) (Result Set, manually filled)
- 
- 
+- [GDO.php](../GDO/Core/GDO.php) (Main DBAL Logic)
+- [GDT.php](../GDO/Core/GDO.php) (Main DBAL Logic)
+- [Cache.php](../GDO/DB/Cache.php) (All caches)
+- [Database.php](../GDO/DB/Database.php) (Connection interface)
+- [Query.php](../GDO/DB/Query.php) (Query Builder)
+- [Result.php](../GDO/DB/Result.php) (Result Set)
+- [ArrayResult.php](../GDO/DB/ArrayResult.php) (Result Set, manually filled)
+
 # GDOv7 DBAL: Column GDTs
 
 In GDOv7, almost everything is a Gizmore Data Type, even GDOs.
@@ -45,7 +42,6 @@ You can plug any Type inside your GDO table,
 and get a lot of repetetive work done by your own datatypes.
 
 Validation has never been *dry* easier.
-
 
 ## GDOv7 DBAL: IDs
 
@@ -56,7 +52,6 @@ Maybe look at the implementation of
 [GDT_AutoInc](../GDO/Core/GDT_AutoInc.php) and
 [GDT_Char](../GDO/Core/GDT_Char.php).
 
-
 ## GDOv7 DBAL: Migrations
 
 I bet you don't like writing migrations much.
@@ -66,7 +61,8 @@ Return an array of GDT in all flavours and combinations. That's it.
 Changed your DB layout?
 GDOv7 got you covered by changing the DB layout on the fly with a single click.
 Admitted, this is quite risky and may be not the best technique to manage DB migrations, but for me it works great!
-Background info: In an auto-migration the table is **exported**, **dropped** and then **re-imported** to avoida any hackery with SQL. The auto migration code for mysql is around 100 lines.
+Background info: In an auto-migration the table is **exported**, **dropped** and then **re-imported** to avoida any hackery with SQL. The auto migration code
+for mysql is around 100 lines.
 Works charmy!
 But it probably is slow and too risky in real production environments.
 
@@ -81,7 +77,6 @@ It simply knows how to join your relations.
 The default cascades are deleting, but with cascadeRestrict() your biggest worries are over.
 Of course the many foreign keys are performance hungry.
 
-
 ## GDOv7 DBAL: Transactions
 
 In GDOv7, when using InnoDB as the `GDO_DB_ENGINE`,
@@ -90,45 +85,41 @@ But only when you are doing a *POST*, **and** the method wants it.
 [MethodForm](../GDO/Form/MethodForm.php)
 should be the only generic Method that behaves like this.
 
-
 ## GDOv7 DBAL: GDO examples
 
 I would not be unhappy, if someone would issue a few problems,
 so let's get to work with some examples.
 
-
 1) Get a user by name
 
-    GDO_User::table()->select() # Select * from gdo_user
-    ->where('user_name="gizmore"') # Add Where condition
-    ->first() # Short for ->limit(0, 1) # Still building Query object
-    ->exec() # Get Result object from Query object
-    ->fetchObject() # Result fetches GDO_User object
-    
+   GDO_User::table()->select() # Select * from gdo_user
+   ->where('user_name="gizmore"') # Add Where condition
+   ->first() # Short for ->limit(0, 1) # Still building Query object
+   ->exec() # Get Result object from Query object
+   ->fetchObject() # Result fetches GDO_User object
+
 
 2) Select all users of a group by group name
 
-    GDO_UserPermission::table()->select('perm_user_id_t.*') # Select only  GDO_User columns. Query the permission relation table.
-    ->joinObject('perm_user_id') # Join the user table. perm_user_id is the column that references the user table. it is automatically joined as perm_user_id_t
-    ->joinObject('perm_perm_id') # Join the permission table, so we can query permissions by name, not by id.
-    ->where('perm_name="admin"') # Select all admins :)
-    ->exec() # execute the query and get a Result
-    ->fetchTable(GDO_User::table()) # Set result fetch class to GDO_User. Else it would fetch GDO_UserPermission objects.
-    ->fetchAllObjects() # get an array of GDO_User objects
-    
+   GDO_UserPermission::table()->select('perm_user_id_t.*') # Select only GDO_User columns. Query the permission relation table.
+   ->joinObject('perm_user_id') # Join the user table. perm_user_id is the column that references the user table. it is automatically joined as perm_user_id_t
+   ->joinObject('perm_perm_id') # Join the permission table, so we can query permissions by name, not by id.
+   ->where('perm_name="admin"') # Select all admins :)
+   ->exec() # execute the query and get a Result
+   ->fetchTable(GDO_User::table()) # Set result fetch class to GDO_User. Else it would fetch GDO_UserPermission objects.
+   ->fetchAllObjects() # get an array of GDO_User objects
+
 
 3) A union select
 
-    $query1 = GDO_User::table()->where('user_type="member"'); #simple query 1
-    $query2 = GDO_User::table()->where('user_type="guest"'); # simple query 2
-    $query1->union($query2)->exec()->fetchAll(); # Use union to merge the two queries.
-
+   $query1 = GDO_User::table()->where('user_type="member"'); #simple query 1
+   $query2 = GDO_User::table()->where('user_type="guest"'); # simple query 2
+   $query1->union($query2)->exec()->fetchAll(); # Use union to merge the two queries.
 
 ## GDOv7 DBAL: GDO vs. Eloquent
 
- - also does allow composite primary keys.
- - Eloquent seems harder to learn
-
+- also does allow composite primary keys.
+- Eloquent seems harder to learn
 
 ## GDOv7 DBAL: Drawbacks
 
@@ -158,4 +149,3 @@ examples.
 Read on!
 
 - (c)2023 gizmore 
- 
