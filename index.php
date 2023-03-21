@@ -1,30 +1,31 @@
 <?php
-use GDO\DB\Database;
-use GDO\Core\GDT;
-use GDO\Core\Logger;
-use GDO\Core\Debug;
+
+use GDO\CLI\CLI;
 use GDO\Core\Application;
-use GDO\Core\Method;
-use GDO\Core\ModuleLoader;
-use GDO\Language\Trans;
-use GDO\Session\GDO_Session;
-use GDO\User\GDO_User;
-use GDO\DB\Cache;
-use GDO\Language\Module_Language;
+use GDO\Core\Debug;
+use GDO\Core\GDO_SEO_URL;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Method;
+use GDO\Core\GDT_Response;
+use GDO\Core\Logger;
+use GDO\Core\Method;
 use GDO\Core\Method\DirectoryIndex;
+use GDO\Core\Method\Error;
 use GDO\Core\Method\FileNotFound;
 use GDO\Core\Method\Fileserver;
 use GDO\Core\Method\ForceSSL;
-use GDO\Core\Method\SeoProxy;
 use GDO\Core\Method\NotAllowed;
-use GDO\Core\Method\Error;
-use GDO\Core\GDT_Response;
+use GDO\Core\Method\SeoProxy;
+use GDO\Core\ModuleLoader;
+use GDO\DB\Cache;
+use GDO\DB\Database;
+use GDO\Language\Module_Language;
+use GDO\Language\Trans;
+use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Error;
 use GDO\UI\GDT_HTML;
 use GDO\UI\GDT_Page;
-use GDO\CLI\CLI;
-use GDO\Core\GDO_SEO_URL;
+use GDO\User\GDO_User;
 
 /**
  * @var $me Method
@@ -32,10 +33,10 @@ use GDO\Core\GDO_SEO_URL;
 global $me; # one of the very few globals, required a lot in index.
 /**
  * GDOv7 - The best PHP Framework in the solar system. Really!
- * 
- * @author gizmore@wechall.net
+ *
  * @version 7.0.2
  * @since 1.0.0
+ * @author gizmore@wechall.net
  */
 # Really, the first thing we do is measure performance :)
 # Go Go Go GDOv7!
@@ -72,7 +73,7 @@ if ($app->hasSession())
 	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 	$session = GDO_Session::instance();
 }
-$loader->initModules();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+$loader->initModules();    # @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 $user = GDO_User::current();
 Logger::init($user->getName(), GDO_ERROR_LEVEL);
 # First convert the response to readable.
@@ -88,7 +89,7 @@ if (GDO_LOG_REQUEST)
 #
 # HTTP Method. Deny anything not supported.
 #
-$rqmethod = (string) @$_SERVER['REQUEST_METHOD'];
+$rqmethod = (string)@$_SERVER['REQUEST_METHOD'];
 if (!in_array($rqmethod, ['GET', 'POST', 'HEAD', 'OPTIONS'], true))
 {
 	$me = NotAllowed::make(); # early setting of method.
@@ -106,7 +107,7 @@ else
 	$iso = Module_Language::instance()->detectISO();
 }
 Trans::setISO($iso);
-$loader->loadLangFiles();	# @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+$loader->loadLangFiles();    # @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 #
 # Remember GET/POST HTTP verb.
@@ -114,7 +115,7 @@ define('GDO_CORE_STABLE', true); # all fine? @deprecated
 $app->verb(strtolower($_SERVER['REQUEST_METHOD']));
 #
 # Detect Content Type and set application render mode.
-# 
+#
 if (isset($_REQUEST['_fmt']))
 {
 	$mode = $app->detectRenderMode((string)@$_REQUEST['_fmt']);
@@ -133,7 +134,7 @@ $app->modeDetected($mode); # set detected mode.
 # index.php is called directly.
 # Read $_GET _mo/_me
 #
-function gdoRouteMoMe(string $mo, string $me) : Method
+function gdoRouteMoMe(string $mo, string $me): Method
 {
 	if ($mo)
 	{
@@ -178,7 +179,7 @@ function gdoRouteMoMe(string $mo, string $me) : Method
 	return $method;
 }
 
-if (GDO_FORCE_SSL && (!Application::$INSTANCE->isTLS()) )
+if (GDO_FORCE_SSL && (!Application::$INSTANCE->isTLS()))
 {
 	$me = ForceSSL::make();
 }
@@ -189,7 +190,7 @@ elseif (!isset($_REQUEST['_url']) || empty($_REQUEST['_url']))
 else
 {
 	# Wrap url
-	$url = (string) @$_REQUEST['_url'];
+	$url = (string)@$_REQUEST['_url'];
 	$url = $url ? "/{$url}" : '/index.html';
 	$_REQUEST['url'] = $url;
 	$url2 = ltrim($url, '/');
@@ -264,7 +265,7 @@ try
 	{
 		$result = GDT_HTML::make()->var($result);
 	}
-	
+
 	if ($app->isError())
 	{
 		if ($app->isAPI())
@@ -277,7 +278,7 @@ try
 		}
 	}
 }
-catch (\Throwable $t)
+catch (Throwable $t)
 {
 	# Send mail
 	Debug::debugException($t, false);

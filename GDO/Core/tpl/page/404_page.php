@@ -1,8 +1,10 @@
 <?php
 namespace GDO\Core\tpl\page;
+
 use GDO\Net\URL;
 use GDO\UI\GDT_Error;
 use GDO\UI\TextStyle;
+
 /**
  * @var $url URL
  */

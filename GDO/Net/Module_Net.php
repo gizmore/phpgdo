@@ -7,9 +7,9 @@ use GDO\Core\GDO_SEO_URL;
 /**
  * Network related stuff.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 6.11.0
+ * @author gizmore
  */
 final class Module_Net extends GDO_Module
 {

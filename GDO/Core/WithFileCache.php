@@ -8,57 +8,31 @@ use GDO\UI\GDT_HTML;
 /**
  * This method decorator adds file cache behaviour to a method.
  * File cache key is generated from all Method::gdoParameterCache()
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 7.0.1
+ * @author gizmore
  * @see Cache
  * @see Method
  */
 trait WithFileCache
 {
+
 	public int $fileCacheExpire = GDO_MEMCACHE_TTL;
-	
-	public function fileCacheExpire(int $expire): static
+
+	public function fileCacheExpire(int $expire): self
 	{
 		$this->fileCacheExpire = $expire;
 		return $this;
 	}
-	
-	/**
-	 * The filecache is unique for any parameter combination,
-	 * including language and rendering mode.
-	 */
-	protected function fileCacheKey(): string
-	{
-		$sep = ';';
-		$key = $this->getModuleName();
-		$key .= $sep;
-		$key .= $this->getMethodName();
-		$key .= $sep;
-		$key .= Trans::$ISO;
-		$key .= $sep;
-		$key .= Application::$MODE;
-		foreach ($this->gdoParameterCache() as $gdt)
-		{
-			$key .= $sep;
-			$key .= $gdt->getVar();
-		}
-		return $key;
-	}
-	
-	protected function isFileCacheEnabled() : bool
-	{
-		return true;
-	}
-	
+
 	protected function executeB()
 	{
 		if (!$this->isFileCacheEnabled())
 		{
 			return $this->execute();
 		}
-		
+
 		$key = $this->fileCacheKey();
 		if ($content = Cache::fileGetSerialized($key, $this->fileCacheExpire))
 		{
@@ -89,5 +63,32 @@ trait WithFileCache
 			return $result;
 		}
 	}
-	
+
+	protected function isFileCacheEnabled(): bool
+	{
+		return true;
+	}
+
+	/**
+	 * The filecache is unique for any parameter combination,
+	 * including language and rendering mode.
+	 */
+	protected function fileCacheKey(): string
+	{
+		$sep = ';';
+		$key = $this->getModuleName();
+		$key .= $sep;
+		$key .= $this->getMethodName();
+		$key .= $sep;
+		$key .= Trans::$ISO;
+		$key .= $sep;
+		$key .= Application::$MODE;
+		foreach ($this->gdoParameterCache() as $gdt)
+		{
+			$key .= $sep;
+			$key .= $gdt->getVar();
+		}
+		return $key;
+	}
+
 }

@@ -1,28 +1,43 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\WithName;
 use GDO\Core\Application;
 use GDO\Core\GDT;
+use GDO\Core\WithName;
 use GDO\Language\Trans;
 
 /**
  * Add label fields to a GDT.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 5.0.1
+ * @author gizmore
  */
 trait WithLabel
 {
+
 	use WithName;
-	
-	public static function make(string $name = null): static
+
+	private static string $requiredIcon;
+	public bool $labelNone = true;
+
+	############
+	### Star ###
+	############
+	public string $labelRaw;
+	public string $labelKey;
+
+	#############
+	### Label ###
+	#############
+	public ?array $labelArgs = null;
+
+	public static function make(string $name = null): self
 	{
 		return self::makeWithLabel($name);
 	}
-	
-	public static function makeWithLabel(string $name = null): static
+
+	public static function makeWithLabel(string $name = null): self
 	{
 		$obj = self::makeNamed($name);
 		if ($name = $obj->getName())
@@ -42,29 +57,16 @@ trait WithLabel
 		}
 		return $obj;
 	}
-	
-	############
-	### Star ###
-	############
-	private static string $requiredIcon;
-	public static function renderRequiredIcon() : string
+
+	public function label(string $key, array $args = null): self
 	{
-		if (!isset(self::$requiredIcon))
-		{
-			self::$requiredIcon = '<span class="gdt-required">'.GDT_Icon::iconS('required', t('required')).'</span>';
-		}
-		return self::$requiredIcon;
+		unset($this->labelRaw);
+		$this->labelKey = $key;
+		$this->labelArgs = $args;
+		return $this->labelNone(false);
 	}
-	
-	#############
-	### Label ###
-	#############
-	public bool   $labelNone = true;
-	public string $labelRaw;
-	public string $labelKey;
-	public ?array $labelArgs = null;
-	
-	public function labelNone(bool $none = true): static
+
+	public function labelNone(bool $none = true): self
 	{
 		$this->labelNone = $none;
 		if ($none)
@@ -75,41 +77,11 @@ trait WithLabel
 		}
 		return $this;
 	}
-	
-	public function label(string $key, array $args = null): static
-	{
-		unset($this->labelRaw);
-		$this->labelKey = $key;
-		$this->labelArgs = $args;
-		return $this->labelNone(false);
-	}
-	
-	public function labelArgs(...$args): static
-	{
-		$this->labelArgs = $args;
-		return $this;
-	}
-	
-	public function labelRaw(string $label): static
-	{
-		$this->labelRaw = $label;
-		unset($this->labelKey);
-		$this->labelArgs = null;
-		return $this->labelNone(false);
-	}
-	
-	public function hasLabel() : bool
-	{
-		return !$this->labelNone;
-	}
-	
-	##############
-	### Render ###
-	##############
+
 	/**
 	 * The label is the label text with the required star asterisk.
 	 */
-	public function renderLabel() : string
+	public function renderLabel(): string
 	{
 		$text = $this->renderLabelText();
 		if (Application::$MODE === GDT::RENDER_FORM)
@@ -118,10 +90,10 @@ trait WithLabel
 		}
 		return $text;
 	}
-	
+
 	/**
 	 */
-	public function renderLabelText() : string
+	public function renderLabelText(): string
 	{
 		if ($this->labelNone)
 		{
@@ -141,33 +113,67 @@ trait WithLabel
 		}
 		return GDT::EMPTY_STRING;
 	}
-	
+
 	/**
 	 * Display the *required* asterisk sign.
 	 */
-	private function charRequired() : string
+	private function charRequired(): string
 	{
 		return (isset($this->notNull) && ($this->notNull)) ?
 			self::renderRequiredIcon() : GDT::EMPTY_STRING;
 	}
-	
-	############
-	### HTML ###
-	############
-	/**
-	 * HTML string: for="id" 
-	 */
-	public function htmlForID() : string
+
+	public static function renderRequiredIcon(): string
 	{
-		return " for=\"{$this->getName()}\"";
+		if (!isset(self::$requiredIcon))
+		{
+			self::$requiredIcon = '<span class="gdt-required">' . GDT_Icon::iconS('required', t('required')) . '</span>';
+		}
+		return self::$requiredIcon;
 	}
 
 	##############
 	### Render ###
 	##############
-	public function renderTHead() : string
+
+	public function renderTHead(): string
 	{
 		return $this->renderLabelText();
 	}
-	
+
+	public function labelArgs(...$args): self
+	{
+		$this->labelArgs = $args;
+		return $this;
+	}
+
+	public function labelRaw(string $label): self
+	{
+		$this->labelRaw = $label;
+		unset($this->labelKey);
+		$this->labelArgs = null;
+		return $this->labelNone(false);
+	}
+
+	############
+	### HTML ###
+	############
+
+	public function hasLabel(): bool
+	{
+		return !$this->labelNone;
+	}
+
+	##############
+	### Render ###
+	##############
+
+	/**
+	 * HTML string: for="id"
+	 */
+	public function htmlForID(): string
+	{
+		return " for=\"{$this->getName()}\"";
+	}
+
 }

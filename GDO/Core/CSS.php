@@ -6,35 +6,36 @@ use GDO\CSS\Minifier;
 /**
  * CSS asset storage.
  * Can be given to CSSMinify for asset minification.
- * 
- * @author gizmore
+ *
  * @version 7.0.0
  * @since 7.0.0
+ * @author gizmore
  */
 final class CSS
 {
+
 	public static string $INLINE = '';
 	public static array $FILES = [];
 	public static array $EXTERNAL = [];
-	
-	public static function addFile(string $path) : void
+
+	public static function addFile(string $path): void
 	{
 		self::$FILES[] = $path;
 	}
-	
-	public static function addExternalFile(string $path) : void
+
+	public static function addExternalFile(string $path): void
 	{
 		self::$EXTERNAL[] = $path;
 	}
-	
-	public static function addInline(string $css) : void
+
+	public static function addInline(string $css): void
 	{
 		if ($css)
 		{
 			self::$INLINE .= $css . "\n";
 		}
 	}
-	
+
 	public static function render()
 	{
 		# Let module CSS handle it
@@ -42,7 +43,7 @@ final class CSS
 		{
 			return Minifier::renderMinified();
 		}
-		
+
 		# Render original basics
 		$back = '';
 		foreach (self::$FILES as $path)

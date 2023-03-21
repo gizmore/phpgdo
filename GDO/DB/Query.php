@@ -2,24 +2,24 @@
 namespace GDO\DB;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_Error;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Join;
 use GDO\Core\GDT_Object;
 use GDO\Core\GDT_ObjectSelect;
 use GDO\Core\Logger;
-use GDO\Core\GDO_Error;
-use GDO\Core\GDT;
 
 /**
  * GDO Query Builder.
  * Is it SQL compliant? I have no clue :)
  * Part of the GDO DBAL code.
  * You should use GDO Classes to create queries.
- * 
- * @example GDO_User::table()->select()->execute()->fetchAll();
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 5.0.0
+ * @example GDO_User::table()->select()->execute()->fetchAll();
+ *
+ * @author gizmore
  * @see GDO
  * @see Cache
  * @see Result
@@ -27,22 +27,29 @@ use GDO\Core\GDT;
  */
 final class Query
 {
+
 	# Type constants
-	const RAW = 0;
-	const SELECT = 1;
-	const INSERT = 2;
-	const REPLACE = 3;
-	const UPDATE = 4;
-	const DELETE = 5;
-	const INSERT_OR_UPDATE = 6;
-	
+	public const RAW = 0;
+	public const SELECT = 1;
+	public const INSERT = 2;
+	public const REPLACE = 3;
+	public const UPDATE = 4;
+	public const DELETE = 5;
+	public const INSERT_OR_UPDATE = 6;
+
 	/**
 	 * The fetch into object gdo table / final class.
 	 */
 	public GDO $table;
 	public GDO $fetchTable;
-	
+
 	# query parts
+	public ?array $order = null;
+	public ?array $values = null;
+	public ?array $nonPKValues = null;
+	public bool $buffered = true;
+	public bool $debug = false;
+	public ?self $union = null;
 	private ?string $columns = null;
 	private ?string $where = null;
 	private ?string $join = null;
@@ -50,150 +57,160 @@ final class Query
 	private ?string $having = null;
 	private ?string $from = null;
 	private int $type = self::RAW;
-	private ?string $set = null;
-	public  ?array  $order = null;
-	public  ?array  $values = null;
-	public  ?array  $nonPKValues = null;
+	private ?string $set = null; # Is it a write query?
 	private ?string $limit = null;
 	private ?string $raw = null;
-	private bool $write = false; # Is it a write query?
+	private bool $write = false;
 	private bool $cached = true;
-	public  bool $buffered = true;
-	public  bool $debug = false;
-	public  ?self $union = null;
-	
+	/**
+	 *
+	 * @var array
+	 */
+	private array $joinedObjects = [];
+
+	#############
+	### Cache ###
+	#############
+
 	public function __construct(GDO $table)
 	{
 		$this->table = $table;
 		$this->fetchTable = $table;
 	}
-	
-	#############
-	### Cache ###
-	#############
+
 	/**
 	 * Use this to avoid using the GDO cache. This means the memcache might be still used? This means no single identity?
-	 * @return \GDO\DB\Query
+	 *
+	 * @return Query
 	 */
-	public function uncached(): static { return $this->cached(false); }
-	public function cached(bool $cached=true): static { $this->cached = $cached; return $this; }
+	public function uncached(): self { return $this->cached(false); }
+
+	public function cached(bool $cached = true): self
+	{
+		$this->cached = $cached;
+		return $this;
+	}
+
+	public function unbuffered(): self
+	{
+		return $this->buffered(false);
+	}
+
+	#############
+	### Debug ###
+	#############
 
 	/**
 	 * Mark this query's buffered mode.
 	 */
-	public function buffered(bool $buffered): static
+	public function buffered(bool $buffered): self
 	{
-	    $this->buffered = $buffered;
-	    return $this;
+		$this->buffered = $buffered;
+		return $this;
 	}
-	
-	public function unbuffered(): static
-	{
-	    return $this->buffered(false);
-	}
-	
+
 	#############
-	### Debug ###
+	### Clone ###
 	#############
+
 	/**
 	 * Enable logging and verbose output.
 	 */
-	public function debug($debug=true): static
+	public function debug($debug = true): self
 	{
 		$this->debug = $debug;
 		return $this;
 	}
-	
-	#############
-	### Clone ###
-	#############
+
 	/**
 	 * Copy this query.
+	 *
 	 * @return self
 	 */
-	public function copy(): static
+	public function copy(): self
 	{
 		$clone = new self($this->table);
 		if (isset($this->raw))
 		{
-		    $clone->raw = $this->raw;
+			$clone->raw = $this->raw;
 		}
 		else
 		{
 // 			$clone->table = $this->fetchTable;
 			$clone->fetchTable = $this->fetchTable;
 			$clone->type = $this->type;
-    		$clone->columns = $this->columns;
-    		$clone->from = $this->from;
-    		$clone->where = $this->where;
-   			$clone->join = $this->join;
-    		$clone->joinedObjects = $this->joinedObjects;
-    		$clone->group = $this->group;
-    		$clone->having = $this->having;
-            $clone->order = $this->order;
-            $clone->limit = $this->limit;
-    		$clone->from = $this->from;
-    		$clone->write = $this->write;
+			$clone->columns = $this->columns;
+			$clone->from = $this->from;
+			$clone->where = $this->where;
+			$clone->join = $this->join;
+			$clone->joinedObjects = $this->joinedObjects;
+			$clone->group = $this->group;
+			$clone->having = $this->having;
+			$clone->order = $this->order;
+			$clone->limit = $this->limit;
+			$clone->from = $this->from;
+			$clone->write = $this->write;
 //     		$clone->debug = $this->debug; # not cool to copy
-    		$clone->cached = $this->cached;
-    		return $clone;
+			$clone->cached = $this->cached;
+			return $clone;
 		}
 	}
-	
+
 	/**
 	 * Specify which GDO class is used for fetching. @TODO Rename function.
 	 */
-	public function fetchTable(GDO $fetchTable): static
+	public function fetchTable(GDO $fetchTable): self
 	{
 		$this->fetchTable = $fetchTable;
 		return $this;
 	}
-	
-	public function update(string $tableName): static
+
+	public function update(string $tableName): self
 	{
 		$this->type = self::UPDATE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
-	
-	public function insert(string $tableName): static
+
+	public function from(string $tableName): self
+	{
+		$this->from = isset($this->from) ? $this->from . ", $tableName" : $tableName;
+		return $this;
+	}
+
+	public function insert(string $tableName): self
 	{
 		$this->type = self::INSERT;
 		$this->write = true;
 		return $this->from($tableName);
 	}
 
-	public function softReplace(string $tableName): static
+	public function softReplace(string $tableName): self
 	{
 		$this->type = self::INSERT_OR_UPDATE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
-	
-	public function replace(string $tableName): static
+
+	public function replace(string $tableName): self
 	{
 		$this->type = self::REPLACE;
 		$this->write = true;
 		return $this->from($tableName);
 	}
-	
-	public function where(string $condition, string $op="AND"): static
+
+	public function orWhere($condition): self
+	{
+		return $this->where($condition, 'OR');
+	}
+
+	public function where(string $condition, string $op = 'AND'): self
 	{
 		$this->where = isset($this->where) ? $this->where . " $op ($condition)" : "($condition)";
 		return $this;
 	}
-	
-	public function orWhere($condition): static
-	{
-		return $this->where($condition, 'OR');
-	}
-	
-	public function getWhere() : string
-	{
-		return isset($this->where) ? " WHERE {$this->where}" : "";
-	}
-	
-	public function having(string $condition, string $op="AND"): static
+
+	public function having(string $condition, string $op = 'AND'): self
 	{
 		if (isset($this->having))
 		{
@@ -201,136 +218,112 @@ final class Query
 		}
 		else
 		{
-			$this->having= "($condition)";
+			$this->having = "($condition)";
 		}
 		return $this;
 	}
-	
-	public function getHaving() : string
-	{
-		return isset($this->having) ? " HAVING {$this->having}" : "";
-	}
-	
-	public function from(string $tableName): static
-	{
-		$this->from = isset($this->from) ? $this->from . ", $tableName" : $tableName;
-		return $this;
-	}
-	
-	public function onlyFrom(string $tableName): static
-	{
-		$this->from = $tableName;
-		return $this;
-	}
-	
-	public function fromSelf(): static
+
+	public function fromSelf(): self
 	{
 		return $this->from($this->table->gdoTableIdentifier());
 	}
-	
-	public function getFrom() : string
+
+	/**
+	 * Select a field as first column in query.
+	 * Useful to build count queries out of filtered tables etc.
+	 *
+	 * @param string $columns
+	 *
+	 * @return self
+	 */
+	public function selectAtFirst(string $columns = 'COUNT(*)'): self
 	{
-		return isset($this->from) ? " {$this->from}" : "";
+		if ($columns)
+		{
+			$this->columns = isset($this->columns) ?
+				" {$columns}, {$this->columns}" : " $columns";
+		}
+		return $this;
 	}
-	
+
+	/**
+	 * Continue to build a select but reset columns.
+	 * This may be useful in pagination queries.
+	 *
+	 * @param string $columns
+	 *
+	 * @return self
+	 */
+	public function selectOnly(string $columns = null): self
+	{
+		unset($this->columns);
+		return $this->select($columns);
+	}
+
 	/**
 	 * Build a select.
 	 */
-	public function select(string $columns=null): static
+	public function select(string $columns = null): self
 	{
 		$this->type = self::SELECT;
 		if ($columns) # ignore empty
 		{
-			$this->columns = isset($this->columns) ? 
+			$this->columns = isset($this->columns) ?
 				"{$this->columns}, $columns" :
 				" $columns";
 		}
 		return $this;
 	}
-	
+
+	public function noLimit(): self
+	{
+		unset($this->limit);
+		return $this;
+	}
+
 	/**
-	 * Select a field as first column in query.
-	 * Useful to build count queries out of filtered tables etc.
-	 * @param string $columns
+	 * Limit results to one.
+	 *
 	 * @return self
 	 */
-	public function selectAtFirst(string $columns="COUNT(*)"): static
+	public function first(): self
 	{
-	    if ($columns)
-	    {
-	        $this->columns = isset($this->columns) ? 
-	           " {$columns}, {$this->columns}" : " $columns";
-	    }
-	    return $this;
+		return $this->limit(1);
 	}
-	
-	/**
-	 * Continue to build a select but reset columns.
-	 * This may be useful in pagination queries.
-	 * 
-	 * @param string $columns
-	 * @return self
-	 */
-	public function selectOnly(string $columns=null): static
-	{
-		unset($this->columns);
-	    return $this->select($columns);
-	}
-	
+
 	/**
 	 * @param int $count
 	 * @param int $start
+	 *
 	 * @return self
 	 */
-	public function limit(int $count, int $start=0): static
+	public function limit(int $count, int $start = 0): self
 	{
 		$this->limit = " LIMIT {$start}, {$count}";
 		return $this;
 	}
-	
-	public function noLimit(): static
-	{
-	    unset($this->limit);
-	    return $this;
-	}
-	
-	/**
-	 * Limit results to one.
-	 * @return self
-	 */
-	public function first(): static
-	{
-		return $this->limit(1);
-	}
-		
-	public function getLimit() : string
-	{
-		return isset($this->limit) ? $this->limit : '';
-	}
-	
-	public function getSelect() : string
-	{
-		return $this->write ? '' : ($this->getSelectColumns() . ' FROM');
-	}
-	
-	private function getSelectColumns() : string
-	{
-		return isset($this->columns) ? $this->columns : ' *';
-	}
-	
-	public function delete(string $tableName): static
+
+	public function delete(string $tableName): self
 	{
 		$this->type = self::DELETE;
 		$this->write = true;
 		return $this->onlyFrom($tableName);
 	}
-	
+
+	public function onlyFrom(string $tableName): self
+	{
+		$this->from = $tableName;
+		return $this;
+	}
+
 	/**
 	 * Build part of the SET clause.
+	 *
 	 * @param string $set
+	 *
 	 * @return self
 	 */
-	public function set(string $set): static
+	public function set(string $set): self
 	{
 		if (isset($this->set))
 		{
@@ -342,47 +335,90 @@ final class Query
 		}
 		return $this;
 	}
-	
-	public function getSet() : string
-	{
-		return isset($this->set) ? " SET {$this->set}" : "";
-	}
 
-	
-	public function noOrder(): static
+	public function noOrder(): self
 	{
-	    unset($this->order);
-	    return $this;
-	}
-	
-	/**
-	 * Order clause.
-	 * @param string $order
-	 * @return self
-	 */
-	public function order(string $order=null): static
-	{
-		if ($order)
-		{
-		    if (!isset($this->order))
-		    {
-		        $this->order = [$order];
-		    }
-		    else
-		    {
-		        $this->order[] = $order;
-		    }
-		}
+		unset($this->order);
 		return $this;
 	}
-	
-	public function orderRand(): static
+
+	public function orderRand(): self
 	{
 		$rand = Database::DBMS()->dbmsRandom();
 		return $this->order($rand);
 	}
-	
-	public function join(string $join): static
+
+	/**
+	 * Order clause.
+	 *
+	 * @param string $order
+	 *
+	 * @return self
+	 */
+	public function order(string $order = null): self
+	{
+		if ($order)
+		{
+			if (!isset($this->order))
+			{
+				$this->order = [$order];
+			}
+			else
+			{
+				$this->order[] = $order;
+			}
+		}
+		return $this;
+	}
+
+	/**
+	 * Automatically build a join based on a GDT_Object column of this queries GDO table.
+	 *
+	 * @param string $key the GDT_Object
+	 * @param string $join type
+	 *
+	 * @return Query
+	 * @see GDO
+	 */
+	public function joinObject(string $key, string $join = 'JOIN', string $tableAlias = null): self
+	{
+		if (in_array($key, $this->joinedObjects, true))
+		{
+			return $this;
+		}
+
+		$this->joinedObjects[] = $key;
+
+		if (!($gdt = $this->table->gdoColumn($key)))
+		{
+			throw new GDO_Error(t('err_column', [html($key)]));
+		}
+
+		if ($gdt instanceof GDT_Join)
+		{
+			$join = $gdt->join;
+		}
+		elseif (
+			($gdt instanceof GDT_Object) ||
+			($gdt instanceof GDT_ObjectSelect)
+		)
+		{
+			$table = $gdt->table;
+			$atbl = $this->table->gdoTableIdentifier();
+			$ftbl = $tableAlias ? $tableAlias : "{$key}_t";
+			$tableAlias = " AS {$ftbl}";
+
+			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->identifier()}=$atbl.{$gdt->identifier()}";
+		}
+		else
+		{
+			throw new GDO_Error(t('err_join_object', [html($key), html($this->table->renderName())]));
+		}
+
+		return $this->join($join);
+	}
+
+	public function join(string $join): self
 	{
 		if (isset($this->join))
 		{
@@ -394,76 +430,110 @@ final class Query
 		}
 		return $this;
 	}
-	
-	/**
-	 * 
-	 * @var array
-	 */
-	private array $joinedObjects = [];
-	
-	/**
-	 * Automatically build a join based on a GDT_Object column of this queries GDO table.
-	 * 
-	 * @see GDO
-	 * @param string $key the GDT_Object
-	 * @param string $join type
-	 * @return Query
-	 */
-	public function joinObject(string $key, string $join='JOIN', string $tableAlias=null): static
-	{
-		if (in_array($key, $this->joinedObjects, true))
-		{
-			return $this;
-		}
-		
-		$this->joinedObjects[] = $key;
-		
-		if (!($gdt = $this->table->gdoColumn($key)))
-		{
-			throw new GDO_Error(t('err_column', [html($key)]));
-		}
-		
-		if ($gdt instanceof GDT_Join)
-		{
-			$join = $gdt->join;
-		}
-		elseif ( ($gdt instanceof GDT_Object) ||
-			($gdt instanceof GDT_ObjectSelect) )
-		{
-			$table = $gdt->table;
-			$atbl = $this->table->gdoTableIdentifier();
-			$ftbl = $tableAlias ? $tableAlias : "{$key}_t";
-			$tableAlias = " AS {$ftbl}";
-			
-			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->identifier()}=$atbl.{$gdt->identifier()}";
-		}
-		else
-		{
-			throw new GDO_Error(t('err_join_object', [html($key), html($this->table->renderName())]));
-		}
-		
-		return $this->join($join);
-	}
-	
-	public function group(string $group): static
+
+	public function group(string $group): self
 	{
 		$this->group = isset($this->group) ? "{$this->group},{$group}" : $group;
 		return $this;
 	}
-	
-	public function values(array $values): static
-	{
-		$this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
-		return $this;
-	}
-	
-	public function updateValues(array $values): static
+
+	public function updateValues(array $values): self
 	{
 		$this->nonPKValues = isset($this->nonPKValues) ? array_merge($this->nonPKValues, $values) : $values;
 		return $this->values($values);
 	}
-	
-	public function getValues() : string
+
+	public function values(array $values): self
+	{
+		$this->values = isset($this->values) ? array_merge($this->values, $values) : $values;
+		return $this;
+	}
+
+	public function noJoins(): self
+	{
+		$this->join = null;
+		return $this;
+	}
+
+	public function raw(string $raw): self
+	{
+		$this->write = !str_starts_with($raw, 'SELECT');
+		$this->raw = $raw;
+		return $this;
+	}
+
+	public function union(self $query): self
+	{
+		$this->union = $query;
+		return $this;
+	}
+
+	public function getUnion(): ?string
+	{
+		return $this->union ?
+			(' UNION ' . $this->union->buildQuery()) :
+			null;
+	}
+
+	/**
+	 * Build the query string.
+	 */
+	public function buildQuery(): string
+	{
+		return isset($this->raw) ?
+			$this->raw :
+
+			$this->getType() .
+			$this->getSelect() .
+			$this->getFrom() .
+			$this->getValues() .
+			$this->getJoin() .
+			$this->getSet() .
+			$this->getWhere() .
+			$this->getGroup() .
+			$this->getHaving() .
+			$this->getOrderBy() .
+			$this->getLimit() .
+
+			$this->getUnion();
+	}
+
+	public function getType(): string
+	{
+		switch ($this->type)
+		{
+			case self::RAW:
+				return GDT::EMPTY_STRING;
+			case self::SELECT:
+				return 'SELECT ';
+			case self::INSERT:
+			case self::INSERT_OR_UPDATE:
+				return 'INSERT INTO ';
+			case self::REPLACE:
+				return 'REPLACE INTO ';
+			case self::UPDATE:
+				return 'UPDATE ';
+			case self::DELETE:
+				return "DELETE {$this->from} FROM ";
+		}
+	}
+
+	public function getSelect(): string
+	{
+		return $this->write ? '' : ($this->getSelectColumns() . ' FROM');
+	}
+
+	private function getSelectColumns(): string
+	{
+		return isset($this->columns) ? $this->columns : ' *';
+	}
+
+	public function getFrom(): string
+	{
+		return isset($this->from) ? " {$this->from}" : '';
+	}
+
+	public function getValues(): string
 	{
 		if (!isset($this->values))
 		{
@@ -485,102 +555,60 @@ final class Query
 			$dupsql = '';
 			foreach ($this->nonPKValues as $key => $var)
 			{
-				$dupsql .= ",{$key}=".quote($var);
+				$dupsql .= ",{$key}=" . quote($var);
 			}
 			$rawsql .= ' ON DUPLICATE KEY UPDATE ';
 			$rawsql .= trim($dupsql, ' ,');
 		}
-		
+
 		return $rawsql;
 	}
-	
-	public function getJoin() : string
+
+	public function getJoin(): string
 	{
-		return isset($this->join) ? " {$this->join}" : "";
+		return isset($this->join) ? " {$this->join}" : '';
 	}
-	
-	public function noJoins(): static
+
+	public function getSet(): string
 	{
-	    $this->join = null;
-	    return $this;
+		return isset($this->set) ? " SET {$this->set}" : '';
 	}
-	
-	public function getGroup() : string
+
+	public function getWhere(): string
 	{
-		return isset($this->group) ? " GROUP BY $this->group" : "";
+		return isset($this->where) ? " WHERE {$this->where}" : '';
 	}
-	
-	public function getOrderBy() : string
-	{
-		return isset($this->order) ? ' ORDER BY ' . implode(', ', $this->order) : '';
-	}
-	
-	public function raw(string $raw): static
-	{ 
-	    $this->write = !str_starts_with($raw, 'SELECT');
-	    $this->raw = $raw;
-	    return $this;
-	}
-	
+
 	#############
 	### Union ###
 	#############
-	public function union(self $query): static
+
+	public function getGroup(): string
 	{
-		$this->union = $query;
-		return $this;
+		return isset($this->group) ? " GROUP BY $this->group" : '';
 	}
-	
-	public function getUnion() : ?string
+
+	public function getHaving(): string
 	{
-		return $this->union ?
-			(' UNION ' . $this->union->buildQuery()) :
-			null;
+		return isset($this->having) ? " HAVING {$this->having}" : '';
 	}
-	
-	public function getType() : string
+
+	public function getOrderBy(): string
 	{
-		switch ($this->type)
-		{
-			case self::RAW: return GDT::EMPTY_STRING;
-			case self::SELECT: return 'SELECT ';
-			case self::INSERT:
-			case self::INSERT_OR_UPDATE:
-				return 'INSERT INTO ';
-			case self::REPLACE: return 'REPLACE INTO ';
-			case self::UPDATE: return 'UPDATE ';
-			case self::DELETE: return "DELETE {$this->from} FROM ";
-		}
+		return isset($this->order) ? ' ORDER BY ' . implode(', ', $this->order) : '';
+	}
+
+	public function getLimit(): string
+	{
+		return isset($this->limit) ? $this->limit : '';
 	}
 
 	/**
-	 * Build the query string.
-	 */
-	public function buildQuery() : string
-	{
-	    return isset($this->raw) ?
-    	    $this->raw :
-    	    
-    	    $this->getType() .
-    	    $this->getSelect() .
-    	    $this->getFrom() .
-    	    $this->getValues() .
-    	    $this->getJoin() .
-    	    $this->getSet() .
-    	    $this->getWhere() .
-    	    $this->getGroup() .
-    	    $this->getHaving() .
-    	    $this->getOrderBy() .
-    	    $this->getLimit() .
-    	    
-	    	$this->getUnion();
-	}
-	
-	/**
 	 * Execute a query.
 	 * Returns boolean on writes and a Result on reads.
-	 * @see Result
+	 *
 	 * @return Result
+	 * @see Result
 	 */
 	public function exec()
 	{
@@ -593,7 +621,7 @@ final class Query
 			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
 			Logger::rawLog('query', $query);
 		}
-		
+
 		if ($this->write)
 		{
 			return $db->queryWrite($query);
@@ -603,5 +631,5 @@ final class Query
 			return new Result($this->fetchTable, $db->queryRead($query, $this->buffered), $this->cached);
 		}
 	}
-	
+
 }

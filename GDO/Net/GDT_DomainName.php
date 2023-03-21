@@ -8,17 +8,18 @@ use GDO\Core\GDT_String;
  */
 final class GDT_DomainName extends GDT_String
 {
+
 	public string $pattern = "/[\\.a-z]+\\.[a-z]+$/iD";
-	
+
 	public bool $tldOnly = false;
-	
-	public function tldOnly(bool $tldOnly=true): static
+
+	public function tldOnly(bool $tldOnly = true): self
 	{
 		$this->tldOnly = $tldOnly;
 		return $this;
 	}
-	
-	public function validate($value) : bool
+
+	public function validate($value): bool
 	{
 		if (!parent::validate($value))
 		{
@@ -28,16 +29,16 @@ final class GDT_DomainName extends GDT_String
 		{
 			return true;
 		}
-		
+
 		$parts = explode('.', $value);
 		if ($this->tldOnly && count($parts) !== 2)
 		{
 			return $this->error('err_domain_no_tld');
 		}
-		
+
 		return true;
 	}
-	
+
 	public function plugVars(): array
 	{
 		if ($this->tldOnly)

@@ -1,25 +1,26 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDO;
 use GDO\Core\GDT_Array;
 use GDO\Core\GDT_Enum;
-use GDO\Core\ModuleLoader;
-use GDO\Core\GDO;
 use GDO\Core\MethodAjax;
+use GDO\Core\ModuleLoader;
 
 /**
  * Get all possible enum values for all entities and GDT.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.8.0
+ * @author gizmore
  */
 final class GetEnums extends MethodAjax
 {
+
 	public function execute()
 	{
 		$columns = [];
-		
+
 		# Add non abstract module tables
 		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
 		{
@@ -37,7 +38,7 @@ final class GetEnums extends MethodAjax
 								{
 									if ($gdt instanceof GDT_Enum)
 									{
-										$columns[$table->gdoClassName().'.'.$name] = $gdt->enumValues;
+										$columns[$table->gdoClassName() . '.' . $name] = $gdt->enumValues;
 									}
 								}
 							}
@@ -45,41 +46,41 @@ final class GetEnums extends MethodAjax
 					}
 				}
 			}
-			
+
 			if ($config = $module->getConfigCache())
 			{
 				foreach ($config as $gdt)
 				{
 					if ($gdt instanceof GDT_Enum)
 					{
-						$columns[$module->getName().'.config.'.$gdt->name] = $gdt->enumValues;
-					}
-				}
-			}
-		
-			if ($config = $module->getUserConfigCacheConfigs())
-			{
-				foreach ($config as $gdt)
-				{
-					if ($gdt instanceof GDT_Enum)
-					{
-						$columns[$module->getName().'.userconfig.'.$gdt->name] = $gdt->enumValues;
+						$columns[$module->getName() . '.config.' . $gdt->name] = $gdt->enumValues;
 					}
 				}
 			}
 
-			if ($config = $module->getUserConfigCacheSettings())
+			if ($config = $module->getSettingsConfigs())
 			{
 				foreach ($config as $gdt)
 				{
 					if ($gdt instanceof GDT_Enum)
 					{
-						$columns[$module->getName().'.settings.'.$gdt->name] = $gdt->enumValues;
+						$columns[$module->getName() . '.userconfig.' . $gdt->name] = $gdt->enumValues;
+					}
+				}
+			}
+
+			if ($config = $module->getSettingsSettings())
+			{
+				foreach ($config as $gdt)
+				{
+					if ($gdt instanceof GDT_Enum)
+					{
+						$columns[$module->getName() . '.settings.' . $gdt->name] = $gdt->enumValues;
 					}
 				}
 			}
 		}
-		
+
 		return GDT_Array::make()->value($columns);
 	}
 

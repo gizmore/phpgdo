@@ -14,14 +14,15 @@ use GDO\UI\MethodPage;
  */
 final class Impressum extends MethodPage
 {
-	public function getMethodTitle() : string
+
+	public function getMethodTitle(): string
 	{
 		return t('impressum');
 	}
-	
-	public function getMethodDescription() : string
+
+	public function getMethodDescription(): string
 	{
 		return t('md_impressum', [sitename()]);
 	}
-	
+
 }

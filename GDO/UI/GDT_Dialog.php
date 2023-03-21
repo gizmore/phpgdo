@@ -10,54 +10,60 @@ use GDO\Form\WithActions;
  * A dialog.
  * Very simple JS is used to display it.
  * Should almost work with CSS only.
- * 
- * @author gizmore
+ *
  * @version 6.11.0
  * @since 6.10.4
+ * @author gizmore
  */
 class GDT_Dialog extends GDT
 {
-    use WithTitle;
-    use WithFields;
-    use WithPHPJQuery;
-    use WithActions;
-    
-	public function renderHTML() : string
-	{
-		return GDT_Template::php('UI', 'cell/dialog.php', ['field' => $this]);
-	}
-	
+
+	use WithTitle;
+	use WithFields;
+	use WithPHPJQuery;
+	use WithActions;
+
+	public $opened = false;
+
 	##############
 	### Opened ###
 	##############
-	public $opened = false;
-	
 	/**
-	 * Start dialog in open mode?
-	 * @param boolean $opened
-	 * @return \GDO\UI\GDT_Dialog
+	 * Start dialog in modal mode?
+	 *
+	 * @var bool
 	 */
-	public function opened($opened=true)
+	public $modal = false;
+
+	public function renderHTML(): string
 	{
-	    $this->opened = $opened;
-	    return $this;
+		return GDT_Template::php('UI', 'cell/dialog.php', ['field' => $this]);
 	}
-	
+
 	#############
 	### Modal ###
 	#############
+
 	/**
-	 * Start dialog in modal mode?
-	 * @var boolean
+	 * Start dialog in open mode?
+	 *
+	 * @param bool $opened
+	 *
+	 * @return GDT_Dialog
 	 */
-	public $modal = false;
-	public function modal($modal=true)
+	public function opened($opened = true)
 	{
-	    $this->modal = $modal;
-	    return $this;
+		$this->opened = $opened;
+		return $this;
 	}
-	
-	public function okButton($key='btn_ok', array $args=null)
+
+	public function modal($modal = true)
+	{
+		$this->modal = $modal;
+		return $this;
+	}
+
+	public function okButton($key = 'btn_ok', array $args = null)
 	{
 		$btn = GDT_Button::make('ok')->label($key, $args);
 		$btn->attr('onclick', "GDO.closeDialog('{$this->id()}', 'ok')");
@@ -65,7 +71,7 @@ class GDT_Dialog extends GDT
 		return $this;
 	}
 
-	public function cancelButton($key='btn_cancel', array $args=null)
+	public function cancelButton($key = 'btn_cancel', array $args = null)
 	{
 		$btn = GDT_Button::make('cancel')->label($key, $args);
 		$btn->attr('onclick', "GDO.closeDialog('{$this->id()}', 'cancel')");

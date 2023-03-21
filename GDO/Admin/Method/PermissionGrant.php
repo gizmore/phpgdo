@@ -12,15 +12,16 @@ use GDO\User\GDO_UserPermission;
 
 class PermissionGrant extends MethodForm
 {
+
 	use MethodAdmin;
-	
-	public function onRenderTabs() : void
+
+	public function onRenderTabs(): void
 	{
-	    $this->renderAdminBar();
-	    $this->renderPermissionBar();
+		$this->renderAdminBar();
+		$this->renderPermissionBar();
 	}
-	
-	public function createForm(GDT_Form $form) : void
+
+	public function createForm(GDT_Form $form): void
 	{
 		$gdo = GDO_UserPermission::table();
 		$form->addFields(
@@ -30,18 +31,18 @@ class PermissionGrant extends MethodForm
 		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
-	
+
 	public function formValidated(GDT_Form $form)
 	{
 		$userpermission = GDO_UserPermission::blank($form->getFormVars())->replace();
 		$permission = $userpermission->getPermission();
-		/** @var $permission GDO_Permission **/
+		/** @var $permission GDO_Permission * */
 		$permission = $form->getFormValue('perm_perm_id');
-		/** @var $user GDO_User **/
+		/** @var $user GDO_User * */
 		$user = $form->getFormValue('perm_user_id');
 		$user->changedPermissions();
 		$this->resetForm();
 		return $this->message('msg_perm_granted', [$permission->renderName(), $user->renderUserName()])->addField($this->renderPage());
 	}
-	
+
 }

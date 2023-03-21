@@ -1,24 +1,24 @@
 <?php
-use GDO\DB\Database;
-use GDO\Install\Installer;
-use GDO\Core\Logger;
+
+use GDO\CLI\CLI;
+use GDO\CLI\REPL;
 use GDO\Core\Application;
-use GDO\Util\FileUtil;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT;
+use GDO\Core\Logger;
 use GDO\Core\ModuleLoader;
-use GDO\CLI\CLI;
-use GDO\Tests\Module_Tests;
+use GDO\Core\ModuleProviders;
 use GDO\Date\Time;
-use GDO\Tests\TestCase;
+use GDO\DB\Database;
+use GDO\Install\Installer;
 use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
+use GDO\Tests\Module_Tests;
+use GDO\Tests\TestCase;
 use GDO\UI\TextStyle;
-use GDO\Core\ModuleProviders;
-use GDO\Core\Method\ClearCache;
-use GDO\CLI\REPL;
+use GDO\Util\FileUtil;
 
 define('GDO_TIME_START', microtime(true));
 
@@ -29,7 +29,7 @@ define('GDO_TIME_START', microtime(true));
 if (PHP_SAPI !== 'cli')
 {
 	echo "Tests can only be run from the command line.\n";
-	die( -1);
+	die(-1);
 }
 
 echo "######################################\n";
@@ -38,7 +38,7 @@ echo "###       Enjoy your flight!       ###\n";
 echo "######################################\n";
 
 # Rename the config in case an accident happened.
-if ((is_file('protected/config_test2.php')) && ( !is_file('protected/config_test.php')))
+if ((is_file('protected/config_test2.php')) && (!is_file('protected/config_test.php')))
 {
 	rename('protected/config_test2.php', 'protected/config_test.php');
 }
@@ -56,48 +56,50 @@ Logger::init('gdo_test');
 final class gdo_test extends Application
 {
 
+	public bool $install = true;
+	public bool $all = false;
+	public bool $dog = false;
+	public bool $quick = false;
+
 	public function isUnitTests(): bool
 	{
 		return true;
 	}
-
-	public bool $install = true;
 
 	public function isInstall(): bool
 	{
 		return $this->install;
 	}
 
-	public bool $all = false;
-	public function all(bool $all=true): static
+	public function all(bool $all = true): self
 	{
 		$this->all = $all;
 		return $this;
 	}
 
-	public bool $dog = false;
-	public function dog(bool $dog=true): static
+	public function dog(bool $dog = true): self
 	{
 		$this->dog = $dog;
 		return $this;
 	}
 
-	public bool $quick = false;
-	public function quick(bool $quick=true): static
+	public function quick(bool $quick = true): self
 	{
 		$this->quick = $quick;
 		return $this;
 	}
-	
+
 	public function showHelp(): int
 	{
 		echo "HELP!\n";
 		return 0;
 	}
+
 }
+
 $app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
-$db = Database::init();
+$db = Database::init(GDO_DB_NAME);
 
 $index = 0;
 $options = getopt('adhq', ['all', 'dog', 'help', 'quick'], $index);
@@ -122,14 +124,14 @@ if (isset($options['q']) || isset($options['quick']))
 	$app->quick();
 }
 
-/** @var array $argv **/
+/** @var array $argv * */
 $argv = array_slice($argv, $index);
 $argc = count($argv);
 
 switch (count($argv))
 {
 	case 0:
-		if ( (!$app->all) && (!$app->dog))
+		if ((!$app->all) && (!$app->dog))
 		{
 			return $app->showHelp();
 		}
@@ -141,7 +143,7 @@ switch (count($argv))
 
 
 # Confirm
-echo "I will erase the database " . TextStyle::bold(GDO_DB_NAME) . ".\n";
+echo 'I will erase the database ' . TextStyle::bold(GDO_DB_NAME) . ".\n";
 if (!REPL::confirm('Is this correct?', true))
 {
 	echo "Abort!\n";
@@ -153,10 +155,10 @@ if (!REPL::confirm('Is this correct?', true))
 CLI::setServerVars();
 # ###########################
 
-/** @var $argc int **/
-/** @var $argv string[] **/
+/** @var $argc int * */
+/** @var $argv string[] * */
 
-echo "Dropping Test Database: " . GDO_DB_NAME . ".\n";
+echo 'Dropping Test Database: ' . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
 $db->dropDatabase(GDO_DB_NAME);
 FileUtil::removeDir(GDO_PATH . 'files_test/');
@@ -196,7 +198,7 @@ if ($app->dog)
 		$argv[0] .= ',';
 	}
 	$dogs = [];
-	$folders = scandir(GDO_PATH.'GDO');
+	$folders = scandir(GDO_PATH . 'GDO');
 	foreach ($folders as $folder)
 	{
 		if (str_starts_with($folder, 'Dog'))
@@ -220,10 +222,10 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	# Add Tests, Perf and CLI as dependencies on unit tests.
 	$modules[] = 'CLI';
 	$modules[] = 'Perf';
-	
+
 	# Tests Module as a finisher
 	$modules[] = 'Tests';
-	
+
 	# Fix lowercase names
 	$modules = array_map(
 		function (string $moduleName)
@@ -231,9 +233,9 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
 			return $module->getModuleName();
 		}, $modules);
-	
+
 	$modules = array_unique($modules);
-	
+
 	while ($count != count($modules))
 	{
 		$count = count($modules);
@@ -254,9 +256,9 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 
 		$modules = array_unique($modules);
 	}
-	
+
 	# While loading...
-	
+
 	# Map
 	$modules = array_map(function ($m)
 	{
@@ -268,7 +270,6 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	{
 		return $m1->priority - $m2->priority;
 	});
-
 	# Inited!
 }
 
@@ -289,7 +290,8 @@ Trans::inited(true);
 
 if ($app->quick)
 {
-	$modules = array_filter($modules, function(GDO_Module $module) {
+	$modules = array_filter($modules, function (GDO_Module $module)
+	{
 		return !in_array($module->getName(), [
 			'CountryCoordinates',
 			'IP2Country',

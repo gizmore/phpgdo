@@ -1,19 +1,19 @@
 <?php
 namespace GDO\Util;
 
-use GDO\User\GDO_User;
-use GDO\Language\Trans;
 use GDO\Date\Time;
+use GDO\Language\Trans;
+use GDO\User\GDO_User;
 
 /**
  * Call a function wrapped in a locale change.
  * Execute callbacks with the locale of a user.
- * 
+ *
  * @author gizmore
  */
 final class Localized
 {
-	
+
 	public static function forUser(GDO_User $user, $callback)
 	{
 		$old = Time::$TIMEZONE;
@@ -22,7 +22,7 @@ final class Localized
 		Time::setTimezone($old);
 		return $result;
 	}
-	
+
 	public static function withISO(string $iso, $callback)
 	{
 		$old = Trans::$ISO;
@@ -31,5 +31,5 @@ final class Localized
 		Trans::setISO($old);
 		return $result;
 	}
-	
+
 }

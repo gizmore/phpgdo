@@ -1,30 +1,28 @@
 <?php
 namespace GDO\Tests;
 
-use GDO\CLI\Method\Help;
-use GDO\Core\Website;
+use GDO\CLI\CLI;
+use GDO\Core\Application;
+use GDO\Core\Debug;
+use GDO\Core\GDT_Expression;
+use GDO\Core\Method;
+use GDO\Core\WithModule;
+use GDO\Date\GDO_Timezone;
+use GDO\Date\Time;
+use GDO\Form\GDT_Form;
+use GDO\Language\Trans;
+use GDO\Net\GDT_IP;
+use GDO\Session\GDO_Session;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserPermission;
+use GDO\User\Module_User;
+use GDO\Util\FileUtil;
+use PHPUnit\Framework\Assert;
+use Throwable;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
-use GDO\CLI\CLI;
-use GDO\Core\GDT_Expression;
-use GDO\User\GDO_User;
-use GDO\Session\GDO_Session;
-use GDO\Core\Method;
-use GDO\Net\GDT_IP;
-use GDO\User\Module_User;
-use GDO\User\GDO_UserPermission;
-use GDO\Core\Application;
-use GDO\Util\FileUtil;
-use GDO\Language\Trans;
-use GDO\Date\Time;
-use GDO\Date\GDO_Timezone;
-use PHPUnit\Framework\Assert;
-use GDO\Core\WithModule;
-use GDO\Form\GDT_Form;
-use function PHPUnit\Framework\assertLessThan;
-use GDO\Core\Debug;
-use GDO\UI\GDT_Page;
 
 /**
  * A GDO test case knows a few helper functions.
@@ -39,13 +37,14 @@ use GDO\UI\GDT_Page;
  *
  * Provides MethodTest->execute() helper for convinient testing.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.10.1
+ * @author gizmore
  * @see MethodTest
  */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+
 	use WithModule;
 
 	public static int $LAST_COUNT = 0;
@@ -57,313 +56,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ################
 	# ## Init test ###
 	# ################
-	private int $ipc = 0;
-
-	private int $ipd = 0;
-
-	private function nextIP(): string
-	{
-		$this->ipd++;
-		if ($this->ipd > 254)
-		{
-			$this->ipd = 1;
-			$this->ipc++;
-		}
-		$ip = sprintf('127.0.%d.%d', $this->ipc, $this->ipd);
-		return $ip;
-	}
-
-	protected function setUp(): void
-	{
-		$this->message("Running %s", CLI::bold($this->gdoClassName()));
-
-		$app = Application::$INSTANCE;
-		$app->reset(true);
-		$app->verb(GDT_Form::GET);
-
-		# Increase IP
-		GDT_IP::$CURRENT = $this->nextIP();
-
-		# Set gizmore user
-		if (Module_User::instance()->isPersisted())
-		{
-			$user = count(GDT_MethodTest::$TEST_USERS) ? GDT_MethodTest::$TEST_USERS[0] : GDO_User::system();
-			$this->user($user);
-			if ( !$user->isSystem())
-			{
-				$this->restoreUserPermissions($user);
-			}
-		}
-	}
-
-	protected function tearDown(): void
-	{
-		$new = Assert::getCount();
-		$add = $new - self::$LAST_COUNT;
-		self::$ASSERT_COUNT += $add;
-		// self::$LAST_COUNT = self::$ASSERT_COUNT;
-		CLI::flushTopResponse();
-	}
-
-	/**
-	 * Restore gizmore because auto coverage messes with him a lot.
-	 *
-	 * @param GDO_User $user
-	 */
-	protected function restoreUserPermissions(GDO_User $user): void
-	{
-		if (count(GDT_MethodTest::$TEST_USERS))
-		{
-			# IF GIZMORE
-			if ($user->getID() === GDT_MethodTest::$TEST_USERS[0]->getID())
-			{
-				$table = GDO_UserPermission::table();
-				$table->grant($user, 'admin');
-				$table->grant($user, 'staff');
-				$table->grant($user, 'cronjob');
-				$user->changedPermissions();
-				$user->saveVar('user_deleted', null);
-				$user->saveVar('user_deletor', null);
-				
-				$this->restoreUserSettings($user);
-			}
-		}
-	}
-	
-	protected function restoreUserSettings(GDO_User $user) : void
-	{
-		# english and male
-		$user->saveSettingVar('User', 'gender', 'male');
-// 		$user->saveSettingVar('Country', 'country', 'DE');
-		$user->saveSettingVar('Language', 'language', GDO_LANGUAGE);
-	}
-	
-
 	/**
 	 *
 	 * @var GDO_Session[string]
 	 */
 	protected array $sessions = [];
+	protected array $plugVariants;
+	private int $ipc = 0;
+	private int $ipd = 0;
 
-	protected function session(GDO_User $user): ?GDO_Session
-	{
-		if (module_enabled('Session'))
-		{
-			$uid = $user->getID();
-			if ( !isset($this->sessions[$uid]))
-			{
-				$this->sessions[$uid] = GDO_Session::blank();
-				$this->sessions[$uid]->setVar('sess_user', $user->getID());
-			}
-			GDO_Session::$INSTANCE = $this->sessions[$uid];
-			return $this->sessions[$uid];
-		}
-		return null;
-	}
-
-	# ##################
-	# ## User switch ###
-	# ##################
-	protected function ghost(): GDO_User
-	{
-		return GDO_User::ghost();
-	}
-
-	protected function system(): GDO_User
-	{
-		return GDO_User::system();
-	}
-
-	# 1
-	protected function gizmore(): GDO_User
-	{
-		return GDT_MethodTest::$TEST_USERS[0];
-	}
-
-	# user_id: 2
-	protected function peter(): GDO_User
-	{
-		return GDT_MethodTest::$TEST_USERS[1];
-	}
-
-	# 3
-	protected function monica(): GDO_User
-	{
-		return GDT_MethodTest::$TEST_USERS[2];
-	}
-
-	# 4
-	protected function gaston(): GDO_User
-	{
-		return GDT_MethodTest::$TEST_USERS[3];
-	}
-
-	# 5
-	protected function sven(): GDO_User
-	{
-		return GDT_MethodTest::$TEST_USERS[4];
-	}
-
-	# 6
-	protected function userGhost(): GDO_User
-	{
-		return $this->user(GDO_User::ghost());
-	}
-
-	# ID 0
-	protected function userSystem(): GDO_User
-	{
-		return $this->user(GDO_User::system());
-	}
-
-	# ID 1
-	protected function userGizmore(): GDO_User
-	{
-		return $this->user($this->gizmore());
-	}
-
-	# Admin
-	protected function userPeter(): GDO_User
-	{
-		return $this->user($this->peter());
-	}
-
-	# Staff
-	protected function userMonica(): GDO_User
-	{
-		return $this->user($this->monica());
-	}
-
-	# Member
-	protected function userGaston(): GDO_User
-	{
-		return $this->user($this->gaston());
-	}
-
-	# Guest
-	protected function userSven(): GDO_User
-	{
-		return $this->user($this->sven());
-	}
-
-	protected function user(GDO_User $user): GDO_User
-	{
-		$this->session($user);
-		Trans::setISO($user->getLangISO());
-		Time::setTimezone($user->getTimezone());
-		return GDO_User::setCurrent($user);
-	}
-
-	# ##############
-	# ## Asserts ###
-	# ##############
-	protected function assertNoCrash(string $message)
-	{
-		assertLessThan(500, Application::$RESPONSE_CODE, $message);
-	}
-	
-	protected function assertOK(string $message)
-	{
-		assertLessThan(400, Application::$RESPONSE_CODE, $message);
-	}
-	
-	protected function assert200(string $message)
-	{
-		$this->assertCode(200, $message);
-	}
-
-	protected function assert409(string $message)
-	{
-		$this->assertCode(409, $message);
-	}
-	
-	protected function assert403(string $message)
-	{
-		$this->assertCode(403, $message);
-	}
-	
-	protected function assertCode(int $code, string $message)
-	{
-		try
-		{
-			assertEquals($code, Application::$RESPONSE_CODE, $message);
-		}
-		catch (\Throwable $ex)
-		{
-			echo Debug::debugException($ex);
-			throw $ex;
-		}
-	}
-
-	protected function assertStringContainsStrings(array $needles, string $haystack, string $message = '')
-	{
-		foreach ($needles as $needle)
-		{
-			assertStringContainsString($needle, $haystack, $message . "; $needle not found!");
-		}
-	}
-
-	protected function assertStringContainsStringsIgnoringCase(array $needles, string $haystack, string $message = '')
-	{
-		foreach ($needles as $needle)
-		{
-			assertStringContainsStringIgnoringCase($needle, $haystack, $message . "; $needle not found!");
-		}
-	}
-
-	# ##################
-	# ## Call method ###
-	# ##################
-// 	protected function callMethod(Method $method, array $parameters = null, array $getParameters = null)
-// 	{
-// 		$gdt_method = GDT_MethodTest::make()->method($method)
-// 			->runAs($method->plugUser())
-// 			->addFields(...$getParameters)
-// 			->addFields(...$parameters);
-// 		$result = $gdt_method->execute();
-// 		$gdt_method->result($result);
-// 		$this->assert200(sprintf('Test if %s response code is 200.', $method->gdoClassName()));
-// 		return $result;
-// 	}
-
-	protected function callMethod(Method $method, array $inputs, bool $assertOk=true)
-	{
-		$m = GDT_MethodTest::make()->method($method);
-		$m->inputs($inputs);
-		$r = $m->execute();
-// 		$r->render(); # This will trigger 409 to be set -.-
-		if ($assertOk)
-		{
-			$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");
-		}
-		else
-		{
-			$this->assert409("Test if callMethod {$method->gdoClassName()} errors!");
-		}
-		return $r;
-	}
-	
-	protected function fakeFileUpload($fieldName, $fileName, $path)
-	{
-		$dest = Module_Tests::instance()->tempPath($fileName);
-		$error = 5;
-		if (FileUtil::isFile($path))
-		{
-			copy($path, $dest);
-			$error = 0;
-		}
-		$_FILES[$fieldName] = [
-			'name' => $fileName,
-			'type' => FileUtil::mimetype($dest),
-			'tmp_name' => $dest,
-			'error' => $error,
-			'size' => filesize($dest),
-		];
-	}
-
-	# ################
-	# ## CLI Tests ###
-	# ################
 	public function proc(string $command): string
 	{
 		$output = [];
@@ -392,9 +93,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		return trim($res, "\r\n");
 	}
 
-	# ###########
-	# ## Lang ###
-	# ###########
 	public function lang($iso)
 	{
 		Trans::setISO($iso);
@@ -406,27 +104,36 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		Time::setTimezone($tz->getID());
 	}
 
-	# #############
-	# ## Output ###
-	# #############
-	protected function error($message, ...$args)
+	protected function setUp(): void
 	{
-		$this->out(STDERR, $message, $args);
+		$this->message('Running %s', CLI::bold($this->gdoClassName()));
+
+		$app = Application::$INSTANCE;
+		$app->reset(true);
+		$app->verb(GDT_Form::GET);
+
+		# Increase IP
+		GDT_IP::$CURRENT = $this->nextIP();
+
+		# Set gizmore user
+		if (Module_User::instance()->isPersisted())
+		{
+			$user = count(GDT_MethodTest::$TEST_USERS) ? GDT_MethodTest::$TEST_USERS[0] : GDO_User::system();
+			$this->user($user);
+			if (!$user->isSystem())
+			{
+				$this->restoreUserPermissions($user);
+			}
+		}
 	}
+
+	# ##################
+	# ## User switch ###
+	# ##################
 
 	protected function message($message, ...$args)
 	{
 		$this->out(STDOUT, $message, $args);
-	}
-
-	protected function boldmome(Method $method)
-	{
-		return CLI::bold(self::mome($method));
-	}
-
-	protected function mome(Method $method)
-	{
-		return sprintf('%s/%s', $method->getModuleName(), $method->getMethodName());
 	}
 
 	/**
@@ -442,16 +149,322 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		}
 	}
 
+	# 1
+
+	private function nextIP(): string
+	{
+		$this->ipd++;
+		if ($this->ipd > 254)
+		{
+			$this->ipd = 1;
+			$this->ipc++;
+		}
+		$ip = sprintf('127.0.%d.%d', $this->ipc, $this->ipd);
+		return $ip;
+	}
+
+	# user_id: 2
+
+	protected function system(): GDO_User
+	{
+		return GDO_User::system();
+	}
+
+	# 3
+
+	protected function user(GDO_User $user): GDO_User
+	{
+		$this->session($user);
+		Trans::setISO($user->getLangISO());
+		Time::setTimezone($user->getTimezone());
+		return GDO_User::setCurrent($user);
+	}
+
+	# 4
+
+	protected function session(GDO_User $user): ?GDO_Session
+	{
+		if (module_enabled('Session'))
+		{
+			$uid = $user->getID();
+			if (!isset($this->sessions[$uid]))
+			{
+				$this->sessions[$uid] = GDO_Session::blank();
+				$this->sessions[$uid]->setVar('sess_user', $user->getID());
+			}
+			GDO_Session::$INSTANCE = $this->sessions[$uid];
+			return $this->sessions[$uid];
+		}
+		return null;
+	}
+
+	# 5
+
+	/**
+	 * Restore gizmore because auto coverage messes with him a lot.
+	 *
+	 * @param GDO_User $user
+	 */
+	protected function restoreUserPermissions(GDO_User $user): void
+	{
+		if (count(GDT_MethodTest::$TEST_USERS))
+		{
+			# IF GIZMORE
+			if ($user->getID() === GDT_MethodTest::$TEST_USERS[0]->getID())
+			{
+				$table = GDO_UserPermission::table();
+				$table->grant($user, 'admin');
+				$table->grant($user, 'staff');
+				$table->grant($user, 'cronjob');
+				$user->changedPermissions();
+				$user->saveVar('user_deleted', null);
+				$user->saveVar('user_deletor', null);
+
+				$this->restoreUserSettings($user);
+			}
+		}
+	}
+
+	# 6
+
+	protected function restoreUserSettings(GDO_User $user): void
+	{
+		# english and male
+		$user->saveSettingVar('User', 'gender', 'male');
+// 		$user->saveSettingVar('Country', 'country', 'DE');
+		$user->saveSettingVar('Language', 'language', GDO_LANGUAGE);
+	}
+
+	# ID 0
+
+	protected function tearDown(): void
+	{
+		$new = Assert::getCount();
+		$add = $new - self::$LAST_COUNT;
+		self::$ASSERT_COUNT += $add;
+		// self::$LAST_COUNT = self::$ASSERT_COUNT;
+		CLI::flushTopResponse();
+	}
+
+	# ID 1
+
+	protected function userGhost(): GDO_User
+	{
+		return $this->user(GDO_User::ghost());
+	}
+
+	# Admin
+
+	protected function ghost(): GDO_User
+	{
+		return GDO_User::ghost();
+	}
+
+	# Staff
+
+	protected function userSystem(): GDO_User
+	{
+		return $this->user(GDO_User::system());
+	}
+
+	# Member
+
+	protected function userGizmore(): GDO_User
+	{
+		return $this->user($this->gizmore());
+	}
+
+	# Guest
+
+	protected function gizmore(): GDO_User
+	{
+		return GDT_MethodTest::$TEST_USERS[0];
+	}
+
+	protected function userPeter(): GDO_User
+	{
+		return $this->user($this->peter());
+	}
+
+	# ##############
+	# ## Asserts ###
+	# ##############
+
+	protected function peter(): GDO_User
+	{
+		return GDT_MethodTest::$TEST_USERS[1];
+	}
+
+	protected function userMonica(): GDO_User
+	{
+		return $this->user($this->monica());
+	}
+
+	protected function monica(): GDO_User
+	{
+		return GDT_MethodTest::$TEST_USERS[2];
+	}
+
+	protected function userGaston(): GDO_User
+	{
+		return $this->user($this->gaston());
+	}
+
+	protected function gaston(): GDO_User
+	{
+		return GDT_MethodTest::$TEST_USERS[3];
+	}
+
+	protected function userSven(): GDO_User
+	{
+		return $this->user($this->sven());
+	}
+
+	protected function sven(): GDO_User
+	{
+		return GDT_MethodTest::$TEST_USERS[4];
+	}
+
+	protected function assertNoCrash(string $message)
+	{
+		assertLessThan(500, Application::$RESPONSE_CODE, $message);
+	}
+
+	# ##################
+	# ## Call method ###
+	# ##################
+// 	protected function callMethod(Method $method, array $parameters = null, array $getParameters = null)
+// 	{
+// 		$gdt_method = GDT_MethodTest::make()->method($method)
+// 			->runAs($method->plugUser())
+// 			->addFields(...$getParameters)
+// 			->addFields(...$parameters);
+// 		$result = $gdt_method->execute();
+// 		$gdt_method->result($result);
+// 		$this->assert200(sprintf('Test if %s response code is 200.', $method->gdoClassName()));
+// 		return $result;
+// 	}
+
+	protected function assert200(string $message)
+	{
+		$this->assertCode(200, $message);
+	}
+
+	protected function assertCode(int $code, string $message)
+	{
+		try
+		{
+			assertEquals($code, Application::$RESPONSE_CODE, $message);
+		}
+		catch (Throwable $ex)
+		{
+			echo Debug::debugException($ex);
+			throw $ex;
+		}
+	}
+
+	# ################
+	# ## CLI Tests ###
+	# ################
+
+	protected function assert403(string $message)
+	{
+		$this->assertCode(403, $message);
+	}
+
+	protected function assertStringContainsStrings(array $needles, string $haystack, string $message = '')
+	{
+		foreach ($needles as $needle)
+		{
+			assertStringContainsString($needle, $haystack, $message . "; $needle not found!");
+		}
+	}
+
+	# ###########
+	# ## Lang ###
+	# ###########
+
+	protected function assertStringContainsStringsIgnoringCase(array $needles, string $haystack, string $message = '')
+	{
+		foreach ($needles as $needle)
+		{
+			assertStringContainsStringIgnoringCase($needle, $haystack, $message . "; $needle not found!");
+		}
+	}
+
+	protected function callMethod(Method $method, array $inputs, bool $assertOk = true)
+	{
+		$m = GDT_MethodTest::make()->method($method);
+		$m->inputs($inputs);
+		$r = $m->execute();
+// 		$r->render(); # This will trigger 409 to be set -.-
+		if ($assertOk)
+		{
+			$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");
+		}
+		else
+		{
+			$this->assert409("Test if callMethod {$method->gdoClassName()} errors!");
+		}
+		return $r;
+	}
+
+	# #############
+	# ## Output ###
+	# #############
+
+	protected function assertOK(string $message)
+	{
+		assertLessThan(400, Application::$RESPONSE_CODE, $message);
+	}
+
+	protected function assert409(string $message)
+	{
+		$this->assertCode(409, $message);
+	}
+
+	protected function fakeFileUpload($fieldName, $fileName, $path)
+	{
+		$dest = Module_Tests::instance()->tempPath($fileName);
+		$error = 5;
+		if (FileUtil::isFile($path))
+		{
+			copy($path, $dest);
+			$error = 0;
+		}
+		$_FILES[$fieldName] = [
+			'name' => $fileName,
+			'type' => FileUtil::mimetype($dest),
+			'tmp_name' => $dest,
+			'error' => $error,
+			'size' => filesize($dest),
+		];
+	}
+
+	protected function error($message, ...$args)
+	{
+		$this->out(STDERR, $message, $args);
+	}
+
+	protected function boldmome(Method $method)
+	{
+		return CLI::bold(self::mome($method));
+	}
+
 	# ###############
 	# ## PlugVars ###
 	# ###############
-	protected array $plugVariants;
 
-	protected function addPlugVars(array $_plugs) : void
+	protected function mome(Method $method)
+	{
+		return sprintf('%s/%s', $method->getModuleName(), $method->getMethodName());
+	}
+
+	protected function addPlugVars(array $_plugs): void
 	{
 		foreach ($_plugs as $plugs)
 		{
-			if ( !is_array($plugs))
+			if (!is_array($plugs))
 			{
 				xdebug_break();
 			}
@@ -459,15 +472,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	private function addPlugVarsB(array $plugs) : void
+	private function addPlugVarsB(array $plugs): void
 	{
 		foreach ($plugs as $name => $plug)
 		{
-			if ( !isset($this->plugVariants[$name]))
+			if (!isset($this->plugVariants[$name]))
 			{
 				$this->plugVariants[$name] = [];
 			}
-			if ( !in_array($plug, $this->plugVariants[$name], true))
+			if (!in_array($plug, $this->plugVariants[$name], true))
 			{
 				$this->plugVariants[$name][] = $plug;
 			}

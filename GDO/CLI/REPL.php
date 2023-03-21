@@ -7,23 +7,29 @@ use GDO\UI\TextStyle;
 
 /**
  * Helper class for interactive CLI applications.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.2
+ * @author gizmore
  */
-final class REPL 
+final class REPL
 {
-	
-	private static function abortmsg(): string
+
+	/**
+	 * confirm prompt that exits on abort.
+	 */
+	public static function confirmOrDie(string $prompt, ?bool $default = true, string $abortmsg = 'Aborted', int $exitCode = 0): void
 	{
-		return t('msg_abort');
+		if (!self::confirm($prompt, $default))
+		{
+			die(self::abortmsg());
+		}
 	}
-	
+
 	/**
 	 * DO a yes/no confirmation prompt.
 	 */
-	public static function confirm(string $prompt, ?bool $default, bool $allowNo=true): bool
+	public static function confirm(string $prompt, ?bool $default, bool $allowNo = true): bool
 	{
 		$y = $default === true ? 'Y' : 'y';
 		$n = $default === false ? 'N' : 'n';
@@ -32,24 +38,22 @@ final class REPL
 		echo $prompt;
 		switch (@strtolower(trim(readline()))[0])
 		{
-			case 'y': return true;
-			case 'n': return false;
-			case 'a': die(self::abortmsg());
-			default: return !!$default;
+			case 'y':
+				return true;
+			case 'n':
+				return false;
+			case 'a':
+				die(self::abortmsg());
+			default:
+				return !!$default;
 		}
 	}
 
-	/**
-	 * confirm prompt that exits on abort.
-	 */
-	public static function confirmOrDie(string $prompt, ?bool $default=true, string $abortmsg='Aborted', int $exitCode=0): void
+	private static function abortmsg(): string
 	{
-		if (!self::confirm($prompt, $default))
-		{
-			die(self::abortmsg());
-		}
+		return t('msg_abort');
 	}
-	
+
 	public static function abortable(string $prompt): void
 	{
 		if (!self::confirm($prompt, null, false))
@@ -57,19 +61,34 @@ final class REPL
 			die(self::abortmsg());
 		}
 	}
-	
+
 	public static function acknowledge(string $prompt, ?bool $default): bool
 	{
 		return self::confirm($prompt, $default, false);
 	}
-	
+
+	/**
+	 *
+	 * @param GDT $gdt
+	 * @param string $prompt
+	 *
+	 * @return bool - has the user changed  the value?
+	 */
+	public static function changedGDTVar(GDT $gdt, string $prompt = ''): bool
+	{
+		$old = $gdt->getVar();
+		self::changeGDT($gdt, $prompt);
+		$new = $gdt->getVar();
+		return $gdt->hasError() ? false : $old !== $new;
+	}
+
 	/**
 	 * Show a prompt to change a GDT value.
 	 * Validate and return success.
 	 */
-	public static function changeGDT(GDT $gdt, string $prompt=''): bool
+	public static function changeGDT(GDT $gdt, string $prompt = ''): bool
 	{
-		$xmplvars = (string) $gdt->gdoExampleVars();
+		$xmplvars = (string)$gdt->gdoExampleVars();
 		$prompt = $prompt ? "$prompt " : '';
 		if ($label = $gdt->renderLabel())
 		{
@@ -83,7 +102,7 @@ final class REPL
 		}
 		$prompt .= self::xmplDefaults($gdt, $xmplvars);
 		echo $prompt;
-		echo "?: ";
+		echo '?: ';
 		$response = rtrim(readline(), "\r\n");
 		if ($response === '')
 		{
@@ -98,15 +117,17 @@ final class REPL
 		Website::error('GDOv7', 'err_adm_iconfig', [$gdt->getName(), $gdt->renderError()]);
 		return false;
 	}
-	
-	private static function xmplDefaults(GDT $gdt, string $xmplvars): string 
+
+	private static function xmplDefaults(GDT $gdt, string $xmplvars): string
 	{
 		$back = '';
 		$xmplvars = str_replace('|', ',', $xmplvars);
 		$xmplvars2 = ",{$xmplvars},";
 		$initial = $gdt->getInitial();
-		if ( ($initial !== null) &&
-			 (strpos($xmplvars2, ",{$initial},") !== false) )
+		if (
+			($initial !== null) &&
+			(strpos($xmplvars2, ",{$initial},") !== false)
+		)
 		{
 			$back = str_replace(",{$initial},", sprintf(',%s,', TextStyle::bold($initial)), $xmplvars2);
 		}
@@ -119,21 +140,7 @@ final class REPL
 		{
 			$back = $xmplvars;
 		}
-		return trim($back, ",");
+		return trim($back, ',');
 	}
-	
-	/**
-	 * 
-	 * @param GDT $gdt
-	 * @param string $prompt
-	 * @return bool - has the user changed  the value?
-	 */
-	public static function changedGDTVar(GDT $gdt, string $prompt=''): bool
-	{
-		$old = $gdt->getVar();
-		self::changeGDT($gdt, $prompt);
-		$new = $gdt->getVar();
-		return $gdt->hasError() ? false : $old !== $new;
-	}
-		
+
 }

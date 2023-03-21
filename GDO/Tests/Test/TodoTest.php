@@ -6,15 +6,16 @@ use function PHPUnit\Framework\assertTrue;
 
 /**
  * Test if the todo generation works.
- * 
- * @author gizmore
+ *
  * @since 7.0.0
+ * @author gizmore
  */
 final class TodoTest extends TestCase
 {
+
 	public function testTodo()
 	{
 		assertTrue(true);
 	}
-	
+
 }

@@ -5,35 +5,37 @@ use GDO\Core\GDT_Select;
 
 final class GDT_Protocol extends GDT_Select
 {
-	const HTTP = 'http';
-	const HTTPS = 'https';
-	const SSH = 'ssh';
-	const IRC = 'irc';
-	const IRCS = 'ircs';
-	const FTP = 'ftp';
-	const FTPS = 'ftps';
-	const SFTP = 'sftp';
-	const TCP = 'tcp';
-	const TCPS = 'tcps';
-	const RDP = 'rdp';
-	
+
+	public const HTTP = 'http';
+	public const HTTPS = 'https';
+	public const SSH = 'ssh';
+	public const IRC = 'irc';
+	public const IRCS = 'ircs';
+	public const FTP = 'ftp';
+	public const FTPS = 'ftps';
+	public const SFTP = 'sftp';
+	public const TCP = 'tcp';
+	public const TCPS = 'tcps';
+	public const RDP = 'rdp';
+
 	###########
 	### GDT ###
 	###########
+	public $protocols = [];
+
 	public function allowHTTP()
 	{
 		return $this->allowProtocols('http', 'https');
 	}
-	
-	public $protocols = [];
+
 	public function allowProtocols(string ...$protocols)
 	{
 		$this->protocols = array_unique(array_merge($this->protocols, $protocols));
 		$this->protocols = array_combine($this->protocols, $this->protocols);
 		return $this;
 	}
-	
-	public function allowProtocol(string $protocol, bool $allow=true)
+
+	public function allowProtocol(string $protocol, bool $allow = true)
 	{
 		if ($allow)
 		{
@@ -45,7 +47,7 @@ final class GDT_Protocol extends GDT_Select
 		}
 		return $this;
 	}
-	
+
 	###############
 	### Choices ###
 	###############
@@ -56,20 +58,20 @@ final class GDT_Protocol extends GDT_Select
 		$choices = array_merge($choices, $this->protocols);
 		return $choices;
 	}
-	
+
 	##############
 	### Render ###
 	##############
-	public function render() : string
+	public function render(): string
 	{
 		$this->initChoices();
 		return parent::render();
 	}
-	
+
 	################
 	### Validate ###
 	################
-	public function validate($value) : bool
+	public function validate($value): bool
 	{
 		$this->initChoices();
 		return parent::validate($value);

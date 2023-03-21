@@ -7,9 +7,9 @@ namespace GDO\Core;
  * Use GDT_Message for a textarea.
  * The cell rendering in tables should be dottet.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 5.0.2
+ * @author gizmore
  * @see GDT_String
  * @see GDT_Message
  */
@@ -18,7 +18,7 @@ class GDT_Text extends GDT_String
 
 	public int $max = 65535;
 
-	public function defaultLabel(): static
+	public function defaultLabel(): self
 	{
 		return $this->label('message');
 	}

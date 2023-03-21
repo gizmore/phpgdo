@@ -5,55 +5,55 @@ use GDO\Core\GDO_NoSuchMethodError;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Util\Strings;
-use GDO\Core\GDO_Error;
 
 /**
  * Parse a CLI expression into an expression tree for execution.
  * A grad student probably would have pulled a lexer and AST stuff ;)
- * 
+ *
  * The syntax is a bit weird, first named params, then positional required params.
  * All parameters are seperated by comma.
- * 
+ *
  * Syntax:
- * 
+ *
+ * @version 7.0.1
+ * @since 7.0.0
  * @example gdo cli.echo hi there.
  * @example gdo math.calc 1+2+3
  * @example gdo cli.concat a,$(wget https://google.de) # => a<!DOCTYPE....
  * @example gdo math.add $(add 1,2),$(add 3,4) # => 10
- * 
+ *
  * @example gdo mail giz,hi there(howdy;$(concat );   wget --abc ssh://)
- * 
+ *
  * @author gizmore
- * @version 7.0.1
- * @since 7.0.0
  * @see Method
  * @see GDT_Method
  * @see GDT_Expression
  */
 final class Parser
 {
-	const SPACE = ' '; # seperates named args.
-	const QUOTES = '"';
-	const CMD_PREAMBLE = '$';
-	const CMD_BEGIN = '(';
-	const CMD_ENDIN = ')';
-	const ARG_SEPARATOR = ',';
-	const VAL_SEPERATOR = '=';
-	const ESCAPE_CHARACTER = '\\';
-	
+
+	public const SPACE = ' '; # seperates named args.
+	public const QUOTES = '"';
+	public const CMD_PREAMBLE = '$';
+	public const CMD_BEGIN = '(';
+	public const CMD_ENDIN = ')';
+	public const ARG_SEPARATOR = ',';
+	public const VAL_SEPERATOR = '=';
+	public const ESCAPE_CHARACTER = '\\';
+
 	private string $line;
-	
-	public function parse(string $line) : GDT_Expression
+
+	public function parse(string $line): GDT_Expression
 	{
 		$this->line = $line;
 		$current = GDT_Expression::make();
 		return $this->parseB($current->line($line), $this->line);
 	}
-	
+
 	###############
 	### Private ###
 	###############
-	private function parseB(GDT_Expression $current, string $line) : GDT_Expression
+	private function parseB(GDT_Expression $current, string $line): GDT_Expression
 	{
 		$i = 0;
 		$l = $line;
@@ -65,7 +65,7 @@ final class Parser
 		while ($i < $len)
 		{
 			$c = $l[$i++];
-			
+
 			switch ($c)
 			{
 				case self::CMD_PREAMBLE:
@@ -83,13 +83,18 @@ final class Parser
 					}
 					$arg .= $c;
 					break;
-				
+
 				case self::ESCAPE_CHARACTER:
 					$c2 = $l[$i++];
 					switch ($c2)
 					{
-						case 'n': case 'N': $arg .= "\n"; break;
-						default: $arg .= $c2; break;
+						case 'n':
+						case 'N':
+							$arg .= "\n";
+							break;
+						default:
+							$arg .= $c2;
+							break;
 					}
 					break;
 
@@ -104,7 +109,7 @@ final class Parser
 						$this->addArg($current, $arg);
 					}
 					break;
-					
+
 // 				case self::SPACE:
 // 					# space means next arg, if not yet positional
 // 					$arg .= $c;
@@ -126,49 +131,22 @@ final class Parser
 		{
 			$this->addArg($current, $arg);
 		}
-		
+
 		$current->applyInputs();
 
 		$current->method->setupCLIButton();
 
 		return $current;
 	}
-	
-	private function addArg(GDT_Expression $expression, string &$arg) : void
-	{
-		if (str_starts_with($arg, '--'))
-		{
-//			if ($expression->hasPositionalInput())
-//			{
-//				throw new GDO_Error('err_positional_after_named_parameter', [html($arg)]);
-//			}
-			$arg = substr($arg, 2);
-// 			$arg = Strings::substrTo($arg, self::ARG_SEPARATOR, $arg);
-			$key = Strings::substrTo($arg, self::VAL_SEPERATOR, $arg);
-			$input = Strings::substrFrom($arg, self::VAL_SEPERATOR, '1');
-		}
-		else
-		{
-			$key = null;
-			$input = $arg;
-		}
-		$arg = ''; # do not use EMPTY_STRING!, it's a ref
-		$expression->addInput($key, $input);
-	}
-	
-	private function addArgExpr(GDT_Expression $expression, GDT_Expression $arg) : void
-	{
-		$expression->addInput(null, $arg->method);
-	}
 
 	/**
 	 * @throws GDO_NoSuchMethodError
 	 */
-	private function parseMethod(string $line, int &$i, int $len) : Method
+	private function parseMethod(string $line, int &$i, int $len): Method
 	{
 		$parsed = '';
 		$started = false;
-		for (;$i < $len;)
+		for (; $i < $len;)
 		{
 			$c = $line[$i++];
 			if (ctype_space($c))
@@ -219,14 +197,14 @@ final class Parser
 
 		return $method;
 	}
-	
+
 	/**
 	 * Parse an additional line within parantheses.
 	 */
-	private function parseLine(string $line, int &$i, int $len) : string
+	private function parseLine(string $line, int &$i, int $len): string
 	{
 		$parsed = '';
-		for (;$i < $len;)
+		for (; $i < $len;)
 		{
 			$c = $line[$i++];
 			switch ($c)
@@ -235,10 +213,10 @@ final class Parser
 					$c2 = $line[$i++];
 					$parsed .= $c2;
 					break;
-				
+
 				case self::CMD_ENDIN:
 					break 2;
-					
+
 				default:
 					$parsed .= $c;
 					break;
@@ -246,5 +224,32 @@ final class Parser
 		}
 		return $parsed;
 	}
-	
+
+	private function addArgExpr(GDT_Expression $expression, GDT_Expression $arg): void
+	{
+		$expression->addInput(null, $arg->method);
+	}
+
+	private function addArg(GDT_Expression $expression, string &$arg): void
+	{
+		if (str_starts_with($arg, '--'))
+		{
+//			if ($expression->hasPositionalInput())
+//			{
+//				throw new GDO_Error('err_positional_after_named_parameter', [html($arg)]);
+//			}
+			$arg = substr($arg, 2);
+// 			$arg = Strings::substrTo($arg, self::ARG_SEPARATOR, $arg);
+			$key = Strings::substrTo($arg, self::VAL_SEPERATOR, $arg);
+			$input = Strings::substrFrom($arg, self::VAL_SEPERATOR, '1');
+		}
+		else
+		{
+			$key = null;
+			$input = $arg;
+		}
+		$arg = ''; # do not use EMPTY_STRING!, it's a ref
+		$expression->addInput($key, $input);
+	}
+
 }

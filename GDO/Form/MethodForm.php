@@ -2,72 +2,58 @@
 namespace GDO\Form;
 
 use GDO\Core\GDO;
-use GDO\Core\Method;
-use GDO\Core\GDT;
-use GDO\File\GDT_File;
 use GDO\Core\GDO_Error;
+use GDO\Core\GDT;
+use GDO\Core\Method;
+use GDO\File\GDT_File;
 
 /**
  * A method with a form.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 5.0.2
+ * @author gizmore
  */
 abstract class MethodForm extends Method
 {
-	public function isUserRequired() : bool
-	{
-		return true;
-	}
-	
-	public function isLocking() : bool
-	{
-		return true;
-	}
-	
+
+	public bool $submitted = false;
+	public ?string $pressedButton = null;
+
 	#################
 	### Submitted ###
 	#################
-	public bool $submitted = false;
-	public ?string $pressedButton = null;
-	public function submitted(bool $submitted=true): static
+	public bool $validated = false;
+	protected GDT_Form $form;
+
+	public function isUserRequired(): bool
+	{
+		return true;
+	}
+
+	#################
+	### Validated ###
+	#################
+
+	public function isLocking(): bool
+	{
+		return true;
+	}
+
+	public function submitted(bool $submitted = true): self
 	{
 		$this->submitted = $submitted;
 		return $this;
 	}
-	
-	#################
-	### Validated ###
-	#################
-	public bool $validated = false;
-	public function validated(bool $validated=true): static
-	{
-		$this->validated = $validated;
-		return $this;
-	}
-	
+
 	############
 	### Form ###
 	############
-	protected GDT_Form $form;
-	
-	public function getFormName() : string
-	{
-		return 'form';
-	}
-	
-	public abstract function createForm(GDT_Form $form) : void;
 
-	public function formValidated(GDT_Form $form)
+	public function validated(bool $validated = true): self
 	{
-		$this->message('msg_form_validated');
-		return $this->renderPage();
-	}
-	
-	public function formInvalid(GDT_Form $form)
-	{
-		return $this->renderPage();
+		$this->validated = $validated;
+		return $this;
 	}
 
 	/**
@@ -76,7 +62,7 @@ abstract class MethodForm extends Method
 	 * Reset GDT to initial.
 	 * Optionally remove inputs.
 	 */
-	public function resetForm(bool $removeInput = false) : void
+	public function resetForm(bool $removeInput = false): void
 	{
 		if (isset($this->form))
 		{
@@ -93,35 +79,14 @@ abstract class MethodForm extends Method
 		}
 		unset($this->parameterCache); # :)
 	}
-	
-	/**
-	 * Get the parameter cache.
-	 * 
-	 * @return GDT[]
-	 */
-	public function &gdoParameterCache(): array
+
+	protected function initFromGDO(GDO $gdo): self
 	{
-		if (!isset($this->parameterCache))
-		{
-			$this->parameterCache = [];
-// 			$this->applyInput();
-			$this->addComposeParameters($this->gdoParameters());
-			$form = $this->getForm(true);
-			$this->addComposeParameters($form->getAllFields());
-			$this->addComposeParameters($form->actions()->getAllFields());
-// 			$this->applyInput();
-		}
-		return $this->parameterCache;
+		$this->getForm()->initFromGDO($gdo);
+		return $this;
 	}
-	
-	public function getMethodTitle() : string
-	{
-		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
-		$key = strtolower($key);
-		return t($key);
-	}
-	
-	public function getForm(bool $reset = false) : GDT_Form
+
+	public function getForm(bool $reset = false): GDT_Form
 	{
 		if ($reset)
 		{
@@ -143,7 +108,122 @@ abstract class MethodForm extends Method
 		}
 		return $this->form;
 	}
-	
+
+	public function getFormName(): string
+	{
+		return 'form';
+	}
+
+	abstract public function createForm(GDT_Form $form): void;
+
+	protected function applyInput(): void
+	{
+		$this->getForm();
+		parent::applyInput();
+	}
+
+	public function execute()
+	{
+		### validation result
+		$this->submitted = false;
+		$this->validated = false;
+		$this->pressedButton = null;
+
+		### Generate form
+		unset($this->parameterCache);
+		$this->gdoParameterCache();
+		$form = $this->getForm();
+
+		$this->appliedInputs($this->getInputs());
+
+		$form->titleRaw($this->getMethodTitle());
+
+// 		if (isset($this->inputs))
+// 		{
+// 			$form->inputs($this->inputs);
+// 			$this->applyInput();
+
+		### Flow upload
+		if ($flowField = (@$this->inputs['flowField']))
+		{
+			/** @var $formField GDT_File * */
+			if ($formField = $form->getField($flowField))
+			{
+				return $formField->flowUpload();
+			}
+		}
+// 		}
+
+
+		### Execute action
+// 		$inputs = $this->getInputs();
+		foreach ($form->actions()->getAllFields() as $gdt)
+		{
+			/** @var $gdt GDT_Submit * */
+// 			$gdt->inputs($inputs);
+			if ($gdt->hasInput() && $gdt->isWriteable())
+			{
+				$this->submitted = true;
+				$this->pressedButton = $gdt->getName();
+
+				$this->beforeValidation();
+
+				if ($form->validate(null))
+				{
+					$this->validated = true;
+
+					# submit events
+					$this->onSubmitted();
+
+					# Click it
+					if ($gdt->onclick)
+					{
+						$result = $gdt->click($form);
+					}
+					elseif ($gdt->name === 'submit')
+					{
+						$result = $this->formValidated($form);
+					}
+					else
+					{
+						throw new GDO_Error('err_submit_without_click_handler', [
+							$this->renderMoMe(), $gdt->getName()]);
+					}
+
+					$this->afterValidation();
+
+					return $result;
+				}
+				else
+				{
+					$form->errorFormInvalid();
+					return $this->formInvalid($form);
+				}
+			}
+		}
+		return $this->renderPage();
+	}
+
+	/**
+	 * Get the parameter cache.
+	 *
+	 * @return GDT[]
+	 */
+	public function &gdoParameterCache(): array
+	{
+		if (!isset($this->parameterCache))
+		{
+			$this->parameterCache = [];
+// 			$this->applyInput();
+			$this->addComposeParameters($this->gdoParameters());
+			$form = $this->getForm(true);
+			$this->addComposeParameters($form->getAllFields());
+			$this->addComposeParameters($form->actions()->getAllFields());
+// 			$this->applyInput();
+		}
+		return $this->parameterCache;
+	}
+
 // 	public function executeEditMethods()
 // 	{
 // 		if (count($_POST))
@@ -166,114 +246,21 @@ abstract class MethodForm extends Method
 	############
 	### Init ###
 	############
-	protected function initFromGDO(GDO $gdo): static
+
+	public function getMethodTitle(): string
 	{
-		$this->getForm()->initFromGDO($gdo);
-		return $this;
+		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return t($key);
 	}
-	
-	protected function applyInput(): void
-	{
-		$this->getForm();
-		parent::applyInput();
-	}
-	
+
+	protected function beforeValidation(): void {}
+
 	############
 	### Exec ###
 	############
-	protected function beforeValidation() : void {}
-	protected function afterValidation() : void {}
 
-	public function execute()
-	{
-		### validation result 
-		$this->submitted = false;
-		$this->validated = false;
-		$this->pressedButton = null;
-		
-		### Generate form
-		unset($this->parameterCache);
-		$this->gdoParameterCache();
-		$form = $this->getForm();
-		
-		$this->appliedInputs($this->getInputs());
-		
-		$form->titleRaw($this->getMethodTitle());
-		
-// 		if (isset($this->inputs))
-// 		{
-// 			$form->inputs($this->inputs);
-// 			$this->applyInput();
-
-			### Flow upload
-			if ($flowField = (@$this->inputs['flowField']))
-			{
-				/** @var $formField GDT_File **/
-				if ($formField = $form->getField($flowField))
-				{
-					return $formField->flowUpload();
-				}
-			}
-// 		}
-		
-
-		### Execute action
-// 		$inputs = $this->getInputs();
-		foreach ($form->actions()->getAllFields() as $gdt)
-		{
-			/** @var $gdt GDT_Submit **/
-// 			$gdt->inputs($inputs);
-			if ($gdt->hasInput() && $gdt->isWriteable())
-			{
-				$this->submitted = true;
-				$this->pressedButton = $gdt->getName();
-				
-				$this->beforeValidation();
-				
-				if ($form->validate(null))
-				{
-					$this->validated = true;
-
-					# submit events
-					$this->onSubmitted();
-					
-					# Click it
-					if ($gdt->onclick)
-					{
-						$result = $gdt->click($form);
-					}
-					elseif ($gdt->name === 'submit')
-					{
-						$result = $this->formValidated($form);
-					}
-					else
-					{
-						throw new GDO_Error('err_submit_without_click_handler', [
-							$this->renderMoMe(), $gdt->getName()]);
-					}
-
-					$this->afterValidation();
-					
-					return $result;
-				}
-				else
-				{
-					$form->errorFormInvalid();
-					return $this->formInvalid($form);
-				}
-			}
-		}
-		return $this->renderPage();
-	}
-	
-	protected function renderMoMe() : string
-	{
-		$mo = $this->getModuleName();
-		$me = $this->getMethodName();
-		return "{$mo}::{$me}";
-	}
-	
-	private function onSubmitted() : void
+	private function onSubmitted(): void
 	{
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
@@ -281,15 +268,36 @@ abstract class MethodForm extends Method
 		}
 	}
 
-	### Override ###
+	public function formValidated(GDT_Form $form)
+	{
+		$this->message('msg_form_validated');
+		return $this->renderPage();
+	}
+
 	/**
 	 * @TODO renderPage() is not a GDT method. Maybe rename and make it a Method thingy.
 	 */
-	public function renderPage() : GDT
+	public function renderPage(): GDT
 	{
 		$form = $this->getForm();
 		$form->titleRaw($this->getMethodTitle());
 		return $form;
 	}
-	
+
+	protected function renderMoMe(): string
+	{
+		$mo = $this->getModuleName();
+		$me = $this->getMethodName();
+		return "{$mo}::{$me}";
+	}
+
+	protected function afterValidation(): void {}
+
+	### Override ###
+
+	public function formInvalid(GDT_Form $form)
+	{
+		return $this->renderPage();
+	}
+
 }

@@ -4,23 +4,25 @@ namespace GDO\Core;
 /**
  * Select a method.
  * Optional permission validation.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.1
+ * @author gizmore
  */
 final class GDT_MethodSelect extends GDT_Select
 {
+
 	#################
 	### Permitted ###
 	#################
 	public bool $onlyPermitted = false;
-	public function onlyPermitted(bool $onlyPermitted = true): static
+
+	public function onlyPermitted(bool $onlyPermitted = true): self
 	{
 		$this->onlyPermitted = $onlyPermitted;
 		return $this;
 	}
-	
+
 	###############
 	### Choices ###
 	###############

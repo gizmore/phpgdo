@@ -1,9 +1,11 @@
 <?php
 namespace GDO\Table\tpl;
-use GDO\Table\GDT_List;
-use GDO\Core\GDT_Template;
+
 use GDO\Core\GDT;
-/** @var $field GDT_List **/
+use GDO\Core\GDT_Template;
+use GDO\Table\GDT_List;
+
+/** @var $field GDT_List * */
 
 echo GDT_Template::php('Table', 'list_filter.php', ['field' => $field]);
 
@@ -27,31 +29,35 @@ $pagemenu = $pagemenu ? $pagemenu->renderHTML() : GDT::EMPTY_STRING;
 
 if (!$field->countItems())
 {
-    if ($field->hideEmpty)
-    {
-        return;
-    }
+	if ($field->hideEmpty)
+	{
+		return;
+	}
 }
 
 $result = $field->getResult();
 
 echo $pagemenu;
 ?>
-<!-- Begin List -->
-<div class="gdt-list">
-<?php if ( ($page == 1) && ($field->hasText()) ) : ?>
-  <p class="gdt-list-text"><?=$field->renderText()?></p>
-<?php endif; ?>
-<?php if ($field->hasTitle()) : ?>
-  <div class="gdt-list-title"><h3><?=$field->renderTitle()?></h3></div>
-<?php endif; ?>
-<?php
-$gdo = $field->fetchAs->cache->getDummy();
-while ($gdo = $result->fetchInto($gdo)) :
-  echo $gdo->renderList();
-endwhile;
-?>
-</div>
-<!-- End of List -->
-<?php
+    <!-- Begin List -->
+    <div class="gdt-list">
+		<?php
+		if (($page == 1) && ($field->hasText())) : ?>
+            <p class="gdt-list-text"><?=$field->renderText()?></p>
+		<?php
+		endif; ?>
+		<?php
+		if ($field->hasTitle()) : ?>
+            <div class="gdt-list-title"><h3><?=$field->renderTitle()?></h3></div>
+		<?php
+		endif; ?>
+		<?php
+		$gdo = $field->fetchAs->cache->getDummy();
+		while ($gdo = $result->fetchInto($gdo)) :
+			echo $gdo->renderList();
+		endwhile;
+		?>
+    </div>
+    <!-- End of List -->
+	<?php
 echo $pagemenu;

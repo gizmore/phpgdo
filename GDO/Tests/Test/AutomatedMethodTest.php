@@ -3,15 +3,13 @@ namespace GDO\Tests\Test;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Response;
 use GDO\Language\Method\SwitchLanguage;
-use GDO\PM\Method\Quote;
-use GDO\TBS\Method\Tutorials;
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
-use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertTrue;
-use GDO\Core\GDT_Response;
 
 /**
  * Test all GDOv7 methods with plugvar fuzzing.
@@ -25,12 +23,12 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	{
 		$this->doAllMethods();
 	}
-	
+
 	protected function getTestName(): string
 	{
-		return "Method Execution";
+		return 'Method Execution';
 	}
-	
+
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		$method = $mt->method;
@@ -46,7 +44,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		$result = $mt->execute(null, false);
 		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
 		assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
-		assertTrue(!!$this->renderResult($result), "Test if method response renders all outputs without crash.");
+		assertTrue(!!$this->renderResult($result), 'Test if method response renders all outputs without crash.');
 	}
 
 	/**
@@ -64,13 +62,9 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		$response->renderMode(GDT::RENDER_WEBSITE);
 		return true;
 	}
-	
-	protected function runGDTTest(GDT $gdt): void
-	{
-	}
-	
-	protected function runGDOTest(GDO $gdo): void
-	{
-	}
-	
+
+	protected function runGDTTest(GDT $gdt): void {}
+
+	protected function runGDOTest(GDO $gdo): void {}
+
 }

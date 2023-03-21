@@ -6,18 +6,28 @@ use GDO\Core\GDT;
 /**
  * HTML target attribute for GDTs.
  * Offers target attribute rendering.
- * 
- * @author gizmore
+ *
  * @version 7.0.0
  * @since 6.3.0
+ * @author gizmore
  * @see GDT
  * @see WithHREF
  * @see WithAction
  */
 trait WithTarget
 {
+
 	public string $target;
-	public function target(string $target=null): static
+
+	/**
+	 * @deprecated Is often blocked on User devices (chrome).
+	 */
+	public function targetBlank(): self
+	{
+		return $this->target('_blank');
+	}
+
+	public function target(string $target = null): self
 	{
 		if ($target === null)
 		{
@@ -30,15 +40,7 @@ trait WithTarget
 		return $this;
 	}
 
-	/**
-	 * @deprecated Is often blocked on User devices (chrome).
-	 */
-	public function targetBlank(): static
-	{
-		return $this->target('_blank');
-	}
-	
-	public function htmlTarget() : string
+	public function htmlTarget(): string
 	{
 		if (isset($this->target))
 		{
@@ -46,5 +48,5 @@ trait WithTarget
 		}
 		return GDT::EMPTY_STRING;
 	}
-	
+
 }

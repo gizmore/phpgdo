@@ -1,4 +1,5 @@
-<?php namespace GDO\Core\tpl\page; ?>
+<?php
+namespace GDO\Core\tpl\page; ?>
 # GDOv7 SECURITY.md
 
 Security policy file for
@@ -31,12 +32,12 @@ Roughly you can say a security issue will patch all versions.
 
 v7(properitary) is under development. v6(free) would still receive security fixes.
 
-    +---------+-----------+
-    | Version | Supported |
-    +---------+-----+-----+
-    | >=6.0.0 | Yes |
-    | >=7.0.0 | Yes |
-    +---------+-----+
++---------+-----------+
+| Version | Supported |
++---------+-----+-----+
+| >=6.0.0 | Yes |
+| >=7.0.0 | Yes |
++---------+-----+
 
 
 ## GDOv7 SECURITY.md: Reporting a Vulnerability
@@ -50,11 +51,9 @@ There is no real reward, but helping the GDO project is a hacking challenge flag
 ### Credits
 
 Thanks for reading SECURITY.md!
-    - gizmore
+- gizmore
 
 
 ### Hall of Fame
 
- - [jusb3](https://www.wechall.net/profile/jusb3) (PaddingOracle attack on [phpgdo-session-cookie](https://github.com/gizmore/phpgdo-session-cookie)
- 
- 
+- [jusb3](https://www.wechall.net/profile/jusb3) (PaddingOracle attack on [phpgdo-session-cookie](https://github.com/gizmore/phpgdo-session-cookie)

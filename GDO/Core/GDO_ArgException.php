@@ -5,13 +5,14 @@ use GDO\UI\TextStyle;
 
 /**
  * Invalid argument exception.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
+ * @author gizmore
  */
 final class GDO_ArgException extends GDO_Error
 {
-	public function __construct(GDT $field, int $code=GDO_Exception::DEFAULT_ERROR_CODE)
+
+	public function __construct(GDT $field, int $code = GDO_Exception::DEFAULT_ERROR_CODE)
 	{
 		$f = $field->hasName() ? $field->getName() : $field->gdoHumanName();
 		$e = $field->renderError();
@@ -20,5 +21,5 @@ final class GDO_ArgException extends GDO_Error
 			TextStyle::italic($e),
 		], $code);
 	}
-	
+
 }

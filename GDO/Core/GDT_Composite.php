@@ -1,41 +1,43 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Form\WithFormAttributes;
 use GDO\UI\GDT_Container;
 use GDO\UI\WithLabel;
-use GDO\Form\WithFormAttributes;
 
 /**
  * A composite is a container that proxies certain methods to all it's fields.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.1
+ * @author gizmore
  */
 class GDT_Composite extends GDT_Container
 {
+
 	use WithLabel;
 	use WithValue;
 	use WithInput;
 	use WithError;
 	use WithFormAttributes;
-	
-	public function gdoCompositeFields() : array
-	{
-		return GDT::EMPTY_ARRAY;
-	}
-	
-	public static function make(string $name=null): static
+
+	public static function make(string $name = null): self
 	{
 		$obj = self::makeNamed($name);
 		$obj->addFields(...$obj->gdoCompositeFields());
 		return $obj;
 	}
-	
+
+	public function gdoCompositeFields(): array
+	{
+		return GDT::EMPTY_ARRAY;
+	}
+
 	###############
 	### NotNull ###
 	###############
-	public function notNull(bool $notNull = true): static
+
+	public function notNull(bool $notNull = true): self
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{
@@ -43,29 +45,35 @@ class GDT_Composite extends GDT_Container
 		}
 		return $this;
 	}
-	
-	public function inputs(?array $inputs): static
+
+	public function gdo(GDO $gdo = null): self
 	{
-		parent::inputs($inputs);
-		foreach ($this->getAllFields() as $gdt)
+		array_map(function (GDT $gdt) use ($gdo)
 		{
-			$gdt->inputs($inputs);
-		}
-		return $this;
-	}
-	
-	###################
-	### Var / Value ###
-	###################
-	public function gdo(GDO $gdo = null): static
-	{
-		array_map(function(GDT $gdt) use ($gdo) {
 			$gdt->gdo($gdo);
 		}, $this->getAllFields());
 		return $this;
 	}
-	
-	public function getGDOData() : array
+
+	###################
+	### Var / Value ###
+	###################
+
+	public function setGDOData(array $data): self
+	{
+		foreach ($this->getAllFields() as $gdt)
+		{
+			$gdt->setGDOData($data);
+		}
+		return $this;
+	}
+
+	public function getValue()
+	{
+		return parent::getValue();
+	}
+
+	public function getGDOData(): array
 	{
 		$gdodata = [];
 		foreach ($this->getAllFields() as $gdt)
@@ -78,17 +86,8 @@ class GDT_Composite extends GDT_Container
 		}
 		return $gdodata;
 	}
-	
-	public function setGDOData(array $data): static
-	{
-		foreach ($this->getAllFields() as $gdt)
-		{
-			$gdt->setGDOData($data);
-		}
-		return $this;
-	}
-	
-	public function validated(bool $throw=false) : ?self
+
+	public function validated(bool $throw = false): ?self
 	{
 		$valid = true;
 		$inputs = $this->getInputs();
@@ -105,28 +104,22 @@ class GDT_Composite extends GDT_Container
 		}
 		return $valid ? $this : null;
 	}
-	
-	public function getValue()
+
+	public function inputs(?array $inputs): self
 	{
-		return parent::getValue();
-	}
-	
-	#############
-	### Proxy ###
-	#############
-	public function writeable(bool $writeable): static
-	{
+		parent::inputs($inputs);
 		foreach ($this->getAllFields() as $gdt)
 		{
-			$gdt->writeable($writeable);
+			$gdt->inputs($inputs);
 		}
 		return $this;
 	}
-	
-	##########
-	### DB ###
-	##########
-	public function blankData() : array
+
+	#############
+	### Proxy ###
+	#############
+
+	public function blankData(): array
 	{
 		$data = [];
 		foreach ($this->getAllFields() as $gdt)
@@ -138,19 +131,21 @@ class GDT_Composite extends GDT_Container
 		}
 		return $data;
 	}
-	
-	public function gdoColumnDefine() : string
+
+	##########
+	### DB ###
+	##########
+
+	public function gdoColumnDefine(): string
 	{
-		$defines = array_map(function(GDT $gdt) {
+		$defines = array_map(function (GDT $gdt)
+		{
 			return $gdt->gdoColumnDefine();
 		}, $this->getAllFields());
 		return implode(",\n", $defines);
 	}
 
-	############
-	### Test ###
-	############
-	public function plugVars() : array
+	public function plugVars(): array
 	{
 		$plugs = [];
 		foreach ($this->getAllFields() as $gdt)
@@ -159,11 +154,32 @@ class GDT_Composite extends GDT_Container
 		}
 		return $plugs;
 	}
-	
+
+	############
+	### Test ###
+	############
+
+	public function configJSON(): array
+	{
+		return [
+			'name' => $this->getName(),
+		];
+	}
+
 	##############
 	### Render ###
 	##############
-	public function renderError() : string
+
+	public function writeable(bool $writeable): self
+	{
+		foreach ($this->getAllFields() as $gdt)
+		{
+			$gdt->writeable($writeable);
+		}
+		return $this;
+	}
+
+	public function renderError(): string
 	{
 		$errors = [];
 		foreach ($this->getAllFields() as $gdt)
@@ -175,15 +191,8 @@ class GDT_Composite extends GDT_Container
 		}
 		return implode(' - ', $errors);
 	}
-	
-	public function configJSON() : array
-	{
-		return [
-			'name' => $this->getName(),
-		];
-	}
-	
-	public function tooltip(string $key, array $args=null): static
+
+	public function tooltip(string $key, array $args = null): self
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{

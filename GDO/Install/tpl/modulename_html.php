@@ -1,21 +1,27 @@
 <?php
-use GDO\Core\GDT_Template;
+
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT_Template;
+
 $field instanceof GDT_Template;
 $module = $field->gdo;
 $module instanceof GDO_Module;
 $name = $module->getName();
-if ($module->isSiteModule()) {
+if ($module->isSiteModule())
+{
 	$class = 'site-module';
 }
-elseif ($module->isCoreModule()) {
+elseif ($module->isCoreModule())
+{
 	$class = 'core-module';
 }
-else {
+else
+{
 	$class = 'gdo-module';
 }
 
-if ($module->isInstalled()) {
+if ($module->isInstalled())
+{
 	$class .= ' module-installed';
 }
 ?>

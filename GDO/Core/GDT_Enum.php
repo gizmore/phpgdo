@@ -4,20 +4,22 @@ namespace GDO\Core;
 /**
  * An enum.
  * It is a select with special rendering.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.0.0
+ * @author gizmore
  */
 class GDT_Enum extends GDT_Select
 {
+
 	public array $enumValues;
-	public function enumValues(string...$enumValues): static
+
+	public function enumValues(string...$enumValues): self
 	{
 		$this->enumValues = $enumValues;
 		return $this;
 	}
-	
+
 	public function getChoices(): array
 	{
 		if (isset($this->enumValues))
@@ -26,19 +28,8 @@ class GDT_Enum extends GDT_Select
 		}
 		return GDT::EMPTY_ARRAY;
 	}
-	
-	public function enumIndex()
-	{
-		return $this->enumIndexFor($this->getVar());
-	}
-	
-	public function enumIndexFor($enumValue)
-	{
-		$index = array_search($enumValue, $this->enumValues, true);
-		return $index === false ? 0 : $index + 1;
-	}
 
-	public function configJSON() : array
+	public function configJSON(): array
 	{
 		return [
 			'name' => $this->getName(),
@@ -47,18 +38,30 @@ class GDT_Enum extends GDT_Select
 			'notNull' => $this->notNull,
 		];
 	}
-	
+
+	public function displayVar(string $var = null): string
+	{
+		return $var === null ? self::none() : t('enum_' . $var);
+	}
+
+	public function gdoExampleVars(): ?string
+	{
+		return implode('|', $this->enumValues);
+	}
+
 	##############
 	### Render ###
 	##############
-	public function displayVar(string $var=null) : string
+
+	public function enumIndex()
 	{
-		return $var === null ? self::none(): t('enum_' . $var);
+		return $this->enumIndexFor($this->getVar());
 	}
-	
-	public function gdoExampleVars() : ?string
+
+	public function enumIndexFor($enumValue)
 	{
-		return implode('|', $this->enumValues);
+		$index = array_search($enumValue, $this->enumValues, true);
+		return $index === false ? 0 : $index + 1;
 	}
 
 }

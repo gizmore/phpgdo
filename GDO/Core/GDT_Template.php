@@ -1,12 +1,13 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Util\Strings;
 use GDO\Language\Trans;
+use GDO\Table\GDT_Filter;
 use GDO\UI\WithLabel;
 use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
-use GDO\Table\GDT_Filter;
+use GDO\Util\Strings;
+use Throwable;
 
 /**
  * GDOv7 Template Engine as a GDT implementation.
@@ -16,147 +17,56 @@ use GDO\Table\GDT_Filter;
  * - Themes cascade similiar to css.
  * - @TODO get Sidebar Menu Ordering done.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 3.0.0
  * @notin 3.0.4 - 4.9.0
+ * @author gizmore
  */
 class GDT_Template extends GDT
 {
-	use WithGDO;
-	use WithLabel; # so you can use GDT_Template in GDT_Table
 
-	public function isTestable() : bool { return false; } # skip this class in tests
+	use WithGDO;
+	use WithLabel;
+
+	# so you can use GDT_Template in GDT_Table
 
 	/**
 	 * Loaded themes. Name => Path
+	 *
 	 * @var string[string]
 	 */
 	public static array $THEMES = [];
-
-	public static function themeNames() : array
-	{
-		return array_keys(self::$THEMES);
-	}
-
-	public static function registerTheme(string $theme, string $path) : void
-	{
-		self::$THEMES[$theme] = $path;
-	}
+	public static $CALLS = 0;
+	public string $templateHeadModule;
+	public string $templateHeadPath;
 
 	# ###########
 	# ## Base ###
 	# ###########
-	public function defaultLabel(): static
-	{
-		return $this->labelNone();
-	}
-
-	public function htmlClass(): string
-	{
-		return parent::htmlClass() . "-{$this->templateModule}-" .
-			Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
-	}
+	public ?array $templateHeadVars;
+	public string $templateModule;
 
 	##############
 	### Render ###
 	##############
-	public function render(): string
-	{
-		return $this->renderTemplate();
-	}
-
-	public function renderJSON()
-	{
-		return null;
-	}
-
-	public function renderHTML(): string
-	{
-		return $this->renderTemplate();
-	}
-
-	public function renderForm(): string
-	{
-		return $this->renderTemplate();
-	}
-
-	public function renderCLI(): string
-	{
-		return strip_tags($this->renderTemplate());
-	}
-
-	public function renderFilter(GDT_Filter $f): string
-	{
-		return $this->renderTemplate($f);
-	}
-
-	public function renderTemplate($f = null) : string
-	{
-		$tVars = [
-			'field' => $this,
-			'f' => $f
-		];
-		$tVars = isset($this->templateVars) ? array_merge($this->templateVars, $tVars) : $tVars;
-		return self::php($this->templateModule, $this->templatePath, $tVars);
-	}
-	
-	#####################
-	### Template Head ###
-	#####################
-	public string $templateHeadModule;
-	public string $templateHeadPath;
-	public ?array $templateHeadVars;
-	
-	public function templateHead(string $module, string $path, array $vars=null): static
-	{
-		$this->templateHeadModule = $module;
-		$this->templateHeadPath = $path;
-		$this->templateHeadVars = $vars;
-		return $this;
-	}
-
-	public function renderTHead(): string
-	{
-		if (isset($this->templateHeadPath))
-		{
-			return self::php($this->templateHeadModule, $this->templateHeadPath, $this->templateHeadVars);
-		}
-		return GDT::EMPTY_STRING;
-	}
-	
-	# ###########
-	# ## Type ###
-	# ###########
-	public string $templateModule;
 	public string $templatePath;
-	public array  $templateVars;
+	public array $templateVars;
 
-	public function template(string $moduleName, string $path, array $tVars = null): static
+	public static function themeNames(): array
 	{
-		$this->templateModule = $moduleName;
-		$this->templatePath = $path;
-		if ($tVars)
-		{
-			$this->templateVars = $tVars;
-		}
-		else
-		{
-			unset($this->templateVars);
-		}
-		return $this;
+		return array_keys(self::$THEMES);
 	}
 
-	# #############
-	# ## Engine ###
-	# #############
-	public static $CALLS = 0; # Performance counter
+	public static function registerTheme(string $theme, string $path): void
+	{
+		self::$THEMES[$theme] = $path;
+	}
 
 	/**
 	 * Include a template for a user.
 	 * Sets/Wraps locale ISO for the template call.
 	 */
-	public static function phpUser(GDO_User $user, string $moduleName, string $path, array $tVars = null) : string
+	public static function phpUser(GDO_User $user, string $moduleName, string $path, array $tVars = null): string
 	{
 		$old = Trans::$ISO;
 		Trans::setISO($user->getLangISO());
@@ -173,7 +83,7 @@ class GDT_Template extends GDT
 		try
 		{
 			ob_start();
-			
+
 			$path = self::getPath($moduleName, $path);
 
 			#PP#start#
@@ -203,7 +113,7 @@ class GDT_Template extends GDT
 			include $path; # a hell of a bug is to supress errors here.
 			return ob_get_contents();
 		}
-		catch (\Throwable $ex)
+		catch (Throwable $ex)
 		{
 			$html = Debug::debugException($ex);
 			if (GDO_ERROR_DIE)
@@ -226,28 +136,12 @@ class GDT_Template extends GDT
 	}
 
 	/**
-	 * Include a static file.
-	 * Useful for localized asset loading.
-	 */
-	public static function file(string $moduleName, string $path): string
-	{
-		self::$CALLS++; #PP#delete#
-		$path = self::getPath($moduleName, $path);
-		return file_get_contents($path);
-	}
-
-	# ########################
-	# ## Path substitution ###
-	# ########################
-//	private static $PATHES = [];
-
-	/**
 	 * Get the Path for the GDO Theme Module Path and language.
 	 */
 	private static function getPath(string $moduleName, string $path): string
 	{
 		static $isosc = [];
-		
+
 		if (isset($isosc[Trans::$ISO]))
 		{
 			$isos = $isosc[Trans::$ISO];
@@ -262,7 +156,7 @@ class GDT_Template extends GDT
 			]);
 			$isosc[Trans::$ISO] = $isos;
 		}
-		
+
 
 		# cut at dot.
 		$path12 = Strings::rsubstrTo($path, '.', $path);
@@ -273,15 +167,15 @@ class GDT_Template extends GDT
 		{
 //			if (isset(self::$THEMES[$theme]))
 //			{
-				foreach ($isos as $iso)
+			foreach ($isos as $iso)
+			{
+				$path1 = $path12 . $iso . '.' . $path13;
+				$path1 = self::$THEMES[$theme] . "/$moduleName/tpl/$path1";
+				if (FileUtil::isFile($path1))
 				{
-					$path1 = $path12 . $iso . '.' . $path13;
-					$path1 = self::$THEMES[$theme] . "/$moduleName/tpl/$path1";
-					if (FileUtil::isFile($path1))
-					{
-						return $path1;
-					}
+					return $path1;
 				}
+			}
 //			}
 		}
 
@@ -296,8 +190,121 @@ class GDT_Template extends GDT
 		}
 
 		throw new GDO_Error('err_missing_template', [
-			html("$moduleName/tpl/$path")
+			html("$moduleName/tpl/$path"),
 		]);
+	}
+
+	#####################
+	### Template Head ###
+	#####################
+
+	/**
+	 * Include a static file.
+	 * Useful for localized asset loading.
+	 */
+	public static function file(string $moduleName, string $path): string
+	{
+		self::$CALLS++; #PP#delete#
+		$path = self::getPath($moduleName, $path);
+		return file_get_contents($path);
+	}
+
+	public function isTestable(): bool { return false; }
+
+	public function defaultLabel(): self
+	{
+		return $this->labelNone();
+	}
+
+	public function htmlClass(): string
+	{
+		return parent::htmlClass() . "-{$this->templateModule}-" .
+			Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
+	}
+
+	public function render(): string
+	{
+		return $this->renderTemplate();
+	}
+
+	# ###########
+	# ## Type ###
+	# ###########
+
+	public function renderTemplate($f = null): string
+	{
+		$tVars = [
+			'field' => $this,
+			'f' => $f,
+		];
+		$tVars = isset($this->templateVars) ? array_merge($this->templateVars, $tVars) : $tVars;
+		return self::php($this->templateModule, $this->templatePath, $tVars);
+	}
+
+	public function renderJSON()
+	{
+		return null;
+	}
+
+	public function renderHTML(): string
+	{
+		return $this->renderTemplate();
+	}
+
+	public function renderForm(): string
+	{
+		return $this->renderTemplate();
+	}
+
+	# #############
+	# ## Engine ###
+	# #############
+
+	public function renderCLI(): string
+	{
+		return strip_tags($this->renderTemplate());
+	} # Performance counter
+
+	public function renderFilter(GDT_Filter $f): string
+	{
+		return $this->renderTemplate($f);
+	}
+
+	public function templateHead(string $module, string $path, array $vars = null): self
+	{
+		$this->templateHeadModule = $module;
+		$this->templateHeadPath = $path;
+		$this->templateHeadVars = $vars;
+		return $this;
+	}
+
+	public function renderTHead(): string
+	{
+		if (isset($this->templateHeadPath))
+		{
+			return self::php($this->templateHeadModule, $this->templateHeadPath, $this->templateHeadVars);
+		}
+		return GDT::EMPTY_STRING;
+	}
+
+	# ########################
+	# ## Path substitution ###
+	# ########################
+//	private static $PATHES = [];
+
+	public function template(string $moduleName, string $path, array $tVars = null): self
+	{
+		$this->templateModule = $moduleName;
+		$this->templatePath = $path;
+		if ($tVars)
+		{
+			$this->templateVars = $tVars;
+		}
+		else
+		{
+			unset($this->templateVars);
+		}
+		return $this;
 	}
 
 }

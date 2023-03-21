@@ -3,4 +3,5 @@ namespace GDO\Core;
 
 trait WithRateLimit
 {
+
 }

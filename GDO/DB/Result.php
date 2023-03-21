@@ -5,24 +5,25 @@ use GDO\Core\GDO;
 
 /**
  * A Database query result.
- * Use fetchTable() to control the object type for fetching objects. 
- * 
- * @author gizmore
+ * Use fetchTable() to control the object type for fetching objects.
+ *
  * @version 7.0.2
  * @since 6.0.0
+ * @author gizmore
  * @see ArrayResult
  */
 class Result
 {
+
 	public GDO $table;
-	
+
 	private bool $useCache;
-	
+
 	/**
 	 * @var resource
 	 */
 	private $result;
-	
+
 	###################
 	### Instanciate ###
 	###################
@@ -32,73 +33,52 @@ class Result
 		$this->result = $result;
 		$this->useCache = $useCache;
 	}
-	
+
 	/**
 	 * Shouldn't it be as safe and as fast to just rely on their destructors?
 	 */
 	public function __destruct()
 	{
-	    if (isset($this->result))
-	    {
-	    	Database::DBMS()->dbmsFree($this->result);
-	        unset($this->result);
-	    }
+		if (isset($this->result))
+		{
+			Database::DBMS()->dbmsFree($this->result);
+			unset($this->result);
+		}
 	}
-	
+
 	################
 	### Num rows ###
 	################
-	public function numRows() : int
+	public function numRows(): int
 	{
 		return Database::DBMS()->dbmsNumRows($this->result);
 	}
-	
-	public function affectedRows() : int
+
+	public function affectedRows(): int
 	{
-	    return Database::DBMS()->dbmsAffected();
+		return Database::DBMS()->dbmsAffected();
 	}
-	
+
 	#############
 	### Fetch ###
 	#############
-	/**
-	 * Fetch the first value of the next row. @TODO rename to fetchVar()
-	 */
-	public function fetchValue() : ?string
-	{
-		if ($row = $this->fetchRow())
-		{
-			return $row[0];
-		}
-		return null;
-	}
-	
-	public function fetchRow() : ?array
-	{
-		return Database::DBMS()->dbmsFetchRow($this->result);
-	}
-	
+
 	public function fetchAllRows(): array
 	{
 		return Database::DBMS()->dbmsFetchAllRows($this->result);
 	}
-	
-	public function fetchAssoc() : ?array
-	{
-		return Database::DBMS()->dbmsFetchAssoc($this->result);
-	}
-	
-	public function fetchAllAssoc() : ?array
+
+	public function fetchAllAssoc(): ?array
 	{
 		return Database::DBMS()->dbmsFetchAllAssoc($this->result);
 	}
 
-	public function fetchObject() : ?GDO
+	public function fetchObject(): ?GDO
 	{
 		return $this->fetchAs($this->table);
 	}
-	
-	public function fetchAs(GDO $table) : ?GDO
+
+	public function fetchAs(GDO $table): ?GDO
 	{
 		if ($gdoData = $this->fetchAssoc())
 		{
@@ -108,34 +88,39 @@ class Result
 			}
 			elseif ($table->cached())
 			{
-			    return $table->initCached($gdoData, false);
+				return $table->initCached($gdoData, false);
 			}
 			else
 			{
 				$class = $table->gdoClassName();
-				/** @var $object GDO **/
+				/** @var $object GDO * */
 				$object = new $class();
 				return $object->setGDOVars($gdoData)->setPersisted();
 			}
 		}
 		return null;
 	}
-	
-	public function fetchInto(GDO $gdo) : ?GDO
+
+	public function fetchAssoc(): ?array
 	{
-	    if ($gdoVars = $this->fetchAssoc())
-	    {
-	        return $gdo->tempReset()->setGDOVars($gdoVars)->setPersisted();
-	    }
-	    return null;
+		return Database::DBMS()->dbmsFetchAssoc($this->result);
 	}
 
-	public function fetchAllObjects(bool $json=false) : array
+	public function fetchInto(GDO $gdo): ?GDO
+	{
+		if ($gdoVars = $this->fetchAssoc())
+		{
+			return $gdo->tempReset()->setGDOVars($gdoVars)->setPersisted();
+		}
+		return null;
+	}
+
+	public function fetchAllObjects(bool $json = false): array
 	{
 		return $this->fetchAllObjectsAs($this->table, $json);
 	}
-	
-	public function fetchAllObjectsAs(GDO $table, bool $json=false) : array
+
+	public function fetchAllObjectsAs(GDO $table, bool $json = false): array
 	{
 		$objects = [];
 		while ($object = $this->fetchAs($table, $json))
@@ -149,7 +134,7 @@ class Result
 	 * For a 2 column select.
 	 * Fetch all 2 column rows as a 0 => 1 assoc array.
 	 */
-	public function fetchAllArray2dPair() : array
+	public function fetchAllArray2dPair(): array
 	{
 		$array2d = [];
 		while ($row = $this->fetchRow())
@@ -158,12 +143,18 @@ class Result
 		}
 		return $array2d;
 	}
-	
+
+	public function fetchRow(): ?array
+	{
+		return Database::DBMS()->dbmsFetchRow($this->result);
+	}
+
 	/**
 	 * Fetch all objects and have the ID as array key.
+	 *
 	 * @return GDO[]
 	 */
-	public function &fetchAllArray2dObject(GDO $table=null, $json=false) : array
+	public function &fetchAllArray2dObject(GDO $table = null, $json = false): array
 	{
 		$table = $table ? $table : $this->table;
 		$array2d = [];
@@ -173,11 +164,11 @@ class Result
 		}
 		return $array2d;
 	}
-	
+
 	/**
 	 * @return GDO[]
 	 */
-	public function fetchAllArrayAssoc2dObject(GDO $table=null) : array
+	public function fetchAllArrayAssoc2dObject(GDO $table = null): array
 	{
 		$table = $table ? $table : $this->table;
 		$array2d = [];
@@ -189,11 +180,19 @@ class Result
 		}
 		return $array2d;
 	}
-	
+
+	/**
+	 * Alias for fetchAllValues().
+	 */
+	public function fetchColumn(): array
+	{
+		return $this->fetchAllValues();
+	}
+
 	/**
 	 * Fetch all, but only a single column as simple array.
 	 */
-	public function fetchAllValues() : array
+	public function fetchAllValues(): array
 	{
 		$values = [];
 		while ($value = $this->fetchValue())
@@ -202,15 +201,19 @@ class Result
 		}
 		return $values;
 	}
-	
+
 	/**
-	 * Alias for fetchAllValues().
+	 * Fetch the first value of the next row. @TODO rename to fetchVar()
 	 */
-	public function fetchColumn() : array
+	public function fetchValue(): ?string
 	{
-	    return $this->fetchAllValues();
+		if ($row = $this->fetchRow())
+		{
+			return $row[0];
+		}
+		return null;
 	}
-	
+
 	public function getDummy(): GDO
 	{
 		return $this->table->cache->getDummy();

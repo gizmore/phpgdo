@@ -1,17 +1,18 @@
 <?php
 namespace GDO\CLI\Test;
 
-use GDO\Tests\TestCase;
-use GDO\Core\GDT_Expression;
 use GDO\Core\Expression\Parser;
+use GDO\Core\GDT_Expression;
+use GDO\Tests\TestCase;
 use GDO\Util\PP;
-use function PHPUnit\Framework\assertStringContainsString;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertEmpty;
+use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertStringContainsString;
 
 final class CLITest extends TestCase
 {
+
 	public function testBasicExpressions()
 	{
 		$sep = Parser::ARG_SEPARATOR;
@@ -20,24 +21,24 @@ final class CLITest extends TestCase
 		$res = $gdt->renderCLI();
 		assertEquals('ab', $res, 'Test if concat a,b works');
 	}
-	
+
 	public function testEcho()
 	{
 //		$expression = GDT_Expression::fromLine("cli.ekko 123");
 //		$response = $expression->execute();
 //		$content = $response->renderCLI();
 //		assertStringContainsString("123", $content, 'Test if core.ekko command works.');
-		
-		$expression = GDT_Expression::fromLine("echo 123");
+
+		$expression = GDT_Expression::fromLine('echo 123');
 		$response = $expression->execute();
 		$content = $response->renderCLI();
-		assertEquals("123", $content, 'Test if echo command alias works.');
+		assertEquals('123', $content, 'Test if echo command alias works.');
 	}
-	
+
 	public function testNestedConcat()
 	{
-		$result = $this->cli("cli.concat --glue=,, ,a,b,$(cli.concat c,d),e");
-		assertEquals("a, b, cd, e", $result, 'Test if nested concat with a weird ,, glue works.');
+		$result = $this->cli('cli.concat --glue=,, ,a,b,$(cli.concat c,d),e');
+		assertEquals('a, b, cd, e', $result, 'Test if nested concat with a weird ,, glue works.');
 	}
 
 	public function testPP()
@@ -52,5 +53,5 @@ final class CLITest extends TestCase
 			assertFalse((bool)ini_get('allow_url_fopen'), 'Warning removal urlfopen.');
 		}
 	}
-	
+
 }

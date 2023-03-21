@@ -2,10 +2,10 @@
 namespace GDO\Core;
 
 /**
- * 
- * 
- * @author gizmore
+ *
+ *
  * @since 7.0.2
+ * @author gizmore
  */
 final class GDT_RegEx extends GDT_String
 {

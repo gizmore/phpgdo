@@ -8,4 +8,5 @@ namespace GDO\Core;
  */
 final class GDO_CRUDException extends GDO_Error
 {
+
 }

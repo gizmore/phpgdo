@@ -6,13 +6,13 @@ use GDO\Util\Load;
 
 /**
  * Render service health information.
- * 
- * @author gizmore
+ *
  * @since 7.0.1
+ * @author gizmore
  */
 final class GDT_HealthCard extends GDT_Card
 {
-	
+
 	protected function __construct()
 	{
 		parent::__construct();
@@ -33,5 +33,5 @@ final class GDT_HealthCard extends GDT_Card
 			GDT_Filesize::make('health_hdd_free')->label('health_hdd_free')->initial(Load::$STATE['hddf']),
 		);
 	}
-	
+
 }

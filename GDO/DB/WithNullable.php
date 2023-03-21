@@ -4,8 +4,8 @@ namespace GDO\DB;
 /**
  * Add nullable option to a GDT.
  *
- * @author gizmore
  * @version 7.0.2
+ * @author gizmore
  */
 trait WithNullable
 {
@@ -18,7 +18,7 @@ trait WithNullable
 	/**
 	 * Change nullable setting.
 	 */
-	public function notNull(bool $notNull = true): static
+	public function notNull(bool $notNull = true): self
 	{
 		$this->notNull = $notNull;
 		return $this;

@@ -7,11 +7,13 @@ require 'php-preprocessor/src/Preprocessor.php';
 
 /**
  * php-preprocessor bindings for phpgdo.
- * @author gizmore
+ *
  * @since 7.0.2
+ * @author gizmore
  */
 final class PP
 {
+
 	/**
 	 * Used to include it.
 	 */
@@ -19,5 +21,5 @@ final class PP
 	{
 		return new Preprocessor();
 	}
-	
+
 }

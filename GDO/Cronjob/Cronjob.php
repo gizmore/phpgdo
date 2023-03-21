@@ -1,37 +1,40 @@
 <?php
 namespace GDO\Cronjob;
 
-use GDO\Install\Installer;
-use GDO\Core\ModuleLoader;
-use GDO\DB\Database;
-use GDO\Date\Time;
-use GDO\User\GDO_User;
 use GDO\Core\Application;
+use GDO\Core\GDO_Module;
+use GDO\Core\ModuleLoader;
+use GDO\Date\Time;
+use GDO\DB\Database;
+use GDO\Install\Installer;
+use GDO\User\GDO_User;
+use Throwable;
 
 /**
  * Convinience cronjob launcher.
- * 
- * @author gizmore
+ *
  * @version 6.11.2
  * @since 6.5.0
+ * @author gizmore
  * @see MethodCronjob
  */
 final class Cronjob
 {
+
 	private static $FORCE = false;
-	
+
 	/**
 	 * Cronjobs main.
 	 * Loop over all enabled modules to run cronjob.
 	 */
-	public static function run(bool $force=false) : void
+	public static function run(bool $force = false): void
 	{
 		self::$FORCE = $force;
-	    GDO_User::setCurrent(GDO_User::system());
-	    $loader = ModuleLoader::instance();
+		GDO_User::setCurrent(GDO_User::system());
+		$loader = ModuleLoader::instance();
 		$modules = $loader->loadModulesCache();
 		$loader->initModules();
-		
+
 		if (module_enabled('Cronjob'))
 		{
 			foreach ($modules as $module)
@@ -40,7 +43,7 @@ final class Cronjob
 				{
 					Installer::loopMethods($module, [
 						__CLASS__,
-						'runCronjob'
+						'runCronjob',
 					]);
 				}
 			}
@@ -54,29 +57,30 @@ final class Cronjob
 
 	/**
 	 * Path traversal entry point. Method is encoded in $entry
+	 *
 	 * @param string $entry
 	 * @param string $path
-	 * @param \GDO\Core\GDO_Module $module
+	 * @param GDO_Module $module
 	 */
 	public static function runCronjob($entry, $path, $module)
 	{
 		$method = Installer::loopMethod($module, $path);
 		if ($method instanceof MethodCronjob)
 		{
-		    if (self::shouldRun($method))
-		    {
-		        self::executeCronjob($method);
-		    }
+			if (self::shouldRun($method))
+			{
+				self::executeCronjob($method);
+			}
 		}
 	}
-	
+
 	private static function shouldRun(MethodCronjob $method)
 	{
 		if (self::$FORCE)
 		{
 			return true;
 		}
-		
+
 		$module = Module_Cronjob::instance();
 		$lastRun = $module->cfgLastRun();
 		$dt = Time::parseDateTimeDB($lastRun);
@@ -93,14 +97,15 @@ final class Cronjob
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Check if in this minute the cron should have run.
 	 * If not, the algo will compute for the next elapsed minute.
-	 *  
+	 *
 	 * @param MethodCronjob $method
 	 * @param int $timestamp
-	 * @return boolean
+	 *
+	 * @return bool
 	 */
 	private static function shouldRunAt(MethodCronjob $method, $timestamp)
 	{
@@ -158,30 +163,30 @@ final class Cronjob
 		try
 		{
 			$db = Database::instance();
-		    $job = GDO_Cronjob::blank([
-		        'cron_method' => get_class($method),
-		    ])->insert();
+			$job = GDO_Cronjob::blank([
+				'cron_method' => get_class($method),
+			])->insert();
 			$db->transactionBegin();
 			$method->execute();
 			$job->saveVars([
-			    'cron_success' => '1',
+				'cron_success' => '1',
 			]);
 			$db->transactionEnd();
 		}
-		catch (\Throwable $ex)
+		catch (Throwable $ex)
 		{
-		    if (isset($db))
-		    {
-		        $db->transactionRollback();
-		        if (isset($job))
-		        {
-			        $job->saveVars([
-			        	'cron_success' => '0',
-			        ]);
-		        }
-		    }
+			if (isset($db))
+			{
+				$db->transactionRollback();
+				if (isset($job))
+				{
+					$job->saveVars([
+						'cron_success' => '0',
+					]);
+				}
+			}
 			throw $ex;
 		}
 	}
-	
+
 }

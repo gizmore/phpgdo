@@ -5,5 +5,5 @@ use GDO\UI\MethodPage;
 
 final class Security extends MethodPage
 {
-	
+
 }

@@ -3,12 +3,13 @@ namespace GDO\Date;
 
 /**
  * A Date select that only allows week start dates (mondays).
- * 
- * @author gizmore
+ *
  * @version 6.11.2
+ * @author gizmore
  */
 final class GDT_Week extends GDT_Date
 {
+
 	public function _inputToVar($input)
 	{
 		$input = str_replace('T', ' ', $input);
@@ -18,5 +19,5 @@ final class GDT_Week extends GDT_Date
 		$input = Time::getDate($monday, 'Y-m-d'); # UTC DB date
 		return $input;
 	}
-	
+
 }

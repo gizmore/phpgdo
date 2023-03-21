@@ -2,36 +2,37 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
-use GDO\Core\GDT_Hook;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDO_ModuleVar;
+use GDO\Core\GDT_Hook;
 use GDO\Core\GDT_Module;
 use GDO\Core\GDT_Name;
+use GDO\Core\GDT_Path;
+use GDO\Core\GDT_Tuple;
 use GDO\Core\GDT_Version;
 use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
-use GDO\UI\GDT_Divider;
-use GDO\Language\Trans;
-use GDO\UI\GDT_Panel;
 use GDO\Install\Installer;
-use GDO\Util\Arrays;
+use GDO\Language\Trans;
 use GDO\UI\GDT_Container;
-use GDO\Core\GDT_Tuple;
-use GDO\Core\GDT_Path;
+use GDO\UI\GDT_Divider;
+use GDO\UI\GDT_Panel;
 use GDO\UI\TextStyle;
+use GDO\Util\Arrays;
 
 /**
  * Configure a module.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 3.4.0
+ * @author gizmore
  */
 class Configure extends MethodForm
 {
+
 	use MethodAdmin;
 
 	public function getPermission(): ?string
@@ -46,16 +47,11 @@ class Configure extends MethodForm
 		];
 	}
 
-	public function configModule(): GDO_Module
-	{
-		return $this->gdoParameterValue('module');
-	}
-
 	public function execute()
 	{
 		# Response
 		$response = GDT_Tuple::make();
-		
+
 		$mod = $this->configModule();
 
 		# Response for install and configure
@@ -68,7 +64,7 @@ class Configure extends MethodForm
 		# Response for install panel
 		$install = Install::make()->inputs($this->inputs);
 		$response->addField($install->executeWithInit());
-		
+
 		# Configuration if installed
 		if ($this->configModule()->isPersisted())
 		{
@@ -81,61 +77,66 @@ class Configure extends MethodForm
 				$response->addField(GDT_Panel::make()->text('info_module_deps', [$text]));
 			}
 		}
-		
+
 		if ($text = $this->getFriendencyText())
 		{
 			$response->addField(GDT_Panel::make()->text('info_module_freps', [$text]));
 		}
-		
+
 		# Respond
 		return $response;
 	}
 
-	public function getMethodTitle() : string
+	public function configModule(): GDO_Module
 	{
-		return t('mt_admin_configure',
-			[
-				$this->configModule()->renderName()
-			]);
+		return $this->gdoParameterValue('module');
 	}
 
-	public function getMethodDescription() : string
-	{
-		return t('md_admin_configure',
-			[
-				$this->configModule()->renderName()
-			]);
-	}
-	
-	private function getFriendencyText() : string
-	{
-		$mod = $this->configModule();
-		$deps = Installer::getFriendencyModules($mod->getName());
-		return $this->getDepsText($deps);
-	}
-	
 	private function getDependencyText(): string
 	{
 		$mod = $this->configModule();
 		$deps = Installer::getDependencyModuleNames($mod->getName());
 		return $this->getDepsText($deps);
 	}
-	
+
 	private function getDepsText(array $deps): string
 	{
 		$deps = array_map(
 			function ($nam)
 			{
 				$link = href('Admin', 'Configure',
-					"&module=" . urlencode($nam));
+					'&module=' . urlencode($nam));
 				$link = sprintf('<a href="%s">%s</a>', $link,
 					html($nam));
 				return module_enabled($nam) ? '<span class="dependency_ok">' .
-				$link . '</span>' : '<span class="dependency_ko">' .
-				$link . '</span>';
+					$link . '</span>' : '<span class="dependency_ko">' .
+					$link . '</span>';
 			}, $deps);
 
 		return Arrays::implodeHuman($deps);
+	}
+
+	private function getFriendencyText(): string
+	{
+		$mod = $this->configModule();
+		$deps = Installer::getFriendencyModules($mod->getName());
+		return $this->getDepsText($deps);
+	}
+
+	public function getMethodTitle(): string
+	{
+		return t('mt_admin_configure',
+			[
+				$this->configModule()->renderName(),
+			]);
+	}
+
+	public function getMethodDescription(): string
+	{
+		return t('md_admin_configure',
+			[
+				$this->configModule()->renderName(),
+			]);
 	}
 
 	public function createForm(GDT_Form $form): void
@@ -173,7 +174,7 @@ class Configure extends MethodForm
 		$form->addField(GDT_AntiCSRF::make());
 		$form->action($this->href("&module={$mod->getName()}"));
 	}
-	
+
 // 	private function resetConfig()
 // 	{
 // 		$mod = $this->configModule();
@@ -182,7 +183,7 @@ class Configure extends MethodForm
 // 			$gdt->reset(true);
 // 		}
 // 	}
-	
+
 // 	public function formInvalid(GDT_Form $form)
 // 	{
 // 		$this->resetConfig();
@@ -194,7 +195,7 @@ class Configure extends MethodForm
 // 		$this->resetConfig();
 // 		parent::afterExecute();
 // 	}
-	
+
 	public function formValidated(GDT_Form $form)
 	{
 		$mod = $this->configModule();
@@ -224,13 +225,13 @@ class Configure extends MethodForm
 			Cache::fileFlush();
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);
 		}
-		
+
 // 		$this->resetConfig();
-		
+
 		# Announce
 		return $this->message('msg_module_saved',
 			[
-				implode("\n", $info)
+				implode("\n", $info),
 			])->addField($this->renderPage());
 	}
 

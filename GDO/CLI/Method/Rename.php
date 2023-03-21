@@ -2,28 +2,46 @@
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
-use GDO\Form\GDT_Form;
+use GDO\Core\GDT_Checkbox;
 use GDO\Core\GDT_Path;
 use GDO\Core\GDT_RegEx;
+use GDO\Core\GDT_String;
+use GDO\Core\Website;
+use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Util\Filewalker;
-use GDO\Core\GDT_String;
-use GDO\Core\GDT_Checkbox;
-use GDO\Core\Website;
 
 /**
  * Mass rename utility.
- * 
- * @example gdo cli.rename .,^(.*\.)mp3$,$1ogg
- * @example gdo cli.rename --pretend=1,.,DRAFT.md,README.md
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.2
+ * @author gizmore
+ * @example gdo cli.rename .,^(.*\.)mp3$,$1ogg
+ * @example gdo cli.rename --pretend=1,.,DRAFT.md,README.md
+ *
  */
 final class Rename extends MethodCLI
 {
-	
+
+	public static function rename(string $entry, string $fullpath, $args = null): int
+	{
+		$count = 0;
+		[$pattern, $replacement, $pretend] = $args;
+		$newEntry = preg_replace($pattern, $replacement, $entry);
+		$newPath = substr($fullpath, 0, -strlen($entry));
+		$newPath .= $newEntry;
+		if (!$pretend)
+		{
+			$count++;
+			rename($fullpath, $newPath);
+		}
+		Website::message(self::gdoHumanNameS(),
+			'msg_file_renamed',
+			[html($fullpath), html($newPath)]);
+		return $count;
+	}
+
 	/**
 	 * Disable unit test fuzzer. dangerous for mass rename!
 	 */
@@ -31,7 +49,7 @@ final class Rename extends MethodCLI
 	{
 		return false;
 	}
-	
+
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
@@ -45,7 +63,7 @@ final class Rename extends MethodCLI
 		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
-	
+
 	public function formValidated(GDT_Form $form)
 	{
 		$count = self::massRename(
@@ -59,8 +77,8 @@ final class Rename extends MethodCLI
 		);
 		return $this->message('msg_files_renamed', [$count]);
 	}
-	
-	public static function massRename(string $path, string $pattern, string $replace, bool $recursive=false, bool $dirs=false, bool $files=true, bool $pretend=false): void
+
+	public static function massRename(string $path, string $pattern, string $replace, bool $recursive = false, bool $dirs = false, bool $files = true, bool $pretend = false): void
 	{
 		$callbackDir = $dirs ? [self::class, 'rename'] : null;
 		$callbackFile = $files ? [self::class, 'rename'] : null;
@@ -68,23 +86,5 @@ final class Rename extends MethodCLI
 		$args = [$pattern, $replace, $pretend];
 		Filewalker::traverse($path, $pattern, $callbackFile, $callbackDir, $rec, $args);
 	}
-	
-	public static function rename(string $entry, string $fullpath, $args=null): int
-	{
-		$count = 0;
-		list($pattern, $replacement, $pretend) = $args;
-		$newEntry = preg_replace($pattern, $replacement, $entry);
-		$newPath  = substr($fullpath, 0, -strlen($entry));
-		$newPath .= $newEntry;
-		if (!$pretend)
-		{
-			$count++;
-			rename($fullpath, $newPath);
-		}
-		Website::message(self::gdoHumanNameS(),
-			'msg_file_renamed',
-			[html($fullpath), html($newPath)]);
-		return $count;
-	}
-	
+
 }

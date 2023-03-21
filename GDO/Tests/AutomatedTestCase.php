@@ -13,30 +13,52 @@ use GDO\Install\Installer;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use GDO\Util\Permutations;
+use ReflectionClass;
+use Throwable;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
 
 /**
  * Run a test for all trivial methods / GDT / GDO
  *
- * @author gizmore
  * @version 7.0.1
  * @since 7.0.1
+ * @author gizmore
  */
 abstract class AutomatedTestCase extends TestCase
 {
-	protected abstract function getTestName() : string;
-	
+
+	protected int $numGDO = 0;
+
 	###########
 	### GDO ###
 	###########
-	protected abstract function runGDOTest(GDO $gdo): void;
-	
-	protected int $numGDO = 0;
 	protected int $numGDO_abstract = 0;
 	protected int $numGDO_skipped = 0;
 	protected int $numGDO_success = 0;
 	protected int $numGDO_tested = 0;
-	
+	protected int $numGDT = 0;
+	protected int $numGDT_abstract = 0;
+	protected int $numGDT_skipped = 0;
+	protected int $numGDT_success = 0;
+
+	###########
+	### GDT ###
+	###########
+	protected int $numGDT_tested = 0;
+	protected int $numMethods = 0;
+	protected int $automatedTested = 0;
+	protected int $automatedPassed = 0;
+	protected int $automatedFailed = 0;
+	protected int $automatedCalled = 0;
+	protected int $automatedSkippedAuto = 0;
+	protected int $automatedSkippedHard = 0;
+	protected int $automatedSkippedAbstract = 0;
+	private $i = 0;
+
+	##############
+	### Method ###
+	##############
+
 	protected function doAllGDO(): void
 	{
 		foreach (get_declared_classes() as $classname)
@@ -59,12 +81,18 @@ abstract class AutomatedTestCase extends TestCase
 					$this->numGDO_skipped++;
 					continue;
 				}
-				
+
 				$this->testGDOVariants($table);
 			}
 		}
 	}
-	
+
+	protected function class_is_abstract(string $classname): bool
+	{
+		$k = new ReflectionClass($classname);
+		return $k->isAbstract();
+	}
+
 	private function testGDOVariants(GDO $table): bool
 	{
 		$this->numGDO_tested++;
@@ -82,9 +110,9 @@ abstract class AutomatedTestCase extends TestCase
 				$this->numGDO_success++;
 				return true;
 			}
-			catch (\Throwable $ex)
+			catch (Throwable $ex)
 			{
-				$this->error("%s: %s",
+				$this->error('%s: %s',
 					Color::red(get_class($ex)),
 					TextStyle::bold($ex->getMessage()));
 				echo Debug::debugException($ex);
@@ -92,18 +120,21 @@ abstract class AutomatedTestCase extends TestCase
 		}
 		return false;
 	}
-	
-	###########
-	### GDT ###
-	###########
-	protected abstract function runGDTTest(GDT $gdt): void;
 
-	protected int $numGDT = 0;
-	protected int $numGDT_abstract = 0;
-	protected int $numGDT_skipped = 0;
-	protected int $numGDT_success = 0;
-	protected int $numGDT_tested = 0;
-	
+	protected function plugGDO(GDO $gdo): void
+	{
+		$this->plugVariants = [];
+		foreach ($gdo->gdoColumnsCache() as $gdt)
+		{
+			$gdt->inputs(null); # clear input
+			$this->addPlugVars($gdt->gdo($gdo)->plugVars());
+		}
+	}
+
+	abstract protected function runGDOTest(GDO $gdo): void;
+
+	# Num plug variants called
+
 	protected function doAllGDT(): void
 	{
 		try
@@ -125,11 +156,13 @@ abstract class AutomatedTestCase extends TestCase
 					# other
 					continue;
 				}
-			
+
 				if (is_subclass_of($classname, GDO::class))
 				{
-					if ( (!($table = call_user_func([$classname, 'table'])))
-						|| ($table->gdoAbstract()) )
+					if (
+						(!($table = call_user_func([$classname, 'table'])))
+						|| ($table->gdoAbstract())
+					)
 					{
 						$this->numGDT_abstract++;
 						continue;
@@ -144,7 +177,7 @@ abstract class AutomatedTestCase extends TestCase
 					$this->assertOK('Test if we have no gdo error');
 					$this->numGDT_success++;
 				}
-				
+
 				# All GDO Columns
 				elseif (is_subclass_of($classname, GDT::class))
 				{
@@ -162,14 +195,14 @@ abstract class AutomatedTestCase extends TestCase
 			}
 			$this->assertOK('Test if we still have no error');
 		}
-		catch (\Throwable $ex)
+		catch (Throwable $ex)
 		{
 			echo Debug::backtraceException($ex);
 			@ob_flush();
 			throw $ex;
 		}
 	}
-	
+
 	private function foreachGDOsGDT(GDO $gdo): bool
 	{
 		$success = false;
@@ -204,9 +237,9 @@ abstract class AutomatedTestCase extends TestCase
 					}
 				}
 			}
-			catch (\Throwable $ex)
+			catch (Throwable $ex)
 			{
-				$this->error("%s: %s",
+				$this->error('%s: %s',
 					Color::red(get_class($ex)),
 					TextStyle::bold($ex->getMessage()));
 				echo Debug::debugException($ex);
@@ -215,17 +248,11 @@ abstract class AutomatedTestCase extends TestCase
 		assert($success);
 		return $success;
 	}
-	
-	protected function plugGDO(GDO $gdo): void
-	{
-		$this->plugVariants = [];
-		foreach ($gdo->gdoColumnsCache() as $gdt)
-		{
-			$gdt->inputs(null); # clear input
-			$this->addPlugVars($gdt->gdo($gdo)->plugVars());
-		}
-	}
-	
+
+	abstract protected function runGDTTest(GDT $gdt): void;
+
+	abstract protected function getTestName(): string;
+
 	protected function plugMethod(Method $method): void
 	{
 		$this->plugVariants = [];
@@ -235,32 +262,10 @@ abstract class AutomatedTestCase extends TestCase
 			$this->addPlugVars($gdt->plugVars());
 		}
 	}
-	
-	##############
-	### Method ###
-	##############
-	protected int $numMethods = 0;
 
-	protected int $automatedTested = 0;
-
-	protected int $automatedPassed = 0;
-
-	protected int $automatedFailed = 0;
-
-	protected int $automatedCalled = 0;
-
-	# Num plug variants called
-	protected int $automatedSkippedAuto = 0;
-
-	protected int $automatedSkippedHard = 0;
-
-	protected int $automatedSkippedAbstract = 0;
-
-	protected abstract function runMethodTest(GDT_MethodTest $mt) : void;
-	
 	protected function doAllMethods()
 	{
-		$this->message("This Test is testing all trivial methods automagically...");
+		$this->message('This Test is testing all trivial methods automagically...');
 
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		foreach ($modules as $module)
@@ -286,7 +291,7 @@ abstract class AutomatedTestCase extends TestCase
 			if (in_array('GDO\\Core\\Method', $parents, true))
 			{
 				# Skip abstract
-				$k = new \ReflectionClass($klass);
+				$k = new ReflectionClass($klass);
 				if ($k->isAbstract())
 				{
 					$this->automatedSkippedAbstract++;
@@ -294,14 +299,14 @@ abstract class AutomatedTestCase extends TestCase
 				}
 
 				# Check others
-				/** @var $method \GDO\Core\Method **/
+				/** @var $method Method * */
 				$method = call_user_func([
 					$klass,
-					'make'
+					'make',
 				]);
 
 				# Skip special marked
-				if ( !$method->isTrivial())
+				if (!$method->isTrivial())
 				{
 					$this->automatedSkippedHard++;
 					continue;
@@ -321,63 +326,52 @@ abstract class AutomatedTestCase extends TestCase
 		} # foreach classes
 
 		$this->message(Color::green(CLI::bold("Done with automated method test {$this->getTestName()}.")));
-		$this->message("Tested %s trivial methods.", TextStyle::bold($this->automatedTested));
+		$this->message('Tested %s trivial methods.', TextStyle::bold($this->automatedTested));
 		$this->message(CLI::bold($this->automatedFailed . ' FAILED!'));
-		$this->message("%s were skipped because they were abstract.", CLI::bold($this->automatedSkippedAbstract));
-		$this->message("%s were skipped because they were unpluggable.", CLI::bold($this->automatedSkippedAuto));
-		$this->message("%s have been manually skipped via Method settings.", CLI::bold($this->automatedSkippedHard));
+		$this->message('%s were skipped because they were abstract.', CLI::bold($this->automatedSkippedAbstract));
+		$this->message('%s were skipped because they were unpluggable.', CLI::bold($this->automatedSkippedAuto));
+		$this->message('%s have been manually skipped via Method settings.', CLI::bold($this->automatedSkippedHard));
 	}
 
-	private function tryTrivialMethod(Method $method)
+	private function isPluggableMethod(Method $method)
 	{
-		$this->automatedTested++;
-		$permutations = new Permutations($this->plugVariants);
-		foreach ($permutations->generate() as $plugVars)
-		{
-			# This fixes old input in method from previous permutations.
-			$method = call_user_func([get_class($method), 'make']);
-			$this->tryTrivialMethodVariant($method, $plugVars);
-		}
-	}
+		$trivial = true;
+		$this->plugVariants = [];
+// 		$pluggedViaMethod = false;
 
-	private $i = 0;
-	
-	private function tryTrivialMethodVariant(Method $method, array $plugVars)
-	{
-		try
+		if ($plugs = $method->plugVars())
 		{
-// 			if ($method instanceof CreateThread)
-// 			{
-// 				$this->i++;
-// 				echo "tryTrivialMethodVariant({$method->getCLITrigger()} $this->i)\n";
-// 				@ob_flush();
-// 				if ($this->i === 3)
-// 				{
-// 					xdebug_break();
-// 				}
-// 			}
-			
-			
-			Application::$INSTANCE->reset();
-			$n = $this->automatedTested;
-			$this->automatedCalled++;
-			$mt = GDT_MethodTest::make()->inputs($plugVars);
-			$mt->runAs($method->plugUser());
-			$mt->method($method);
-			$method->inputs($plugVars);
-			$this->runMethodTest($mt);
-			$this->automatedPassed++;
-			$this->message('%4d.) %s: %s (%s)', $n, CLI::bold(CLI::green('SUCCESS')), $this->boldmome($mt->method),
-				json_encode($plugVars));
+			$this->addPlugVars($plugs);
+			$method->inputs($plugs[0]);
+// 			$pluggedViaMethod = true;
 		}
-		catch (\Throwable $ex)
+
+// 		if (!$pluggedViaMethod)
 		{
-			Logger::logException($ex);
-			Debug::exception_handler($ex);
-			$this->automatedFailed++;
-			$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
-			$this->error('Error: %s', CLI::bold($ex->getMessage()));
+			# Plug via GDTs
+			$fields = $method->gdoParameters();
+			foreach ($fields as $gdt)
+			{
+				$this->addPlugVars($gdt->plugVars());
+			}
+
+			$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
+			foreach ($fields as $gdt)
+			{
+				$this->addPlugVars($gdt->plugVars());
+			}
 		}
+
+		$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
+		if (!$this->isPluggableParameters($method, $fields))
+		{
+			$trivial = false;
+		}
+		if (!$trivial)
+		{
+			$this->automatedSkippedAuto++;
+		}
+		return $trivial;
 	}
 
 	private function firstPlugPermutation()
@@ -387,47 +381,6 @@ abstract class AutomatedTestCase extends TestCase
 		{
 			return $p;
 		}
-	}
-
-	private function isPluggableMethod(Method $method)
-	{
-		$trivial = true;
-		$this->plugVariants = [];
-// 		$pluggedViaMethod = false;
-		
-		if ($plugs = $method->plugVars())
-		{
-			$this->addPlugVars($plugs);
-			$method->inputs($plugs[0]);
-// 			$pluggedViaMethod = true;
-		}
-		
-// 		if (!$pluggedViaMethod)
-		{
-			# Plug via GDTs
-			$fields = $method->gdoParameters();
-			foreach ($fields as $gdt)
-			{
-				$this->addPlugVars($gdt->plugVars());
-			}
-			
-			$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
-			foreach ($fields as $gdt)
-			{
-				$this->addPlugVars($gdt->plugVars());
-			}
-		}
-
-		$fields = $method->inputs($this->firstPlugPermutation())->gdoParameterCache();
-		if ( !$this->isPluggableParameters($method, $fields))
-		{
-			$trivial = false;
-		}
-		if ( !$trivial)
-		{
-			$this->automatedSkippedAuto++;
-		}
-		return $trivial;
 	}
 
 	private function isPluggableParameters(Method $method, array $fields): bool
@@ -441,7 +394,7 @@ abstract class AutomatedTestCase extends TestCase
 				$trivial = false;
 			}
 			# But maybe now
-			if ( !$trivial)
+			if (!$trivial)
 			{
 				if ($plugs = $gdt->plugVars())
 				{
@@ -456,7 +409,57 @@ abstract class AutomatedTestCase extends TestCase
 		}
 		return $trivial;
 	}
-	
+
+	private function tryTrivialMethod(Method $method)
+	{
+		$this->automatedTested++;
+		$permutations = new Permutations($this->plugVariants);
+		foreach ($permutations->generate() as $plugVars)
+		{
+			# This fixes old input in method from previous permutations.
+			$method = call_user_func([get_class($method), 'make']);
+			$this->tryTrivialMethodVariant($method, $plugVars);
+		}
+	}
+
+	private function tryTrivialMethodVariant(Method $method, array $plugVars)
+	{
+		try
+		{
+// 			if ($method instanceof CreateThread)
+// 			{
+// 				$this->i++;
+// 				echo "tryTrivialMethodVariant({$method->getCLITrigger()} $this->i)\n";
+// 				@ob_flush();
+// 				if ($this->i === 3)
+// 				{
+// 					xdebug_break();
+// 				}
+// 			}
+
+
+			Application::$INSTANCE->reset();
+			$n = $this->automatedTested;
+			$this->automatedCalled++;
+			$mt = GDT_MethodTest::make()->inputs($plugVars);
+			$mt->runAs($method->plugUser());
+			$mt->method($method);
+			$method->inputs($plugVars);
+			$this->runMethodTest($mt);
+			$this->automatedPassed++;
+			$this->message('%4d.) %s: %s (%s)', $n, CLI::bold(CLI::green('SUCCESS')), $this->boldmome($mt->method),
+				json_encode($plugVars));
+		}
+		catch (Throwable $ex)
+		{
+			Logger::logException($ex);
+			Debug::exception_handler($ex);
+			$this->automatedFailed++;
+			$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
+			$this->error('Error: %s', CLI::bold($ex->getMessage()));
+		}
+	}
+
 	##############
 	### Helper ###
 	##############
@@ -464,11 +467,7 @@ abstract class AutomatedTestCase extends TestCase
 // 	{
 // 		return in_array($traitname, class_uses($classname, true), true);
 // 	}
-	
-	protected function class_is_abstract(string $classname): bool
-	{
-		$k = new \ReflectionClass($classname);
-		return $k->isAbstract();
-	}
-	
+
+	abstract protected function runMethodTest(GDT_MethodTest $mt): void;
+
 }

@@ -1,25 +1,26 @@
 <?php
 namespace GDO\Core\Method;
 
-use GDO\Core\ModuleLoader;
 use GDO\Core\GDO;
-use GDO\Core\MethodAjax;
 use GDO\Core\GDT_JSON;
+use GDO\Core\MethodAjax;
+use GDO\Core\ModuleLoader;
 use GDO\Core\WithFileCache;
 
 /**
  * Get all types used in all tables.
  * Get the type class hierarchy.
  * Is file cached.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.7.0
+ * @author gizmore
  */
 final class GetTypes extends MethodAjax
 {
+
 	use WithFileCache;
-	
+
 	public function execute()
 	{
 		$tables = [];
@@ -43,7 +44,7 @@ final class GetTypes extends MethodAjax
 				}
 			}
 		}
-		
+
 		# Sum table fields
 		$fields = [];
 		foreach ($tables as $table)
@@ -53,14 +54,14 @@ final class GetTypes extends MethodAjax
 			{
 				if ($gdt->isSerializable())
 				{
-					$fields[$table->gdoClassName()][$name] = array(
+					$fields[$table->gdoClassName()][$name] = [
 						'type' => $gdt->gdoClassName(),
 						'options' => $gdt->configJSON(),
-					);
+					];
 				}
 			}
 		}
-		
+
 		# Build type hiararchy (GDTs that are no GDO)
 		$types = [];
 		foreach (get_declared_classes() as $class)
@@ -73,7 +74,7 @@ final class GetTypes extends MethodAjax
 				}
 			}
 		}
-		
+
 		$json = [
 			'fields' => $fields,
 			'types' => $types,
@@ -81,5 +82,5 @@ final class GetTypes extends MethodAjax
 
 		return GDT_JSON::make()->value($json);
 	}
-	
+
 }

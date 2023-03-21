@@ -3,16 +3,17 @@ namespace GDO\UI;
 
 /**
  * Add HTML href capabilities.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.1.0
+ * @author gizmore
  */
 trait WithHREF
 {
+
 	public string $href;
 
-	public function href(string $href=null): static
+	public function href(string $href = null): self
 	{
 		if ($href)
 		{
@@ -25,7 +26,7 @@ trait WithHREF
 		return $this;
 	}
 
-	public function htmlHREF() : string
+	public function htmlHREF(): string
 	{
 		return isset($this->href) ? sprintf(' href="%s"', html($this->href)) : '';
 	}
@@ -36,21 +37,21 @@ trait WithHREF
 	/**
 	 * Get this href with a replaced parameter.
 	 */
-	public function replacedHREF(string $key, ?string $var) : string
+	public function replacedHREF(string $key, ?string $var): string
 	{
-		return isset($this->href) ? 
+		return isset($this->href) ?
 			self::replacedHREFS($this->href, $key, $var) :
 			'';
 	}
-	
+
 	/**
 	 * Replace a GET Parameter inside an URL.
 	 * Adds it, if not found.
 	 * Removes if replacement var is empty.
-	 * 
+	 *
 	 * @TODO Speed up replacedHREFS() or at least fix the ?problem for the first element.
 	 */
-	public static function replacedHREFS(string $href, string $key, ?string $var) : string
+	public static function replacedHREFS(string $href, string $key, ?string $var): string
 	{
 		$new = $var ? ("&{$key}=" . urlencode($var)) : '';
 		if (strpos($href, "&{$key}=") !== false)
@@ -64,5 +65,5 @@ trait WithHREF
 		}
 		return $href;
 	}
-	
+
 }

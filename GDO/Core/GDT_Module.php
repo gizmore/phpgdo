@@ -3,26 +3,29 @@ namespace GDO\Core;
 
 /**
  * A module select.
- * 
+ *
  * Features installed and uninstalled choices.
  * Loads modules via module loader.
  * Plugs vars for auto tests is module UI first, so nothing get's horribly hurt?
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.2.0
- *       
+ *
+ * @author gizmore
  * @see GDO_Module
  */
 final class GDT_Module extends GDT_ObjectSelect
 {
+
 	###########
 	### GDT ###
 	###########
-	public function getDefaultName(): ?string
-	{
-		return 'module';
-	}
+	public bool $installed = true;
+	public bool $uninstalled = false;
+
+	# ###################
+	# ## Un/Installed ###
+	# ###################
 
 	protected function __construct()
 	{
@@ -30,33 +33,11 @@ final class GDT_Module extends GDT_ObjectSelect
 		$this->table(GDO_Module::table());
 	}
 
-	# ###################
-	# ## Un/Installed ###
-	# ###################
-	public bool $installed = true;
-	public bool $uninstalled = false;
-
-	/**
-	 * Also consider installed modules, or not when false.
-	 */
-	public function installed(bool $installed = true): static
+	public function getDefaultName(): ?string
 	{
-		$this->installed = $installed;
-		return $this;
+		return 'module';
 	}
 
-	/**
-	 * Also consider / not consider uninstalled modules.
-	 */
-	public function uninstalled(bool $uninstalled = true): static
-	{
-		$this->uninstalled = $uninstalled;
-		return $this;
-	}
-
-	# ##############
-	# ## Choices ###
-	# ##############
 	public function getChoices(): array
 	{
 		$choices = [];
@@ -66,8 +47,10 @@ final class GDT_Module extends GDT_ObjectSelect
 
 		foreach ($modules as $module)
 		{
-			if ((($module->isInstalled()) && $this->installed) ||
-				((!$module->isInstalled()) && $this->uninstalled))
+			if (
+				(($module->isInstalled()) && $this->installed) ||
+				((!$module->isInstalled()) && $this->uninstalled)
+			)
 			{
 				$choices[$module->getLowerName()] = $module;
 			}
@@ -75,9 +58,6 @@ final class GDT_Module extends GDT_ObjectSelect
 		return $choices;
 	}
 
-	# ################
-	# ## Var/Value ###
-	# ################
 	public function getValueSingle(string $moduleName): ?GDO_Module
 	{
 		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
@@ -86,6 +66,10 @@ final class GDT_Module extends GDT_ObjectSelect
 		}
 		return $this->toClosestChoiceValue($moduleName);
 	}
+
+	# ##############
+	# ## Choices ###
+	# ##############
 
 	public function getValueMulti(string $var): array
 	{
@@ -101,9 +85,10 @@ final class GDT_Module extends GDT_ObjectSelect
 		return $back;
 	}
 
-	#############
-	### Tests ###
-	#############
+	# ################
+	# ## Var/Value ###
+	# ################
+
 	public function plugVars(): array
 	{
 		$name = $this->getName();
@@ -112,5 +97,27 @@ final class GDT_Module extends GDT_ObjectSelect
 			[$name => 'Table'],
 		];
 	}
-	
+
+	/**
+	 * Also consider installed modules, or not when false.
+	 */
+	public function installed(bool $installed = true): self
+	{
+		$this->installed = $installed;
+		return $this;
+	}
+
+	#############
+	### Tests ###
+	#############
+
+	/**
+	 * Also consider / not consider uninstalled modules.
+	 */
+	public function uninstalled(bool $uninstalled = true): self
+	{
+		$this->uninstalled = $uninstalled;
+		return $this;
+	}
+
 }

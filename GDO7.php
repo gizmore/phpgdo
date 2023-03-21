@@ -1,4 +1,6 @@
 <?php
+
+use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
@@ -9,12 +11,13 @@ use GDO\Net\GDT_Url;
 use GDO\User\GDO_User;
 use GDO\Util\Regex;
 use GDO\Util\Strings;
+
 /**
  * GDO Autoloader and global functions.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 6.0.0
+ * @author gizmore
  */
 define('GDO_PATH', __DIR__ . '/');
 // define('GDO_PATH', str_replace('\\', '/', __DIR__) . '/');
@@ -30,16 +33,16 @@ $GDT_LOADED = 0; #PP#delete#
 /**
  * The infamous 5 line phpgdo autoloader... was cancelled.
  * I present now: the branchless autoloader! :)
- * 
+ *
  * Generally both loaders work like this:
  * 1. Check if classname starts with `GDO\`
  * 2. Turn GDO\Module\Classname into a /fullpath.php (a tad faster on windows because a non required str_replace)
  * 3. Include the fullpath
  * 4. Increase performance counter, which is removed in production.
- * 
+ *
  * @author gizmore
  */
-spl_autoload_register(function(string $name) : void
+spl_autoload_register(function (string $name): void
 {
 	# Branchless autoloader v7.02. slow
 // 	$call = [
@@ -52,7 +55,7 @@ spl_autoload_register(function(string $name) : void
 // 		},
 // 	];
 // 	$call[((((ord($name[0]) << 8) | ord($name[3])) ^ 0xB8A3) + 1) >> 16]($name);
-	
+
 	# The original autoloader seems faster ;)
 	if ($name[0] === 'G' && $name[3] === '\\') # 1 line for two if's
 	{   # 2 lines for path + include
@@ -69,27 +72,27 @@ spl_autoload_register(function(string $name) : void
 require GDO_PATH . 'GDO/Util/Shim.php';
 new ModuleLoader(GDO_PATH . 'GDO/');
 
-function sitename() : string
+function sitename(): string
 {
 	return t('sitename');
 }
 
-function url(string $module, string $method, string $append = '', bool $lang = true) : string
+function url(string $module, string $method, string $append = '', bool $lang = true): string
 {
 	return GDT_Url::absolute(href($module, $method, $append, $lang));
 }
 
-function jxhref(string $module, string $method, string $append = '', bool $lang = true) : string
+function jxhref(string $module, string $method, string $append = '', bool $lang = true): string
 {
 	return href($module, $method, $append . '&_ajax=1&_fmt=json', $lang);
 }
 
-function hrefDefault() : string
+function hrefDefault(): string
 {
 	return href(GDO_MODULE, GDO_METHOD);
 }
 
-function profile_link(string $username, int $avatarSize=0)
+function profile_link(string $username, int $avatarSize = 0)
 {
 	$user = GDO_User::getByName($username);
 	return $user->renderProfileLink(true, $avatarSize);
@@ -100,12 +103,13 @@ function profile_link(string $username, int $avatarSize=0)
  * SEO: Turn an url like " Forum, Board, &id=3 " into " /forum/board/id/3 ".
  * Paramters with a dash or [] are not SEO converted.
  * Append timezone and language to an url via dash paramter.
+ *
  * @see seo()
  */
-function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS) : string
+function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS): string
 {
 	$lang = true;
-	
+
 	$module = strtolower($module);
 	$method = strtolower($method);
 
@@ -130,7 +134,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 					{
 						$fmt = Strings::substrFrom($part, '=');
 					}
-					elseif (( !strpos($part, '[')) && ( !str_starts_with($part, '_')))
+					elseif ((!strpos($part, '[')) && (!str_starts_with($part, '_')))
 					{
 						$kv = explode('=', $part);
 						$k = $kv[0];
@@ -144,9 +148,9 @@ function href(string $module, string $method, string $append = null, bool $seo =
 				}
 			}
 		}
-		
+
 		$href .= ".{$fmt}";
-		
+
 		if ($q)
 		{
 			$href .= '?' . implode('&', $q);
@@ -185,13 +189,13 @@ function href(string $module, string $method, string $append = null, bool $seo =
 		#PP#end#
 		$href .= $append;
 	}
-	
+
 	Application::$HREFS[] = $href; #PP#delete#
-	
+
 	return $href;
 }
 
-function hrefNoSeo(string $module, string $method, string $append = null) : string
+function hrefNoSeo(string $module, string $method, string $append = null): string
 {
 	return href($module, $method, $append, false);
 }
@@ -208,21 +212,22 @@ function quote($value)
 
 function json_quote($s)
 {
-	return str_replace("'", "&#39;", $s);
+	return str_replace("'", '&#39;', $s);
 }
 
-function json($value) : string
+function json($value): string
 {
-	return json_encode($value, GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
+	return json_encode($value, GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0);
 }
 
 /**
  * HTML escaping.
  * *Performance stunt*: Replace only the same character count to safe clock cycles. the func is probably a hot spot.
  * In CLI mode, no escaping is done.
- * @see \htmlspecialchars()
+ *
+ * @see htmlspecialchars
  */
-function html(string $html=null) : string
+function html(string $html = null): string
 {
 	if ($html === null)
 	{
@@ -231,15 +236,15 @@ function html(string $html=null) : string
 	switch (Application::$MODE)
 	{
 		case GDT::RENDER_CLI:
-			return \GDO\CLI\CLI::removeColorCodes($html);
+			return CLI::removeColorCodes($html);
 		default:
 			return str_replace(
-			[
-				'&',
-				'"',
-				'<',
-				'>',
-			], [
+				[
+					'&',
+					'"',
+					'<',
+					'>',
+				], [
 				'&amp;',
 				'&quot;',
 				'&lt;',
@@ -269,7 +274,7 @@ function deff(string $key, $value): mixed
 function hdrc(string $header, bool $replace = true): void
 {
 	hdr($header, $replace);
-	$code = (int) Regex::firstMatch('#HTTP/1.1 (\\d+)#', $header);
+	$code = (int)Regex::firstMatch('#HTTP/1.1 (\\d+)#', $header);
 	Application::setResponseCode($code);
 }
 
@@ -288,7 +293,7 @@ function hdr(string $header, bool $replace = true): void
 	}
 }
 
-function uridecode(string $url=null) : string
+function uridecode(string $url = null): string
 {
 	return $url ? urldecode($url) : '';
 }
@@ -296,7 +301,7 @@ function uridecode(string $url=null) : string
 /**
  * Check if a module is enabled.
  */
-function module_enabled(string $moduleName) : bool
+function module_enabled(string $moduleName): bool
 {
 	if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
 	{
@@ -311,6 +316,7 @@ function module_enabled(string $moduleName) : bool
 
 /**
  * Global translate function to translate into current language ISO.
+ *
  * @return string|string[string]
  */
 function t(string $key, array $args = null)
@@ -320,6 +326,7 @@ function t(string $key, array $args = null)
 
 /**
  * Global translate function to translate into english.
+ *
  * @return string|string[string]
  */
 function ten(string $key, array $args = null)
@@ -329,6 +336,7 @@ function ten(string $key, array $args = null)
 
 /**
  * Global translate function to translate into an ISO language code.
+ *
  * @return string|string[string]
  */
 function tiso(string $iso, string $key, array $args = null)
@@ -338,6 +346,7 @@ function tiso(string $iso, string $key, array $args = null)
 
 /**
  * Global translate function to translate into a user's language.
+ *
  * @return string|string[string]
  */
 function tusr(GDO_User $user, string $key, array $args = null)
@@ -354,9 +363,10 @@ function tusr(GDO_User $user, string $key, array $args = null)
  *        format key from trans file; e.g: 'short', 'long', 'date', 'exact'.
  * @param string $default
  *        the default string to display when date is null or invalid.
+ *
  * @return string
  */
-function tt(string $date = null, string $format = 'short', string $default = '---') : string
+function tt(string $date = null, string $format = 'short', string $default = '---'): string
 {
 	return Time::displayDate($date, $format, $default);
 }

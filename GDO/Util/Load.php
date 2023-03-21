@@ -6,13 +6,14 @@ use GDO\CLI\Process;
 /**
  * Gather System metrics.
  * Call Load::init() to include.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.1
+ * @author gizmore
  */
 final class Load
 {
+
 	# Prefilled with fictive values.
 	public static array $STATE = [
 		# PERF
@@ -33,7 +34,7 @@ final class Load
 	{
 		self::update();
 	}
-	
+
 	public static function update(): void
 	{
 		self::$STATE['cpus'] = self::_getCPUCores();
@@ -46,7 +47,7 @@ final class Load
 		self::$STATE['hdda'] = $a = self::_getHDDAvail();
 		self::$STATE['hddu'] = $a - $f;
 	}
-	
+
 	######################
 	### Private Gather ###
 	######################
@@ -56,11 +57,11 @@ final class Load
 			getenv('NUMBER_OF_PROCESSORS') :
 			substr_count(file_get_contents('/proc/cpuinfo'), 'processor'));
 	}
-	
+
 	private static function _getServerLoad(): float
 	{
 		$load = null;
-		
+
 		if (Process::isWindows())
 		{
 			$cmd = 'wmic cpu get loadpercentage /all';
@@ -74,15 +75,10 @@ final class Load
 				substr($output, 0, strpos($output, ' ')) :
 				9.99;
 		}
-		
+
 		return $load;
 	}
-	
-	private static function _getServerClock(): float
-	{
-		return 0.00;
-	}
-	
+
 	private static function _windowsStats(string $cmd): ?string
 	{
 		$output = [];
@@ -100,26 +96,43 @@ final class Load
 		return null;
 	}
 
+	private static function _getServerClock(): float
+	{
+		return 0.00;
+	}
+
 	private static function _getAvail(): int
 	{
 		return Process::isWindows() ?
 			self::_getAvailWindows() :
 			self::_getAvailLinux();
 	}
-	
+
+	private static function _getAvailWindows(): int
+	{
+		$cmd = 'wmic memorychip get capacity';
+		return self::_windowsStats($cmd);
+	}
+
+	private static function _getAvailLinux(): int
+	{
+		return self::_getMemLinux('MemTotal');
+	}
+
+	private static function _getMemLinux(string $key): int
+	{
+		$ptrn = '/' . $key . ':\s*([0-9]+) kB/';
+		$info = file_get_contents('/proc/meminfo');
+		return Regex::firstMatch($ptrn, $info) * 1024;
+	}
+
 	private static function _getUsed(): int
 	{
 		return Process::isWindows() ?
 			self::_getUsedWindows() :
 			self::_getUsedLinux();
 	}
-	
-	private static function _getAvailWindows(): int
-	{
-		$cmd = 'wmic memorychip get capacity';
-		return self::_windowsStats($cmd);
-	}
-	
+
 	private static function _getUsedWindows(): int
 	{
 		$cmd = 'wmic OS get FreePhysicalMemory';
@@ -128,32 +141,20 @@ final class Load
 		$total = self::_getAvailWindows();
 		return $total - $free;
 	}
-	
-	private static function _getAvailLinux(): int
-	{
-		return self::_getMemLinux('MemTotal');
-	}
-	
+
 	private static function _getUsedLinux(): int
 	{
 		return self::_getMemLinux('MemFree');
 	}
-	
-	private static function _getMemLinux(string $key): int
-	{
-		$ptrn = '/'.$key.':\s*([0-9]+) kB/';
-		$info = file_get_contents('/proc/meminfo');
-		return Regex::firstMatch($ptrn, $info) * 1024;
-	}
-	
-	private static function _getHDDAvail(): int
-	{
-		return disk_total_space(GDO_PATH);
-	}
-	
+
 	private static function _getHDDFree(): int
 	{
 		return disk_free_space(GDO_PATH);
 	}
-	
+
+	private static function _getHDDAvail(): int
+	{
+		return disk_total_space(GDO_PATH);
+	}
+
 }

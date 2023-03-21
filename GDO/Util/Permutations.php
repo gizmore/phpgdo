@@ -1,20 +1,23 @@
 <?php
 namespace GDO\Util;
 
+use Generator;
+
 /**
  * Permutation generator.
  * Works for mixed[mixed]?
  * If you have empty values, you have one permutation with an empty array.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
+ * @author gizmore
  */
 final class Permutations
 {
+
 	private int $count = 0;
 	private array $values;
 	private array $lastPermutation;
-	
+
 	public function __construct(array $values)
 	{
 		$this->values = $values;
@@ -25,8 +28,8 @@ final class Permutations
 		}
 		$this->count = self::countPermutations($values);
 	}
-	
-	public static function countPermutations(array $values) : int
+
+	public static function countPermutations(array $values): int
 	{
 		$n = 1;
 		foreach ($values as $value)
@@ -35,8 +38,8 @@ final class Permutations
 		}
 		return $n;
 	}
-	
-	public function generate() : \Generator
+
+	public function generate(): Generator
 	{
 		yield $this->lastPermutation();
 
@@ -60,7 +63,7 @@ final class Permutations
 			}
 		}
 	}
-	
+
 	private function lastPermutation()
 	{
 		$back = [];
@@ -71,5 +74,5 @@ final class Permutations
 		}
 		return $back;
 	}
-	
+
 }

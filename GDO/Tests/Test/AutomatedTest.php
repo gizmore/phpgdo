@@ -1,41 +1,44 @@
 <?php
 namespace GDO\Tests\Test;
 
-use GDO\Tests\TestCase;
+use GDO\CLI\CLI;
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\ModuleLoader;
+use GDO\Tests\TestCase;
 use GDO\Util\Filewalker;
-use function PHPUnit\Framework\assertTrue;
-use function PHPUnit\Framework\assertInstanceOf;
+use ReflectionClass;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertGreaterThanOrEqual;
-use function PHPUnit\Framework\assertLessThanOrEqual;
+use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertLessThan;
-use GDO\CLI\CLI;
+use function PHPUnit\Framework\assertLessThanOrEqual;
+use function PHPUnit\Framework\assertTrue;
 
 /**
  * Auto coverage test.
  * Note that GDO are not treated as GDT here.
- * 
+ *
  * Includes all GDT and tries some basic make and nullable test and basic back and forth conversion.
  * Includes all GDO and tests basic blank data instanciation.
- * 
+ *
  * @TODO Includes all GDO and test plugged initial test data + insert() + replace().
  * @TODO Add real easy working support for theme cycle testing :(
- * @TODO 
- * 
+ * @TODO
+ *
  * Includes all Method and executes trivial ones.
  * Trivial methods only have parameters that can be plugged.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.10.0
+ * @author gizmore
  */
 final class AutomatedTest extends TestCase
 {
+
 	private int $numMethods = 0;
-	
-	function testGDOandGDTsyntax()
+
+	public function testGDOandGDTsyntax()
 	{
 		echo "Testing GDO and GDT syntax...\n";
 		ob_flush();
@@ -45,8 +48,10 @@ final class AutomatedTest extends TestCase
 			Filewalker::traverse($module->filePath(), null,
 				function ($entry, $fullpath)
 				{
-					if ((str_starts_with($entry, 'GDT_')) ||
-					(str_starts_with($entry, 'GDO_')))
+					if (
+						(str_starts_with($entry, 'GDT_')) ||
+						(str_starts_with($entry, 'GDO_'))
+					)
 					{
 						require_once $fullpath;
 					}
@@ -69,19 +74,19 @@ final class AutomatedTest extends TestCase
 				{
 					continue; # skip GDO
 				}
-				/** @var $gdt \GDO\Core\GDT **/
+				/** @var $gdt GDT * */
 
-				$k = new \ReflectionClass($klass);
+				$k = new ReflectionClass($klass);
 				if ($k->isAbstract())
 				{
 					continue;
 				}
-				
+
 				$gdt = call_user_func([
 					$klass,
-					'make'
+					'make',
 				], 'testfield');
-				
+
 				if ($gdt->isTestable())
 				{
 					$gdt->value(null);
@@ -91,7 +96,7 @@ final class AutomatedTest extends TestCase
 					$count++;
 					assertTrue(!!$gdt, "Test if {$gdt->gdoClassName()} can be created.");
 				}
-				
+
 				CLI::flushTopResponse();
 			}
 		}
@@ -104,12 +109,12 @@ final class AutomatedTest extends TestCase
 		$this->message('Testing blank() handling on all GDO\n');
 		foreach (get_declared_classes() as $klass)
 		{
-			$k = new \ReflectionClass($klass);
+			$k = new ReflectionClass($klass);
 			if ($k->isAbstract())
 			{
 				continue;
 			}
-			
+
 			$parents = class_parents($klass);
 			if (in_array(GDO::class, $parents, true))
 			{
@@ -122,7 +127,7 @@ final class AutomatedTest extends TestCase
 //					echo "Testing GDO $klass\n"; flush();
 					$gdo = call_user_func([
 						$klass,
-						'blank'
+						'blank',
 					]);
 					assertInstanceOf(GDO::class, $gdo,
 						'Test if ' . $klass . ' is a GDO.');
@@ -130,8 +135,8 @@ final class AutomatedTest extends TestCase
 				CLI::flushTopResponse();
 			}
 		}
-		
-		$this->message("%d GDO tested.", $count);
+
+		$this->message('%d GDO tested.', $count);
 		echo "{$count} GDO tested!\n";
 		ob_flush();
 	}

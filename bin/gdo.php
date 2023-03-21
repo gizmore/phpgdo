@@ -1,20 +1,25 @@
 <?php
 namespace bin;
+
 use GDO\CLI\CLI;
+use GDO\Core\Application;
 use GDO\Core\Debug;
+use GDO\Core\GDO_Error;
 use GDO\Core\GDO_NoSuchMethodError;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
+use GDO\Core\GDT_Response;
 use GDO\Core\Logger;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\Language\Trans;
-use GDO\Core\Application;
-use GDO\Core\GDT;
+use GDO\UI\GDT_Error;
 use GDO\User\GDO_User;
 use GDO\Util\Arrays;
-use GDO\UI\GDT_Error;
+use Throwable;
+
 /**
  * @var $argv string[]
  */
@@ -23,14 +28,17 @@ require __DIR__ . '/../protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
 	echo "GDOv7 is not installed here.\n";
-	die(1);
+	die(Application::EXIT_ERROR);
 }
 require __DIR__ . '/../GDO7.php';
 
-class gdo extends Application
+$gdo = new class extends Application
 {
-	public function isCLI() : bool { return true; }
-}
+
+	public function isCLI(): bool { return true; }
+
+};
+
 global $me;
 gdo::init()->cli()->modeDetected(GDT::RENDER_CLI);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
@@ -62,7 +70,7 @@ if (CLI::isInteractive() && $me)
 		try
 		{
 			$expression = GDT_Expression::fromLine($line);
-			/** @var $result \GDO\Core\GDT_Response **/
+			/** @var $result GDT_Response * */
 			$result = $expression->execute();
 			CLI::flushTopResponse();
 			echo $result->render() . "\n";
@@ -71,19 +79,20 @@ if (CLI::isInteractive() && $me)
 		{
 			$module = $ex->module;
 			$methods = $module->getMethods();
-			$methods = array_map(function(Method $m) {
+			$methods = array_map(function (Method $m)
+			{
 				return $m->gdoShortName();
 			}, $methods);
 			$methods = Arrays::implodeHuman($methods);
 			echo t('msg_module_methods', [
 				$module->gdoShortName(), $methods]);
 		}
-		catch (\GDO\Core\GDO_Error $ex)
+		catch (GDO_Error $ex)
 		{
 			CLI::flushTopResponse();
 			echo $ex->renderCLI();
 		}
-		catch (\Throwable $ex)
+		catch (Throwable $ex)
 		{
 			Debug::debugException($ex, false);
 			CLI::flushTopResponse();

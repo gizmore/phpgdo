@@ -10,46 +10,47 @@ use GDO\User\GDO_User;
 /**
  * Show a 403 page.
  * Send an email if opted-in.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.0
+ * @author gizmore
  */
 final class NotAllowed extends MethodPage
 {
-	public function isSavingLastUrl() : bool
+
+	public function isSavingLastUrl(): bool
 	{
 		return false;
 	}
-	
-	protected function isFileCacheEnabled() : bool
+
+	protected function isFileCacheEnabled(): bool
 	{
 		return false;
 	}
-	
-	public function getMethodTitle() : string
+
+	public function getMethodTitle(): string
 	{
 		return t('forbidden');
 	}
-	
-	public function getMethodDescription() : string
+
+	public function getMethodDescription(): string
 	{
 		return t('err_forbidden');
 	}
-	
-	public function getTemplateName() : string
+
+	public function getTemplateName(): string
 	{
 		return 'page/403_page.php';
 	}
-	
-	public function gdoParameters() : array
+
+	public function gdoParameters(): array
 	{
 		return [
 			GDT_Url::make('url')->notNull()->allowInternal(),
 		];
 	}
-	
-	public function beforeExecute() : void
+
+	public function beforeExecute(): void
 	{
 		if (Module_Core::instance()->cfgMail403())
 		{
@@ -59,16 +60,16 @@ final class NotAllowed extends MethodPage
 			}
 		}
 	}
-	
-	private function send403Mails() : void
+
+	private function send403Mails(): void
 	{
 		foreach (GDO_User::admins() as $user)
 		{
 			$this->send403Mail($user);
 		}
 	}
-	
-	private function send403Mail(GDO_User $user) : void
+
+	private function send403Mail(GDO_User $user): void
 	{
 		$url = $this->gdoParameterVar('url');
 		$mail = Mail::botMail();

@@ -5,16 +5,17 @@ use GDO\UI\GDT_Menu;
 
 /**
  * Add an array of actions GDT like buttons.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 6.2.0
+ * @author gizmore
  */
 trait WithActions
 {
+
 	private GDT_Menu $actions;
-	
-	public function actions() : GDT_Menu
+
+	public function actions(): GDT_Menu
 	{
 		if (!isset($this->actions))
 		{
@@ -22,13 +23,13 @@ trait WithActions
 		}
 		return $this->actions;
 	}
-	
-	public function getActions() : ?GDT_Menu
+
+	public function getActions(): ?GDT_Menu
 	{
 		return isset($this->actions) ? $this->actions : null;
 	}
 
-	public function hasActions() : bool
+	public function hasActions(): bool
 	{
 		return isset($this->actions) && $this->actions->hasFields();
 	}

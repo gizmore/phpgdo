@@ -1,42 +1,38 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\GDT_Template;
 use GDO\Core\GDT_Field;
+use GDO\Core\GDT_Template;
 
 /**
- * A numeric slider with min and max values. 
- * 
- * @author gizmore
+ * A numeric slider with min and max values.
+ *
  * @version 7.0.1
  * @since 6.0.0
+ * @author gizmore
  */
 class GDT_Slider extends GDT_Field
 {
+
 	##############
 	### Render ###
 	##############
-	public function renderForm() : string
-	{
-		return GDT_Template::php('UI', 'slider.php', ['field' => $this]);
-	}
+	public $min;
 
 	###############
 	### Options ###
 	###############
-	public $min;
-	public function min($min) { $this->min = $min; return $this; }
 	public $max;
-	public function max($max) { $this->max = $max; return $this; }
 	public $step = 1;
-	public function step($step) { $this->step = $step; return $this; }
 
-	################
-	### Validate ###
-	################
-	public function getGDOData() : array { return [$this->name => $this->var]; }
-	
-	public function validate($value) : bool
+	public function renderForm(): string
+	{
+		return GDT_Template::php('UI', 'slider.php', ['field' => $this]);
+	}
+
+	public function getGDOData(): array { return [$this->name => $this->var]; }
+
+	public function validate($value): bool
 	{
 		if (parent::validate($value))
 		{
@@ -49,7 +45,7 @@ class GDT_Slider extends GDT_Field
 			}
 			elseif ($value !== null)
 			{
-				if ( ($value < $this->min) || ($value > $this->max) )
+				if (($value < $this->min) || ($value > $this->max))
 				{
 					return $this->error('err_int_not_between', [$this->min, $this->max]);
 				}
@@ -57,5 +53,27 @@ class GDT_Slider extends GDT_Field
 			return true;
 		}
 	}
-	
+
+	public function min($min)
+	{
+		$this->min = $min;
+		return $this;
+	}
+
+	################
+	### Validate ###
+	################
+
+	public function max($max)
+	{
+		$this->max = $max;
+		return $this;
+	}
+
+	public function step($step)
+	{
+		$this->step = $step;
+		return $this;
+	}
+
 }

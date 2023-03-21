@@ -1,10 +1,12 @@
 <?php
+
 use GDO\Install\Config;
-use GDO\UI\GDT_Panel;
 use GDO\UI\GDT_Container;
-/** @var $container GDT_Container **/
+use GDO\UI\GDT_Panel;
+
+/** @var $container GDT_Container * */
 ?>
-<h2><?= t('install_title_5'); ?></h2>
+    <h2><?=t('install_title_5');?></h2>
 <?php
 $email = GDO_ADMIN_EMAIL;
 $path = GDO_PATH . 'gdo_cronjob.sh > /dev/null';

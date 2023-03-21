@@ -5,29 +5,32 @@ use GDO\Core\GDT;
 
 /**
  * Bcrypt hash form and database value
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 5.0.0
+ * @author gizmore
  */
 class GDT_PasswordHash extends GDT_Password
 {
-	
-    public function isSerializable() : bool
-    {
-    	return false;
-    }
-    
-    public function toValue($var = null)
+
+	public function isSerializable(): bool
+	{
+		return false;
+	}
+
+	public function toValue($var = null)
 	{
 		return $var === null ? null : new BCrypt($var);
 	}
-	
-	public function getHash()
+
+	/**
+	 * Do not show previous input!
+	 */
+	public function renderCell(): string
 	{
-		return $this->getValue()->__toString();
+		return GDT::EMPTY_STRING;
 	}
-	
+
 //	public function inputToVar($input) : ?string
 //	{
 //		if ($input === null)
@@ -36,18 +39,15 @@ class GDT_PasswordHash extends GDT_Password
 //		}
 //		return (new BCrypt($input))->__toString();
 //	}
-	
-	/**
-	 * Do not show previous input!
-	 */
-	public function renderCell(): string
-	{
-		return GDT::EMPTY_STRING;
-	}
-	
+
 	public function htmlValue(): string
 	{
 		return GDT::EMPTY_STRING;
+	}
+
+	public function getHash()
+	{
+		return $this->getValue()->__toString();
 	}
 
 }

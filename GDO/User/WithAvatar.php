@@ -7,25 +7,23 @@ use GDO\Core\GDT;
 /**
  * Add an avatar to a GDT.
  * You need Module_Avatar to have anything rendered by this trait.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.2.0
+ * @author gizmore
  */
 trait WithAvatar
 {
+
 	private static GDT_Avatar $AVATAR_DUMMY;
-	
-	public function hasAvatar() : bool
-	{
-		return isset($this->avatarUser);
-	}
-	
+	public GDO_User $avatarUser;
+
 	############
 	### User ###
 	############
-	public GDO_User $avatarUser;
-	public function avatarUser(GDO_User $user=null, int $size=42): static
+	public int $avatarSize = 32;
+
+	public function avatarUser(GDO_User $user = null, int $size = 42): self
 	{
 		if ($user === null)
 		{
@@ -37,21 +35,18 @@ trait WithAvatar
 		}
 		return $this->avatarSize($size);
 	}
-	
+
 	############
 	### Size ###
 	############
-	public int $avatarSize = 32;
-	public function avatarSize(int $size): static
+
+	public function avatarSize(int $size): self
 	{
 		$this->avatarSize = $size;
 		return $this;
 	}
-	
-	##############
-	### Render ###
-	##############
-	public function renderAvatar() : ?string
+
+	public function renderAvatar(): ?string
 	{
 		if (module_enabled('Avatar'))
 		{
@@ -62,8 +57,17 @@ trait WithAvatar
 		}
 		return GDT::EMPTY_STRING;
 	}
-	
-	protected function renderAvatarFor(GDO_User $user) : ?string
+
+	##############
+	### Render ###
+	##############
+
+	public function hasAvatar(): bool
+	{
+		return isset($this->avatarUser);
+	}
+
+	protected function renderAvatarFor(GDO_User $user): ?string
 	{
 		if (!isset(self::$AVATAR_DUMMY))
 		{
@@ -71,5 +75,5 @@ trait WithAvatar
 		}
 		return self::$AVATAR_DUMMY->imageSize($this->avatarSize)->user($user)->render();
 	}
-	
+
 }

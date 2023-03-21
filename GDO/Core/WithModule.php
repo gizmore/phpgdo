@@ -2,8 +2,8 @@
 namespace GDO\Core;
 
 use GDO\Language\Trans;
-use GDO\Util\Strings;
 use GDO\Util\Regex;
+use GDO\Util\Strings;
 
 /**
  * Very basic trait.
@@ -19,9 +19,9 @@ use GDO\Util\Regex;
  *
  * Offers static and non static versions.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 7.0.0
+ * @author gizmore
  * @see WithName
  */
 trait WithModule

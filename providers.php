@@ -3,16 +3,17 @@
  * This prints all modules and their providers.
  * The list can be copied by authors to Core/ModuleProviders.php
  */
+
 use GDO\Util\Filewalker;
 use GDO\Util\Regex;
 
 # Bootstrap GDOv7
-require "protected/config.php";
-require "GDO7.php";
+require 'protected/config.php';
+require 'GDO7.php';
 
 global $mode;
 
-/** @var $argv string **/
+/** @var $argv string * */
 $mode = @$argv[1];
 
 if ($mode)
@@ -23,26 +24,24 @@ if ($mode)
 	echo "'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],\n";
 }
 
-Filewalker::traverse("GDO", null, null,
-function ($entry, $fullpath)
-{
-	if (is_dir('GDO/' . $entry . "/.git"))
+Filewalker::traverse('GDO', null, null,
+	function ($entry, $fullpath)
 	{
-		global $mode;
-		$c = file_get_contents('GDO/' . $entry . "/.git/config");
-		$c = Regex::firstMatch('#/gizmore/([-_a-z0-9]+)#miD', $c);
-		if (!str_starts_with($entry, 'phpgdo-'))
+		if (is_dir('GDO/' . $entry . '/.git'))
 		{
-			if (!$mode)
+			global $mode;
+			$c = file_get_contents('GDO/' . $entry . '/.git/config');
+			$c = Regex::firstMatch('#/gizmore/([-_a-z0-9]+)#miD', $c);
+			if (!str_starts_with($entry, 'phpgdo-'))
 			{
-				echo "$entry - < https://github.com/gizmore/$c >\n";
-			}
-			else
-			{
-				echo "'" . $entry . "' => '$c',\n";
+				if (!$mode)
+				{
+					echo "$entry - < https://github.com/gizmore/$c >\n";
+				}
+				else
+				{
+					echo "'" . $entry . "' => '$c',\n";
+				}
 			}
 		}
-	}
-}, 0);
-
-
+	}, 0);

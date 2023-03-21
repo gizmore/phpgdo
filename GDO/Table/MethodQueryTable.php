@@ -1,19 +1,19 @@
 <?php
 namespace GDO\Table;
 
+use GDO\Core\GDO_Exception;
 use GDO\DB\ArrayResult;
 use GDO\DB\Query;
-use GDO\User\GDO_User;
 use GDO\UI\GDT_DeleteButton;
 use GDO\UI\GDT_EditButton;
-use GDO\Core\GDO_Exception;
+use GDO\User\GDO_User;
 
 /**
  * A method that displays a table via a query.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 3.0.0
+ * @author gizmore
  * @see GDT_Table
  */
 abstract class MethodQueryTable extends MethodTable
@@ -48,16 +48,6 @@ abstract class MethodQueryTable extends MethodTable
 	# ###############
 	# ## Abstract ###
 	# ###############
-	/**
-	 * This method should not be called anymore when using Queried tables.
-	 *
-	 * {@inheritdoc}
-	 * @see \GDO\Table\MethodTable::getResult()
-	 */
-	public function getResult(): ArrayResult
-	{
-		throw new GDO_Exception("Shuld not return result for queried methods!");
-	}
 
 	/**
 	 * Override this function to return a query for your table.
@@ -66,6 +56,17 @@ abstract class MethodQueryTable extends MethodTable
 	public function getQuery(): Query
 	{
 		return $this->gdoTable()->select();
+	}
+
+	/**
+	 * This method should not be called anymore when using Queried tables.
+	 *
+	 * {@inheritdoc}
+	 * @see MethodTable::getResult
+	 */
+	public function getResult(): ArrayResult
+	{
+		throw new GDO_Exception('Shuld not return result for queried methods!');
 	}
 
 //	/**
@@ -81,9 +82,8 @@ abstract class MethodQueryTable extends MethodTable
 	# ###########
 	# ## Exec ###
 	# ###########
-	protected function beforeCalculateTable(GDT_Table $table)
-	{
-	}
+
+	protected function beforeCalculateTable(GDT_Table $table) {}
 
 	/**
 	 * Calculate the GDT_Table object for queried tables.

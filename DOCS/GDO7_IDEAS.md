@@ -2,6 +2,9 @@
 
 This is my official great ideas list. I gave up getting rich with stupid ideas, so i don't hide any. DO I?! ;)
 
+LATEST IDEAS LAST:
+
+
 ## GDOv7 Ideas: (Non wanking related)
 
 - Add all my TODO ideas here!
@@ -171,11 +174,17 @@ This is my official great ideas list. I gave up getting rich with stupid ideas, 
 - Cloppy: Like sniping tool but drag target (textfields+?) is supported by confiugrable pasteimg service. like sniping tool, but copy+paste sends a link to
   uploaded cut.
 
-- WCChallenge: Exploit [img](/etc/proc/self)/etc/proc/self] - maybe simulated.
-
 - *Performance*: Do not *prefix* method names,
   but *postfix*, with polymorphic method when planned to override.
   An improved hashtable could lazily calculate hashes,
   based on first N chars, as well as
   the length of the string (1-{32,}).
   Longer strings go into the std impl of hashtable?
+
+ - Challenge: create a virus signature from an XOR string. annoy the user. host it where?
+ 
+ - Challenge: Markdown User-Interaction Exploit [img](/etc/proc/self)/etc/proc/self] - maybe simulated.
+
+ - CGX: Configure the windows firewall for fun and profit.
+ 
+ - GDO_String - A better string storage engine. (PoC in phpgdo, as i love my cache).

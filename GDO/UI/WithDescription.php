@@ -3,48 +3,43 @@ namespace GDO\UI;
 
 /**
  * Adds a description to a GDT.
- * 
- * @author gizmore
+ *
  * @version 7.0.0
  * @since 7.0.0
+ * @author gizmore
  */
 trait WithDescription
 {
+
 	public $descrKey;
 	public $descrArgs;
-	public function description(string $key, array $args=null): static
+	public $descrRaw;
+	public $descrEscaped = true;
+
+	public function description(string $key, array $args = null): self
 	{
 		$this->descrRaw = null;
-	    $this->descrKey = $key;
-	    $this->descrArgs = $args;
-	    return $this;
-	}
-	
-	public $descrRaw;
-	public function descrRaw($descr)
-	{
-	    $this->descrRaw = $descr;
-	    $this->descrKey = null;
-	    $this->descrArgs = null;
-	    return $this;
+		$this->descrKey = $key;
+		$this->descrArgs = $args;
+		return $this;
 	}
 
-	public $descrEscaped = true;
 	public function descrEscaped(bool $escaped)
 	{
-	    $this->descrEscaped = $escaped;
-	    return $this;
+		$this->descrEscaped = $escaped;
+		return $this;
 	}
-	
-	##############
-	### Render ###
-	##############
-	public function hasDescription() : bool
+
+	public function hasDescription(): bool
 	{
 		return $this->descrKey || $this->descrRaw;
 	}
-	
-	public function renderDescription() : string
+
+	##############
+	### Render ###
+	##############
+
+	public function renderDescription(): string
 	{
 		if ($this->descrKey)
 		{
@@ -52,10 +47,18 @@ trait WithDescription
 		}
 		return $this->descrRaw;
 	}
-	
-	public function noDescription(): static
+
+	public function noDescription(): self
 	{
 		return $this->descrRaw(null);
+	}
+
+	public function descrRaw($descr)
+	{
+		$this->descrRaw = $descr;
+		$this->descrKey = null;
+		$this->descrArgs = null;
+		return $this;
 	}
 
 }

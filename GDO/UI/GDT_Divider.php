@@ -5,38 +5,39 @@ use GDO\Core\GDT;
 
 /**
  * A horizontal divider tag.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 6.0.0
+ * @author gizmore
  */
 class GDT_Divider extends GDT
 {
+
 	use WithLabel;
-	
+
 	##############
 	### Render ###
 	##############
-	public function renderCLI() : string
+	public function renderCLI(): string
 	{
 		return sprintf("===%s===\n", $this->renderLabelText());
 	}
-	
-	public function renderHTML() : string
+
+	public function renderHTML(): string
 	{
 		$text = $this->renderLabelText();
 		$text = $text ? "<h5>{$text}</h5>" : $text;
-	    return '<div class="gdt-divider">' . $text . '</div>';
+		return '<div class="gdt-divider">' . $text . '</div>';
 	}
-	
+
 	/**
 	 * Render code block separator.
 	 */
-	public function renderCodeBlock() : string
+	public function renderCodeBlock(): string
 	{
 		return self::displayCodeBlockS($this->renderLabelText());
 	}
-	
+
 	/**
 	 * Display a code block separator.
 	 */

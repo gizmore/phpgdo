@@ -1,44 +1,47 @@
 <?php
 namespace GDO\Tests\Test;
 
-use GDO\Tests\TestCase;
 use GDO\CLI\CLI;
+use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
-use GDO\Util\Permutations;
-use GDO\Core\Application;
 use GDO\Core\GDO_Exception;
+use GDO\Tests\TestCase;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use GDO\Util\Permutations;
+use ReflectionClass;
+use Throwable;
 
 /**
  * Try to save all GDO.
  * Once with blank. (may fail!)
  * Once with plugged. (should be a success)
- * 
- * @author gizmore
+ *
  * @version 7.0.1
+ * @author gizmore
  */
 final class AutomatedGDOSaveTest extends TestCase
 {
+
 	private int $gdoTested = 0;
 	private int $gdoFailure = 0;
 	private int $gdoSuccess = 0;
 	private int $gdoAbstract = 0;
 	private int $gdoNonTestable = 0;
-	
+
 	public function testGDOSave()
 	{
-		$this->message(CLI::bold("Starting the automated gdo save test!"));
-		
+		$this->message(CLI::bold('Starting the automated gdo save test!'));
+
 		foreach (get_declared_classes() as $klass)
 		{
 			$parents = class_parents($klass);
 			if (in_array('GDO\\Core\\GDO', $parents, true))
 			{
 				$this->gdoTested++;
-				/** @var $gdo \GDO\Core\GDO **/
-				$k = new \ReflectionClass($klass);
+				/** @var $gdo GDO * */
+				$k = new ReflectionClass($klass);
 				if ($k->isAbstract())
 				{
 					$this->gdoAbstract++;
@@ -46,39 +49,30 @@ final class AutomatedGDOSaveTest extends TestCase
 				}
 				$gdo = call_user_func([
 					$klass,
-					'make'
+					'make',
 				], 'testfield');
 				if ($gdo->gdoAbstract())
 				{
 					$this->gdoAbstract++;
 					continue;
 				}
-				
-				if ( (!$gdo->isTestable()) || ($gdo->gdoDTO()) )
+
+				if ((!$gdo->isTestable()) || ($gdo->gdoDTO()))
 				{
 					$this->gdoNonTestable++;
 					continue;
 				}
-				
+
 				$this->trySafeTestGDO($gdo);
 			}
 		}
 	}
-	
+
 	###############
 	### Private ###
 	###############
-	private function reportStatistics()
-	{
-		$this->message(CLI::bold("DONE!"));
-		$this->message('Tested %d GDO', $this->gdoTested);
-		$this->message('%s have succeeded. %s were abstract. %s. %s ',
-			$this->gdoSuccess, $this->gdoAbstract,
-			CLI::bold("{$this->gdoFailure} failed",
-			CLI::bold("{$this->gdoNonTestable} were not testable.")));
-	}
-	
-	private function trySafeTestGDO(GDO $gdo) : bool
+
+	private function trySafeTestGDO(GDO $gdo): bool
 	{
 		try
 		{
@@ -87,27 +81,27 @@ final class AutomatedGDOSaveTest extends TestCase
 			if (!$success)
 			{
 				$errors = '';
-				foreach($gdo->gdoColumnsCache() as $gdt)
+				foreach ($gdo->gdoColumnsCache() as $gdt)
 				{
 					if ($gdt->hasError())
 					{
-						$errors .= $gdt->getName().':'. $gdt->renderError()."\n";
+						$errors .= $gdt->getName() . ':' . $gdt->renderError() . "\n";
 					}
 				}
-				throw new GDO_Exception("Cannot save blank plugged GDO: " . get_class($gdo).". Reason: ".$errors);
+				throw new GDO_Exception('Cannot save blank plugged GDO: ' . get_class($gdo) . '. Reason: ' . $errors);
 			}
-			$this->message("%4d.) %s: %s",
+			$this->message('%4d.) %s: %s',
 				$this->gdoTested,
-				CLI::bold(CLI::green("SUCCESS")),
+				CLI::bold(CLI::green('SUCCESS')),
 				get_class($gdo));
 			$this->gdoSuccess++;
 			return true;
 		}
-		catch(\Throwable $t)
+		catch (Throwable $t)
 		{
-			$this->error("%4d.) %s: %s - %s",
+			$this->error('%4d.) %s: %s - %s',
 				$this->gdoTested,
-				CLI::bold(CLI::red("FAILURE")),
+				CLI::bold(CLI::red('FAILURE')),
 				get_class($t),
 				$t->getMessage());
 			$this->error(Debug::backtraceException($t, false, $t->getMessage()));
@@ -121,7 +115,7 @@ final class AutomatedGDOSaveTest extends TestCase
 		}
 	}
 
-	private function saveTestGDO(GDO $gdo) : bool
+	private function saveTestGDO(GDO $gdo): bool
 	{
 		$success = true;
 		$this->plugVariants = [];
@@ -130,12 +124,12 @@ final class AutomatedGDOSaveTest extends TestCase
 // 			$gdt->inputs(null); # clear input
 			$this->addPlugVars($gdt->plugVars());
 		}
-		
+
 // 		if ($gdo instanceof \GDO\Mettwitze\GDO_MettwitzComments)
 // 		{
 // 			xdebug_break();
 // 		}
-		
+
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $inputs)
 		{
@@ -146,14 +140,14 @@ final class AutomatedGDOSaveTest extends TestCase
 // 				{
 // 					xdebug_break();
 // 				}
-				
+
 				$new = $gdo->table()->cache->getNewDummy();
 				$new->setVars($inputs);
 				if ($new->isValid())
 				{
 					$new->replace();
 					# might ruin custom test chains :(
-// 					$new->delete(); 
+// 					$new->delete();
 					$success = true;
 					break;
 				}
@@ -173,7 +167,7 @@ final class AutomatedGDOSaveTest extends TestCase
 					}
 				}
 			}
-			catch (\Throwable $ex)
+			catch (Throwable $ex)
 			{
 				$this->message('Warning: Failed a null GDO save test for: %s', $gdo->gdoClassName());
 			}
@@ -181,12 +175,22 @@ final class AutomatedGDOSaveTest extends TestCase
 
 		if (!$success)
 		{
-			$this->error("%s: %s",
+			$this->error('%s: %s',
 				Color::red('Cannot save blank GDO'),
 				TextStyle::bold($gdo->gdoClassName()));
 		}
 
 		return $success;
+	}
+
+	private function reportStatistics()
+	{
+		$this->message(CLI::bold('DONE!'));
+		$this->message('Tested %d GDO', $this->gdoTested);
+		$this->message('%s have succeeded. %s were abstract. %s. %s ',
+			$this->gdoSuccess, $this->gdoAbstract,
+			CLI::bold("{$this->gdoFailure} failed",
+				CLI::bold("{$this->gdoNonTestable} were not testable.")));
 	}
 
 }

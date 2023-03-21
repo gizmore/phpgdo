@@ -11,29 +11,52 @@ use GDO\Core\WithFields;
  * No template is used yet.
  * Has no input.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 5.7.1
+ * @author gizmore
  * @see GDT_Panel
  */
 class GDT_Container extends GDT
 {
+
 	use WithFlex;
 	use WithFields;
 	use WithPHPJQuery;
-	
-	const HORIZONTAL = 1;
-	const VERTICAL = 2;
-	
+
+	public const HORIZONTAL = 1;
+	public const VERTICAL = 2;
+
 	##############
 	### Render ###
 	##############
-	public function renderFields(int $renderMode) : string
+	public function renderFields(int $renderMode): string
 	{
 		$this->setupHTML();
 		$rendered = $this->renderFieldsB($renderMode);
 		$attrs = $this->htmlAttributes();
 		return "<div{$this->htmlID()}{$attrs}>{$rendered}</div>\n";
+	}
+
+	/**
+	 * Setup the CSS classes for this container.
+	 */
+	protected function setupHTML(): void
+	{
+		$this->addClass('gdt-container');
+		if ($this->flex)
+		{
+			$this->addClass("flx {$this->flexClass()}");
+
+			if ($this->flexWrap)
+			{
+				$this->addClass('flx-wrap');
+			}
+
+			if ($this->flexShrink)
+			{
+				$this->addClass('flx-shrink');
+			}
+		}
 	}
 
 	public function renderCLI(): string
@@ -57,28 +80,6 @@ class GDT_Container extends GDT
 			}
 		}
 		return $rendered;
-	}
-
-	/**
-	 * Setup the CSS classes for this container.
-	 */
-	protected function setupHTML(): void
-	{
-		$this->addClass('gdt-container');
-		if ($this->flex)
-		{
-			$this->addClass("flx {$this->flexClass()}");
-
-			if ($this->flexWrap)
-			{
-				$this->addClass('flx-wrap');
-			}
-
-			if ($this->flexShrink)
-			{
-				$this->addClass('flx-shrink');
-			}
-		}
 	}
 
 }

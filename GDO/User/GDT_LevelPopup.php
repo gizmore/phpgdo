@@ -7,23 +7,25 @@ use GDO\UI\GDT_Button;
 /**
  * Show a trophy with level badge.
  * A tooltip explains if your access is granted or restricted.
- * 
- * @author gizmore
+ *
  * @version 7.0.0
  * @since 6.12.1
+ * @author gizmore
  */
 final class GDT_LevelPopup extends GDT_Button
 {
+
 	public int $level = 0;
-	public function level(int $level): static
+
+	public function level(int $level): self
 	{
 		$this->level = $level;
 		return $this;
 	}
-	
-	public function renderHTML() : string
+
+	public function renderHTML(): string
 	{
-		return GDT_Template::php('User', 'cell/levelpopup.php', ['field'=>$this]);
+		return GDT_Template::php('User', 'cell/levelpopup.php', ['field' => $this]);
 	}
-	
+
 }

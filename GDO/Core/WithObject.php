@@ -1,88 +1,116 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Query;
-use GDO\UI\TextStyle;
 use GDO\Table\GDT_Filter;
+use GDO\UI\TextStyle;
 
 /**
  * You would expect this to be in GDT_Object,
  * but this is also mixed into GDT_ObjectSelect, hence it is a trait.
  *
- * @author gizmore
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
+ * @author gizmore
  * @see GDT_Object
  * @see GDT_ObjectSelect
  */
 trait WithObject
 {
+
 	use WithGDO;
 
 	# ##################
 	# ## With Object ###
 	# ##################
+	public const CASCADE_NULL = 'SET NULL';
+
+	###############
+	### Cascade ###
+	###############
+	public const CASCADE_NO = 'RESTRICT';
+	public const CASCADE = 'CASCADE';
 	public GDO $table;
-	/**
-	 * The GDO table to operate on.
-	 */
-	public function table(GDO $table): static
-	{
-// 		if (!$table->gdoIsTable()) # requires cache too early
-// 		{
-// 			throw new GDO_Error('err_gdo_is_not_table', [$this->getName()]);
-// 		}
-		$this->table = $table;
-		return $this;
-	}
+	public string $filterField;
 
 	# ##################
 	# ## Var / Value ###
 	# ##################
-	public function getVar()
+	/**
+	 * Cascade mode for foreign keys.
+	 * Default is SET NULL, so nothing gets lost easily.
+	 *
+	 * Fun bug was:
+	 * delete a language => delete all users that use this language
+	 * triggered by a replace on install module_language.
+	 */
+	public string $cascade = self::CASCADE_NULL;
+
+	/**
+	 * The GDO table to operate on.
+	 */
+	public function table(GDO $table): self
 	{
-		if ( !($var = $this->getInput($this->getName())))
-		{
-			$var = $this->var;
-		}
-		return empty($var) ? null : $var;
+		$this->table = $table;
+		return $this;
 	}
 
 	public function toVar($value): ?string
 	{
-		return $value !== null ? $value->getID() : null;
+		return $value ? $value->getID() : null;
+	}
+
+	public function displayVar(string $var = null): string
+	{
+		if (isset($this->multiple) && $this->multiple)
+		{
+			if ($gdos = $this->toValue($var))
+			{
+				return implode(', ', array_map(function (GDO $gdo)
+				{
+					return $gdo->renderName();
+				}, $gdos));
+			}
+			return GDT::EMPTY_STRING;
+		}
+		/** @var GDO $gdo * */
+		if ($gdo = $this->toValue($var))
+		{
+			if ($gdt = $gdo->gdoNameColumn())
+			{
+				return html($gdt->getVar());
+			}
+			else
+			{
+				return $gdo->renderName();
+			}
+		}
+		else
+		{
+			return TextStyle::italic(t('none'));
+		}
 	}
 
 	public function toValue($var = null)
 	{
 		if ($var !== null)
 		{
-			if (($gdo = $this->table->getById($var)) ||
-				($gdo = $this->getByName($var)))
+			if (
+				($gdo = $this->table->getById($var)) ||
+				($gdo = $this->getByName($var))
+			)
 			{
 				// $this->addInput($this->getName(), $gdo->getID());
 				return $gdo;
 			}
 		}
+		return null;
 	}
 
-	/**
-	 * Get possible matching inputs via GDT_Name fields.
-	 * @return GDO[]
-	 */
-	protected function getGDOsByName(string $var): array
-	{
-		$query = $this->table->select();
-		$gdt = $this->table->gdoColumnOf(GDT_Name::class);
-		if ($gdt !== null)
-		{
-			$var = GDO::escapeSearchS($var);
-			$query->where("{$gdt->name} LIKE '%{$var}%'");
-			$query->limit(GDT_Object::MAX_SUGGESTIONS);
-			return $query->exec()->fetchAllObjects();
-		}
-		return [];
-	}
+	# #############
+	# ## Render ###
+	# #############
 
 	/**
 	 * Analyze seearch hits for getGDOsByName.
@@ -123,55 +151,44 @@ trait WithObject
 			return $middles[0];
 		}
 		$this->error('err_select_candidates', [
-			implode('|', array_keys($middles))
+			implode('|', array_keys($middles)),
 		]);
 		return null;
 	}
 
-	# #############
-	# ## Render ###
-	# #############
-	public function htmlValue(): string
+	/**
+	 * Get possible matching inputs via GDT_Name fields.
+	 *
+	 * @return GDO[]
+	 */
+	protected function getGDOsByName(string $var): array
 	{
-		if ($var = $this->getVar())
+		$query = $this->table->select();
+		$gdt = $this->table->gdoColumnOf(GDT_Name::class);
+		if ($gdt !== null)
 		{
-			return sprintf(' value="%s"', html($var));
+			$var = GDO::escapeSearchS($var);
+			$query->where("{$gdt->name} LIKE '%{$var}%'");
+			$query->limit(GDT_Object::MAX_SUGGESTIONS);
+			return $query->exec()->fetchAllObjects();
 		}
-		return GDT::EMPTY_STRING;
+		return [];
 	}
 
-	public function displayVar(string $var = null): string
+	public function getVar()
 	{
-		if (isset($this->multiple) && $this->multiple)
+		if (!($var = $this->getInput($this->getName())))
 		{
-			if ($gdos = $this->toValue($var))
-			{
-				return implode(', ', array_map(function (GDO $gdo)
-				{
-					return $gdo->renderName();
-				}, $gdos));
-			}
-			return GDT::EMPTY_STRING;
+			$var = $this->var;
 		}
-		/** @var $gdo GDO **/
-		if ($gdo = $this->toValue($var))
-		{
-			if ($gdt = $gdo->gdoNameColumn())
-			{
-				return html($gdt->getVar());
-			}
-			else
-			{
-				return $gdo->renderName();
-			}
-		}
-		else
-		{
-			return TextStyle::italic(t('none'));
-		}
+		return empty($var) ? null : $var;
 	}
 
-	public function getGDOData() : array
+	# ###############
+	# ## Validate ###
+	# ###############
+
+	public function getGDOData(): array
 	{
 		if ($gdo = $this->getValue())
 		{
@@ -188,17 +205,11 @@ trait WithObject
 				];
 			}
 		}
-		else
-		{
-			return [
-				$this->name => null,
-			];
-		}
+		return [
+			$this->name => null,
+		];
 	}
 
-	# ###############
-	# ## Validate ###
-	# ###############
 	public function validate($value): bool
 	{
 		if ($value) # we successfully converted the var to value.
@@ -213,7 +224,7 @@ trait WithObject
 			}
 			return $this->error('err_gdo_not_found', [
 				$this->table->gdoHumanName(),
-				html($var)
+				html($var),
 			]);
 		}
 		elseif ($this->notNull) # empty input and not null
@@ -225,7 +236,7 @@ trait WithObject
 			return true;
 		}
 	}
-	
+
 	public function plugVars(): array
 	{
 		if (isset($this->table))
@@ -240,26 +251,6 @@ trait WithObject
 			}
 		}
 		return GDT::EMPTY_ARRAY;
-	}
-
-	private function plugVarsSingle(): array
-	{
-		$back = [];
-		if ($first = $this->table->select()
-			->first()
-			->exec()
-			->fetchObject())
-		{
-			$back[] = [$this->name => $first->getID()];
-		}
-		if ($second = $this->table->select()
-			->limit(1, 1)
-			->exec()
-			->fetchObject())
-		{
-			$back[] = [$this->name => $second->getID()];
-		}
-		return $back;
 	}
 
 	private function plugVarsMultiple(): array
@@ -287,65 +278,36 @@ trait WithObject
 	# ##############
 	# ## Cascade ###
 	# ##############
-	/**
-	 * Cascade mode for foreign keys.
-	 * Default is SET NULL, so nothing gets lost easily.
-	 *
-	 * Fun bug was:
-	 * delete a language => delete all users that use this language
-	 * triggered by a replace on install module_language.
-	 *
-	 * @var string
-	 */
-	public $cascade = 'SET NULL';
 
-	public function cascade(): static
+	private function plugVarsSingle(): array
 	{
-		$this->cascade = 'CASCADE';
-		return $this;
+		$back = [];
+		if (
+			$first = $this->table->select()
+				->first()
+				->exec()
+				->fetchObject()
+		)
+		{
+			$back[] = [$this->name => $first->getID()];
+		}
+		if (
+			$second = $this->table->select()
+				->limit(1, 1)
+				->exec()
+				->fetchObject()
+		)
+		{
+			$back[] = [$this->name => $second->getID()];
+		}
+		return $back;
 	}
 
-	public function cascadeNull(): static
-	{
-		$this->cascade = 'SET NULL';
-		return $this;
-	}
-
-	public function cascadeRestrict(): static
-	{
-		$this->cascade = 'RESTRICT';
-		return $this;
-	}
-
-	#####
-	/**
-	 * If object columns are not null, they cascade upon deletion.
-	 */
-	public function notNull(bool $notNull = true): static
-	{
-		$this->notNull = $notNull;
-		return $this->cascade();
-	}
-
-	/**
-	 * If object columns are primary, they cascade upon deletion.
-	 */
-	public function primary(bool $primary = true): static
-	{
-		$this->primary = $primary;
-		return $this->notNull();
-	}
-
-	# #############
-	# ## Filter ###
-	# #############
-	public string $filterField;
-	
 	public function renderFilter(GDT_Filter $f): string
 	{
 		return GDT_Template::php('Core', 'object_filter.php', [
 			'field' => $this,
-			'f' => $f
+			'f' => $f,
 		]);
 	}
 
@@ -354,11 +316,11 @@ trait WithObject
 	 * else filter like parent.??
 	 *
 	 * @todo check
-	 *      
+	 *
 	 * @see GDT_Int::filterQuery()
 	 * @see GDT_String::filterQuery()
 	 */
-	public function filterQuery(Query $query, GDT_Filter $f): static
+	public function filterQuery(Query $query, GDT_Filter $f): self
 	{
 		if (isset($this->filterField))
 		{
@@ -371,22 +333,14 @@ trait WithObject
 		}
 	}
 
-	# #############
-	# ## Search ###
-	# #############
 	/**
 	 * Build a huge quicksearch query.
-	 *
-	 * @param Query $query
-	 * @param string $searchTerm
-	 * @param boolean $first
-	 * @return string
 	 */
-	public function searchQuery(Query $query, $searchTerm): static
+	public function searchQuery(Query $query, string $term): self
 	{
 		return $this;
-		$table = $this->table;
-		$nameT = GDO::escapeIdentifierS('t_' . $this->name);
+//		$table = $this->table;
+//		$nameT = GDO::escapeIdentifierS('t_' . $this->name);
 
 //		if ($first) // first time joined this table?
 //		{
@@ -397,19 +351,70 @@ trait WithObject
 //			$query->join("LEFT JOIN {$table->gdoTableName()} {$nameT} ON {$myT}.{$name} = {$nameT}.{$fkI}");
 //		}
 
-		$where = [];
-		foreach ($table->gdoColumnsCache() as $gdt)
-		{
-//			if ($gdt->isSearchable())
-//			{
-				$gdt->searchQuery($query, $searchTerm);
-//				if ($condition =
-//				{
-//					$where[] = $condition;
-//				}
-//			}
-		}
+//		$where = [];
+//		foreach ($table->gdoColumnsCache() as $gdt)
+//		{
+//			$gdt->searchQuery($query, $term);
+//		}
+//		return $this;
+	}	public function cascade(): self
+	{
+		$this->cascade = self::CASCADE;
 		return $this;
 	}
+
+	public function htmlValue(): string
+	{
+		if ($var = $this->getVar())
+		{
+			return sprintf(' value="%s"', html($var));
+		}
+		return GDT::EMPTY_STRING;
+	}
+
+	public function cascadeNull(): self
+	{
+		$this->cascade = self::CASCADE_NULL;
+		return $this;
+	}
+
+	#####
+
+	public function cascadeRestrict(): self
+	{
+		$this->cascade = self::CASCADE_NO;
+		return $this;
+	}
+
+
+
+	/**
+	 * If object columns are not null, they cascade upon deletion.
+	 */
+	public function notNull(bool $notNull = true): self
+	{
+		$this->notNull = $notNull;
+		return $this->cascade();
+	}
+
+
+	/**
+	 * If object columns are primary, they cascade upon deletion.
+	 */
+	public function primary(bool $primary = true): self
+	{
+		$this->primary = $primary;
+		return $this->notNull();
+	}
+
+	# #############
+	# ## Filter ###
+	# #############
+
+
+	# #############
+	# ## Search ###
+	# #############
+
 
 }

@@ -2,11 +2,11 @@
 namespace GDO\Date\Method;
 
 use GDO\Core\GDT_String;
-use GDO\Form\GDT_Form;
 use GDO\Date\GDO_Timezone;
-use GDO\Form\MethodForm;
-use GDO\Form\GDT_Submit;
 use GDO\Date\GDT_Timezone;
+use GDO\Form\GDT_Form;
+use GDO\Form\GDT_Submit;
+use GDO\Form\MethodForm;
 
 /**
  * Detect timezone by name.
@@ -16,22 +16,24 @@ use GDO\Date\GDT_Timezone;
  */
 final class TimezoneDetect extends MethodForm
 {
+
 	public function formName() { return 'tzform'; }
-	
-	public function isUserRequired() : bool{ return false; }
-	public function isTransactional() : bool { return false; }
-	
-	public function getMethodTitle() : string
+
+	public function isUserRequired(): bool { return false; }
+
+	public function isTransactional(): bool { return false; }
+
+	public function getMethodTitle(): string
 	{
 		return t('mt_date_timezone');
 	}
-	
-	public function getMethodDescription() : string
+
+	public function getMethodDescription(): string
 	{
 		return t('md_date_timezone', [sitename()]);
 	}
-	
-	public function createForm(GDT_Form $form) : void
+
+	public function createForm(GDT_Form $form): void
 	{
 		$tz = GDT_Timezone::make('timezone')->notNull();
 		$form->addFields(
@@ -40,16 +42,7 @@ final class TimezoneDetect extends MethodForm
 		);
 		$form->actions()->addField(GDT_Submit::make()->label('btn_set'));
 	}
-	
-	public function validateTimezoneName(GDT_Form $form, GDT_String $string, $value)
-	{
-		if (!($this->tz = GDO_Timezone::getBy('tz_name', $value->getName())))
-		{
-			return $string->error('err_unknown_timezone');
-		}
-		return true;
-	}
-	
+
 	public function formValidated(GDT_Form $form)
 	{
 		$inputs = [
@@ -58,6 +51,15 @@ final class TimezoneDetect extends MethodForm
 		];
 		$set = Timezone::make()->inputs($inputs);
 		return $set->executeWithInit();
+	}
+
+	public function validateTimezoneName(GDT_Form $form, GDT_String $string, $value)
+	{
+		if (!($this->tz = GDO_Timezone::getBy('tz_name', $value->getName())))
+		{
+			return $string->error('err_unknown_timezone');
+		}
+		return true;
 	}
 
 }

@@ -5,19 +5,20 @@ use GDO\Core\GDT_Enum;
 
 /**
  * Gender enum.
- * 
- * @author gizmore
+ *
  * @version 6.0.7
  * @since 4.0.1
+ * @author gizmore
  */
 class GDT_Gender extends GDT_Enum
 {
+
 // 	const NONE = 'none';
-	const MALE = 'male';
-	const FEMALE = 'female';
-	
-// 	public function defaultLabel(): static { return ; }
-	
+	public const MALE = 'male';
+	public const FEMALE = 'female';
+
+// 	public function defaultLabel(): self { return ; }
+
 	protected function __construct()
 	{
 		parent::__construct();
@@ -29,8 +30,8 @@ class GDT_Gender extends GDT_Enum
 // 		$this->initial(self::NONE);
 // 		$this->notNull();
 	}
-	
-	public function enumLabel($enumValue=null)
+
+	public function enumLabel($enumValue = null)
 	{
 		return t("gender_$enumValue");
 	}

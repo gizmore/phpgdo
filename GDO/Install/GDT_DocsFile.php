@@ -1,25 +1,26 @@
 <?php
 namespace GDO\Install;
 
-use GDO\Util\Filewalker;
 use GDO\Core\GDT_Select;
+use GDO\Util\Filewalker;
 
 /**
  * A select for a file in /phpgdo/DOCS/.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 7.0.2
+ * @author gizmore
  */
 final class GDT_DocsFile extends GDT_Select
 {
-	private static array $DOCS = []; 
-	
+
+	private static array $DOCS = [];
+
 	public function getChoices(): array
 	{
 		if (!self::$DOCS)
 		{
-			Filewalker::traverse(GDO_PATH . 'DOCS/', "/^GDO7_/", [$this, '_buildEnum']);
+			Filewalker::traverse(GDO_PATH . 'DOCS/', '/^GDO7_/', [$this, '_buildEnum']);
 		}
 		return self::$DOCS;
 	}
@@ -32,10 +33,10 @@ final class GDT_DocsFile extends GDT_Select
 		$key = substr($entry, 0, -3);
 		self::$DOCS[$key] = $fullpath;
 	}
-	
+
 	public function getDocsPath(): ?string
 	{
 		return $this->getValue();
 	}
-	
+
 }

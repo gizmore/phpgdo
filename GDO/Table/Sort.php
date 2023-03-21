@@ -6,26 +6,27 @@ namespace GDO\Table;
 
 /**
  * Utility class to sort GDOs.
- * 
- * @author gizmore
+ *
  * @version 6.11.4
  * @since 6.10.0
+ * @author gizmore
  */
 final class Sort
 {
-    /**
-     * @param GDO[] $array
-     * @param GDO $table
-     * @param bool[string] $orders
-     */
+
+	/**
+	 * @param GDO[] $array
+	 * @param GDO $table
+	 * @param bool[string] $orders
+	 */
 //     public static function sortArray(array &$array, GDO $table, array $orders)
 //     {
 //         $result = new ArrayResult($array, $table);
 //         self::sortResult($result, $orders);
 //     }
-    
-//     public static function 
-    
+
+//     public static function
+
 //     /**
 //      * Sort a result set, stable, by multiple columns.
 //      * @param ArrayResult $result
@@ -36,11 +37,11 @@ final class Sort
 //         # Create a table to sort with
 //         $table = GDT_Table::make()->addHeaderFields(...$result->table->gdoColumnsCache());
 // //         $table->inputs($orders);
-        
+
 // //         $table->addHeaderFields($result->table->gdoColumnsCache());
 // //         $table->headers->name = '_mosort_';
 //         $table->headers->inputs($orders);
-        
+
 //         # Plug orders into request vars
 // //         $o = $table->headers->name;
 // //         $_REQUEST[$o] = ['o' => []];
@@ -48,7 +49,7 @@ final class Sort
 // //         {
 // //             $_REQUEST[$o]['o'][$column] = $asc ? '1' : '0';
 // //         }
-        
+
 //         # sort the result
 //         $table->multisort($result);
 
@@ -56,5 +57,5 @@ final class Sort
 // //         unset($_REQUEST[$o]);
 // //         GDT_Table::$ORDER_NAME--;
 //     }
-    
+
 }

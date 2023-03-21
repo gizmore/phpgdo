@@ -7,25 +7,28 @@ namespace GDO\Core;
  * [=]
  *°|.|´
  * / \
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 7.0.0
+ * @author gizmore
  * @license GDOv7-LICENSE
  */
 trait WithInput
 {
+
 	/**
 	 * An input can also be a GDT_Method, for nested expressions.
+	 *
 	 * @var GDT|string[]
 	 */
 	public array $inputs;
-	
+
 	/**
 	 * Set all inputs to the fixed inputs parameter.
+	 *
 	 * @param GDT|string[] $inputs
 	 */
-	public function inputs(?array $inputs): static
+	public function inputs(?array $inputs): self
 	{
 		if ($inputs === null)
 		{
@@ -41,34 +44,13 @@ trait WithInput
 		}
 		return $this;
 	}
-	
-	public function addInput(?string $key, $var): static
-	{
-		if ($key)
-		{
-			$this->inputs[$key] = (string) $var;
-		}
-		else
-		{
-			$this->inputs[] = (string) $var;
-		}
-		return $this;
-	}
-	
-	public function getInputs() : array
+
+	public function getInputs(): array
 	{
 		return isset($this->inputs) ? $this->inputs : GDT::EMPTY_ARRAY;
 	}
-	
-	/**
-	 * @deprecated not type safe
-	 */
-	public function getInputFor(string $key)
-	{
-		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
-	}
-	
-	public function hasInput() : bool
+
+	public function hasInput(): bool
 	{
 		if ($name = $this->getName())
 		{
@@ -80,15 +62,36 @@ trait WithInput
 		return false;
 	}
 
+	public function getInput(): ?string
+	{
+		$key = $this->getName();
+		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
+	}
+
+	public function addInput(?string $key, $var): self
+	{
+		if ($key)
+		{
+			$this->inputs[$key] = (string)$var;
+		}
+		else
+		{
+			$this->inputs[] = (string)$var;
+		}
+		return $this;
+	}
+
+	/**
+	 * @deprecated not type safe
+	 */
+	public function getInputFor(string $key)
+	{
+		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
+	}
+
 	public function hasInputFor(string $key): bool
 	{
 		return isset($this->inputs[$key]);
 	}
 
-	public function getInput() : ?string
-	{
-		$key = $this->getName();
-		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
-	}
-	
 }

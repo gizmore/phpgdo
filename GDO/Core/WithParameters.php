@@ -6,38 +6,48 @@ use GDO\UI\GDT_Repeat;
 /**
  * Add GDT parameters.
  * Override gdoParameters() in your methods.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 7.0.0
+ * @author gizmore
  * @see Method
  */
 trait WithParameters
 {
+
 	#################
 	### Protected ### - Override these
 	#################
 	/**
-	 * Get method parameters.
-	 * @return GDT[]
+	 * @var GDT[string]
 	 */
-	public function gdoParameters() : array # @TODO: make gdoParameters() protected
-	{
-		return GDT::EMPTY_ARRAY;
-	}
-	
+	public array $parameterCache;
+
 	##################
 	### Parameters ###
 	##################
+
+	/**
+	 * Get a parameter's GDT db var string.
+	 */
+	public function gdoParameterVar(string $key, bool $validate = true, bool $throw = true): ?string
+	{
+		if ($gdt = $this->gdoParameter($key, $validate, $throw))
+		{
+			return $gdt->getVar();
+		}
+		return null;
+	}
+
 	/**
 	 * Get a parameter by key.
 	 * If key is an int, get positional parameter N.
 	 */
-	public function gdoParameter(string $key, bool $validate=true, bool $throw=true) : ?GDT
+	public function gdoParameter(string $key, bool $validate = true, bool $throw = true): ?GDT
 	{
 		if ($gdt = $this->gdoParameterB($key, $throw))
 		{
-			if ( ($validate) && (!$gdt->validated()) )
+			if (($validate) && (!$gdt->validated()))
 			{
 				if ($throw)
 				{
@@ -48,11 +58,11 @@ trait WithParameters
 		}
 		return $gdt;
 	}
-	
-	private function gdoParameterB(string $key, bool $throw=true) : ?GDT
+
+	private function gdoParameterB(string $key, bool $throw = true): ?GDT
 	{
 		$cache = $this->gdoParameterCache();
-		
+
 		if (isset($cache[$key]))
 		{
 			return $cache[$key];
@@ -71,7 +81,7 @@ trait WithParameters
 						return $gdt;
 					}
 				}
-				
+
 				if ($gdt instanceof GDT_Repeat)
 				{
 					return $gdt;
@@ -96,38 +106,9 @@ trait WithParameters
 	}
 
 	/**
-	 * Get a parameter's GDT db var string.
-	 */
-	public function gdoParameterVar(string $key, bool $validate=true, bool $throw=true) : ?string
-	{
-		if ($gdt = $this->gdoParameter($key, $validate, $throw))
-		{
-			return $gdt->getVar();
-		}
-		return null;
-	}
-	
-	public function gdoParameterValue(string $key, bool $validate=true, bool $throw=true)
-	{
-		if ($gdt = $this->gdoParameter($key, $validate, $throw))
-		{
-			return $gdt->getValue();
-		}
-		return null;
-	}
-	
-	#############
-	### Cache ###
-	#############
-	/**
-	 * @var GDT[string]
-	 */
-	public array $parameterCache;
-	
-	/**
 	 * @return GDT[]
 	 */
-	public function &gdoParameterCache() : array
+	public function &gdoParameterCache(): array
 	{
 		if (!isset($this->parameterCache))
 		{
@@ -136,11 +117,15 @@ trait WithParameters
 		}
 		return $this->parameterCache;
 	}
-	
+
+	#############
+	### Cache ###
+	#############
+
 	/**
 	 * @param GDT[] $params
 	 */
-	protected function addComposeParameters(array $params) : void
+	protected function addComposeParameters(array $params): void
 	{
 		# Add to cache
 		foreach ($params as $gdt)
@@ -150,8 +135,8 @@ trait WithParameters
 		}
 		$this->applyInputComposeParams();
 	}
-	
-	private function applyInputComposeParams() : void
+
+	private function applyInputComposeParams(): void
 	{
 		# Map positional to now named input
 		$pos = -1;
@@ -167,7 +152,7 @@ trait WithParameters
 				}
 			}
 		}
-		
+
 		# Copy previously already named input
 		foreach ($this->getInputs() as $key => $input)
 		{
@@ -177,12 +162,31 @@ trait WithParameters
 			}
 		}
 		$this->inputs = $newInput;
-		
+
 		# Apply all input to all GDT
 		foreach ($this->gdoParameterCache() as $gdt)
 		{
 			$gdt->inputs($this->inputs);
 		}
 	}
-	
+
+	/**
+	 * Get method parameters.
+	 *
+	 * @return GDT[]
+	 */
+	public function gdoParameters(): array # @TODO: make gdoParameters() protected
+	{
+		return GDT::EMPTY_ARRAY;
+	}
+
+	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true)
+	{
+		if ($gdt = $this->gdoParameter($key, $validate, $throw))
+		{
+			return $gdt->getValue();
+		}
+		return null;
+	}
+
 }

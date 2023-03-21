@@ -1,15 +1,52 @@
-header { min-height: 108px; background: rgba(0,0,100,0.25); vertical-align: bottom; }
+header {
+    min-height: 108px;
+    background: rgba(0, 0, 100, 0.25);
+    vertical-align: bottom;
+}
+
 .gdo-bar-column, .gdo-bar-column > *,
-.gdo-bar-row, .gdo-bar-row > * { display: flex; flex-grow: 1; justify-content: center; }
-.gdo-bar-column { flex-direction: column; }
-.gdo-bar-row { flex-direction: row; }
-.module-installed { color: green; }
-.core-module { font-style: italic; }
-.site-module { color: purple; }
-.gdt-divider { background: #eee; padding: 5px; }
+.gdo-bar-row, .gdo-bar-row > * {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.gdo-bar-column {
+    flex-direction: column;
+}
+
+.gdo-bar-row {
+    flex-direction: row;
+}
+
+.module-installed {
+    color: green;
+}
+
+.core-module {
+    font-style: italic;
+}
+
+.site-module {
+    color: purple;
+}
+
+.gdt-divider {
+    background: #eee;
+    padding: 5px;
+}
+
 .gdt-modulefeature,
 td.gdt-name,
 td.gdt-template-Install-modulename span,
-.gdt-template-Install-modulelicense { white-space: nowrap; }
-body > div.gdo-body { padding: 0; }
-.gdt-module-license { font-style: italic; }
+.gdt-template-Install-modulelicense {
+    white-space: nowrap;
+}
+
+body > div.gdo-body {
+    padding: 0;
+}
+
+.gdt-module-license {
+    font-style: italic;
+}

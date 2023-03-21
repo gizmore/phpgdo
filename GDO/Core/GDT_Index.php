@@ -4,66 +4,70 @@ namespace GDO\Core;
 /**
  * Index db column definition.
  * The default algo is HASH. BTREE available.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.5.0
+ * @author gizmore
  */
 class GDT_Index extends GDT
 {
+
 	use WithName;
-	
-	const FULLTEXT = 'FULLTEXT';
-	const HASH = 'USING HASH';
-	const BTREE = 'USING BTREE';
-	
+
+	public const FULLTEXT = 'FULLTEXT';
+	public const HASH = 'USING HASH';
+	public const BTREE = 'USING BTREE';
+
 	###########
 	### GDT ###
 	###########
+	public string $indexColumns;
+	public string $indexFulltext;
+	public string $indexUsing = self::HASH;
+
+	###############
+	### Columns ###
+	###############
+
 	public function isPrimary(): bool
 	{
 		# This fixes gdoPrimaryKeyColumns() for IP2Country
 		return false;
 	}
-	
+
 	public function renderHTML(): string
 	{
 		return GDT::EMPTY_STRING;
 	}
-	
+
+	##################
+	### Index Type ###
+	##################
+
 	public function isVirtual(): bool
 	{
 		return true;
 	}
 
-	###############
-	### Columns ###
-	###############
-	public string $indexColumns;
-	
-	public function indexColumns(string... $indexColumns): static
+	public function indexColumns(string...$indexColumns): self
 	{
-	    $this->indexColumns = implode(',', $indexColumns);
-	    # Default name if none is given?
-	    $this->name = $this->getName() ?
-	    	$this->name : str_replace(',', '_', $this->indexColumns);
-	    return $this;
+		$this->indexColumns = implode(',', $indexColumns);
+		# Default name if none is given?
+		$this->name = $this->getName() ?
+			$this->name : str_replace(',', '_', $this->indexColumns);
+		return $this;
 	}
-	
-	##################
-	### Index Type ###
-	##################
-	public string $indexFulltext;
-	public string $indexUsing = self::HASH;
-	public function hash(): static
+
+	public function hash(): self
 	{
 		$this->indexUsing = self::HASH;
 		return $this;
 	}
 
-	public function btree(): static
+	public function btree(): self
 	{
-		$this->indexUsing = self::BTREE; return $this;
+		$this->indexUsing = self::BTREE;
+		return $this;
 	}
 
 	public function fulltext()
@@ -71,5 +75,5 @@ class GDT_Index extends GDT
 		$this->indexFulltext = self::FULLTEXT;
 		return $this;
 	}
-	
+
 }

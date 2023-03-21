@@ -6,11 +6,12 @@ use GDO\UI\GDT_Link;
 
 /**
  * The admin section tab bar.
- * 
+ *
  * @author gizmore
  */
 final class GDT_AdminBar extends GDT_Bar
 {
+
 	protected function __construct()
 	{
 		parent::__construct();

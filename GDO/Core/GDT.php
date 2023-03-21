@@ -10,15 +10,15 @@ use GDO\Util\Arrays;
 /**
  * The base class for all GDT.
  * It shall not have any attributes, to allow lightweight memory types like GDO or GDT_Icon.
- * 
+ *
  * A GDT can, better, has to, support the following rendering mode functions a.k.a output formats;
- * 
+ *
  * OUTPUT MODES  : CLI / JSON / XML / WEBSITE / PDF / BINARY / GTK
  * HTML SUBMODES : HTML / CARD / FORM / OPTION / LIST /
  * TABLE SUBMODES: ORDER / CELL / THEAD / TFOOT / FILTER
- * 
+ *
  * The current rendering mode is stored in @link \GDO\Core\Application
- *  
+ *
  * @author gizmore
  * @version 7.0.2
  * @since 5.0.0
@@ -29,14 +29,14 @@ use GDO\Util\Arrays;
 abstract class GDT
 {
 	use WithModule;
-	
+
 	/**
 	 * @var GDT[]
 	 */
 	const EMPTY_ARRAY = [];
-	
+
 	const EMPTY_STRING = ''; # @TODO Does this safe allocs or cycles? i doubt... we can test :)=
-	
+
 	###################
 	### Instanciate ###
 	###################
@@ -44,16 +44,16 @@ abstract class GDT
 	 * Create a GDT instance.
 	 * The very basic GDT don't know anything, don't have attributes or much functions.
 	 */
-	public static function make(string $name = null): static
+	public static function make(string $name = null): self
 	{
 		return new static();
 	}
-	
+
 	public function blankData() : array
 	{
 		return self::EMPTY_ARRAY;
 	}
-	
+
 	#############
 	### Debug ###
 	#############
@@ -61,17 +61,17 @@ abstract class GDT
 	public static int $GDT_COUNT = 0; # total allocs
 	public static int $GDT_KILLS = 0; # total deallocs
 	public static int $GDT_PEAKS = 0; # highest simultan. alive
-	
+
 	protected function __construct()
 	{
 		$this->afterLoaded(); #PP#delete#
 	}
-	
+
 	public function __destruct()
 	{
 		self::$GDT_KILLS++; #PP#delete#
 	}
-	
+
 	#PP#start#
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
@@ -80,7 +80,7 @@ abstract class GDT
 	{
 		$this->afterLoaded();
 	}
-	
+
 	private function afterLoaded()
 	{
 		self::$GDT_COUNT++;
@@ -94,7 +94,7 @@ abstract class GDT
 			$this->logDebug();
 		}
 	}
-	
+
 	private function logDebug()
 	{
 		Logger::log('gdt', sprintf('%d: %s', self::$GDT_COUNT, get_class($this)));
@@ -104,8 +104,8 @@ abstract class GDT
 		}
 	}
 	#PP#end#
-	
-	public function gdtCopy(string $name=null): static
+
+	public function gdtCopy(string $name=null): self
 	{
 		$copy = call_user_func([$this, 'make'], $name);
 		foreach (get_object_vars($this) as $k => $v)
@@ -117,7 +117,7 @@ abstract class GDT
 		}
 		return $copy;
 	}
-	
+
 	###########################
 	# --- GDT Render Core --- #
 	###########################
@@ -147,14 +147,14 @@ abstract class GDT
 	const RENDER_LIST   = 13; # <li>
 	const RENDER_FORM   = 14; # <form><input>
 	const RENDER_OPTION = 15; # <option>
-	# HTML table subrendering # # # # # # # # # # # # # # # # # # # # 
+	# HTML table subrendering # # # # # # # # # # # # # # # # # # # #
 	const RENDER_HEADER = 16; # table <th>
 	const RENDER_ORDER  = 17; # table <th> order
 	const RENDER_FILTER = 18; # table <th> filter
 	const RENDER_CELL   = 19; # table <td>
 	const RENDER_THEAD  = 20; # table <thead>
 	const RENDER_TFOOT  = 21; # table <tfoot>
-	
+
 // 	/**
 // 	 * Switchable rendering callmap.
 // 	 * @var callable[]
@@ -181,12 +181,12 @@ abstract class GDT
 // 		[null, 'renderTHead'],
 // 		[null, 'renderTFoot'],
 // 	];
-	
+
 	/**
 	 * Call the applications mode rendering method.
 	 * Returns an array for JSON.
 	 * retuns a string for everything else at the moment.
-	 *  
+	 *
 	 * @return string|array
 	 */
 	protected function renderGDT()
@@ -196,7 +196,7 @@ abstract class GDT
 // 		$mode = Application::$MODE;
 // 		self::$RENDER_CALLMAP[$mode][0] = $this;
 // 		return self::$RENDER_CALLMAP[$mode]();
-		
+
 		switch (Application::$MODE)
 		{
 			# Output modes
@@ -224,7 +224,7 @@ abstract class GDT
 			case self::RENDER_TFOOT: return $this->renderTFoot();
 		}
 	}
-	
+
 	#############################
 	### render default stubs ####
 	#############################
@@ -255,7 +255,7 @@ abstract class GDT
 	public function renderLabel() : string { return GDT::EMPTY_STRING; }
 	public function renderLabelText() : string { return GDT::EMPTY_STRING; }
 	public function cliIcon() : string { return GDT::EMPTY_STRING; }
-	
+
 	#####################
 	### Render Helper ###
 	#####################
@@ -263,15 +263,15 @@ abstract class GDT
 	{
 		return $this->displayVar($this->getVar());
 	}
-	
+
 	/**
-	 * Display a given var with this GDT. 
+	 * Display a given var with this GDT.
 	 */
 	public function displayVar(string $var=null) : string
 	{
 		return $var === null ? self::none() : html($var);
 	}
-	
+
 	/**
 	 * Render a null value.
 	 */
@@ -284,7 +284,7 @@ abstract class GDT
 		}
 		return $none;
 	}
-	
+
 	public function displayChoice($choice) : string
 	{
 		if (is_string($choice))
@@ -296,12 +296,12 @@ abstract class GDT
 			return $choice->renderOption();
 		}
 	}
-	
+
 	/**
 	 * Render this GDT in a specified rendering mode.
 	 * This should be the method to use to render a GDT.
 	 * The default rendering mode is the initial detected mode.
-	 *  
+	 *
 	 * @param int $mode
 	 * @return string|array - array for json
 	 */
@@ -315,7 +315,7 @@ abstract class GDT
 		$app->mode($old);
 		return $result;
 	}
-	
+
 	###################
 	### Permissions ###
 	###################
@@ -324,7 +324,7 @@ abstract class GDT
 	public function isReadable() : bool { return false; }
 	public function isWriteable() : bool { return false; }
 	public function isSerializable() : bool { return false; }
-	
+
 	################
 	### Features ###
 	################
@@ -333,7 +333,7 @@ abstract class GDT
 	public function isDefaultAsc() : bool { return true; }
 	public function isSearchable() : bool { return false; }
 	public function isFilterable() : bool { return false; }
-	
+
 	##################
 	### GDO Events ###
 	##################
@@ -341,7 +341,7 @@ abstract class GDT
 	public function gdoBeforeRead  (GDO $gdo, Query $query) : void {}
 	public function gdoBeforeUpdate(GDO $gdo, Query $query) : void {}
 	public function gdoBeforeDelete(GDO $gdo, Query $query) : void {}
-	
+
 	public function gdoAfterCreate(GDO $gdo) : void {}
 	public function gdoAfterRead  (GDO $gdo) : void {}
 	public function gdoAfterUpdate(GDO $gdo) : void {}
@@ -359,13 +359,13 @@ abstract class GDT
 	 * The form has been executed and submittted.
 	 */
 	public function onSubmitted() : void {}
-	
+
 	################
 	### Validate ###
 	################
 	/**
 	 * Validation is a great experience in GDOv7.
-	 * 
+	 *
 	 * Almost all GDT have a quite decent validator. There is also a GDT to top that; The GDT_Validator.
 	 * This GDT parameterizes the target GDT to validate, the value to validate, and the form to check for related fields.
 	 * To indicate an error return false. Please use $gdt->error() to make the field in question blink and noting your error
@@ -397,7 +397,7 @@ abstract class GDT
 	{
 		return true; # all empty GDT does nothing... what can it do? randomly fail?!
 	}
-	
+
 	public function validated(bool $throw=false) : ?self
 	{
 		$var = $this->getVar();
@@ -413,27 +413,27 @@ abstract class GDT
 		}
 		return null;
 	}
-	
+
 	public function hasError() : bool
 	{
 		return false;
 	}
-	
+
 	public function error(string $key, array $args = null) : bool
 	{
 		return false;
 	}
-	
-	public function noError(): static
+
+	public function noError(): self
 	{
 		return $this;
 	}
-	
+
 	public function classError() : string
 	{
 		return GDT::EMPTY_STRING;
 	}
-	
+
 	##############
 	### Config ###
 	##############
@@ -444,7 +444,7 @@ abstract class GDT
 	{
 		return self::EMPTY_ARRAY;
 	}
-	
+
 	/**
 	 * Render config JSON as html attribute string.
 	 */
@@ -456,17 +456,17 @@ abstract class GDT
 		});
 		return json_quote(json($json));
 	}
-	
+
 	public function htmlConfig() : string
 	{
 		return sprintf(' data-config=\'%s\'', $this->renderConfigJSON());
 	}
-	
+
 	##############
 	### Filter ###
 	##############
 	/**
-	 * Get the input for this GDTs filter var. 
+	 * Get the input for this GDTs filter var.
 	 */
 	public function filterVar(GDT_Filter $f): ?string
 	{
@@ -480,7 +480,7 @@ abstract class GDT
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Check if a GDO is shown for a filter input.
 	 */
@@ -493,8 +493,8 @@ abstract class GDT
 		}
 		return stripos($var, $filterInput) !== false;
 	}
-	
-	public function filterQuery(Query $query, GDT_Filter $f): static
+
+	public function filterQuery(Query $query, GDT_Filter $f): self
 	{
 		if (null !== ($var = $this->filterVar($f)))
 		{
@@ -504,13 +504,13 @@ abstract class GDT
 		}
 		return $this;
 	}
-	
-	public function filterQueryCondition(Query $query, string $condition): static
+
+	public function filterQueryCondition(Query $query, string $condition): self
 	{
 		$query->where($condition);
 		return $this;
 	}
-	
+
 	##############
 	### Search ###
 	##############
@@ -523,7 +523,7 @@ abstract class GDT
 		return false;
 	}
 
-	public function searchQuery(Query $query, string $searchTerm): static
+	public function searchQuery(Query $query, string $searchTerm): self
 	{
 //		if ()
 //		{
@@ -536,7 +536,7 @@ abstract class GDT
 //		}
 		return $this;
 	}
-	
+
 	#########################
 	### Bridge for traits ###
 	#########################
@@ -544,7 +544,7 @@ abstract class GDT
 	{
 		return false;
 	}
-	
+
 	public function getName() : ?string
 	{
 		return null;
@@ -554,7 +554,7 @@ abstract class GDT
 	{
 		return $this->getName();
 	}
-	
+
 	/**
 	 * Get all DB column names for this GDT.
 	 * @return string[]
@@ -563,7 +563,7 @@ abstract class GDT
 	{
 		return self::EMPTY_ARRAY;
 	}
-	
+
 	/**
 	 * If we are a DB column, a DBMS can get the column define for this.
 	 * @TODO: What about composites like GDT_GeoPos?
@@ -576,66 +576,66 @@ abstract class GDT
 		}
 		return GDT::EMPTY_STRING;
 	}
-	
+
 	/**
 	 * Setup the default label. None by default.
 	 */
-	public function defaultLabel(): static
+	public function defaultLabel(): self
 	{
 		return $this;
 	}
-	
+
 	public function hasInput() : bool
 	{
 		return false;
 	}
-	
+
 	public function getInitial() : ?string
 	{
 		return null;
 	}
-	
+
 	public function getInputs() : array
 	{
 		return self::EMPTY_ARRAY;
 	}
-	
+
 	public function getInput() : ?string
 	{
 		return null;
 	}
-	
-	public function inputs(?array $inputs): static
+
+	public function inputs(?array $inputs): self
 	{
 		return $this;
 	}
-	
+
 	public function getVar()
 	{
 		return null;
 	}
-	
+
 	public function getValue()
 	{
 		return null;
 	}
-	
+
 	public function hasChanged() : bool
 	{
 		return false;
 	}
-	
+
 	public function hasFields() : bool
 	{
 		return false;
 	}
-	
+
 	public function getFields() : array
 	{
 		return self::EMPTY_ARRAY;
 	}
-	
-	public function gdo(GDO $gdo = null): static
+
+	public function gdo(GDO $gdo = null): self
 	{
 		return $this;
 	}
@@ -648,13 +648,13 @@ abstract class GDT
 		$name = $this->getName();
 		return $name ? " name=\"{$name}\"" : GDT::EMPTY_STRING;
 	}
-	
+
 	public function htmlClass() : string
 	{
 		$class = strtolower($this->gdoShortName());
 		return str_replace('_', '-', $class);
 	}
-	
+
 	public function htmlID() : string
 	{
 		if ($name = $this->getName())
@@ -663,7 +663,7 @@ abstract class GDT
 		}
 		return GDT::EMPTY_STRING;
 	}
-	
+
 	/**
 	 * Provided by WithPHPJQuery.
 	 */
@@ -671,22 +671,22 @@ abstract class GDT
 	{
 		return GDT::EMPTY_STRING;
 	}
-	
-	public function initial(string $initial = null): static
+
+	public function initial(string $initial = null): self
 	{
 		return $this;
 	}
-	
-	public function initialValue($value): static
+
+	public function initialValue($value): self
 	{
 		return $this->initial($this->toVar($value));
 	}
-	
-	public function var(string $var = null): static
+
+	public function var(string $var = null): self
 	{
 		return $this;
 	}
-	
+
 	/**
 	 * @return string[string]
 	 */
@@ -694,13 +694,13 @@ abstract class GDT
 	{
 		return GDT::EMPTY_ARRAY;
 	}
-	
-	public function setGDOData(array $data): static
+
+	public function setGDOData(array $data): self
 	{
 		return $this;
 	}
-	
-	public function value($value): static
+
+	public function value($value): self
 	{
 		return $this;
 	}
@@ -709,47 +709,47 @@ abstract class GDT
 	{
 		return false;
 	}
-	
+
 	public function isPositional() : bool
 	{
 		return false;
 	}
-	
+
 	public function isVirtual() : bool
 	{
 		return false;
 	}
-	
+
 	public function isPrimary() : bool
 	{
 		return false;
 	}
-	
+
 	public function isUnique() : bool
 	{
 		return false;
 	}
-	
+
 	public function gdoCompare(GDO $a, GDO $b) : int
 	{
 		return 0;
 	}
-	
-	public function writeable(bool $writeable): static
+
+	public function writeable(bool $writeable): self
 	{
 		return $this;
 	}
-	
+
 	public function isACLCapable() : bool
 	{
 		return false;
 	}
-	
-	public function reset(bool $removeInput=false): static
+
+	public function reset(bool $removeInput=false): self
 	{
 		return $this;
 	}
-	
+
 	##################
 	### Conversion ###
 	##################
@@ -774,17 +774,17 @@ abstract class GDT
 		}
 		return json_encode($input);
 	}
-	
+
 	public function toVar($value) : ?string
 	{
 		return $value;
 	}
-	
+
 	public function toValue($var = null)
 	{
 		return $var;
 	}
-	
+
 	#############
 	### Tests ###
 	#############
@@ -792,7 +792,7 @@ abstract class GDT
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Get multiple variants of a plug var.
 	 */
@@ -800,7 +800,7 @@ abstract class GDT
 	{
 		return GDT::EMPTY_ARRAY;
 	}
-	
+
 	###########
 	### CLI ###
 	###########
@@ -808,7 +808,7 @@ abstract class GDT
 	{
 		return null;
 	}
-	
+
 }
 
 #PP#start#

@@ -5,14 +5,16 @@ use GDO\Core\GDT_EnumNoI18n;
 
 /**
  * Font weight enum select.
- * @author gizmore
+ *
  * @version 6.10
  * @since 6.10
+ * @author gizmore
  */
 class GDT_FontWeight extends GDT_EnumNoI18n
 {
-    public string $icon = 'font';
-    
-	public function defaultLabel(): static { return $this->label('font_weight'); }
-	
+
+	public string $icon = 'font';
+
+	public function defaultLabel(): self { return $this->label('font_weight'); }
+
 }

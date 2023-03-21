@@ -6,15 +6,16 @@ use GDO\Core\GDT;
 /**
  * An HTML <pre> element.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.10.4
+ * @author gizmore
  * @see GDT_DIV
  * @see GDT_Tabs
  * @see GDT_Headline
  */
 final class GDT_Pre extends GDT
 {
+
 	use WithText;
 
 	public function renderCard(): string

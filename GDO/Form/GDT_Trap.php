@@ -6,24 +6,25 @@ use GDO\Core\GDT_String;
 /**
  * A fake field that may *not* be filled out.
  * This is kinda additional captcha for havoc bots.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
+ * @author gizmore
  */
 final class GDT_Trap extends GDT_String
 {
-	public function defaultLabel(): static
+
+	public function defaultLabel(): self
 	{
 		return $this->label('trap');
 	}
-	
-	public function renderForm() : string
+
+	public function renderForm(): string
 	{
 		$html = parent::renderForm();
 		return "<div class=\"dc\">$html</div>";
 	}
-	
-	public function validate($value) : bool
+
+	public function validate($value): bool
 	{
 		if ($value === null)
 		{
@@ -31,10 +32,10 @@ final class GDT_Trap extends GDT_String
 		}
 		return $this->error('err_trap');
 	}
-	
-	public function plugVars() : array
+
+	public function plugVars(): array
 	{
 		return [[$this->name => null]];
 	}
-	
+
 }

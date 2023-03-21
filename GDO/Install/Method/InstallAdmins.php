@@ -1,47 +1,47 @@
 <?php
 namespace GDO\Install\Method;
 
-use GDO\DB\Database;
-use GDO\Form\MethodForm;
-use GDO\Core\GDT_Template;
-use GDO\User\GDO_User;
 use GDO\Core\Debug;
-use GDO\Form\GDT_Form;
-use GDO\Form\GDT_Submit;
-use GDO\User\GDO_UserPermission;
-use GDO\User\GDO_Permission;
+use GDO\Core\GDT;
+use GDO\Core\GDT_Template;
 use GDO\Core\ModuleLoader;
 use GDO\Crypto\BCrypt;
-use GDO\Session\GDO_Session;
-use GDO\Core\GDT;
 use GDO\Crypto\GDT_Password;
+use GDO\DB\Database;
+use GDO\Form\GDT_Form;
+use GDO\Form\GDT_Submit;
+use GDO\Form\MethodForm;
+use GDO\Session\GDO_Session;
+use GDO\User\GDO_Permission;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserPermission;
 
 /**
  * Install an admin account.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 3.0.5
+ * @author gizmore
  */
 class InstallAdmins extends MethodForm
 {
-	
-	public function isUserRequired() : bool
+
+	public function isUserRequired(): bool
 	{
 		return false;
 	}
-	
-	public function getMethodTitle() : string
+
+	public function getMethodTitle(): string
 	{
 		return t('install_title_6');
 	}
-	
-	public function getMethodDescription() : string
+
+	public function getMethodDescription(): string
 	{
 		return $this->getMethodTitle();
 	}
-	
-	public function createForm(GDT_Form $form) : void
+
+	public function createForm(GDT_Form $form): void
 	{
 		Debug::init();
 		Database::init();
@@ -56,34 +56,34 @@ class InstallAdmins extends MethodForm
 		);
 		$form->actions()->addField(GDT_Submit::make());
 	}
-	
-	public function renderPage() : GDT
+
+	public function renderPage(): GDT
 	{
 		return GDT_Template::make()->template('Install', 'page/installadmins.php', ['form' => $this->getForm()]);
 	}
-	
+
 	public function formValidated(GDT_Form $form)
 	{
 // 		/** @var $password GDT_PasswordHash **/
 // 		$password = $form->getField('user_password');
 // 		$password->input(BCrypt::create($password->getVar())->__toString());
-		
+
 		$user = GDO_User::blank($this->getInputs());
 		$user->setVar('user_type', 'member');
 		$user->insert();
-		
+
 		if (module_enabled('Login'))
 		{
 			$user->saveSettingVar('Login', 'password', BCrypt::create($form->getFormVar('pass'))->__toString());
 		}
-		
+
 		$permissions = ['admin' => 1000, 'staff' => 500, 'cronjob' => 500];
 		foreach ($permissions as $permission => $level)
 		{
 			GDO_UserPermission::grantPermission($user, GDO_Permission::create($permission, $level));
 		}
-		
+
 		return parent::formValidated($form);
 	}
-	
+
 }

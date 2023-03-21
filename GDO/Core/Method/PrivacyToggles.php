@@ -1,40 +1,41 @@
 <?php
 namespace GDO\Core\Method;
 
-use GDO\Core\Method;
+use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Tuple;
+use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
-use GDO\Core\GDO_Module;
+use GDO\Install\Config;
+use GDO\Language\Trans;
 use GDO\UI\GDT_Accordeon;
 use GDO\UI\GDT_Card;
-use GDO\Language\Trans;
-use GDO\Install\Config;
 
 /**
  * Show information about privacy related settings.
- * 
+ *
  * @author gizmore
  *
  */
 final class PrivacyToggles extends Method
 {
+
 	public function isTrivial(): bool
 	{
 		# This method messes with setting fields instead!!!
 		return false;
 	}
-	
+
 	public function getMethodTitle(): string
 	{
 		return t('privacy_settings');
 	}
-	
+
 	public function execute()
 	{
 		ModuleLoader::instance()->loadModuleFS('Install')->onLoadLanguage();
 		Trans::inited();
-		
+
 		$result = GDT_Tuple::make('result');
 		$panel = GDT_Response::make('information');
 		$result->addFields($panel);
@@ -68,12 +69,6 @@ final class PrivacyToggles extends Method
 		return $this->createAccordeonB($fields)->title('t_privacy_core_toggles');
 	}
 
-	private function createAccordeon(GDO_Module $module, array $fields): GDT_Accordeon
-	{
-		$acc = $this->createAccordeonB($fields);
-		return $acc->titleRaw($module->gdoHumanName());
-	}
-	
 	private function createAccordeonB(array $fields): GDT_Accordeon
 	{
 		$acc = GDT_Accordeon::make();
@@ -86,7 +81,7 @@ final class PrivacyToggles extends Method
 				if (Trans::hasKey($cfgkey))
 				{
 					$gdt->label($cfgkey);
-					$cfgkey= 'tt_' . $cfgkey;
+					$cfgkey = 'tt_' . $cfgkey;
 					if (Trans::hasKey($cfgkey))
 					{
 						$gdt->tooltip($cfgkey);
@@ -97,5 +92,11 @@ final class PrivacyToggles extends Method
 		}
 		return $acc->addFields($card);
 	}
-	
+
+	private function createAccordeon(GDO_Module $module, array $fields): GDT_Accordeon
+	{
+		$acc = $this->createAccordeonB($fields);
+		return $acc->titleRaw($module->gdoHumanName());
+	}
+
 }

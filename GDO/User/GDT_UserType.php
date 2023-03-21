@@ -5,20 +5,21 @@ use GDO\Core\GDT_Enum;
 
 /**
  * User type enum.
- * 
- * @author gizmore
+ *
  * @version 7.0.0
  * @since 7.0.0
+ * @author gizmore
  */
 final class GDT_UserType extends GDT_Enum
 {
-	const SYSTEM = 'system';
-	const GHOST = 'ghost';
-	const GUEST = 'guest';
-	const MEMBER = 'member';
-	const BOT = 'bot'; # @TODO: make use of new user type "bot"
-	const LINK = 'link'; # @TODO: make use of new user type "link"
-	
+
+	public const SYSTEM = 'system';
+	public const GHOST = 'ghost';
+	public const GUEST = 'guest';
+	public const MEMBER = 'member';
+	public const BOT = 'bot'; # @TODO: make use of new user type "bot"
+	public const LINK = 'link'; # @TODO: make use of new user type "link"
+
 	protected function __construct()
 	{
 		parent::__construct();
@@ -28,5 +29,5 @@ final class GDT_UserType extends GDT_Enum
 		$this->initial(self::GHOST);
 		$this->notNull();
 	}
-	
+
 }

@@ -2,42 +2,43 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
-use GDO\Table\MethodQueryTable;
 use GDO\Core\GDO;
+use GDO\Table\MethodQueryTable;
 use GDO\UI\GDT_Button;
-use GDO\User\GDO_User;
 use GDO\UI\GDT_EditButton;
+use GDO\User\GDO_User;
 
 /**
  * GDO_User table for staff.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.0.2
+ * @author gizmore
  * @see GDO_User
  * @see GDT_Table
  */
 class Users extends MethodQueryTable
 {
+
 	use MethodAdmin;
-	
-	public function getMethodTitle() : string
+
+	public function getMethodTitle(): string
 	{
 		return t('btn_users');
 	}
-	
-	public function gdoTable() : GDO
+
+	public function gdoTable(): GDO
 	{
 		return GDO_User::table();
 	}
-	
+
 	public function execute()
 	{
 		$createLink = GDT_Button::make()->icon('create')->href(href('Admin', 'UserCreate'))->label('link_create_user');
 		return parent::execute()->addField($createLink);
 	}
-	
-	public function gdoHeaders() : array
+
+	public function gdoHeaders(): array
 	{
 		$gdo = $this->gdoTable();
 		return [
@@ -52,5 +53,5 @@ class Users extends MethodQueryTable
 			$gdo->gdoColumn('user_deletor'),
 		];
 	}
-	
+
 }

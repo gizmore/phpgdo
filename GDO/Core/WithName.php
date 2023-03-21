@@ -5,34 +5,38 @@ namespace GDO\Core;
  * Add a name to a GDT.
  * Display human classname.
  * Add trait WithModule.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 6.0.0
+ * @author gizmore
  * @see WithModule
  */
 trait WithName
 {
+
 	use WithModule;
-	
+
 	public string $name;
-	
-	public function hasName() : bool
+
+	public static function make(string $name = null): self
 	{
-		return isset($this->name);
+		return self::makeNamed($name);
 	}
-	
-	public function getName() : ?string
+
+	public static function makeNamed(string $name = null): self
 	{
-		return isset($this->name) ? $this->name : null;
+		$obj = new static();
+		$name = $name === null ? $obj->getDefaultName() : $name;
+		$obj->name($name);
+		return $obj;
 	}
-	
-	public function getDefaultName() : ?string
+
+	public function getDefaultName(): ?string
 	{
 		return null;
 	}
-	
-	public function name(string $name = null): static
+
+	public function name(string $name = null): self
 	{
 		if ($name)
 		{
@@ -44,21 +48,19 @@ trait WithName
 		}
 		return $this;
 	}
-	
+
 	###############
 	### Factory ###
 	###############
-	public static function make(string $name = null): static
+
+	public function hasName(): bool
 	{
-		return self::makeNamed($name);
+		return isset($this->name);
 	}
-	
-	public static function makeNamed(string $name = null): static
+
+	public function getName(): ?string
 	{
-		$obj = new static();
-		$name = $name === null ? $obj->getDefaultName() : $name;
-		$obj->name($name);
-		return $obj;
+		return isset($this->name) ? $this->name : null;
 	}
 
 }

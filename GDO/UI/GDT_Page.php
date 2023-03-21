@@ -3,32 +3,51 @@ namespace GDO\UI;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
-use GDO\Core\WithInstance;
 use GDO\Core\ModuleLoader;
+use GDO\Core\WithInstance;
 use GDO\Session\GDO_Session;
 
 /**
  * A website page object.
  * Adds 4 sidebars and 1 top response box.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 5.0.0
+ * @author gizmore
  */
 final class GDT_Page extends GDT
 {
+
 	use WithHTML;
 	use WithTitle;
 	use WithInstance;
 	use WithDescription;
-	
+
 	#############
 	### Reset ###
 	#############
+	private GDT_Box $topResponse;
+
+	##############
+	### Render ###
+	##############
+	private GDT_Bar $topBar;
+
+	###########
+	### Top ###
+	###########
+	private GDT_Bar $leftBar;
+	private GDT_Bar $rightBar;
+	private GDT_Bar $bottomBar;
+
+	###############
+	### Navbars ###
+	###############
+
 	/**
 	 * Reset the global page object.
 	 */
-	public function reset(bool $removeInput=false): static
+	public function reset(bool $removeInput = false): self
 	{
 		unset($this->topBar);
 		unset($this->leftBar);
@@ -37,15 +56,12 @@ final class GDT_Page extends GDT
 		unset($this->topResponse);
 		return $this;
 	}
-	
-	##############
-	### Render ###
-	##############
+
 	/**
 	 * Render this website page in html mode.
 	 * Include module scripts and sidebars for a full html page.
 	 */
-	public function renderHTML() : string
+	public function renderHTML(): string
 	{
 		global $me;
 		$loader = ModuleLoader::instance();
@@ -64,13 +80,32 @@ final class GDT_Page extends GDT
 		}
 		return GDT_Template::php('UI', 'page_blank.php', ['page' => $this]);
 	}
-	
-	###########
-	### Top ###
-	###########
-	private GDT_Box $topResponse;
-	
-	public function topResponse() : GDT_Box
+
+	public function topBar(): GDT_Bar
+	{
+		if (!isset($this->topBar))
+		{
+			$this->topBar = GDT_Bar::make('top')->horizontal();
+		}
+		return $this->topBar;
+	}
+
+	public function getSlot(string $slot): GDT_Container
+	{
+		switch ($slot)
+		{
+			case 'top':
+				return $this->topResponse();
+			case 'left':
+				return $this->leftBar();
+			case 'right':
+				return $this->rightBar();
+			case 'bottom':
+				return $this->bottomBar();
+		}
+	}
+
+	public function topResponse(): GDT_Box
 	{
 		if (!isset($this->topResponse))
 		{
@@ -82,7 +117,7 @@ final class GDT_Page extends GDT
 		}
 		return $this->topResponse;
 	}
-	
+
 	private function restoreSessionRedirectResponse()
 	{
 		if ($error = GDO_Session::get('redirect_error'))
@@ -96,25 +131,8 @@ final class GDT_Page extends GDT
 			GDO_Session::remove('redirect_message');
 		}
 	}
-	
-	###############
-	### Navbars ###
-	###############
-	private GDT_Bar $topBar;
-	private GDT_Bar $leftBar;
-	private GDT_Bar $rightBar;
-	private GDT_Bar $bottomBar;
-	
-	public function topBar() : GDT_Bar
-	{
-		if (!isset($this->topBar))
-		{
-			$this->topBar = GDT_Bar::make('top')->horizontal();
-		}
-		return $this->topBar;
-	}
-	
-	public function leftBar() : GDT_Bar
+
+	public function leftBar(): GDT_Bar
 	{
 		if (!isset($this->leftBar))
 		{
@@ -122,8 +140,8 @@ final class GDT_Page extends GDT
 		}
 		return $this->leftBar;
 	}
-	
-	public function rightBar() : GDT_Bar
+
+	public function rightBar(): GDT_Bar
 	{
 		if (!isset($this->rightBar))
 		{
@@ -131,8 +149,8 @@ final class GDT_Page extends GDT
 		}
 		return $this->rightBar;
 	}
-	
-	public function bottomBar() : GDT_Bar
+
+	public function bottomBar(): GDT_Bar
 	{
 		if (!isset($this->bottomBar))
 		{
@@ -140,16 +158,5 @@ final class GDT_Page extends GDT
 		}
 		return $this->bottomBar;
 	}
-	
-	public function getSlot(string $slot) : GDT_Container
-	{
-		switch ($slot)
-		{
-			case 'top': return $this->topResponse();
-			case 'left': return $this->leftBar();
-			case 'right': return $this->rightBar();
-			case 'bottom': return $this->bottomBar();
-		}
-	}
-	
+
 }

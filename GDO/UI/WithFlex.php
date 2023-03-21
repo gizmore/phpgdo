@@ -4,9 +4,9 @@ namespace GDO\UI;
 /**
  * Flex class handling trait for containers.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.3.0
+ * @author gizmore
  * @see GDT_Bar
  * @see GDT_Box
  * @see GDT_Container
@@ -25,7 +25,7 @@ trait WithFlex
 	/**
 	 * Enable flex for this container.
 	 */
-	public function flex(int $direction = self::HORIZONTAL, bool $wrap = true, bool $shrink = false): static
+	public function flex(int $direction = self::HORIZONTAL, bool $wrap = true, bool $shrink = false): self
 	{
 		$this->flex = true;
 		$this->flexDirection = $direction;
@@ -34,13 +34,13 @@ trait WithFlex
 		return $this;
 	}
 
-	public function noflex(): static
+	public function noflex(): self
 	{
 		$this->flex = false;
 		return $this;
 	}
 
-	public function horizontal(bool $wrap = true, bool $shrink = false): static
+	public function horizontal(bool $wrap = true, bool $shrink = false): self
 	{
 		$this->flex = true;
 		$this->flexDirection = self::HORIZONTAL;
@@ -48,7 +48,13 @@ trait WithFlex
 		return $this->shrink($shrink);
 	}
 
-	public function vertical(bool $wrap = false, bool $shrink = false): static
+	public function shrink(bool $shrink = true): self
+	{
+		$this->flexShrink = $shrink;
+		return $this;
+	}
+
+	public function vertical(bool $wrap = false, bool $shrink = false): self
 	{
 		$this->flex = true;
 		$this->flexDirection = self::VERTICAL;
@@ -56,26 +62,21 @@ trait WithFlex
 		return $this->shrink($shrink);
 	}
 
-	public function wrap(bool $wrap = true): static
+	public function wrap(bool $wrap = true): self
 	{
 		$this->flexWrap = $wrap;
 		return $this;
 	}
 
-	public function grow(bool $grow = true): static
+	public function grow(bool $grow = true): self
 	{
-		return $this->shrink( !$grow);
-	}
-
-	public function shrink(bool $shrink = true): static
-	{
-		$this->flexShrink = $shrink;
-		return $this;
+		return $this->shrink(!$grow);
 	}
 
 	# #############
 	# ## Render ###
 	# #############
+
 	/**
 	 * Render classname for flex classes.
 	 */

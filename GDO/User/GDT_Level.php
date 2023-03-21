@@ -6,23 +6,21 @@ use GDO\UI\GDT_Badge;
 
 /**
  * User level field.
- * 
+ *
  * If the gdo is a user, it reads combined level of user permission.
  * NotNull, initial 0, because we want to do arithmetics.
  * With trophy icon.
  * Renders effective level in table cells.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.0.2
+ * @author gizmore
  */
 final class GDT_Level extends GDT_Badge
 {
+
 	use WithGDO;
-	
-	public function defaultLabel(): static { return $this->label('user_level'); }
-	public function isSearchable() : bool { return false; }
-	
+
 	protected function __construct()
 	{
 		parent::__construct();
@@ -31,10 +29,15 @@ final class GDT_Level extends GDT_Badge
 		$this->writeable(true);
 		$this->icon('level');
 	}
-	
+
+	public function defaultLabel(): self { return $this->label('user_level'); }
+
+	public function isSearchable(): bool { return false; }
+
 	#################
 	### Var / Val ###
 	#################
+
 	public function getVar()
 	{
 		if (isset($this->gdo))
@@ -49,5 +52,5 @@ final class GDT_Level extends GDT_Badge
 		}
 		return parent::getVar();
 	}
-	
+
 }

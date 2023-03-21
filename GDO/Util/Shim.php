@@ -4,14 +4,14 @@
  * Backwards compatibility. @TODO make use of the php preprocessor to make shim zero cost.
  * PHP7.4 will not work though :(
  */
-if ( !function_exists('getallheaders'))
+if (!function_exists('getallheaders'))
 {
 	/**
 	 * Get all HTTP header key/values as an associative array for the current request.
 	 *
 	 * @return string[string] The HTTP header key/value pairs.
 	 */
-	function getallheaders() : array
+	function getallheaders(): array
 	{
 		$headers = [];
 
@@ -26,10 +26,10 @@ if ( !function_exists('getallheaders'))
 			if (str_starts_with($key, 'HTTP_'))
 			{
 				$key = substr($key, 5);
-				if ( !isset($copy_server[$key]) || !isset($_SERVER[$key]))
+				if (!isset($copy_server[$key]) || !isset($_SERVER[$key]))
 				{
 					$key = str_replace(' ', '-',
-					ucwords(strtolower(str_replace('_', ' ', $key))));
+						ucwords(strtolower(str_replace('_', ' ', $key))));
 					$headers[$key] = $value;
 				}
 			}
@@ -39,7 +39,7 @@ if ( !function_exists('getallheaders'))
 			}
 		}
 
-		if ( !isset($headers['Authorization']))
+		if (!isset($headers['Authorization']))
 		{
 			if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION']))
 			{
@@ -49,7 +49,7 @@ if ( !function_exists('getallheaders'))
 			{
 				$basic_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
 				$headers['Authorization'] = 'Basic ' .
-				base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
+					base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
 			}
 			elseif (isset($_SERVER['PHP_AUTH_DIGEST']))
 			{
@@ -60,9 +60,9 @@ if ( !function_exists('getallheaders'))
 	}
 }
 
-if ( !function_exists('openssl_random_pseudo_bytes'))
+if (!function_exists('openssl_random_pseudo_bytes'))
 {
-	function openssl_random_pseudo_bytes(int $length, bool $crypto_strong=true) : string 
+	function openssl_random_pseudo_bytes(int $length, bool $crypto_strong = true): string
 	{
 		$rand = '';
 		for ($i = 0; $i < $length; $i++)
@@ -73,17 +73,17 @@ if ( !function_exists('openssl_random_pseudo_bytes'))
 	}
 }
 
-if ( !function_exists('str_starts_with'))
+if (!function_exists('str_starts_with'))
 {
-	function str_starts_with(string $haystack, string $needle) : bool
+	function str_starts_with(string $haystack, string $needle): bool
 	{
 		return strpos($haystack, $needle) === 0;
 	}
 }
 
-if ( !function_exists('str_ends_with'))
+if (!function_exists('str_ends_with'))
 {
-	function str_ends_with(string $haystack, string $needle) : bool
+	function str_ends_with(string $haystack, string $needle): bool
 	{
 		return substr_compare($haystack, $needle, -strlen($needle)) === 0;
 	}

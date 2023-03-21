@@ -1,106 +1,130 @@
 <?php
 namespace GDO\Core;
 
-use GDO\CLI\CLI;
-use GDO\DB\Database;
-use GDO\User\GDO_User;
-use GDO\Util\Strings;
-use GDO\UI\WithTitle;
-use GDO\UI\WithDescription;
-use GDO\Language\Trans;
-use GDO\UI\GDT_Redirect;
-use GDO\Form\GDT_Submit;
-use GDO\Form\GDT_Form;
 use GDO\Date\Time;
-use GDO\Util\Arrays;
+use GDO\DB\Database;
+use GDO\Form\GDT_Form;
+use GDO\Form\GDT_Submit;
+use GDO\Language\Trans;
 use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Redirect;
+use GDO\UI\WithDescription;
+use GDO\UI\WithTitle;
+use GDO\User\GDO_User;
+use GDO\Util\Arrays;
+use GDO\Util\Strings;
+use Throwable;
 
 /**
  * Abstract baseclass for all methods.
  * Checks permission.
  * Sets up SEO method meta data.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
  * @since 3.0.1
+ * @author gizmore
  * @see GDT
  * @see GDO
  */
 abstract class Method #extends GDT
 {
+
 	use WithTitle;
 	use WithInput;
 	use WithModule;
 	use WithParameters;
 	use WithDescription;
-	
-	public function getName() : ?string
-	{
-		return $this->gdoClassName();
-	}
-	
+
+	/**
+	 * @var Method[string]
+	 */
+	public static array $CLI_ALIASES;
+
 	################
 	### Override ###
 	################
 	# execution
-	public function isEnabled() : bool { return $this->getModule()->isEnabled(); }
-	public function getMethodName() : string { return $this->gdoShortName(); }
-	public function getPermission() : ?string { return null; }
-	public function hasPermission(GDO_User $user) : bool { return true; }
-	
-	public abstract function execute();
-	
-	protected function executeB()
+	public string $button;
+	private bool $locked = false;
+
+	/**
+	 * Get a method by cli convention. Aliases first, then module DOT method.
+	 *
+	 * @param string $alias
+	 *
+	 * @return Method
+	 */
+	public static function getMethod(string $alias, bool $throw = true): ?self
 	{
-		return $this->execute();
+		$alias = strtolower($alias);
+		if (isset(self::$CLI_ALIASES[$alias]))
+		{
+			$klass = self::$CLI_ALIASES[$alias];
+			return $klass::make();
+		}
+		else
+		{
+			$moduleName = Strings::substrTo($alias, '.', $alias);
+
+			if (!($module = ModuleLoader::instance()->getModule($moduleName, false, $throw)))
+			{
+// 				if ($throw)
+// 				{
+// 					throw new GDO_Error('err_unknown_module', [html($moduleName)]);
+// 				}
+				return null;
+			}
+
+			$methodName = Strings::substrFrom($alias, '.', t('none'));
+			if ($method = $module->getMethod($methodName, false))
+			{
+				return $method;
+			}
+			if ($throw)
+			{
+				throw new GDO_NoSuchMethodError($module, $methodName);
+			}
+		}
+		return null;
 	}
-	
+
+	public static function make(): static
+	{
+		return new static();
+	}
+
 	public function getCLITrigger()
 	{
 		$trigger = "{$this->getModuleName()}.{$this->getMethodName()}";
 		return strtolower($trigger);
 	}
 
+	public function getMethodName(): string { return $this->gdoShortName(); }
+
+	public function isCLI(): bool { return true; }
+
 	# toggles
-	public function isCLI() : bool { return true; }
+
+	public function isAjax(): bool { return false; }
+
 //	public function isWeb() : bool { return true; }
-	public function isAjax() : bool { return false; }
+
 	/**
 	 * Toggle if method can be trivially fuzz-tested. defaults to yes.
 	 */
-	public function isTrivial() : bool { return true; }
-	public function isLocking() : bool { return false; }
-	public function isUserRequired() : bool { return false; }
-	public function isGuestAllowed() : bool { return Module_Core::instance()->cfgAllowGuests(); }
-	public function isTransactional() : bool { return Application::$INSTANCE->verb === GDT_Form::POST; }
-	public function isAlwaysAllowed() : bool { return false; }
-	public function isAlwaysTransactional() : bool { return false; }
-	public function isSavingLastUrl() : bool { return true; }
-	public function isShownInSitemap() : bool { return true; }
-	public function getUserType() : ?string { return null; }
-	public function isIndexed() : bool { return true; }
-	public function isSidebarEnabled() : bool { return true; }
-	
-	# events
-	public function onMethodInit() {}
-	public function onRenderTabs() : void {}
-	public function beforeExecute() : void {}
-	public function afterExecute() : void {}
-	
-	###################
-	### Alias Cache ###
-	###################
-	/**
-	 * @var Method[string]
-	 */
-	public static array $CLI_ALIASES;
-	
-//	public static function addCLIAlias(string $alias, string $className) : void
-//	{
-//		self::$CLI_ALIASES[$alias] = $className;
-//	}
-	
-	public function getAutoButton(array $keys=null) : ?string
+	public function isTrivial(): bool { return true; }
+
+	public function isAlwaysAllowed(): bool { return false; }
+
+	public function isSavingLastUrl(): bool { return true; }
+
+	public function isShownInSitemap(): bool { return true; }
+
+	public function isIndexed(): bool { return true; }
+
+	public function isSidebarEnabled(): bool { return true; }
+
+	public function getAutoButton(array $keys = null): ?string
 	{
 		$first = null;
 		$keys = Arrays::arrayed($keys);
@@ -116,149 +140,35 @@ abstract class Method #extends GDT
 				$first = $first ?? $gdt->getName();
 			}
 		}
-		
+
 //		if ($first)
 //		{
 //			Application::$INSTANCE->verb(GDT_Form::POST);
 //		}
-		
+
 		return $first;
 	}
-	
-	
-	############
-	### HREF ###
-	############
-	public function href(string $append='') : string
+
+	public function getID(): ?string
 	{
-		return $this->getModule()->href($this->getMethodName(), $append);
+		return $this->getName();
 	}
-	
-	public function hrefNoSEO(string $append='') : string
+
+	public function getName(): ?string
+	{
+		return $this->gdoClassName();
+	}
+
+	public function renderName(): string
+	{
+		return $this->getName();
+	}
+
+	public function hrefNoSEO(string $append = ''): string
 	{
 		return $this->getModule()->hrefNoSEO($this->getMethodName(), $append);
 	}
-	
-/**
-	 * Get a method by cli convention. Aliases first, then module DOT method.
-	 * 
-	 * @param string $alias
-	 * @return Method
-	 */
-	public static function getMethod(string $alias, bool $throw=true) : ?self
-	{
-		$alias = strtolower($alias);
-		if (isset(self::$CLI_ALIASES[$alias]))
-		{
-			$klass = self::$CLI_ALIASES[$alias];
-			return $klass::make();
-		}
-		else
-		{
-			$moduleName = Strings::substrTo($alias, '.', $alias);
-			
-			if (!($module = ModuleLoader::instance()->getModule($moduleName, false, $throw)))
-			{
-// 				if ($throw)
-// 				{
-// 					throw new GDO_Error('err_unknown_module', [html($moduleName)]);
-// 				}
-				return null;
-			}
-			
-			$methodName = Strings::substrFrom($alias, '.', t('none'));
-			if ($method = $module->getMethod($methodName, false))
-			{
-				return $method;
-			}
-			if ($throw)
-			{
-				throw new GDO_NoSuchMethodError($module, $methodName);
-			}
-		}
-		return null;
-	}
 
-	###################
-	### Instanciate ###
-	###################
-	public static function make(): static
-	{
-		return new static();
-	}
-	
-	############
-	### Exec ###
-	############
-	public function checkPermission(GDO_User $user)
-	{
-		if (!($this->isEnabled()))
-		{
-			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()], 403);
-		}
-		
-		if ( ($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()) )
-		{
-			$hrefAuth = href('Login', 'Form', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
-			return $this->error('err_members_only', [$hrefAuth]);
-		}
-		
-		if ( ($this->isUserRequired()) && (!$user->isUser()) )
-		{
-			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
-			{
-				$hrefGuest = href('Register', 'Guest', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
-				return $this->error('err_user_required', [$hrefGuest]);
-			}
-			else
-			{
-				$hrefAuth = href('Login', 'Form', "&_backto=".urlencode($_SERVER['REQUEST_URI']));
-				return $this->error('err_members_only', [$hrefAuth]);
-			}
-		}
-		
-		if ($mt = $this->getUserType())
-		{
-			if (!$user->isAdmin())
-			{
-				$mt = explode(',', $mt);
-				$ut = $user->getType();
-				if (!in_array($ut, $mt, true))
-				{
-					return $this->error('err_user_type', [Arrays::implodeHuman($mt, 'or')]);
-				}
-			}
-		}
-		
-		if ($mp = $this->getPermission())
-		{
-			if (!$user->isAdmin())
-			{
-				$mp = explode(',', $mp);
-				$has = false;
-				foreach ($mp as $permission)
-				{
-					if ($user->hasPermission($permission))
-					{
-						$has = true;
-						break;
-					}
-				}
-				if (!$has)
-				{
-					return $this->error('err_permission_required');
-				}
-			}
-		}
-		
-		if (!$this->hasPermission($user))
-		{
-			return $this->error('err_permission_required');
-		}
-		
-		return true;
-	}
-	
 	/**
 	 * Test permissions and execute method.
 	 */
@@ -266,30 +176,7 @@ abstract class Method #extends GDT
 	{
 		return $this->execWrap();
 	}
-	
-	/**
-	 * Detect if we should start a transaction. # @TODO only mark DB transaction ready / lazily
-	 * This happens when it's generally transaction worthy method (isTransactional())
-	 * And if the REQUEST VERB is POST.
-	 * Another option is: isAlwaysTransactional()
-	 */
-	public function transactional() : bool
-	{
-		if (Application::$INSTANCE->isWebserver())
-		{
-			return
-				($this->isAlwaysTransactional()) ||
-				($this->isTransactional() &&
-					(Application::$INSTANCE->verb === GDT_Form::POST) );
-		}
-		return false;
-	}
-	
-	public function locking() : bool
-	{
-		return $this->isLocking() && $this->transactional();
-	}
-	
+
 	/**
 	 * Wrap execution in transaction if desired from method.
 	 */
@@ -298,29 +185,12 @@ abstract class Method #extends GDT
 		$response = $this->executeWithInit();
 		return $response;
 	}
-	
-	public function executeWithInputs(array $inputs=null, bool $checkPermission=true)
-	{
-		$this->inputs = $inputs;
-		return $this->executeWithInit($checkPermission);
-	}
 
-	/**
-	 * Execute this method without any checks or events.
-	 * Used when invoking methods inside other methods.
-	 */
-	public function execWithInputs(array $inputs=null)
-	{
-		$this->inputs = $inputs;
-		$this->applyInput();
-		return $this->executeB();
-	}
-	
 	/**
 	 * Execute this method with all hooks.
 	 * Quite a long method.
 	 */
-	public function executeWithInit(bool $checkPermission=true)
+	public function executeWithInit(bool $checkPermission = true)
 	{
 		$db = Database::instance();
 // 		$app = Application::$INSTANCE;
@@ -332,12 +202,12 @@ abstract class Method #extends GDT
 			{
 				$response->addField($result);
 			}
-			
+
 			# 0) Init
 			$this->applyInput();
-			
+
 			$user = GDO_User::current();
-			
+
 			if ($checkPermission)
 			{
 				if (true !== ($error = $this->checkPermission($user)))
@@ -345,12 +215,12 @@ abstract class Method #extends GDT
 					return $error;
 				}
 			}
-			
+
 			if (Application::isError())
 			{
 				return $response;
 			}
-			
+
 			# 1) Start the transaction
 			$this->lock();
 			if ($this->transactional())
@@ -374,13 +244,13 @@ abstract class Method #extends GDT
 				}
 				return $response;
 			}
-			
+
 			# 3) Build top response tabs
 			if (Application::$INSTANCE->isHTML())
 			{
 				$this->onRenderTabs();
 			}
-			
+
 			# 4) Execute
 			if ($result = $this->executeB())
 			{
@@ -391,7 +261,7 @@ abstract class Method #extends GDT
 				}
 				$response->addField($result);
 			}
-			
+
 			# 4b) Error
 			if (Application::isError())
 			{
@@ -401,7 +271,7 @@ abstract class Method #extends GDT
 				}
 				return $response;
 			}
-			
+
 			# 5) After execute
 			$this->afterExecute();
 			$result = GDT_Hook::callHook('AfterExecute', $this, $response);
@@ -417,7 +287,7 @@ abstract class Method #extends GDT
 				}
 				return $response;
 			}
-			
+
 			# 5b)
 			if (Application::$INSTANCE->isWebserver())
 			{
@@ -432,7 +302,7 @@ abstract class Method #extends GDT
 			{
 				$db->transactionEnd();
 			}
-			
+
 			return $response;
 		}
 //		catch (GDO_Error $e)
@@ -473,7 +343,7 @@ abstract class Method #extends GDT
 //			Logger::logException($e);
 //			return $this->error('error', [$e->getMessage()]);
 //		}
-		catch (\Throwable $e)
+		catch (Throwable $e)
 		{
 			if ($transactional)
 			{
@@ -494,25 +364,133 @@ abstract class Method #extends GDT
 // 			}
 		}
 	}
-	
-	############
-	### Lock ###
-	############
-	private bool $locked = false;
-	
-	private function lockKey() : string
+
+	public function onMethodInit() {}
+
+	# events
+
+	protected function applyInput(): void
 	{
-		$user = GDO_User::current();
-		$lock = GDO_SITENAME . "_USERLOCK_{$user->getID()}";
-		return $lock;
+		$inputs = $this->getInputs();
+		foreach ($this->gdoParameterCache() as $gdt)
+		{
+			$gdt->inputs($inputs);
+		}
 	}
-	
-	private function lock() : bool
+
+	public function checkPermission(GDO_User $user)
+	{
+		if (!($this->isEnabled()))
+		{
+			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()], 403);
+		}
+
+		if (($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()))
+		{
+			$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+			return $this->error('err_members_only', [$hrefAuth]);
+		}
+
+		if (($this->isUserRequired()) && (!$user->isUser()))
+		{
+			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
+			{
+				$hrefGuest = href('Register', 'Guest', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+				return $this->error('err_user_required', [$hrefGuest]);
+			}
+			else
+			{
+				$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+				return $this->error('err_members_only', [$hrefAuth]);
+			}
+		}
+
+		if ($mt = $this->getUserType())
+		{
+			if (!$user->isAdmin())
+			{
+				$mt = explode(',', $mt);
+				$ut = $user->getType();
+				if (!in_array($ut, $mt, true))
+				{
+					return $this->error('err_user_type', [Arrays::implodeHuman($mt, 'or')]);
+				}
+			}
+		}
+
+		if ($mp = $this->getPermission())
+		{
+			if (!$user->isAdmin())
+			{
+				$mp = explode(',', $mp);
+				$has = false;
+				foreach ($mp as $permission)
+				{
+					if ($user->hasPermission($permission))
+					{
+						$has = true;
+						break;
+					}
+				}
+				if (!$has)
+				{
+					return $this->error('err_permission_required');
+				}
+			}
+		}
+
+		if (!$this->hasPermission($user))
+		{
+			return $this->error('err_permission_required');
+		}
+
+		return true;
+	}
+
+	public function isEnabled(): bool { return $this->getModule()->isEnabled(); }
+
+	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true): GDT
+	{
+		$titleRaw = $this->getModule()->gdoHumanName();
+		return Website::error($titleRaw, $key, $args, $log, $code);
+	}
+
+	###################
+	### Alias Cache ###
+	###################
+
+	public function isUserRequired(): bool { return false; }
+
+//	public static function addCLIAlias(string $alias, string $className) : void
+//	{
+//		self::$CLI_ALIASES[$alias] = $className;
+//	}
+
+	public function isGuestAllowed(): bool { return Module_Core::instance()->cfgAllowGuests(); }
+
+
+	############
+	### HREF ###
+	############
+
+	public function getUserType(): ?string { return null; }
+
+	public function getPermission(): ?string { return null; }
+
+	public function hasPermission(GDO_User $user): bool { return true; }
+
+	###################
+	### Instanciate ###
+	###################
+
+	private function lock(): bool
 	{
 		$user = GDO_User::current();
-		if ( (!module_enabled('Session')) ||
-			 (!$this->isLocking()) ||
-			 (!$user->isPersisted()) )
+		if (
+			(!module_enabled('Session')) ||
+			(!$this->isLocking()) ||
+			(!$user->isPersisted())
+		)
 		{
 			return false;
 		}
@@ -523,24 +501,59 @@ abstract class Method #extends GDT
 		}
 		return $this->locked;
 	}
-	
-	private function unlock() : bool
+
+	############
+	### Exec ###
+	############
+
+	public function isLocking(): bool { return false; }
+
+	private function lockKey(): string
 	{
-		if (!$this->locked)
-		{
-			return true;
-		}
-		$lock = $this->lockKey();
-		if (Database::instance()->unlock($lock))
-		{
-			$this->locked = false;
-		}
-		return !$this->locked;
+		$user = GDO_User::current();
+		$lock = GDO_SITENAME . "_USERLOCK_{$user->getID()}";
+		return $lock;
 	}
-	
-	###########
-	### SEO ###
-	###########
+
+	/**
+	 * Detect if we should start a transaction. # @TODO only mark DB transaction ready / lazily
+	 * This happens when it's generally transaction worthy method (isTransactional())
+	 * And if the REQUEST VERB is POST.
+	 * Another option is: isAlwaysTransactional()
+	 */
+	public function transactional(): bool
+	{
+		if (Application::$INSTANCE->isWebserver())
+		{
+			return
+				($this->isAlwaysTransactional()) ||
+				($this->isTransactional() &&
+					(Application::$INSTANCE->verb === GDT_Form::POST));
+		}
+		return false;
+	}
+
+	public function isAlwaysTransactional(): bool { return false; }
+
+	public function isTransactional(): bool { return Application::$INSTANCE->verb === GDT_Form::POST; }
+
+	public function beforeExecute(): void {}
+
+	public function onRenderTabs(): void {}
+
+	protected function executeB()
+	{
+		return $this->execute();
+	}
+
+	############
+	### Lock ###
+	############
+
+	abstract public function execute();
+
+	public function afterExecute(): void {}
+
 	public function setupSEO(): void
 	{
 		# SEO
@@ -550,22 +563,26 @@ abstract class Method #extends GDT
 		Website::addMeta(['description', $description, 'name']);
 		Website::addMeta(['og:description', $description, 'property']);
 	}
-	
-	public function getMethodTitle() : string
-	{
-		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
-		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : GDT::EMPTY_STRING;
-	}
-	
-	public function getMethodDescription() : string
+
+	public function getMethodDescription(): string
 	{
 		$key = sprintf('md_%s_%s', $this->getModuleName(), $this->getMethodName());
 		$key = strtolower($key);
 		return Trans::hasKey($key) ? t($key) : $this->getMethodTitle();
 	}
-	
-	public function getMethodKeywords() : string
+
+	###########
+	### SEO ###
+	###########
+
+	public function getMethodTitle(): string
+	{
+		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
+		$key = strtolower($key);
+		return Trans::hasKey($key) ? t($key) : GDT::EMPTY_STRING;
+	}
+
+	public function getMethodKeywords(): string
 	{
 		$keywords = [];
 		if (Trans::hasKey('site_keywords'))
@@ -582,21 +599,10 @@ abstract class Method #extends GDT
 	}
 
 	/**
-	 * Return a @see \GDO\Core\Website compatible meta data, for an image in teams links.
-	 */
-	public function seoMetaImage(): array
-	{
-		return GDT::EMPTY_ARRAY;
-	}
-	
-	##################
-	### Statistics ###
-	##################
-	/**
 	 * Update user last activity timestamp, for persisted users/guests.
 	 * Basically only store POST requests to non-ajax methods. And exceptions.
 	 */
-	private function storeLastActivity() : void
+	private function storeLastActivity(): void
 	{
 		if (Application::$INSTANCE->verb === GDT_Form::POST)
 		{
@@ -611,74 +617,116 @@ abstract class Method #extends GDT
 		}
 	}
 
+	public function href(string $append = ''): string
+	{
+		return $this->getModule()->href($this->getMethodName(), $append);
+	}
+
+	private function unlock(): bool
+	{
+		if (!$this->locked)
+		{
+			return true;
+		}
+		$lock = $this->lockKey();
+		if (Database::instance()->unlock($lock))
+		{
+			$this->locked = false;
+		}
+		return !$this->locked;
+	}
+
+	##################
+	### Statistics ###
+	##################
+
+	public function locking(): bool
+	{
+		return $this->isLocking() && $this->transactional();
+	}
+
 	#############
 	### Input ###
 	#############
+
+	public function executeWithInputs(array $inputs = null, bool $checkPermission = true)
+	{
+		$this->inputs = $inputs;
+		return $this->executeWithInit($checkPermission);
+	}
+
 	/**
-	 * Get plug variables.
-	 * @return [string[string]]
+	 * Execute this method without any checks or events.
+	 * Used when invoking methods inside other methods.
 	 */
-	public function plugVars() : array
+	public function execWithInputs(array $inputs = null)
+	{
+		$this->inputs = $inputs;
+		$this->applyInput();
+		return $this->executeB();
+	}
+
+	/**
+	 * Return a @see Website compatible meta data, for an image in teams links.
+	 */
+	public function seoMetaImage(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
-	
-	public function plugUserID() : string
+
+	/**
+	 * Get plug variables.
+	 *
+	 * @return [string[string]]
+	 */
+	public function plugVars(): array
 	{
-		return '2'; # gizmore
+		return GDT::EMPTY_ARRAY;
 	}
-	
-	public function plugUser() : GDO_User
+
+	public function plugUser(): GDO_User
 	{
 		return GDO_User::findById($this->plugUserID());
 	}
-	
-	public function appliedInputs(array $inputs): static
+
+	#############
+	### Error ###
+	#############
+
+	public function plugUserID(): string
+	{
+		return '2'; # gizmore
+	}
+
+	public function appliedInputs(array $inputs): self
 	{
 		$this->inputs($inputs);
 		$this->applyInput();
 		return $this;
 	}
-	
-	protected function applyInput(): void
-	{
-		$inputs = $this->getInputs();
-		foreach ($this->gdoParameterCache() as $gdt)
-		{
-			$gdt->inputs($inputs);
-		}
-	}
-	
-	#############
-	### Error ###
-	#############
-	public function message(string $key, array $args = null, int $code = 200, bool $log = true) : GDT
+
+	################
+	### Redirect ###
+	################
+
+	public function message(string $key, array $args = null, int $code = 200, bool $log = true): GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
 		return Website::message($titleRaw, $key, $args, $log, $code);
 	}
-	
-	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true) : GDT
-	{
-		$titleRaw = $this->getModule()->gdoHumanName();
-		return Website::error($titleRaw, $key, $args, $log, $code);
-	}
-	
-	################
-	### Redirect ###
-	################
-	public function redirect(string $href) : GDT_Redirect
-	{
-		return GDT_Redirect::make()->href($href);
-	}
-	
-	public function redirectBack(string $default = null) : GDT_Redirect
+
+	public function redirectBack(string $default = null): GDT_Redirect
 	{
 		$href = GDT_Redirect::hrefBack($default);
 		return $this->redirect($href);
 	}
-	
-	public function redirectMessage(string $key, array $args = null, string $href=null) : GDT_Redirect
+
+	public function redirect(string $href): GDT_Redirect
+	{
+		return GDT_Redirect::make()->href($href);
+	}
+
+	public function redirectMessage(string $key, array $args = null, string $href = null): GDT_Redirect
 	{
 		$href = $href ? $href : GDT_Redirect::hrefBack();
 		$redirect = GDT_Redirect::make()->href($href)
@@ -686,37 +734,38 @@ abstract class Method #extends GDT
 		GDT_Page::instance()->topResponse()->addField($redirect);
 		return $redirect;
 	}
-	
-	public function redirectError(string $key, array $args = null, string $href=null) : GDT_Redirect
+
+	################
+	### Template ###
+	################
+
+	public function redirectError(string $key, array $args = null, string $href = null): GDT_Redirect
 	{
 		$href = $href ? $href : GDT_Redirect::hrefBack();
 		$redirect = GDT_Redirect::make()->href($href)
 			->redirectError($key, $args);
 		GDT_Page::instance()->topResponse()->
-			addField($redirect);
+		addField($redirect);
 		return $redirect;
 	}
-	
-	################
-	### Template ###
-	################
-	public function templatePHP(string $path, array $tVars=null) : GDT_Template
+
+	public function templatePHP(string $path, array $tVars = null): GDT_Template
 	{
 		return GDT_Template::make()->template(
 			$this->getModuleName(), $path, $tVars);
 	}
 
-	public function tempPath(string $path = ''): string
-	{
-		$module = $this->getModule();
-		return $module->tempPath($this->getMethodName().'/'.$path);
-	}
-
 	##################
 	### CLI Button ###
 	##################
-	public string $button;
-	public function cliButton(string $button): static
+
+	public function tempPath(string $path = ''): string
+	{
+		$module = $this->getModule();
+		return $module->tempPath($this->getMethodName() . '/' . $path);
+	}
+
+	public function cliButton(string $button): self
 	{
 		$this->button = $button;
 		$this->addInput($button, '1');

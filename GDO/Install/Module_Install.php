@@ -2,8 +2,8 @@
 namespace GDO\Install;
 
 use GDO\Core\GDO_Module;
-use GDO\Core\Method\ClearCache;
 use GDO\Core\GDT_Template;
+use GDO\Core\Method\ClearCache;
 
 /**
  * Installer module.
@@ -12,9 +12,9 @@ use GDO\Core\GDT_Template;
  * Offers WWW Installer
  * Offers install utility.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 3.0.0
+ * @author gizmore
  */
 final class Module_Install extends GDO_Module
 {

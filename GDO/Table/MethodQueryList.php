@@ -5,26 +5,27 @@ namespace GDO\Table;
  * Abstract class that renders a list.
  * Not filtered by default.
  *
- * @author gizmore
  * @version 6.11.0
  * @since 5.0.0
+ * @author gizmore
  */
 abstract class MethodQueryList extends MethodQueryTable
 {
+
 	public function listName() { return 'list'; }
 
 	public function gdoHeaders(): array
 	{
 		return $this->gdoTable()->gdoColumnsCache();
 	}
-	
-	public function createCollection() : GDT_Table
+
+	public function createCollection(): GDT_Table
 	{
 		$this->table = GDT_List::make($this->getTableName());
 		return $this->createCollectionB();
 	}
-	
-	protected function createCollectionB() : GDT_Table
+
+	protected function createCollectionB(): GDT_Table
 	{
 		$this->table->href($this->gdoTableHREF());
 		$this->table->gdo($this->gdoTable());
@@ -32,5 +33,5 @@ abstract class MethodQueryList extends MethodQueryTable
 		$this->table->query($this->getQuery());
 		return $this->table;
 	}
-	
+
 }

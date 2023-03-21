@@ -1,31 +1,27 @@
 <?php
 namespace GDO\UI;
 
-use GDO\Core\Method;
 use GDO\Core\GDO;
-use GDO\Core\GDT_Object;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Hook;
+use GDO\Core\GDT_Object;
+use GDO\Core\Method;
+use GDO\Core\WithObject;
 
 /**
  * Abstract method to render a single GDO as a card.
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.6.4
+ * @author gizmore
  */
 abstract class MethodCard extends Method
 {
-	public abstract function gdoTable(): GDO;
 
-	/**
-	 * Parameter name.
-	 */
-	public function idName(): string { return 'id'; }
+	use WithObject;
 
-	# #############
-	# ## Params ###
-	# #############
+	private GDO $object;
+
 	public function gdoParameters(): array
 	{
 		return [
@@ -33,7 +29,27 @@ abstract class MethodCard extends Method
 		];
 	}
 
-	private GDO $object;
+	# #############
+	# ## Params ###
+	# #############
+
+	/**
+	 * Parameter name.
+	 */
+	public function idName(): string { return 'id'; }
+
+	abstract public function gdoTable(): GDO;
+
+	public function execute()
+	{
+		$gdo = $this->getObject();
+		return $this->executeFor($gdo);
+	}
+
+	# ###########
+	# ## Exec ###
+	# ###########
+
 	public function getObject(): ?GDO
 	{
 		if (!isset($this->object))
@@ -41,15 +57,6 @@ abstract class MethodCard extends Method
 			$this->object = $this->gdoParameterValue($this->idName());
 		}
 		return $this->object;
-	}
-
-	# ###########
-	# ## Exec ###
-	# ###########
-	public function execute()
-	{
-		$gdo = $this->getObject();
-		return $this->executeFor($gdo);
 	}
 
 	protected function executeFor(GDO $gdo): GDT
@@ -65,13 +72,11 @@ abstract class MethodCard extends Method
 		$this->callCardHook($card);
 		return $card;
 	}
-	
+
 	/**
 	 * Override this method to setup your card.
 	 */
-	protected function createCard(GDT_Card $card): void
-	{
-	}
+	protected function createCard(GDT_Card $card): void {}
 
 	/**
 	 * Call the card creation hook for all modules.
@@ -86,7 +91,7 @@ abstract class MethodCard extends Method
 	# ##########
 	# ## Seo ###
 	# ##########
-	public function getMethodTitle() : string
+	public function getMethodTitle(): string
 	{
 		if ($gdo = $this->getObject())
 		{

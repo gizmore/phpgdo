@@ -1,2 +1,7 @@
-.dependency_ko a { color: red; }
-.dependency_ok a { color: green; }
+.dependency_ko a {
+    color: red;
+}
+
+.dependency_ok a {
+    color: green;
+}

@@ -6,7 +6,8 @@ use GDO\Core\GDT_AutoInc;
 
 final class GDO_SubDomain extends GDO
 {
-	public function gdoColumns() : array
+
+	public function gdoColumns(): array
 	{
 		return [
 			GDT_AutoInc::make('subdomain_id'),
@@ -14,5 +15,5 @@ final class GDO_SubDomain extends GDO
 			GDT_DomainName::make('subdomain_name'),
 		];
 	}
-	
+
 }

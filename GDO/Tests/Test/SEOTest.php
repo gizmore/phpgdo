@@ -3,45 +3,41 @@ namespace GDO\Tests\Test;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT;
+use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
 use function PHPUnit\Framework\assertNotEmpty;
-use GDO\Tests\AutomatedTestCase;
 use function PHPUnit\Framework\assertNotEquals;
 
 /**
  * Test if all methods have a title and description.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
+ * @author gizmore
  */
 final class SEOTest extends AutomatedTestCase
 {
+
 	public function testIfKeywordsAreThere()
 	{
 		assertNotEmpty(t('keywords'), 'Test if keywords are set.');
 	}
-	
+
 	public function testAllMethods(): void
 	{
 		$this->doAllMethods();
 	}
-	
+
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		$this->methodSEOTest($mt);
 	}
-	
-	protected function getTestName(): string
-	{
-		return "SEO Test";
-	}
-	
+
 	private function methodSEOTest(GDT_MethodTest $mt)
 	{
 		$plugged = [];
-		
+
 		$method = $mt->method;
-		
+
 		foreach ($method->gdoParameters() as $gdt)
 		{
 			if ($name = $gdt->getName())
@@ -72,7 +68,7 @@ final class SEOTest extends AutomatedTestCase
 				}
 			}
 		}
-		
+
 // 		$method->inputs($plugged);
 		$method->appliedInputs($plugged);
 		$title = $method->getMethodTitle();
@@ -87,13 +83,14 @@ final class SEOTest extends AutomatedTestCase
 // 			);
 // 		}
 	}
-	
-	protected function runGDTTest(GDT $gdt): void
+
+	protected function getTestName(): string
 	{
+		return 'SEO Test';
 	}
-	
-	protected function runGDOTest(GDO $gdo): void
-	{
-	}
+
+	protected function runGDTTest(GDT $gdt): void {}
+
+	protected function runGDOTest(GDO $gdo): void {}
 
 }

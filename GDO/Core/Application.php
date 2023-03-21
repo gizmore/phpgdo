@@ -1,77 +1,82 @@
 <?php
 namespace GDO\Core;
 
-use GDO\UI\GDT_Page;
-use function GDO\Perf\xdebug_get_function_count;
 use GDO\Core\Method\Stub;
 use GDO\DB\Database;
+use GDO\UI\GDT_Page;
 
 /**
  * Application runtime data.
  * Global error methods.
  * Rendering mode.
  * Global Application time and microtime.
- * 
- * @author gizmore
- * @version 7.0.1
+ *
+ * @version 7.0.2
  * @since 3.0.0
+ * @author gizmore
  * @see GDT_Page
  */
 class Application extends GDT
 {
+
 	use WithVerb;
 	use WithInstance;
-	
-	public function __destruct()
-	{
-		parent::__destruct();
-		if (class_exists('GDO\\Core\\Logger', false))
-		{
-			Logger::flush();
-		}
-	}
-	
+
+	const EXIT_ERROR = -409;
+	const EXIT_FATAL = -1;
+
+	public static array $HREFS = [];
+
 	################################
 	### HREF COLLECTOR FOR TESTS ###
 	################################
-	public static array $HREFS = []; #PP#delete#
+	public static int $TIME; #PP#delete#
 
 	################
 	### App Time ###
 	################
-	public static int $TIME;
 	public static float $MICROTIME;
-	public static function time(float $time) : void
-	{
-		self::$TIME = (int)$time;
-		self::$MICROTIME = $time;
-	}
-	
-	public static function updateTime() : void
-	{
-		self::time(microtime(true));
-	}
-	
-	public static function getRuntime() : float
-	{
-		return microtime(true) - GDO_TIME_START;
-	}
-	
+	/**
+	 * HTTP Response Code.
+	 */
+	public static int $RESPONSE_CODE = 200;
+	/**
+	 * Current global rendering mode. @TODO make static for performance-
+	 * For example switches from html to cell to form to table etc.
+	 */
+	public static int $MODE = GDT::RENDER_WEBSITE;
+	/**
+	 * Detected rendering mode for invocation.
+	 */
+	public static int $MODE_DETECTED = GDT::RENDER_WEBSITE;
+	/**
+	 * Ajax mode is website/html without the html boilerplate.
+	 */
+	public bool $ajax = false;
+	/**
+	 * Toggle CLI force mode (mostly for tests)
+	 */
+	public bool $cli = false;
+	private array $themes;
+
 	/**
 	 * Call this at least.
 	 */
-	public static function init(): static
+	public static function init(): self
 	{
 		global $me;
 		$me = Stub::make();
 		return self::instance();
 	}
 
+	#################
+	### HTTP Code ###
+	#################
 
 	/**
 	 * Exit the application. On UnitTests we continue...
 	 */
-	public static function exit(int $code=0): void
+	public static function exit(int $code = 0): void
 	{
 		if (self::$INSTANCE->isUnitTests())
 		{
@@ -81,6 +86,117 @@ class Application extends GDT
 		}
 		die($code);
 	}
+
+	public function isUnitTests(): bool { return false; }
+
+	/**
+	 * Set the HTTP response code.
+	 */
+	public static function setResponseCode(int $code): void
+	{
+		if ($code > self::$RESPONSE_CODE)
+		{
+			self::$RESPONSE_CODE = $code;
+		}
+	}
+
+	public static function isCrash(): bool
+	{
+		return self::$RESPONSE_CODE >= 500;
+	}
+
+	public static function isSuccess(): bool
+	{
+		return self::$RESPONSE_CODE < 400;
+	}
+
+	#########################
+	### Application state ###
+	#########################
+
+	public static function isDev(): bool { return self::isEnv('dev'); }
+
+	private static function isEnv(string $env): bool { return def('GDO_ENV', 'dev') === $env; }
+
+	public static function isTes(): bool { return self::isEnv('tes'); }
+
+	# Render
+
+	public static function isPro(): bool { return self::isEnv('pro'); }
+
+	/**
+	 * Detect the rendering output mode / format.
+	 * GDO Applications currently support 6 formats, a 7th is planned: (GTK+App)
+	 */
+	public static function detectRenderMode(string $fmt): int
+	{
+		switch (strtoupper($fmt))
+		{
+			case 'TXT':
+			case 'CLI':
+				return GDT::RENDER_CLI;
+			case 'IRC':
+				return GDT::RENDER_IRC;
+			case 'WS':
+				return GDT::RENDER_BINARY;
+			case 'PDF':
+				return GDT::RENDER_PDF;
+			case 'JSON':
+				return GDT::RENDER_JSON;
+			case 'XML':
+				return GDT::RENDER_XML;
+			case 'GTK':
+				return GDT::RENDER_GTK;
+			default:
+				return GDT::RENDER_WEBSITE;
+		}
+	}
+
+	public function __destruct()
+	{
+		parent::__destruct();
+		if (class_exists('GDO\\Core\\Logger', false))
+		{
+			Logger::flush();
+		}
+	}
+
+	/**
+	 * Call when you create the next command in a loop.
+	 * Optionally remove all input, when a form was sent and wants to get cleared.
+	 */
+	public function reset(bool $removeInput = false): self
+	{
+		self::$RESPONSE_CODE = 200;
+		$_FILES = [];
+		GDT_Page::instance()->reset();
+		self::$MODE = self::$MODE_DETECTED;
+		self::updateTime();
+		return $this;
+	}
+
+	public static function updateTime(): void
+	{
+		self::time(microtime(true));
+	}
+
+	public static function time(float $time): void
+	{
+		self::$TIME = (int)$time;
+		self::$MICROTIME = $time;
+	}
+
+	public function hasError(): bool
+	{
+		return self::isError();
+	}
+
+	public static function isError(): bool
+	{
+		return self::$RESPONSE_CODE >= 400;
+	}
+
+	# Install / Tests
 
 	/**
 	 * Perf headers as cheap as possible.
@@ -94,159 +210,85 @@ class Application extends GDT
 		hdr(sprintf('X-GDO-MEM: %s', max([$m1, $m2])));
 		hdr(sprintf('X-GDO-TIME: %.01fms', $this->getRuntime() * 1000.0));
 	}
-	
-	#################
-	### HTTP Code ###
-	#################
-	/**
-	 * HTTP Response Code.
-	 */
-	public static int $RESPONSE_CODE = 200;
-	
-	/**
-	 * Set the HTTP response code.
-	 */
-	public static function setResponseCode(int $code): void
+
+	public static function getRuntime(): float
 	{
-		if ($code > self::$RESPONSE_CODE)
-		{
-			self::$RESPONSE_CODE = $code;
-		}
-	}
-	
-	public static function isCrash() : bool
-	{
-		return self::$RESPONSE_CODE >= 500;
+		return microtime(true) - GDO_TIME_START;
 	}
 
-	public static function isError() : bool
-	{
-		return self::$RESPONSE_CODE >= 400;
-	}
-	
-	public static function isSuccess() : bool
-	{
-		return self::$RESPONSE_CODE < 400;
-	}
-	
-	#########################
-	### Application state ###
-	#########################
-	public function isTLS() : bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
-	public function isAPI() : bool { return $this->isAjax() || $this->isJSON() || $this->isXML(); }
-	public function isWebserver() : bool { return !$this->isCLI(); }
-	# Render
-	public function isCLI() : bool { return $this->cli; }
-	public function isAjax() : bool { return $this->ajax; }
-	public function isWebsocket() : bool { return false; }
-	public function isHTML() : bool { return self::$MODE_DETECTED >= 10; }
-	public function isJSON() : bool { return self::$MODE_DETECTED === GDT::RENDER_JSON; }
-	public function isXML() : bool { return self::$MODE_DETECTED === GDT::RENDER_XML; }
-	public function isPDF() : bool { return self::$MODE_DETECTED === GDT::RENDER_PDF; }
-	public function isGTK() : bool { return self::$MODE_DETECTED === GDT::RENDER_GTK; }
-	# Install / Tests
-	public function isInstall() : bool { return false; }
-	public function isUnitTests() : bool { return false; }
 	# Env
-	public static function isDev() : bool { return self::isEnv('dev'); }
-	public static function isTes() : bool { return self::isEnv('tes'); }
-	public static function isPro() : bool { return self::isEnv('pro'); }
-	private static function isEnv(string $env) : bool { return def('GDO_ENV', 'dev') === $env; }
-	
-	
-	/**
-	 * Is a session handler supported?
-	 */
-	public function hasSession() : bool
-	{
-		return module_enabled('Session');
-	}
-	
-	/**
-	 * Call when you create the next command in a loop.
-	 * Optionally remove all input, when a form was sent and wants to get cleared.
-	 */
-	public function reset(bool $removeInput=false): static
-	{
-		self::$RESPONSE_CODE = 200;
-		$_FILES = [];
-		GDT_Page::instance()->reset();
-		self::$MODE = self::$MODE_DETECTED;
-		self::updateTime();
-		return $this;
-	}
-	
+
+	public function isTLS(): bool { return (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off'); }
+
+	public function isAPI(): bool { return $this->isAjax() || $this->isJSON() || $this->isXML(); }
+
+	public function isAjax(): bool { return $this->ajax; }
+
+	public function isJSON(): bool { return self::$MODE_DETECTED === GDT::RENDER_JSON; }
+
+	public function isXML(): bool { return self::$MODE_DETECTED === GDT::RENDER_XML; }
+
+	public function isWebserver(): bool { return !$this->isCLI(); }
+
 	###################
 	### Render Mode ###
 	###################
+
+	public function isCLI(): bool { return $this->cli; }
+
+	public function isWebsocket(): bool { return false; }
+
+	public function isHTML(): bool { return self::$MODE_DETECTED >= 10; }
+
+	public function isPDF(): bool { return self::$MODE_DETECTED === GDT::RENDER_PDF; }
+
+	public function isGTK(): bool { return self::$MODE_DETECTED === GDT::RENDER_GTK; }
+
+	############
+	### Ajax ###
+	############
+
+	public function isInstall(): bool { return false; }
+
 	/**
-	 * Detect the rendering output mode / format.
-	 * GDO Applications currently support 6 formats, a 7th is planned: (GTK+App)
+	 * Is a session handler supported?
 	 */
-	public static function detectRenderMode(string $fmt) : int
+	public function hasSession(): bool
 	{
-		switch (strtoupper($fmt))
-		{
-			case 'TXT':
-			case 'CLI': return GDT::RENDER_CLI;
-			case 'IRC': return GDT::RENDER_IRC;
-			case 'WS': return GDT::RENDER_BINARY;
-			case 'PDF': return GDT::RENDER_PDF;
-			case 'JSON': return GDT::RENDER_JSON;
-			case 'XML': return GDT::RENDER_XML;
-			case 'GTK': return GDT::RENDER_GTK;
-			default: return GDT::RENDER_WEBSITE;
-		}
+		return module_enabled('Session');
 	}
-	
-	/**
-	 * Current global rendering mode. @TODO make static for performance-
-	 * For example switches from html to cell to form to table etc.
-	 */
-	public static int $MODE = GDT::RENDER_WEBSITE;
-	
-	/**
-	 * Detected rendering mode for invocation.
-	 */
-	public static int $MODE_DETECTED = GDT::RENDER_WEBSITE;
+
+	################
+	### CLI Mode ###
+	################
+
+	public function modeDetected(int $mode): self
+	{
+		self::$MODE_DETECTED = $mode;
+		return $this->mode($mode);
+	}
 
 	/**
 	 * Change current rendering mode.
 	 * Optionally set detected mode to this.
 	 */
-	public function mode(int $mode): static
+	public function mode(int $mode): self
 	{
 		self::$MODE = $mode;
 		return $this;
 	}
-	
-	public function modeDetected(int $mode): static
-	{
-		self::$MODE_DETECTED = $mode;
-		return $this->mode($mode);
-	}
-	
-	############
-	### Ajax ###
-	############
-	/**
-	 * Ajax mode is website/html without the html boilerplate.
-	 */
-	public bool $ajax = false;
-	public function ajax(bool $ajax): static
+
+	##############
+	### Themes ###
+	##############
+
+	public function ajax(bool $ajax): self
 	{
 		$this->ajax = $ajax;
 		return $this;
 	}
-	
-	################
-	### CLI Mode ###
-	################
-	/**
-	 * Toggle CLI force mode (mostly for tests)
-	 */
-	public bool $cli = false;
-	public function cli(bool $cli=true): static
+
+	public function cli(bool $cli = true): self
 	{
 		if ($this->cli = $cli)
 		{
@@ -254,13 +296,17 @@ class Application extends GDT
 		}
 		return $this;
 	}
-	
-	##############
-	### Themes ###
-	##############
-	private array $themes;
-	
-	public function &getThemes() : array
+
+	public function hasTheme(string $theme): bool
+	{
+		return isset($this->getThemes()[$theme]);
+	}
+
+	##################
+	### JSON Input ###
+	##################
+
+	public function &getThemes(): array
 	{
 		if (!isset($this->themes))
 		{
@@ -269,22 +315,16 @@ class Application extends GDT
 		}
 		return $this->themes;
 	}
-	
-	public function hasTheme(string $theme) : bool
-	{
-		return isset($this->getThemes()[$theme]);
-	}
-	
-	##################
-	### JSON Input ###
-	##################
+
 	/**
 	 * Turn JSON requests into normal Requests.
 	 */
-	public function handleJSONRequests() : void
+	public function handleJSONRequests(): void
 	{
-		if (isset($_SERVER["CONTENT_TYPE"]) &&
-			($_SERVER["CONTENT_TYPE"] === 'application/json'))
+		if (
+			isset($_SERVER['CONTENT_TYPE']) &&
+			($_SERVER['CONTENT_TYPE'] === 'application/json')
+		)
 		{
 			$data = file_get_contents('php://input');
 			if ($data = json_decode($data, true))
@@ -292,11 +332,6 @@ class Application extends GDT
 				$_REQUEST = array_merge($_REQUEST, $data);
 			}
 		}
-	}
-
-	public function hasError(): bool
-	{
-		return self::isError();
 	}
 
 }

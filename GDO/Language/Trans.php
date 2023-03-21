@@ -1,162 +1,249 @@
 <?php
 namespace GDO\Language;
 
-use GDO\Util\FileUtil;
-use GDO\UI\GDT_Error;
-use GDO\DB\Cache;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDT;
 use GDO\Core\Logger;
+use GDO\DB\Cache;
+use GDO\Util\FileUtil;
 
 /**
- * Trans; a very cheap I18n API.
+ * Trans - a very cheap, high perfomance, translation API.
  * All data is stored in a single Hashmap to reuse translation data.
- * 
- * Uses [Filecache](../Core/Cache.php)
- * 
- * @TODO: Trans: Check if ini file parsing or other techniques would be faster than php include to populate the hashmap.
+ *
  * @TODO: Trans: In early loading state errors are handled badly.
- * 
- * @author gizmore
- * @version 7.0.2
+ *
+ * @version 7.0.3
  * @since 1.0.0
+ * @author gizmore
  * @see Cache
  */
 final class Trans
 {
-	public static bool $FILE_CACHE = false;
-	public static string $ISO = GDO_LANGUAGE;
 
-	private static bool $HAS_LOADED_FILE_CACHE = false;
-	
+//	public static bool $FILE_CACHE = false;
+	public const CACHE_KEY_PREFIX = 'trans_'; # Current ISO
+	public static string $ISO = GDO_LANGUAGE;
 	/**
-	 * Base pathes for translation data files.
+	 * Base pathes for all translation data files.
+	 *
 	 * @var string[]
 	 */
 	public static array $PATHS = [];
-	
 	/**
 	 * Translation data cache.
+	 *
 	 * @var string[string]
 	 */
 	public static array $CACHE = [];
-	
-	/**
-	 * Are all pathes added? # @TODO: This can be removed?
-	 */
-	private static bool $INITED = false;
-	
 	/**
 	 * @TODO Shall sitename be appended to seo titles? Implement it? Shall be an option in module UI or Core.
+	 * @deprecated
 	 */
 	public static bool $NO_SITENAME = false;
-	
 	/**
 	 * Number of missing translation keys for stats and testing.
 	 */
 	public static int $MISS = 0;
-	
 	/**
 	 * The keys that are missing in translation.
+	 *
 	 * @var string[]
 	 */
 	public static array $MISSING = [];
-	
+	/**
+	 * Is lazy cache loading available for ISO key?
+	 *
+	 * @var bool[]
+	 */
+	private static array $HAS_CACHE = [];
+	/**
+	 * Are all pathes added? # @TODO: This can be removed? - just install process is ugly?
+	 */
+	private static bool $INITED = false; #PP#delete#
+
 	/**
 	 * Set the current ISO.
 	 */
-	public static function setISO(string $iso) : void
+	public static function setISO(string $iso): void
 	{
-	    if ($iso !== self::$ISO)
-	    {
-    		# Set Trans locale
-    		self::$ISO = $iso;
-    		# Generate utf8 locale identifier, e.g: de_DE.utf8
-    		$iso = $iso . '_' . strtoupper($iso) . '.utf-8';
-   			setlocale(LC_TIME, $iso); # Bug... sometimes it needs two calls?!
-	    }
+		if ($iso !== self::$ISO)
+		{
+			# Set Trans locale
+			self::$ISO = $iso;
+			# Generate utf8 locale identifier, e.g: de_DE.utf8
+			$iso = $iso . '_' . strtoupper($iso) . '.utf-8';
+			setlocale(LC_TIME, $iso); # Bug... sometimes it needs two calls?!
+		}
 	}
-	
+
 	/**
 	 * Show number of registered translation data base pathes.
 	 * In case we used the filecache this is set to 1.
 	 */
-	public static function numFiles() : int
+	public static function numFiles(): int
 	{
-	    if (self::$HAS_LOADED_FILE_CACHE)
-	    {
-	        return 1;
-	    }
-		return count(self::$PATHS);
+		return count(self::$PATHS) ?? 1;
 	}
 
 	/**
 	 * Add a translation file to the language file pathes.
 	 */
-	public static function addPath(string $path) : void
+	public static function addPath(string $path): void
 	{
-	    self::$PATHS[] = $path;
+		self::$PATHS[$path] = $path;
 	}
-	
+
 	/**
 	 * Set inited and clear cache.
+	 *
 	 * @TODO separate calls. maybe cache should not be cleared quickly? no idea. Make performance tests for language loading on init.
 	 */
-	public static function inited(bool $inited = true) : void
+	public static function inited(bool $inited = true): void
 	{
-	    if (!$inited)
-	    {
-	    	self::$CACHE = [];
-	    	self::$PATHS = [];
-	    }
+//	    if (!$inited)
+//	    {
+////			self::$PATHS = [];
+//			self::$CACHE = [];
+//			self::$HAS_CACHE = [];
+//	    }
 		self::$INITED = $inited;
 	}
-	
+
 	/**
 	 * Get the cache for an ISO.
+	 *
 	 * @return string[string]
 	 */
-	public static function getCache(string $iso) : array
+	public static function getCache(string $iso): array
 	{
 		return self::load($iso);
 	}
-	
+
 	/**
 	 * Load a translation data into and from cache.
+	 *
 	 * @return string[string]
 	 */
-	public static function &load(string $iso) : array
+	public static function load(string $iso): array
 	{
-		if (!isset(self::$CACHE[$iso]))
-		{
-			return self::reload($iso);
-		}
-		return self::$CACHE[$iso];
+		return isset(self::$CACHE[$iso]) ? self::$CACHE[$iso] : self::reload($iso);
 	}
-	
+
+	/**
+	 * @TODO: This algorithm is bad and i should feel bad.
+	 */
+	private static function reload(string $iso): array
+	{
+//		$trans = [];
+//		$trans2 = [];
+
+		# Try cache
+		if (isset(self::$HAS_CACHE[$iso]))
+		{
+			self::$CACHE[$iso] = Cache::fileGetSerialized(self::getCacheKey($iso));
+//			self::$HAS_LOADED_FILE_CACHE = true;
+			return self::$CACHE[$iso]; # lazy
+//		    $content = Cache::fileGetSerialized($key);
+//		    self::$CACHE[$iso] = $content;
+//		    self::$HAS_LOADED_FILE_CACHE = true;
+//		    return self::$CACHE[$iso];
+		}
+
+		# Build lang map
+//		if (self::$INITED)
+//		{
+		foreach (self::$PATHS as $path)
+		{
+			$pathISO = "{$path}_{$iso}.php";
+			if (FileUtil::isFile($pathISO))
+			{
+//				    try
+//				    {
+//				    }
+//				    catch (\Throwable $e)
+//				    {
+//				        self::$CACHE[$iso] = $trans;
+//				        echo GDT_Error::make()->exception($e)->renderHTML();
+//				    }
+			}
+			else
+			{
+				$pathISO = "{$path}_en.php";
+//					$trans2 = include($pathEN);
+//					try
+//					{
+//						if ($t2 = @include($pathEN))
+//						{
+//							$trans2[] = $t2;
+//						}
+//					}
+//					catch (\Throwable $e)
+//					{
+//					    self::$CACHE[$iso] = $trans;
+//					    echo GDT_Error::responseException($e)->renderHTML();
+//					    throw new GDO_Error('err_langfile_corrupt', [$pathEN]);
+//					}
+			}
+			self::$CACHE[$iso] = isset(self::$CACHE[$iso]) ? self::$CACHE[$iso] : [];
+			self::$CACHE[$iso] = array_merge(self::$CACHE[$iso], include($pathISO));
+		}
+//			$trans =
+//			$loaded = $trans;
+//			$trans = $loaded;
+
+		# Save cache
+//    		if (self::$FILE_CACHE)
+//    		{
+//    		    FileUtil::createDir(Cache::filePath());
+//    		    Cache::fileSetSerialized($key, $trans);
+//    		}
+//		}
+
+		if (self::$INITED)
+		{
+			Cache::fileSetSerialized(self::getCacheKey($iso), self::$CACHE[$iso]);
+		}
+
+		return isset(self::$CACHE[$iso]) ? self::$CACHE[$iso] : GDT::EMPTY_ARRAY;
+	}
+
+	private static function getCacheKey(string $iso): string
+	{
+		return self::CACHE_KEY_PREFIX . $iso;
+#		$key = md5("$iso;" . implode(',', self::$PATHS));
+		return $key;
+	}
+
+	public static function clearCache(): void
+	{
+		foreach (GDO_Language::gdoSupportedISOs() as $iso)
+		{
+			Cache::fileRemove(self::getCacheKey($iso));
+		}
+	}
+
 	/**
 	 * Translate into current ISO.
-	 * @return string|string[]
 	 */
-	public static function t(string $key, array $args=null)
+	public static function t(string $key, array $args = null): string|array
 	{
 		return self::tiso(self::$ISO, $key, $args);
 	}
-	
+
 	/**
 	 * Translate key into a language.
-	 * @return string|string[]
 	 */
-	public static function tiso(string $iso, string $key, array $args=null)
+	public static function tiso(string $iso, string $key, array $args = null): string|array
 	{
 		$cache = self::load($iso);
-		if (isset($cache[$key]))
+		if (isset($cache[$key])) # @TODO: aggresive programming - remove the if!
 		{
-		    $text = $cache[$key];
+			$text = $cache[$key];
 			if ($args)
 			{
 				if (!($text = @vsprintf($text, $args)))
 				{
-					self::missing($iso, $key);
+					self::missing($iso, $key); #PP#delete#
 					$text = $cache[$key] . ': ';
 					$text .= json_encode($args);
 				}
@@ -164,12 +251,11 @@ final class Trans
 		}
 		else # Fallback key + printargs
 		{
-			self::missing($iso, $key);
-		    $text = $key;
+			self::missing($iso, $key); #PP#delete#
+			$text = $key;
 			if ($args)
 			{
-				$text .= ': ';
-				$text .= json_encode($args);
+				$text .= ': ' . json_encode($args);
 			}
 		}
 		return $text;
@@ -177,8 +263,9 @@ final class Trans
 
 	/**
 	 * When a key is missing, log it.
+	 * Optionally removed via PP preprocessor.
 	 */
-	private static function missing(string $iso, string $key, bool $logMissing=false) : bool
+	private static function missing(string $iso, string $key, bool $logMissing = false): bool
 	{
 		#PP#start#
 		if (self::$INITED && $logMissing)
@@ -191,105 +278,28 @@ final class Trans
 		return false;
 	}
 
-	private static function getCacheKey(string $iso) : string
-	{
-		$key = md5("$iso;" . implode(',', self::$PATHS));
-		return $key;
-	}
-	
-	/**
-	 * @TODO: This algorithm is bad and i should feel bad.
-	 */
-	private static function &reload(string $iso) : array
-	{
-		$trans = [];
-		$trans2 = [];
-		
-		# Try cache
-		$key = self::getCacheKey($iso);
-		if (self::$FILE_CACHE && Cache::fileHas($key))
-		{
-		    $content = Cache::fileGetSerialized($key);
-		    self::$CACHE[$iso] = $content;
-		    self::$HAS_LOADED_FILE_CACHE = true;
-		    return self::$CACHE[$iso];
-		}
-		
-		# Build lang map
-		if (self::$INITED)
-		{
-			foreach (self::$PATHS as $path)
-			{
-			    $pathISO = "{$path}_{$iso}.php";
-				if (FileUtil::isFile($pathISO))
-				{
-				    try
-				    {
-						$trans2[] = include($pathISO);
-				    }
-				    catch (\Throwable $e)
-				    {
-				        self::$CACHE[$iso] = $trans;
-				        echo GDT_Error::make()->exception($e)->renderHTML();
-				    }
-				}
-				else
-				{
-				    $pathEN= "{$path}_en.php";
-					try
-					{
-						if ($t2 = @include($pathEN))
-						{
-							$trans2[] = $t2;
-						}
-					}
-					catch (\Throwable $e)
-					{
-					    self::$CACHE[$iso] = $trans;
-					    echo GDT_Error::responseException($e)->renderHTML();
-					    throw new GDO_Error('err_langfile_corrupt', [$pathEN]);
-					}
-				}
-			}
-			$trans = array_merge(...$trans2);
-			$loaded = $trans;
-			$trans = $loaded;
-    		self::$CACHE[$iso] = $trans;
-    		
-    		# Save cache
-    		if (self::$FILE_CACHE)
-    		{
-    		    FileUtil::createDir(Cache::filePath());
-    		    Cache::fileSetSerialized($key, $trans);
-    		}
-		}
-		
-		return $trans;
-	}
-	
 	/**
 	 * Check if a translation key exists.
 	 */
-	public static function hasKey(string $key, bool $logMissing=false) : bool
+	public static function hasKey(string $key, bool $logMissing = false): bool
 	{
-	    return self::hasKeyIso(self::$ISO, $key, $logMissing);
+		return self::hasKeyIso(self::$ISO, $key, $logMissing);
 	}
 
 	/**
 	 * Check if a translation key exists for an ISO.
 	 */
-	public static function hasKeyIso(string $iso, string $key, bool $logMissing=false) : bool
+	public static function hasKeyIso(string $iso, string $key, bool $logMissing = false): bool
 	{
 		$cache = self::load($iso);
-		return isset($cache[$key]) ? true : self::missing($iso, $key, $logMissing);
+		return isset($cache[$key]) || self::missing($iso, $key, $logMissing);
 	}
-	
+
 }
+
 #############
 ### Setup ###
 #############
-#PP#start#
-deff('GDO_LANGUAGE', 'en');
-deff('GDO_FILECACHE', false);
-#PP#end#
-Trans::$FILE_CACHE = (bool) GDO_FILECACHE;
+deff('GDO_LANGUAGE', 'en'); #PP#delete#
+deff('GDO_FILECACHE', false); #PP#delete#
+//Trans::$FILE_CACHE = (bool)GDO_FILECACHE;

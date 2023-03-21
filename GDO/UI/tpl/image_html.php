@@ -1,9 +1,12 @@
 <?php
 namespace GDO\UI\tpl;
-/** @var $field \GDO\UI\GDT_Image **/
+
+use GDO\UI\GDT_Image;
+
+/** @var $field GDT_Image * */
 ?>
 <span class="gdt-image"><img
 <?=$field->htmlID()?>
-<?=$field->htmlName()?>
-<?=$field->htmlSrc()?>
-<?=$field->htmlAttributes()?> /></span>
+		<?=$field->htmlName()?>
+		<?=$field->htmlSrc()?>
+		<?=$field->htmlAttributes()?> /></span>

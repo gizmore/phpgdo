@@ -2,30 +2,30 @@
 namespace GDO\User;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_Error;
+use GDO\Core\GDT;
 use GDO\Core\GDT_AutoInc;
+use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDT_Index;
+use GDO\Core\ModuleLoader;
+use GDO\Date\Module_Date;
 use GDO\Date\Time;
-use GDO\Session\GDO_Session;
-use GDO\Core\GDT_DeletedAt;
 use GDO\DB\Query;
 use GDO\DB\Result;
-use GDO\Date\Module_Date;
 use GDO\Language\Module_Language;
 use GDO\Language\Trans;
-use GDO\Core\GDT;
-use GDO\Core\ModuleLoader;
-use GDO\Core\GDO_Error;
+use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Card;
 
 /**
  * The holy user class.
  * Most user related fields are in other module settings.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 1.0.0
+ * @author gizmore
  * @see GDO
  * @see GDT_User
  * @see Module_Date
@@ -33,15 +33,179 @@ use GDO\UI\GDT_Card;
  */
 final class GDO_User extends GDO
 {
-	const GUEST_NAME_PREFIX = '~';
-	
+
+	public const GUEST_NAME_PREFIX = '~';
+
 	#############
 	### Cache ###
 	#############
 	# Instances
 	private static ?self $SYSTEM = null;
 	private static self $CURRENT;
-	public function clearCache(): static
+
+	public static function system(): self
+	{
+		if (!isset(self::$SYSTEM))
+		{
+			self::$SYSTEM = self::findById('1');
+		}
+		return self::$SYSTEM;
+	}
+
+	###########
+	### GDO ###
+	###########
+
+	/**
+	 * @return GDO_User[]
+	 */
+	public static function admins(): array
+	{
+		static $admins;
+		if ($admins === null)
+		{
+
+			$admins = self::withPermission('admin');
+		}
+		return $admins;
+	}
+
+	/**
+	 * Get all users with a permisison.
+	 *
+	 * @return GDO_User[]
+	 */
+	public static function withPermission(string $permission): array
+	{
+		return self::withPermissionQuery($permission)->exec()->fetchAllObjects();
+	}
+
+	###############
+	### Factory ###
+	###############
+
+	/**
+	 * Get the query to get all users with a permisison.
+	 */
+	public static function withPermissionQuery(string $permission): Query
+	{
+		return GDO_UserPermission::table()->
+		select('perm_user_id_t.*')->
+		joinObject('perm_perm_id')->
+		joinObject('perm_user_id')->
+		fetchTable(self::table())->where('perm_name=' . quote($permission));
+	}
+
+	/**
+	 * @return GDO_User[]
+	 */
+	public static function staff(): array
+	{
+		static $staff;
+		if ($staff === null)
+		{
+			$staff = self::withPermission('staff');
+		}
+		return $staff;
+	}
+
+	/**
+	 * Get current user.
+	 * Not neccisarilly via session!
+	 */
+	public static function current(): self
+	{
+		return self::$CURRENT;
+	}
+
+	/**
+	 * Set the current user and their environment.
+	 */
+	public static function setCurrent(GDO_User $user): self
+	{
+		self::$CURRENT = $user;
+		Time::setTimezone($user->getTimezone());
+		Trans::setISO($user->getLangISO());
+		return $user;
+	}
+
+	/**
+	 * Get the appropiate timezone object for this user.
+	 */
+	public function getTimezone(): string
+	{
+		$tz = Module_Date::instance()->cfgUserTimezoneId($this);
+		if ($tz > 1)
+		{
+			return $tz;
+		}
+		if (module_enabled('Session'))
+		{
+			return GDO_Session::get('timezone', '1');
+		}
+		return Time::UTC;
+	}
+
+	public function getLangISO(): string { return Module_Language::instance()->cfgUserLangID($this); }
+
+	/**
+	 * Get a user by login, for auth mechanisms
+	 *
+	 * @return self
+	 * @todo getByLogin shall use a hook for mail module to login via email.
+	 */
+	public static function getByLogin(string $name): ?self
+	{
+		return self::getByName($name);
+	}
+
+	public static function getByName(string $name): ?self
+	{
+		return self::getBy('user_name', $name);
+	}
+
+	public static function getSingleWithSetting(string $moduleName, string $key, string $var, string $op = '='): ?self
+	{
+		$users = self::withSetting($moduleName, $key, $var, $op);
+		return count($users) === 1 ? $users[0] : null;
+	}
+
+	/**
+	 * Get all users with a specified setting.
+	 * Optionally an SQL like match is performed.
+	 *
+	 * @return self[]
+	 */
+	public static function withSetting(string $moduleName, string $key, string $var, string $op = '='): array
+	{
+		return self::withSettingResult($moduleName, $key, $var, $op)->fetchAllObjects();
+	}
+
+	public static function withSettingResult(string $moduleName, string $key, string $var, string $op = '='): Result
+	{
+		return GDO_UserSetting::usersWith($moduleName, $key, $var, $op);
+	}
+
+	##############
+	### Getter ###
+	##############
+
+	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op = '='): self
+	{
+		$users = self::withSetting($moduleName, $key, $var, $op);
+		$c = count($users);
+		switch ($c)
+		{
+			case 0:
+				self::notFoundException("$key = $var");
+			case 1:
+				return $users[0];
+			default:
+				throw new GDO_Error('err_user_ambigious', [$c, $key, $op, $var]);
+		}
+	}
+
+	public function clearCache(): self
 	{
 		$currId = self::$CURRENT->getID();
 		self::$SYSTEM = null;
@@ -58,12 +222,23 @@ final class GDO_User extends GDO
 		}
 		return $this;
 	}
-	
-	###########
-	### GDO ###
-	###########
-	public function isTestable() : bool { return false; }
-	public function gdoColumns() : array
+
+	public function getID(): ?string { return $this->gdoVar('user_id'); }
+
+	/**
+	 * Get guest ghost user.
+	 */
+	public static function ghost(): self
+	{
+		return self::blank([
+			'user_id' => '0',
+			'user_type' => 'ghost',
+		]);
+	}
+
+	public function isTestable(): bool { return false; }
+
+	public function gdoColumns(): array
 	{
 		return [
 			GDT_AutoInc::make('user_id'),
@@ -76,225 +251,201 @@ final class GDO_User extends GDO
 			GDT_Index::make('usertype_index')->indexColumns('user_type'),
 		];
 	}
-	
-	###############
-	### Factory ###
-	###############
-	public function isSystem() : bool
-	{
-		return $this->isType(GDT_UserType::SYSTEM);
-	}
-	
-	public static function system(): static
-	{
-		if (!isset(self::$SYSTEM))
-		{
-			self::$SYSTEM = self::findById('1');
-		}
-		return self::$SYSTEM;
-	}
-	
-	/**
-	 * @return GDO_User[]
-	 */
-	public static function admins() : array
-	{
-		static $admins;
-		if ($admins === null)
-		{
 
-			$admins = self::withPermission('admin');
-		}
-		return $admins;
-	}
-	
-	/**
-	 * @return GDO_User[]
-	 */
-	public static function staff() : array
-	{
-		static $staff;
-		if ($staff === null)
-		{
-			$staff = self::withPermission('staff');
-		}
-		return $staff;
-	}
-	
-	/**
-	 * Get all users with a permisison.
-	 * @return GDO_User[]
-	 */
-	public static function withPermission(string $permission) : array
-	{
-		return self::withPermissionQuery($permission)->exec()->fetchAllObjects();
-	}
-	
-	/**
-	 * Get the query to get all users with a permisison.
-	 */
-	public static function withPermissionQuery(string $permission) : Query
-	{
-		return GDO_UserPermission::table()->
-			select('perm_user_id_t.*')->
-			joinObject('perm_perm_id')->
-			joinObject('perm_user_id')->
-			fetchTable(self::table())->where('perm_name=' . quote($permission));
-	}
-	
-	/**
-	 * Get current user.
-	 * Not neccisarilly via session!
-	 */
-	public static function current(): static
-	{
-		return self::$CURRENT;
-	}
-	
-	/**
-	 * Set the current user and their environment.
-	 */
-	public static function setCurrent(GDO_User $user): static
-	{
-		self::$CURRENT = $user;
-		Time::setTimezone($user->getTimezone());
-		Trans::setISO($user->getLangISO());
-		return $user;
-	}
-	
-	/**
-	 * Get guest ghost user.
-	 */
-	public static function ghost(): static
-	{
-		return self::blank([
-			'user_id' => '0',
-			'user_type' => 'ghost'
-		]);
-	}
-	
-	public static function getByName(string $name) : ?self
-	{
-		return self::getBy('user_name', $name);
-	}
-	
-	/**
-	 * Get a user by login, for auth mechanisms
-	 * 
-	 * @todo getByLogin shall use a hook for mail module to login via email.
-	 * @return self
-	 */
-	public static function getByLogin(string $name) : ?self 
-	{
-		return self::getByName($name);
-	}
-	
-	##############
-	### Getter ###
-	##############
-	public function getID() : ?string { return $this->gdoVar('user_id'); }
-	public function getName() : ?string { return $this->gdoVar('user_name'); }
-	public function getType() : string { return $this->gdoVar('user_type'); }
-	public function getLangISO() : string { return Module_Language::instance()->cfgUserLangID($this); }
-	public function getUserName() : ?string { return $this->gdoVar('user_name'); }
-	public function getGuestName() : ?string { return $this->gdoVar('user_guest_name'); }
-	
 	#############
 	### HREFs ###
 	#############
-	public function href_edit() : string
+
+	public function isSystem(): bool
 	{
-		return href('Admin', 'UserEdit', "&user={$this->getID()}");
+		return $this->isType(GDT_UserType::SYSTEM);
 	}
-	
-	public function href_perm_add() : string
-	{
-		return href('Admin', 'PermissionGrant', "&perm_user_id={$this->getID()}");
-	}
-	
-	public function hrefProfile() : string
-	{
-		return href('User', 'Profile', "&for={$this->renderUserName()}");
-	}
-	
+
+	public function isType($type): bool { return $this->getType() === $type; }
+
+	public function getType(): string { return $this->gdoVar('user_type'); }
+
 	############
 	### Type ###
 	############
-	public function isBot() : bool { return $this->isType(GDT_UserType::BOT); }
-	public function isLink() : bool { return $this->isType(GDT_UserType::LINK); }
-	public function isGhost() : bool { return $this->isType(GDT_UserType::GHOST); }
-	public function isAnon() : bool { return $this->isGuest() && (!$this->getGuestName()); }
-	public function isMember() : bool { return $this->isType(GDT_UserType::MEMBER); }
-	public function isType($type) : bool { return $this->getType() === $type; }
-	public function isGuest(bool $andAuthenticated=true) : bool
+
+	public function href_edit(): string
+	{
+		return href('Admin', 'UserEdit', "&user={$this->getID()}");
+	}
+
+	public function href_perm_add(): string
+	{
+		return href('Admin', 'PermissionGrant', "&perm_user_id={$this->getID()}");
+	}
+
+	public function hrefProfile(): string
+	{
+		return href('User', 'Profile', "&for={$this->renderUserName()}");
+	}
+
+	public function renderUserName(): string
+	{
+		if ($name = $this->getName())
+		{
+			return html($name);
+		}
+
+		$p = self::GUEST_NAME_PREFIX;
+		if ($name = $this->getGuestName())
+		{
+			return $p . html($name) . $p;
+		}
+
+		$pp = $p . $p;
+		if ($this->isGhost())
+		{
+			return $pp . t('ghost') . $pp;
+		}
+		return $pp . t('guest') . $pp;
+	}
+
+	public function getName(): ?string { return $this->gdoVar('user_name'); }
+
+	public function getGuestName(): ?string { return $this->gdoVar('user_guest_name'); }
+
+	public function isGhost(): bool { return $this->isType(GDT_UserType::GHOST); }
+
+	public function renderName(): string
+	{
+		return $this->renderUserName();
+	}
+
+	################
+	### Timezone ###
+	################
+
+	public function renderCard(): string
+	{
+		return $this->getCard()->render();
+	}
+
+	public function getCard(): GDT_Card
+	{
+		$card = GDT_Card::make('user-card-' . $this->getID());
+		$card->titleRaw($this->renderProfileLink());
+		return $card;
+	}
+
+	public function renderProfileLink(bool $nickname = true, ?int $avatar = 42, bool $level = true): string
+	{
+		return GDT_ProfileLink::make()->gdo($this)->avatarSize($avatar)->avatar(!!$avatar)->nickname($nickname)->user($this)->level($level)->render();
+	}
+
+	#############
+	### Perms ###
+	#############
+
+	public function gdoAfterDelete(GDO $gdo): void
+	{
+		GDT_Hook::callWithIPC('UserDeleted', $gdo, $this->isPersisted());
+	}
+
+	public function isBot(): bool { return $this->isType(GDT_UserType::BOT); }
+
+	public function isLink(): bool { return $this->isType(GDT_UserType::LINK); }
+
+	public function isAnon(): bool { return $this->isGuest() && (!$this->getGuestName()); }
+
+	public function isGuest(bool $andAuthenticated = true): bool
 	{
 		$a = $andAuthenticated;
 		return $this->isType(GDT_UserType::GUEST) ?
 			($a ? (!!$this->getGuestName()) : true) : # guest type checks for auth or true
 			false; # non guest
 	}
-	
+
+	public function isMember(): bool { return $this->isType(GDT_UserType::MEMBER); }
+
 	/**
 	 * Check if it is a legit user.
 	 * Either a guest with a name or a member.
-	 * 
-	 * @return boolean
+	 *
+	 * @return bool
 	 */
-	public function isUser() : bool
+	public function isUser(): bool
 	{
 		switch ($this->getType())
 		{
-			case GDT_UserType::GUEST: return !!$this->getGuestName();
-			case GDT_UserType::MEMBER: return true;
-			default: return false;
+			case GDT_UserType::GUEST:
+				return !!$this->getGuestName();
+			case GDT_UserType::MEMBER:
+				return true;
+			default:
+				return false;
 		}
 	}
-	
-	################
-	### Timezone ###
-	################
-	/**
-	 * Get the appropiate timezone object for this user.
-	 */
-	public function getTimezone() : string
-	{
-		$tz = Module_Date::instance()->cfgUserTimezoneId($this);
-		if ($tz > 1)
-		{
-			return $tz;
-		}
-		if (module_enabled('Session'))
-		{
-			return GDO_Session::get('timezone', '1');
-		}
-		return Time::UTC;
-	}
-	
-	public function hasTimezone() : bool
+
+	public function hasTimezone(): bool
 	{
 		return $this->getTimezone() > 1;
 	}
-	
+
 	public function getTimezoneObject()
 	{
 		return Time::getTimezoneObject($this->getTimezone());
 	}
-	
-	#############
-	### Perms ###
-	#############
+
 	/**
 	 * Not really checking auth status, but check for a user or guest name, then this user could be authed. if it's the current user you are surely authed. weird!
 	 */
-	public function isAuthenticated() : bool
+	public function isAuthenticated(): bool
 	{
 		return $this->getGuestName() || $this->getUserName();
 	}
-	
+
+	public function getUserName(): ?string { return $this->gdoVar('user_name'); }
+
+	public function hasPermissionID(string $permissionId = null): bool
+	{
+		if ($permissionId)
+		{
+			$permission = GDO_Permission::findById($permissionId);
+			return $this->hasPermissionObject($permission);
+		}
+		return true;
+	}
+
+	##################
+	### Persistent ###
+	##################
+
+	public function hasPermissionObject(GDO_Permission $permission): bool
+	{
+		return $this->hasPermission($permission->getName());
+	}
+
+	##############
+	### Render ###
+	##############
+
+	/**
+	 * Check if the user has at least one permisson.
+	 *
+	 * @param string $permission CSV permissions
+	 */
+	public function hasPermission(string $permissions): bool
+	{
+		$perms = $this->loadPermissions();
+		foreach (explode(',', $permissions) as $permission)
+		{
+			if (array_key_exists($permission, $perms))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Load user permissions from cache if possible.
 	 */
-	public function loadPermissions() : array
+	public function loadPermissions(): array
 	{
 		if ($this->isPersisted())
 		{
@@ -308,140 +459,7 @@ final class GDO_User extends GDO
 		}
 		return GDT::EMPTY_ARRAY;
 	}
-	
-	public function hasPermissionID(string $permissionId=null) : bool
-	{
-		if ($permissionId)
-		{
-			$permission = GDO_Permission::findById($permissionId);
-			return $this->hasPermissionObject($permission);
-		}
-		return true;
-	}
-	
-	public function isAdmin() : bool { return $this->hasPermission('admin'); }
-	public function isStaff() : bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
-	
-	/**
-	 * Check if the user has at least one permisson.
-	 * @param string $permission CSV permissions
-	 */
-	public function hasPermission(string $permissions) : bool
-	{
-		$perms = $this->loadPermissions();
-		foreach (explode(',', $permissions) as $permission)
-		{
-			if (array_key_exists($permission, $perms))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 
-	public function hasPermissionObject(GDO_Permission $permission) : bool
-	{
-		return $this->hasPermission($permission->getName());
-	}
-	
-	public function changedPermissions(): static
-	{
-		$this->tempUnset('gdo_permission');
-		return $this->recache();
-	}
-	
-	/**
-	 * Get the effective userlevel for this user.
-	 */
-	public function getLevel() : int
-	{
-		$level = $this->gdoVar('user_level');
-		$permLevel = $this->getPermissionLevel();
-		return $level + $permLevel;
-	}
-	
-	public function getLevelSpent(): int
-	{
-		return $this->settingVar('User', 'level_spent');
-	}
-	
-	public function getLevelAvailable(): int
-	{
-		return $this->getLevel() - $this->getLevelSpent();
-	}
-	
-	/**
-	 * Get the highest level for all permissions.
-	 */
-	public function getPermissionLevel() : int
-	{
-		$max = 0;
-		if ($perms = $this->loadPermissions())
-		{
-			foreach ($perms as $level)
-			{
-				if ($level > $max)
-				{
-					$max = $level;
-				}
-			}
-		}
-		return $max;
-	}
-	
-	##################
-	### Persistent ###
-	##################
-	/**
-	 * Ensure user is persistent.
-	 * This allows LoginAsGuest 
-	 */
-	public function persistent(): static
-	{
-		if (!$this->isPersisted())
-		{
-			$this->setVar('user_type', GDT_UserType::GUEST);
-			$this->insert();
-			if (module_enabled('Session'))
-			{
-				if ($session = GDO_Session::instance())
-				{
-					$session->setVar('sess_user', $this->getID());
-				}
-			}
-		}
-		return $this;
-	}
-	
-	##############
-	### Render ###
-	##############
-	public function renderName() : string
-	{
-		return $this->renderUserName();
-	}
-	
-	public function renderUserName() : string
-	{
-		if ($name = $this->getName())
-		{
-			return html($name);
-		}
-		
-		$p = self::GUEST_NAME_PREFIX;
-		if ($name = $this->getGuestName())
-		{
-			return $p . html($name) . $p;
-		}
-		
-		$pp = $p.$p;
-		if ($this->isGhost())
-		{
-			return $pp . t('ghost') . $pp;
-		}
-		return $pp . t('guest') . $pp;
-	}
-	
 // 	public function getProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : GDT_ProfileLink
 // 	{
 // 		$link = GDT_ProfileLink::make()->gdo($this);
@@ -457,57 +475,113 @@ final class GDO_User extends GDO
 // 		return $link;
 // 	}
 
-	public function renderProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : string
+	public function isAdmin(): bool { return $this->hasPermission('admin'); }
+
+	public function isStaff(): bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
+
+	public function changedPermissions(): self
 	{
-		return GDT_ProfileLink::make()->gdo($this)->avatarSize($avatar)->avatar(!!$avatar)->nickname($nickname)->user($this)->level($level)->render();
+		$this->tempUnset('gdo_permission');
+		return $this->recache();
 	}
-	
-	public function getGender() : ?string
-	{
-		return $this->settingVar('User', 'gender');
-	}
-	
-	public function renderCard(): string
-	{
-		return $this->getCard()->render();
-	}
-	
+
 	############
 	### Card ###
 	############
-	public function getCard(): GDT_Card
+
+	public function getLevelAvailable(): int
 	{
-		$card = GDT_Card::make('user-card-'.$this->getID());
-		$card->titleRaw($this->renderProfileLink());
-		return $card;
+		return $this->getLevel() - $this->getLevelSpent();
 	}
-	
+
 	################
 	### Settings ###
 	################
-	public function setting(string $moduleName, string $key) : GDT
+
+	/**
+	 * Get the effective userlevel for this user.
+	 */
+	public function getLevel(): int
+	{
+		$level = $this->gdoVar('user_level');
+		$permLevel = $this->getPermissionLevel();
+		return $level + $permLevel;
+	}
+
+	/**
+	 * Get the highest level for all permissions.
+	 */
+	public function getPermissionLevel(): int
+	{
+		$max = 0;
+		if ($perms = $this->loadPermissions())
+		{
+			foreach ($perms as $level)
+			{
+				if ($level > $max)
+				{
+					$max = $level;
+				}
+			}
+		}
+		return $max;
+	}
+
+	public function getLevelSpent(): int
+	{
+		return $this->settingVar('User', 'level_spent');
+	}
+
+	public function settingVar(string $moduleName, string $key): ?string
+	{
+		return $this->setting($moduleName, $key)->getVar();
+	}
+
+	public function setting(string $moduleName, string $key): GDT
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName, true, false);
 		return $module->userSetting($this, $key);
 	}
-	
+
+	/**
+	 * Ensure user is persistent.
+	 * This allows LoginAsGuest
+	 */
+	public function persistent(): self
+	{
+		if (!$this->isPersisted())
+		{
+			$this->setVar('user_type', GDT_UserType::GUEST);
+			$this->insert();
+			if (module_enabled('Session'))
+			{
+				if ($session = GDO_Session::instance())
+				{
+					$session->setVar('sess_user', $this->getID());
+				}
+			}
+		}
+		return $this;
+	}
+
+	public function getGender(): ?string
+	{
+		return $this->settingVar('User', 'gender');
+	}
+
 	public function hasSetting(string $moduleName, string $key): bool
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		return $module->hasSetting($key);
 	}
-	
-	public function settingVar(string $moduleName, string $key) : ?string
+
+	public function increaseSetting(string $moduleName, string $key, float $by = 1): self
 	{
-		return $this->setting($moduleName, $key)->getVar();
+		$now = $this->settingVar($moduleName, $key);
+		return $this->saveSettingVar($moduleName, $key, $now + $by);
 	}
-	
-	public function settingValue(string $moduleName, string $key)
-	{
-		return $this->setting($moduleName, $key)->getValue();
-	}
-	
-	public function saveSettingVar(string $moduleName, string $key, ?string $var): static
+
+	public function saveSettingVar(string $moduleName, string $key, ?string $var): self
 	{
 		if ($module = ModuleLoader::instance()->getModule($moduleName, true, false))
 		{
@@ -515,17 +589,11 @@ final class GDO_User extends GDO
 		}
 		return $this;
 	}
-	
-	public function increaseSetting(string $moduleName, string $key, float $by=1): static
-	{
-		$now = $this->settingVar($moduleName, $key);
-		return $this->saveSettingVar($moduleName, $key, $now + $by);
-	}
-	
+
 	/**
 	 * Save all the ACL settings for a user's setting var.
 	 */
-	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level=0, string $permission=null): static
+	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level = 0, string $permission = null): self
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$module->saveUserSettingACLRelation($this, $key, $relation);
@@ -535,93 +603,60 @@ final class GDO_User extends GDO
 		$this->recache();
 		return $this;
 	}
-	
-	/**
-	 * Get all users with a specified setting.
-	 * Optionally an SQL like match is performed.
-	 * @return self[]
-	 */
-	public static function withSetting(string $moduleName, string $key, string $var, string $op='=') : array
-	{
-		return self::withSettingResult($moduleName, $key, $var, $op)->fetchAllObjects();
-	}
-	
-	public static function withSettingResult(string $moduleName, string $key, string $var, string $op='=') : Result
-	{
-		return GDO_UserSetting::usersWith($moduleName, $key, $var, $op);
-	}
-	
-	public static function getSingleWithSetting(string $moduleName, string $key, string $var, string $op='=') : ?self
-	{
-		$users = self::withSetting($moduleName, $key, $var, $op);
-		return count($users) === 1 ? $users[0] : null;
-	}
 
-	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op='='): static
-	{
-		$users = self::withSetting($moduleName, $key, $var, $op);
-		$c = count($users);
-		switch ($c)
-		{
-			case 0:
-				self::notFoundException("$key = $var");
-			case 1:
-				return $users[0];
-			default:
-				throw new GDO_Error('err_user_ambigious', [$c, $key, $op, $var]);
-		}
-	}
-	
 	#############
 	### Email ###
 	#############
-	public function hasMail(bool $confirmed=true)
+
+	public function hasMail(bool $confirmed = true)
 	{
 		return !!$this->getMail($confirmed);
 	}
-	
+
 	/**
 	 * Get the email address for a user.
 	 * This requires the mail module.
-	 * 
+	 *
 	 * @param bool $confirmed if it shall only return confirmed addresses.
 	 */
-	public function getMail(bool $confirmed=true) : ?string
+	public function getMail(bool $confirmed = true): ?string
 	{
 		$email = $this->settingVar('Mail', 'email');
 		return $confirmed ? ($this->settingVar('Mail', 'email_confirmed') ? $email : null) : $email;
 	}
 
-	public function getMailFormat() : string
+	public function getMailFormat(): string
 	{
 		return $this->settingVar('Mail', 'email_format');
 	}
-	
+
 	#######################
 	### Setting helpers ###
 	#######################
 	/**
 	 * Get the credits for a user.
+	 *
 	 * @see Module_PaymentCredits.
 	 */
-	public function getCredits() : int
+	public function getCredits(): int
 	{
 		return $this->settingValue('PaymentCredits', 'credits');
 	}
-	
-	public function getCountryISO() : ?string
+
+	public function settingValue(string $moduleName, string $key)
 	{
-		return $this->settingVar('Country', 'country_of_living');
+		return $this->setting($moduleName, $key)->getValue();
 	}
-	
+
 	#############
 	### Hooks ###
 	#############
-	public function gdoAfterDelete(GDO $gdo): void
+
+	public function getCountryISO(): ?string
 	{
-		GDT_Hook::callWithIPC('UserDeleted', $gdo, $this->isPersisted());
+		return $this->settingVar('Country', 'country_of_living');
 	}
-	
+
 }
 
 GDO_User::setCurrent(GDO_User::ghost());

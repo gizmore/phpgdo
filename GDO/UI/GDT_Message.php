@@ -1,93 +1,116 @@
 <?php
 namespace GDO\UI;
 
+use Closure;
 use GDO\Core\GDO;
+use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
 use GDO\Core\GDT_Text;
 use GDO\DB\Query;
+use GDO\DBMS\Module_DBMS;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
-use GDO\Core\GDT_String;
-use GDO\DBMS\Module_DBMS;
 
 /**
  * A message is a GDT_Text with an editor.
- * 
+ *
  * It will add 4 DB columns when added to a GDO: _input, _output, _text and _editor.
  * This way messages can be searched nicely, rendered quickly and beeing edited nicely.
- * 
+ *
  * Classic uses a textarea when no editor module is installed.
  * I.e. the default Text renderer is used, which is just htmlspecialchars($input).
- * 
+ *
  * The saved pre-rendered content is just final HTML,
  * filtered through a whitelist with html-purifier, when using appropiate modules.
  * There are various editor modules available.
- * 
+ *
  * An editor has to provide a renderer and a quotemsg generator (quoty by foo at 13:37)
  * An HTML to editor back-encoder is not required or used / supported.
- * 
- * @see \GDO\HTML\Module_HTML
- * @see \GDO\TinyMCE\Module_TinyMCE
+ *
+ * @version 7.0.2
+ * @since 4.0.0
  * @see \GDO\BBCode\Module_BBCode
  * @see \GDO\CKEditor\Module_CKEditor
  * @see \GDO\Markdown\Module_Markdown
  * @see \GDO\SimpleMDE\Module_SimpleMDE
  *
  * @author gizmore
- * @version 7.0.2
- * @since 4.0.0
+ * @see \GDO\HTML\Module_HTML
+ * @see \GDO\TinyMCE\Module_TinyMCE
  */
 class GDT_Message extends GDT_Text
 {
-	public string $icon = 'message';
 
-	# Raw user input
-	private ?string $msgInput = null;
-
-	# Decoded input to output
-	private ?string $msgOutput = null;
-
-	# Output with removed html for search
-	private ?string $msgText = null;
-
-	# Message Codec Provider used to edit this message.
-	private ?string $msgEditor = null;
-
-	# ##########
-	# ## GDT ###
-	# ##########
 	/**
 	 * @deprecated
 	 */
 	public static int $NUM = 1;
 
+	# Raw user input
+	/**
+	 * @var Closure The quotemsg generator.
+	 */
+	public static $QUOTER = [
+		self::class,
+		'QUOTE',
+	];
+
+	# Decoded input to output
+	/**
+	 * Current editor name.
+	 * Default is raw HTML with html purifier filter.
+	 */
+	public static string $EDITOR_NAME = 'Text';
+
+	# Output with removed html for search
+	public static array $EDITORS = ['Text' => [self::class, 'ESCAPE']];
+
+	# Message Codec Provider used to edit this message.
+	/**
+	 * @var callable current editor's decoder method.
+	 */
+	public static array $DECODER = [
+		self::class,
+		'ESCAPE',
+	];
+
+	# ##########
+	# ## GDT ###
+	# ##########
+	/**
+	 * Available editors.
+	 *
+	 * @var callable[string]
+	 */
+	public static array $DECODERS = [
+		'Text' => [
+			self::class,
+			'ESCAPE',
+		],
+	];
+	public string $icon = 'message';
 	/**
 	 * @deprecated
 	 */
 	public int $num = 0;
 
-	/**
-	 * On make, setup order and search field.
-	 */
-	public static function make(string $name = null): static
-	{
-		$gdt = parent::make($name);
-		$gdt->num = self::$NUM++;
-// 		$gdt->orderField = $gdt->name . '_text';
-// 		$gdt->searchField = $gdt->name . '_text';
-		return $gdt;
-	}
-
 	# #############
 	# ## Quoter ###
 	# #############
+	public int $textRows = 5;
 	/**
-	 * @var \Closure The quotemsg generator.
+	 * Do not attach the editor to the textarea.
+	 * Use a simple textarea.
 	 */
-	public static $QUOTER = [
-		self::class,
-		'QUOTE'
-	];
+	public bool $nowysiwyg = false;
+	private ?string $msgInput = null;
+
+	# ##############
+	# ## Decoder ###
+	# ##############
+	private ?string $msgOutput = null;
+	private ?string $msgText = null;
+	private ?string $msgEditor = null;
 
 	public static function quoteMessage(GDO_User $user, string $date, string $text): string
 	{
@@ -100,71 +123,56 @@ class GDT_Message extends GDT_Text
 		return sprintf(
 			"<div><blockquote>\n<span class=\"quote-by\">%s</span>\n<span class=\"quote-from\">%s</span>\n<br/>%s</blockquote>&nbsp;</div>\n",
 			t('quote_by', [
-				$link->render()
+				$link->render(),
 			]), t('quote_at', [
-				tt($date)
-			]), $text);
+			tt($date),
+		]), $text);
 	}
 
-	# ##############
-	# ## Decoder ###
-	# ##############
 	/**
-	 * Current editor name.
-	 * Default is raw HTML with html purifier filter.
+	 * On make, setup order and search field.
 	 */
-	public static string $EDITOR_NAME = 'Text';
-	
-	public static array $EDITORS = ['Text' => [self::class, 'ESCAPE']];
-
-	/**
-	 * @var callable current editor's decoder method.
-	 */
-	public static array $DECODER = [
-		self::class,
-		'ESCAPE'
-	];
-
-	/**
-	 * Available editors.
-	 * @var callable[string]
-	 */
-	public static array $DECODERS = [
-		'Text' => [
-			self::class,
-			'ESCAPE'
-		],
-	];
-
-	/**
-	 * Add a decoder.
-	 * As modules populate this by priortity, the most enhanced one wins the default race.
-	 * @param \Closure $callable
-	 */
-	public static function addDecoder(string $decoder, $callable): void
+	public static function make(string $name = null): self
 	{
-		self::$EDITOR_NAME = $decoder;
-		self::$DECODERS[$decoder] = self::$DECODER = $callable;
-	}
-	
-	/**
-	 * Set the current editor.
-	 */
-	public static function setDecoder(string $decoder): void
-	{
-		self::$EDITOR_NAME = $decoder;
-		self::$DECODER = self::$DECODERS[$decoder];
+		$gdt = parent::make($name);
+		$gdt->num = self::$NUM++;
+// 		$gdt->orderField = $gdt->name . '_text';
+// 		$gdt->searchField = $gdt->name . '_text';
+		return $gdt;
 	}
 
 	/**
-	 * Decode a message with the current editor.
+	 * Validate via String validation twice, the input and output variants.
+	 *
+	 * @see GDT_Text::validate()
 	 */
-	public static function decodeMessage(GDT_Message $message): ?string
+	public function validate($value): bool
 	{
-		$s = $message->getVarInput();
-		return self::decodeText($s);
+// 		# Check raw input for length and pattern etc.
+// 		if ( !parent::validate($value))
+// 		{
+// 			return false;
+// 		}
+
+		# Decode the message
+		$decoded = self::decodeText($this->toVar($value));
+		$text = self::plaintext($decoded);
+
+		# Check decoded input for length and pattern etc.
+		if (!parent::validate($decoded))
+		{
+			return false;
+		}
+
+		# Assign input variations.
+// 		$this->var = $value;
+		$this->msgInput = $value;
+		$this->msgOutput = $decoded;
+		$this->msgText = $text;
+		$this->msgEditor = self::$EDITOR_NAME;
+		return true;
 	}
-	
+
 	public static function decodeText(?string $s): ?string
 	{
 		$decoded = '';
@@ -175,7 +183,7 @@ class GDT_Message extends GDT_Text
 		}
 		return $decoded === '' ? null : $decoded;
 	}
-	
+
 	/**
 	 * Strip HTML from all it's tags to generate a searchable plaintext.
 	 * Convert anchors to a plaintext URL, like foo(bla.com).
@@ -196,58 +204,20 @@ class GDT_Message extends GDT_Text
 		}
 		return null;
 	}
-	
+
 	###############
 	### Editors ###
 	###############
-	public static function ESCAPE(?string $s): ?string
-	{
-		return $s !== null ? html($s) : null;
-	}
-
-	# ###############
-	# ## Validate ###
-	# ###############
-	/**
-	 * Validate via String validation twice, the input and output variants.
-	 *
-	 * @see GDT_Text::validate()
-	 */
-	public function validate($value): bool
-	{
-// 		# Check raw input for length and pattern etc.
-// 		if ( !parent::validate($value))
-// 		{
-// 			return false;
-// 		}
-
-		# Decode the message
-		$decoded = self::decodeText($this->toVar($value));
-		$text = self::plaintext($decoded);
-
-		# Check decoded input for length and pattern etc.
-		if ( !parent::validate($decoded))
-		{
-			return false;
-		}
-
-		# Assign input variations.
-// 		$this->var = $value;
-		$this->msgInput = $value;
-		$this->msgOutput = $decoded;
-		$this->msgText = $text;
-		$this->msgEditor = self::$EDITOR_NAME;
-		return true;
-	}
 
 	public function gdoExampleVars(): ?string
 	{
 		return t('message');
 	}
-	
-	# #########
-	# ## DB ###
-	# #########
+
+	# ###############
+	# ## Validate ###
+	# ###############
+
 	public function gdoColumnNames(): array
 	{
 		return [
@@ -270,10 +240,11 @@ class GDT_Message extends GDT_Text
 			GDT_String::make("{$this->name}_editor")->max(16)->ascii()->gdoColumnDefine();
 	}
 
-	# #####################
-	# ## 4 columns hack ###
-	# #####################
-	public function initial(string $var = null): static
+	# #########
+	# ## DB ###
+	# #########
+
+	public function initial(string $var = null): self
 	{
 		$this->msgInput = $var;
 		$this->msgOutput = self::decodeText($var);
@@ -283,9 +254,51 @@ class GDT_Message extends GDT_Text
 	}
 
 	/**
+	 * Add a decoder.
+	 * As modules populate this by priortity, the most enhanced one wins the default race.
+	 *
+	 * @param Closure $callable
+	 */
+	public static function addDecoder(string $decoder, $callable): void
+	{
+		self::$EDITOR_NAME = $decoder;
+		self::$DECODERS[$decoder] = self::$DECODER = $callable;
+	}
+
+	# #####################
+	# ## 4 columns hack ###
+	# #####################
+
+	/**
+	 * Set the current editor.
+	 */
+	public static function setDecoder(string $decoder): void
+	{
+		self::$EDITOR_NAME = $decoder;
+		self::$DECODER = self::$DECODERS[$decoder];
+	}
+
+	/**
+	 * Decode a message with the current editor.
+	 */
+	public static function decodeMessage(GDT_Message $message): ?string
+	{
+		$s = $message->getVarInput();
+		return self::decodeText($s);
+	}
+
+	public function getVarInput(): ?string
+	{
+		return $this->msgInput;
+	}
+
+	public static function ESCAPE(?string $s): ?string
+	{
+		return $s !== null ? html($s) : null;
+	}	/**
 	 * If we set a var, value and plaintext get's precomputed.
 	 */
-	public function var(string $var = null): static
+	public function var(string $var = null): self
 	{
 		$this->var = $var;
 // 		$this->valueConverted = false;
@@ -296,7 +309,22 @@ class GDT_Message extends GDT_Text
 		return $this;
 	}
 
-	public function blankData(): array
+	public function textRows(int $rows): self
+	{
+		$this->textRows = $rows;
+		return $this;
+	}
+
+	public function htmlRows(): string
+	{
+		return " rows=\"{$this->textRows}\"";
+	}
+
+	public function nowysiwyg(bool $nowysiwyg = true): self
+	{
+		$this->nowysiwyg = $nowysiwyg;
+		return $this;
+	}	public function blankData(): array
 	{
 		return [
 			"{$this->name}_input" => $this->msgInput,
@@ -304,6 +332,16 @@ class GDT_Message extends GDT_Text
 			"{$this->name}_text" => $this->msgText,
 			"{$this->name}_editor" => self::$EDITOR_NAME,
 		];
+	}
+
+	public function classEditor(): string
+	{
+		return $this->nowysiwyg ? 'as-is' : ('wysiwyg gdt-editor-' . $this->getWantedEditorName());
+	}
+
+	protected function getWantedEditorName(): string
+	{
+		return strtolower(self::$EDITOR_NAME);
 	}
 
 	public function getVar()
@@ -322,22 +360,28 @@ class GDT_Message extends GDT_Text
 		return $this->msgInput;
 	}
 
-	public function gdo(GDO $gdo = null): static
+
+
+
+
+	public function gdo(GDO $gdo = null): self
 	{
 		return $this->var($gdo->gdoVar("{$this->name}_input"));
 	}
-	
-	public function inputToVar($input) : ?string
+
+
+	public function inputToVar($input): ?string
 	{
 		$input = trim($input);
 		return parent::inputToVar($input);
 	}
 
+
 	/**
 	 * Set GDO Data is called when the GDO sets up the GDT.
 	 * We copy the 3 text columns and revert a special naming hack in module news; 'iso][en][colum_name' could be it's name.
 	 */
-	public function setGDOData(array $data): static
+	public function setGDOData(array $data): self
 	{
 // 		$name = Strings::rsubstrFrom($this->name, '[', $this->name); # @XXX: ugly hack for news tabs!
 		$name = $this->name;
@@ -356,11 +400,12 @@ class GDT_Message extends GDT_Text
 		return $this;
 	}
 
+
 	/**
 	 * getGDOData() is called when the gdo wants to update it's gdoVars.
 	 * This happens when formData() is plugged into saveVars() upon update and creation.
 	 */
-	public function getGDOData() : array
+	public function getGDOData(): array
 	{
 		return [
 			"{$this->name}_input" => $this->msgInput,
@@ -373,10 +418,7 @@ class GDT_Message extends GDT_Text
 	# #############
 	# ## Getter ###
 	# #############
-	public function getVarInput(): ?string
-	{
-		return $this->msgInput;
-	}
+
 
 	public function getVarOutput(): ?string
 	{
@@ -398,12 +440,12 @@ class GDT_Message extends GDT_Text
 
 	public function renderHTML(): string
 	{
-		return (string) $this->getVarOutput();
+		return (string)$this->getVarOutput();
 	}
 
 	public function renderList(): string
 	{
-		return (string) $this->getVarOutput();
+		return (string)$this->getVarOutput();
 	}
 
 	public function renderCard(): string
@@ -416,7 +458,7 @@ class GDT_Message extends GDT_Text
 	public function renderForm(): string
 	{
 		return GDT_Template::php('UI', 'message_form.php', [
-			'field' => $this
+			'field' => $this,
 		]);
 	}
 
@@ -424,56 +466,26 @@ class GDT_Message extends GDT_Text
 	{
 		return '<div class="gdo-message-condense">' . $this->renderHTML() . '</div>';
 	}
-	
+
 	############
 	### Rows ###
 	############
-	public int $textRows = 5;
-	public function textRows(int $rows): static
-	{
-		$this->textRows = $rows;
-		return $this;
-	}
-	
-	public function htmlRows() : string
-	{
-		return " rows=\"{$this->textRows}\"";
-	}
+
 
 	# #############
 	# ## Editor ###
 	# #############
-	/**
-	 * Do not attach the editor to the textarea.
-	 * Use a simple textarea.
-	 */
-	public bool $nowysiwyg = false;
 
-	public function nowysiwyg(bool $nowysiwyg = true): static
-	{
-		$this->nowysiwyg = $nowysiwyg;
-		return $this;
-	}
-
-	public function classEditor(): string
-	{
-		return $this->nowysiwyg ? 'as-is' : ('wysiwyg gdt-editor-' . $this->getWantedEditorName());
-	}
-
-	protected function getWantedEditorName() : string
-	{
-		return strtolower(self::$EDITOR_NAME);
-	}
 
 	##############
 	### Search ###
 	##############
-	public function searchQuery(Query $query, string $searchTerm): static
+	public function searchQuery(Query $query, string $term): self
 	{
 		if ($this->isSearchable())
 		{
 			$name = $this->getName();
-			$search = GDO::escapeSearchS($searchTerm);
+			$search = GDO::escapeSearchS($term);
 			$query->orWhere("{$name}_text LIKE '%{$search}%'");
 		}
 		return $this;

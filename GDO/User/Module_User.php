@@ -2,50 +2,51 @@
 namespace GDO\User;
 
 use GDO\Core\GDO_Module;
-use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_Checkbox;
-use GDO\UI\GDT_Page;
-use GDO\UI\GDT_Link;
+use GDO\Core\GDT_UInt;
+use GDO\Date\GDT_Timestamp;
 use GDO\Net\GDT_Url;
 use GDO\UI\GDT_Color;
-use GDO\Date\GDT_Timestamp;
+use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Menu;
+use GDO\UI\GDT_Page;
 
 /**
  * GDO_User related types and plugins.
- * 
+ *
  * Adds user config and settings: last url, gender, ...
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 3.0.4
+ * @author gizmore
  * @see GDO
  * @see GDO_User
  */
 final class Module_User extends GDO_Module
 {
+
 	##############
 	### Module ###
 	##############
 	# Start very early. Important for test chain.
 	public int $priority = 4;
-	
-	public function getDependencies() : array
+
+	public function getDependencies(): array
 	{
 		return [
 			'Core',
 		];
 	}
-	
-	public function getFriendencies() : array
+
+	public function getFriendencies(): array
 	{
 		return [
 			'Account', 'Avatar', 'Cronjob',
 			'Friends', 'Session',
 		];
 	}
-	
-	public function getClasses() : array
+
+	public function getClasses(): array
 	{
 		$classes = [
 			GDO_UserSetting::class,
@@ -53,12 +54,14 @@ final class Module_User extends GDO_Module
 		];
 		return $classes;
 	}
-	
-	public function onInstall() : void { OnInstall::onInstall(); }
-	public function isCoreModule() : bool { return true; }
-	public function onLoadLanguage() : void { $this->loadLanguage('lang/user'); }
 
-	public function onInitSidebar() : void
+	public function onInstall(): void { OnInstall::onInstall(); }
+
+	public function isCoreModule(): bool { return true; }
+
+	public function onLoadLanguage(): void { $this->loadLanguage('lang/user'); }
+
+	public function onInitSidebar(): void
 	{
 		if ($this->cfgSidebar())
 		{
@@ -72,11 +75,14 @@ final class Module_User extends GDO_Module
 			}
 		}
 	}
-	
+
 	##############
 	### Config ###
 	##############
-	public function getConfig() : array
+
+	public function cfgSidebar(): bool { return $this->getConfigValue('hook_sidebar'); }
+
+	public function getConfig(): array
 	{
 		return [
 			GDT_Checkbox::make('hook_sidebar')->initial('1'),
@@ -86,19 +92,11 @@ final class Module_User extends GDO_Module
 			GDT_Checkbox::make('acl_permissions')->initial('0'),
 		];
 	}
-	public function cfgSidebar() : bool { return $this->getConfigValue('hook_sidebar'); }
-	public function cfgFavColor() : bool { return $this->getConfigValue('fav_color'); }
-	public function cfgACLRelations() : bool { return $this->getConfigValue('acl_relations'); }
-	public function cfgACLLevels() : bool { return $this->getConfigValue('acl_levels'); }
-	public function cfgACLPermissions() : bool { return $this->getConfigValue('acl_permissions'); }
-	
-	################
-	### Settings ###
-	################
+
 	/**
 	 * profile views are default visible for all types, 0 score with any permission.
 	 */
-	public function getACLDefaults() : array
+	public function getACLDefaults(): array
 	{
 		return [
 			'color' => [GDT_ACLRelation::GUESTS, 0, null],
@@ -109,8 +107,8 @@ final class Module_User extends GDO_Module
 			'probably_malicious' => [GDT_ACLRelation::HIDDEN, 0, null],
 		];
 	}
-	
-	public function getUserConfig() : array
+
+	public function getUserConfig(): array
 	{
 		return [
 			GDT_Timestamp::make('last_activity'),
@@ -120,19 +118,26 @@ final class Module_User extends GDO_Module
 			GDT_Checkbox::make('probably_malicious')->initial('0')->noacl()->hidden(),
 		];
 	}
-		
-	public function getUserSettings() : array
+
+	public function getUserSettings(): array
 	{
 		$settings = [
 			GDT_Gender::make('gender'),
 			GDT_ACLRelation::make('profile_visibility')->initial(GDT_ACLRelation::ALL)->noacl(),
 		];
-		if ($this->cfgFavColor()) {
+		if ($this->cfgFavColor())
+		{
 			$settings[] = GDT_Color::make('color')->label('favorite_color');
 		}
 		return $settings;
 	}
-	
+
+	public function cfgFavColor(): bool { return $this->getConfigValue('fav_color'); }
+
+	################
+	### Settings ###
+	################
+
 	public function getPrivacyRelatedFields(): array
 	{
 		return [
@@ -141,5 +146,11 @@ final class Module_User extends GDO_Module
 			$this->setting('last_url'),
 		];
 	}
-	
+
+	public function cfgACLRelations(): bool { return $this->getConfigValue('acl_relations'); }
+
+	public function cfgACLLevels(): bool { return $this->getConfigValue('acl_levels'); }
+
+	public function cfgACLPermissions(): bool { return $this->getConfigValue('acl_permissions'); }
+
 }

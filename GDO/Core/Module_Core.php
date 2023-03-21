@@ -1,18 +1,18 @@
 <?php
 namespace GDO\Core;
 
-use GDO\UI\GDT_Link;
-use GDO\User\GDO_User;
-use GDO\User\GDT_User;
-use GDO\Language\Trans;
-use GDO\User\GDO_Permission;
-use GDO\UI\GDT_Page;
-use GDO\User\GDO_UserPermission;
 use GDO\Date\GDO_Timezone;
-use GDO\Net\GDT_Url;
-use GDO\Language\GDO_Language;
 use GDO\Date\Module_Date;
+use GDO\Language\GDO_Language;
 use GDO\Language\Module_Language;
+use GDO\Language\Trans;
+use GDO\Net\GDT_Url;
+use GDO\UI\GDT_Link;
+use GDO\UI\GDT_Page;
+use GDO\User\GDO_Permission;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserPermission;
+use GDO\User\GDT_User;
 
 /**
  * The core module holds some generic config as well as the global revision string.
@@ -23,28 +23,29 @@ use GDO\Language\Module_Language;
  *
  * Very basic vanilla JS is optionally loaded.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 6.0.0
+ * @author gizmore
  */
 final class Module_Core extends GDO_Module
 {
-	const GDO_VERSION = '7.0.1';
-	const GDO_REVISION = '7.0.1-r1763';
-	const GDO_CODENAME = 'Garlic-Gremlin';
-	
+
+	public const GDO_VERSION = '7.0.2';
+	public const GDO_REVISION = '7.0.2-r1765';
+	public final const GDO_CODENAME = 'Hailing Hermelin';
+
 	##############
 	### Module ###
 	##############
 	public int $priority = 1;
-	
-	public function isCoreModule() : bool { return true; }
-	
-	public function getTheme() : ?string { return 'default'; }
-	
-	public function onLoadLanguage() : void { $this->loadLanguage('lang/core'); }
-	
-	public function getClasses() : array
+
+	public function isCoreModule(): bool { return true; }
+
+	public function getTheme(): ?string { return 'default'; }
+
+	public function onLoadLanguage(): void { $this->loadLanguage('lang/core'); }
+
+	public function getClasses(): array
 	{
 		return [
 			GDO_Hook::class,
@@ -59,8 +60,8 @@ final class Module_Core extends GDO_Module
 			GDO_SEO_URL::class,
 		];
 	}
-	
-	public function getDependencies() : array
+
+	public function getDependencies(): array
 	{
 		return [
 			'Crypto',
@@ -72,13 +73,13 @@ final class Module_Core extends GDO_Module
 			'User',
 		];
 	}
-	
-	public function onInstall() : void
+
+	public function onInstall(): void
 	{
 		Install::onInstall($this);
 	}
-	
-	public function checkSystemDependencies() : bool
+
+	public function checkSystemDependencies(): bool
 	{
 		if (PHP_MAJOR_VERSION < 8)
 		{
@@ -94,11 +95,11 @@ final class Module_Core extends GDO_Module
 		}
 		return true;
 	}
-	
+
 	##############
 	### Config ###
 	##############
-	public function getConfig() : array
+	public function getConfig(): array
 	{
 		return [
 			GDT_User::make('system_user')->writeable(false)->initial('1'), # System user / id should be 1.
@@ -115,24 +116,8 @@ final class Module_Core extends GDO_Module
 			GDT_Checkbox::make('dotfiles')->initial('0'),
 		];
 	}
-	public function cfgSystemUser() : GDO_User { return $this->getConfigValue('system_user'); }
-	public function cfgSystemUserID() : string { return $this->getConfigVar('system_user'); }
-	public function cfgShowImpressum() : string { return $this->getConfigVar('show_impressum'); }
-	public function cfgShowPrivacy() : string { return $this->getConfigVar('show_privacy'); }
-	public function cfgAssetVersion() : Version { return $this->getConfigValue('asset_revision'); }
-	public function cfgAllowGuests() : string { return $this->getConfigVar('allow_guests'); }
-	public function cfgAllowJavascript() : string { return $this->getConfigVar('allow_javascript'); }
-	public function cfgSiteShortTitleAppend() : string { return $this->getConfigVar('siteshort_title_append'); }
-	public function cfgMail403() : string { return $this->getConfigVar('mail_403'); }
-	public function cfgMail404() : string { return $this->getConfigVar('mail_404'); }
-	public function cfgDirectoryIndex() : string { return $this->getConfigVar('directory_indexing'); }
-	public function cfgModuleAssets() : string { return $this->getConfigVar('module_assets'); }
-	public function cfgDotfiles() : bool { return $this->getConfigValue('dotfiles'); }
 
-	#############
-	### Hooks ###
-	#############
-	public function onInitSidebar() : void
+	public function onInitSidebar(): void
 	{
 		$page = GDT_Page::instance();
 		$bar = $page->bottomBar();
@@ -147,11 +132,12 @@ final class Module_Core extends GDO_Module
 				->href(href('Core', 'Privacy'))->icon('info'));
 		}
 	}
-	
-	##################
-	### Javascript ###
-	##################
-	public function onIncludeScripts() : void
+
+	public function cfgShowImpressum(): string { return $this->getConfigVar('show_impressum'); }
+
+	public function cfgShowPrivacy(): string { return $this->getConfigVar('show_privacy'); }
+
+	public function onIncludeScripts(): void
 	{
 		$this->addCSS('css/gdo7.css');
 		$this->addJS('js/gdo-string-util.js');
@@ -160,15 +146,16 @@ final class Module_Core extends GDO_Module
 		Javascript::addJSPreInline($this->gdoConfigJS());
 		Javascript::addJSPostInline($this->gdoUserJS());
 	}
-	
+
 	/**
 	 * Pretty print gdo config to JS.
+	 *
 	 * @return string
 	 */
 	public function gdoConfigJS()
 	{
 		return sprintf(
-		"	window.GDO_CONFIG = {};
+			"	window.GDO_CONFIG = {};
 	window.GDO_PROTOCOL = '%s';
 	window.GDO_DOMAIN = '%s';
 	window.GDO_PORT = '%s';
@@ -176,16 +163,16 @@ final class Module_Core extends GDO_Module
 	window.GDO_LANGUAGE = '%s';
 	window.GDO_REVISION = '%s';
 ", GDO_PROTOCOL, GDO_DOMAIN, GDT_Url::port(),
-		GDO_WEB_ROOT, Trans::$ISO,
-		$this->nocacheVersion());
+			GDO_WEB_ROOT, Trans::$ISO,
+			$this->nocacheVersion());
 	}
-	
+
 	public function gdoUserJS()
 	{
-		$json = json_encode($this->gdoUserJSON(), GDO_JSON_DEBUG?JSON_PRETTY_PRINT:0);
+		$json = json_encode($this->gdoUserJSON(), GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0);
 		return "window.GDO_USER = new GDO_User($json);";
 	}
-	
+
 	public function gdoUserJSON()
 	{
 		$user = GDO_User::current();
@@ -194,24 +181,54 @@ final class Module_Core extends GDO_Module
 		$data['language'] = Module_Language::instance()->cfgUserLangID($user);
 		return $data;
 	}
-	
+
+	public function cfgSystemUser(): GDO_User { return $this->getConfigValue('system_user'); }
+
+	public function cfgSystemUserID(): string { return $this->getConfigVar('system_user'); }
+
+	public function cfgAssetVersion(): Version { return $this->getConfigValue('asset_revision'); }
+
+	public function cfgAllowGuests(): string { return $this->getConfigVar('allow_guests'); }
+
+	public function cfgAllowJavascript(): string { return $this->getConfigVar('allow_javascript'); }
+
+	public function cfgSiteShortTitleAppend(): string { return $this->getConfigVar('siteshort_title_append'); }
+
+	#############
+	### Hooks ###
+	#############
+
+	public function cfgMail403(): string { return $this->getConfigVar('mail_403'); }
+
+	##################
+	### Javascript ###
+	##################
+
+	public function cfgMail404(): string { return $this->getConfigVar('mail_404'); }
+
+	public function cfgDirectoryIndex(): string { return $this->getConfigVar('directory_indexing'); }
+
+	public function cfgDotfiles(): bool { return $this->getConfigValue('dotfiles'); }
+
 	/**
 	 * Check if an url should be restricted due to GDO asset source restriction.
 	 * You should enable this in production.
 	 */
-	public function checkAssetAllowed(string $url) : bool
+	public function checkAssetAllowed(string $url): bool
 	{
 		if ($this->cfgModuleAssets())
 		{
 			return true;
 		}
-		
+
 		if (preg_match('/\\.(?:ttf|woff|woff2|png|gif|jpg|jpeg|svg)$/iD', $url))
 		{
 			return true;
 		}
-		
+
 		return (strpos($url, 'GDO/') !== 0);
 	}
-	
+
+	public function cfgModuleAssets(): string { return $this->getConfigVar('module_assets'); }
+
 }

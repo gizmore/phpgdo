@@ -1,24 +1,25 @@
 <?php
 namespace GDO\Install\Method;
 
-use GDO\Form\GDT_Form;
-use GDO\Form\MethodForm;
-use GDO\Form\GDT_Submit;
-use GDO\Install\Config;
-use GDO\Util\FileUtil;
 use GDO\Core\GDT;
+use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
 use GDO\DB\Database;
+use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Hidden;
+use GDO\Form\GDT_Submit;
+use GDO\Form\MethodForm;
+use GDO\Install\Config;
 use GDO\UI\GDT_Redirect;
-use GDO\Core\GDT_String;
+use GDO\Util\FileUtil;
+use Throwable;
 
 /**
  * Create a GDO config with this form.
  *
- * @author gizmore
  * @version 7.0.2
  * @since 3.0.0
+ * @author gizmore
  */
 class Configure extends MethodForm
 {
@@ -46,16 +47,6 @@ class Configure extends MethodForm
 		];
 	}
 
-	public function cfgConfigName(): string
-	{
-		return $this->gdoParameterVar('filename');
-	}
-
-	public function configPath(): string
-	{
-		return GDO_PATH . 'protected/' . $this->cfgConfigName();
-	}
-
 	public function createForm(GDT_Form $form): void
 	{
 		foreach (Config::fields() as $gdt)
@@ -64,28 +55,39 @@ class Configure extends MethodForm
 		}
 		$form->actions()->addField(GDT_Submit::make('save_config')->onclick([
 			$this,
-			'onSaveConfig'
+			'onSaveConfig',
 		]));
 		$enabled = FileUtil::isFile($this->configPath());
 		$form->actions()->addField(
 			GDT_Submit::make('test_config')->enabled($enabled)
 				->onclick([
-				$this,
-				'onTestConfig'
-			]));
+					$this,
+					'onTestConfig',
+				]));
+	}
+
+	public function configPath(): string
+	{
+		return GDO_PATH . 'protected/' . $this->cfgConfigName();
+	}
+
+	public function cfgConfigName(): string
+	{
+		return $this->gdoParameterVar('filename');
 	}
 
 	# ############
 	# ## Write ###
 	# ############
+
 	public function onSaveConfig(): GDT
 	{
 		$this->writeConfig($this->configPath());
 		return GDT_Redirect::make()->redirectTime(2)
 			->back()
 			->redirectMessage('msg_config_written', [
-			html($this->cfgConfigName())
-		], Config::hrefStep(3));
+				html($this->cfgConfigName()),
+			], Config::hrefStep(3));
 	}
 
 	public function writeConfig(string $path): bool
@@ -95,7 +97,7 @@ class Configure extends MethodForm
 			'form' => $form,
 		]);
 		FileUtil::createDir(dirname($path));
-		return ! !file_put_contents($path, $content);
+		return !!file_put_contents($path, $content);
 	}
 
 	# ###########
@@ -110,7 +112,7 @@ class Configure extends MethodForm
 				$db = new Database(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, GDO_DB_NAME, false);
 				$db->getLink();
 			}
-			catch (\Throwable $ex)
+			catch (Throwable $ex)
 			{
 				return $this->error('err_db_connect', [$ex->getMessage()])->addField($this->renderPage());
 			}

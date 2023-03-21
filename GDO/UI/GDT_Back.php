@@ -4,14 +4,13 @@ namespace GDO\UI;
 /**
  * The back button points to your origin.
  * It has a default icon and label.
- * 
- * @author gizmore
+ *
  * @version 6.11.2
  * @since 6.3.0
+ * @author gizmore
  */
 final class GDT_Back extends GDT_Link
 {
-	public function defaultLabel(): static { return $this->label('btn_back'); }
 
 	protected function __construct()
 	{
@@ -20,10 +19,12 @@ final class GDT_Back extends GDT_Link
 		$this->icon('back');
 		$this->href(GDT_Redirect::hrefBack());
 	}
-	
-	public function htmlClass() : string
+
+	public function defaultLabel(): self { return $this->label('btn_back'); }
+
+	public function htmlClass(): string
 	{
 		return ' gdt-link gdt-back';
 	}
-	
+
 }

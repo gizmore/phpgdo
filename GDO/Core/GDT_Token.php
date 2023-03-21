@@ -5,62 +5,36 @@ use GDO\Util\Random;
 
 /**
  * Default random token is 16 chars alphanumeric.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 4.0.0
+ * @author gizmore
  */
 class GDT_Token extends GDT_Char
 {
-	public function getDefaultName() : string { return 'token'; }
-	public function defaultLabel(): static { return $this->label('token'); }
-	
+
+	public bool $initialNull = false;
+
 	protected function __construct()
 	{
-	    parent::__construct();
-	    $this->length(GDO::TOKEN_LENGTH);
-	}
-	
-	public function length($size): static
-	{
-		$this->pattern = '/^[a-zA-Z0-9]{'.$size.'}$/D';
-		return parent::length($size);
-	}
-	
-	public bool $initialNull = false;
-	public function initialNull(bool $initialNull=true): static
-	{
-		$this->initialNull = $initialNull;
-		return $this;
-	}
-	
-	public function blankData() : array
-	{
-		return [
-		    $this->name => $this->initialNull ? 
-		        null : Random::randomKey($this->max)];
+		parent::__construct();
+		$this->length(GDO::TOKEN_LENGTH);
 	}
 
-	######################
-	### Static helpers ###
-	######################
-	/**
-	 * Generate a fixed compute token for arbritrary data.
-	 * @TODO: Test crypto
-	 */
-	public static function generateToken(string $data, int $len=GDO::TOKEN_LENGTH) : string
+	public function length($size): self
 	{
-		$hash = sha1( md5($data) . md5(GDO_SALT) ); # the eye of the tiger
-		return substr($hash, 0, $len);
+		$this->pattern = '/^[a-zA-Z0-9]{' . $size . '}$/D';
+		return parent::length($size);
 	}
-	
-	public static function validateToken(string $token, string $data, int $len=GDO::TOKEN_LENGTH) : bool
+
+	public function blankData(): array
 	{
-		$compare = self::generateToken($data, $len);
-		return $token === $compare;
+		return [
+			$this->name => $this->initialNull ?
+				null : Random::randomKey($this->max)];
 	}
-	
-	public function plugVars() : array
+
+	public function plugVars(): array
 	{
 		if ($this->initialNull)
 		{
@@ -70,5 +44,36 @@ class GDT_Token extends GDT_Char
 			[$this->getName() => Random::mrandomKey($this->max)],
 		];
 	}
-	
+
+	public function getDefaultName(): string { return 'token'; }
+
+	public function defaultLabel(): self { return $this->label('token'); }
+
+	######################
+	### Static helpers ###
+	######################
+
+	public static function validateToken(string $token, string $data, int $len = GDO::TOKEN_LENGTH): bool
+	{
+		$compare = self::generateToken($data, $len);
+		return $token === $compare;
+	}
+
+	/**
+	 * Generate a fixed compute token for arbritrary data.
+	 *
+	 * @TODO: Test crypto
+	 */
+	public static function generateToken(string $data, int $len = GDO::TOKEN_LENGTH): string
+	{
+		$hash = sha1(md5($data) . md5(GDO_SALT)); # the eye of the tiger
+		return substr($hash, 0, $len);
+	}
+
+	public function initialNull(bool $initialNull = true): self
+	{
+		$this->initialNull = $initialNull;
+		return $this;
+	}
+
 }

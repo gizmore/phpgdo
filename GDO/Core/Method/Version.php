@@ -2,30 +2,31 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\GDT;
-use GDO\Core\Method;
-use GDO\Core\GDT_Version;
-use GDO\Core\Module_Core;
 use GDO\Core\GDT_String;
+use GDO\Core\GDT_Version;
+use GDO\Core\Method;
+use GDO\Core\Module_Core;
 use GDO\UI\GDT_Card;
 
 /**
  * Print GDO and PHP version number.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
+ * @author gizmore
  */
 final class Version extends Method
 {
-	public function getMethodTitle() : string
+
+	public function getMethodTitle(): string
 	{
 		return t('version');
 	}
-	
-	public function getMethodDescription() : string
+
+	public function getMethodDescription(): string
 	{
 		return t('info_version');
 	}
-	
+
 	public function execute(): GDT
 	{
 		return GDT_Card::makeWith(
@@ -36,4 +37,3 @@ final class Version extends Method
 	}
 
 }
-

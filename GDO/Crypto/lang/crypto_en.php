@@ -1,5 +1,6 @@
 <?php
 namespace GDO\Crypto\lang;
+
 return [
 	'module_crypto' => 'Cryptography',
 	'cfg_password_strong' => 'Force a strong password?',

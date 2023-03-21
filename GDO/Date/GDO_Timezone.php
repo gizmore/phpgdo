@@ -1,41 +1,45 @@
 <?php
 namespace GDO\Date;
 
+use DateTimeZone;
 use GDO\Core\GDO;
 use GDO\Core\GDT_AutoInc;
-use GDO\Core\GDT_Name;
 use GDO\Core\GDT_Int;
-use GDO\Core\GDT_Index;
+use GDO\Core\GDT_Name;
 
 /**
  * Timezone mapping entities.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.10.7
+ * @author gizmore
  */
 final class GDO_Timezone extends GDO
 {
-	public function isTestable() : bool { return false; }
-	
-	public function gdoCached() : bool { return false; }
-	
-	###############
-	### Factory ###
-	###############
+
 	/**
 	 * Get a timezone by name.
+	 *
 	 * @example Europe/Berlin
 	 */
-	public static function getByName($name): static
+	public static function getByName($name): self
 	{
 		return self::getBy('tz_name', $name);
 	}
-	
+
+	public function isTestable(): bool { return false; }
+
+	###############
+	### Factory ###
+	###############
+
+	public function gdoCached(): bool { return false; }
+
 	###########
 	### GDO ###
 	###########
-	public function gdoColumns() : array
+
+	public function gdoColumns(): array
 	{
 		return [
 			GDT_AutoInc::make('tz_id')->bytes(2),
@@ -44,22 +48,38 @@ final class GDO_Timezone extends GDO
 //			GDT_Index::make('tz_index_name')->indexColumns('tz_name')->btree(),
 		];
 	}
-	
+
 	###############
 	### Getters ###
 	###############
-	public function getName() : ?string { return $this->gdoVar('tz_name'); }
+
+	/**
+	 * @return DateTimeZone
+	 */
+	public function getTimezone()
+	{
+		return Time::getTimezoneObject($this->getID());
+	}
+
+	public function allTimezones()
+	{
+		return array_values($this->allCached('tz_name', true));
+	}
+
+	public function getName(): ?string { return $this->gdoVar('tz_name'); }
+
+
 	public function getOffset() { return $this->gdoVar('tz_offset'); }
 
 	###############
 	### Display ###
 	###############
-	public function renderName() : string
+	public function renderName(): string
 	{
 		return $this->getName() . ' ' . $this->displayOffset();
 	}
-	
-	public function renderOption() : string
+
+	public function renderOption(): string
 	{
 		if ($name = $this->getName())
 		{
@@ -67,7 +87,7 @@ final class GDO_Timezone extends GDO
 		}
 		return '';
 	}
-	
+
 	public function displayOffset()
 	{
 		$o = $this->getOffset();
@@ -77,24 +97,15 @@ final class GDO_Timezone extends GDO
 			$oo / 60, $oo % 60
 		);
 	}
-	
+
 	#######################
 	### Timezone Object ###
 	#######################
-	/**
-	 * @return \DateTimeZone
-	 */
-	public function getTimezone()
-	{
-		return Time::getTimezoneObject($this->getID());
-	}
+
 
 	#############
 	### Cache ###
 	#############
-	public function allTimezones()
-	{
-		return array_values($this->allCached('tz_name', true));
-	}
-	
+
+
 }

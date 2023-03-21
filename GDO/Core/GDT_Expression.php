@@ -1,51 +1,59 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Core\Expression\Parser;
 use GDO\CLI\CLI;
+use GDO\Core\Expression\Parser;
 
 /**
  * An expression executes a command line.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 7.0.0
+ * @author gizmore
  */
 final class GDT_Expression extends GDT
 {
+
 	###############
 	### Factory ###
 	###############
-	public static function fromLine(string $line): static
+	public self $parent;
+	public GDT_Method $method;
+	public string $line;
+	public array $inputs = [];
+
+	public static function fromLine(string $line): self
 	{
 		static $parser = new Parser();
 		return $parser->parse($line);
 	}
-	
-	public self $parent;
-	public function parent(self $parent): static
+
+	public function parent(self $parent): self
 	{
 		$this->parent = $parent;
 		return $this;
 	}
-	
-	public GDT_Method $method;
-	public function method(Method $method): static
+
+	public function method(Method $method): self
 	{
 		$this->method = GDT_Method::make()->method($method);
 		return $this;
 	}
 
-	public string $line;
-	public function line(string $line): static
+	############
+	### Exec ###
+	############
+
+	public function line(string $line): self
 	{
 		$this->line = $line;
 		return $this;
 	}
-	
-	############
-	### Exec ###
-	############
+
+	#############
+	### Input ###
+	#############
+
 	public function execute()
 	{
 		try
@@ -61,13 +69,8 @@ final class GDT_Expression extends GDT
 			return $ex->renderCLI() . trim(CLI::renderCLIHelp($this->method->method));
 		}
 	}
-	
-	#############
-	### Input ###
-	#############
-	public array $inputs = [];
-	
-	public function addInput(?string $key, $input) : void
+
+	public function addInput(?string $key, $input): void
 	{
 		$this->method->addInput($key, $input);
 		$this->inputs = $this->method->getInputs();
@@ -80,19 +83,19 @@ final class GDT_Expression extends GDT
 // 			$this->inputs[$key] = $input;
 // 		}
 	}
-	
-	public function hasPositionalInput() : bool
+
+	public function hasPositionalInput(): bool
 	{
 		return isset($this->inputs[0]);
 	}
-	
-	public function applyInputs() : void
+
+	public function applyInputs(): void
 	{
 		$this->method->inputs($this->inputs);
 		$this->method->method->inputs($this->inputs);
-		
+
 // 		$cache = $this->method->method->gdoParameterCache();
-		
+
 // 		$pos = 0;
 // 		foreach ($this->inputs as $key => $input)
 // 		{
@@ -102,11 +105,11 @@ final class GDT_Expression extends GDT
 // 				{
 // 					if ()
 // 					{
-						
+
 // 					}
 // 				}
 // 			}
 // 		}
 	}
-	
+
 }

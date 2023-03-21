@@ -5,41 +5,24 @@ use GDO\Crypto\GDT_MD5;
 
 /**
  * A cache for static file md5 sums.
- * 
- * @author gizmore
+ *
  * @version 7.0.2
+ * @author gizmore
  */
 final class GDO_FileCache extends GDO
 {
-	
-	public function gdoCached(): bool
-	{
-		return false;
-	}
-	
-	public function gdoColumns(): array
-	{
-		return [
-			GDT_Name::make('fc_name')->primary()->max(255),
-			GDT_MD5::make('fc_md5')->notNull(),
-			GDT_UInt::make('fc_mtime')->notNull(),
-		];
-	}
-	
-	##############
-	### Static ###
-	##############
-	public static function md5For(string $path, int $last_modified_time) : string
+
+	public static function md5For(string $path, int $last_modified_time): string
 	{
 		$table = self::table();
-		if ($file = $table->select()->where("fc_name=".quote($path))->where("fc_mtime>=$last_modified_time")->first()->exec()->fetchObject())
+		if ($file = $table->select()->where('fc_name=' . quote($path))->where("fc_mtime>=$last_modified_time")->first()->exec()->fetchObject())
 		{
 			return $file->gdoVar('fc_md5');
 		}
 		return self::newMD5For($path, $last_modified_time);
 	}
-	
-	private static function newMD5For(string $path, int $last_modified_time) : string
+
+	private static function newMD5For(string $path, int $last_modified_time): string
 	{
 		$md5 = md5($path);
 		self::blank([
@@ -49,5 +32,23 @@ final class GDO_FileCache extends GDO
 		])->replace();
 		return $md5;
 	}
-	
+
+	##############
+	### Static ###
+	##############
+
+	public function gdoCached(): bool
+	{
+		return false;
+	}
+
+	public function gdoColumns(): array
+	{
+		return [
+			GDT_Name::make('fc_name')->primary()->max(255),
+			GDT_MD5::make('fc_md5')->notNull(),
+			GDT_UInt::make('fc_mtime')->notNull(),
+		];
+	}
+
 }

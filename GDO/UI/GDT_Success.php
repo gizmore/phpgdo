@@ -3,11 +3,18 @@ namespace GDO\UI;
 
 /**
  * A success is a panel with a special css class and icon.
- * 
+ *
  * @author gizmore
  */
 final class GDT_Success extends GDT_Panel
 {
+
+	public int $code = 200;
+
+	############
+	### Code ###
+	############
+
 	protected function __construct()
 	{
 		parent::__construct();
@@ -16,25 +23,21 @@ final class GDT_Success extends GDT_Panel
 		$this->addClass('alert-success');
 		$this->icon = 'check';
 	}
-	
-	############
-	### Code ###
-	############
-	public int $code = 200;
-	public function code(int $code): static
+
+	public function code(int $code): self
 	{
 		$this->code = $code;
 		return $this;
 	}
-	
+
 	##############
 	### Render ###
 	##############
-	public function renderCLI() : string
+	public function renderCLI(): string
 	{
 		return Color::green($this->renderText()) . "\n";
 	}
-	
+
 	public function renderJSON()
 	{
 		return ['message' => $this->renderText()];

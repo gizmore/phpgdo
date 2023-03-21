@@ -2,23 +2,24 @@
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
-use GDO\Form\GDT_Form;
 use GDO\Date\GDT_Duration;
 use GDO\Form\GDT_AntiCSRF;
+use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\UI\GDT_Success;
 
 /**
  * Wait a specified duration.
- * 
- * @author gizmore
+ *
  * @version 6.11.5
+ * @author gizmore
  */
 final class Wait extends MethodCLI
 {
+
 	public function getCLITrigger() { return 'wait'; }
-	
-	public function createForm(GDT_Form $form) : void
+
+	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_Duration::make('duration')->notNull(),
@@ -33,5 +34,5 @@ final class Wait extends MethodCLI
 		usleep($seconds * 1000000);
 		return GDT_Success::make();
 	}
-	
+
 }

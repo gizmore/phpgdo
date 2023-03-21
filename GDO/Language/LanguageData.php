@@ -1,104 +1,106 @@
 <?php
 namespace GDO\Language;
+
 use GDO\Util\FileUtil;
 
 /**
  * This class contains Language data.
  * English Name | Native Name | iso-639-3 | iso-639-1
- * 
+ *
  * @author gizmore
  */
 final class LanguageData
 {
+
 	public static function onInstall()
 	{
 		foreach (self::getLanguages() as $data)
 		{
 // 			list($en, $native, $iso3, $iso2) = $data;
 			$iso2 = $data[3];
-			if (FileUtil::isFile(GDO_PATH . 'GDO/Language/img/'.strtolower($iso2).'.png'))
+			if (FileUtil::isFile(GDO_PATH . 'GDO/Language/img/' . strtolower($iso2) . '.png'))
 			{
-			    if (!GDO_Language::getById($iso2))
-			    {
-			        GDO_Language::blank(array(
-			            'lang_iso' => $iso2
-			        ))->insert();
-			    }
+				if (!GDO_Language::getById($iso2))
+				{
+					GDO_Language::blank([
+						'lang_iso' => $iso2,
+					])->insert();
+				}
 			}
 		}
 	}
-	
+
 	public static function getLanguages()
 	{
 		# English Name | Native Name | iso-639-3 | iso-639-1
-		static $languages = array(
-			array('English', 'English', 'eng', 'en'),
-			array('German', 'Deutsch', 'ger', 'de'),
-			array('French', 'Française', 'fre', 'fr'),
-			array('Bulgarian', 'български език', 'bul', 'bg'),
-			array('Brazil', 'Brazil', 'bra', 'br'),
-			array('Spanish', 'español', 'spa', 'es'),
-			array('Chinese', '汉语 / 漢語', 'chi', 'zh'),
-			array('Croatian', 'hrvatski', 'cro', 'hr'),
-			array('Albanian', 'Shqip', 'alb', 'sq'),
-			array('Arabic', 'العربية', 'ara', 'ar'),
+		static $languages = [
+			['English', 'English', 'eng', 'en'],
+			['German', 'Deutsch', 'ger', 'de'],
+			['French', 'Française', 'fre', 'fr'],
+			['Bulgarian', 'български език', 'bul', 'bg'],
+			['Brazil', 'Brazil', 'bra', 'br'],
+			['Spanish', 'español', 'spa', 'es'],
+			['Chinese', '汉语 / 漢語', 'chi', 'zh'],
+			['Croatian', 'hrvatski', 'cro', 'hr'],
+			['Albanian', 'Shqip', 'alb', 'sq'],
+			['Arabic', 'العربية', 'ara', 'ar'],
 // 			array('Amazigh', '', 'ama', ''),
-			array('Catalan', 'català', 'cat', 'ca'),
-			array('Armenian', 'Հայերեն', 'arm', 'hy'),
-			array('Azerbaijani', 'Azərbaycan / Азәрбајҹан / آذربایجان دیلی', 'aze', 'az'),
-			array('Bengali', 'বাংলা',  'ben', 'bn'),
-			array('Dutch', 'Nederlands', 'dut', 'nl'),
-			array('Bosnian', 'bosanski/босански', 'bos', 'bs'),
-			array('Serbian', 'Српски / Srpski ', 'ser', 'sr'),
-			array('Portuguese', 'português', 'por', 'pt'),
-			array('Greek', 'Ελληνικά / Ellīniká', 'gre', 'el'),
-			array('Turkish', 'Türkçe', 'tur', 'tr'),
-			array('Czech', 'Čeština', 'cze', 'cs'),
-			array('Danish', 'dansk', 'dan', 'da'),
-			array('Finnish', 'suomi', 'fin', 'fi'),
-			array('Swedish', 'svenska', 'swe', 'sv'),
-			array('Hungarian', 'magyar', 'hun', 'hu'),
-			array('Icelandic', 'Íslenska', 'ice', 'is'),
-			array('Hindi', 'हिन्दी / हिंदी',  'hin', 'hi'),
-			array('Persian', 'فارسی', 'per', 'fa'),
-			array('Kurdish', 'Kurdî / کوردی', 'kur', 'ku'),
-			array('Irish', 'Gaeilge', 'iri', 'ga'),
-			array('Hebrew', 'עִבְרִית / \'Ivrit', 'heb', 'he'),
-			array('Italian', 'Italiano', 'ita', 'it'),
-			array('Japanese', '日本語 / Nihongo', 'jap', 'ja'),
-			array('Korean', '한국어 / 조선말',  'kor', 'ko'),
-			array('Latvian', 'latviešu valoda', 'lat', 'lv'),
-			array('Lithuanian', 'Lietuvių kalba', 'lit', 'lt'),
-			array('Luxembourgish', 'Lëtzebuergesch', 'lux', 'lb'),
-			array('Macedonian', 'Македонски јазик / Makedonski jazik', 'mac', 'mk'),
-			array('Malay', 'Bahasa Melayu / بهاس ملايو', 'mal', 'ms'),
-			array('Dhivehi', 'Dhivehi / Mahl', 'dhi', 'dv'),
+			['Catalan', 'català', 'cat', 'ca'],
+			['Armenian', 'Հայերեն', 'arm', 'hy'],
+			['Azerbaijani', 'Azərbaycan / Азәрбајҹан / آذربایجان دیلی', 'aze', 'az'],
+			['Bengali', 'বাংলা', 'ben', 'bn'],
+			['Dutch', 'Nederlands', 'dut', 'nl'],
+			['Bosnian', 'bosanski/босански', 'bos', 'bs'],
+			['Serbian', 'Српски / Srpski ', 'ser', 'sr'],
+			['Portuguese', 'português', 'por', 'pt'],
+			['Greek', 'Ελληνικά / Ellīniká', 'gre', 'el'],
+			['Turkish', 'Türkçe', 'tur', 'tr'],
+			['Czech', 'Čeština', 'cze', 'cs'],
+			['Danish', 'dansk', 'dan', 'da'],
+			['Finnish', 'suomi', 'fin', 'fi'],
+			['Swedish', 'svenska', 'swe', 'sv'],
+			['Hungarian', 'magyar', 'hun', 'hu'],
+			['Icelandic', 'Íslenska', 'ice', 'is'],
+			['Hindi', 'हिन्दी / हिंदी', 'hin', 'hi'],
+			['Persian', 'فارسی', 'per', 'fa'],
+			['Kurdish', 'Kurdî / کوردی', 'kur', 'ku'],
+			['Irish', 'Gaeilge', 'iri', 'ga'],
+			['Hebrew', 'עִבְרִית / \'Ivrit', 'heb', 'he'],
+			['Italian', 'Italiano', 'ita', 'it'],
+			['Japanese', '日本語 / Nihongo', 'jap', 'ja'],
+			['Korean', '한국어 / 조선말', 'kor', 'ko'],
+			['Latvian', 'latviešu valoda', 'lat', 'lv'],
+			['Lithuanian', 'Lietuvių kalba', 'lit', 'lt'],
+			['Luxembourgish', 'Lëtzebuergesch', 'lux', 'lb'],
+			['Macedonian', 'Македонски јазик / Makedonski jazik', 'mac', 'mk'],
+			['Malay', 'Bahasa Melayu / بهاس ملايو', 'mal', 'ms'],
+			['Dhivehi', 'Dhivehi / Mahl', 'dhi', 'dv'],
 // 			array("Montenegrin", "Црногорски / Crnogorski", "mon", ''),
-			array('Maori', 'Māori', 'mao', 'mi'),
-			array('Norwegian', 'norsk', 'nor', 'no'),
-			array('Filipino', 'Filipino', 'fil', 'tl'),
-			array('Polish', 'język polski', 'pol', 'pl'),
-			array('Romanian', 'română / limba română', 'rom', 'ro'),
-			array('Russian', 'Русский язык', 'rus', 'ru'),
-			array('Slovak', 'slovenčina', 'slo', 'sk'),
-			array('Mandarin', '官話 / Guānhuà', 'man', 'zh'),
-			array('Tamil', 'தமிழ', 'tam', 'ta'),
-			array('Slovene', 'slovenščina', 'slv', 'sl'),
-			array('Zulu', 'isiZulu', 'zul', 'zu'),
-			array('Xhosa', 'isiXhosa', 'xho', 'xh'),
-			array('Afrikaans', 'Afrikaans', 'afr', 'af'),
+			['Maori', 'Māori', 'mao', 'mi'],
+			['Norwegian', 'norsk', 'nor', 'no'],
+			['Filipino', 'Filipino', 'fil', 'tl'],
+			['Polish', 'język polski', 'pol', 'pl'],
+			['Romanian', 'română / limba română', 'rom', 'ro'],
+			['Russian', 'Русский язык', 'rus', 'ru'],
+			['Slovak', 'slovenčina', 'slo', 'sk'],
+			['Mandarin', '官話 / Guānhuà', 'man', 'zh'],
+			['Tamil', 'தமிழ', 'tam', 'ta'],
+			['Slovene', 'slovenščina', 'slv', 'sl'],
+			['Zulu', 'isiZulu', 'zul', 'zu'],
+			['Xhosa', 'isiXhosa', 'xho', 'xh'],
+			['Afrikaans', 'Afrikaans', 'afr', 'af'],
 // 			array('Northern Sotho', 'Sesotho sa Leboa', 'nso', '--'),
-			array('Tswana', 'Setswana / Sitswana', 'tsw', 'tn'),
-			array('Sotho', 'Sesotho', 'sot', 'st'),
-			array('Tsonga', 'Tsonga', 'tso', 'ts'),
-			array('Thai', 'ภาษาไทย / phasa thai', 'tha', 'th'),
-			array('Ukrainian', 'українська мова', 'ukr', 'uk'),
-			array('Vietnamese', 'Tiếng Việt', 'vie', 'vi'),
-			array('Pashto', 'پښت', 'pas', 'ps'),
-			array('Samoan', 'gagana Sāmoa', 'sam', 'sm'),
+			['Tswana', 'Setswana / Sitswana', 'tsw', 'tn'],
+			['Sotho', 'Sesotho', 'sot', 'st'],
+			['Tsonga', 'Tsonga', 'tso', 'ts'],
+			['Thai', 'ภาษาไทย / phasa thai', 'tha', 'th'],
+			['Ukrainian', 'українська мова', 'ukr', 'uk'],
+			['Vietnamese', 'Tiếng Việt', 'vie', 'vi'],
+			['Pashto', 'پښت', 'pas', 'ps'],
+			['Samoan', 'gagana Sāmoa', 'sam', 'sm'],
 // 			array('Bajan', 'Barbadian Creole', 'baj', '--'),
-			array('Belarusian', 'беларуская мова', 'bel', 'be'),
-			array('Dzongkha', '', 'dzo', 'dz'),
+			['Belarusian', 'беларуская мова', 'bel', 'be'],
+			['Dzongkha', '', 'dzo', 'dz'],
 // 			array('Quechua', '', 'que', ''),
 // 			array('Aymara', '', 'aym', ''),
 // 			array('Setswana', '', 'set', ''),
@@ -178,11 +180,12 @@ final class LanguageData
 // 			array('Sindebele', '', 'sid', ''),
 // 			array('Taiwanese', '', 'tai', ''),
 // 			array('Manx', '', 'max', ''),
-			array('Fanmglish', 'Famster', 'fam', 'xf'),
-			array('Bot', 'BotJSON', 'bot', 'xb'),
-			array('Ibdes', 'RFCBotJSON', 'ibd', 'xi'),
-			array('Test Japanese', 'Test Japanese', 'ori', 'xo')
-		);
+			['Fanmglish', 'Famster', 'fam', 'xf'],
+			['Bot', 'BotJSON', 'bot', 'xb'],
+			['Ibdes', 'RFCBotJSON', 'ibd', 'xi'],
+			['Test Japanese', 'Test Japanese', 'ori', 'xo'],
+		];
 		return $languages;
 	}
+
 }

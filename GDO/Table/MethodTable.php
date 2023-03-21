@@ -1,22 +1,22 @@
 <?php
 namespace GDO\Table;
 
-use GDO\DB\ArrayResult;
-use GDO\Core\GDT;
 use GDO\Core\GDO;
-use GDO\User\GDO_User;
-use GDO\UI\GDT_SearchField;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Tuple;
-use GDO\Form\MethodForm;
+use GDO\DB\ArrayResult;
 use GDO\Form\GDT_Form;
+use GDO\Form\MethodForm;
+use GDO\UI\GDT_SearchField;
+use GDO\User\GDO_User;
 
 /**
  * A method that displays a table from memory via ArrayResult.
  * It's the base class for MethodQueryTable or MethodQueryCards.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 5.0.0
+ * @author gizmore
  * @see ArrayResult
  * @see GDO
  * @see GDT
@@ -27,41 +27,50 @@ use GDO\Form\GDT_Form;
  */
 abstract class MethodTable extends MethodForm
 {
+
 	public GDT_Table $table;
-	
+
 	# Override Feature Parameter Names.
-	protected function getIPPName() : string { return 'ipp'; }
-	protected function getPageName() : string { return 'page'; }
-	protected function getOrderName() : string { return 'o'; }
-	protected function getTableName() : string { return 'table'; }
-	protected function getFilterName() : string { return 'f'; }
-	protected function getSearchName() : string { return 'search'; }
-	
-	protected function gdoTableHREF() : string { return $this->href(); }
-	
+	/**
+	 * @var GDT[]
+	 */
+	private array $headerCache;
+
 	/**
 	 * Override this.
 	 * Called upon creation of the GDT_Table.
 	 */
-	public function onCreateTable(GDT_Table $table) : void {}
-	protected function onInitTable() : void {}
-	public function useFetchInto(): bool { return true; }
-	
-	/**
-	 * Override this.
-	 * Return an array of GDT[] for the table headers.
-	 * Defaults to all fields from your gdoTable().
-	 * @return GDT[]
-	 */
-	public function gdoHeaders() : array
+	public function onCreateTable(GDT_Table $table): void {}
+
+	public function getFilterVars(): array
 	{
-		return $this->gdoTable()->gdoColumnsCache();
+		return $this->getFilterField()->getFilterVars();
 	}
-	
+
+	public function getFilterField(): ?GDT_Filter
+	{
+		return $this->gdoParameter($this->getFilterName(), false, false);
+	}
+
+	protected function getFilterName(): string { return 'f'; }
+
+	public function validate(): bool
+	{
+		$valid = true;
+		foreach ($this->gdoParameterCache() as $gdt)
+		{
+			if (!$gdt->validated())
+			{
+				$valid = false;
+			}
+		}
+		return $valid;
+	}
+
 	/**
 	 * @return GDT[string]
 	 */
-	public function &gdoParameterCache() : array
+	public function &gdoParameterCache(): array
 	{
 		if (!isset($this->parameterCache))
 		{
@@ -70,13 +79,89 @@ abstract class MethodTable extends MethodForm
 		}
 		return $this->parameterCache;
 	}
-	
+
 	/**
-	 * @var GDT[]
+	 * Table features paramter array.
+	 *
+	 * @return GDT[]
 	 */
-	private array $headerCache;
-	
-	public function gdoHeaderCache() : array
+	private function gdoTableFeatures(): array
+	{
+		$features = [];
+		if ($this->isPaginated())
+		{
+			$features[] = GDT_IPP::make($this->getIPPName())->initial($this->getDefaultIPP());
+			$features[] = GDT_PageNum::make($this->getPageName())->initial('1');
+		}
+		if ($this->isSearched())
+		{
+			$features[] = GDT_SearchField::make($this->getSearchName());
+		}
+		if ($this->isOrdered())
+		{
+			$features[] = GDT_Order::make($this->getOrderName())->
+			initial($this->getDefaultOrder())->
+			extraFields($this->getExtraFieldNames())->
+			setFields($this->gdoHeaderCache());
+		}
+		if ($this->isFiltered())
+		{
+			$features[] = GDT_Filter::make($this->getFilterName());
+		}
+		return $features;
+	}
+
+	/**
+	 * Override this.
+	 * Return true if you want pagination for this table method.
+	 *
+	 * @return bool
+	 */
+	public function isPaginated() { return true; }
+
+	protected function getIPPName(): string { return 'ipp'; }
+
+	/**
+	 * Default IPP defaults to config in Module_Table.
+	 *
+	 * @see Module_Table::getConfig()
+	 */
+	public function getDefaultIPP(): int { return Module_Table::instance()->cfgItemsPerPage(); }
+
+	protected function getPageName(): string { return 'page'; }
+
+	/**
+	 * Override this.
+	 * Return true if this table shall be searchable over all columns with one input field.
+	 * This is called "HugeQuery" in the GDT_Table implementation.
+	 *
+	 * @return bool
+	 */
+	public function isSearched() { return true; }
+
+	protected function getSearchName(): string { return 'search'; }
+
+	/**
+	 * Override this.
+	 * Return true if this table shall be able to be ordered by headers.
+	 */
+	public function isOrdered(): bool { return true; }
+
+	protected function getOrderName(): string { return 'o'; }
+
+	public function getDefaultOrder(): ?string
+	{
+		foreach ($this->gdoHeaderCache() as $gdt)
+		{
+			if ($gdt->isOrderable())
+			{
+				return $gdt->name . ($gdt->isDefaultAsc() ? ' ASC' : ' DESC');
+			}
+		}
+		return null;
+	}
+
+	public function gdoHeaderCache(): array
 	{
 		if (!isset($this->headerCache))
 		{
@@ -95,180 +180,43 @@ abstract class MethodTable extends MethodForm
 		}
 		return $this->headerCache;
 	}
-	
+
 	/**
-	 * Table features paramter array.
+	 * Override this.
+	 * Return an array of GDT[] for the table headers.
+	 * Defaults to all fields from your gdoTable().
+	 *
 	 * @return GDT[]
 	 */
-	private function gdoTableFeatures() : array
+	public function gdoHeaders(): array
 	{
-		$features = [];
-		if ($this->isPaginated())
-		{
-			$features[] = GDT_IPP::make($this->getIPPName())->initial($this->getDefaultIPP());
-			$features[] = GDT_PageNum::make($this->getPageName())->initial('1');
-		}
-		if ($this->isSearched())
-		{
-			$features[] = GDT_SearchField::make($this->getSearchName());
-		}
-		if ($this->isOrdered())
-		{
-			$features[] = GDT_Order::make($this->getOrderName())->
-				initial($this->getDefaultOrder())->
-				extraFields($this->getExtraFieldNames())->
-				setFields($this->gdoHeaderCache());
-		}
-		if ($this->isFiltered())
-		{
-			$features[] = GDT_Filter::make($this->getFilterName());
-		}
-		return $features;
+		return $this->gdoTable()->gdoColumnsCache();
 	}
-	
-    ################
-    ### Abstract ###
-    ################
-    /**
-     * Override this with returning your GDO->table()
-     * @return GDO
-     */
-    public abstract function gdoTable();
-   
-    public function gdoFetchAs() { return $this->gdoTable(); }
-    
-    /**
-     * Override this with returning an ArrayResult with data.
-     */
-    public function getResult() : ArrayResult { return new ArrayResult([], $this->gdoTable()); }
-    
-    /**
-     * Default IPP defaults to config in Module_Table.
-     * @see Module_Table::getConfig()
-     */
-    public function getDefaultIPP() : int { return Module_Table::instance()->cfgItemsPerPage(); }
-    
-    protected function getCurrentHREF()
-    {
-    	return @$_SERVER['REQUEST_URI'];
-    }
-    
-    /**
-     * Creates the collection GDT.
-     */
-    protected function createCollection() : GDT_Table
-    {
-        $this->table = GDT_Table::make($this->getTableName());
-        $this->table->href($this->gdoTableHREF());
-        $this->table->gdo($this->gdoTable());
-        $this->table->fetchAs($this->gdoFetchAs());
-        $this->gdoParameterCache();
-        return $this->table;
-    }
-    
-    ##################
-    ### 5 features ###
-    ##################
-    /**
-     * Override this.
-     * Return true if this table shall be able to be ordered by headers.
-     */
-	public function isOrdered() : bool { return true; }
 
 	/**
-	 * Override this.
-	 * Return true if this table shall be searchable over all columns with one input field.
-	 * This is called "HugeQuery" in the GDT_Table implementation.
-	 * @return boolean
+	 * Override this with returning your GDO->table()
+	 *
+	 * @return GDO
 	 */
-	public function isSearched() { return true; } # GDT$searchable
+	abstract public function gdoTable();
 
-	/**
-	 * Override this.
-	 * Return true if you want to be able to filter your data by your header columns.
-	 * @return boolean
-	 */
-	public function isFiltered() { return true; } # GDT#filterable
+	################
+	### Abstract ###
+	################
 
-	/**
-	 * Override this.
-	 * Return true if you want pagination for this table method.
-	 * @return boolean
-	 */
-	public function isPaginated() { return true; } # creates a GDT_Pagemenu
-	
-	/**
-	 * Override this.
-	 * Return true if you want to be able to sort this table data manually.
-	 * This requires a GDT_Sort field in your GDO columns / headers as well as MethodSort endpoint.
-	 * @return boolean
-	 * @see GDT_Sort
-	 * @see MethodSort
-	 */
-	public function isSorted() { return false; } # Uses js/ajax and GDO needs to have GDT_Sort column.
-	
-	############
-	### CRUD ###
-	############
-	public function isCreateable(GDO_User $user) : bool { return false; }
-	public function isReadable(GDO_User $user) : bool { return false; }
-	public function isUpdateable(GDO_User $user) : bool { return false; }
-	public function isDeleteable(GDO_User $user) : bool { return false; }
-	
-	public function getDefaultOrder() : ?string
-	{
-	    foreach ($this->gdoHeaderCache() as $gdt)
-	    {
-	        if ($gdt->isOrderable())
-	        {
-	            return $gdt->name . ($gdt->isDefaultAsc() ? ' ASC' : ' DESC');
-	        }
-	    }
-	    return null;
-	}
-	
 	public function getExtraFieldNames(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
-	
-	public function getIPP() : int
-	{
-		return $this->gdoParameterValue($this->getIPPName());
-	}
-	
-	public function getPage() : int
-	{
-		return $this->gdoParameterValue($this->getPageName());
-	}
-	
-	public function getSearchTerm() : string
-	{
-		if ($var = $this->gdoParameterVar($this->getSearchName()))
-		{
-			return $var;
-		}
-		return GDT::EMPTY_STRING;
-	}
-	
-	public function getOrderTerm() : string
-	{
-		return $this->gdoParameterValue($this->getOrderName());
-	}
-	
-	public function getFilterVars() : array
-	{
-		return $this->getFilterField()->getFilterVars();
-	}
-	
-	public function getFilterField() : ?GDT_Filter
-	{
-		return $this->gdoParameter($this->getFilterName(), false, false);
-	}
-	
-	###############
-	### Execute ###
-	###############
+
+	/**
+	 * Override this.
+	 * Return true if you want to be able to filter your data by your header columns.
+	 *
+	 * @return bool
+	 */
+	public function isFiltered() { return true; }
+
 	public function execute()
 	{
 		$form = $this->getForm();
@@ -281,87 +229,13 @@ abstract class MethodTable extends MethodForm
 			$form,
 			$this->renderTable());
 	}
-	
-	public function validate() : bool
+
+	public function renderTable()
 	{
-		$valid = true;
-		foreach ($this->gdoParameterCache() as $gdt)
-		{
-			if (!$gdt->validated())
-			{
-				$valid = false;
-			}
-		}
-		return $valid;
+		return $this->getTable();
 	}
-	
-	public function getMethodTitle() : string
-	{
-		return $this->getTableTitle();
-	}
-	
-	public function getTableTitleLangKey()
-	{
-	    return strtolower('list_'.$this->getModuleName().'_'.$this->getMethodName());
-	}
-	
-	public function getTableTitle()
-	{
-		if (isset($this->table))
-		{
-		    $key = $this->getTableTitleLangKey();
-		    return t($key, [$this->table->countItems()]);
-		}
-		else
-		{
-			$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
-			return t($key);
-		}
-	}
-	
-	public function getNumItems(): int
-	{
-		return $this->table->countItems();
-	}
-	
-	protected function setupTitle(GDT_Table $table)
-	{
-	    $table->titleRaw($this->getTableTitle());
-	}
-	
-	protected function setupCollection(GDT_Table $table)
-	{
-	    $headers = $this->gdoHeaderCache();
-	    $this->table->addHeaderFields(...array_values($headers));
-	    
-	    # 5 features
-	    if ($this->isOrdered())
-	    {
-		    $table->ordered($this->gdoParameter($this->getOrderName()));
-	    }
-	    $table->filtered($this->isFiltered(), $this->getFilterField());
-	    $table->searched($this->isSearched());
-	    $table->sorted($this->isSorted());
-	    if ($this->isPaginated())
-	    {
-	    	$table->paginated(true, $this->gdoTableHREF(), $this->getIPP());
-			$this->gdoParameter($this->getPageName())->table($this->table);
-	    	$table->pagemenu->page($this->getPage());
-	    }
-	    
-	    # 4 editor permissions
-	    $user = GDO_User::current();
-	    $table->creatable($this->isCreateable($user));
-	    $table->readable($this->isReadable($user));
-	    $table->updatable($this->isUpdateable($user));
-	    $table->deletable($this->isDeleteable($user));
-	    
-	    # 1 speedup
-	    $table->fetchInto($this->useFetchInto());
-	    $table->fetchAs($this->gdoFetchAs());
-	}
-	
-	public function getTable() : GDT_Table
+
+	public function getTable(): GDT_Table
 	{
 		if (!isset($this->table))
 		{
@@ -371,10 +245,28 @@ abstract class MethodTable extends MethodForm
 		return $this->table;
 	}
 
-	public function onMethodInit()
+	##################
+	### 5 features ###
+	##################
+
+	/**
+	 * Creates the collection GDT.
+	 */
+	protected function createCollection(): GDT_Table
 	{
-		$this->getTable();
+		$this->table = GDT_Table::make($this->getTableName());
+		$this->table->href($this->gdoTableHREF());
+		$this->table->gdo($this->gdoTable());
+		$this->table->fetchAs($this->gdoFetchAs());
+		$this->gdoParameterCache();
+		return $this->table;
 	}
+
+	protected function getTableName(): string { return 'table'; } # GDT$searchable
+
+	protected function gdoTableHREF(): string { return $this->href(); } # GDT#filterable
+
+	public function gdoFetchAs() { return $this->gdoTable(); } # creates a GDT_Pagemenu
 
 	private function initTable()
 	{
@@ -383,17 +275,89 @@ abstract class MethodTable extends MethodForm
 		$this->onInitTable();
 		$this->beforeCalculateTable($table);
 		$this->calculateTable($table);
-	    $result = $table->getResult();
-        $result->table = $this->gdoFetchAs();
-	    $this->setupTitle($table);
-	    return $table;
-	}
-	
-	public function renderTable()
+		$result = $table->getResult();
+		$result->table = $this->gdoFetchAs();
+		$this->setupTitle($table);
+		return $table;
+	} # Uses js/ajax and GDO needs to have GDT_Sort column.
+
+	############
+	### CRUD ###
+	############
+
+	protected function setupCollection(GDT_Table $table)
 	{
-	    return $this->getTable();
+		$headers = $this->gdoHeaderCache();
+		$this->table->addHeaderFields(...array_values($headers));
+
+		# 5 features
+		if ($this->isOrdered())
+		{
+			$table->ordered($this->gdoParameter($this->getOrderName()));
+		}
+		$table->filtered($this->isFiltered(), $this->getFilterField());
+		$table->searched($this->isSearched());
+		$table->sorted($this->isSorted());
+		if ($this->isPaginated())
+		{
+			$table->paginated(true, $this->gdoTableHREF(), $this->getIPP());
+			$this->gdoParameter($this->getPageName())->table($this->table);
+			$table->pagemenu->page($this->getPage());
+		}
+
+		# 4 editor permissions
+		$user = GDO_User::current();
+		$table->creatable($this->isCreateable($user));
+		$table->readable($this->isReadable($user));
+		$table->updatable($this->isUpdateable($user));
+		$table->deletable($this->isDeleteable($user));
+
+		# 1 speedup
+		$table->fetchInto($this->useFetchInto());
+		$table->fetchAs($this->gdoFetchAs());
 	}
-	
+
+	/**
+	 * Override this.
+	 * Return true if you want to be able to sort this table data manually.
+	 * This requires a GDT_Sort field in your GDO columns / headers as well as MethodSort endpoint.
+	 *
+	 * @return bool
+	 * @see GDT_Sort
+	 * @see MethodSort
+	 */
+	public function isSorted() { return false; }
+
+	public function getIPP(): int
+	{
+		return $this->gdoParameterValue($this->getIPPName());
+	}
+
+	public function getPage(): int
+	{
+		return $this->gdoParameterValue($this->getPageName());
+	}
+
+	public function isCreateable(GDO_User $user): bool { return false; }
+
+	public function isReadable(GDO_User $user): bool { return false; }
+
+	public function isUpdateable(GDO_User $user): bool { return false; }
+
+	public function isDeleteable(GDO_User $user): bool { return false; }
+
+	public function useFetchInto(): bool { return true; }
+
+	protected function onInitTable(): void {}
+
+
+
+
+
+	###############
+	### Execute ###
+	###############
+
 	protected function beforeCalculateTable(GDT_Table $table)
 	{
 		if ($this->isPaginated())
@@ -403,42 +367,103 @@ abstract class MethodTable extends MethodForm
 			$this->table->pagemenu->numItems(count($result->getData()));
 		}
 	}
-	
+
+	/**
+	 * Override this with returning an ArrayResult with data.
+	 */
+	public function getResult(): ArrayResult { return new ArrayResult([], $this->gdoTable()); }
+
 	protected function calculateTable(GDT_Table $table)
 	{
-	    # Exec
-	    $result = $this->getResult();
-	    
-	    # Exec features
-	    if ($this->isFiltered())
-	    {
-	        $result = $result->filterResult($result->getFullData(), $table->getHeaderFields(), $this->getFilterField());
-	    }
-	    if ($this->isSearched())
-	    {
-	        $result = $result->searchResult($result->getData(), $this->gdoTable(), $table->getHeaderFields(), $this->getSearchTerm());
-	    }
-	    if ($this->isOrdered())
-	    {
-	    	$table->result($result);
-	    	$result = $table->multisort($this->getOrderTerm());
-	    }
-	    if ($this->isPaginated())
-	    {
-	        $result = $table->pagemenu->paginateResult($result, $this->getPage(), $this->getIPP());
-	    }
-	    $table->result($result);
+		# Exec
+		$result = $this->getResult();
+
+		# Exec features
+		if ($this->isFiltered())
+		{
+			$result = $result->filterResult($result->getFullData(), $table->getHeaderFields(), $this->getFilterField());
+		}
+		if ($this->isSearched())
+		{
+			$result = $result->searchResult($result->getData(), $this->gdoTable(), $table->getHeaderFields(), $this->getSearchTerm());
+		}
+		if ($this->isOrdered())
+		{
+			$table->result($result);
+			$result = $table->multisort($this->getOrderTerm());
+		}
+		if ($this->isPaginated())
+		{
+			$result = $table->pagemenu->paginateResult($result, $this->getPage(), $this->getIPP());
+		}
+		$table->result($result);
 	}
-	
-	### Form
-	
+
+	public function getSearchTerm(): string
+	{
+		if ($var = $this->gdoParameterVar($this->getSearchName()))
+		{
+			return $var;
+		}
+		return GDT::EMPTY_STRING;
+	}
+
+	public function getOrderTerm(): string
+	{
+		return $this->gdoParameterValue($this->getOrderName());
+	}
+
+	protected function setupTitle(GDT_Table $table)
+	{
+		$table->titleRaw($this->getTableTitle());
+	}
+
+	public function getTableTitle()
+	{
+		if (isset($this->table))
+		{
+			$key = $this->getTableTitleLangKey();
+			return t($key, [$this->table->countItems()]);
+		}
+		else
+		{
+			$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
+			return t($key);
+		}
+	}
+
+	public function getTableTitleLangKey()
+	{
+		return strtolower('list_' . $this->getModuleName() . '_' . $this->getMethodName());
+	}
+
+	public function getMethodTitle(): string
+	{
+		return $this->getTableTitle();
+	}
+
+	public function onMethodInit()
+	{
+		$this->getTable();
+	}
+
 	public function isUserRequired(): bool
 	{
 		return false;
 	}
-	
-	public function createForm(GDT_Form $form): void
+
+	public function createForm(GDT_Form $form): void {}
+
+	### Form
+
+	public function getNumItems(): int
 	{
+		return $this->table->countItems();
 	}
-	
+
+	protected function getCurrentHREF()
+	{
+		return @$_SERVER['REQUEST_URI'];
+	}
+
 }

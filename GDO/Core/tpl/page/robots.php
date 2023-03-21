@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core\tpl\page;
+
 use GDO\Core\Module_Core;
+
 ?>
 #
 # <?=sitename()?> robots.txt

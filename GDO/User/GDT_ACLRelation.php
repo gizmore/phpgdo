@@ -8,35 +8,36 @@ use GDO\Friends\GDO_Friendship;
  * An ACL field has default ACL options.
  * It checks access based on user relation and member status.
  * It helps to construct queries to reflect ACL permission.
- * 
- * @author gizmore@wechall.net
+ *
  * @version 7.0.1
  * @since 6.8.0
+ * @author gizmore@wechall.net
  * @see GDT_ACL
  */
 final class GDT_ACLRelation extends GDT_Enum
 {
-	const ALL = 'acl_all';
-	const GUESTS = 'acl_guests';
-	const MEMBERS = 'acl_members';
-	const FRIENDS = 'acl_friends';
-	const FRIEND_FRIENDS = 'acl_friend_friends';
-	const NOONE = 'acl_noone';
-	const HIDDEN = 'acl_hidden';
-	
+
+	public const ALL = 'acl_all';
+	public const GUESTS = 'acl_guests';
+	public const MEMBERS = 'acl_members';
+	public const FRIENDS = 'acl_friends';
+	public const FRIEND_FRIENDS = 'acl_friend_friends';
+	public const NOONE = 'acl_noone';
+	public const HIDDEN = 'acl_hidden';
+
 	protected function __construct()
 	{
-	    parent::__construct();
-	    $this->enumValues(self::ALL, self::GUESTS, self::MEMBERS, self::FRIEND_FRIENDS, self::FRIENDS, self::NOONE, self::HIDDEN);
-	    $this->initial = self::NOONE;
+		parent::__construct();
+		$this->enumValues(self::ALL, self::GUESTS, self::MEMBERS, self::FRIEND_FRIENDS, self::FRIENDS, self::NOONE, self::HIDDEN);
+		$this->initial = self::NOONE;
 		$this->notNull = true;
 		$this->icon = 'eye';
 	}
-	
+
 	/**
 	 * Check if a userpair allows access for this setting.
 	 */
-	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason) : bool
+	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason): bool
 	{
 		switch ($this->var)
 		{
@@ -49,14 +50,14 @@ final class GDT_ACLRelation extends GDT_Enum
 					$reason = t('err_only_user_access');
 				}
 				return $result;
-				
+
 			case self::MEMBERS:
 				if (!$result = $user->isMember())
 				{
 					$reason = t('err_only_member_access');
 				}
 				return $result;
-			
+
 			case self::FRIEND_FRIENDS:
 				$result = module_enabled('Friends') ? GDO_Friendship::isFriendFriend($user, $target) : false;
 				if (!$result)
@@ -64,7 +65,7 @@ final class GDT_ACLRelation extends GDT_Enum
 					$reason = t('err_only_friend_friend_access');
 				}
 				return $result;
-				
+
 			case self::FRIENDS:
 				$result = module_enabled('Friends') ? GDO_Friendship::areRelated($user, $target) : false;
 				if (!$result)
@@ -72,21 +73,21 @@ final class GDT_ACLRelation extends GDT_Enum
 					$reason = t('err_only_friend_access');
 				}
 				return $result;
-				
+
 			case self::NOONE:
 				$reason = t('err_only_private_access');
 				return false;
-	
+
 			case self::HIDDEN:
 				# Show nothing
 				return false;
-				
+
 			default: # Should never happen.
 				$reason = t('err_unknown_acl_setting', [$this->var]);
 				return false;
 		}
 	}
-	
+
 // 	/**
 // 	 * Add where conditions to a query that reflect acl settings.
 // 	 * @param Query $query
@@ -104,13 +105,13 @@ final class GDT_ACLRelation extends GDT_Enum
 // 		{
 // 			$condition .= " OR $idf = 'acl_guests'";
 // 		}
-		
+
 // 		# Members
 // 		if ($user->isMember())
 // 		{
 // 			$condition .= " OR $idf = 'acl_members'";
 // 		}
-		
+
 // 		# Friends and own require a owner column
 // 		if ($creatorColumn)
 // 		{
@@ -125,10 +126,10 @@ final class GDT_ACLRelation extends GDT_Enum
 // 				$condition .= " OR ( $idf = 'acl_friends' AND ( $subquery ) )";
 // 			}
 // 		}
-		
+
 // 		# Apply condition
 // 		$query->where($condition);
 // 		return $this;
 // 	}
-	
+
 }

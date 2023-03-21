@@ -3,136 +3,15 @@ namespace GDO\Util;
 
 /**
  * Fix Input UTF8 encoding.
+ *
  * @author gizmore
  */
 final class Encoding
 {
-	public static function fix($utf8)
-	{
-		if (!$utf8)
-		{
-			return $utf8;
-		}
-		
-		$utf8 = self::removeEmoji($utf8);
-		
-		$utf8 = self::utf8($utf8);
-		
-		if ($fixed = @iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $utf8))
-		{
-			return $fixed;
-		}
-		else
-		{
-			die('CANNOT FIX!');
-		}
-	}
-	
-	public static function removeEmoji($text)
-	{
-		return str_replace(self::$EMOJI_TABLE, '', $text);
-	}
-	
-	/**
-	 * Clean a string to only have valid utf8.
-	 */
-	public static function utf8($text)
-	{
-		if (!$text)
-		{
-			return $text;
-		}
-		
-		$max = mb_strlen($text, '8bit');
-		
-		$buf = "";
-		for ($i = 0; $i < $max; $i++)
-		{
-			$c1 = $text[$i];
-			if ($c1 >= "\xc0")
-			{ // Should be converted to UTF8, if it's not UTF8 already
-				$c2 = $i + 1 >= $max ? "\x00" : $text[$i + 1];
-				$c3 = $i + 2 >= $max ? "\x00" : $text[$i + 2];
-				$c4 = $i + 3 >= $max ? "\x00" : $text[$i + 3];
-				if ($c1 >= "\xc0" & $c1 <= "\xdf")
-				{ // looks like 2 bytes UTF8
-					if ($c2 >= "\x80" && $c2 <= "\xbf")
-					{ // yeah, almost sure it's UTF8 already
-						$buf .= $c1 . $c2;
-						$i++;
-					}
-					else
-					{ // not valid UTF8. Convert it.
-						$cc1 = (chr(ord($c1) / 64) | "\xc0");
-						$cc2 = ($c1 & "\x3f") | "\x80";
-						$buf .= $cc1 . $cc2;
-					}
-				}
-				elseif ($c1 >= "\xe0" & $c1 <= "\xef")
-				{ // looks like 3 bytes UTF8
-					if ($c2 >= "\x80" && $c2 <= "\xbf" &&
-					$c3 >= "\x80" && $c3 <= "\xbf")
-					{ // yeah, almost sure it's UTF8 already
-						$buf .= $c1 . $c2 . $c3;
-						$i = $i + 2;
-					}
-					else
-					{ // not valid UTF8. Convert it.
-						$cc1 = (chr(ord($c1) / 64) | "\xc0");
-						$cc2 = ($c1 & "\x3f") | "\x80";
-						$buf .= $cc1 . $cc2;
-					}
-				}
-				elseif ($c1 >= "\xf0" & $c1 <= "\xf7")
-				{ // looks like 4 bytes UTF8
-					if ($c2 >= "\x80" && $c2 <= "\xbf" &&
-					$c3 >= "\x80" && $c3 <= "\xbf" &&
-					$c4 >= "\x80" && $c4 <= "\xbf")
-					{ // yeah, almost sure it's UTF8 already
-						$buf .= $c1 . $c2 . $c3 . $c4;
-						$i = $i + 3;
-					}
-					else
-					{ // not valid UTF8. Convert it.
-						$cc1 = (chr(ord($c1) / 64) | "\xc0");
-						$cc2 = ($c1 & "\x3f") | "\x80";
-						$buf .= $cc1 . $cc2;
-					}
-				}
-				else
-				{ // doesn't look like UTF8, but should be converted
-					$cc1 = (chr(ord($c1) / 64) | "\xc0");
-					$cc2 = (($c1 & "\x3f") | "\x80");
-					$buf .= $cc1 . $cc2;
-				}
-			}
-			elseif (($c1 & "\xc0") === "\x80")
-			{ // needs conversion
-				if (isset(self::$WIN1252_TO_UTF8[ord($c1)]))
-				{ // found in Windows-1252 special cases
-					$buf .= self::$WIN1252_TO_UTF8[ord($c1)];
-				}
-				else
-				{
-					$cc1 = (chr(ord($c1) / 64) | "\xc0");
-					$cc2 = (($c1 & "\x3f") | "\x80");
-					$buf .= $cc1 . $cc2;
-				}
-			}
-			else
-			{ // it doesn't need conversion
-				$buf .= $c1;
-			}
-		}
-		return $buf;
-	}
-	
-	############
-	### DATA ###
-	############
-	private static $WIN1252_TO_UTF8 = array(
+
+	private static $WIN1252_TO_UTF8 = [
 		128 => "\xe2\x82\xac",
-		
+
 		130 => "\xe2\x80\x9a",
 		131 => "\xc6\x92",
 		132 => "\xe2\x80\x9e",
@@ -144,9 +23,9 @@ final class Encoding
 		138 => "\xc5\xa0",
 		139 => "\xe2\x80\xb9",
 		140 => "\xc5\x92",
-		
+
 		142 => "\xc5\xbd",
-		
+
 		145 => "\xe2\x80\x98",
 		146 => "\xe2\x80\x99",
 		147 => "\xe2\x80\x9c",
@@ -159,11 +38,10 @@ final class Encoding
 		154 => "\xc5\xa1",
 		155 => "\xe2\x80\xba",
 		156 => "\xc5\x93",
-		
+
 		158 => "\xc5\xbe",
-		159 => "\xc5\xb8"
-	);
-	
+		159 => "\xc5\xb8",
+	];
 	private static $EMOJI_TABLE = [
 		"\xF0\x9F\x91\xA8\xE2\x80\x8D\xE2\x9D\xA4\xEF\xB8\x8F\xE2\x80\x8D\xF0\x9F\x92\x8B\xE2\x80\x8D\xF0\x9F\x91\xA8",
 		"\xF0\x9F\x91\xA9\xE2\x80\x8D\xE2\x9D\xA4\xEF\xB8\x8F\xE2\x80\x8D\xF0\x9F\x92\x8B\xE2\x80\x8D\xF0\x9F\x91\xA9",
@@ -1600,5 +1478,133 @@ final class Encoding
 		"\xC2\xAE",
 		"\xC2\xA9",
 	];
-	
+
+	public static function fix($utf8)
+	{
+		if (!$utf8)
+		{
+			return $utf8;
+		}
+
+		$utf8 = self::removeEmoji($utf8);
+
+		$utf8 = self::utf8($utf8);
+
+		if ($fixed = @iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $utf8))
+		{
+			return $fixed;
+		}
+		else
+		{
+			die('CANNOT FIX!');
+		}
+	}
+
+	############
+	### DATA ###
+	############
+
+	public static function removeEmoji($text)
+	{
+		return str_replace(self::$EMOJI_TABLE, '', $text);
+	}
+
+	/**
+	 * Clean a string to only have valid utf8.
+	 */
+	public static function utf8($text)
+	{
+		if (!$text)
+		{
+			return $text;
+		}
+
+		$max = mb_strlen($text, '8bit');
+
+		$buf = '';
+		for ($i = 0; $i < $max; $i++)
+		{
+			$c1 = $text[$i];
+			if ($c1 >= "\xc0")
+			{ // Should be converted to UTF8, if it's not UTF8 already
+				$c2 = $i + 1 >= $max ? "\x00" : $text[$i + 1];
+				$c3 = $i + 2 >= $max ? "\x00" : $text[$i + 2];
+				$c4 = $i + 3 >= $max ? "\x00" : $text[$i + 3];
+				if ($c1 >= "\xc0" & $c1 <= "\xdf")
+				{ // looks like 2 bytes UTF8
+					if ($c2 >= "\x80" && $c2 <= "\xbf")
+					{ // yeah, almost sure it's UTF8 already
+						$buf .= $c1 . $c2;
+						$i++;
+					}
+					else
+					{ // not valid UTF8. Convert it.
+						$cc1 = (chr(ord($c1) / 64) | "\xc0");
+						$cc2 = ($c1 & "\x3f") | "\x80";
+						$buf .= $cc1 . $cc2;
+					}
+				}
+				elseif ($c1 >= "\xe0" & $c1 <= "\xef")
+				{ // looks like 3 bytes UTF8
+					if (
+						$c2 >= "\x80" && $c2 <= "\xbf" &&
+						$c3 >= "\x80" && $c3 <= "\xbf"
+					)
+					{ // yeah, almost sure it's UTF8 already
+						$buf .= $c1 . $c2 . $c3;
+						$i = $i + 2;
+					}
+					else
+					{ // not valid UTF8. Convert it.
+						$cc1 = (chr(ord($c1) / 64) | "\xc0");
+						$cc2 = ($c1 & "\x3f") | "\x80";
+						$buf .= $cc1 . $cc2;
+					}
+				}
+				elseif ($c1 >= "\xf0" & $c1 <= "\xf7")
+				{ // looks like 4 bytes UTF8
+					if (
+						$c2 >= "\x80" && $c2 <= "\xbf" &&
+						$c3 >= "\x80" && $c3 <= "\xbf" &&
+						$c4 >= "\x80" && $c4 <= "\xbf"
+					)
+					{ // yeah, almost sure it's UTF8 already
+						$buf .= $c1 . $c2 . $c3 . $c4;
+						$i = $i + 3;
+					}
+					else
+					{ // not valid UTF8. Convert it.
+						$cc1 = (chr(ord($c1) / 64) | "\xc0");
+						$cc2 = ($c1 & "\x3f") | "\x80";
+						$buf .= $cc1 . $cc2;
+					}
+				}
+				else
+				{ // doesn't look like UTF8, but should be converted
+					$cc1 = (chr(ord($c1) / 64) | "\xc0");
+					$cc2 = (($c1 & "\x3f") | "\x80");
+					$buf .= $cc1 . $cc2;
+				}
+			}
+			elseif (($c1 & "\xc0") === "\x80")
+			{ // needs conversion
+				if (isset(self::$WIN1252_TO_UTF8[ord($c1)]))
+				{ // found in Windows-1252 special cases
+					$buf .= self::$WIN1252_TO_UTF8[ord($c1)];
+				}
+				else
+				{
+					$cc1 = (chr(ord($c1) / 64) | "\xc0");
+					$cc2 = (($c1 & "\x3f") | "\x80");
+					$buf .= $cc1 . $cc2;
+				}
+			}
+			else
+			{ // it doesn't need conversion
+				$buf .= $c1;
+			}
+		}
+		return $buf;
+	}
+
 }

@@ -1,37 +1,39 @@
 <?php
 namespace GDO\Date;
 
-use GDO\Core\GDT_Template;
 use GDO\Core\GDT_String;
+use GDO\Core\GDT_Template;
 
 /**
  * Duration field int in seconds.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.0.0
+ * @author gizmore
  */
 class GDT_Duration extends GDT_String
 {
-	public function defaultLabel(): static { return $this->label('duration'); }
-	
+
 	public int $max = 16;
 	public int $encoding = self::ASCII;
 	public string $icon = 'time';
 	public string $pattern = '/^(?:[\\.0-9 ]+[sminohdwy]{0,2} *)+$/iD';
-	
+	public int $minDuration = 0;
+
 	#################
 	### Min / Max ###
 	#################
-	public int $minDuration = 0;
-	public function min(int $minDuration): static
+	public int $maxDuration;
+
+	public function defaultLabel(): self { return $this->label('duration'); }
+
+	public function min(int $minDuration): self
 	{
 		$this->minDuration = $minDuration;
 		return $this;
 	}
-	
-	public int $maxDuration;
-	public function max(int $maxDuration): static
+
+	public function max(int $maxDuration): self
 	{
 		$this->maxDuration = $maxDuration;
 		return $this;
@@ -42,23 +44,23 @@ class GDT_Duration extends GDT_String
 	###################
 	public function toValue($var = null)
 	{
-	    return $var === null ? null : Time::humanToSeconds($var);
+		return $var === null ? null : Time::humanToSeconds($var);
 	}
-	
-	public function toVar($value) : ?string
+
+	public function toVar($value): ?string
 	{
-	    return $value === null ? null : Time::humanDuration($value);
+		return $value === null ? null : Time::humanDuration($value);
 	}
-	
+
 	##############
 	### Render ###
 	##############
-	public function renderHTML() : string
+	public function renderHTML(): string
 	{
 		return html($this->getVar());
 	}
-	
-	public function renderForm() : string
+
+	public function renderForm(): string
 	{
 		return GDT_Template::php('Date', 'form/duration.php', ['field' => $this]);
 	}
@@ -66,7 +68,7 @@ class GDT_Duration extends GDT_String
 	################
 	### Validate ###
 	################
-	public function validate($value) : bool
+	public function validate($value): bool
 	{
 		if (!parent::validate($value))
 		{
@@ -82,12 +84,12 @@ class GDT_Duration extends GDT_String
 		}
 		return true;
 	}
-	
-	public function plugVars() : array
+
+	public function plugVars(): array
 	{
 		return [
 			[$this->getName() => '1s'],
 		];
 	}
-	
+
 }

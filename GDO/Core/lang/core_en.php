@@ -1,11 +1,12 @@
 <?php
 namespace GDO\Core\lang;
+
 return [
 	# Site
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
 	'%s' => '%s',
 	'---n/a---' => '---n/a---',
-	
+
 	# Errors
 	'error' => 'Error: %s',
 	'err_php_extension_missing' => 'This module requires the `%s` PHP extension.',
@@ -88,11 +89,11 @@ return [
 	'err_min_max_confusion' => 'The maximum is smaller than the minimum.',
 	'err_invalid_user_setting' => 'Module %s has an invalid user setting named %s: %s (%s)',
 	'err_gdt_column_define_missing' => 'Your DBMS module cannot create database definitions for the field `%s`, which is a `%s`.',
-	
+
 	# err_path
 	'is_dir' => 'directory',
 	'is_file' => 'file',
-	
+
 	# Messages
 	'msg_form_validated' => 'Your form has been sent successfully.',
 	'msg_cache_flushed' => 'All caches have been flushed. E.g; rm -rf temp/, Cache::flush(), Internal caches via hooks.',
@@ -105,29 +106,29 @@ return [
 	'enum_yes' => 'Yes',
 	'enum_no' => 'No',
 	'enum_undetermined_yes_no' => 'undecided',
-	
+
 	# Enum
 	'enum_none' => '-None-',
 	'enum_all' => 'All',
 	'enum_staff' => 'Staff',
 	'enum_unknown' => 'unknown',
-	
+
 	# E-Mail
 	'enum_html' => 'HTML',
 	'enum_text' => 'Text',
 	'email_fmt' => 'Format',
-	
+
 	# Navpos
 	'enum_left' => 'Left',
 	'enum_right' => 'Right',
 	'enum_bottom' => 'Bottom',
-	
+
 	# Permissions
 	'sel_no_permissions' => 'Not required',
 	'perm_admin' => 'Admin',
 	'perm_staff' => 'Staff',
 	'perm_cronjob' => 'Cronjob',
-	
+
 	# Buttons
 	'btn_ok' => 'O.K.',
 	'btn_abort' => 'Abort',
@@ -151,11 +152,11 @@ return [
 	'btn_view' => 'View',
 	'btn_visible' => 'Set Visible',
 	'submit' => 'Submit',
-	
+
 	# Float
 	'decimal_point' => '.',
 	'thousands_seperator' => ',',
-	
+
 	# UserType
 	'enum_system' => 'System',
 	'enum_ghost' => 'Ghost',
@@ -164,7 +165,7 @@ return [
 	'enum_link' => 'Link',
 	'enum_bot' => 'Bot',
 	'unknown_user' => 'Unknown User',
-	
+
 	# GDTs
 	'expires' => 'Expires At',
 	'website_content' => 'Website Content',
@@ -246,53 +247,53 @@ return [
 	'information' => 'Information',
 	'health' => 'Health',
 	'logo' => 'Logo',
-	
+
 	# CBX
 	'sel_all' => 'Select All',
 	'sel_checked' => 'Yes',
 	'sel_unchecked' => 'No',
-	
+
 	# Fineprint
 	'privacy' => 'Privacy',
 	'impressum' => 'Impressum',
 	'md_core_privacy' => 'Privacy and Dataflow information for %s.',
 	'md_core_impressum' => 'The impressum for the %s service website.',
-	
+
 	# Util
 	'or' => 'or',
 	'and' => 'and',
 	'none' => 'None',
-	
+
 	# Welcome
 	'welcome' => 'Welcome',
 	'md_welcome' => 'The welcome page for the %s service.',
-	
+
 	# Version
 	'info_version' => 'Display the GDOv7 and PHP version.',
 	'php_version' => 'PHP Version',
 	'gdo_version' => 'GDO Version',
-	
+
 	# Directory Index
 	'mt_dir_index' => '%s (%s files and folders)',
 	'mt_filenotfound' => 'Not Found!',
 	'mt_notallowed' => 'Forbidden!',
-	
+
 	# Table
 	'cfg_spr' => 'Suggestions per Request',
 	'cfg_ipp_cli' => 'Items per page (CLI)',
 	'cfg_ipp_http' => 'Items per page (HTML)',
-	
+
 	# List
 	'lbl_search_criteria' => 'Search: %s',
 	'order_by' => 'Order By',
 	'order_dir' => 'Direction',
 	'asc' => 'Ascending',
 	'desc' => 'Descending',
-	
+
 	# User
 	'users' => 'Users',
 	'permissions' => 'Permissions',
-	
+
 	'msg_sort_success' => 'Successfully sorted?!',
 
 	### Config ###
@@ -307,7 +308,7 @@ return [
 	'cfg_directory_indexing' => 'Enable Directory Indexing?',
 	'cfg_module_assets' => 'Allow assets to be loaded from the GDO source directory?',
 	'cfg_dotfiles' => 'Allow to read and index hidden dotfiles?',
-	
+
 	### 403 ###
 	'mail_title_403' => '%s: 403 (%s)',
 	'mail_body_403' => '
@@ -319,7 +320,7 @@ User: %s
 	
 Kind Regards,
 The %2$s System',
-	
+
 	### 404 ###
 	'mail_title_404' => '%s: 404 (%s)',
 	'mail_body_404' => '
@@ -334,7 +335,7 @@ Kind Regards,
 The %2$s System',
 
 	'confirm_delete' => 'Do you really want to delete this?',
-	
+
 	'md_switch_language' => 'Switch language',
 	'gdt_redirect_to' => 'Redirecting to %s...',
 
@@ -342,37 +343,37 @@ The %2$s System',
 	'add_permissions' => 'Add a permisison',
 
 	'mt_sort' => 'Sort %s Database',
-	
+
 	'mt_crud_create' => 'New %s',
 	'mt_crud_update' => 'Edit %s',
-	
+
 	'cronjob_method' => 'Cronjob Method',
 	'method' => 'Method',
-	
+
 	'msg_installed_modules' => 'Installed modules: %s.',
-	
+
 	'mt_core_security' => 'SECURITY.md',
 	'mt_core_robots' => 'robots.txt',
 	'mt_core_gettypes' => 'Get GDT Meta-Data',
 	'mt_core_pathcompletion' => 'Path completion',
 	'mt_ajax' => '%s Data Retrieval',
-	
+
 	'creator_header' => '%s added this on %s.',
-	
+
 	'please_choose' => 'Please choose...',
 	'required' => 'This field is required and has to be filled out.',
-	
+
 	# Privacy
 	'info_privacy_related_module' => '%s is a privacy related module that is currently enabled.',
 	't_privacy_core_toggles' => 'Core Configuration',
-	
+
 	'_acl_last_activity_relation' => '`Letzte Aktivität` sichtbar für',
 	'privacy_settings' => 'Privacy Settings',
 	'health' => 'Health',
 	'mt_core_forcessl' => 'Force Encryption',
 
 	'err_nothing_happened' => 'No error occured, but unexpectedly nothing happened.',
-	
+
 	# Health
 	'gdo_revision' => 'GDO-Revision',
 	'health_cpus' => 'Cores',
@@ -384,8 +385,8 @@ The %2$s System',
 	'health_hdd_avail' => 'HDD',
 	'health_hdd_free' => 'Free',
 	'health_hdd_used' => 'Used',
-	
+
 	'edited_info' => 'Edited by %s %s ago',
-	
+
 	'md_on_windows' => 'Run this script to install phpgdo on windows. Caution: git4windows and PHP8.0 is required. Warning: Do not run untrusted code!',
 ];

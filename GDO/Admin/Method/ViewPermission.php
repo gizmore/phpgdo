@@ -2,58 +2,59 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDO;
 use GDO\Core\GDT_CreatedAt;
 use GDO\Core\GDT_CreatedBy;
+use GDO\DB\Query;
 use GDO\Table\GDT_Count;
 use GDO\Table\MethodQueryTable;
+use GDO\UI\GDT_Button;
 use GDO\UI\GDT_DeleteButton;
-use GDO\User\GDT_User;
+use GDO\User\GDO_Permission;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\GDT_Permission;
-use GDO\User\GDO_Permission;
-use GDO\Core\GDO;
-use GDO\DB\Query;
-use GDO\UI\GDT_Button;
+use GDO\User\GDT_User;
 
 /**
  * View all users with a permission.
- * 
+ *
  * @version 7.0.1
  * @since 3.0.2
  * @author gizmore
  */
 class ViewPermission extends MethodQueryTable
 {
+
 	use MethodAdmin;
-	
+
 	private GDO_Permission $permission;
-	
-	public function getMethodTitle() : string
+
+	public function getMethodTitle(): string
 	{
 		return t('btn_permissions');
 	}
-	
-	public function getPermission() : ?string { return 'staff'; }
 
-	public function gdoParameters() : array
+	public function gdoParameters(): array
 	{
-	    return [
-	        GDT_Permission::make('permission')->notNull(),
-	    ];
+		return [
+			GDT_Permission::make('permission')->notNull(),
+		];
 	}
-	
-	public function gdoTable() : GDO
+
+	public function getPermission(): ?string { return 'staff'; }
+
+	public function gdoTable(): GDO
 	{
-	    return GDO_UserPermission::table();
+		return GDO_UserPermission::table();
 	}
-	
+
 	public function gdoFetchAs()
 	{
 		return GDO_User::table();
 	}
-	
-	public function getConfigPermission() : GDO_Permission
+
+	public function getConfigPermission(): GDO_Permission
 	{
 		if (!isset($this->permission))
 		{
@@ -61,8 +62,8 @@ class ViewPermission extends MethodQueryTable
 		}
 		return $this->permission;
 	}
-	
-	public function gdoHeaders() : array
+
+	public function gdoHeaders(): array
 	{
 		return [
 			GDT_Count::make('count'),
@@ -73,20 +74,20 @@ class ViewPermission extends MethodQueryTable
 			GDT_DeleteButton::make('perm_revoke'),
 		];
 	}
-	
-	protected function gdoTableHREF() : string
+
+	protected function gdoTableHREF(): string
 	{
-		return $this->href('&permission='.$this->getConfigPermission()->getID());
+		return $this->href('&permission=' . $this->getConfigPermission()->getID());
 	}
-	
-	public function getQuery() : Query
+
+	public function getQuery(): Query
 	{
 		return $this->gdoTable()->
-			select('*,perm_user_id_t.*, perm_perm_id_t.*')->
-			joinObject('perm_user_id')->
-			joinObject('perm_perm_id')->
-			where('perm_perm_id='.$this->getConfigPermission()->getID())->
-			uncached();
+		select('*,perm_user_id_t.*, perm_perm_id_t.*')->
+		joinObject('perm_user_id')->
+		joinObject('perm_perm_id')->
+		where('perm_perm_id=' . $this->getConfigPermission()->getID())->
+		uncached();
 	}
-	
+
 }

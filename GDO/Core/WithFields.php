@@ -5,81 +5,44 @@ use GDO\Table\GDT_Filter;
 
 /**
  * Add children fields to a GDT.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.0.1
+ * @author gizmore
  * @see GDT
  */
 trait WithFields
 {
+
 	################
 	### Instance ###
 	################
 	/**
-	 * Call unnamed make and add fields.
+	 * Real tree.
+	 *
+	 * @var GDT[string]
 	 */
-	public static function makeWith(GDT...$gdt): static
-	{
-		return self::make()->addFields(...$gdt);
-	}
-	
+	public array $fields;
+
 	##############
 	### Fields ### More methods available here :)
 	##############
 	/**
-	 * Real tree.
-	 * @var GDT[string]
-	 */
-	public array $fields;
-	
-	/**
 	 * Flattened fields.
+	 *
 	 * @var GDT[]
 	 */
 	public array $fieldsFlat;
-	
-	public function setFields(array $fields): static
+
+	/**
+	 * Call unnamed make and add fields.
+	 */
+	public static function makeWith(GDT...$gdt): self
 	{
-		unset($this->fields);
-		unset($this->fieldsFlat);
-		$this->addFields(...array_values($fields));
-		return $this;
-	}
-	
-	public function addField(GDT $gdt, GDT $after=null, bool $last=true): static
-	{
-		return $this->addFieldB($gdt, $after, $last);		
-	}
-	
-	public function addFieldFirst(GDT $gdt): static
-	{
-		return $this->addFieldB($gdt, null, false);
-	}
-	
-	public function addFieldAfter(GDT $gdt, GDT $after): static
-	{
-		return $this->addFieldB($gdt, $after, false);
+		return self::make()->addFields(...$gdt);
 	}
 
-	public function addFieldAfterName(GDT $gdt, string $afterName): static
-	{
-	    $after = $this->getField($afterName);
-	    return $this->addFieldAfter($gdt, $after);
-	}
-	
-// 	public function addFieldAfterNamed(GDT $gdt, string $afterName): static
-// 	{
-// 		$after = $this->getField($afterName);
-// 		return $this->addFieldAfter($gdt, $after);
-// 	}
-	
-	public function addFieldLast(GDT $gdt): static
-	{
-		return $this->addFieldB($gdt, null, true);
-	}
-	
-	public function addFields(GDT...$gdts): static
+	public function addFields(GDT...$gdts): self
 	{
 		foreach ($gdts as $gdt)
 		{
@@ -87,8 +50,48 @@ trait WithFields
 		}
 		return $this;
 	}
-	
-	protected function addFieldA(GDT $gdt, GDT $after=null, bool $last=true) : void
+
+	public function addField(GDT $gdt, GDT $after = null, bool $last = true): self
+	{
+		return $this->addFieldB($gdt, $after, $last);
+	}
+
+	protected function addFieldB(GDT $gdt, GDT $after = null, bool $last = true): self
+	{
+		$this->addFieldA($gdt, $after, $last);
+
+		# Add to flatten
+		if ($name = $gdt->getName())
+		{
+			$this->fieldsFlat[$name] = $gdt;
+		}
+		else
+		{
+			$this->fieldsFlat[] = $gdt;
+		}
+
+		# Add children in flatten only
+		if ($gdt->hasFields())
+		{
+			foreach ($gdt->getAllFields() as $gdt)
+			{
+				if ($name = $gdt->getName())
+				{
+					$this->fieldsFlat[$name] = $gdt;
+				}
+				else
+				{
+					$this->fieldsFlat[] = $gdt;
+				}
+			}
+		}
+
+// 		$gdt->inputs($this->getInputs());
+
+		return $this;
+	}
+
+	protected function addFieldA(GDT $gdt, GDT $after = null, bool $last = true): void
 	{
 		# Init
 		if (!isset($this->fields))
@@ -96,11 +99,11 @@ trait WithFields
 			$this->fields = [];
 			$this->fieldsFlat = [];
 		}
-		
+
 		# Do the hard work
 		$this->fields = $this->getFieldsSlicy($this->fields, $gdt, $last, $after);
 	}
-	
+
 	private function getFieldsSlicy(array $fields, GDT $field, bool $last, ?GDT $after)
 	{
 		# Build 3 slices depending on first, after, last.
@@ -123,7 +126,7 @@ trait WithFields
 			$midl = array_values($fields);
 			$aftr = GDT::EMPTY_ARRAY;
 		}
-		
+
 		# Build again
 		$newfields = [];
 		$all = array_merge($begn, $midl, $aftr);
@@ -138,76 +141,12 @@ trait WithFields
 				$newfields[] = $gdt;
 			}
 		}
-		
+
 		# Done :)
 		return $newfields;
 	}
-	
-	protected function addFieldB(GDT $gdt, GDT $after=null, bool $last=true): static
-	{
-		$this->addFieldA($gdt, $after, $last);
 
-		# Add to flatten
-		if ($name = $gdt->getName())
-		{
-			$this->fieldsFlat[$name] = $gdt;
-		}
-		else
-		{
-			$this->fieldsFlat[] = $gdt;
-		}
-		
-		# Add children in flatten only
-		if ($gdt->hasFields())
-		{
-			foreach ($gdt->getAllFields() as $gdt)
-			{
-				if ($name = $gdt->getName())
-				{
-					$this->fieldsFlat[$name] = $gdt;
-				}
-				else
-				{
-					$this->fieldsFlat[] = $gdt;
-				}
-			}
-		}
-		
-// 		$gdt->inputs($this->getInputs());
-		
-		return $this;
-	}
-	
-	public function removeFields(): static
-	{
-		unset($this->fields);
-		unset($this->fieldsFlat);
-		return $this;
-	}
-	
-	public function removeFieldNamed(string $key, bool $throw=false): static
-	{
-		if ($field = $this->getField($key, $throw))
-		{
-			return $this->removeField($field);
-		}
-		return $this;
-	}
-	
-	public function removeField(GDT $field): static
-	{
-		if (false !== ($i = array_search($field, $this->fields, true)))
-		{
-			unset($this->fields[$i]);
-		}
-		if (false !== ($i = array_search($field, $this->fieldsFlat, true)))
-		{
-			unset($this->fieldsFlat[$i]);
-		}
-		return $this;
-	}
-	
-	public function hasFields(bool $ignoreHidden=false) : bool
+	public function hasFields(bool $ignoreHidden = false): bool
 	{
 		if (!$ignoreHidden)
 		{
@@ -225,16 +164,37 @@ trait WithFields
 			return false;
 		}
 	}
-	
+
+// 	public function addFieldAfterNamed(GDT $gdt, string $afterName): self
+// 	{
+// 		$after = $this->getField($afterName);
+// 		return $this->addFieldAfter($gdt, $after);
+// 	}
+
 	/**
+	 * Get all fields in a flattened array.
+	 *
 	 * @return GDT[]
 	 */
-	public function getFields() : array
+	public function getAllFields(): array
 	{
-		return isset($this->fields) ? $this->fields : GDT::EMPTY_ARRAY;
+		return isset($this->fieldsFlat) ?
+			$this->fieldsFlat :
+			GDT::EMPTY_ARRAY;
 	}
-	
-	public function getField(string $key, bool $throw=true) : ?GDT
+
+	public function addFieldFirst(GDT $gdt): self
+	{
+		return $this->addFieldB($gdt, null, false);
+	}
+
+	public function addFieldAfterName(GDT $gdt, string $afterName): self
+	{
+		$after = $this->getField($afterName);
+		return $this->addFieldAfter($gdt, $after);
+	}
+
+	public function getField(string $key, bool $throw = true): ?GDT
 	{
 		if (isset($this->fieldsFlat[$key]))
 		{
@@ -249,51 +209,51 @@ trait WithFields
 			return null;
 		}
 	}
-	
-	/**
-	 * Get all fields in a flattened array.
-	 * @return GDT[]
-	 */
-	public function getAllFields() : array
+
+	public function addFieldAfter(GDT $gdt, GDT $after): self
 	{
-		return isset($this->fieldsFlat) ?
-			$this->fieldsFlat :
-			GDT::EMPTY_ARRAY;
+		return $this->addFieldB($gdt, $after, false);
 	}
-	
-	###########################
-	### Iterate recursively ###
-	###########################
-	/**
-	 * Iterate recusively over the fields with a callback.
-	 * If the result is truthy, break the loop early and return the result.
-	 */
-	public function withFields($callback, bool $returnEarly=false)
+
+	public function addFieldLast(GDT $gdt): self
 	{
-		if (isset($this->fields))
+		return $this->addFieldB($gdt, null, true);
+	}
+
+	public function removeFields(): self
+	{
+		unset($this->fields);
+		unset($this->fieldsFlat);
+		return $this;
+	}
+
+	public function removeFieldNamed(string $key, bool $throw = false): self
+	{
+		if ($field = $this->getField($key, $throw))
 		{
-			foreach ($this->fields as $gdt)
-			{
-				if ($result = $callback($gdt))
-				{
-					if ($returnEarly)
-					{
-						return $result;
-					}
-				}
-// 				if ($gdt->hasFields())
-// 				{
-// 					$gdt->withFields($callback);
-// 				}
-			}
+			return $this->removeField($field);
 		}
+		return $this;
 	}
-	
+
+	public function removeField(GDT $field): self
+	{
+		if (false !== ($i = array_search($field, $this->fields, true)))
+		{
+			unset($this->fields[$i]);
+		}
+		if (false !== ($i = array_search($field, $this->fieldsFlat, true)))
+		{
+			unset($this->fieldsFlat[$i]);
+		}
+		return $this;
+	}
+
 	/**
 	 * Iterate recusively over the fields until we find the one with the key/name/pos.
 	 * Then call the callback with it and return the result.
 	 * Supports both, named and positional fields.
-	 * 
+	 *
 	 * @param string|int $key
 	 * @param callable $callback
 	 */
@@ -314,24 +274,47 @@ trait WithFields
 			}
 		}
 	}
-	
-	##############
-	### Render ### - 
-	##############
-	public function render()
+
+	/**
+	 * Iterate recusively over the fields with a callback.
+	 * If the result is truthy, break the loop early and return the result.
+	 */
+	public function withFields($callback, bool $returnEarly = false)
 	{
-		return $this->renderGDT();
+		if (isset($this->fields))
+		{
+			foreach ($this->fields as $gdt)
+			{
+				if ($result = $callback($gdt))
+				{
+					if ($returnEarly)
+					{
+						return $result;
+					}
+				}
+// 				if ($gdt->hasFields())
+// 				{
+// 					$gdt->withFields($callback);
+// 				}
+			}
+		}
 	}
-	
+
+	public function renderCLI(): string { return $this->renderFields(GDT::RENDER_CLI); }
+
 	/**
 	 * WithFields, we simply iterate over them and render current mode.
 	 */
-	public function renderFields(int $renderMode) : string
+	public function renderFields(int $renderMode): string
 	{
 		return $this->renderFieldsB($renderMode);
 	}
-	
-	protected function renderFieldsB(int $renderMode) : string
+
+	###########################
+	### Iterate recursively ###
+	###########################
+
+	protected function renderFieldsB(int $renderMode): string
 	{
 		$app = Application::$INSTANCE;
 		$rendered = '';
@@ -344,35 +327,76 @@ trait WithFields
 		$app->mode($old);
 		return $rendered;
 	}
-	
+
+	/**
+	 * @return GDT[]
+	 */
+	public function getFields(): array
+	{
+		return isset($this->fields) ? $this->fields : GDT::EMPTY_ARRAY;
+	}
+
+	##############
+	### Render ### -
+	##############
+
+	public function setFields(array $fields): self
+	{
+		unset($this->fields);
+		unset($this->fieldsFlat);
+		$this->addFields(...array_values($fields));
+		return $this;
+	}
+
+	public function render()
+	{
+		return $this->renderGDT();
+	}
+
+	public function renderBinary(): string { return $this->renderFields(GDT::RENDER_BINARY); }
+
+	public function renderPDF(): string { return $this->renderFields(GDT::RENDER_PDF); }
+
+	public function renderXML(): string { return $this->renderFields(GDT::RENDER_XML); }
+
+	public function renderGTK() { return $this->renderFields(GDT::RENDER_GTK); }
+
 	####################
 	### Render modes ### Proxy them to renderFields().
 	####################
 // 	public function renderNIL() : ?string { return null; } # hehe
-	public function renderBinary() : string { return $this->renderFields(GDT::RENDER_BINARY); }
-	public function renderCLI() : string { return $this->renderFields(GDT::RENDER_CLI); }
-	public function renderPDF() : string { return $this->renderFields(GDT::RENDER_PDF); }
-	public function renderXML() : string { return $this->renderFields(GDT::RENDER_XML); }
+
+	public function renderWebsite(): string { return $this->renderFields(GDT::RENDER_WEBSITE); }
+
+	public function renderCell(): string { return $this->renderFields(GDT::RENDER_CELL); }
+
+	public function renderTFoot(): string { return $this->renderFields(GDT::RENDER_TFOOT); }
+
+	public function renderList(): string { return $this->renderFields(GDT::RENDER_LIST); }
+
+	public function renderHTML(): string { return $this->renderFields(GDT::RENDER_HTML); }
+
+	public function renderCard(): string { return $this->renderFields(GDT::RENDER_CARD); }
+
+	public function renderForm(): string { return $this->renderFields(GDT::RENDER_FORM); }
+
 // 	public function renderJSON() : { return $this->renderFields(GDT::RENDER_JSON); }
-	public function renderGTK() { return $this->renderFields(GDT::RENDER_GTK); }
-	public function renderWebsite() : string { return $this->renderFields(GDT::RENDER_WEBSITE); } # Cannot happen
+
+	public function renderOption(): string { return $this->renderFields(GDT::RENDER_OPTION); }
+
+	public function renderFilter(GDT_Filter $f): string { return $this->renderFields(GDT::RENDER_FILTER); } # Cannot happen
+
 	# html rendering
-	public function renderHTML() : string { return $this->renderFields(GDT::RENDER_HTML); }
-	public function renderCard() : string { return $this->renderFields(GDT::RENDER_CARD); }
-	public function renderList() : string { return $this->renderFields(GDT::RENDER_LIST); }
-	public function renderForm() : string { return $this->renderFields(GDT::RENDER_FORM); }
-	public function renderOption() : string { return $this->renderFields(GDT::RENDER_OPTION); }
+
+
 	# html table rendering
 // 	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
-	public function renderOrder() : string { return $this->renderFields(GDT::RENDER_ORDER); }
-	public function renderFilter(GDT_Filter $f) : string { return $this->renderFields(GDT::RENDER_FILTER); }
-	public function renderCell() : string { return $this->renderFields(GDT::RENDER_CELL); }
-	public function renderTFoot() : string { return $this->renderFields(GDT::RENDER_TFOOT); }
 
 	public function renderJSON()
 	{
 		$json = [];
-		$this->withFields(function(GDT $gdt) use (&$json) {
+		$this->withFields(function (GDT $gdt) use (&$json)
+		{
 			$more = $gdt->renderJSON();
 			if ($name = $gdt->getName())
 			{
@@ -385,5 +409,8 @@ trait WithFields
 		});
 		return $json;
 	}
-	
+
+	public function renderOrder(): string { return $this->renderFields(GDT::RENDER_ORDER); }
+
+
 }

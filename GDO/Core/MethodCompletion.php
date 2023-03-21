@@ -1,68 +1,37 @@
 <?php
 namespace GDO\Core;
 
-use GDO\Table\Module_Table;
-use GDO\UI\GDT_SearchField;
 use GDO\DB\Query;
 use GDO\DB\Result;
+use GDO\Table\Module_Table;
+use GDO\UI\GDT_SearchField;
 
 /**
  * Generic autocompletion base code.
  * Override 1 method (itemToCompletionJSON) for full implemented completion of a GDO.
- * 
- * @author gizmore
+ *
  * @version 7.0.1
  * @since 6.3.0
+ * @author gizmore
  * @see GDT_Table
  * @see MethodAjax
  */
 abstract class MethodCompletion extends MethodAjax
 {
-	protected abstract function gdoTable() : GDO;
-	
-	protected  function gdoHeaderFields() : array
+
+	public function gdoParameters(): array
 	{
-		return $this->gdoTable()->gdoColumnsCache();
+		$min = $this->getSearchTermMinLength();
+		return [
+			GDT_SearchField::make('query')->notNull()->min($min)->max(228),
+		];
 	}
-	
-	protected function getQuery() : Query
-	{
-		return $this->gdoTable()->select();
-	}
-	
-    public function gdoParameters() : array
-    {
-    	$min = $this->getSearchTermMinLength();
-        return [
-            GDT_SearchField::make('query')->notNull()->min($min)->max(228),
-        ];
-    }
-    
-    #############
-    ### Input ###
-    #############
-	public function getSearchTerm() : string
-	{
-		if (null !== ($var = $this->gdoParameterVar('query')))
-		{
-			return $var;
-		}
-		return GDT::EMPTY_STRING;
-	}
-	
-	protected function getSearchTermMinLength() : int
+
+	protected function getSearchTermMinLength(): int
 	{
 		return 2;
 	}
 
-	public function getMaxSuggestions() : int
-	{
-		return Module_Table::instance()->cfgSuggestionsPerRequest();
-	}
-	
-	############
-	### Exec ###
-	############
 	public function execute()
 	{
 		$query = $this->buildQuery();
@@ -71,8 +40,8 @@ abstract class MethodCompletion extends MethodAjax
 		$json = $this->itemsToJSON($items);
 		return GDT_Array::make()->value($json);
 	}
-	
-	protected function buildQuery() : Query
+
+	protected function buildQuery(): Query
 	{
 		$max = $this->getMaxSuggestions();
 		$term = $this->getSearchTerm();
@@ -85,8 +54,8 @@ abstract class MethodCompletion extends MethodAjax
 			{
 // 				if ($name = $gdt->getName())
 // 				{
-	// 				$query->orWhere("{$name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
-					$query->orWhere("{$name} LIKE '%{$eterm}%'");
+				// 				$query->orWhere("{$name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
+				$query->orWhere("{$name} LIKE '%{$eterm}%'");
 // 				}
 			}
 		}
@@ -96,8 +65,42 @@ abstract class MethodCompletion extends MethodAjax
 		}
 		return $query->limit($max);
 	}
-	
-	protected function collectItems(Result $result) : array
+
+	#############
+	### Input ###
+	#############
+
+	public function getMaxSuggestions(): int
+	{
+		return Module_Table::instance()->cfgSuggestionsPerRequest();
+	}
+
+	public function getSearchTerm(): string
+	{
+		if (null !== ($var = $this->gdoParameterVar('query')))
+		{
+			return $var;
+		}
+		return GDT::EMPTY_STRING;
+	}
+
+	abstract protected function gdoTable(): GDO;
+
+	############
+	### Exec ###
+	############
+
+	protected function getQuery(): Query
+	{
+		return $this->gdoTable()->select();
+	}
+
+	protected function gdoHeaderFields(): array
+	{
+		return $this->gdoTable()->gdoColumnsCache();
+	}
+
+	protected function collectItems(Result $result): array
 	{
 		$term = $this->getSearchTerm();
 		$q = mb_strtolower($term);
@@ -118,13 +121,13 @@ abstract class MethodCompletion extends MethodAjax
 		}
 		return $items;
 	}
-	
-	protected function itemsToJSON(array $items) : array
+
+	protected function itemsToJSON(array $items): array
 	{
 		return array_map([$this, 'itemToCompletionJSON'], $items);
 	}
-	
-	public function itemToCompletionJSON(GDO $item) : array
+
+	public function itemToCompletionJSON(GDO $item): array
 	{
 		return [
 			'id' => $item->getID(),
@@ -132,5 +135,5 @@ abstract class MethodCompletion extends MethodAjax
 			'display' => $item->renderOption(),
 		];
 	}
-	
+
 }

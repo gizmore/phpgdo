@@ -9,112 +9,14 @@ namespace GDO\Core;
  *
  * You can generate providers and dependenices with providers.php and provider_dependenciews.php
  *
- * @author gizmore
  * @version 7.0.1
  * @since 6.10.0
+ * @author gizmore
  */
 final class ModuleProviders
 {
-	const GIT_PROVIDER = 'https://github.com/gizmore/';
 
-	/**
-	 * Get URL for a module.
-	 *
-	 * @param string $moduleName
-	 * @param number $which
-	 * @return string
-	 */
-	public static function getGitUrl(string $moduleName, int $which = 1, bool $ssh=false)
-	{
-		$git = self::GIT_PROVIDER;
-		$which = (int) $which;
-		$providers = self::getProviders($moduleName);
-		$url = '';
-		if (is_array($providers))
-		{
-			if (($which < 1) || ($which > count($providers)))
-			{
-				throw new GDO_Exception(
-					"Invalid provider choice!");
-			}
-			$url = $git . $providers[$which - 1];
-		}
-		else
-		{
-			$url = $git . $providers;
-		}
-		
-		if ($ssh)
-		{
-			$url = str_replace('https://', 'ssh://git@', $url);
-		}
-
-		return $url;
-	}
-
-	public static function getCleanModuleName(string $moduleName): string
-	{
-		foreach (array_keys(self::$PROVIDERS) as $modname)
-		{
-			if (strcasecmp($moduleName, $modname) === 0)
-			{
-				return $modname;
-			}
-		}
-	}
-
-	public static function getDependencies(string $moduleName): array
-	{
-		foreach (self::$DEPENDENCIES as $modname => $depNames)
-		{
-			if (strcasecmp($moduleName, $modname) === 0)
-			{
-				return $depNames;
-			}
-		}
-		return GDT::EMPTY_ARRAY;
-	}
-
-	public static function getProviders(string $moduleName)
-	{
-		foreach (self::$PROVIDERS as $modname => $providers)
-		{
-			if (strcasecmp($moduleName, $modname) === 0)
-			{
-				return $providers;
-			}
-		}
-		return null;
-	}
-	
-	public static function getMultiProviders() : array
-	{
-		$back = [];
-		foreach (self::$PROVIDERS as $modname => $providers)
-		{
-			if (is_array($providers))
-			{
-				$back[$modname] = $providers;
-			}
-		}
-		return $back;
-	}
-	
-	/**
-	 * Get all core module names.
-	 * 
-	 * @return string[]
-	 */
-	public static function getCoreModuleNames() : array
-	{
-		return ['Core', 'Date', 'Form', 'Language', 'UI', 'User'];
-	}
-	
-	public static function isCoreModule(string $moduleName) : bool
-	{
-		return in_array($moduleName, self::getCoreModuleNames(), true);
-	}
-
+	public const GIT_PROVIDER = 'https://github.com/gizmore/';
 	/**
 	 * Provider packages.
 	 * Multi-Provided is first
@@ -180,6 +82,7 @@ final class ModuleProviders
 'Forum' => 'phpgdo-forum',
 'Friends' => 'phpgdo-friends',
 'Gallery' => 'phpgdo-gallery',
+'GDO6DB' => 'phpgdo-gdo6',
 'Geo2Country' => 'phpgdo-geo2country',
 'GTranslate' => 'phpgdo-gtranslate',
 'Guestbook' => 'phpgdo-guestbook',
@@ -213,6 +116,7 @@ final class ModuleProviders
 'Moment' => 'phpgdo-moment',
 'News' => 'phpgdo-news',
 'OnlineUsers' => 'phpgdo-online-users',
+'OnSocial' => 'phpgdo-on-social',
 'OpenTimes' => 'phpgdo-open-times',
 'Payment' => 'phpgdo-payment',
 'PaymentBank' => 'phpgdo-payment-bank',
@@ -250,7 +154,6 @@ final class ModuleProviders
 'ZIP' => 'phpgdo-zip',
 ### END_PROVIDERS ###
 	];
-
 	public static $DEPENDENCIES = [
 		### BEGIN_DEPENDENCIES ###
 'AboutMe' => ['Account'],
@@ -298,7 +201,7 @@ final class ModuleProviders
 'DogIRCSpider' => ['DogIRC'],
 'DogShadowdogs' => ['DogAuth'],
 'DogTeams' => ['Dog'],
-'DogTick' => ['Dog', 'DogIRC'],
+'DogTick' => ['Country', 'Dog', 'DogIRC'],
 'DogWebsite' => ['Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'Dog', 'DogAuth', 'DogBlackjack', 'DogGreetings', 'DogIRC', 'DogIRCAutologin', 'DogIRCSpider', 'DogShadowdogs', 'DogTick', 'Download', 'Forum', 'JQuery', 'Links', 'Markdown', 'News', 'Perf', 'PM', 'Quotes', 'Shoutbox', 'Todo'],
 'DOMPDF' => ['File'],
 'DoubleAccounts' => [],
@@ -396,5 +299,103 @@ final class ModuleProviders
 ### END_DEPENDENCIES ###
 	];
 
+	/**
+	 * Get URL for a module.
+	 *
+	 * @param string $moduleName
+	 * @param number $which
+	 *
+	 * @return string
+	 */
+	public static function getGitUrl(string $moduleName, int $which = 1, bool $ssh = false)
+	{
+		$git = self::GIT_PROVIDER;
+		$which = (int)$which;
+		$providers = self::getProviders($moduleName);
+		$url = '';
+		if (is_array($providers))
+		{
+			if (($which < 1) || ($which > count($providers)))
+			{
+				throw new GDO_Exception(
+					'Invalid provider choice!');
+			}
+			$url = $git . $providers[$which - 1];
+		}
+		else
+		{
+			$url = $git . $providers;
+		}
+
+		if ($ssh)
+		{
+			$url = str_replace('https://', 'ssh://git@', $url);
+		}
+
+		return $url;
+	}
+
+	public static function getProviders(string $moduleName)
+	{
+		foreach (self::$PROVIDERS as $modname => $providers)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $providers;
+			}
+		}
+		return null;
+	}
+
+	public static function getCleanModuleName(string $moduleName): string
+	{
+		foreach (array_keys(self::$PROVIDERS) as $modname)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $modname;
+			}
+		}
+	}
+
+	public static function getDependencies(string $moduleName): array
+	{
+		foreach (self::$DEPENDENCIES as $modname => $depNames)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $depNames;
+			}
+		}
+		return GDT::EMPTY_ARRAY;
+	}
+
+	public static function getMultiProviders(): array
+	{
+		$back = [];
+		foreach (self::$PROVIDERS as $modname => $providers)
+		{
+			if (is_array($providers))
+			{
+				$back[$modname] = $providers;
+			}
+		}
+		return $back;
+	}
+
+	public static function isCoreModule(string $moduleName): bool
+	{
+		return in_array($moduleName, self::getCoreModuleNames(), true);
+	}
+
+	/**
+	 * Get all core module names.
+	 *
+	 * @return string[]
+	 */
+	public static function getCoreModuleNames(): array
+	{
+		return ['Core', 'Date', 'Form', 'Language', 'UI', 'User'];
+	}
+
 }
-    
