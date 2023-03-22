@@ -115,8 +115,8 @@ function printUsage(int $code = -1, string $cmd = null): void
 
 		'DIV-Config',
 		'config' => "$exe -ar [<module>] - To show or reset all config variables for modules,",
-		'config' => "$exe -r <module> <key> - To show or reset a single module config variable,",
-		'config' => "$exe <module> <key> <var> - To set the value of a config variable.",
+		'config ' => "$exe -r <module> <key> - To show or reset a single module config variable,",
+		'config  ' => "$exe <module> <key> <var> - To set the value of a config variable.",
 	];
 
 
@@ -126,11 +126,13 @@ function printUsage(int $code = -1, string $cmd = null): void
 		echo "Note: PHP getopts syntax is used here.\n";
 		echo "\n";
 		echo "Toggles:\n";
-		echo "-a == --all - To select all availble modules.\n";
-		echo "-a == --configured - To select all installed modules.\n";
+		echo "-a == --all - To select all available modules.\n";
+		echo "-c == --configured - To select all installed modules.\n";
 		echo "-d == --delete - To delete admins.\n";
 		echo "-r == --reset - To reset config vars.\n";
+		echo "-s == --ssh - To clone via ssh protocol, only for the developers.\n";
 		echo "-v == --verbose - For more output.\n";
+		echo "-3 == --libraries - To select third party libraries.\n";
 		echo "\n";
 	}
 
@@ -157,7 +159,7 @@ if (FileUtil::isFile('protected/config_cli.php'))
 	require 'protected/config_cli.php';
 }
 
-$gdo_adm = new class extends Application
+$app = new class extends Application
 {
 
 	public function __construct()
@@ -175,21 +177,31 @@ $gdo_adm = new class extends Application
 		global $argv, $argc;
 
 		$i = 0;
-		$o = getopt('ciqsv3', ['config', 'interactive', 'quiet', 'ssh', 'verbose', 'vendor'], $i);
+		$o = getopt('aciqrsv3', ['all', 'configured', 'interactive', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
 
-		if (isset($o['i']) || isset($o['interactive']))
+		if (isset($o['a']) || isset($o['all']))
 		{
-			$this->quiet();
+			$this->all();
+		}
+
+		if (isset($o['c']) || isset($o['configured']))
+		{
+			$this->configured();
 		}
 
 		if (isset($o['i']) || isset($o['interactive']))
 		{
-			$this->quiet();
+			$this->interactive();
 		}
 
 		if (isset($o['q']) || isset($o['quiet']))
 		{
 			$this->quiet();
+		}
+
+		if (isset($o['r']) || isset($o['reset']))
+		{
+			$this->resetting();
 		}
 
 		if (isset($o['s']) || isset($o['ssh']))
@@ -202,7 +214,7 @@ $gdo_adm = new class extends Application
 			$this->verbose();
 		}
 
-		if (isset($o['3']) || isset($o['vendor']))
+		if (isset($o['3']) || isset($o['libraries']))
 		{
 			$this->vendor();
 		}
@@ -223,6 +235,22 @@ $gdo_adm = new class extends Application
 	###############
 	### Options ###
 	###############
+	public bool $all = false;
+
+	public function all(bool $all = true): self
+	{
+		$this->all = $all;
+		return $this;
+	}
+
+	public bool $configured = false;
+
+	public function configured(bool $configured = true): self
+	{
+		$this->configured = $configured;
+		return $this;
+	}
+
 	public bool $interactive = false;
 
 	public function interactive(bool $interactive = true): self
@@ -236,6 +264,13 @@ $gdo_adm = new class extends Application
 	public function quiet(bool $quiet = true): self
 	{
 		$this->quiet = $quiet;
+		return $this;
+	}
+
+	public bool $reset = false;
+	public function resetting(bool $r=true): self
+	{
+		$this->reset = $r;
 		return $this;
 	}
 
@@ -265,15 +300,12 @@ $gdo_adm = new class extends Application
 
 };
 
-$app = call_user_func([get_class($gdo_adm), 'init']);
 $app->modeDetected(GDT::RENDER_CLI)->cli()->verb(GDT_Form::POST);
 
 # Load config defaults
 if (!defined('GDO_CONFIGURED'))
 {
 	define('GDO_DB_ENABLED', false);
-	/** @var string[] $argv * */
-	/** @var string[] $argv * */
 	define('GDO_WEB_ROOT', '/');
 	Config::configure(); # autoconfig
 }
@@ -296,18 +328,15 @@ if ($argc === 1)
 	printUsage(0);
 }
 
-
-$command = array_shift($argv);
+$command = array_pop($argv);
 $argc = count($argv);
 $db = (bool)GDO_DB_ENABLED;
 switch ($command)
 {
 	case 'configure':
 	case 'systemtest':
-	case 'wipe_all':
+	case 'wipe':
 	case 'provide':
-	case 'provide_me':
-	case 'provide_all':
 	case 'revendor':
 		$db = false;
 		break;
@@ -316,8 +345,20 @@ switch ($command)
 		{
 			Database::instance();
 		}
+		break;
 }
-$loader->loadModules($db, true);
+$modules = [];
+
+if ($app->all)
+{
+	$modules = $loader->loadModules($db, true);
+}
+elseif ($app->configured)
+{
+	$modules = $loader->loadModules($db, false);
+}
+
+#$loader->loadModules($db, true);
 $loader->loadLangFiles(true);
 $loader->initModules();
 
@@ -387,7 +428,6 @@ elseif ($command === 'docs')
 
 
 	echo "See you around!\n";
-	die(0);
 }
 
 elseif ($command === 'systemtest')
@@ -397,7 +437,6 @@ elseif ($command === 'systemtest')
 		printUsage(1);
 	}
 	echo SystemTest::make()->execute()->renderCLI();
-	echo PHP_EOL;
 }
 
 elseif ($command === 'configure')
@@ -531,9 +570,9 @@ elseif ($command === 'modules')
 	}
 }
 
-elseif (($command === 'install') || ($command === 'install_all'))
+elseif ($command === 'install')
 {
-	if (!GDO_DB_ENABLED)
+	if (!$db)
 	{
 		echo "You do not have GDO_DB_ENABLED. I cannot install anything.\n";
 		die(1);
@@ -541,25 +580,11 @@ elseif (($command === 'install') || ($command === 'install_all'))
 
 	$deps = [];
 
-	if ($command === 'install')
-	{
-		$mode = 1;
-		if ($argc !== 3)
-		{
-			printUsage();
-		}
-	}
-	elseif ($command === 'install_all')
-	{
-		$mode = 2;
-		if ($argc !== 2)
-		{
-			printUsage();
-		}
-	}
+	$mode = $app->all ? 2 : 1;
 
-	ModuleLoader::instance()->reset()->loadModules(true, true, true);
-	ModuleLoader::instance()->initModules();
+#	ModuleLoader::instance()->reset()->loadModules(true, true, true);
+#	ModuleLoader::instance()->initModules();
+
 	$git = ModuleProviders::GIT_PROVIDER;
 
 	if ($mode === 1)
@@ -703,13 +728,8 @@ elseif ($command === 'admin')
 		]) . "\n";
 }
 
-elseif ($command === 'wipe_all')
+elseif ( ($command === 'wipe') && ($app->all) )
 {
-	if ($argc !== 2)
-	{
-		printUsage();
-	}
-
 	Database::instance()->dropDatabase(GDO_DB_NAME);
 	Database::instance()->createDatabase(GDO_DB_NAME);
 	printf("The database has been killed completely and created empty.\n");
@@ -862,23 +882,24 @@ elseif (($command === 'config') || ($command === 'conf'))
 	}
 }
 
-elseif (($command === 'provide') || ($command === 'provide_me') || ($command === 'provide_all'))
+elseif ($command === 'provide')
 {
-	if ($argc < 3)
-	{
-		if (($argc < 2) && ($command === 'provide'))
-		{
-			printUsage(-1);
-		}
-	}
+//	if ($argc < 3)
+//	{
+//		if (($argc < 2) && ($command === 'provide'))
+//		{
+//			printUsage(-1);
+//		}
+//	}
 
-	$isme = $app-command === 'provide_me';
+	$isme = $app->configured;
+#		command === 'provide_me';
 	$isall = $app->all;
 	$isssh = $app->ssh;
 
-	$loader = ModuleLoader::instance();
+#	$loader = ModuleLoader::instance();
 
-	$loader->loadModules($isme, !$isme, true);
+#	$loader->loadModules($isme, !$isme, true);
 
 	# Get all dependencies
 	$cd = 0;
@@ -897,7 +918,8 @@ elseif (($command === 'provide') || ($command === 'provide_me') || ($command ===
 	}
 	elseif ($isme)
 	{
-		foreach ($loader->getModules() as $module)
+		$deps = [];
+		foreach ($modules as $module)
 		{
 			$deps[] = $module->getModuleName();
 		}
@@ -1124,45 +1146,45 @@ elseif ($command === 'migrate')
 	}
 }
 
-elseif ($command === 'migrate_all')
-{
-	$modules = ModuleLoader::instance()->getEnabledModules();
-	foreach ($modules as $module)
-	{
-		Installer::installModule($module, true);
-	}
-	echo GDT_Success::make()->text('msg_gdoadm_migrated_all')->renderCLI();
-}
+//elseif ($command === 'migrate_all')
+//{
+//	$modules = ModuleLoader::instance()->getEnabledModules();
+//	foreach ($modules as $module)
+//	{
+//		Installer::installModule($module, true);
+//	}
+//	echo GDT_Success::make()->text('msg_gdoadm_migrated_all')->renderCLI();
+//}
 
-elseif ($command === 'gizmore_setup')
-{
-	$special = ModuleProviders::getMultiProviders();
-	foreach ($special as $moduleName => $providers)
-	{
-		echo "Cloning especially {$moduleName}.\n";
-		foreach ($providers as $i => $provider)
-		{
-			echo "Cloning provider {$provider}.\n";
-			$url = ModuleProviders::getGitUrl($moduleName, $i + 1, true);
-			$cmd = "cd GDO && git clone --recursive {$url}";
-			$output = [];
-			$return_var = 0;
-			echo "$cmd\n";
-			$result = exec($cmd, $output, $return_var);
-			if ($return_var !== 0)
-			{
-				CLI::error(t('err_clone_url', [
-					$url,
-				]));
-			}
-		}
-
-		$dir = GDO_PATH . "GDO/{$moduleName}/.git";
-		echo "Cleaning provider choice in use: {$dir}.\n";
-		FileUtil::removeDir($dir);
-	}
-	echo "All done, gizmore, sire o\"! =)\n";
-}
+//elseif ($command === 'gizmore_setup')
+//{
+//	$special = ModuleProviders::getMultiProviders();
+//	foreach ($special as $moduleName => $providers)
+//	{
+//		echo "Cloning especially {$moduleName}.\n";
+//		foreach ($providers as $i => $provider)
+//		{
+//			echo "Cloning provider {$provider}.\n";
+//			$url = ModuleProviders::getGitUrl($moduleName, $i + 1, true);
+//			$cmd = "cd GDO && git clone --recursive {$url}";
+//			$output = [];
+//			$return_var = 0;
+//			echo "$cmd\n";
+//			$result = exec($cmd, $output, $return_var);
+//			if ($return_var !== 0)
+//			{
+//				CLI::error(t('err_clone_url', [
+//					$url,
+//				]));
+//			}
+//		}
+//
+//		$dir = GDO_PATH . "GDO/{$moduleName}/.git";
+//		echo "Cleaning provider choice in use: {$dir}.\n";
+//		FileUtil::removeDir($dir);
+//	}
+//	echo "All done, gizmore, sire o\"! =)\n";
+//}
 
 elseif ($command === 'confgrade')
 {

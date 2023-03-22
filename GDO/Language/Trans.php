@@ -3,6 +3,7 @@ namespace GDO\Language;
 
 use GDO\Core\GDT;
 use GDO\Core\Logger;
+use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
 use GDO\Util\FileUtil;
 
@@ -50,12 +51,12 @@ final class Trans
 	 * @var string[]
 	 */
 	public static array $MISSING = [];
-	/**
-	 * Is lazy cache loading available for ISO key?
-	 *
-	 * @var bool[]
-	 */
-	private static array $HAS_CACHE = [];
+//	/**
+//	 * Is lazy cache loading available for ISO key?
+//	 *
+//	 * @var bool[]
+//	 */
+//	private static array $HAS_CACHE = [];
 	/**
 	 * Are all pathes added? # @TODO: This can be removed? - just install process is ugly?
 	 */
@@ -82,7 +83,7 @@ final class Trans
 	 */
 	public static function numFiles(): int
 	{
-		return count(self::$PATHS) ?? 1;
+		return count(self::$PATHS);
 	}
 
 	/**
@@ -137,10 +138,11 @@ final class Trans
 //		$trans = [];
 //		$trans2 = [];
 
+		$cacheKey = self::getCacheKey($iso);
 		# Try cache
-		if (isset(self::$HAS_CACHE[$iso]))
+		if (Cache::fileHas($cacheKey))
 		{
-			self::$CACHE[$iso] = Cache::fileGetSerialized(self::getCacheKey($iso));
+			self::$CACHE[$iso] = Cache::fileGetSerialized($cacheKey);
 //			self::$HAS_LOADED_FILE_CACHE = true;
 			return self::$CACHE[$iso]; # lazy
 //		    $content = Cache::fileGetSerialized($key);
@@ -148,6 +150,8 @@ final class Trans
 //		    self::$HAS_LOADED_FILE_CACHE = true;
 //		    return self::$CACHE[$iso];
 		}
+
+		ModuleLoader::instance()->loadLangFiles();
 
 		# Build lang map
 //		if (self::$INITED)
@@ -199,10 +203,10 @@ final class Trans
 //    		}
 //		}
 
-		if (self::$INITED)
-		{
+//		if (self::$INITED)
+//		{
 			Cache::fileSetSerialized(self::getCacheKey($iso), self::$CACHE[$iso]);
-		}
+//		}
 
 		return isset(self::$CACHE[$iso]) ? self::$CACHE[$iso] : GDT::EMPTY_ARRAY;
 	}

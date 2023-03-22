@@ -42,14 +42,14 @@ trait WithLabel
 		$obj = self::makeNamed($name);
 		if ($name = $obj->getName())
 		{
-			if (Trans::hasKey($name))
-			{
+//			if (Trans::hasKey($name))
+//			{
 				$obj->label($name);
-			}
-			else
-			{
-				$obj->defaultLabel();
-			}
+//			}
+//			else
+//			{
+//				$obj->defaultLabel();
+//			}
 		}
 		else
 		{

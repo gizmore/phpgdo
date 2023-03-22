@@ -107,7 +107,7 @@ else
 	$iso = Module_Language::instance()->detectISO();
 }
 Trans::setISO($iso);
-$loader->loadLangFiles();    # @TODO lazy module initing. This requires a complete change of how Hooks are handled.
+#$loader->loadLangFiles();    # @TODO lazy module initing. This requires a complete change of how Hooks are handled.
 define('GDO_CORE_STABLE', true); # all fine? @deprecated
 #
 # Remember GET/POST HTTP verb.
