@@ -222,7 +222,7 @@ class Configure extends MethodForm
 		if ($moduleVarsChanged)
 		{
 			Cache::flush();
-			Cache::fileFlush();
+//			Cache::fileFlush();
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);
 		}
 

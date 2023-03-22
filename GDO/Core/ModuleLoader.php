@@ -16,6 +16,8 @@ use Throwable;
  * @version 7.0.2
  * @since 3.0.0
  * @author gizmore
+ *
+ * @see GDO_Module
  */
 final class ModuleLoader
 {
@@ -121,7 +123,7 @@ final class ModuleLoader
 		{
 			if (GDO_DB_ENABLED)
 			{
-				if (!($data = Cache::fileGetSerialized('gdo_modulevars')))
+				if (null === ($data = Cache::fileGetSerialized('gdo_modulevars')))
 				{
 					$query = GDO_ModuleVar::table()->select('mv_module, mv_name, mv_value');
 // 		    		if ($singleModuleName)
@@ -347,7 +349,9 @@ final class ModuleLoader
 	 */
 	public function loadModulesA(): array
 	{
-		return $this->loadModules(!!GDO_DB_ENABLED, !GDO_DB_ENABLED);
+		$modules = $this->loadModules(!!GDO_DB_ENABLED, !GDO_DB_ENABLED);
+		$this->initModuleVars();
+		return $modules;
 	}
 
 	/**
@@ -355,13 +359,8 @@ final class ModuleLoader
 	 *
 	 * @return GDO_Module[]
 	 */
-	public function loadModules(bool $loadDB = true, bool $loadFS = false, bool $refresh = false): array
+	public function loadModules(bool $loadDB = true, bool $loadFS = false): array
 	{
-		if ($refresh)
-		{
-			$this->reset();
-		}
-
 		# Load maybe 0, 1 or 2 sources
 		$loaded = false;
 		if ($loadDB && (!$this->loadedDB))

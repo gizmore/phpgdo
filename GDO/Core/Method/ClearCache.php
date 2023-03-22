@@ -64,7 +64,7 @@ class ClearCache extends MethodForm
 		# Flush memcached.
 		Cache::flush();
 		# Flush filecache
-		Cache::fileFlush();
+//		Cache::fileFlush();
 		# Flush GDO cache
 		# Reset application state
 		Application::$INSTANCE->reset();

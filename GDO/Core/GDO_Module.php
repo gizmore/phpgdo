@@ -582,7 +582,7 @@ class GDO_Module extends GDO
 	{
 		$name = $this->getName();
 		$key = strtolower("module_{$name}");
-		return Trans::hasKey($key) ? t($key) : $name;
+		return t($key);
 	}
 
 	public function &gdoColumnsCache(): array

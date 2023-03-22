@@ -65,7 +65,7 @@ class Install extends MethodForm
 	{
 		$response = call_user_func([$this, "execute_$button"]);
 		Cache::flush();
-		Cache::fileFlush();
+//		Cache::fileFlush();
 		$this->resetForm();
 		return $response;
 	}

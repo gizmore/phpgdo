@@ -315,7 +315,6 @@ CLI::setServerVars();
 Logger::init('gdo_adm', GDO_ERROR_LEVEL); # init without username
 Database::init(GDO_DB_NAME);
 Cache::flush();
-Cache::fileFlush();
 Trans::$ISO = GDO_LANGUAGE;
 Debug::init(false, false);
 $loader = ModuleLoader::instance();
@@ -349,6 +348,9 @@ switch ($command)
 }
 $modules = [];
 
+$core = $loader->loadModuleFS('Core');
+$core->onLoadLanguage();
+
 if ($app->all)
 {
 	$modules = $loader->loadModules($db, true);
@@ -359,7 +361,7 @@ elseif ($app->configured)
 }
 
 #$loader->loadModules($db, true);
-$loader->loadLangFiles(true);
+//$loader->loadLangFiles(true);
 $loader->initModules();
 
 # Run!
@@ -693,8 +695,6 @@ elseif ($command === 'install')
 	}, array_keys($deps2));
 	Installer::installModules($modules);
 
-	Cache::flush();
-	Cache::fileFlush();
 	echo "Done.\n";
 }
 
@@ -1214,5 +1214,7 @@ else
 	echo "Unknown command {$command}\n\n";
 	printUsage();
 }
+
+Cache::flush();
 
 CLI::flushTopResponse();

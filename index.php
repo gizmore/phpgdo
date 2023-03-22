@@ -63,7 +63,7 @@ Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
-$loader->initModuleVars();
+//$loader->initModuleVars();
 if (!module_enabled('Core'))
 {
 	require 'index_install.php';

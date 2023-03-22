@@ -369,24 +369,17 @@ class Cache
 	 */
 	public static function flush(): void
 	{
-		switch (GDO_MEMCACHE)
+		if (isset(self::$MEMCACHED))
 		{
-			case 1:
-				if (!defined('GDO_MEMCACHED_FALLBACK'))
-				{
-					self::$MEMCACHED->flush();
-				}
-				break;
-			case 2:
-				self::fileFlush();
-				break;
+			self::$MEMCACHED->flush();
 		}
+		self::fileFlush();
 	}
 
 	/**
 	 * Remove the whole filecache.
 	 */
-	public static function fileFlush(string $key = null): bool
+	private static function fileFlush(string $key = null): bool
 	{
 		self::$CACHE_FLUSH++; #PP#delete#
 		return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/')

@@ -45,7 +45,7 @@ final class InstallModules extends Method
 
 	public function execute()
 	{
-		Cache::fileFlush();
+		Cache::flush();
 		Database::init();
 		$loader = ModuleLoader::instance();
 		$this->modules = $loader->loadModules(true, true, true);

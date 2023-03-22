@@ -156,6 +156,7 @@ final class Trans
 		# Build lang map
 //		if (self::$INITED)
 //		{
+		self::$CACHE[$iso] = [];
 		foreach (self::$PATHS as $path)
 		{
 			$pathISO = "{$path}_{$iso}.php";
@@ -188,7 +189,6 @@ final class Trans
 //					    throw new GDO_Error('err_langfile_corrupt', [$pathEN]);
 //					}
 			}
-			self::$CACHE[$iso] = isset(self::$CACHE[$iso]) ? self::$CACHE[$iso] : [];
 			self::$CACHE[$iso] = array_merge(self::$CACHE[$iso], include($pathISO));
 		}
 //			$trans =
