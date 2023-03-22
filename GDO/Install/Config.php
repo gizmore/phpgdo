@@ -97,7 +97,7 @@ class Config
 		deff('GDO_SITECREATED', Time::getDate());
 		deff('GDO_LANGUAGE', 'en');
 		deff('GDO_TIMEZONE', ini_get('date.timezone')); # @TODO use the full timezone name here for the default timezone in module date.
-		deff('GDO_THEMES', 'classic,default');
+		deff('GDO_THEMES', 'default');
 		deff('GDO_MODULE', 'Core');
 		deff('GDO_METHOD', 'Welcome');
 		deff('GDO_SEO_URLS', false);

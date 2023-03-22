@@ -414,7 +414,7 @@ class Installer
 	/**
 	 * Module description is fetched from README.md by default. Additionally, all Method's phpdoc is read.
 	 */
-	public static function getModuleDescription(GDO_Module $module): string
+	public static function getModuleDescription(GDO_Module $module, bool $short=false): string
 	{
 		$back = '';
 		if ($readme = @file_get_contents($module->filePath('README.md')))
@@ -422,9 +422,16 @@ class Installer
 			$matches = null;
 			if (preg_match("/^#.*[\\r\\n]+([^#]+)/", $readme, $matches))
 			{
-				$back .= trim($matches[1]) . "<br/>\n<br/>\n";
+				$back .= trim($matches[1]);
 			}
 		}
+
+		if ($short)
+		{
+			return $back;
+		}
+
+		$back .=  "<br/>\n<br/>\n";
 
 		$back .= self::getClassDescription($module);
 

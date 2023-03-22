@@ -268,7 +268,8 @@ $app = new class extends Application
 	}
 
 	public bool $reset = false;
-	public function resetting(bool $r=true): self
+
+	public function resetting(bool $r = true): self
 	{
 		$this->reset = $r;
 		return $this;
@@ -327,7 +328,7 @@ if ($argc === 1)
 	printUsage(0);
 }
 
-$command = array_pop($argv);
+$command = $argv[1];
 $argc = count($argv);
 $db = (bool)GDO_DB_ENABLED;
 switch ($command)
@@ -342,7 +343,7 @@ switch ($command)
 	default:
 		if ($db)
 		{
-			Database::instance();
+			Database::init();
 		}
 		break;
 }
@@ -350,6 +351,8 @@ $modules = [];
 
 $core = $loader->loadModuleFS('Core');
 $core->onLoadLanguage();
+$inst = $loader->loadModuleFS('Install');
+$inst->onLoadLanguage();
 
 if ($app->all)
 {
@@ -490,11 +493,7 @@ elseif ($command === 'configure')
 
 elseif ($command === 'test')
 {
-	if (GDO_DB_ENABLED)
-	{
-		Database::init();
-	}
-	echo SystemTest::make()->execute()->renderCLI();
+	echo Configure::make()->onTestConfig()->renderCLI();
 
 	echo "---\n\n\n";
 	echo "Your configuration seems solid.\n";
@@ -509,66 +508,34 @@ elseif ($command === 'test')
 
 elseif ($command === 'modules')
 {
-	if ($argc == 2)
+
+	$modules = [];
+	if ($app->all)
 	{
-		echo "List of official modules\n";
-		$providers = ModuleProviders::$PROVIDERS;
-		$git = ModuleProviders::GIT_PROVIDER;
-		foreach ($providers as $moduleName => $p)
-		{
-			if (!is_array($p))
-			{
-				$p = [
-					$p,
-				];
-			}
-			foreach ($p as $provider)
-			{
-				printf("%32s: cd GDO; git clone --recursive {$git}{$provider} {$moduleName}; cd ..\n", $moduleName);
-			}
-		}
+		$modules = $loader->getModules();
 	}
 	elseif ($argc == 3)
 	{
-		$moduleName = $argv[2];
-		$module = ModuleLoader::instance()->getModule($moduleName, true);
+		$module = $loader->loadModuleFS($argv[2]);
 		if (!$module)
 		{
-			echo "Module not found.\n";
-
-			$providers = @ModuleProviders::$PROVIDERS[$moduleName];
-			if (!$providers)
-			{
-				echo "{$moduleName}: Not an official module or a typo somewhere. No Provider known.\n";
-				echo "Try reading docs/INSTALL.MD\n";
-				echo "You can get a list of modules via {$argv[0]}.\n";
-			}
-			elseif (is_array($providers))
-			{
-				echo "{$moduleName}: Choose between multiple possible providers:\n";
-				foreach ($providers as $provider)
-				{
-					printf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$moduleName}; cd ..\n", $moduleName);
-				}
-			}
-			else
-			{
-				printf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$moduleName}; cd ..\n", $moduleName);
-			}
-		}
-		else
-		{
-			echo "Module: {$moduleName}\n";
-			echo "License: {$module->license}\n";
-			echo $module->getModuleDescription();
-			echo "\n";
-			echo "Dependencies: {$module->renderDependencyNames()}\n";
-			echo "Friendencies: {$module->renderFriendencyNames()}\n";
+			echo "Module {$argv[2]} not found.\n";
 		}
 	}
 	else
 	{
-		printUsage();
+		printUsage(-409, $command);
+	}
+
+	foreach ($modules as $module)
+	{
+		printf("%16s (%s): %s\n", $module->getName(), $module->license, Installer::getModuleDescription($module));
+
+		if (count($modules) === 1)
+		{
+			printf("Dependencies: %s\n", implode(', ', $module->getDependencies()));
+			printf("Friendencies: %s\n", implode(', ', $module->getFriendencies()));
+		}
 	}
 }
 
@@ -728,7 +695,7 @@ elseif ($command === 'admin')
 		]) . "\n";
 }
 
-elseif ( ($command === 'wipe') && ($app->all) )
+elseif (($command === 'wipe') && ($app->all))
 {
 	Database::instance()->dropDatabase(GDO_DB_NAME);
 	Database::instance()->createDatabase(GDO_DB_NAME);

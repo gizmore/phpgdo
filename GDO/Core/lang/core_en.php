@@ -101,6 +101,7 @@ return [
 	'msg_crud_updated' => 'Your %s has been updated successfully.',
 	'msg_binary_detected' => 'The %s binary has been detected.',
 	'msg_module_methods' => '%s methods: %s.',
+	'msg_abort' => 'User abort.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',

@@ -1282,8 +1282,6 @@ class GDO_Module extends GDO
 		return null;
 	}
 
-// 	public array $methods;
-
 	public function getConfigVar(string $key): ?string
 	{
 		if ($gdt = $this->getConfigColumn($key))
