@@ -100,8 +100,8 @@ function printUsage(int $code = -1, string $cmd = null): void
 		'secure' => "$exe - To secure your installation after an install.",
 
 		'DIV-Modules',
-		'modules' => "$exe -ac [<module>] - To show a list of modules or show module details.",
-		'provide' => "$exe -ac [<module>] - To download all modules that are required to provide a module,",
+		'modules' => "$exe -a [<module>] - To show a list of modules or show module details.",
+		'provide' => "$exe -a [<module>] - To download all modules that are required to provide a module,",
 		'install' => "$exe -ac [<module>] - To install a module and it's dependencies,",
 		'wipe' => "$exe -a [<module>] - To uninstall modules,",
 
@@ -147,6 +147,7 @@ function printUsage(int $code = -1, string $cmd = null): void
 
 		}
 	}
+	die($code);
 }
 
 chdir(__DIR__);
@@ -157,6 +158,10 @@ require 'GDO7.php';
 if (FileUtil::isFile('protected/config_cli.php'))
 {
 	require 'protected/config_cli.php';
+}
+else
+{
+	@include 'protected/config.php';
 }
 
 $app = new class extends Application
@@ -354,17 +359,8 @@ $core->onLoadLanguage();
 $inst = $loader->loadModuleFS('Install');
 $inst->onLoadLanguage();
 
-if ($app->all)
-{
-	$modules = $loader->loadModules($db, true);
-}
-elseif ($app->configured)
-{
-	$modules = $loader->loadModules($db, false);
-}
+$loader->loadModules($db, true);
 
-#$loader->loadModules($db, true);
-//$loader->loadLangFiles(true);
 $loader->initModules();
 
 # Run!
@@ -521,6 +517,10 @@ elseif ($command === 'modules')
 		{
 			echo "Module {$argv[2]} not found.\n";
 		}
+		else
+		{
+			$modules = [$module];
+		}
 	}
 	else
 	{
@@ -529,7 +529,7 @@ elseif ($command === 'modules')
 
 	foreach ($modules as $module)
 	{
-		printf("%16s (%s): %s\n", $module->getName(), $module->license, Installer::getModuleDescription($module));
+		printf("%16s (%s): %s\n", $module->getName(), $module->license, Strings::substrTo(Installer::getModuleDescription($module, true), "\n"));
 
 		if (count($modules) === 1)
 		{
@@ -558,6 +558,11 @@ elseif ($command === 'install')
 
 	if ($mode === 1)
 	{
+		if ($argc !== 3)
+		{
+			printUsage(409, $command);
+		}
+
 		$deps[] = 'Core';
 		$moduleNames = explode(',', $argv[2]);
 		foreach ($moduleNames as $moduleName)
@@ -575,6 +580,10 @@ elseif ($command === 'install')
 	}
 	elseif ($mode === 2)
 	{
+		if ($argc !== 2)
+		{
+			printUsage(409, $command);
+		}
 		$modules = ModuleLoader::instance()->loadModules(true, true, true);
 		$modules = array_filter($modules, function (GDO_Module $module)
 		{
@@ -669,7 +678,7 @@ elseif ($command === 'admin')
 {
 	if ($argc !== 4)
 	{
-		printUsage();
+		printUsage(409, $command);
 	}
 	if (!($user = GDO_User::getByName($argv[2])))
 	{
@@ -706,7 +715,7 @@ elseif ($command === 'wipe')
 {
 	if ($argc !== 3)
 	{
-		printUsage();
+		printUsage(409, $command);
 	}
 
 	$module = ModuleLoader::instance()->loadModuleFS($argv[2]);
@@ -929,7 +938,7 @@ elseif ($command === 'provide')
 	$missing = [];
 	foreach ($deps as $dep)
 	{
-		if (!$loader->getModule($dep, false, false))
+		if (!$loader->getModule($dep, true, false))
 		{
 			$missing[] = $dep;
 		}
