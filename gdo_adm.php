@@ -1042,7 +1042,7 @@ elseif ($command === 'provide')
 		{
 			if ($isall || $isme)
 			{
-				system('php gdo_adm.php install_all');
+				system('php gdo_adm.php -a install');
 			}
 			else
 			{
