@@ -1000,7 +1000,7 @@ elseif ($command === 'provide')
 
 			if ($isall || $isme)
 			{
-				echo "You can now:\n./gdoadm.sh install_all\n";
+				echo "You can now:\n./gdoadm.sh -a install\n";
 			}
 			else
 			{
@@ -1011,9 +1011,13 @@ elseif ($command === 'provide')
 			if (($r[0] === 'y') || ($r[0] === 'Y'))
 			{
 
-				if ($isall || $isme)
+				if ($isall)
 				{
-					system('php gdo_adm.php install_all');
+					system('php gdo_adm.php -a install');
+				}
+				elseif ($isme)
+				{
+					system('php gdo_adm.php -c install');
 				}
 				else
 				{
@@ -1026,7 +1030,7 @@ elseif ($command === 'provide')
 	{
 		if ($isall || $isme)
 		{
-			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install_all\n";
+			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh -a install\n";
 		}
 		else
 		{

@@ -12,7 +12,7 @@
     ./gdo_adm.sh configure
     ./gdo_adm.sh test
     ./gdo_adm.sh admin username password
-    ./gdo_adm.sh install_all
+    ./gdo_adm.sh -a install
 </code>
 </body>
 </html>
