@@ -1040,9 +1040,13 @@ elseif ($command === 'provide')
 		$r = $r ? $r : 'y';
 		if (($r[0] === 'y') || ($r[0] === 'Y'))
 		{
-			if ($isall || $isme)
+			if ($isall)
 			{
 				system('php gdo_adm.php -a install');
+			}
+			elseif ($isme)
+			{
+				system('php gdo_adm.php -a install'); # @TODO: use -c option in adm.sh
 			}
 			else
 			{
