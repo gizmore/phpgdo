@@ -35,12 +35,18 @@ require __DIR__ . '/../GDO7.php';
 $gdo = new class extends Application
 {
 
+	public function __construct()
+	{
+		parent::__construct();
+		self::$INSTANCE = $this;
+	}
+
 	public function isCLI(): bool { return true; }
 
 };
 
 global $me;
-gdo::init()->cli()->modeDetected(GDT::RENDER_CLI);
+$gdo->cli()->modeDetected(GDT::RENDER_CLI);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();
@@ -61,7 +67,7 @@ Logger::init(GDO_User::current()->renderUserName(), GDO_ERROR_LEVEL);
 define('GDO_CORE_STABLE', 1);
 
 # Shell
-if (CLI::isInteractive() && $me)
+if (CLI::isInteractive())
 {
 	$line = trim(CLI::getSingleCommandLine());
 	$_SERVER['REQUEST_URI'] = $line;
@@ -105,11 +111,11 @@ if (CLI::isInteractive() && $me)
 		die(0);
 	}
 }
-// else
-// {
-// 	while ($line = fgets(STDIN))
-// 	{
-// 		$exp = GDT_Expression::fromLine($line);
-// 		echo $line;
-// 	}
-// }
+ else
+ {
+ 	while ($line = fgets(STDIN))
+ 	{
+ 		$exp = GDT_Expression::fromLine($line);
+ 		echo $line;
+ 	}
+ }

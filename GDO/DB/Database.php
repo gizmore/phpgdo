@@ -165,7 +165,7 @@ class Database
 
 	public function __destruct()
 	{
-		$this->closeLink();
+ 		$this->closeLink();
 	}
 
 	public function closeLink(): void
