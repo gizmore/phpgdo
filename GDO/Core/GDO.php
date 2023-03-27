@@ -220,8 +220,6 @@ abstract class GDO extends GDT
 		$gdoVars = [];
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
-// 			$gdt->inputs(null);
-
 			# Pass 1) Plug initial var
 			$name = $gdt->getName();
 			if (isset($initial[$name]))

@@ -176,7 +176,7 @@ final class ModuleProviders
 'CKEditor' => ['HTML', 'JQuery'],
 'Classic' => [],
 'CLI' => [],
-'Codinggeex' => [],
+'Codinggeex' => ['Admin', 'Bootstrap5Theme', 'Download', 'Login', 'Perf'],
 'Comments' => ['Votes', 'File'],
 'Contact' => ['Mail'],
 'Core' => ['Crypto', 'Date', 'DBMS', 'Form', 'Language', 'UI', 'User'],

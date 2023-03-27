@@ -4,6 +4,7 @@ namespace GDO\Table;
 
 use GDO\Core\Application;
 use GDO\Core\GDO;
+use GDO\Core\GDO_DBException;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
@@ -130,7 +131,15 @@ class GDT_Table extends GDT
 		return 'table';
 	}
 
-	public function isTestable(): bool { return false; }	public function isOrderable(): bool { return isset($this->order); }
+	public function isTestable(): bool
+	{
+		return false;
+	}
+
+	public function isOrderable(): bool
+	{
+		return isset($this->order);
+	}
 
 // 	protected function getOrderField() : GDT_Order
 // 	{
@@ -355,6 +364,7 @@ class GDT_Table extends GDT
 	}
 
 	/**
+	 * @throws GDO_DBException
 	 * @return int the total number of matching rows.
 	 */
 	public function countItems(): int
@@ -440,42 +450,35 @@ class GDT_Table extends GDT
 	 * We do this by examin the order from our filtered query.
 	 * We count(*) the elements that are before or after orderby.
 	 *
-	 * @throws GDO_Exception
+	 * @throws GDO_DBException
 	 */
 	public function getPageFor(GDO $gdo): int
 	{
 		$result = $this->getResult();
 
-		if ($result instanceof ArrayResult)
+		$q = $this->query->copy(); # ->noJoins();
+		if (isset($this->order))
 		{
-			throw new GDO_Exception('@TODO implement getPageFor() ArrayResult');
-		}
-		else
-		{
-			$q = $this->query->copy(); # ->noJoins();
-			if (isset($this->order))
+			$i = 0;
+			foreach ($this->order->getAllFields() as $field)
 			{
-				$i = 0;
-				foreach ($this->order->getAllFields() as $field)
-				{
-					$i++;
-					$column = $field->getName();
-					$subq = $gdo->entityQuery()
-						->from($gdo->gdoTableName() . " AS sq{$i}")
-						->selectOnly($column)
-						->buildQuery();
-					$order = stripos($column, 'DESC') ? '0' : '1';
-					$cmpop = $order ? '<' : '>';
-					$q->where("{$column} {$cmpop} ( {$subq} )");
-				}
+				$i++;
+				$column = $field->getName();
+				$subq = $gdo->entityQuery()
+					->from($gdo->gdoTableName() . " AS sq{$i}")
+					->selectOnly($column)
+					->buildQuery();
+				$order = stripos($column, 'DESC') ? '0' : '1';
+				$cmpop = $order ? '<' : '>';
+				$q->where("{$column} {$cmpop} ( {$subq} )");
 			}
-			$q->selectOnly('COUNT(*)');#->noOrder();
-			$itemsBefore = $q->exec()->fetchValue();
-			return $this->getPageForB((int)$itemsBefore);
 		}
+		$q->selectOnly('COUNT(*)');#->noOrder();
+		$itemsBefore = $q->exec()->fetchValue();
+		return $this->getPageForB((int)$itemsBefore);
 	}
 
-	public function gdo(?GDO $gdo): GDT
+	public function gdo(?GDO $gdo): static
 	{
 		if ($gdo === null)
 		{

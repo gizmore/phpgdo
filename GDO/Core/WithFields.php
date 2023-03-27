@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Table\GDT_Filter;
@@ -6,7 +7,7 @@ use GDO\Table\GDT_Filter;
 /**
  * Add children fields to a GDT.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.1
  * @author gizmore
  * @see GDT
@@ -19,8 +20,7 @@ trait WithFields
 	################
 	/**
 	 * Real tree.
-	 *
-	 * @var GDT[string]
+	 * @var GDT[]
 	 */
 	public array $fields;
 
@@ -29,7 +29,6 @@ trait WithFields
 	##############
 	/**
 	 * Flattened fields.
-	 *
 	 * @var GDT[]
 	 */
 	public array $fieldsFlat;
@@ -37,12 +36,12 @@ trait WithFields
 	/**
 	 * Call unnamed make and add fields.
 	 */
-	public static function makeWith(GDT...$gdt): self
+	public static function makeWith(GDT ...$gdt): self
 	{
 		return self::make()->addFields(...$gdt);
 	}
 
-	public function addFields(GDT...$gdts): self
+	public function addFields(GDT ...$gdts): self
 	{
 		foreach ($gdts as $gdt)
 		{
@@ -104,7 +103,7 @@ trait WithFields
 		$this->fields = $this->getFieldsSlicy($this->fields, $gdt, $last, $after);
 	}
 
-	private function getFieldsSlicy(array $fields, GDT $field, bool $last, ?GDT $after)
+	private function getFieldsSlicy(array $fields, GDT $field, bool $last, ?GDT $after): array
 	{
 		# Build 3 slices depending on first, after, last.
 		if ($after !== null)
@@ -178,9 +177,7 @@ trait WithFields
 	 */
 	public function getAllFields(): array
 	{
-		return isset($this->fieldsFlat) ?
-			$this->fieldsFlat :
-			GDT::EMPTY_ARRAY;
+		return $this->fieldsFlat ?? GDT::EMPTY_ARRAY;
 	}
 
 	public function addFieldFirst(GDT $gdt): self
@@ -194,20 +191,9 @@ trait WithFields
 		return $this->addFieldAfter($gdt, $after);
 	}
 
-	public function getField(string $key, bool $throw = true): ?GDT
+	public function getField(string $key): ?GDT
 	{
-		if (isset($this->fieldsFlat[$key]))
-		{
-			return $this->fieldsFlat[$key];
-		}
-		elseif ($throw)
-		{
-			throw new GDO_Error('err_unknown_field', [html($key)]);
-		}
-		else
-		{
-			return null;
-		}
+		return $this->fieldsFlat[$key] ?: null;
 	}
 
 	public function addFieldAfter(GDT $gdt, GDT $after): self
@@ -217,7 +203,7 @@ trait WithFields
 
 	public function addFieldLast(GDT $gdt): self
 	{
-		return $this->addFieldB($gdt, null, true);
+		return $this->addFieldB($gdt);
 	}
 
 	public function removeFields(): self
@@ -227,13 +213,10 @@ trait WithFields
 		return $this;
 	}
 
-	public function removeFieldNamed(string $key, bool $throw = false): self
+	public function removeFieldNamed(string $key): self
 	{
-		if ($field = $this->getField($key, $throw))
-		{
-			return $this->removeField($field);
-		}
-		return $this;
+		$field = $this->getField($key);
+		return $this->removeField($field);
 	}
 
 	public function removeField(GDT $field): self
@@ -253,11 +236,8 @@ trait WithFields
 	 * Iterate recusively over the fields until we find the one with the key/name/pos.
 	 * Then call the callback with it and return the result.
 	 * Supports both, named and positional fields.
-	 *
-	 * @param string|int $key
-	 * @param callable $callback
 	 */
-	public function withField($key, $callback)
+	public function withField(string|int $key, callable $callback)
 	{
 		if (isset($this->fields))
 		{
@@ -273,13 +253,14 @@ trait WithFields
 				}
 			}
 		}
+		return null;
 	}
 
 	/**
 	 * Iterate recusively over the fields with a callback.
 	 * If the result is truthy, break the loop early and return the result.
 	 */
-	public function withFields($callback, bool $returnEarly = false)
+	public function withFields(callable $callback, bool $returnEarly = false): mixed
 	{
 		if (isset($this->fields))
 		{
@@ -292,15 +273,15 @@ trait WithFields
 						return $result;
 					}
 				}
-// 				if ($gdt->hasFields())
-// 				{
-// 					$gdt->withFields($callback);
-// 				}
 			}
 		}
+		return null;
 	}
 
-	public function renderCLI(): string { return $this->renderFields(GDT::RENDER_CLI); }
+	public function renderCLI(): string
+	{
+		return $this->renderFields(GDT::RENDER_CLI);
+	}
 
 	/**
 	 * WithFields, we simply iterate over them and render current mode.
@@ -364,7 +345,7 @@ trait WithFields
 	####################
 	### Render modes ### Proxy them to renderFields().
 	####################
-// 	public function renderNIL() : ?string { return null; } # hehe
+ 	public function renderNIL() : null { return null; } # hehe
 
 	public function renderWebsite(): string { return $this->renderFields(GDT::RENDER_WEBSITE); }
 
@@ -410,7 +391,9 @@ trait WithFields
 		return $json;
 	}
 
-	public function renderOrder(): string { return $this->renderFields(GDT::RENDER_ORDER); }
-
+	public function renderOrder(): string
+	{
+		return $this->renderFields(GDT::RENDER_ORDER);
+	}
 
 }

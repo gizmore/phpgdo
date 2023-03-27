@@ -382,7 +382,7 @@ class GDO_Module extends GDO
 	public function tempPath(string $path = ''): string
 	{
 		$base = Application::$INSTANCE->isUnitTests() ? 'temp_test' : 'temp';
-		$full = GDO_PATH . "{$base}/" . $this->getLowerName() . '/' - $path;
+		$full = GDO_PATH . "{$base}/" . $this->getLowerName() . '/' . $path;
 		FileUtil::createdDir(dirname($full));
 		return $full;
 	}
@@ -637,6 +637,8 @@ class GDO_Module extends GDO
 
 	/**
 	 * Get a user setting.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function userSetting(GDO_User $user, string $key): GDT
 	{
@@ -833,6 +835,9 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	private function loadUserSettings(GDO_User $user): array
 	{
 		if (null === ($settings = $user->tempGet('gdo_setting')))
@@ -846,6 +851,8 @@ class GDO_Module extends GDO
 
 	/**
 	 * Load a user's settings into their temp cache.
+	 *
+	 * @throws GDO_DBException
 	 */
 	private function loadUserSettingsB(GDO_User $user): array
 	{
@@ -909,6 +916,9 @@ class GDO_Module extends GDO
 		return self::saveUserSetting(GDO_User::current(), $key, $var);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
 		$gdt = $this->userSetting($user, $key);
@@ -1110,6 +1120,9 @@ class GDO_Module extends GDO
 		return $query->select("IFNULL( ( SELECT uset_var FROM gdo_usersetting {$jn} WHERE {$jn}.uset_name='{$key}' AND {$jn}.uset_user={$userFieldName} ), {$default} ) AS {$key}");
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function getUserConfigACLField(string $key, GDO_User $user = null): ?GDT_ACL
 	{
 		$c = $this->settingsACL;
@@ -1117,6 +1130,9 @@ class GDO_Module extends GDO
 		return isset($c[$key]) ? $this->_ucacl($key, $c[$key], $user) : null;
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	private function _ucacl(string $key, GDT_ACL $acl, GDO_User $user): GDT_ACL
 	{
 		$gdt = $this->userSetting($user, $key);
@@ -1126,12 +1142,11 @@ class GDO_Module extends GDO
 			$acl->aclRelation->var($data[0]);
 			$acl->aclLevel->var($data[1]);
 			$acl->aclPermission->var($data[2]);
-			break;
 		}
 		return $acl;
 	}
 
-	public function getMethod(string $methodName, bool $throw = true): ?Method
+	public function getMethod(string $methodName): ?Method
 	{
 		$methods = $this->getMethods(false);
 		foreach ($methods as $method)
@@ -1140,13 +1155,6 @@ class GDO_Module extends GDO
 			{
 				return $method;
 			}
-		}
-		if ($throw)
-		{
-			throw new GDO_Error('err_unknown_method', [
-				$this->gdoHumanName(),
-				html($methodName),
-			]);
 		}
 		return null;
 	}

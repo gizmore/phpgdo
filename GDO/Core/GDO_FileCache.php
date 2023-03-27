@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Crypto\GDT_MD5;
@@ -6,7 +7,7 @@ use GDO\Crypto\GDT_MD5;
 /**
  * A cache for static file md5 sums.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @author gizmore
  */
 final class GDO_FileCache extends GDO
@@ -28,7 +29,7 @@ final class GDO_FileCache extends GDO
 		self::blank([
 			'fc_name' => $path,
 			'fc_md5' => $md5,
-			'fc_mtime' => $last_modified_time,
+			'fc_mtime' => (string) $last_modified_time,
 		])->replace();
 		return $md5;
 	}

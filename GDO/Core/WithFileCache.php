@@ -47,7 +47,7 @@ trait WithFileCache
 		{
 			$app = Application::$INSTANCE;
 			$result = $this->execute();
-			if (!$app->isError())
+			if (!$app::isError())
 			{
 				$content = $result->renderMode(Application::$MODE_DETECTED);
 				Cache::fileSetSerialized($key, $content);

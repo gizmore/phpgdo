@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
@@ -28,13 +29,13 @@ use GDO\UI\GDT_Page;
 use GDO\User\GDO_User;
 
 /**
- * @var $me Method
+ * @var Method $me
  */
 global $me; # one of the very few globals, required a lot in index.
 /**
  * GDOv7 - The best PHP Framework in the solar system. Really!
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 1.0.0
  * @author gizmore@wechall.net
  */
@@ -118,7 +119,7 @@ $app->verb(strtolower($_SERVER['REQUEST_METHOD']));
 #
 if (isset($_REQUEST['_fmt']))
 {
-	$mode = $app->detectRenderMode((string)@$_REQUEST['_fmt']);
+	$mode = $app::detectRenderMode((string)@$_REQUEST['_fmt']);
 	unset($_REQUEST['_fmt']);
 }
 else

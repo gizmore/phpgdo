@@ -165,7 +165,7 @@ echo 'Dropping Test Database: ' . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
 $db->dropDatabase(GDO_DB_NAME);
 FileUtil::removeDir(GDO_PATH . 'files_test/');
-mkdir(GDO_PATH . 'files_test/', GDO_CHMOD);
+@mkdir(GDO_PATH . 'files_test/', GDO_CHMOD);
 FileUtil::removeDir(GDO_TEMP_PATH);
 $db->createDatabase(GDO_DB_NAME);
 $db->useDatabase(GDO_DB_NAME);

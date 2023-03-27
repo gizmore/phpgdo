@@ -52,7 +52,7 @@ abstract class Method #extends GDT
 	/**
 	 * Get a method by cli convention. Aliases first, then module DOT method.
 	 */
-	public static function getMethod(string $alias, bool $throw = true): ?self
+	public static function getMethod(string $alias): ?self
 	{
 		$alias = strtolower($alias);
 		if (isset(self::$CLI_ALIASES[$alias]))
@@ -64,12 +64,8 @@ abstract class Method #extends GDT
 		{
 			$moduleName = Strings::substrTo($alias, '.', $alias);
 
-			if (!($module = ModuleLoader::instance()->getModule($moduleName, false, $throw)))
+			if (!($module = ModuleLoader::instance()->getModule($moduleName, false)))
 			{
-// 				if ($throw)
-// 				{
-// 					throw new GDO_Error('err_unknown_module', [html($moduleName)]);
-// 				}
 				return null;
 			}
 
@@ -78,10 +74,10 @@ abstract class Method #extends GDT
 			{
 				return $method;
 			}
-			if ($throw)
-			{
-				throw new GDO_NoSuchMethodError($module, $methodName);
-			}
+//			if ($throw)
+//			{
+//				throw new GDO_NoSuchMethodError($module, $methodName);
+//			}
 		}
 		return null;
 	}
@@ -93,11 +89,14 @@ abstract class Method #extends GDT
 
 	public function getCLITrigger(): string
 	{
-		$trigger = "{$this->getModuleName()}.{$this->getMethodName()}";
-		return strtolower($trigger);
+		return strtolower("{$this->getModuleName()}.{$this->getMethodName()}");
 	}
 
-	public function getMethodName(): string { return $this->gdoShortName(); }
+	public function getMethodName(): string
+	{
+		return $this->gdoShortName();
+
+	}
 
 	public function isCLI(): bool { return true; }
 
@@ -211,8 +210,8 @@ abstract class Method #extends GDT
 			$this->lock();
 			if ($this->transactional())
 			{
+				$transactonal = true;
 				$db->transactionBegin();
-				$transactional = true;
 			}
 
 			# 2) Before execute
@@ -707,7 +706,7 @@ abstract class Method #extends GDT
 
 	public function redirectMessage(string $key, array $args = null, string $href = null): GDT_Redirect
 	{
-		$href = $href ? $href : GDT_Redirect::hrefBack();
+		$href = $href ?: GDT_Redirect::hrefBack();
 		$redirect = GDT_Redirect::make()->href($href)
 			->redirectMessage($key, $args);
 		GDT_Page::instance()->topResponse()->addField($redirect);
@@ -720,7 +719,7 @@ abstract class Method #extends GDT
 
 	public function redirectError(string $key, array $args = null, string $href = null): GDT_Redirect
 	{
-		$href = $href ? $href : GDT_Redirect::hrefBack();
+		$href = $href ?: GDT_Redirect::hrefBack();
 		$redirect = GDT_Redirect::make()->href($href)
 			->redirectError($key, $args);
 		GDT_Page::instance()->topResponse()->

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace GDO\Form;
 
-use GDO\Core\GDO;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_ArgException;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Response;
 use GDO\Core\Method;
 use GDO\File\GDT_File;
 
@@ -19,6 +19,7 @@ abstract class MethodForm extends Method
 {
 
 	public bool $submitted = false;
+
 	public ?string $pressedButton = null;
 
 	#################
@@ -81,11 +82,11 @@ abstract class MethodForm extends Method
 		unset($this->parameterCache); # :)
 	}
 
-	protected function initFromGDO(GDO $gdo): self
-	{
-		$this->getForm()->initFromGDO($gdo);
-		return $this;
-	}
+//	protected function initFromGDO(GDO $gdo): self
+//	{
+//		$this->getForm()->initFromGDO($gdo);
+//		return $this;
+//	}
 
 	public function getForm(bool $reset = false): GDT_Form
 	{
@@ -123,6 +124,9 @@ abstract class MethodForm extends Method
 		parent::applyInput();
 	}
 
+	/**
+	 * @throws GDO_ArgException
+	 */
 	public function execute(): GDT
 	{
 		### validation result
@@ -178,9 +182,13 @@ abstract class MethodForm extends Method
 					}
 					else
 					{
-						throw new GDO_Error('err_submit_without_click_handler', [
-							$this->renderMoMe(), $gdt->getName()]);
+						return GDT_Response::make();
 					}
+//					else
+//					{
+//						throw new GDO_Error('err_submit_without_click_handler', [
+//							$this->renderMoMe(), $gdt->getName()]);
+//					}
 
 					$this->afterValidation();
 
@@ -276,12 +284,12 @@ abstract class MethodForm extends Method
 		return $form;
 	}
 
-	protected function renderMoMe(): string
-	{
-		$mo = $this->getModuleName();
-		$me = $this->getMethodName();
-		return "{$mo}::{$me}";
-	}
+//	protected function renderMoMe(): string
+//	{
+//		$mo = $this->getModuleName();
+//		$me = $this->getMethodName();
+//		return "{$mo}::{$me}";
+//	}
 
 	protected function afterValidation(): void {}
 

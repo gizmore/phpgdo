@@ -77,10 +77,10 @@ if (CLI::isInteractive())
 		try
 		{
 			$expression = GDT_Expression::fromLine($line);
-			/** @var $result GDT_Response * */
+			/** @var GDT_Response $result * */
 			$result = $expression->execute();
 			CLI::flushTopResponse();
-			echo $result->render() . "\n";
+			echo $result->render();
 		}
 		catch (GDO_NoSuchMethodError $ex)
 		{

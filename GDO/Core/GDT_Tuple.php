@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -7,7 +8,7 @@ namespace GDO\Core;
  * In HTML it does not get wrapped in a gdt-container.
  * In JSON it does inflatten. instead of response => values you will just get values.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
