@@ -136,8 +136,6 @@ final class FileUtil
 	###############
 	/**
 	 * Get the size of a folder recursively.
-	 *
-	 * @deprecated too slow! @TODO Maybe use cached in Core/Fileserver GDO_FileCache?
 	 */
 	public static function dirsize(string $path): int
 	{

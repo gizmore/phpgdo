@@ -19,7 +19,7 @@ use GDO\UI\WithLabel;
  * @author gizmore
  * @see GDT_Join
  */
-final class GDT_Virtual extends GDT
+class GDT_Virtual extends GDT
 {
 
 	use WithGDO;
@@ -31,7 +31,7 @@ final class GDT_Virtual extends GDT
 	/**
 	 * Encapsulated virtual GDT Proxy
 	 **/
-	public GDT_Field $gdtType;
+	public GDT $gdtType;
 
 	public function isTestable(): bool { return false; }
 
@@ -72,7 +72,7 @@ final class GDT_Virtual extends GDT
 	/**
 	 * Get and setup the proxy GDT
 	 */
-	private function proxy(): GDT_Field
+	private function proxy(): GDT
 	{
 		$gdt = isset($this->gdo) ? $this->gdtType->gdo($this->gdo) : $this->gdtType;
 		if (isset($this->labelKey))
@@ -90,8 +90,6 @@ final class GDT_Virtual extends GDT
 	##############
 	### Render ###
 	##############
-
-
 
 	public function render(): array|string|null
 	{
@@ -120,19 +118,12 @@ final class GDT_Virtual extends GDT
 		return $this;
 	}
 
-	public function gdtType(GDT_Field $gdt): self
+	public function gdtType(GDT $gdt): self
 	{
 		$this->gdtType = $gdt;
 		$this->gdtType->name($this->getName());
 		return $this;
 	}
-
-//	public function renderHeader(): string { return $this->proxy()->renderHeader(); }
-
-//	public function displayTableOrder(GDT_Table $table)
-//	{
-//		return $this->proxy()->displayTableOrder($table);
-//	}
 
 
 }

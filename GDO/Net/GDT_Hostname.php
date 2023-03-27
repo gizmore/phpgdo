@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\GDT_String;
@@ -7,7 +8,7 @@ use GDO\Core\GDT_String;
  * Hostname datatype.
  * Optionally validate reachability.
  *
- * @version 6.10.1
+ * @version 7.0.3
  * @since 6.0.3
  * @author gizmore
  */
@@ -17,21 +18,27 @@ final class GDT_Hostname extends GDT_String
 	###############
 	### Resolve ###
 	###############
-	public int $min = 1;
-	public int $max = 128;
+	public ?int $min = 1;
+	public ?int $max = 128;
 
 	##################
 	### GDT_String ###
 	##################
 	public bool $reachable = false;
 
-	public function getIP() { return self::resolve($this->getVar()); }
+	public function getIP(): string
+	{
+		return self::resolve($this->getVar());
+	}
 
 	#################
 	### Reachable ###
 	#################
 
-	public static function resolve($hostname) { return gethostbyname($hostname); }
+	public static function resolve(string $hostname): string
+	{
+		return gethostbyname($hostname);
+	}
 
 	public function reachable(bool $reachable = true): self
 	{
@@ -55,9 +62,9 @@ final class GDT_Hostname extends GDT_String
 		return false;
 	}
 
-	public function validateReachable($value)
+	public function validateReachable($value): bool
 	{
-		return self::resolve($value) ? true : $this->error('err_unknown_host');
+		return self::resolve($value) || $this->error('err_unknown_host');
 	}
 
 }
