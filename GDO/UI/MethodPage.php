@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
@@ -10,7 +11,7 @@ use GDO\Core\WithFileCache;
  * Default method that simply loads a template.
  * Uses gdoParameters to populate template vars.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.4.0
  * @author gizmore
  */
