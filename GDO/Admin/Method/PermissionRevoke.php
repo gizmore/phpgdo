@@ -2,6 +2,7 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDT;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -36,7 +37,7 @@ class PermissionRevoke extends MethodForm
 
 	public function getPermission(): ?string { return 'admin'; }
 
-	public function onMethodInit()
+	public function onMethodInit(): ?GDT
 	{
 		if ($userid = Common::getRequestString('user'))
 		{
@@ -46,9 +47,10 @@ class PermissionRevoke extends MethodForm
 		{
 			$this->permission = GDO_Permission::table()->getById($permid);
 		}
+		return null;
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$this->renderPermissionBar();
 		return parent::execute();
@@ -70,7 +72,7 @@ class PermissionRevoke extends MethodForm
 	 *
 	 * @see MethodForm::formValidated
 	 */
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		/** @var $user GDO_User * */
 		/** @var $perm GDO_Permission * */

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDO;
@@ -23,9 +24,10 @@ use GDO\UI\GDT_Card;
  * The holy user class.
  * Most user related fields are in other module settings.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 1.0.0
  * @author gizmore
+ *
  * @see GDO
  * @see GDT_User
  * @see Module_Date
@@ -34,21 +36,19 @@ use GDO\UI\GDT_Card;
 final class GDO_User extends GDO
 {
 
-	public const GUEST_NAME_PREFIX = '~';
+	final public const GUEST_NAME_PREFIX = '~';
 
 	#############
 	### Cache ###
 	#############
 	# Instances
 	private static ?self $SYSTEM = null;
+
 	private static self $CURRENT;
 
 	public static function system(): self
 	{
-		if (!isset(self::$SYSTEM))
-		{
-			self::$SYSTEM = self::findById('1');
-		}
+		self::$SYSTEM ??= self::findById('1');
 		return self::$SYSTEM;
 	}
 
@@ -64,8 +64,7 @@ final class GDO_User extends GDO
 		static $admins;
 		if ($admins === null)
 		{
-
-			$admins = self::withPermission('admin');
+			$admins = self::withPermission(GDO_Permission::ADMIN);
 		}
 		return $admins;
 	}
@@ -104,7 +103,7 @@ final class GDO_User extends GDO
 		static $staff;
 		if ($staff === null)
 		{
-			$staff = self::withPermission('staff');
+			$staff = self::withPermission(GDO_Permission::STAFF);
 		}
 		return $staff;
 	}
@@ -141,18 +140,20 @@ final class GDO_User extends GDO
 		}
 		if (module_enabled('Session'))
 		{
-			return GDO_Session::get('timezone', '1');
+			return GDO_Session::get('timezone', Time::UTC);
 		}
 		return Time::UTC;
 	}
 
-	public function getLangISO(): string { return Module_Language::instance()->cfgUserLangID($this); }
+	public function getLangISO(): string
+	{
+		return Module_Language::instance()->cfgUserLangID($this);
+	}
 
 	/**
 	 * Get a user by login, for auth mechanisms
 	 *
-	 * @return self
-	 * @todo getByLogin shall use a hook for mail module to login via email.
+	 * @TODO: getByLogin shall use a hook for mail module to login via email.
 	 */
 	public static function getByLogin(string $name): ?self
 	{
@@ -223,7 +224,10 @@ final class GDO_User extends GDO
 		return $this;
 	}
 
-	public function getID(): ?string { return $this->gdoVar('user_id'); }
+	public function getID(): ?string
+	{
+		return $this->gdoVar('user_id');
+	}
 
 	/**
 	 * Get guest ghost user.
@@ -261,7 +265,7 @@ final class GDO_User extends GDO
 		return $this->isType(GDT_UserType::SYSTEM);
 	}
 
-	public function isType($type): bool { return $this->getType() === $type; }
+	public function isType(string $type): bool { return $this->getType() === $type; }
 
 	public function getType(): string { return $this->gdoVar('user_type'); }
 
@@ -289,6 +293,7 @@ final class GDO_User extends GDO
 		if ($name = $this->getName())
 		{
 			return html($name);
+			return html($name);
 		}
 
 		$p = self::GUEST_NAME_PREFIX;
@@ -302,6 +307,7 @@ final class GDO_User extends GDO
 		{
 			return $pp . t('ghost') . $pp;
 		}
+
 		return $pp . t('guest') . $pp;
 	}
 
@@ -434,7 +440,7 @@ final class GDO_User extends GDO
 		$perms = $this->loadPermissions();
 		foreach (explode(',', $permissions) as $permission)
 		{
-			if (array_key_exists($permission, $perms))
+			if (in_array($permission, $perms, true))
 			{
 				return true;
 			}
@@ -460,24 +466,9 @@ final class GDO_User extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
-// 	public function getProfileLink(bool $nickname=true, ?int $avatar=42, bool $level=true) : GDT_ProfileLink
-// 	{
-// 		$link = GDT_ProfileLink::make()->gdo($this);
-// 		$link->nickname($nickname);
-// 		if ($avatar > 0)
-// 		{
-// 			$link->avatarUser($this, $avatar);
-// 		}
-// 		if ($level)
-// 		{
-// 			$link->tooltip('tt_user_profile_link', [$this->renderUserName(), $this->getLevel()]);
-// 		}
-// 		return $link;
-// 	}
+	public function isAdmin(): bool { return $this->hasPermission(GDO_Permission::ADMIN); }
 
-	public function isAdmin(): bool { return $this->hasPermission('admin'); }
-
-	public function isStaff(): bool { return $this->hasPermission('staff') || $this->hasPermission('admin'); }
+	public function isStaff(): bool { return $this->hasPermission(GDO_Permission::STAFF); }
 
 	public function changedPermissions(): self
 	{
@@ -501,33 +492,12 @@ final class GDO_User extends GDO
 	/**
 	 * Get the effective userlevel for this user.
 	 */
-	public function getLevel(): int
+	public function getLevel(): string
 	{
-		$level = $this->gdoVar('user_level');
-		$permLevel = $this->getPermissionLevel();
-		return $level + $permLevel;
+		return $this->gdoVar('user_level');
 	}
 
-	/**
-	 * Get the highest level for all permissions.
-	 */
-	public function getPermissionLevel(): int
-	{
-		$max = 0;
-		if ($perms = $this->loadPermissions())
-		{
-			foreach ($perms as $level)
-			{
-				if ($level > $max)
-				{
-					$max = $level;
-				}
-			}
-		}
-		return $max;
-	}
-
-	public function getLevelSpent(): int
+	public function getLevelSpent(): string
 	{
 		return $this->settingVar('User', 'level_spent');
 	}
@@ -539,7 +509,7 @@ final class GDO_User extends GDO
 
 	public function setting(string $moduleName, string $key): GDT
 	{
-		$module = ModuleLoader::instance()->getModule($moduleName, true, false);
+		$module = ModuleLoader::instance()->getModule($moduleName, true);
 		return $module->userSetting($this, $key);
 	}
 
@@ -583,7 +553,7 @@ final class GDO_User extends GDO
 
 	public function saveSettingVar(string $moduleName, string $key, ?string $var): self
 	{
-		if ($module = ModuleLoader::instance()->getModule($moduleName, true, false))
+		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
 		{
 			$module->saveUserSetting($this, $key, $var);
 		}
@@ -593,7 +563,7 @@ final class GDO_User extends GDO
 	/**
 	 * Save all the ACL settings for a user's setting var.
 	 */
-	public function saveACLSettings(string $moduleName, string $key, string $relation, int $level = 0, string $permission = null): self
+	public function saveACLSettings(string $moduleName, string $key, string $relation, string $level = null, string $permission = null): self
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$module->saveUserSettingACLRelation($this, $key, $relation);

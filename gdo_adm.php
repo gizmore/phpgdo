@@ -379,7 +379,7 @@ elseif ($command === 'docs')
 	{
 		while (!$gdt->hasError())
 		{
-			$gdt->reset(true);
+			$gdt->reset();
 			if (REPL::changedGDTVar($gdt, "Which File $now? "))
 			{
 				echo file_get_contents($gdt->getDocsPath());

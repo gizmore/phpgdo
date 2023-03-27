@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Form;
 
 use GDO\Core\Application;
 use GDO\Core\GDO;
+use GDO\Core\GDO_ArgException;
+use GDO\Core\GDO_Error;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
@@ -28,7 +31,7 @@ use GDO\UI\WithTitle;
  *
  * Quite a biggy!
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.4
  * @author gizmore
  * @see GDT
@@ -55,12 +58,16 @@ final class GDT_Form extends GDT
 	use WithActions;
 	use WithPHPJQuery;
 
-	public const GET = 'get';
-	public const POST = 'post';
-	public const HEAD = 'head';
-	public const OPTIONS = 'options';
+	final public const GET = 'GET';
+
+	final public const POST = 'POST';
+
+	final public const HEAD = 'HEAD';
+
+	final public const OPTIONS = 'OPTIONS';
 
 	public static ?self $CURRENT = null; # required to handle focus requester engine.
+
 	public bool $slim = false;
 
 	############
@@ -73,7 +80,7 @@ final class GDT_Form extends GDT
 		parent::__construct();
 		$this->verb(self::POST);
 		$this->addClass('gdt-form');
-		$this->action((string)@urldecode($_SERVER['REQUEST_URI']));
+		$this->action(urldecode($_SERVER['REQUEST_URI']));
 	}
 
 	#############
@@ -113,8 +120,7 @@ final class GDT_Form extends GDT
 		{
 			$title = $this->renderTitle();
 			$text = $this->renderText();
-			$tt = trim("{$title} {$text}");
-			return $tt;
+			return trim("{$title} {$text}");
 		}
 		else
 		{
@@ -130,12 +136,12 @@ final class GDT_Form extends GDT
 		}
 	}
 
-	private function renderCLIError(GDT $gdt)
+	private function renderCLIError(GDT $gdt): string
 	{
 		return t('err_cli_form_gdt', [
 				Color::red(html($gdt->getName())),
 				html($gdt->renderError())],
-			) . "\n";
+			);
 	}
 
 	public function renderHTML(): string
@@ -152,24 +158,15 @@ final class GDT_Form extends GDT
 		return $html;
 	}
 
-// 	/**
-// 	 * Render html hidden fields for mo/me.
-// 	 * @deprecated Feels not nice.
-// 	 */
-// 	public static function htmlHiddenMoMe() : string
-// 	{
-// 		return
-// 			"<input type=\"hidden\" name=\"_mo\" value=\"{}\" />\n".
-// 			"<input type=\"hidden\" name=\"_me\" value=\"{}\" />\n";
-// 	}
-
 	################
 	### Validate ###
 	################
 	/**
 	 * Validate the form fields.
+	 *
+	 * @throws GDO_ArgException
 	 */
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		$valid = true;
 		$inputs = $this->getInputs();
@@ -180,17 +177,13 @@ final class GDT_Form extends GDT
 				$valid = false;
 			}
 		}
-		return $valid ? true : $this->errorFormInvalid();
+		return $valid || $this->errorFormInvalid();
 	}
 
-	public function errorFormInvalid()
+	public function errorFormInvalid(): bool
 	{
 		$numErrors = $this->countErrors();
 		Application::setResponseCode(GDO_Exception::DEFAULT_ERROR_CODE);
-// 		if (Application::instance()->isUnitTests())
-// 		{
-// 			echo $this->renderCLI();
-// 		}
 		return $this->error('err_form_invalid', [$numErrors]);
 	}
 
@@ -207,12 +200,18 @@ final class GDT_Form extends GDT
 	###########
 	### Var ###
 	###########
+	/**
+	 * @throws GDO_Error
+	 */
 	public function getFormVar(string $key, bool $throw = true): ?string
 	{
 		return $this->getField($key, $throw)->getVar();
 	}
 
-	public function getFormValue(string $key, bool $throw = true)
+	/**
+	 * @throws GDO_Error
+	 */
+	public function getFormValue(string $key, bool $throw = true): bool|int|float|string|array|null|object
 	{
 		return $this->getField($key, $throw)->getValue();
 	}
@@ -231,10 +230,8 @@ final class GDT_Form extends GDT
 			}
 			else
 			{
-				if ($data = $gdt->var($gdt->getVar())->getGDOData())
-				{
-					$back = array_merge($back, $data);
-				}
+				$data = $gdt->var($gdt->getVar())->getGDOData();
+				$back = array_merge($back, $data);
 			}
 		}
 		return $back;

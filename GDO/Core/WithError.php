@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
  * Adds error annotations to a GDT.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.1.0
  * @author gizmore
  */
@@ -12,8 +13,11 @@ trait WithError
 {
 
 	public string $errorRaw;
+
 	public string $errorKey;
+
 	public ?array $errorArgs;
+
 
 	/**
 	 * Unlike the chain pattern, this returns false!
@@ -26,7 +30,7 @@ trait WithError
 		return false;
 	}
 
-	public function noError(): self
+	public function noError(): static
 	{
 		unset($this->errorRaw);
 		unset($this->errorKey);
@@ -68,10 +72,6 @@ trait WithError
 				}
 			}
 		}
-// 		if (Application::instance()->isError())
-// 		{
-// 			return true;
-// 		}
 		return false;
 	}
 

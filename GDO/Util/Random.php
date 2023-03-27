@@ -117,4 +117,12 @@ final class Random
 		return count($array) ? $array[array_rand($array, 1)] : null;
 	}
 
+	/**
+	 * return true or false based on a probability between 0.00 and 1.00
+	 */
+	public static function mchance(float $chance): bool
+	{
+		return self::mrand() > (self::RAND_MAX / $chance);
+	}
+
 }

@@ -16,7 +16,7 @@ use GDO\Core\ModuleLoader;
 final class UserSettings extends MethodAjax
 {
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$settings = [];
 		$modules = ModuleLoader::instance()->getEnabledModules();

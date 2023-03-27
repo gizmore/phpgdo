@@ -58,7 +58,7 @@ final class GDT_Module extends GDT_ObjectSelect
 		return $choices;
 	}
 
-	public function getValueSingle(string $moduleName): ?GDO_Module
+	public function getValueSingle(?string $moduleName): ?GDO_Module
 	{
 		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
 		{
@@ -71,11 +71,11 @@ final class GDT_Module extends GDT_ObjectSelect
 	# ## Choices ###
 	# ##############
 
-	public function getValueMulti(string $var): array
+	public function getValueMulti($var): array
 	{
 		$loader = ModuleLoader::instance();
 		$back = [];
-		foreach (json_decode($var) as $id)
+		foreach (@json_decode($var) as $id)
 		{
 			if ($object = $loader->getModuleByID($id))
 			{

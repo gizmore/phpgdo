@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -6,7 +7,7 @@ namespace GDO\Core;
  * Display human classname.
  * Add trait WithModule.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see WithModule
@@ -16,19 +17,19 @@ trait WithName
 
 	use WithModule;
 
-	public string $name;
 
-	public static function make(string $name = null): self
+	public ?string $name;
+
+
+	public static function make(string $name = null): static
 	{
 		return self::makeNamed($name);
 	}
 
-	public static function makeNamed(string $name = null): self
+	public static function makeNamed(string $name = null): static
 	{
 		$obj = new static();
-		$name = $name === null ? $obj->getDefaultName() : $name;
-		$obj->name($name);
-		return $obj;
+		return $obj->name($name ?? $obj->getDefaultName());
 	}
 
 	public function getDefaultName(): ?string
@@ -36,16 +37,9 @@ trait WithName
 		return null;
 	}
 
-	public function name(string $name = null): self
+	public function name(?string $name): self
 	{
-		if ($name)
-		{
-			$this->name = $name;
-		}
-		else
-		{
-			unset($this->name);
-		}
+		$this->name = $name;
 		return $this;
 	}
 
@@ -60,7 +54,7 @@ trait WithName
 
 	public function getName(): ?string
 	{
-		return isset($this->name) ? $this->name : null;
+		return $this->name ?? null;
 	}
 
 }

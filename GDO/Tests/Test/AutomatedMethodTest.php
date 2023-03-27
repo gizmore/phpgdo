@@ -33,12 +33,12 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	{
 		$method = $mt->method;
 
-		if ($method instanceof SwitchLanguage)
-		{
+//		if ($method instanceof SwitchLanguage)
+//		{
 //			xdebug_break();
-		}
+//		}
 
-		$this->message('Running command: ' . $method->getCLITrigger());
+		$this->message("Running command: {$method->getCLITrigger()}");
 
 		$mt->runAs($mt->method->plugUser());
 		$result = $mt->execute(null, false);

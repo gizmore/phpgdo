@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Date\Time;
@@ -27,7 +28,7 @@ use GDO\User\GDO_User;
  *
  * - Offers bulk operations
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore@wechall.net
  * @see GDT
@@ -42,46 +43,58 @@ use GDO\User\GDO_User;
 abstract class GDO extends GDT
 {
 
-	use WithTemp;
+	use WithTemp; # @TODO the WithTemp trait should only be used on gdo_user and gdo_news, and others?
 
 	#################
 	### Constants ###
 	#################
-	public const LICENSE = 'GDOv7';
-	public const TOKEN_LENGTH = 16; # length of gdoHashcode and GDT_Token
+	final public const LICENSE = 'GDOv7';
+
+	final public const TOKEN_LENGTH = 16; # length of gdoHashcode and GDT_Token
 
 	# mysql
-	public const MYISAM = 'MyIsam'; # Faster writes
-	public const INNODB = 'InnoDB'; # Foreign keys
-// 	const MEMORY = 'Memory'; # Temp tables @TODO Temp memory tables not working? => remove
+	final public const MYISAM = 'MyIsam'; # Faster writes
+
+	final public const INNODB = 'InnoDB'; # Foreign keys
+
+// 	final const MEMORY = 'Memory'; # Temp tables @TODO Temp memory tables not working? => remove
 
 	# sqlite
-// 	const SQL3_DELETE = 'DELETE';
-// 	const SQL3_TRUNCATE = 'TRUNCATE';
-	public const SQL3_PERSIST = 'PERSIST';
-// 	const SQL3_MEMORY = 'MEMORY';
-	public const SQL3_WAL = 'WAL';
-// 	const SQL3_OFF = 'OFF';
+	final public const SQL3_PERSIST = 'PERSIST';
+
+	final public const SQL3_WAL = 'WAL';
 
 	##############
 	### Static ###
 	##############
+	/**
+	 * @var int Total allocations
+	 */
 	public static int $GDO_COUNT = 0;
+
+	/**
+	 * @var int Total deallocations
+	 */
 	public static int $GDO_KILLS = 0;
+
+	/**
+	 * @var int Maximum simultanious allocations
+	 */
+	public static int $GDO_PEAKS = 0;
 
 	#################
 	### Construct ###
 	#################
-	public static int $GDO_PEAKS = 0; # total allocs
-	public Cache $cache; # total deallocs
-	public bool $recache; # max sim. alive
+	public Cache $cache;
+
+	/**
+	 * @var bool @TODO move GDO->$recache to Cache to reduce GDO memory by one field.
+	 */
+	public bool $recache = false;
+
 	private bool $persisted = false;
 
-	#############
-	#PP#start####
-	#############
-	### DEBUG ###
-	#############
+
 	/**
 	 * Mark vars as dirty.
 	 * Either true for all,
@@ -90,17 +103,33 @@ abstract class GDO extends GDT
 	 * One of the very few mixed fields.
 	 */
 	private mixed $dirty = false;
+
+
 	/**
 	 * DB entity vars.
 	 *
-	 * @var string[string]
+	 * @var string[]
 	 */
 	private array $gdoVars;
 
+
+	public static function tableGDO(): static
+	{
+		return (new static());
+	}
+
 	public function __construct()
 	{
-		$this->afterLoaded(); #PP#delete#
+		parent::__construct(); #PP#delete#
+		$this->afterLoaded();  #PP#delete#
 	}
+
+
+	#############
+	#PP#start####
+	### DEBUG ###
+	#############
+
 
 	private function afterLoaded(): void
 	{
@@ -115,11 +144,6 @@ abstract class GDO extends GDT
 			$this->logDebug();
 		}
 	}
-	#########
-	#PP#end##
-	################
-	### Abstract ###
-	################
 
 	private function logDebug(): void
 	{
@@ -130,10 +154,14 @@ abstract class GDO extends GDT
 		}
 	}
 
-	public static function escapeIdentifierS(string $identifier): string
-	{
-		return str_replace('`', "\\`", $identifier);
-	}
+	#########
+	#PP#end## # end of PP
+	#########
+
+//	public static function escapeIdentifierS(string $identifier): string
+//	{
+//		return str_replace('`', "\\`", $identifier);
+//	}
 
 	public static function escapeSearchS(string $var): string
 	{
@@ -151,21 +179,21 @@ abstract class GDO extends GDT
 	/**
 	 * Create a new entity instance.
 	 */
-	public static function blank(array $initial = null): self
+	public static function blank(array $initial = null): static
 	{
 		return self::entity(self::getBlankData($initial))->dirty()->setPersisted(false);
-	} # @see self::MYISAM
+	}
 
-	public function dirty($dirty = true): self
+	public function dirty(mixed $dirty = true): self
 	{
 		$this->dirty = $dirty;
 		return $this;
 	}
 
 	/**
-	 * @param string[string] $gdoVars
+	 * @param string[] $gdoVars
 	 */
-	public static function entity(array $gdoVars): self
+	public static function  entity(array $gdoVars): static
 	{
 		$instance = new static();
 		$instance->gdoVars = $gdoVars;
@@ -181,9 +209,9 @@ abstract class GDO extends GDT
 	 *
 	 * @TODO throw error on unknown initial vars.
 	 *
-	 * @param string[string] $initial gdovars data to copy
+	 * @param string[] $initial gdovars data to copy
 	 *
-	 * @return string[string] the new blank data
+	 * @return string[] the new blank data
 	 */
 	public static function getBlankData(array $initial = null): array
 	{
@@ -229,7 +257,15 @@ abstract class GDO extends GDT
 	/**
 	 * Get the table GDO for this class.
 	 */
-	public static function table(): ?self
+	public static function table(): ?static
+	{
+		return Database::tableS(static::class);
+	}
+
+	/**
+	 * Get the table GDO for thie class.
+	 */
+	public function tbl(): static
 	{
 		return Database::tableS(static::class);
 	}
@@ -280,15 +316,7 @@ abstract class GDO extends GDT
 	public function gdoPrimaryKeyColumnNames(): array
 	{
 		$table = self::table();
-// 		if (!isset($table->cache))
-// 		{
-// 			xdebug_break();
-// 		}
-// 		$cache = isset($table->cache) ? $table->cache : null;
 		$cache = $table->cache;
-// 		if ($cache && isset($cache->pkNames))
-
-
 		if (isset($cache->pkNames))
 		{
 			return $cache->pkNames;
@@ -298,7 +326,7 @@ abstract class GDO extends GDT
 		{
 			if ($column->isPrimary())
 			{
-				$names[] = $column->name;
+				$names[] = $column->getName();
 			}
 			else
 			{
@@ -317,31 +345,27 @@ abstract class GDO extends GDT
 			}
 		}
 
-// 		if ($cache)
-// 		{
 		$cache->pkNames = $names;
-// 		}
 
 		return $names;
 	}
 
 	public function gdoVar(string $key): ?string
 	{
-		return isset($this->gdoVars[$key]) ? $this->gdoVars[$key] : null;
+		return $this->gdoVars[$key] ?? null;
 	}
 
 	/**
 	 * @TODO: Reset this GDO like it came from the cache (initial/var/dirty)
 	 */
-	public function reset(bool $removeInput = false): self
+	public function reset(): static
 	{
-		$this->dirty = false;
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			$gdt->reset($removeInput);
+			$gdt->reset();
 		}
-		parent::reset($removeInput);
-		return $this;
+		$this->dirty = false;
+		return parent::reset();
 	}
 
 	##############
@@ -359,7 +383,7 @@ abstract class GDO extends GDT
 		$this->afterLoaded();
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return $this->toJSON();
 	}
@@ -389,7 +413,7 @@ abstract class GDO extends GDT
 
 	public function __destruct()
 	{
-		self::$GDO_KILLS++;
+		self::$GDO_KILLS++; #PP#delete#
 	}
 
 	public function renderCLI(): string
@@ -419,7 +443,7 @@ abstract class GDO extends GDT
 	 * Get a row by a single arbritary column value.
 	 * Try caches first.
 	 */
-	public static function getBy(string $key, string $var): ?self
+	public static function getBy(string $key, string $var): ?static
 	{
 		if ($gdo = self::getCachedBy($key, $var))
 		{
@@ -428,7 +452,7 @@ abstract class GDO extends GDT
 		return self::table()->getWhere($key . '=' . self::quoteS($var));
 	}
 
-	private static function getCachedBy(string $key, string $var): ?self
+	private static function getCachedBy(string $key, string $var): ?static
 	{
 		return self::table()->cache->getCachedBy($key, $var);
 	}
@@ -454,8 +478,6 @@ abstract class GDO extends GDT
 
 	/**
 	 * Create a new query for this GDO table.
-	 *
-	 * @return Query
 	 */
 	public function query(): Query
 	{
@@ -464,7 +486,11 @@ abstract class GDO extends GDT
 
 	public function gdoTableIdentifier(): string { return $this->gdoTableName(); }
 
-	public function gdoTableName(): string { return $this->table()->cache->tableName; }
+
+	public function gdoTableName(): string
+	{
+		return $this->tbl()->cache->tableName;
+	}
 
 	############
 	### Vars ###
@@ -485,9 +511,6 @@ abstract class GDO extends GDT
 		return $this;
 	}
 
-	/**
-	 * @throws GDO_Exception
-	 */
 	public static function quoteS($var): string
 	{
 		if (is_string($var))
@@ -500,18 +523,21 @@ abstract class GDO extends GDT
 		}
 		elseif (is_numeric($var))
 		{
-			return $var;
+			return (string)$var;
 		}
-		elseif (is_bool($var))
+		else # if (is_bool($var))
 		{
 			return $var ? '1' : '0';
 		}
-		else
-		{
-			throw new GDO_Exception('Unquoteable var: ' . print_r($var, true));
-		}
+//		else
+//		{
+//			throw new GDO_Exception('Unquoteable var: ' . print_r($var, true));
+//		}
 	}
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public static function notFoundException(string $id): void
 	{
 		throw new GDO_Error('err_gdo_not_found', [
@@ -521,29 +547,29 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * @param string[string] $vars
+	 * @param string[] $vars
+	 *
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
 	 */
-	public static function getByVars(array $vars): ?self
+	public static function getByVars(array $vars): ?static
 	{
 		$query = self::table()->select();
 		foreach ($vars as $key => $value)
 		{
-			$query->where(self::quoteIdentifierS($key) . '=' . self::quoteS($value));
+			$query->where("{$key}=" . self::quoteS($value));
 		}
 		return $query->first()->exec()->fetchObject();
 	}
 
-	public static function quoteIdentifierS(string $identifier): string
-	{
-		return $identifier;  # performance for features
-	}
 
-	public static function findByGID(string $id): self
+	public static function findByGID(string $id): static
 	{
 		return self::findById(...explode(':', $id));
 	}
 
-	public static function findById(string...$id): self
+
+	public static function findById(string...$id): static
 	{
 		if ($object = self::getById(...$id))
 		{
@@ -553,10 +579,10 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * Get a row by IDs.
+	 * Get a row by ID(s).
 	 * Tries GDO process cache first.
 	 */
-	public static function getById(string...$id): ?self
+	public static function getById(string... $id): ?self
 	{
 		$table = self::table();
 		if ((!$table->cached()) || (!($object = $table->cache->findCached(...$id))))
@@ -565,8 +591,8 @@ abstract class GDO extends GDT
 			$query = $table->select();
 			foreach ($table->gdoPrimaryKeyColumns() as $gdt)
 			{
-				$condition = $table->gdoTableName() . '.' . $gdt->identifier() .
-					'=' . self::quoteS($id[$i++]);
+				$condition = sprintf('%s.%s=%s',
+					$table->gdoTableName(), $gdt->getName(), self::quoteS($id[$i++]));
 				$query->where($condition);
 			}
 			$object = $query->first()->exec()->fetchObject();
@@ -591,7 +617,7 @@ abstract class GDO extends GDT
 
 	public function findCached(string...$ids): ?self
 	{
-		if (!($gdo = $this->table()->cache->findCached(...$ids)))
+		if (!($gdo = $this->tbl()->cache->findCached(...$ids)))
 		{
 			$gdo = self::getById(...$ids);
 		}
@@ -617,7 +643,7 @@ abstract class GDO extends GDT
 		{
 			if ($column->isPrimary())
 			{
-				$columns[$column->name] = $column;
+				$columns[$column->getName()] = $column;
 			}
 			else
 			{
@@ -643,6 +669,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Get the table GDO for a classname.
+	 *
+	 * @throws GDO_Error
 	 */
 	public static function tableFor(string $className, bool $throw = true): ?self
 	{
@@ -662,13 +690,18 @@ abstract class GDO extends GDT
 	 * Mass insertion.
 	 *
 	 * @param GDT[] $fields
+	 *
+	 * @throws GDO_DBException
 	 */
-	public static function bulkReplace(array $fields, array $data, int $chunkSize = 100): void
+	public static function bulkReplace(array $fields, array $data, int $chunkSize = 200): void
 	{
 		self::bulkInsert($fields, $data, $chunkSize, 'REPLACE');
 	}
 
-	public static function bulkInsert(array $fields, array $data, $chunkSize = 100, $insert = 'INSERT')
+	/**
+	 * @throws GDO_DBException
+	 */
+	public static function bulkInsert(array $fields, array $data, $chunkSize = 200, string $insert = 'INSERT'): void
 	{
 		foreach (array_chunk($data, $chunkSize) as $chunk)
 		{
@@ -676,6 +709,9 @@ abstract class GDO extends GDT
 		}
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	private static function _bulkInsert(array $fields, array $data, string $insert = 'INSERT'): bool
 	{
 		$names = [];
@@ -698,9 +734,8 @@ abstract class GDO extends GDT
 		}
 		$values = implode("),\n(", $values);
 
-		$query = "$insert INTO {$table->gdoTableIdentifier()} (`$names`)\n VALUES\n($values)";
-		Database::instance()->queryWrite($query);
-		return true;
+		$query = "{$insert} INTO {$table->gdoTableIdentifier()} (`$names`)\nVALUES\n($values)";
+		return Database::instance()->queryWrite($query);
 	}
 
 	/**
@@ -728,33 +763,20 @@ abstract class GDO extends GDT
 	 */
 	public function gdoDTO(): bool { return false; }
 
+
 	public function gdoDisplay(string $key): string
 	{
-		$var = $this->gdoVar($key);
-		if ($gdt = $this->gdoColumn($key, false))
-		{
-			return $gdt->displayVar($var);
-		}
-		return html($var);
+		return $this->gdoColumn($key)->displayVar($this->gdoVar($key));
 	}
 
 	/**
 	 * Get the GDT column for a key.
-	 * Assign my GDO values to the GDT.
-	 *
-	 * @throws GDO_ErrorFatal
+	 * Assign GDO vars to the GDTs.
 	 */
-	public function gdoColumn(string $key, bool $throw = true): ?GDT
+	public function gdoColumn(string $key): ?GDT
 	{
-		if ($gdt = @$this->gdoColumnsCache()[$key])
-		{
-			return $gdt->gdo($this); # assign values
-		}
-		elseif ($throw)
-		{
-			throw new GDO_ErrorFatal('err_unknown_gdo_column', [$this->gdoClassName(), html($key)]);
-		}
-		return null;
+		$cache = $this->gdoColumnsCache();
+		return $cache[$key]?->gdo($this);
 	}
 
 	#################
@@ -795,21 +817,14 @@ abstract class GDO extends GDT
 
 	public function setVars(array $vars = null, $markDirty = true): self
 	{
-		foreach ($vars as $key => $value)
+		foreach ($vars as $key => $var)
 		{
-			$this->setVar($key, $value, $markDirty);
+			$this->setVar($key, $var, $markDirty);
 		}
 		return $this;
 	}
 
-	/**
-	 * @param string $key
-	 * @param string $var
-	 * @param bool $markDirty
-	 *
-	 * @return self
-	 */
-	public function setVar(string $key, string $var = null, bool $markDirty = true): self
+	public function setVar(string $key, ?string $var, bool $markDirty = true): self
 	{
 		if (!$this->hasColumn($key))
 		{
@@ -817,15 +832,18 @@ abstract class GDO extends GDT
 			return $this;
 		}
 
+		$d = false; # worthy?
 		$gdt = $this->gdoColumn($key)->var($var);
-		$d = false;
 		$data = $gdt->getGDOData();
 		foreach ($data as $k => $v)
 		{
-			if (@$this->gdoVars[$k] !== $v)
+			if (array_key_exists($k, $this->gdoVars))
 			{
-				$this->gdoVars[$k] = $v === null ? null : (string)$v;
-				$d = true;
+				if ($this->gdoVars[$k] !== $v)
+				{
+					$this->gdoVars[$k] = $v;
+					$d = true;
+				}
 			}
 		}
 		return ($markDirty && $d) ? $this->markDirty($key) : $this;
@@ -850,26 +868,24 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * Get the gdo value of a column.
-	 *
-	 * @param string $key
-	 *
-	 * @return mixed
+	 * Get the value of a column.
 	 */
-	public function gdoValue(string $key)
+	public function gdoValue(string $key): null|bool|int|float|string|object|array
 	{
 		return $this->gdoColumn($key)->getValue();
 	}
 
 	/**
 	 * Break these GDT functions as they confuse you now.
+	 *
+	 * @throws GDO_Error
 	 */
-	public function getValue(string $var = null)
+	public function getValue(string $var = null): bool|int|float|string|array|null|object
 	{
 		throw new GDO_Error('err_gdo_no_gdt', ['getValue', $this->gdoHumanName()]);
 	}
 
-	public function inputs(?array $inputs): self
+	public function inputs(?array $inputs): static
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
@@ -882,7 +898,7 @@ abstract class GDO extends GDT
 	### DB ###
 	##########
 
-	public static function make(string $name = null): self
+	public static function make(string $name = null): static
 	{
 		return new static();
 	}
@@ -897,14 +913,14 @@ abstract class GDO extends GDT
 		$values = [];
 		foreach ($this->gdoPrimaryKeyColumns() as $gdt)
 		{
-			$values[$gdt->name] = $this->gdoVar($gdt->name);
+			$name = $gdt->getName();
+			$values[$name] = $this->gdoVar($name);
 		}
 		return $values;
 	}
 
 	/**
 	 * Get all columns of a type. Used to load users via two different GDT_Name fields.
-	 *
 	 * @return GDT[]
 	 */
 	public function gdoColumnsOf(string $className): array
@@ -922,7 +938,7 @@ abstract class GDO extends GDT
 
 	public function gdoVarOf(string $className): ?string
 	{
-		return $this->gdoVar($this->gdoColumnOf($className)->name);
+		return $this->gdoVar($this->gdoColumnOf($className)->getName());
 	}
 
 	/**
@@ -933,7 +949,7 @@ abstract class GDO extends GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			if (is_a($gdt, $className, true))
+			if (is_a($gdt, $className))
 			{
 				return $gdt->gdo($this);
 			}
@@ -941,7 +957,7 @@ abstract class GDO extends GDT
 		return null;
 	}
 
-	public function gdoValueOf(string $className)
+	public function gdoValueOf(string $className): null|bool|int|float|string|object|array
 	{
 		return $this->gdoColumnOf($className)->getValue();
 	}
@@ -952,10 +968,11 @@ abstract class GDO extends GDT
 
 	/**
 	 * Get the GDOs AutoIncrement column, if any.
-	 *
-	 * @return GDT_AutoInc
 	 */
-	public function gdoAutoIncColumn(): GDT { return $this->gdoColumnOf(GDT_AutoInc::class); }
+	public function gdoAutoIncColumn(): ?GDT
+	{
+		return $this->gdoColumnOf(GDT_AutoInc::class);
+	}
 
 	##############
 	### Delete ###
@@ -963,10 +980,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Get the GDOs name identifier column, if any.
-	 *
-	 * @return GDT_Name
 	 */
-	public function gdoNameColumn(): ?GDT_Name
+	public function gdoNameColumn(): ?GDT
 	{
 		return $this->gdoColumnOf(GDT_Name::class);
 	}
@@ -1008,6 +1023,17 @@ abstract class GDO extends GDT
 		return $this->gdoColumnsOnlyExcept($keys, true);
 	}
 
+	/**
+	 * Get all GDT columns except those listed.
+	 *
+	 * @return GDT[]
+	 */
+	public function gdoColumnsExcept(string...$keys): array
+	{
+		return $this->gdoColumnsOnlyExcept($keys, false);
+	}
+
+
 	private function gdoColumnsOnlyExcept(array $keys, bool $negate): array
 	{
 		$columns = [];
@@ -1026,37 +1052,23 @@ abstract class GDO extends GDT
 	###############
 
 	/**
-	 * Get all GDT columns except those listed.
-	 *
-	 * @return GDT[]
-	 */
-	public function gdoColumnsExcept(string...$keys): array
-	{
-		return $this->gdoColumnsOnlyExcept($keys, false);
-	}
-
-	/**
 	 * Find a row by AutoInc Id.
 	 *
-	 * @param string $id
-	 *
-	 * @return static
+	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
-	public function find(string $id = null, bool $throw = true): self
+	public function find(string $id): static
 	{
-		if ($id && ($gdo = $this->getById($id)))
+		if ($gdo = self::getById($id))
 		{
 			return $gdo;
 		}
-		if ($throw)
-		{
-			self::notFoundException(html($id));
-		}
+		self::notFoundException(html($id));
 	}
 
 	public function countWhere(string $condition = 'true'): int
 	{
-		return $this->select('COUNT(*)', false)->where($condition)->
+		return (int) $this->select('COUNT(*)', false)->where($condition)->
 		noOrder()->exec()->fetchValue();
 	}
 
@@ -1076,12 +1088,15 @@ abstract class GDO extends GDT
 	### Update ###
 	##############
 
+	/**
+	 * @throws GDO_ArgException
+	 */
 	public function isValid(): bool
 	{
 		$invalid = 0;
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			$invalid += $gdt->noError()->gdo($this)->validated() ? 0 : 1;
+			$invalid += $gdt->gdo($this)->validated() ? 0 : 1;
 		}
 		return $invalid === 0;
 	}
@@ -1104,8 +1119,10 @@ abstract class GDO extends GDT
 
 	/**
 	 * Break these GDT functions as they confuse you now.
+	 *
+	 * @throws GDO_Error
 	 */
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		throw new GDO_Error('err_gdo_no_gdt', ['getVar', $this->gdoHumanName()]);
 	}
@@ -1116,9 +1133,8 @@ abstract class GDO extends GDT
 	### Var manipulation ###
 	########################
 
-	public function setPersisted(bool $persisted = true): self
+	public function setPersisted(bool $persisted = true): static
 	{
-// 		unset($this->id);
 		$this->persisted = $persisted;
 		return $this;
 	}
@@ -1128,14 +1144,15 @@ abstract class GDO extends GDT
 	 */
 	public function markDeleted(bool $withHooks = true): self
 	{
+		$change = false;
 		if ($gdt = $this->gdoColumnOf(GDT_DeletedAt::class))
 		{
-			$this->setVar($gdt->name, Time::getDate());
+			$this->setVar($gdt->getName(), Time::getDate());
 			$change = true;
 		}
 		if ($gdt = $this->gdoColumnOf(GDT_DeletedBy::class))
 		{
-			$this->setVar($gdt->name, GDO_User::current()->getID());
+			$this->setVar($gdt->getName(), GDO_User::current()->getID());
 			$change = true;
 		}
 		if ($change)
@@ -1151,6 +1168,14 @@ abstract class GDO extends GDT
 		{
 			return $this->deleteB($withHooks);
 		}
+	}
+
+	public function insert(bool $withHooks = true): self
+	{
+		$query = $this->query()->
+		insert($this->gdoTableIdentifier())->
+		values($this->getDirtyVars());
+		return $this->insertOrReplace($query, $withHooks);
 	}
 
 	/**
@@ -1182,14 +1207,6 @@ abstract class GDO extends GDT
 			}
 		}
 		return $this;
-	}
-
-	public function insert(bool $withHooks = true): self
-	{
-		$query = $this->query()->
-		insert($this->gdoTableIdentifier())->
-		values($this->getDirtyVars());
-		return $this->insertOrReplace($query, $withHooks);
 	}
 
 	/**
@@ -1241,21 +1258,25 @@ abstract class GDO extends GDT
 
 	private function insertOrReplace(Query $query, bool $withHooks): self
 	{
-		if ($withHooks)
+		try
 		{
-			$this->beforeCreate($query);
+			if ($withHooks)
+			{
+				$this->beforeCreate($query);
+			}
+			$query->exec();
+			$this->dirty = false;
+			$this->persisted = true;
+			if ($withHooks)
+			{
+				$this->afterCreate();
+			}
+			$this->cache(); # not needed for new rows?
 		}
-
-		$query->exec();
-
-		$this->dirty = false;
-		$this->persisted = true;
-
-		if ($withHooks)
+		catch (GDO_DBException $ex)
 		{
-			$this->afterCreate();
+			Debug::debugException($ex);
 		}
-		$this->cache(); # not needed for new rows?
 		return $this;
 	}
 
@@ -1358,6 +1379,9 @@ abstract class GDO extends GDT
 	### Get ID ###
 	##############
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public function entityQuery(): Query
 	{
 		if (!$this->persisted)
@@ -1379,7 +1403,8 @@ abstract class GDO extends GDT
 			{
 				$where .= ' AND ';
 			}
-			$where .= $column->identifier() . ' = ' . $this->quoted($column->name);
+			$name = $column->getName();
+			$where .=  "{$name}={$this->quoted($name)}";
 		}
 		return $where;
 	}
@@ -1388,7 +1413,10 @@ abstract class GDO extends GDT
 	### Get by ###
 	##############
 
-	public function quoted($key) { return self::quoteS($this->gdoVar($key)); }
+	public function quoted($key): string
+	{
+		return self::quoteS($this->gdoVar($key));
+	}
 
 	private function beforeUpdate(Query $query): void
 	{
@@ -1445,54 +1473,44 @@ abstract class GDO extends GDT
 
 	public function uncache(): void
 	{
-		if ($this->table()->cache)
+		if ($c = $this->tbl()->cache)
 		{
-			$this->table()->cache->uncache($this);
-//			Cache::fi
+			$c->uncache($this);
 		}
 	}
 
 	/**
-	 * Delete multiple rows, but still one by one to trigger all events correctly.
+	 * Delete multiple rows, but one by one when using withHooks, to trigger events correctly.
+	 * Mass deletions can be done without hooks.
 	 *
-	 * @return int number of deleted rows
+	 * @return int - Number of deleted rows
 	 */
 	public function deleteWhere(string $condition, bool $withHooks = true): int
 	{
-		$deleted = 0;
 		if ($withHooks)
 		{
-			$result = $this->table()->select()->where($condition)->exec();
+			$deleted = 0;
+			$result = $this->tbl()->select()->where($condition)->exec();
 			while ($gdo = $result->fetchObject())
 			{
 				$deleted++;
 				$gdo->deleteB();
 			}
+			return $deleted;
 		}
 		else
 		{
-			if (
-				$this->query()->
-				delete($this->gdoTableIdentifier())->
-				where($condition)->exec()
-			)
-			{
-				$deleted = Database::instance()->affectedRows();
-			}
+			$this->query()->delete($this->gdoTableIdentifier())->where($condition)->exec();
+			return Database::instance()->affectedRows();
 		}
-		return $deleted;
 	}
 
 	/**
 	 * Does an INSERT, ON DUPLICATE KEY UPDATE. Not all events are supported. I.e. we don't know what event to call before the query is fired.
-	 *
-	 * @param bool $withHooks
-	 *
-	 * @return self
 	 */
 	public function softReplace(bool $withHooks = true): self
 	{
-		if ($gdo = $this->table()->getWhere($this->getPKWhere()))
+		if ($gdo = $this->tbl()->getWhere($this->getPKWhere()))
 		{
 			$gdo->persisted = true;
 			$gdo->dirty = true;
@@ -1523,7 +1541,6 @@ abstract class GDO extends GDT
 
 		$query = $this->query()->
 		replace($this->gdoTableIdentifier())->
-// 			values($this->gdoPrimaryKeyValues())->
 		values($this->getDirtyVars());
 
 		return $this->insertOrReplace($query, $withHooks);
@@ -1536,7 +1553,7 @@ abstract class GDO extends GDT
 
 	public function increase(string $key, float $by = 1): self
 	{
-		return $by == 0 ? $this : $this->saveVar($key, $this->gdoVar($key) + $by);
+		return $this->saveVar($key, (string) ($this->gdoValue($key) + $by));
 	}
 
 	public function saveVar(string $key, ?string $var, bool $withHooks = true, bool &$worthy = false): self
@@ -1545,7 +1562,9 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * @param string[string] $vars
+	 * @param string[] $vars
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function saveVars(array $vars, bool $withHooks = true, bool &$worthy = false): self
 	{
@@ -1584,13 +1603,8 @@ abstract class GDO extends GDT
 
 		if ($withHooks)
 		{
-			$this->recache();
-		}
-
-		# Call hooks even when not needed. Because its needed on GDT_Files
-		if ($withHooks)
-		{
 			$this->afterUpdate();
+			$this->recache();
 		}
 
 		return $this;
@@ -1621,11 +1635,11 @@ abstract class GDO extends GDT
 		$vars = [];
 		foreach ($values as $key => $value)
 		{
-			$this->gdoColumn($key)->setGDOValue($value);
+			$this->gdoColumn($key)->setGDOData($value);
 			$vars[$key] = $this->gdoVar($key);
 		}
 		return $this->saveVars($vars, $withHooks);
-	} // @TODO move GDO->$recache to the Cache to reduce GDO by one field
+	}
 
 	public function fetchAll(Result $result): array
 	{
@@ -1663,10 +1677,13 @@ abstract class GDO extends GDT
 
 	public function gkey(): string
 	{
-		$gkey = self::table()->cache->tableName . $this->getID();
-		return $gkey;
+		return self::table()->cache->tableName . $this->getID();
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 */
 	public function reload($id): self
 	{
 		$table = self::table();
@@ -1677,7 +1694,7 @@ abstract class GDO extends GDT
 			$query = $this->select();
 			foreach ($this->gdoPrimaryKeyColumns() as $gdt)
 			{
-				$query->where($gdt->identifier() . '=' . self::quoteS($id[$i++]));
+				$query->where($gdt->getName() . '=' . self::quoteS($id[$i++]));
 			}
 			$object = $query->uncached()->first()->exec()->fetchObject();
 			return $table->cache->recache($object);
@@ -1689,7 +1706,7 @@ abstract class GDO extends GDT
 	{
 		if ($this->memCached())
 		{
-			$this->table()->cache->recache($this);
+			$this->tbl()->cache->recache($this);
 		}
 	}
 
@@ -1701,7 +1718,6 @@ abstract class GDO extends GDT
 
 	public function clearCache(): self
 	{
-// 		unset($this->id);
 		if ($this->cached())
 		{
 			$cache = self::table()->cache;
@@ -1712,18 +1728,20 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * @return self[]
+	 *
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 *
+	 * @return static[]
 	 */
 	public function &all(string $order = null, bool $json = false): array
 	{
-		$order = $order ? $order : $this->gdoPrimaryKeyColumn()->name;
+		$order = $order ?: $this->gdoPrimaryKeyColumn()->getName();
 		return self::allWhere('true', $order, $json);
 	}
 
 	/**
 	 * Get the first primary key column
-	 *
-	 * @return GDT
 	 */
 	public function gdoPrimaryKeyColumn(): ?GDT
 	{
@@ -1742,7 +1760,11 @@ abstract class GDO extends GDT
 	##############
 
 	/**
-	 * @return self[]
+	 *
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 *
+	 * @return static[]
 	 */
 	public function &allWhere($condition = 'true', $order = null, $json = false): array
 	{
@@ -1753,7 +1775,7 @@ abstract class GDO extends GDT
 
 	public function uncacheAll(): self
 	{
-		unset($this->table()->cache->all);
+		unset($this->tbl()->cache->all);
 		Cache::remove($this->cacheAllKey());
 		return $this;
 	}
@@ -1765,13 +1787,15 @@ abstract class GDO extends GDT
 
 	public function allCachedExpiration(int $expire = GDO_MEMCACHE_TTL): void
 	{
-		$this->cache->expiration = $expire;
+		$this->cache->expires = $expire;
 	}
 
 	/**
 	 * Get all rows via allcache.
 	 *
-	 * @return self[]
+	 * @throws GDO_DBException
+	 *
+	 * @return static[]
 	 */
 	public function &allCached(string $order = null, bool $json = false): array
 	{
@@ -1794,8 +1818,6 @@ abstract class GDO extends GDT
 		{
 			# GDO cached
 			$all = $this->select()->order($order)->exec()->fetchAllArray2dObject(null, $json);
-			$cache->all = $all;
-			return $all;
 		}
 		else
 		{
@@ -1806,9 +1828,9 @@ abstract class GDO extends GDT
 				$all = $this->select()->order($order)->exec()->fetchAllArray2dObject(null, $json);
 				Cache::set($key, $all);
 			}
-			$cache->all = $all;
-			return $all;
 		}
+		$cache->all = $all;
+		return $all;
 	}
 
 	public function removeAllCache(): void
@@ -1823,25 +1845,28 @@ abstract class GDO extends GDT
 	 */
 	public function gdoIsTable(): bool
 	{
-		return $this->table()->cache->isTable($this);
+		return $this->tbl()->cache->isTable($this);
 	}
 
 	public function createTable(bool $reinstall = false): bool
 	{
-		if (!($db = Database::instance()))
-		{
-			die('gdo database not configured!');
-		}
-		return !!$db->createTable($this);
+		$db = Database::instance();
+		$db->createTable($this);
+		return true;
 	}
 
-	public function truncate(): bool { return !!Database::instance()->truncateTable($this); }
+	public function truncate(): bool
+	{
+		Database::instance()->truncateTable($this);
+		return true;
+	}
 
-	##############
-	### Events ###
-	##############
 
-	public function dropTable(): bool { return !!Database::instance()->dropTable($this); }
+	public function dropTable(): bool
+	{
+		Database::instance()->dropTable($this);
+		return true;
+	}
 
 	/**
 	 * @return GDT[]
@@ -1877,40 +1902,15 @@ abstract class GDO extends GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			if ($gdt->orderable)
+			if ($gdt->isOrderable())
 			{
-				return $gdt->name;
+				if ($name = $gdt->getName())
+				{
+					return $name;
+				}
 			}
 		}
 		return null;
 	}
-
-	private function afterRead(): void
-	{
-		$this->afterEvent('gdoAfterRead');
-	}
-
-
-
-
-
-
-
-
-
-	################
-	### Hashcode ###
-	################
-
-
-	#############
-	### Order ###
-	#############
-
-
-	#######################
-	### Bulk Operations ###
-	#######################
-
 
 }

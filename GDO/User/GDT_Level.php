@@ -24,13 +24,14 @@ final class GDT_Level extends GDT_Badge
 	protected function __construct()
 	{
 		parent::__construct();
-		$this->initial('0');
-		$this->notNull();
 		$this->writeable(true);
 		$this->icon('level');
 	}
 
-	public function defaultLabel(): self { return $this->label('user_level'); }
+	public function defaultLabel(): self
+	{
+		return $this->label('user_level');
+	}
 
 	public function isSearchable(): bool { return false; }
 
@@ -38,7 +39,7 @@ final class GDT_Level extends GDT_Badge
 	### Var / Val ###
 	#################
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		if (isset($this->gdo))
 		{

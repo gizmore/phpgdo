@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Admin;
 
 use GDO\Core\GDO_Module;
@@ -16,7 +17,7 @@ use GDO\User\GDO_User;
  *
  * @TODO: restrict admin methods to a second admin password (like in gwf3)
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  */
@@ -61,6 +62,11 @@ class Module_Admin extends GDO_Module
 	public function onIncludeScripts(): void
 	{
 		$this->addCSS('css/admin.css');
+	}
+
+	public function gdoHumanName(): string
+	{
+		return t('btn_admin');
 	}
 
 }

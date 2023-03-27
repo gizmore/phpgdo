@@ -23,10 +23,7 @@ final class Stream
 			hdr('Content-Disposition: attachment; filename="' . htmlspecialchars($file->getName()) . '"');
 		}
 		self::file($file, $variant);
-		if (!Application::$INSTANCE->isUnitTests())
-		{
-			die();
-		}
+		Application::exit();
 	}
 
 	public static function file(GDO_File $file, $variant = '')

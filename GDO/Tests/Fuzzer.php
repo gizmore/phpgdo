@@ -32,6 +32,9 @@ final class Fuzzer extends AutomatedTestCase
 	protected function runGDTTest(GDT $gdt): void {}
 
 
-	protected function getTestName(): string {}
+	protected function getTestName(): string
+	{
+		return 'Method Fuzzer - II';
+	}
 
 }

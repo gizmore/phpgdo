@@ -2,6 +2,7 @@
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Path;
 use GDO\Core\GDT_String;
 use GDO\Core\Website;
@@ -30,7 +31,7 @@ final class Collect extends MethodCLI
 		$form->actions()->addField(GDT_Submit::make());
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$path = $this->getPath();
 		$pattern = $this->getPattern();

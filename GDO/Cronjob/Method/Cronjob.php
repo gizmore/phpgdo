@@ -3,6 +3,7 @@ namespace GDO\Cronjob\Method;
 
 use Exception;
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDT;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -33,7 +34,7 @@ class Cronjob extends MethodForm
 		$form->addField(GDT_AntiCSRF::make());
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		try
 		{

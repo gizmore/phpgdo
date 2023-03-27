@@ -1,8 +1,10 @@
 <?php
 namespace GDO\Table;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Checkbox;
 use GDO\Core\GDT_Template;
+use GDO\DB\Query;
 
 /**
  * Can be first element in a @link GDO_Table to show checkmark selection.
@@ -42,6 +44,9 @@ final class GDT_RowNum extends GDT_Checkbox
 		return $this;
 	}
 
-	public function displayHeaderLabel() { return ''; }
+	public function searchQuery(Query $query, string $searchTerm): self
+	{
+		return $this;
+	}
 
 }

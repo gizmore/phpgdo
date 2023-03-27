@@ -23,7 +23,7 @@ final class CleanupGuests extends MethodCronjob
 		return Time::ONE_DAY;
 	}
 
-	public function run()
+	public function run(): void
 	{
 		# Basically fetch all users with no recent activity.
 		$cut = Time::getDate(Application::$TIME - GDO_SESS_TIME);

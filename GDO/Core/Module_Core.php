@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Date\GDO_Timezone;
@@ -23,7 +24,7 @@ use GDO\User\GDT_User;
  *
  * Very basic vanilla JS is optionally loaded.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
@@ -31,8 +32,9 @@ final class Module_Core extends GDO_Module
 {
 
 	public const GDO_VERSION = '7.0.2';
-	public const GDO_REVISION = '7.0.2-r1767';
-	public final const GDO_CODENAME = 'Hailing Hermelin';
+	public const GDO_REVISION = '7.0.2-r1768';
+
+	final public const GDO_CODENAME = 'Hailing Hermelin';
 
 	##############
 	### Module ###
@@ -43,7 +45,10 @@ final class Module_Core extends GDO_Module
 
 	public function getTheme(): ?string { return 'default'; }
 
-	public function onLoadLanguage(): void { $this->loadLanguage('lang/core'); }
+	public function onLoadLanguage(): void
+	{
+		$this->loadLanguage('lang/core');
+	}
 
 	public function getClasses(): array
 	{
@@ -149,10 +154,8 @@ final class Module_Core extends GDO_Module
 
 	/**
 	 * Pretty print gdo config to JS.
-	 *
-	 * @return string
 	 */
-	public function gdoConfigJS()
+	public function gdoConfigJS(): string
 	{
 		return sprintf(
 			"	window.GDO_CONFIG = {};
@@ -167,13 +170,13 @@ final class Module_Core extends GDO_Module
 			$this->nocacheVersion());
 	}
 
-	public function gdoUserJS()
+	public function gdoUserJS(): string
 	{
-		$json = json_encode($this->gdoUserJSON(), GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0);
+		$json = json($this->gdoUserJSON());
 		return "window.GDO_USER = new GDO_User($json);";
 	}
 
-	public function gdoUserJSON()
+	public function gdoUserJSON(): array
 	{
 		$user = GDO_User::current();
 		$data = $user->toJSON();
@@ -226,7 +229,7 @@ final class Module_Core extends GDO_Module
 			return true;
 		}
 
-		return (strpos($url, 'GDO/') !== 0);
+		return !str_starts_with($url, 'GDO/');
 	}
 
 	public function cfgModuleAssets(): string { return $this->getConfigVar('module_assets'); }

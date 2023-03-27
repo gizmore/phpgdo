@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Form\GDT_Form;
@@ -16,7 +17,7 @@ use GDO\UI\WithPHPJQuery;
  * Fields can have an icon, a label and a placeholder.
  * Fields can have various form attributes.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
@@ -38,6 +39,7 @@ abstract class GDT_Field extends GDT
 	### Name Label ###
 	##################
 	public bool $aclcapable = true;
+
 	public bool $searchable = true;
 
 	################
@@ -49,6 +51,7 @@ abstract class GDT_Field extends GDT
 	### Data ###
 	############
 	public ?bool $positional = null;
+
 	public string $as;
 
 	public function __wakeup()
@@ -89,22 +92,24 @@ abstract class GDT_Field extends GDT
 	### Input/Var/Value ###
 	#######################
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		$name = $this->getName();
 		if (isset($this->inputs[$name]))
 		{
 			$input = $this->inputs[$name];
-			return $this->inputToVar($input);
+			$var = $this->inputToVar($input);
+			$this->var($var);
 		}
 		return $this->var;
 	}
 
-	public function inputToVar($input): ?string
+	public function inputToVar(array|string|null|GDT_Method $input): ?string
 	{
 		if (is_string($input))
 		{
-			return $input === GDT::EMPTY_STRING ? null : $input;
+			$input = trim($input);
+			return ($input === GDT::EMPTY_STRING) ? null : $input;
 		}
 		elseif ($input instanceof GDT_Method)
 		{
@@ -114,17 +119,9 @@ abstract class GDT_Field extends GDT
 		{
 			return json_encode($input);
 		}
-		elseif (is_numeric($input))
-		{
-			return (string)$input;
-		}
-		elseif (is_bool($input))
-		{
-			return $input ? '1' : '0';
-		}
 		else
 		{
-			return null;
+			return (string)$input;
 		}
 	}
 
@@ -156,7 +153,7 @@ abstract class GDT_Field extends GDT
 		]);
 	} # is searched during big searches
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		return $this->validateNull($value);
 	} #
@@ -219,7 +216,7 @@ abstract class GDT_Field extends GDT
 		return $this->hasError() ? ' has-error' : '';
 	}
 
-	public function setGDOData(array $data): self
+	public function setGDOData(array $data): static
 	{
 		if (isset($data[$this->name]))
 		{
@@ -228,13 +225,13 @@ abstract class GDT_Field extends GDT
 		return $this->var($this->initial);
 	}
 
-	public function orderable(bool $orderable): self
+	public function orderable(bool $orderable): static
 	{
 		$this->orderable = $orderable;
 		return $this;
 	}
 
-	public function noacl(): self
+	public function noacl(): static
 	{
 		return $this->aclcapable(false);
 	}
@@ -243,19 +240,19 @@ abstract class GDT_Field extends GDT
 	### Positional ###
 	##################
 
-	public function aclcapable(bool $aclcapable): self
+	public function aclcapable(bool $aclcapable): static
 	{
 		$this->aclcapable = $aclcapable;
 		return $this;
 	}
 
-	public function searchable(bool $searchable): self
+	public function searchable(bool $searchable): static
 	{
 		$this->searchable = $searchable;
 		return $this;
 	}
 
-	public function filterable(bool $filterable): self
+	public function filterable(bool $filterable): static
 	{
 		$this->filterable = $filterable;
 		return $this;
@@ -290,13 +287,13 @@ abstract class GDT_Field extends GDT
 		return null;
 	}
 
-	public function positional(?bool $positional = true): self
+	public function positional(?bool $positional = true): static
 	{
 		$this->positional = $positional;
 		return $this;
 	}
 
-	public function as(string $as): self
+	public function as(string $as): static
 	{
 		$this->as = $as;
 		return $this;

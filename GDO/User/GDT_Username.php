@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDT_Name;
@@ -7,7 +8,7 @@ use GDO\Core\GDT_Name;
  * Username field without completion.
  * Can validate on existing, not-existing and both allowed (null)
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @see GDT_User
  * @author gizmore
@@ -15,28 +16,30 @@ use GDO\Core\GDT_Name;
 class GDT_Username extends GDT_Name
 {
 
-	public const LENGTH = 32;
+	final public const LENGTH = 32;
 
-	public int $min = 2;
-	public int $max = self::LENGTH;
+	public ?int $min = 2;
+
+	public ?int $max = self::LENGTH;
 
 	public string $icon = 'face';
 
 	# Allow - _ LETTERS DIGITS
 	public string $pattern = "/^[\\p{L}][-_\\p{L}0-9]+$/iuD";
-	public bool $exists;
 
-	protected function __construct()
-	{
-		parent::__construct();
-		$this->caseI();
-	}
+	public ?bool $exists = null;
+
+	public bool $caseSensitive = false;
+
 
 	##############
 	### Exists ###
 	##############
 
-	public function defaultLabel(): self { return $this->label('username'); }
+	public function defaultLabel(): self
+	{
+		return $this->label('username');
+	}
 
 	public function renderCLI(): string
 	{
@@ -49,7 +52,7 @@ class GDT_Username extends GDT_Name
 	### Render ###
 	##############
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!parent::validate($value))
 		{
@@ -57,7 +60,7 @@ class GDT_Username extends GDT_Name
 		}
 
 		# Check existance
-		if (isset($this->exists) && ($this->exists === true))
+		if ($this->exists === true)
 		{
 			if ($user = GDO_User::getByName($value))
 			{
@@ -68,9 +71,9 @@ class GDT_Username extends GDT_Name
 				return $this->error('err_user');
 			}
 		}
-		elseif (isset($this->exists) && ($this->exists === false))
+		elseif ($this->exists === false)
 		{
-			if ($user = GDO_User::getByName($value))
+			if (GDO_User::getByName($value))
 			{
 				return $this->error('err_username_taken');
 			}
@@ -90,7 +93,7 @@ class GDT_Username extends GDT_Name
 		];
 	}
 
-	public function exists(bool $exists = true): self
+	public function exists(?bool $exists): static
 	{
 		$this->exists = $exists;
 		return $this;

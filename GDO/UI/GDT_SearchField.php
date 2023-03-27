@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT_String;
@@ -8,7 +9,7 @@ use GDO\Core\GDT_String;
  * Input type is set to search.
  * Field is auxillary and does not feature order, filter and search.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  */
@@ -17,8 +18,8 @@ class GDT_SearchField extends GDT_String
 
 	public string $icon = 'search';
 
-	public int $min = 2;
-	public int $max = 256;
+	public ?int $min = 2;
+	public ?int $max = 256;
 
 	public bool $hidden = true;
 
@@ -48,7 +49,6 @@ class GDT_SearchField extends GDT_String
 		$name = $this->getName();
 		return [
 			[$name => 'giz'],
-// 			[$name => 'ess'],
 		];
 	}
 

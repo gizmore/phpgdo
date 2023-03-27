@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI;
 
+use GDO\Core\GDO_ArgException;
+use GDO\Core\GDO_Error;
 use GDO\Core\GDT;
 use GDO\Core\Website;
 use GDO\UI\TextStyle;
@@ -8,7 +11,7 @@ use GDO\UI\TextStyle;
 /**
  * Helper class for interactive CLI applications.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.2
  * @author gizmore
  */
@@ -33,20 +36,27 @@ final class REPL
 	{
 		$y = $default === true ? 'Y' : 'y';
 		$n = $default === false ? 'N' : 'n';
+		$a = $default === null ? 'A' : 'a';
 		$an = $allowNo ? "/{$n}" : '';
-		$prompt = "{$prompt} ({$y}{$an}/a): ";
-		echo $prompt;
-		switch (@strtolower(trim(readline()))[0])
+		$prompt = "{$prompt} ({$y}{$an}/{$a}): ";
+		if ($line = readline($prompt))
 		{
-			case 'y':
-				return true;
-			case 'n':
-				return false;
-			case 'a':
-				die(self::abortmsg());
-			default:
-				return !!$default;
+			switch (strtolower($line[0]))
+			{
+				case 'y':
+					return true;
+				case 'n':
+					return false;
+				case 'a':
+					die(self::abortmsg());
+			}
 		}
+		if ($default === null)
+		{
+			throw new GDO_Error('err_repl_input');
+		}
+		return !!$default;
+
 	}
 
 	private static function abortmsg(): string
@@ -79,7 +89,7 @@ final class REPL
 		$old = $gdt->getVar();
 		self::changeGDT($gdt, $prompt);
 		$new = $gdt->getVar();
-		return $gdt->hasError() ? false : $old !== $new;
+		return !$gdt->hasError() && $old !== $new;
 	}
 
 	/**
@@ -108,7 +118,7 @@ final class REPL
 		{
 			return false;
 		}
-		$response = $response === '' ? null : $response;
+//		$response = $response === '' ? null : $response;
 		$gdt->var($response);
 		if ($gdt->validate($gdt->getValue()))
 		{
@@ -120,13 +130,13 @@ final class REPL
 
 	private static function xmplDefaults(GDT $gdt, string $xmplvars): string
 	{
-		$back = '';
+//		$back = '';
 		$xmplvars = str_replace('|', ',', $xmplvars);
 		$xmplvars2 = ",{$xmplvars},";
 		$initial = $gdt->getInitial();
 		if (
 			($initial !== null) &&
-			(strpos($xmplvars2, ",{$initial},") !== false)
+			(str_contains($xmplvars2, ",{$initial},"))
 		)
 		{
 			$back = str_replace(",{$initial},", sprintf(',%s,', TextStyle::bold($initial)), $xmplvars2);

@@ -73,11 +73,13 @@ final class AutomatedRenderingTest extends TestCase
 					if (in_array('GDO\\Core\\GDO', $parents, true))
 					{
 						$this->fieldsGDOTested++;
+						$this->message("Testing GDO " . get_class($gdt));
 						$this->fieldTestGDO($gdt);
 					}
 					else
 					{
 						$this->fieldsGDTTested++;
+						$this->message("Testing GDT " . get_class($gdt));
 						$this->fieldTestGDT($gdt);
 					}
 					$t1 = microtime(true) - $t1;
@@ -149,7 +151,7 @@ final class AutomatedRenderingTest extends TestCase
 // 			xdebug_break();
 // 		}
 
-		$this->message('Rendering all modes %s', $gdt->gdoClassName());
+//		$this->message('Rendering all modes %s', $gdt->gdoClassName());
 
 		# various output/rendering formats
 		$gdt->renderNIL();

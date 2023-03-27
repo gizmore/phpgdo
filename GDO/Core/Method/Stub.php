@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO_StubException;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 
 /**
@@ -21,7 +22,7 @@ final class Stub extends Method
 		return 'Core::Stub';
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		throw new GDO_StubException('Core::Stub');
 	}

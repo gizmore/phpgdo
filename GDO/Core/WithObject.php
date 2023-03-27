@@ -24,14 +24,16 @@ trait WithObject
 	# ##################
 	# ## With Object ###
 	# ##################
-	public const CASCADE_NULL = 'SET NULL';
+	final public const CASCADE_NULL = 'SET NULL';
 
 	###############
 	### Cascade ###
 	###############
-	public const CASCADE_NO = 'RESTRICT';
-	public const CASCADE = 'CASCADE';
+	final public const CASCADE_NO = 'RESTRICT';
+	final public const CASCADE = 'CASCADE';
+
 	public GDO $table;
+
 	public string $filterField;
 
 	# ##################
@@ -50,13 +52,13 @@ trait WithObject
 	/**
 	 * The GDO table to operate on.
 	 */
-	public function table(GDO $table): self
+	public function table(GDO $table): static
 	{
 		$this->table = $table;
 		return $this;
 	}
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		return $value ? $value->getID() : null;
 	}
@@ -92,7 +94,7 @@ trait WithObject
 		}
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		if ($var !== null)
 		{
@@ -101,7 +103,6 @@ trait WithObject
 				($gdo = $this->getByName($var))
 			)
 			{
-				// $this->addInput($this->getName(), $gdo->getID());
 				return $gdo;
 			}
 		}
@@ -159,29 +160,29 @@ trait WithObject
 	/**
 	 * Get possible matching inputs via GDT_Name fields.
 	 *
+	 * @throws GDO_DBException
 	 * @return GDO[]
 	 */
 	protected function getGDOsByName(string $var): array
 	{
-		$query = $this->table->select();
-		$gdt = $this->table->gdoColumnOf(GDT_Name::class);
-		if ($gdt !== null)
+		if ($gdt = $this->table->gdoNameColumn())
 		{
+			$query = $this->table->select();
 			$var = GDO::escapeSearchS($var);
-			$query->where("{$gdt->name} LIKE '%{$var}%'");
-			$query->limit(GDT_Object::MAX_SUGGESTIONS);
+			$query->where("{$gdt->getName()} LIKE '%{$var}%'")
+				  ->limit(GDT_Object::MAX_SUGGESTIONS);
 			return $query->exec()->fetchAllObjects();
 		}
-		return [];
+		return GDT::EMPTY_ARRAY;
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
-		if (!($var = $this->getInput($this->getName())))
+		if (!($var = $this->getInput()))
 		{
 			$var = $this->var;
 		}
-		return empty($var) ? null : $var;
+		return $var ?? null;
 	}
 
 	# ###############
@@ -210,7 +211,7 @@ trait WithObject
 		];
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if ($value) # we successfully converted the var to value.
 		{
@@ -241,7 +242,7 @@ trait WithObject
 	{
 		if (isset($this->table))
 		{
-			if (@$this->multiple)
+			if (isset($this->multiple) && $this->multiple)
 			{
 				return $this->plugVarsMultiple();
 			}
@@ -256,8 +257,8 @@ trait WithObject
 	private function plugVarsMultiple(): array
 	{
 		$two = $this->plugVarsSingle();
-		$first = isset($two[0]) ? $two[0] : null;
-		$second = isset($two[1]) ? $two[1] : null;
+		$first = $two[0] ?? null;
+		$second = $two[1] ?? null;
 		$plugs = [];
 		if ($first)
 		{
@@ -314,13 +315,8 @@ trait WithObject
 	/**
 	 * Proxy filter to the pk filterColumn if specified.
 	 * else filter like parent.??
-	 *
-	 * @todo check
-	 *
-	 * @see GDT_Int::filterQuery()
-	 * @see GDT_String::filterQuery()
 	 */
-	public function filterQuery(Query $query, GDT_Filter $f): self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		if (isset($this->filterField))
 		{
@@ -329,14 +325,14 @@ trait WithObject
 		}
 		else
 		{
-			return parent::filterQuery($query, $f);
+			return self::filterQuery($query, $f);
 		}
 	}
 
 	/**
 	 * Build a huge quicksearch query.
 	 */
-	public function searchQuery(Query $query, string $term): self
+	public function searchQuery(Query $query, string $searchTerm): static
 	{
 		return $this;
 //		$table = $this->table;
@@ -357,7 +353,9 @@ trait WithObject
 //			$gdt->searchQuery($query, $term);
 //		}
 //		return $this;
-	}	public function cascade(): self
+	}
+
+	public function cascade(): static
 	{
 		$this->cascade = self::CASCADE;
 		return $this;
@@ -365,14 +363,15 @@ trait WithObject
 
 	public function htmlValue(): string
 	{
-		if ($var = $this->getVar())
+		if (null !== ($var = $this->getVar()))
 		{
-			return sprintf(' value="%s"', html($var));
+			$var = html($var);
+			return " value=\"{$var}\"";
 		}
 		return GDT::EMPTY_STRING;
 	}
 
-	public function cascadeNull(): self
+	public function cascadeNull(): static
 	{
 		$this->cascade = self::CASCADE_NULL;
 		return $this;
@@ -380,7 +379,7 @@ trait WithObject
 
 	#####
 
-	public function cascadeRestrict(): self
+	public function cascadeRestrict(): static
 	{
 		$this->cascade = self::CASCADE_NO;
 		return $this;
@@ -391,7 +390,7 @@ trait WithObject
 	/**
 	 * If object columns are not null, they cascade upon deletion.
 	 */
-	public function notNull(bool $notNull = true): self
+	public function notNull(bool $notNull = true): static
 	{
 		$this->notNull = $notNull;
 		return $this->cascade();
@@ -401,20 +400,11 @@ trait WithObject
 	/**
 	 * If object columns are primary, they cascade upon deletion.
 	 */
-	public function primary(bool $primary = true): self
+	public function primary(bool $primary = true): static
 	{
 		$this->primary = $primary;
 		return $this->notNull();
 	}
-
-	# #############
-	# ## Filter ###
-	# #############
-
-
-	# #############
-	# ## Search ###
-	# #############
 
 
 }

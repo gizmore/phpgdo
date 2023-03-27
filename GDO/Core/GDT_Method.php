@@ -185,7 +185,7 @@ class GDT_Method extends GDT
 	##############
 	### Render ###
 	##############
-	public function render()
+	public function render(): array|string|null
 	{
 		if (!isset($this->result))
 		{
@@ -194,27 +194,10 @@ class GDT_Method extends GDT
 		return $this->result->render();
 	}
 
-// 	public function renderHTML(): string
-// 	{
-// 		if (!isset($this->result))
-// 		{
-// 			$this->execute(false);
-// 		}
-// 		return $this->result->renderHTML();
-// 	}
-// 		if (!isset($this->result))
-// 		{
-// 			$this->execute(false);
-// 		}
-// 		return $this->result->render();
-// 	}
-
 	/**
 	 * Exexute this method.
-	 *
-	 * @return GDT_Response
 	 */
-	public function execute()
+	public function execute(): GDT
 	{
 		if (!isset($this->result))
 		{
@@ -224,15 +207,6 @@ class GDT_Method extends GDT
 			{
 				Application::instance()->verb(GDT_Form::POST);
 				$inputs[$this->method->button] = '1';
-//				if ($button = $this->getCLIAutoButton($inputs))
-//				{
-//					$inputs[$button] = '1';
-//					Application::instance()->verb(GDT_Form::POST);
-//				}
-//				else
-//				{
-//					Application::instance()->verb(GDT_Form::GET);
-//				}
 			}
 			$this->result = $this->method->executeWithInputs($inputs, $this->withPermissionCheck);
 		}

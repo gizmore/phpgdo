@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Database;
@@ -6,7 +7,7 @@ use GDO\DB\Database;
 /**
  * The auto inc column is unsigned and sets the primary key after insertions.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  * @see GDT_CreatedAt
@@ -28,22 +29,34 @@ final class GDT_AutoInc extends GDT_UInt
 	##############
 	### Column ###
 	##############
-	public function primary(bool $primary = true): self { return $this; }
+	public function primary(bool $primary = true): static
+	{
+		return $this;
+	}
 
-	public function isPrimary(): bool { return true; } # Weird workaround for mysql primary key defs.
+	public function isPrimary(): bool
+	{
+		# Weird workaround for mysql primary key defs.
+		return true;
+	}
 
-	public function validate($value): bool { return true; } # We simply do nothing in the almighty validate.
+	public function validate(int|float|string|array|null|object|bool $value): bool
+	{
+		return true;
+	}
 
 	##############
 	### Events ###
 	##############
 	/**
 	 * After creation store the auto inc value.
+	 *
+	 * @throws GDO_ErrorFatal
 	 */
 	public function gdoAfterCreate(GDO $gdo): void
 	{
 		$id = Database::instance()->insertId();
-		$gdo->setVar($this->name, $id, false);
+		$gdo->setVar($this->name, (string)$id, false);
 	}
 
 // 	public function blankData() : array

@@ -2,6 +2,7 @@
 namespace GDO\Language\Method;
 
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_JSON;
 use GDO\Core\MethodCompletion;
 use GDO\Language\GDO_Language;
@@ -32,7 +33,7 @@ final class Completion extends MethodCompletion
 		return 'Language Completion API for GDOv7';
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$response = [];
 		$q = $this->getSearchTerm();

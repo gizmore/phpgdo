@@ -49,7 +49,7 @@ class ViewPermission extends MethodQueryTable
 		return GDO_UserPermission::table();
 	}
 
-	public function gdoFetchAs()
+	public function gdoFetchAs(): GDO
 	{
 		return GDO_User::table();
 	}

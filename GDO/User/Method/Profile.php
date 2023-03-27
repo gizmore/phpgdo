@@ -4,6 +4,7 @@ namespace GDO\User\Method;
 use GDO\Avatar\GDO_Avatar;
 use GDO\Core\GDO;
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Website;
 use GDO\UI\GDT_Card;
@@ -81,7 +82,7 @@ final class Profile extends MethodCard
 		Website::addMeta(['og:image', $avatar->hrefImage(), 'property']);
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$user = $this->getUser();
 		if (!$user)
@@ -132,30 +133,23 @@ final class Profile extends MethodCard
 	 */
 	public static function getHighestPermission(GDO_User $user): string
 	{
-		$high = -1;
-		$highn = null;
-		$perms = $user->loadPermissions();
-		foreach ($perms as $name => $level)
+		if ($perms = $user->loadPermissions())
 		{
-			if ($level > $high)
-			{
-				$high = $level;
-				$highn = $name;
-			}
+			$perm = array_shift($perms);
+			return t("perm_{$perm}");
 		}
-		if ($highn === null)
+		elseif ($user->isMember())
 		{
-			if ($user->isMember())
-			{
-				return t('member');
-			}
-			elseif ($user->isGuest(false))
-			{
-				return t('guest');
-			}
+			return t('member');
+		}
+		elseif ($user->isGuest())
+		{
+			return t('guest');
+		}
+		else
+		{
 			return t('ghost');
 		}
-		return t("perm_$highn");
 	}
 
 	private function createCardB(GDT_Card $card, GDO_Module $module): void

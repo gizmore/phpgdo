@@ -1,6 +1,7 @@
 <?php
 namespace GDO\CLI\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Core\Method;
 
@@ -14,7 +15,7 @@ use GDO\Core\Method;
 final class Ekko extends Method
 {
 
-	public function getCLITrigger()
+	public function getCLITrigger(): string
 	{
 		return 'echo';
 	}
@@ -26,7 +27,7 @@ final class Ekko extends Method
 		];
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		return $this->gdoParameter('text');
 	}

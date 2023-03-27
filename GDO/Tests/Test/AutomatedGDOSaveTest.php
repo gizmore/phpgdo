@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
 use GDO\CLI\CLI;
@@ -18,7 +19,7 @@ use Throwable;
  * Once with blank. (may fail!)
  * Once with plugged. (should be a success)
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class AutomatedGDOSaveTest extends TestCase
@@ -40,7 +41,7 @@ final class AutomatedGDOSaveTest extends TestCase
 			if (in_array('GDO\\Core\\GDO', $parents, true))
 			{
 				$this->gdoTested++;
-				/** @var $gdo GDO * */
+				/** @var GDO $gdo * */
 				$k = new ReflectionClass($klass);
 				if ($k->isAbstract())
 				{
@@ -141,11 +142,11 @@ final class AutomatedGDOSaveTest extends TestCase
 // 					xdebug_break();
 // 				}
 
-				$new = $gdo->table()->cache->getNewDummy();
+				$new = $gdo->tbl()->cache->getNewDummy();
 				$new->setVars($inputs);
 				if ($new->isValid())
 				{
-					$new->replace();
+					$new->softReplace();
 					# might ruin custom test chains :(
 // 					$new->delete();
 					$success = true;

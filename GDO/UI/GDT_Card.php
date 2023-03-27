@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\Application;
@@ -20,7 +21,7 @@ use GDO\User\WithAvatar;
 /**
  * A card with title, subtitle, creator, date, content and actions.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.4
  * @author gizmore
  */
@@ -94,7 +95,6 @@ class GDT_Card extends GDT
 	 */
 	public function creatorHeader(string $byField = null, string $atField = null, string $subtitleOverride = null, bool $subtitleNoUser = false): self
 	{
-		/** @var $user GDO_User * */
 		if ($byField)
 		{
 			$byField = $this->gdo->gdoColumn($byField);
@@ -108,7 +108,8 @@ class GDT_Card extends GDT
 			$byField = $this->gdo->gdoColumnOf(GDT_User::class);
 		}
 
-		$user = $byField ? $byField->getValue() : null;
+		/** @var GDO_User $user * */
+		$user = $byField?->getValue();
 
 		if ($atField)
 		{
@@ -120,10 +121,7 @@ class GDT_Card extends GDT
 		}
 
 		# Add avatar
-		if (module_enabled('Avatar')) # ugly bridge
-		{
-			$this->avatarUser($user, 52);
-		}
+		$this->avatarUser($user, 52);
 
 		# Add created by / at to subtitle
 		if ($subtitleOverride)
@@ -136,14 +134,14 @@ class GDT_Card extends GDT
 			$date = t('unknown');
 			if ($atField)
 			{
-				$date = GDT_DateDisplay::make($atField->name)->gdo($this->gdo)->render();
+				$date = GDT_DateDisplay::make($atField->getName())->gdo($this->gdo)->render();
 			}
 			$this->subtitle('creator_header', [$profileLink->render(), $date]);
 		}
 		return $this;
 	}
 
-	public function render(): string
+	public function render(): array|string|null
 	{
 		if (Application::$MODE === GDT::RENDER_CLI)
 		{
@@ -209,7 +207,7 @@ class GDT_Card extends GDT
 	 */
 	public function editorFooter(): self
 	{
-		/** @var $user GDO_User * */
+		/** @var GDO_User $user * */
 		if ($user = $this->gdo->gdoColumnOf(GDT_EditedBy::class)->getValue())
 		{
 			$username = $user->renderProfileLink();

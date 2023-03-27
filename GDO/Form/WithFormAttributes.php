@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Form;
 
 /**
  * Add HTML Form helpers to a GDT.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see GDT_Field
@@ -18,19 +19,19 @@ trait WithFormAttributes
 	public bool $writeable = true;
 	public bool $focusable = true;
 
-	public function hidden(bool $hidden = true): self
+	public function hidden(bool $hidden = true): static
 	{
 		$this->hidden = $hidden;
 		return $this;
 	}
 
-	public function readable(bool $readable): self
+	public function readable(bool $readable): static
 	{
 		$this->readable = $readable;
 		return $this;
 	}
 
-	public function focusable(bool $focusable): self
+	public function focusable(bool $focusable): static
 	{
 		$this->focusable = $focusable;
 		return $this;
@@ -38,16 +39,15 @@ trait WithFormAttributes
 
 	public function isFocusable(): bool { return $this->focusable; }
 
-	public function enabled(bool $enabled = true): self
+	public function enabled(bool $enabled = true): static
 	{
 		$this->writeable = $enabled;
 		return $this;
 	}
 
-	public function disabled(bool $disabled = true): self
+	public function disabled(bool $disabled = true): static
 	{
-		$this->writeable = !$disabled;
-		return $this;
+		return $this->enabled(!$disabled);
 	}
 
 	public function isHidden(): bool { return $this->hidden; }
@@ -58,7 +58,7 @@ trait WithFormAttributes
 	### Disabled ###
 	################
 
-	public function writeable(bool $writeable): self
+	public function writeable(bool $writeable): static
 	{
 		$this->writeable = $writeable;
 		return $this;
@@ -81,7 +81,7 @@ trait WithFormAttributes
 	##############
 	public function formVariable(): string
 	{
-		return $this->hasName() ? $this->getName() : '';
+		return (string) $this->getName();
 	}
 
 }

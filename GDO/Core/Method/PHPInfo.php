@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\MethodAjax;
 
 /**
@@ -18,7 +19,7 @@ final class PHPInfo extends MethodAjax
 
 	public function getPermission(): ?string { return 'staff'; }
 
-	public function execute()
+	public function execute(): GDT
 	{
 		ob_start();
 		phpinfo();

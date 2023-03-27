@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT_Template;
@@ -10,7 +11,7 @@ use GDO\Net\URL;
  * Extends GDT_Url which is a GDT_String configured for URLs.
  * Link renders the HTML anchor.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
@@ -20,6 +21,8 @@ class GDT_Link extends GDT_Url
 	use WithHREF;
 	use WithText;
 	use WithTarget;
+
+	public bool $searchable = false;
 
 	public const REL_ALTERNATE = 'alternate';
 	public const REL_AUTHOR = 'author';
@@ -69,7 +72,7 @@ class GDT_Link extends GDT_Url
 		return self::make()->href($href)->textRaw($textRaw)->render();
 	}
 
-	public static function make(string $name = null): self
+	public static function make(string $name = null): static
 	{
 		$obj = self::makeWithLabel($name);
 		return $obj->text($name);
@@ -108,7 +111,7 @@ class GDT_Link extends GDT_Url
 		return "<span>$card</span>\n";
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		$out = '';
 		if ($l = $this->renderLabelText())

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDO;
@@ -11,7 +12,7 @@ use GDO\Core\WithObject;
 /**
  * Abstract method to render a single GDO as a card.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.6.4
  * @author gizmore
  */
@@ -29,6 +30,11 @@ abstract class MethodCard extends Method
 		];
 	}
 
+	public function isTrivial(): bool
+	{
+		return false;
+	}
+
 	# #############
 	# ## Params ###
 	# #############
@@ -40,7 +46,7 @@ abstract class MethodCard extends Method
 
 	abstract public function gdoTable(): GDO;
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$gdo = $this->getObject();
 		return $this->executeFor($gdo);
@@ -66,7 +72,7 @@ abstract class MethodCard extends Method
 
 	public function getCard(GDO $gdo = null): GDT_Card
 	{
-		$gdo = $gdo ? $gdo : $this->getObject();
+		$gdo = $gdo ?: $this->getObject();
 		$card = GDT_Card::make()->gdo($gdo);
 		$this->createCard($card);
 		$this->callCardHook($card);

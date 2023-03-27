@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Util\Random;
@@ -8,7 +9,7 @@ use GDO\Util\Random;
  *
  *  - Turns the browser's autocompletion off via 'autocomplete="rand()"'
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 6.3.5
  * @author gizmore
  */
@@ -20,13 +21,13 @@ trait WithCompletion
 	############
 	public string $completionHref;
 
-	public function completionHref(string $completionHref): self
+	public function completionHref(string $completionHref): static
 	{
 		$this->completionHref = $completionHref;
 		return $this;
 	}
 
-	public function noCompletion(): self
+	public function noCompletion(): static
 	{
 		unset($this->completionHref);
 		return $this;
@@ -42,7 +43,7 @@ trait WithCompletion
 	##############
 	public function htmlAutocompleteOff(): string
 	{
-		return sprintf(' autocomplete="harrambe_%s"', Random::mrandomKey(rand(2, 6)));
+		return sprintf(' autocomplete="harrambe_%s"', Random::mrandomKey(rand(2, 4)));
 	}
 
 }

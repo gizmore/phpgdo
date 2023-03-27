@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -8,7 +9,7 @@ namespace GDO\Core;
  * Sets default order direction to descending.
  * Base class of GDT_Object.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.5.0
  *
  * @author gizmore
@@ -17,7 +18,8 @@ namespace GDO\Core;
 class GDT_UInt extends GDT_Int
 {
 
-	public ?float $min = 0;
+	public null|int|float $min = 0;
+
 	public bool $unsigned = true;
 
 	public function isDefaultAsc(): bool

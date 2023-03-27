@@ -14,6 +14,7 @@ use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
 use GDO\DB\Database;
+use GDO\Form\GDT_Form;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Error;
 use GDO\User\GDO_User;
@@ -46,7 +47,7 @@ $gdo = new class extends Application
 };
 
 global $me;
-$gdo->cli()->modeDetected(GDT::RENDER_CLI);
+$gdo->cli()->verb(GDT_Form::GET)->modeDetected(GDT::RENDER_CLI);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
 Cache::init();

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use GDO\CLI\CLI;
 use GDO\CLI\REPL;
@@ -31,6 +32,8 @@ if (PHP_SAPI !== 'cli')
 	echo "Tests can only be run from the command line.\n";
 	die(-1);
 }
+
+system('clear');
 
 echo "######################################\n";
 echo "### Welcome to the GDOv7 Testsuite ###\n";
@@ -99,7 +102,7 @@ final class gdo_test extends Application
 
 $app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
-$db = Database::init(GDO_DB_NAME);
+$db = Database::init();
 
 $index = 0;
 $options = getopt('adhq', ['all', 'dog', 'help', 'quick'], $index);
@@ -155,8 +158,8 @@ if (!REPL::confirm('Is this correct?', true))
 CLI::setServerVars();
 # ###########################
 
-/** @var $argc int * */
-/** @var $argv string[] * */
+/** @var int $argc */
+/** @var string[] $argv */
 
 echo 'Dropping Test Database: ' . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
@@ -180,7 +183,7 @@ if ($app->all)
 
 $app->install = false;
 
-if (Application::$INSTANCE->isError())
+if (Application::isError())
 {
 	CLI::flushTopResponse();
 	die(1);
@@ -279,14 +282,12 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 elseif ($app->all)
 {
 	echo "Loading and install all modules from filesystem again...\n";
-	$modules = $loader->loadModules(true, false, true);
+	$modules = $loader->loadModules();
 }
 else
 {
 	return $app->showHelp();
 }
-$loader->loadLangFiles(true);
-Trans::inited(true);
 
 if ($app->quick)
 {
@@ -306,7 +307,7 @@ if ($app->quick)
 if (Installer::installModules($modules))
 {
 	$loader->initModules();
-	Trans::inited(true);
+	Trans::inited(false);
 	if (module_enabled('Session'))
 	{
 		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);

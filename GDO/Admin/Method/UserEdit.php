@@ -2,6 +2,7 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDT;
 use GDO\Crypto\BCrypt;
 use GDO\Crypto\GDT_Password;
 use GDO\Form\GDT_AntiCSRF;
@@ -72,7 +73,7 @@ class UserEdit extends MethodForm
 		$form->addField(GDT_Password::make('user_password')->notNull(false)->initial(''));
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$user = $this->getUser();
 		$values = $form->getFormVars();

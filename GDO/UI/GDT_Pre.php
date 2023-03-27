@@ -28,7 +28,7 @@ final class GDT_Pre extends GDT
 		return sprintf('<div class="gdt-pre">%s</div>', $this->renderText());
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return $this->renderText();
 	}

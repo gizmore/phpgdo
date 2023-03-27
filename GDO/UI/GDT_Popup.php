@@ -26,7 +26,7 @@ final class GDT_Popup extends GDT
 		]);
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return $this->renderText();
 	}
@@ -34,7 +34,7 @@ final class GDT_Popup extends GDT
 	public function renderCLI(): string
 	{
 		# Echo instead of return... kinda popup
-		echo $this->renderText();
+		return $this->renderText();
 	}
 
 }

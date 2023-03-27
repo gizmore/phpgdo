@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Tuple;
 use GDO\UI\MethodPage;
 
@@ -24,7 +25,7 @@ final class Privacy extends MethodPage
 		return t('privacy_settings');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		return GDT_Tuple::make()->addFields(
 			$this->pageTemplate(),

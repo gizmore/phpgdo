@@ -34,10 +34,10 @@ $table->multisort('module_name');
 echo $table->gdo(GDO_Module::table())->render();
 ?>
 <script type="text/javascript">
-    var modules = <?=json_encode($moduleNames)?>;
-    var coreModules = <?=json_encode($coreModules)?>;
-    var siteModules = <?=json_encode($siteModules)?>;
-    var dependencies = <?=json_encode($dependencies)?>;
+    var modules = <?=json($moduleNames)?>;
+    var coreModules = <?=json($coreModules)?>;
+    var siteModules = <?=json($siteModules)?>;
+    var dependencies = <?=json($dependencies)?>;
     var siteModule = null;
 
     function onlyUnique(value, index, self) {

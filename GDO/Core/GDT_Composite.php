@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Form\WithFormAttributes;
@@ -8,7 +9,7 @@ use GDO\UI\WithLabel;
 /**
  * A composite is a container that proxies certain methods to all it's fields.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  */
@@ -21,7 +22,7 @@ class GDT_Composite extends GDT_Container
 	use WithError;
 	use WithFormAttributes;
 
-	public static function make(string $name = null): self
+	public static function make(string $name = null): static
 	{
 		$obj = self::makeNamed($name);
 		$obj->addFields(...$obj->gdoCompositeFields());
@@ -46,7 +47,7 @@ class GDT_Composite extends GDT_Container
 		return $this;
 	}
 
-	public function gdo(GDO $gdo = null): self
+	public function gdo(?GDO $gdo): static
 	{
 		array_map(function (GDT $gdt) use ($gdo)
 		{
@@ -59,7 +60,7 @@ class GDT_Composite extends GDT_Container
 	### Var / Value ###
 	###################
 
-	public function setGDOData(array $data): self
+	public function setGDOData(array $data): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{
@@ -68,10 +69,10 @@ class GDT_Composite extends GDT_Container
 		return $this;
 	}
 
-	public function getValue()
-	{
-		return parent::getValue();
-	}
+//	public function getValue(): bool|int|float|string|array|null|object
+//	{
+//		return parent::getValue();
+//	}
 
 	public function getGDOData(): array
 	{
@@ -87,7 +88,7 @@ class GDT_Composite extends GDT_Container
 		return $gdodata;
 	}
 
-	public function validated(bool $throw = false): ?self
+	public function validated(bool $throw = false): ?static
 	{
 		$valid = true;
 		$inputs = $this->getInputs();
@@ -105,7 +106,7 @@ class GDT_Composite extends GDT_Container
 		return $valid ? $this : null;
 	}
 
-	public function inputs(?array $inputs): self
+	public function inputs(?array $inputs): static
 	{
 		parent::inputs($inputs);
 		foreach ($this->getAllFields() as $gdt)
@@ -170,7 +171,7 @@ class GDT_Composite extends GDT_Container
 	### Render ###
 	##############
 
-	public function writeable(bool $writeable): self
+	public function writeable(bool $writeable): static
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{

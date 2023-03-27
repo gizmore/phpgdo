@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Cronjob;
 
 use GDO\Core\GDO_Module;
@@ -8,7 +9,7 @@ use GDO\Date\Time;
 /**
  * Cronjob stuff.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.1.0
  * @author gizmore
  */
@@ -49,17 +50,17 @@ class Module_Cronjob extends GDO_Module
 		return href('Cronjob', 'Cronjob');
 	}
 
-	public function onModuleInit()
-	{
-		# @TODO: Cronjob shall run via any request randomly.
-	}
+//	public function onModuleInit(): void
+//	{
+//		# @TODO: Cronjob shall run via any request randomly.
+//	}
 
-	public function cfgLastRun()
+	public function cfgLastRun(): string
 	{
 		return $this->getConfigVar('last_run');
 	}
 
-	public function setLastRun()
+	public function setLastRun(): void
 	{
 		$this->saveConfigVar('last_run', Time::getDate());
 	}

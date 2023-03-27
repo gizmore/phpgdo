@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDO;
@@ -14,7 +15,7 @@ use GDO\User\GDO_User;
  * A method that displays a table from memory via ArrayResult.
  * It's the base class for MethodQueryTable or MethodQueryCards.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  * @see ArrayResult
@@ -68,7 +69,7 @@ abstract class MethodTable extends MethodForm
 	}
 
 	/**
-	 * @return GDT[string]
+	 * @return GDT[]
 	 */
 	public function &gdoParameterCache(): array
 	{
@@ -82,7 +83,6 @@ abstract class MethodTable extends MethodForm
 
 	/**
 	 * Table features paramter array.
-	 *
 	 * @return GDT[]
 	 */
 	private function gdoTableFeatures(): array
@@ -90,7 +90,7 @@ abstract class MethodTable extends MethodForm
 		$features = [];
 		if ($this->isPaginated())
 		{
-			$features[] = GDT_IPP::make($this->getIPPName())->initial($this->getDefaultIPP());
+			$features[] = GDT_IPP::make($this->getIPPName())->initialValue($this->getDefaultIPP());
 			$features[] = GDT_PageNum::make($this->getPageName())->initial('1');
 		}
 		if ($this->isSearched())
@@ -111,13 +111,7 @@ abstract class MethodTable extends MethodForm
 		return $features;
 	}
 
-	/**
-	 * Override this.
-	 * Return true if you want pagination for this table method.
-	 *
-	 * @return bool
-	 */
-	public function isPaginated() { return true; }
+	public function isPaginated(): bool { return true; }
 
 	protected function getIPPName(): string { return 'ipp'; }
 
@@ -137,7 +131,7 @@ abstract class MethodTable extends MethodForm
 	 *
 	 * @return bool
 	 */
-	public function isSearched() { return true; }
+	public function isSearched(): bool { return true; }
 
 	protected function getSearchName(): string { return 'search'; }
 
@@ -195,10 +189,8 @@ abstract class MethodTable extends MethodForm
 
 	/**
 	 * Override this with returning your GDO->table()
-	 *
-	 * @return GDO
 	 */
-	abstract public function gdoTable();
+	abstract public function gdoTable(): GDO;
 
 	################
 	### Abstract ###
@@ -215,9 +207,9 @@ abstract class MethodTable extends MethodForm
 	 *
 	 * @return bool
 	 */
-	public function isFiltered() { return true; }
+	public function isFiltered(): bool { return true; }
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$form = $this->getForm();
 		if ($form->isEmpty())
@@ -230,7 +222,7 @@ abstract class MethodTable extends MethodForm
 			$this->renderTable());
 	}
 
-	public function renderTable()
+	public function renderTable(): GDT_Table
 	{
 		return $this->getTable();
 	}
@@ -266,9 +258,9 @@ abstract class MethodTable extends MethodForm
 
 	protected function gdoTableHREF(): string { return $this->href(); } # GDT#filterable
 
-	public function gdoFetchAs() { return $this->gdoTable(); } # creates a GDT_Pagemenu
+	public function gdoFetchAs(): GDO { return $this->gdoTable(); } # creates a GDT_Pagemenu
 
-	private function initTable()
+	private function initTable(): void
 	{
 		$table = $this->table;
 		$this->setupCollection($table);
@@ -278,14 +270,13 @@ abstract class MethodTable extends MethodForm
 		$result = $table->getResult();
 		$result->table = $this->gdoFetchAs();
 		$this->setupTitle($table);
-		return $table;
 	} # Uses js/ajax and GDO needs to have GDT_Sort column.
 
 	############
 	### CRUD ###
 	############
 
-	protected function setupCollection(GDT_Table $table)
+	protected function setupCollection(GDT_Table $table): void
 	{
 		$headers = $this->gdoHeaderCache();
 		$this->table->addHeaderFields(...array_values($headers));
@@ -297,12 +288,11 @@ abstract class MethodTable extends MethodForm
 		}
 		$table->filtered($this->isFiltered(), $this->getFilterField());
 		$table->searched($this->isSearched());
-		$table->sorted($this->isSorted());
+//		$table->sorted($this->isSorted());
 		if ($this->isPaginated())
 		{
 			$table->paginated(true, $this->gdoTableHREF(), $this->getIPP());
 			$this->gdoParameter($this->getPageName())->table($this->table);
-			$table->pagemenu->page($this->getPage());
 		}
 
 		# 4 editor permissions
@@ -321,12 +311,10 @@ abstract class MethodTable extends MethodForm
 	 * Override this.
 	 * Return true if you want to be able to sort this table data manually.
 	 * This requires a GDT_Sort field in your GDO columns / headers as well as MethodSort endpoint.
-	 *
-	 * @return bool
 	 * @see GDT_Sort
 	 * @see MethodSort
 	 */
-	public function isSorted() { return false; }
+	public function isSorted(): bool { return false; }
 
 	public function getIPP(): int
 	{
@@ -350,30 +338,27 @@ abstract class MethodTable extends MethodForm
 
 	protected function onInitTable(): void {}
 
-
-
-
-
 	###############
 	### Execute ###
 	###############
 
-	protected function beforeCalculateTable(GDT_Table $table)
+	protected function beforeCalculateTable(GDT_Table $table): void
 	{
 		if ($this->isPaginated())
 		{
 			$result = $this->getResult();
-			$this->table->pagemenu->pageName = $this->getPageName();
-			$this->table->pagemenu->numItems(count($result->getData()));
+			$table->pagemenu->pageName = $this->getPageName();
+			$table->pagemenu->numItems(count($result->getData()));
+			$table->pagemenu->page($this->getPage());
 		}
 	}
 
 	/**
 	 * Override this with returning an ArrayResult with data.
 	 */
-	public function getResult(): ArrayResult { return new ArrayResult([], $this->gdoTable()); }
+	public function getResult(): ArrayResult { return new ArrayResult(GDT::EMPTY_ARRAY, $this->gdoTable()); }
 
-	protected function calculateTable(GDT_Table $table)
+	protected function calculateTable(GDT_Table $table): void
 	{
 		# Exec
 		$result = $this->getResult();
@@ -401,11 +386,7 @@ abstract class MethodTable extends MethodForm
 
 	public function getSearchTerm(): string
 	{
-		if ($var = $this->gdoParameterVar($this->getSearchName()))
-		{
-			return $var;
-		}
-		return GDT::EMPTY_STRING;
+		return (string) $this->gdoParameterVar($this->getSearchName());
 	}
 
 	public function getOrderTerm(): string
@@ -413,12 +394,12 @@ abstract class MethodTable extends MethodForm
 		return $this->gdoParameterValue($this->getOrderName());
 	}
 
-	protected function setupTitle(GDT_Table $table)
+	protected function setupTitle(GDT_Table $table): void
 	{
 		$table->titleRaw($this->getTableTitle());
 	}
 
-	public function getTableTitle()
+	public function getTableTitle(): string
 	{
 		if (isset($this->table))
 		{
@@ -427,12 +408,12 @@ abstract class MethodTable extends MethodForm
 		}
 		else
 		{
-			$key = strtolower(sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName()));
-			return t($key);
+			$key = "mt_{$this->getModuleName()}_{$this->getMethodName()}";
+			return t(strtolower($key));
 		}
 	}
 
-	public function getTableTitleLangKey()
+	public function getTableTitleLangKey(): string
 	{
 		return strtolower('list_' . $this->getModuleName() . '_' . $this->getMethodName());
 	}
@@ -442,9 +423,10 @@ abstract class MethodTable extends MethodForm
 		return $this->getTableTitle();
 	}
 
-	public function onMethodInit()
+	public function onMethodInit(): ?GDT
 	{
 		$this->getTable();
+		return null;
 	}
 
 	public function isUserRequired(): bool
@@ -461,9 +443,9 @@ abstract class MethodTable extends MethodForm
 		return $this->table->countItems();
 	}
 
-	protected function getCurrentHREF()
+	protected function getCurrentHREF(): string
 	{
-		return @$_SERVER['REQUEST_URI'];
+		return $_SERVER['REQUEST_URI'];
 	}
 
 }

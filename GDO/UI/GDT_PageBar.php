@@ -2,6 +2,7 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT_Enum;
+use GDO\Core\GDT_Response;
 
 /**
  * A selection for which navbar to use.
@@ -18,7 +19,7 @@ final class GDT_PageBar extends GDT_Enum
 		$this->enumValues('none', 'left', 'right', 'bottom');
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		switch ($var)
 		{
@@ -29,11 +30,11 @@ final class GDT_PageBar extends GDT_Enum
 			case 'bottom':
 				return GDT_Page::instance()->bottomBar();
 			default:
-				return GDT_Null::make('none');
+				return GDT_Bar::make('none');
 		}
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		return true;
 	}

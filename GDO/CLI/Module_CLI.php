@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI;
 
 use GDO\Core\GDO_Module;
@@ -6,7 +7,7 @@ use GDO\Core\GDO_Module;
 /**
  * CLI Specific code.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.4
  * @author gizmore
  */
@@ -19,10 +20,5 @@ final class Module_CLI extends GDO_Module
 	{
 		$this->loadLanguage('lang/cli');
 	}
-
-//    public function onModuleInitCLI() : void
-//    {
-//    	Method::addCLIAlias('echo', Ekko::class);
-//    }
 
 }

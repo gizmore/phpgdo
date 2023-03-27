@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Language\Test;
 
-use GDO\Crypto\BCrypt;
 use GDO\Language\Method\SwitchLanguage;
 use GDO\Language\Module_Language;
 use GDO\Language\Trans;
@@ -12,7 +12,6 @@ use GDO\User\GDO_UserPermission;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertGreaterThanOrEqual;
 use function PHPUnit\Framework\assertNotEquals;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
@@ -25,7 +24,7 @@ use function PHPUnit\Framework\assertTrue;
  * Rudimentary I18n test.
  * Permission and $TEST_USERS generation.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 6.3.4
  * @author gizmore
  * @see Module_Language
@@ -67,14 +66,12 @@ final class LanguageTest extends TestCase
 	public function testUserGeneration()
 	{
 		echo "Creating 4 users for testing\n";
-		$hash = BCrypt::create('11111111')->__toString();
 		# User 2 is gizmore
 		$user = GDO_User::blank([
 			'user_id' => '2',
 			'user_name' => 'gizmore',
 			'user_type' => 'member',
 		])->replace();
-		$user->saveSettingVar('Login', 'password', $hash);
 		GDO_UserPermission::table()->grant($user, 'admin');
 		GDO_UserPermission::table()->grant($user, 'cronjob');
 		GDO_UserPermission::table()->grant($user, 'staff');
@@ -88,7 +85,6 @@ final class LanguageTest extends TestCase
 			'user_name' => 'Peter',
 			'user_type' => 'member',
 		])->replace();
-		$user->saveSettingVar('Login', 'password', $hash);
 		GDO_UserPermission::table()->grant($user, 'staff');
 		GDT_MethodTest::$TEST_USERS[] = $user;
 		$user->changedPermissions();
@@ -101,7 +97,6 @@ final class LanguageTest extends TestCase
 			'user_name' => 'Monica',
 			'user_type' => 'member',
 		])->replace();
-		$user->saveSettingVar('Login', 'password', $hash);
 		GDT_MethodTest::$TEST_USERS[] = $user;
 		$user->changedPermissions();
 		assertFalse($user->isAdmin(), 'Test if admin permissions are assigned correctly.');

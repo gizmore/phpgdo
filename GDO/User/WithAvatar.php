@@ -29,7 +29,7 @@ trait WithAvatar
 		{
 			unset($this->avatarUser);
 		}
-		else
+		elseif (module_enabled('Avatar'))
 		{
 			$this->avatarUser = $user;
 		}

@@ -62,7 +62,7 @@ final class GDT_Protocol extends GDT_Select
 	##############
 	### Render ###
 	##############
-	public function render(): string
+	public function render(): array|string|null
 	{
 		$this->initChoices();
 		return parent::render();
@@ -71,7 +71,7 @@ final class GDT_Protocol extends GDT_Select
 	################
 	### Validate ###
 	################
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		$this->initChoices();
 		return parent::validate($value);

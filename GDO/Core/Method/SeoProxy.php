@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\Util\Strings;
@@ -25,7 +26,7 @@ final class SeoProxy extends Method
 	 */
 	public function isTrivial(): bool { return false; }
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$method = self::makeProxied($_REQUEST['url']);
 		return $method->exec();

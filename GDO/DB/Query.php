@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\DB;
 
 use GDO\Core\GDO;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_DBException;
+use GDO\Core\GDO_ErrorFatal;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Join;
 use GDO\Core\GDT_Object;
@@ -15,7 +17,7 @@ use GDO\Core\Logger;
  * Part of the GDO DBAL code.
  * You should use GDO Classes to create queries.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 5.0.0
  * @example GDO_User::table()->select()->execute()->fetchAll();
  *
@@ -29,13 +31,19 @@ final class Query
 {
 
 	# Type constants
-	public const RAW = 0;
-	public const SELECT = 1;
-	public const INSERT = 2;
-	public const REPLACE = 3;
-	public const UPDATE = 4;
-	public const DELETE = 5;
-	public const INSERT_OR_UPDATE = 6;
+	final public const RAW = 0;
+
+	final public const SELECT = 1;
+
+	final public const INSERT = 2;
+
+	final public const REPLACE = 3;
+
+	final public const UPDATE = 4;
+
+	final public const DELETE = 5;
+
+	final public const INSERT_OR_UPDATE = 6;
 
 	/**
 	 * The fetch into object gdo table / final class.
@@ -62,10 +70,7 @@ final class Query
 	private ?string $raw = null;
 	private bool $write = false;
 	private bool $cached = true;
-	/**
-	 *
-	 * @var array
-	 */
+
 	private array $joinedObjects = [];
 
 	#############
@@ -79,9 +84,8 @@ final class Query
 	}
 
 	/**
-	 * Use this to avoid using the GDO cache. This means the memcache might be still used? This means no single identity?
-	 *
-	 * @return Query
+	 * Use this to avoid using the GDO cache.
+	 * This means the memcache might be still used? This means no single identity?
 	 */
 	public function uncached(): self { return $this->cached(false); }
 
@@ -136,7 +140,6 @@ final class Query
 		}
 		else
 		{
-// 			$clone->table = $this->fetchTable;
 			$clone->fetchTable = $this->fetchTable;
 			$clone->type = $this->type;
 			$clone->columns = $this->columns;
@@ -148,12 +151,10 @@ final class Query
 			$clone->having = $this->having;
 			$clone->order = $this->order;
 			$clone->limit = $this->limit;
-			$clone->from = $this->from;
 			$clone->write = $this->write;
-//     		$clone->debug = $this->debug; # not cool to copy
 			$clone->cached = $this->cached;
-			return $clone;
 		}
+		return $clone;
 	}
 
 	/**
@@ -249,10 +250,6 @@ final class Query
 	/**
 	 * Continue to build a select but reset columns.
 	 * This may be useful in pagination queries.
-	 *
-	 * @param string $columns
-	 *
-	 * @return self
 	 */
 	public function selectOnly(string $columns = null): self
 	{
@@ -318,10 +315,6 @@ final class Query
 
 	/**
 	 * Build part of the SET clause.
-	 *
-	 * @param string $set
-	 *
-	 * @return self
 	 */
 	public function set(string $set): self
 	{
@@ -342,6 +335,9 @@ final class Query
 		return $this;
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function orderRand(): self
 	{
 		$rand = Database::DBMS()->dbmsRandom();
@@ -350,10 +346,6 @@ final class Query
 
 	/**
 	 * Order clause.
-	 *
-	 * @param string $order
-	 *
-	 * @return self
 	 */
 	public function order(string $order = null): self
 	{
@@ -374,13 +366,9 @@ final class Query
 	/**
 	 * Automatically build a join based on a GDT_Object column of this queries GDO table.
 	 *
-	 * @param string $key the GDT_Object
-	 * @param string $join type
-	 *
-	 * @return Query
-	 * @see GDO
+	 * @throws GDO_ErrorFatal
 	 */
-	public function joinObject(string $key, string $join = 'JOIN', string $tableAlias = null): self
+	public function joinObject(string $key, string $join = 'JOIN'): self
 	{
 		if (in_array($key, $this->joinedObjects, true))
 		{
@@ -389,10 +377,7 @@ final class Query
 
 		$this->joinedObjects[] = $key;
 
-		if (!($gdt = $this->table->gdoColumn($key)))
-		{
-			throw new GDO_Error(t('err_column', [html($key)]));
-		}
+		$gdt = $this->table->gdoColumn($key);
 
 		if ($gdt instanceof GDT_Join)
 		{
@@ -405,14 +390,13 @@ final class Query
 		{
 			$table = $gdt->table;
 			$atbl = $this->table->gdoTableIdentifier();
-			$ftbl = $tableAlias ? $tableAlias : "{$key}_t";
+			$ftbl = "{$key}_t";
 			$tableAlias = " AS {$ftbl}";
-
-			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->identifier()}=$atbl.{$gdt->identifier()}";
+			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->getName()}=$atbl.{$gdt->getName()}";
 		}
 		else
 		{
-			throw new GDO_Error(t('err_join_object', [html($key), html($this->table->renderName())]));
+			throw new GDO_DBException('err_join_object', [html($key), html($this->table->renderName())]);
 		}
 
 		return $this->join($join);
@@ -457,6 +441,7 @@ final class Query
 
 	public function raw(string $raw): self
 	{
+		$raw = trim($raw);
 		$this->write = !str_starts_with($raw, 'SELECT');
 		$this->raw = $raw;
 		return $this;
@@ -480,9 +465,7 @@ final class Query
 	 */
 	public function buildQuery(): string
 	{
-		return isset($this->raw) ?
-			$this->raw :
-
+		return $this->raw ??
 			$this->getType() .
 			$this->getSelect() .
 			$this->getFrom() .
@@ -494,7 +477,6 @@ final class Query
 			$this->getHaving() .
 			$this->getOrderBy() .
 			$this->getLimit() .
-
 			$this->getUnion();
 	}
 
@@ -515,6 +497,8 @@ final class Query
 				return 'UPDATE ';
 			case self::DELETE:
 				return "DELETE {$this->from} FROM ";
+			default:
+				return "!INVALID!QRY!TYPE!{$this->type}";
 		}
 	}
 
@@ -525,7 +509,7 @@ final class Query
 
 	private function getSelectColumns(): string
 	{
-		return isset($this->columns) ? $this->columns : ' *';
+		return $this->columns ?? ' *';
 	}
 
 	public function getFrom(): string
@@ -537,7 +521,7 @@ final class Query
 	{
 		if (!isset($this->values))
 		{
-			return '';
+			return GDT::EMPTY_STRING;
 		}
 		$fields = [];
 		$values = [];
@@ -600,27 +584,29 @@ final class Query
 
 	public function getLimit(): string
 	{
-		return isset($this->limit) ? $this->limit : '';
+		return $this->limit ?? GDT::EMPTY_STRING;
 	}
 
 	/**
 	 * Execute a query.
 	 * Returns boolean on writes and a Result on reads.
 	 *
-	 * @return Result
+	 * @throws GDO_DBException
 	 * @see Result
 	 */
-	public function exec()
+	public function exec(): bool|Result
 	{
 		$db = Database::instance();
 
 		$query = $this->buildQuery();
 
+		#PP#begin#
 		if ($this->debug)
 		{
 			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
 			Logger::rawLog('query', $query);
 		}
+		#PP#end#
 
 		if ($this->write)
 		{

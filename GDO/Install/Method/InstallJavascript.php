@@ -29,7 +29,7 @@ final class InstallJavascript extends Method
 		return $this->getMethodTitle();
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		Database::init();
 		ModuleLoader::instance()->loadModulesA();

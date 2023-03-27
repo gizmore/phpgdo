@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\WithNullable;
@@ -7,37 +8,38 @@ use GDO\DB\WithNullable;
  * This trait adds initial/input/var/value schema to a GDT.
  * The very base GDT do not even have this.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
 trait WithValue
 {
 
+	final public const HTML_REQUIRED = ' required="required"';
+
 	use WithNullable;
-
-	################
-	### Required ###
-	################
-
-	public bool $valueConverted = false;
 
 	###########################
 	### Input / Var / Value ###
 	###########################
-	public ?string $initial = null; # remember value has been converted already
-	public ?string $var = null; # initial dbinput var
-	public $value; # dbinput var
+
+	public ?string $initial = null;
+
+	public ?string $var = null;
+
+	public bool $valueConverted = false;
+
+	public bool|int|float|string|array|null|object $value = null;
 
 	/**
 	 * Render HTML required attribute.
 	 */
 	public function htmlRequired(): string
 	{
-		return $this->notNull ? ' required="required"' : '';
-	} # output value
+		return $this->notNull ? self::HTML_REQUIRED : GDT::EMPTY_STRING;
+	}
 
-	public function gdoInitial(GDO $gdo = null): self
+	public function gdoInitial(GDO $gdo = null): static
 	{
 		if ($gdo)
 		{
@@ -49,20 +51,20 @@ trait WithValue
 		return $this->initial(null);
 	}
 
-	public function initial(string $initial = null): self
+	public function initial(?string $initial): static
 	{
 		$this->initial = $initial;
 		return $this->var($initial);
 	}
 
-	public function var(string $var = null): self
+	public function var(?string $var): static
 	{
 		$this->var = $var;
 		$this->valueConverted = false;
 		return $this;
 	}
 
-	public function value($value): self
+	public function value($value): static
 	{
 		$this->var = $this->toVar($value);
 		$this->value = $value;
@@ -70,12 +72,8 @@ trait WithValue
 		return $this;
 	}
 
-	public function reset(bool $removeInput = false): self
+	public function reset(): static
 	{
-		if ($removeInput)
-		{
-			unset($this->inputs);
-		}
 		if ($this->hasError())
 		{
 			unset($this->errorRaw);
@@ -85,35 +83,29 @@ trait WithValue
 		return $this->var($this->initial);
 	}
 
-	public function getInitial(): ?string
-	{
-		return $this->initial;
-	}
-
 	/**
 	 * Render html value attribute value="foo".
 	 */
 	public function htmlValue(): string
 	{
-		$var = $this->getVar();
-		return $var === null ? GDT::EMPTY_STRING :
-			sprintf(' value="%s"', html($var));
+		if (null === ($var = $this->getVar()))
+		{
+			return GDT::EMPTY_STRING;
+		}
+		$var = html($var);
+		return " value=\"{$var}\"";
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
-		$input = $this->getInput();
-		if ($input !== null)
+		if (null !== ($input = $this->getInput()))
 		{
-			return $this->inputToVar($input);
+			$this->var($this->inputToVar($input));
 		}
-		else
-		{
-			return $this->var;
-		}
+		return $this->var;
 	}
 
-	public function getValue()
+	public function getValue(): bool|int|float|string|array|null|object
 	{
 		if (!$this->valueConverted)
 		{
@@ -136,7 +128,7 @@ trait WithValue
 	/**
 	 * Setup this GDT from a GDO.
 	 */
-	public function gdo(GDO $gdo = null): self
+	public function gdo(?GDO $gdo): static
 	{
 		if ($gdo)
 		{
@@ -144,48 +136,26 @@ trait WithValue
 			{
 				return $this->var($this->initial);
 			}
-			if ($name = $this->getName())
-			{
-				return $this->var($gdo->gdoVar($name));
-			}
+			return $this->var($gdo->gdoVar($this->name));
 		}
 		return $this->var(null);
 	}
 
 
-	public function setGDOData(array $data): self
+	public function setGDOData(array $data): static
 	{
-		$n = $this->name;
-		$this->var = isset($data[$n]) ? $data[$n] : null;
-		return $this;
+		return $this->var($data[$this->name] ?? null);
 	}
-
-// 	public function getGDOData() : array
-// 	{
-// 		return [$this->name => $this->getVar()];
-// 	}
 
 	##################
 	### Positional ###
 	##################
 	/**
 	 * Positional GDT cannot be referenced by name in GDT_Expressions.
-	 *
-	 * @return bool
 	 */
 	public function isPositional(): bool
 	{
 		return $this->isRequired() && ($this->initial === null);
 	}
-
-	##############
-	### Render ###
-	##############
-
-
-// 	public function renderHeader() : string
-// 	{
-// 		return $this->renderLabel();
-// 	}
 
 }

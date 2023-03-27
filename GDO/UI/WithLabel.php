@@ -1,15 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\Core\WithName;
-use GDO\Language\Trans;
 
 /**
  * Add label fields to a GDT.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.1
  * @author gizmore
  */
@@ -18,44 +18,42 @@ trait WithLabel
 
 	use WithName;
 
-	private static string $requiredIcon;
-	public bool $labelNone = true;
 
-	############
-	### Star ###
-	############
-	public string $labelRaw;
-	public string $labelKey;
+	public static function renderRequiredIcon(): string
+	{
+		static $req;
+		$req ??= '<span class="gdt-required">' . GDT_Icon::iconS('required', t('required')) . '</span>';
+		return $req;
+	}
+
 
 	#############
 	### Label ###
 	#############
-	public ?array $labelArgs = null;
 
-	public static function make(string $name = null): self
+
+	public string $labelRaw;
+
+	public string $labelKey;
+
+	public ?array $labelArgs;
+
+	public bool $labelNone = true;
+
+
+	public static function make(string $name = null): static
 	{
 		return self::makeWithLabel($name);
 	}
 
-	public static function makeWithLabel(string $name = null): self
+	public static function makeWithLabel(string $name = null): static
 	{
 		$obj = self::makeNamed($name);
-		if ($name = $obj->getName())
+		if ($name)
 		{
-//			if (Trans::hasKey($name))
-//			{
-				$obj->label($name);
-//			}
-//			else
-//			{
-//				$obj->defaultLabel();
-//			}
+			$obj->label($name);
 		}
-		else
-		{
-			$obj->defaultLabel();
-		}
-		return $obj;
+		return $obj->defaultLabel();
 	}
 
 	public function label(string $key, array $args = null): self
@@ -77,6 +75,12 @@ trait WithLabel
 		}
 		return $this;
 	}
+
+
+	##############
+	### Render ###
+	##############
+
 
 	/**
 	 * The label is the label text with the required star asterisk.
@@ -119,29 +123,15 @@ trait WithLabel
 	 */
 	private function charRequired(): string
 	{
-		return (isset($this->notNull) && ($this->notNull)) ?
-			self::renderRequiredIcon() : GDT::EMPTY_STRING;
+		return $this->notNull ? self::renderRequiredIcon() : GDT::EMPTY_STRING;
 	}
-
-	public static function renderRequiredIcon(): string
-	{
-		if (!isset(self::$requiredIcon))
-		{
-			self::$requiredIcon = '<span class="gdt-required">' . GDT_Icon::iconS('required', t('required')) . '</span>';
-		}
-		return self::$requiredIcon;
-	}
-
-	##############
-	### Render ###
-	##############
 
 	public function renderTHead(): string
 	{
 		return $this->renderLabelText();
 	}
 
-	public function labelArgs(...$args): self
+	public function labelArgs(?array $args): self
 	{
 		$this->labelArgs = $args;
 		return $this;
@@ -173,7 +163,7 @@ trait WithLabel
 	 */
 	public function htmlForID(): string
 	{
-		return " for=\"{$this->getName()}\"";
+		return " for=\"{$this->name}\"";
 	}
 
 }

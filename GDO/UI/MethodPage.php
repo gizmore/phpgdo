@@ -1,6 +1,7 @@
 <?php
 namespace GDO\UI;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\Method;
 use GDO\Core\WithFileCache;
@@ -18,7 +19,7 @@ abstract class MethodPage extends Method
 
 	use WithFileCache;
 
-	public function execute()
+	public function execute(): GDT
 	{
 		return $this->pageTemplate();
 	}

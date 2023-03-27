@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Language\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\MethodAjax;
 use GDO\Language\GDO_Language;
 use GDO\Language\GDT_Language;
@@ -57,7 +58,7 @@ final class SwitchLanguage extends MethodAjax
 	/**
 	 * Switch the language and redirect back.
 	 */
-	public function execute()
+	public function execute(): GDT
 	{
 		# Set new ISO language
 		$lang = $this->getLanguage();

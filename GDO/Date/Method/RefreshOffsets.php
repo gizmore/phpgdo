@@ -17,12 +17,12 @@ final class RefreshOffsets extends MethodCronjob
 
 	public function isTrivial(): bool { return false; }
 
-	public function runAt()
+	public function runAt(): string
 	{
 		return $this->runDailyAt(2);
 	}
 
-	public function run()
+	public function run(): void
 	{
 		$result = GDO_Timezone::table()->select()->exec();
 		while ($tz = $result->fetchObject())

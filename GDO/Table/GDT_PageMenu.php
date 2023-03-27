@@ -191,7 +191,7 @@ class GDT_PageMenu extends GDT
 		}
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return [
 			'href' => isset($this->href) ? $this->href : null,

@@ -43,7 +43,7 @@ final class CopyHTAccess extends MethodForm
 		$form->actions()->addField(GDT_Submit::make()->label('copy_htaccess'));
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$dest = GDO_PATH . '.htaccess';
 		if (!FileUtil::isFile($dest))

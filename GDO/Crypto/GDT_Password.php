@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Crypto;
 
 use GDO\Core\GDT_String;
@@ -37,7 +38,7 @@ class GDT_Password extends GDT_String
 
 	public function defaultLabel(): self { return $this->label('password'); }
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $var === null ? null : new BCrypt($var);
 	}
@@ -48,19 +49,22 @@ class GDT_Password extends GDT_String
 		return [$this->name => $pass ? $pass->__toString() : null];
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if ($value === null || (!$value->hash))
 		{
-			return $this->notNull ? $this->errorNull() : true;
+			return !$this->notNull || $this->errorNull();
 		}
-		elseif (mb_strlen($value) < 4)
+		elseif (mb_strlen($value->__toString()) < 4)
 		{
 			return $this->error('err_pass_too_short', [4]);
 		}
 		return true;
 	}
 
-	public function renderJSON() {}
+	public function renderJSON(): array|string|null
+	{
+		return null;
+	}
 
 }

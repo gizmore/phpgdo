@@ -31,9 +31,9 @@ final class ModuleConfigTest extends TestCase
 			$method = Modules::make();
 			$checky = GDT_MethodTest::make()->method($method);
 			$result = $checky->execute();
-			$html = $result->render();
+			$html = $result->renderCLI();
 			$this->assert200('Check Admin::Modules for errors');
-			assertStringContainsString(', Core', $html, 'Test if Module table can be rendered in HTML.');
+			assertStringContainsString(', Core', $html, 'Test if Module table can be rendered in CLI mode.');
 		}
 		else
 		{

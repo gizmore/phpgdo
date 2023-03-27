@@ -2,6 +2,7 @@
 namespace GDO\Date;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_Method;
 use GDO\Core\GDT_Template;
 
 /**
@@ -26,12 +27,12 @@ class GDT_Date extends GDT_Timestamp
 	###################
 	### Var / Value ###
 	###################
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		return $value ? $value->format('Y-m-d') : null;
 	}
 
-	public function inputToVar($input): ?string
+	public function inputToVar(array|string|null|GDT_Method $input): ?string
 	{
 		if ($input === null)
 		{
@@ -62,7 +63,7 @@ class GDT_Date extends GDT_Timestamp
 		return $input ? Time::displayDateTimeFormat($input, 'Y-m-d', '', Time::UTC) : null;
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return empty($var) ? null : Time::parseDateTimeDB($var);
 	}

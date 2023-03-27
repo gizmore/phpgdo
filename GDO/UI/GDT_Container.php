@@ -79,7 +79,7 @@ class GDT_Container extends GDT
 				$rendered .= $field->renderCLI();
 			}
 		}
-		return $rendered;
+		return trim($rendered);
 	}
 
 }

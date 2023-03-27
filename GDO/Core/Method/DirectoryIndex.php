@@ -3,6 +3,7 @@ namespace GDO\Core\Method;
 
 use GDO\Core\GDO;
 use GDO\Core\GDO_DirectoryIndex;
+use GDO\Core\GDT;
 use GDO\Core\Module_Core;
 use GDO\DB\ArrayResult;
 use GDO\Net\GDT_Url;
@@ -23,11 +24,11 @@ final class DirectoryIndex extends MethodTable
 
 	public function isOrdered(): bool { return false; }
 
-	public function isFiltered() { return false; }
+	public function isFiltered(): bool { return false; }
 
-	public function isSearched() { return false; }
+	public function isSearched(): bool { return false; }
 
-	public function isPaginated() { return false; }
+	public function isPaginated(): bool { return false; }
 
 	public function plugVars(): array
 	{
@@ -43,7 +44,7 @@ final class DirectoryIndex extends MethodTable
 		];
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		if (!$this->isAllowed())
 		{
@@ -78,7 +79,7 @@ final class DirectoryIndex extends MethodTable
 		return GDO_DirectoryIndex::table();
 	}
 
-	public function getTableTitle()
+	public function getTableTitle(): string
 	{
 		$count = $this->getResult()->numRows();
 		return t('mt_dir_index', [html($this->getUrl()), $count]);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Language;
 
 use GDO\Core\Application;
@@ -23,7 +24,7 @@ use GDO\Util\Strings;
  * - Provide GDO_Language table
  * - Provide Trans for i18n.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 2.0.0
  * @author gizmore
  * @see Trans
@@ -32,8 +33,6 @@ use GDO\Util\Strings;
  */
 final class Module_Language extends GDO_Module
 {
-
-// 	private array $supported;
 
 	##############
 	### Module ###
@@ -61,7 +60,7 @@ final class Module_Language extends GDO_Module
 	public function getACLDefaults(): array
 	{
 		return [
-			'language' => ['acl_all', 0, null],
+			'language' => ['acl_all', '0', null],
 		];
 	}
 
@@ -79,7 +78,7 @@ final class Module_Language extends GDO_Module
 	/**
 	 * Add meta tag on init.
 	 */
-	public function onModuleInit()
+	public function onModuleInit(): void
 	{
 		Website::addMeta(['language', Trans::$ISO, 'name']);
 	}
@@ -130,13 +129,10 @@ final class Module_Language extends GDO_Module
 
 	/**
 	 * Get the supported  languages, GDO_LANGUAGE first.
-	 *
 	 * @return GDO_Language[]
 	 */
 	public function cfgSupported(): array
 	{
-// 		if (!isset($this->supported))
-// 		{
 		$supported = [GDO_LANGUAGE => GDO_Language::table()->find(GDO_LANGUAGE)];
 		if ($additional = $this->getConfigValue('languages'))
 		{
@@ -145,15 +141,7 @@ final class Module_Language extends GDO_Module
 				$supported[$lang->getISO()] = $lang;
 			}
 		}
-// 			$this->supported = $supported;
-// 		}
-// 		return $this->supported;
 		return $supported;
-	}
-
-	public function hookClearCache(): void
-	{
-		unset($this->supported);
 	}
 
 	#################
@@ -190,26 +178,24 @@ final class Module_Language extends GDO_Module
 
 	public function detectAcceptLanguage(): string
 	{
-		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+		$matches = [];
+		$languages = GDO_Language::table()->allSupported();
+		if (preg_match_all('/[-a-zA-Z,]+;q=[.\d]+/', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches))
 		{
-			$matches = [];
-			$languages = GDO_Language::table()->allSupported();
-			if (preg_match_all('/[-a-zA-Z,]+;q=[.\d]+/', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches))
+			foreach ($matches[0] as $match)
 			{
-				foreach ($matches[0] as $match)
+				[$isos] = explode(';', ltrim($match, ','));
+				foreach (explode(',', $isos) as $iso)
 				{
-					[$isos] = explode(';', ltrim($match, ','));
-					foreach (explode(',', $isos) as $iso)
+					$iso = strtolower(Strings::substrTo($iso, '-', $iso));
+					if (isset($languages[$iso]))
 					{
-						$iso = strtolower(Strings::substrTo($iso, '-', $iso));
-						if (isset($languages[$iso]))
-						{
-							return $iso;
-						}
+						return $iso;
 					}
 				}
 			}
 		}
+		return GDO_LANGUAGE;
 	}
 
 }

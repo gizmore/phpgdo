@@ -2,6 +2,7 @@
 namespace GDO\Table;
 
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Object;
 use GDO\Core\Method;
 use GDO\UI\GDT_HTML;
@@ -28,7 +29,7 @@ abstract class MethodQueryCard extends Method
 	 */
 	abstract public function gdoTable();
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$html = $this->renderCard();
 		return GDT_HTML::make()->var($html);

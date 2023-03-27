@@ -2,6 +2,7 @@
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
+use GDO\Core\GDT;
 use GDO\Date\GDT_Duration;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
@@ -17,7 +18,7 @@ use GDO\UI\GDT_Success;
 final class Wait extends MethodCLI
 {
 
-	public function getCLITrigger() { return 'wait'; }
+	public function getCLITrigger(): string { return 'wait'; }
 
 	public function createForm(GDT_Form $form): void
 	{
@@ -28,7 +29,7 @@ final class Wait extends MethodCLI
 		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onExecute']));
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$seconds = $this->gdoParameterValue('duration');
 		usleep($seconds * 1000000);

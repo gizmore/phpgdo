@@ -62,7 +62,7 @@ class InstallAdmins extends MethodForm
 		return GDT_Template::make()->template('Install', 'page/installadmins.php', ['form' => $this->getForm()]);
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 // 		/** @var $password GDT_PasswordHash **/
 // 		$password = $form->getField('user_password');

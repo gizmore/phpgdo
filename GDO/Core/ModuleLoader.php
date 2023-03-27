@@ -1,11 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
-use GDO\Language\Trans;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
-use SplFixedArray;
 use Throwable;
 
 /**
@@ -13,7 +12,7 @@ use Throwable;
  * Can load from DB and/or FS.
  * Uses memcached for fast modulecache loading.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  *
@@ -23,14 +22,17 @@ final class ModuleLoader
 {
 
 	public static self $INSTANCE;
+
 	/**
 	 * @var GDO_Module[]
 	 */
 	private static array $INSTANCES = [];
+
 	/**
 	 * Base modules path, the modules folder.
 	 */
 	private string $path;
+
 	/**
 	 * @var GDO_Module[]
 	 */
@@ -40,7 +42,7 @@ final class ModuleLoader
 	### Cache ###
 	#############
 	/**
-	 * @var SplFixedArray[GDO_Module]
+	 * @var GDO_Module[]
 	 */
 	private array $enabledModules;
 	private bool $scriptsIncluded = false;
@@ -53,7 +55,10 @@ final class ModuleLoader
 		$this->path = $path;
 	}
 
-	public static function instance(): self { return self::$INSTANCE; }
+	public static function instance(): self
+	{
+		return self::$INSTANCE;
+	}
 
 // 	/**
 // 	 * Get all enabled and loaded modules.
@@ -80,7 +85,7 @@ final class ModuleLoader
 	{
 		if (!in_array($module, $this->getEnabledModules(), true))
 		{
-			$this->initModuleVars($module->getModuleName());
+			$this->initModuleVars();
 			$module->initOnce();
 			$this->enabledModules[] = $module;
 		}
@@ -111,7 +116,7 @@ final class ModuleLoader
 	/**
 	 * Load module vars from database.
 	 */
-	public function initModuleVars()
+	public function initModuleVars(): void
 	{
 // 	    foreach ($this->getEnabledModules() as $module)
 // 	    {
@@ -147,7 +152,7 @@ final class ModuleLoader
 // 		    		}
 //         		while ($row = $result->fetchRow())
 //         		{
-					/** @var $module GDO_Module * */
+//					/** @var GDO_Module $module * */
 //         			if ($module = @$this->modules[strtolower($row[0])])
 //         			{
 //         				if ($gdt = $module->getConfigColumn($row[1], false))
@@ -158,7 +163,7 @@ final class ModuleLoader
 				}
 			}
 		}
-		catch (GDO_DBException $ex)
+		catch (GDO_DBException)
 		{
 			$app = Application::$INSTANCE;
 			if ($app->isCLI()) # && (!$app->isInstall()))
@@ -186,8 +191,6 @@ final class ModuleLoader
 
 	/**
 	 * Get a module by ID.
-	 *
-	 * @return GDO_Module
 	 */
 	public function getModuleByID(string $moduleID): ?GDO_Module
 	{
@@ -201,18 +204,18 @@ final class ModuleLoader
 		return null;
 	}
 
-	public function flushEnabledModules(): void
-	{
-		unset($this->enabledModules);
-	}
+//	public function flushEnabledModules(): void
+//	{
+//		unset($this->enabledModules);
+//	}
 
-	public function setModule(GDO_Module $module)
+	public function setModule(GDO_Module $module): void
 	{
 		$name = strtolower($module->getName());
 		$this->modules[$name] = $module;
 	}
 
-	public function getModule(string $moduleName, bool $fs = false, bool $throw = true): ?GDO_Module
+	public function getModule(string $moduleName, bool $fs = true): ?GDO_Module
 	{
 		$caseName = $moduleName;
 		$moduleName = strtolower($moduleName);
@@ -220,26 +223,13 @@ final class ModuleLoader
 		{
 			return $this->modules[$moduleName];
 		}
-		if ($fs)
-		{
-			return $this->loadModuleFS($caseName, $throw);
-		}
-		if ($throw)
-		{
-			throw new GDO_Error('err_module', [html($caseName)]);
-		}
-		return null;
+		return $fs ? $this->loadModuleFS($caseName) : null;
 	}
 
 	/**
 	 * Load a module from filesystem if it is not loaded yet.
-	 *
-	 * @param string $name The case sensitive name.
-	 * @param bool $throw If it shall throw an exception if not found.
-	 *
-	 * @return GDO_Module
 	 */
-	public function loadModuleFS(string $name, bool $throw = true, bool $init = false): ?GDO_Module
+	public function loadModuleFS(string $name): ?GDO_Module
 	{
 		$lowerName = strtolower($name);
 
@@ -248,9 +238,9 @@ final class ModuleLoader
 			$className = "GDO\\$name\\Module_$name";
 // 			try
 // 			{
-			if (@class_exists($className, true))
+			if (class_exists($className))
 			{
-				$moduleData = GDO_Module::table()->getBlankData([
+				$moduleData = GDO_Module::getBlankData([
 					'module_name' => $name,
 				]);
 				if ($module = self::instanciate($moduleData, true))
@@ -263,10 +253,10 @@ final class ModuleLoader
 // 					    }
 				}
 			}
-			elseif ($throw)
-			{
-				throw new GDO_Error('err_module', [html($name)]);
-			}
+//			elseif ($throw)
+//			{
+//				throw new GDO_Error('err_module', [html($name)]);
+//			}
 			else
 			{
 				return null;
@@ -277,13 +267,13 @@ final class ModuleLoader
 // 				return null;
 // 			}
 		}
-		if ($init)
-		{
-			$module = $this->modules[$lowerName];
-// 			$module->buildConfigCache();
-// 			$this->initModuleVars($module->getName());
-			$this->initModule($module);
-		}
+//		if ($init)
+//		{
+//			$module = $this->modules[$lowerName];
+//// 			$module->buildConfigCache();
+//// 			$this->initModuleVars($module->getName());
+//			$this->initModule($module);
+//		}
 		return $this->modules[$lowerName];
 	}
 
@@ -294,39 +284,32 @@ final class ModuleLoader
 	{
 		$name = $moduleData['module_name'];
 		$klass = "GDO\\$name\\Module_$name";
-		/** @var $instance GDO_Module * */
-		if (class_exists($klass))
-		{
-			if (isset(self::$INSTANCES[$name]))
-			{
-				$instance = self::$INSTANCES[$name];
-			}
-			else
-			{
-				$instance = self::$INSTANCES[$name] = new $klass();
-			}
-			$moduleData['module_priority'] = $instance->priority;
+		/** @var GDO_Module $instance */
+//		if (class_exists($klass))
+//		{
+			$instance = self::$INSTANCES[$name] ?? (self::$INSTANCES[$name] = call_user_func([$klass, 'tableGDO']));
+			$moduleData['module_priority'] = (string) $instance->priority;
 			$moduleData['module_enabled'] = $dirty ?
-				($instance->defaultEnabled() ? '1' : '0') :
-				($moduleData['module_enabled']);
+				'0' : $moduleData['module_enabled'];
 			$instance->setGDOVars($moduleData, $dirty);
 			return $instance;
-		}
+//		}
 	}
 
 	##################
 	### Massloader ###
 	##################
 
-	private function initModule(GDO_Module $module): void
-	{
-		$module->onModuleInit();
-	}
+//	private function initModule(GDO_Module $module): void
+//	{
+//		$module->onModuleInit();
+//	}
 
 	/**
 	 * Load active modules, preferably from cache.
 	 * Sorted by priority to be spinlock free.
 	 *
+	 * @throws GDO_Exception
 	 * @return GDO_Module[]
 	 */
 	public function loadModulesCache(): array
@@ -345,6 +328,7 @@ final class ModuleLoader
 	}
 
 	/**
+	 * @throws GDO_Exception
 	 * @return GDO_Module[]
 	 */
 	public function loadModulesA(): array
@@ -396,7 +380,7 @@ final class ModuleLoader
 		return $this;
 	}
 
-	private function loadModulesDB()
+	private function loadModulesDB(): false|array
 	{
 		if (!GDO_DB_ENABLED)
 		{
@@ -414,10 +398,10 @@ final class ModuleLoader
 					{
 						if ($module = self::instanciate($moduleData))
 						{
-							$this->modules[$moduleName] = $module->setPersisted(true);
+							$this->modules[$moduleName] = $module->setPersisted();
 						}
 					}
-					catch (Throwable $e)
+					catch (Throwable)
 					{
 						echo "A module file or folder is missing in filesystem: GDO/{$moduleName}(\n";
 					}
@@ -426,17 +410,18 @@ final class ModuleLoader
 				{
 					$module = $this->modules[$moduleName];
 					$module->setVars($moduleData, false);
-					$module->setPersisted(true);
+					$module->setPersisted();
 				}
 			}
 			return $this->modules;
 		}
-		catch (GDO_DBException $e)
+		catch (GDO_DBException)
 		{
 			if (Application::$INSTANCE->isCLI())
 			{
 				echo "The table gdo_module does not exist yet.\n";
 				echo "You can ignore this error if you are using the CLI installer.\n";
+				flush();
 			}
 			return false;
 		}
@@ -447,12 +432,15 @@ final class ModuleLoader
 		}
 	}
 
+	/**
+	 * @throws GDO_Error
+	 */
 	private function loadModulesFS(bool $init = true): void
 	{
 // 	    Trans::inited(false);
 		Filewalker::traverse($this->path, null, null, [$this, '_loadModuleFS'], 0, $init);
-		Trans::inited(true);
-		$this->sortModules('module_priority ASC');
+//		Trans::inited(true);
+		$this->sortModules();
 		if ($init)
 		{
 			foreach ($this->modules as $module)
@@ -509,26 +497,29 @@ final class ModuleLoader
 		return $cache;
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	private function initFromCache(array $cache): void
 	{
 		$this->modules = $cache;
-		$this->setupCLIAliases();
+		if (Application::$INSTANCE->isCLI())
+		{
+			$this->setupCLIAliases();
+		}
 	}
 
-	public function loadLangFiles(bool $all = false): void
+	public function loadLangFiles(): void
 	{
-		Trans::inited(false);
-//		if (Cache::fileHas(''))
-//		{
-//			$modules = $all ? $this->modules : $this->getEnabledModules();
-//		}
 		foreach ($this->modules as $module)
 		{
 			$module->onLoadLanguage();
 		}
-		Trans::inited(true);
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public function initModules(): void
 	{
 		# Register themes and load language
@@ -536,15 +527,18 @@ final class ModuleLoader
 		{
 			if ($theme = $module->getTheme())
 			{
-				if ($module->isEnabled())
-				{
+//				if ($module->isEnabled())
+//				{
 					GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
-				}
+//				}
 			}
 		}
 		$this->initModulesB();
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	private function initModulesB(): void
 	{
 		# Init modules
@@ -556,7 +550,10 @@ final class ModuleLoader
 				$module->initOnce();
 			}
 		}
-		$this->setupCLIAliases();
+		if ($app->isCLI())
+		{
+			$this->setupCLIAliases();
+		}
 	}
 
 	############
@@ -575,13 +572,13 @@ final class ModuleLoader
 		}
 	}
 
-	public function _loadModuleFS(string $entry, string $path, bool $init)
+	public function _loadModuleFS(string $entry, string $path): void
 	{
 		if (FileUtil::isFile("$path/Module_$entry.php"))
 		{
 			if (!str_starts_with($entry, 'phpgdo-'))
 			{
-				$this->loadModuleFS($entry, true, $init);
+				$this->loadModuleFS($entry);
 			}
 		}
 	}

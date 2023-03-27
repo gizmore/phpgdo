@@ -3,6 +3,7 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Module;
 use GDO\Core\GDT_Tuple;
 use GDO\DB\Cache;
@@ -43,7 +44,7 @@ class Install extends MethodForm
 		];
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
 		foreach ($buttons as $btn)

@@ -1,6 +1,7 @@
 <?php
 namespace GDO\CLI\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Text;
 use GDO\Form\GDT_AntiCSRF;
@@ -37,7 +38,7 @@ final class PP extends MethodForm
 		$form->actions()->addField(GDT_Submit::make());
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$string = $form->getFormVar('text');
 		$string = \GDO\Util\PP::init()->processString($string);

@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date;
 
 use DateTime;
 use DateTimeZone;
 use GDO\Core\Application;
-use GDO\Core\GDO_Error;
 use GDO\Core\GDO_Exception;
 use GDO\DB\Cache;
 use GDO\Language\Trans;
@@ -26,7 +26,7 @@ use GDO\Language\Trans;
  *
  * @TODO: Sometimes functions take a formatstring sometimes a formatname t(df_). Always use formatstring. fix all bugs.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 2.0.0
  * @author gizmore
  * @see GDT_Week
@@ -38,45 +38,47 @@ use GDO\Language\Trans;
 final class Time
 {
 
-	# durations in seconds
-	public const ONE_MILLISECOND = 0.001;
-	public const ONE_SECOND = 1;
-	public const ONE_MINUTE = 60;
-	public const ONE_HOUR = 3600;
-	public const ONE_DAY = 86400;
-	public const ONE_WEEK = 604800;
-	public const ONE_MONTH = 2629800;
-	public const ONE_YEAR = 31557600;
+	final public const ONE_MILLISECOND = 0.001;
+	final public const ONE_SECOND = 1;
+	final public const ONE_MINUTE = 60;
+	final public const ONE_HOUR = 3600;
+	final public const ONE_DAY = 86400;
+	final public const ONE_WEEK = 604800;
+	final public const ONE_MONTH = 2629800;
+	final public const ONE_YEAR = 31557600;
 
 	# known display formats from lang file
-	public const FMT_MINUTE = 'minute';
-	public const FMT_SHORT = 'short';
-	public const FMT_LONG = 'long';
-	public const FMT_DAY = 'day'; # @TODO: Date format FMT_DAY is same as FMT_SHORT.
-	public const FMT_MS = 'ms';
-	public const FMT_DB = 'db';
+	final public const FMT_MINUTE = 'minute';
+	final public const FMT_SHORT = 'short';
+	final public const FMT_LONG = 'long';
+	final public const FMT_DAY = 'day'; # @TODO: Date format FMT_DAY is same as FMT_SHORT.
+	final public const FMT_MS = 'ms';
+	final public const FMT_DB = 'db';
 
 	################
 	### Timezone ###
 	################
 	/**
 	 * UTC DB ID. UTC is always '1'.
-	 *
-	 * @see GDO_Timezone
 	 */
-	public const UTC = '1';
-	public const MONDAY = '1'; # UTC Timezone object
-	public const TUESDAY = '2'; # default timezone id
-	public const WEDNESDAY = '3';
-	public const THURSDAY = '4'; # Internal cache
-	public const FRIDAY = '5';
-	public const SATURDAY = '6';
-	public const SUNDAY = '7';
-	public static $UTC;
+	final public const UTC = '1';
+
+	final public const MONDAY = '1';
+
+	final public const TUESDAY = '2';
+
+	final public const WEDNESDAY = '3';
+
+	final public const THURSDAY = '4';
+
+	final public const FRIDAY = '5';
+	final public const SATURDAY = '6';
+	final public const SUNDAY = '7';
+
+	public static DateTimeZone $UTC;
+
 	/**
 	 * The timezone as GDO db row id.
-	 *
-	 * @var string
 	 */
 	public static string $TIMEZONE = self::UTC;
 
@@ -84,11 +86,13 @@ final class Time
 	### Convert ###
 	###############
 	/**
-	 * Timezone object cache: @TODO Remove?
-	 *
 	 * @var DateTimeZone[]
 	 */
 	public static array $TIMEZONE_OBJECTS = [];
+
+	/**
+	 * @var GDO_Timezone[]
+	 */
 	private static array $TZ_CACHE;
 
 	public static function setTimezoneNamed(string $timezoneName): void
@@ -101,60 +105,56 @@ final class Time
 		self::setTimezone($tz->getID());
 	}
 
-	public static function setTimezone(string $timezoneId)
+	public static function setTimezone(string $timezoneId): void
 	{
-		#PP#start#
-		if (!is_numeric($timezoneId))
-		{
-			die('FATAL');
-			xdebug_break();
-		}
-		#PP#end#
 		self::$TIMEZONE = $timezoneId;
 	}
 
-	public static function getDateDay($time = 0)
+	public static function getDateDay(int|float|null $time = 0): ?string
 	{
 		return self::getDate($time, 'Y-m-d');
 	}
 
 	/**
 	 * Get a mysql date from a timestamp, like YYYY-mm-dd HH:ii:ss.vvv.
-	 *
-	 * @return string
-	 * @example $date = Time::getDate();
 	 */
-	public static function getDate($time = 0, $format = 'Y-m-d H:i:s.v')
+	public static function getDate(int|float|null $time = 0, string $format = 'Y-m-d H:i:s.v'): ?string
 	{
 		if ($dt = self::getDateTime($time))
 		{
-			$date = $dt->format($format);
-			return $date;
+			return $dt->format($format);
 		}
+		return null;
 	}
 
 	/**
 	 * Get a datetime object from a timestamp.
-	 *
-	 * @param number $time
 	 */
-	public static function getDateTime($time = 0): DateTime
+	public static function getDateTime(float|int|null $time): ?DateTime
 	{
-		$time = $time <= 0 ? Application::$MICROTIME : (float)$time;
+		if ($time === null)
+		{
+			return null;
+		}
+		$time = $time <= 0 ? Application::$MICROTIME : $time;
 		return DateTime::createFromFormat('U.u', sprintf('%.06f', $time), self::$UTC);
 	}
 
-	public static function getDateSec($time = 0)
+	public static function getDateSec(float|int|null $time): ?string
 	{
 		return self::getDate($time, 'Y-m-d H:i:s');
 	}
 
-	public static function getDateWithoutTime($time = null): string
+	public static function getDateWithoutTime(float|int|null $time): ?string
 	{
-		return substr(self::getDate($time), 0, 10);
+		if ($date = self::getDate($time))
+		{
+			return substr($date, 0, 10);
+		}
+		return null;
 	}
 
-	public static function parseDateDB($date): float
+	public static function parseDateDB(?string $date): float
 	{
 		return self::parseDate($date, self::UTC, 'db');
 	}
@@ -162,65 +162,38 @@ final class Time
 	/**
 	 * Convert DateTime input from a user.
 	 * This is usually in the users language format and timezone
-	 *
-	 * @param string $date
-	 * @param string $timezone
-	 * @param string $format
-	 *
-	 * @return int Timestamp
 	 */
-	public static function parseDate($date, $timezone = null, $format = 'parse'): float
+	public static function parseDate(?string $date, string $timezone = null, string $format = 'parse'): ?float
 	{
-		$timestamp = self::parseDateIso(Trans::$ISO, $date, $timezone, $format);
-		return $timestamp;
+		return self::parseDateIso(Trans::$ISO, $date, $timezone, $format);
 	}
 
 	###############
 	### Display ###
 	###############
-
 	/**
 	 * Convert a user date input to a timestamp.
-	 *
-	 * @TODO parseDateIso is broken a bit, because strlen($date) might differ across languages.
-	 *
-	 * @param string $iso
-	 * @param string $date
-	 * @param string $timezone
-	 * @param string $format
-	 *
-	 * @return int Timestamp
 	 */
-	public static function parseDateIso($iso, $date, $timezone = null, $format = 'parse'): float
+	public static function parseDateIso(string $iso, ?string $date, string $timezone = null, string $format = 'parse'): ?float
 	{
 		if ($d = self::parseDateTimeISO($iso, $date, $timezone, $format))
 		{
-			$timestamp = $d->format('U.u');
-			return (float)$timestamp;
+			return (float) $d->format('U.u');
 		}
+		return null;
 	}
 
 	/**
 	 * Parse a string into a datetime.
-	 *
-	 * @param string $date
-	 * @param int $timezone
-	 * @param string $format
-	 * @param string $iso
-	 *
-	 * @throws GDO_Error
-	 * @return DateTime
 	 */
-	public static function parseDateTimeISO($iso, $date, $timezone = null, $format = 'parse')
+	public static function parseDateTimeISO(string $iso, ?string $date, string $timezone = null, string $format = 'parse'): ?DateTime
 	{
-		# Adjust
 		if (!$date)
 		{
 			return null;
 		}
 
-		$date = preg_replace('/[ap]m/iD', '', $date);
-// 	    $date = preg_replace('/ {2,}/D', ' ', $date);
+		$date = preg_replace('/[ap]m/i', '', $date);
 		$date = trim($date);
 
 		$len = strlen($date);
@@ -250,23 +223,19 @@ final class Time
 		{
 			$format = tiso($iso, 'df_' . $format);
 		}
-		$timezone = $timezone ? $timezone : self::$TIMEZONE;
+		$timezone = $timezone ?: self::$TIMEZONE;
 		$timezone = self::getTimezoneObject($timezone);
-		if (!($d = DateTime::createFromFormat($format, $date, $timezone)))
-		{
-			throw new GDO_Error('err_invalid_date', [html($date), $format]);
-		}
-		return $d;
+		return DateTime::createFromFormat($format, $date, $timezone);
 	}
 
-	public static function getTimezoneObject(string $timezoneId = null)
+	public static function getTimezoneObject(string $timezoneId = null): DateTimeZone
 	{
 		return $timezoneId === null ?
-			self::$TIMEZONE :
+			self::$UTC :
 			self::_getTZCached($timezoneId);
 	}
 
-	private static function _getTZCached(string $timezoneId)
+	private static function _getTZCached(string $timezoneId): DateTimeZone
 	{
 		if (isset(self::$TIMEZONE_OBJECTS[$timezoneId]))
 		{
@@ -290,26 +259,20 @@ final class Time
 		return $tz;
 	}
 
-	public static function parseDateTime($date, $timezone = null, $format = 'parse')
+	public static function parseDateTime(?string $date, string $timezone = null, string $format = 'parse'): ?DateTime
 	{
-		return self::parseDateTimeIso(Trans::$ISO, $date, $timezone, $format);
+		return self::parseDateTimeISO(Trans::$ISO, $date, $timezone, $format);
 	}
 
 	/**
 	 * Display a timestamp.
-	 *
-	 * @param $timestamp
-	 * @param $langid
-	 * @param $default_return
-	 *
-	 * @return string
 	 */
-	public static function displayTimestamp($timestamp, $format = 'short', $default_return = '---', $timezone = null)
+	public static function displayTimestamp(int|float $timestamp, string $format = 'short', string $default_return = '---',string $timezone = null): string
 	{
 		return self::displayTimestampISO(Trans::$ISO, $timestamp, $format, $default_return, $timezone);
 	}
 
-	public static function displayTimestampISO($iso, $timestamp, $format = 'short', $default_return = '---', $timezone = null)
+	public static function displayTimestampISO(string $iso, int|float $timestamp, string $format = 'short', string $default_return = '---', string $timezone = null): string
 	{
 		if ($timestamp <= 0)
 		{
@@ -342,22 +305,15 @@ final class Time
 		{
 			return $default_return;
 		}
-		$timezoneId = $timezoneId ? $timezoneId : self::$TIMEZONE;
+		$timezoneId = $timezoneId ?: self::$TIMEZONE;
 		$datetime->setTimezone(self::getTimezoneObject($timezoneId));
 		return $datetime->format($format);
 	}
 
 	/**
 	 * Display a datetime string.
-	 *
-	 * @param string $date
-	 * @param string $format
-	 * @param string $default_return
-	 * @param int $timezone
-	 *
-	 * @return string
 	 */
-	public static function displayDate($date = null, $format = 'short', $default_return = '---', $timezone = null)
+	public static function displayDate(string $date = null, string $format = 'short', string $default_return = '---', string $timezone = null): string
 	{
 		return self::displayDateISO(Trans::$ISO, $date, $format, $default_return, $timezone);
 	}
@@ -381,12 +337,12 @@ final class Time
 	/**
 	 * Parse a date from user input in user timezone, but Y-m-d format.
 	 */
-	public static function parseDateTimeDB(?string $date, $timezone = self::UTC): ?DateTime
+	public static function parseDateTimeDB(?string $date, ?string $timezone = self::UTC): ?DateTime
 	{
-		return self::parseDateTimeIso('en', $date, $timezone, 'db');
+		return self::parseDateTimeISO('en', $date, $timezone, 'db');
 	}
 
-	public static function displayDateTime(DateTime $datetime = null, string $format = 'short', string $default_return = '---', int $timezone = null)
+	public static function displayDateTime(DateTime $datetime = null, string $format = 'short', string $default_return = '---', string $timezone = null): string
 	{
 		return self::displayDateTimeISO(Trans::$ISO, $datetime, $format, $default_return, $timezone);
 	}
@@ -400,7 +356,7 @@ final class Time
 	/**
 	 * Get date diff in seconds. @TODO make it two args for two dates, default now.
 	 */
-	public static function getDiff($date): int
+	public static function getDiff(string $date): float
 	{
 		$b = new DateTime(self::getDate(Application::$MICROTIME));
 		$a = new DateTime($date);
@@ -409,15 +365,12 @@ final class Time
 
 	/**
 	 * Get the timestamp for a database date (UTC).
-	 *
-	 * @param string $date
-	 *
-	 * @return float microtime (ms)
 	 */
-	public static function getTimestamp($date = null)
+	public static function getTimestamp(?string $date): int|float
 	{
-		$ts = $date ? self::parseDate($date, self::UTC, 'db') : Application::$MICROTIME;
-		return $ts;
+		return $date ?
+			self::parseDate($date, self::UTC, 'db') :
+			Application::$MICROTIME;
 	}
 
 	#################
@@ -427,13 +380,10 @@ final class Time
 	/**
 	 * Get the age in years of a date.
 	 */
-	public static function getAge(string $date = null): float
+	public static function getAge(?string $date): float
 	{
-		if ($seconds = self::getAgo($date))
-		{
-			return $seconds / self::ONE_YEAR;
-		}
-		return 0.0;
+		$seconds = self::getAgo($date);
+		return $seconds / self::ONE_YEAR;
 	}
 
 	################
@@ -443,41 +393,34 @@ final class Time
 	/**
 	 * Get the age of a date in seconds.
 	 */
-	public static function getAgo(string $date = null): float
+	public static function getAgo(?string $date): float
 	{
 		return $date ?
 			Application::$MICROTIME - self::getTimestamp($date) :
 			0;
 	}
 
-	public static function getAgeTS(int $duration)
+	public static function getAgeTS(int|float $duration): float
 	{
 		return $duration / self::ONE_YEAR;
 	}
 
-	public static function displayAge($date)
+	public static function displayAge(?string $date): string
 	{
 		return self::displayAgeTS(self::getTimestamp($date));
 	}
 
-	public static function displayAgeTS($timestamp)
+	public static function displayAgeTS(int|float $timestamp): string
 	{
-		$timestamp = Application::$TIME - (int)$timestamp;
+		$timestamp = Application::$MICROTIME - $timestamp;
 		return self::humanDuration($timestamp);
 	}
 
 	/**
 	 * Return a human readable duration.
 	 * Example: 666 returns 11 minutes 6 seconds.
-	 *
-	 * @TODO: Time::humanDuration() shall support ms.
-	 *
-	 * @param $duration int in seconds.
-	 * @param $nUnits int how many units to display max.
-	 *
-	 * @return string
 	 */
-	public static function humanDuration($seconds, int $nUnits = 2, bool $withMillis = false)
+	public static function humanDuration(float|int|null $seconds, int $nUnits = 2, bool $withMillis = false): string
 	{
 		return self::humanDurationISO(Trans::$ISO, $seconds, $nUnits, $withMillis);
 	}
@@ -486,7 +429,7 @@ final class Time
 	### Human to seconds ###
 	########################
 
-	public static function humanDurationISO(string $iso, $seconds, int $nUnits = 2, bool $withMillis = false): string
+	public static function humanDurationISO(string $iso, int|float|null $seconds, int $nUnits = 2, bool $withMillis = false): string
 	{
 // 		static $cache = [];
 // 		if (!isset($cache[$iso]))
@@ -509,10 +452,7 @@ final class Time
 	### Parts ###
 	#############
 
-	/**
-	 * @param int|float $seconds
-	 */
-	public static function humanDurationRaw($seconds, int $nUnits, array $units, bool $withMillis = false)
+	public static function humanDurationRaw(int|float|null $seconds, int $nUnits, array $units, bool $withMillis = false): string
 	{
 		$calced = [];
 		if ($withMillis)
@@ -526,7 +466,7 @@ final class Time
 			{
 				$calced[] = $remainder . $text;
 			}
-			$duration = intval($duration / $mod, 10);
+			$duration = intval($duration / $mod);
 			if ($duration === 0)
 			{
 				break;
@@ -560,12 +500,12 @@ final class Time
 		return implode(' ', $calced);
 	}
 
-	public static function displayAgeISO($date, $iso)
+	public static function displayAgeISO(string $date, string $iso): string
 	{
 		return self::displayAgeTSISO(self::getTimestamp($date), $iso);
 	}
 
-	public static function displayAgeTSISO($timestamp, $iso)
+	public static function displayAgeTSISO(int|float $timestamp, string $iso): string
 	{
 		return self::humanDurationISO($iso, Application::$TIME - $timestamp);
 	}
@@ -574,24 +514,20 @@ final class Time
 	### Is-Day ###
 	##############
 
-	public static function weekTimestamp($year, $week)
+	public static function weekTimestamp(string|int $year, string|int $week): int
 	{
 		$week_start = new DateTime('now', Time::$UTC);
-		$week_start->setISODate(intval($year, 10), intval($week, 10));
+		$week_start->setISODate(intval($year), intval($week));
 		$week_start = $week_start->format('U');
-		return $week_start;
+		return (int) $week_start;
 	}
 
-	public static function humanDurationEN($seconds, int $nUnits = 2, bool $withMillis = false): string
+	public static function humanDurationEN(float|int $seconds, int $nUnits = 2, bool $withMillis = false): string
 	{
 		return self::humanDurationISO('en', $seconds, $nUnits);
 	}
 
-	/**
-	 * @param int|float|null $min
-	 * @param int|float|null $max
-	 */
-	public static function isValidDuration(string $string, $min = null, $max = null): bool
+	public static function isValidDuration(string $string, int|float|null $min, int|float|null $max): bool
 	{
 		$seconds = self::humanToSeconds($string);
 		if (!is_numeric($seconds))
@@ -626,27 +562,27 @@ final class Time
 	 *  - w, week, weeks,
 	 *  - mo, month, months,
 	 *  - y, year, years.
-	 *
-	 * @param $duration string is the duration in human format.
-	 *
-	 * @return float|int|null - duration in seconds
 	 * */
-	public static function humanToSeconds(string $duration)
+	public static function humanToSeconds(?string $duration): float|null
 	{
-		if (is_int($duration))
+		if ($duration === null)
 		{
-			return $duration;
+			return null;
 		}
-		if (!is_string($duration))
-		{
-			return 0.0;
-		}
-		if (is_numeric($duration))
-		{
-			return floatval($duration);
-		}
+//		if (is_int($duration))
+//		{
+//			return $duration;
+//		}
+//		if (!is_string($duration))
+//		{
+//			return 0.0;
+//		}
+//		if (is_numeric($duration))
+//		{
+//			return floatval($duration);
+//		}
 		$matches = null;
-		if (!preg_match_all('/(?:([0-9]+)\\s*([smhdwoy]{0,2}))+/Di', $duration, $matches))
+		if (!preg_match_all('/(?:([0-9]+)\\s*([smhdwoy]{0,2}))+/i', $duration, $matches))
 		{
 			return 0.0;
 		}
@@ -665,26 +601,17 @@ final class Time
 		for ($i = $j = 0; $i < $len; $i++, $j++)
 		{
 			$d = floatval($matches[1][$j]);
-			if ($d)
-			{
-				if ($unit = @$multis[$matches[2][$j]])
-				{
-					$back += $d * $unit;
-				}
-				else
-				{
-					$back += $d;
-				}
-			}
+			$unit = $multis[$matches[2][$j]] ?? 1.0;
+			$back += $d * $unit;
 		}
 		return $back;
 	}
 
-	public static function getYear(string $date) { return substr($date, 0, 4); }
+	public static function getYear(string $date): string { return substr($date, 0, 4); }
 
-	public static function getMonth(string $date) { return substr($date, 5, 2); }
+	public static function getMonth(string $date): string { return substr($date, 5, 2); }
 
-	public static function getDay(string $date) { return substr($date, 8, 2); }
+	public static function getDay(string $date): string { return substr($date, 8, 2); }
 
 	/**
 	 * Is a timestamp a Sunday (UTC)
@@ -696,9 +623,9 @@ final class Time
 
 	public static function isDay(string $day, $time = 0, string $timezoneId = self::UTC): bool
 	{
-		$time = $time ? $time : Application::$MICROTIME;
+		$time = $time ?: Application::$MICROTIME;
 		$dt = Time::getDateTime($time);
-		return self::displayDateTimeFormat($dt, 'N', Time::MONDAY,/**UTC**/) === $day;
+		return self::displayDateTimeFormat($dt, 'N', Time::MONDAY) === $day;
 	}
 
 }

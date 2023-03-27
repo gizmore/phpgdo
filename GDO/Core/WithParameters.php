@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\UI\GDT_Repeat;
@@ -7,7 +8,7 @@ use GDO\UI\GDT_Repeat;
  * Add GDT parameters.
  * Override gdoParameters() in your methods.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see Method
@@ -19,7 +20,7 @@ trait WithParameters
 	### Protected ### - Override these
 	#################
 	/**
-	 * @var GDT[string]
+	 * @var GDT[]
 	 */
 	public array $parameterCache;
 
@@ -130,10 +131,9 @@ trait WithParameters
 		# Add to cache
 		foreach ($params as $gdt)
 		{
-			$name = $gdt->getName(); # Has to suppprt getName()!
-			$this->parameterCache[$name] = $gdt;
+			$this->parameterCache[$gdt->getName()] = $gdt;
 		}
-		$this->applyInputComposeParams();
+//		$this->applyInputComposeParams();
 	}
 
 	private function applyInputComposeParams(): void
@@ -180,7 +180,7 @@ trait WithParameters
 		return GDT::EMPTY_ARRAY;
 	}
 
-	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true)
+	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): int|float|string|array|null|object
 	{
 		if ($gdt = $this->gdoParameter($key, $validate, $throw))
 		{

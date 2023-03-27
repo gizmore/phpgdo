@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Core\Method\Stub;
@@ -11,7 +12,7 @@ use GDO\UI\GDT_Page;
  * Rendering mode.
  * Global Application time and microtime.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  * @see GDT_Page
@@ -22,8 +23,9 @@ class Application extends GDT
 	use WithVerb;
 	use WithInstance;
 
-	const EXIT_ERROR = -409;
-	const EXIT_FATAL = -1;
+	final public const EXIT_ERROR = -409;
+
+	final public const EXIT_FATAL = -1;
 
 	public static array $HREFS = [];
 
@@ -57,6 +59,8 @@ class Application extends GDT
 	 * Toggle CLI force mode (mostly for tests)
 	 */
 	public bool $cli = false;
+
+
 	private array $themes;
 
 	/**
@@ -76,18 +80,29 @@ class Application extends GDT
 	/**
 	 * Exit the application. On UnitTests we continue...
 	 */
-	public static function exit(int $code = 0): void
+	public static function exit(int $code = 0): GDT
 	{
 		if (self::$INSTANCE->isUnitTests())
 		{
 			echo "The application would exit with code {$code}\n";
 			flush();
-			return;
+			return GDT_Response::make();
 		}
 		die($code);
 	}
 
 	public function isUnitTests(): bool { return false; }
+
+	public function isCLIOrUnitTest(): bool
+	{
+		return $this->isUnitTests() || $this->isCLI();
+	}
+
+	public function isIPC(): bool
+	{
+		return GDO_IPC !== 'none';
+	}
+
 
 	/**
 	 * Set the HTTP response code.
@@ -152,6 +167,9 @@ class Application extends GDT
 		}
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public function __destruct()
 	{
 		parent::__destruct();
@@ -165,12 +183,12 @@ class Application extends GDT
 	 * Call when you create the next command in a loop.
 	 * Optionally remove all input, when a form was sent and wants to get cleared.
 	 */
-	public function reset(bool $removeInput = false): self
+	public function reset(): static
 	{
 		self::$RESPONSE_CODE = 200;
 		$_FILES = [];
 		GDT_Page::instance()->reset();
-		self::$MODE = self::$MODE_DETECTED;
+//		self::$MODE = self::$MODE_DETECTED;
 		self::updateTime();
 		return $this;
 	}
@@ -202,13 +220,13 @@ class Application extends GDT
 	 * Perf headers as cheap as possible.
 	 * Query count, memory usage, timing and call count.
 	 */
-	public function timingHeader()
+	public function timingHeader(): void
 	{
 		$m1 = memory_get_peak_usage(true);
-		$m2 = memory_get_peak_usage(false);
+		$m2 = memory_get_peak_usage();
 		hdr(sprintf('X-GDO-DB: %d', Database::$QUERIES));
 		hdr(sprintf('X-GDO-MEM: %s', max([$m1, $m2])));
-		hdr(sprintf('X-GDO-TIME: %.01fms', $this->getRuntime() * 1000.0));
+		hdr(sprintf('X-GDO-TIME: %.01fms', self::getRuntime() * 1000.0));
 	}
 
 	public static function getRuntime(): float
@@ -253,7 +271,7 @@ class Application extends GDT
 	/**
 	 * Is a session handler supported?
 	 */
-	public function hasSession(): bool
+	public function hasSession(): string
 	{
 		return module_enabled('Session');
 	}

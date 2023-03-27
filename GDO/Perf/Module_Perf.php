@@ -62,6 +62,8 @@ final class Module_Perf extends GDO_Module
 				return false;
 			case 'staff':
 				return GDO_User::current()->hasPermission('staff');
+			default:
+				return false;
 		}
 	}
 

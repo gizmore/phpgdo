@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\Application;
@@ -34,7 +35,7 @@ use GDO\UI\WithTitle;
  * Paginated enables pagination via GDT_Pagemenu.
  * Sorted enables drag and drop sorting via GDT_Sort and Table::Method::Sorting.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see GDO
@@ -65,37 +66,43 @@ class GDT_Table extends GDT
 	# ## GDT ###
 	# ##########
 	public bool $hideEmpty = false;
+
 	public bool $searched = false;
 
 	# #############
 	# ## Footer ###
 	# #############
 	public bool $filtered = false;
+
 	public GDT_Filter $filter;
 
 	# #################
 	# ## Hide empty ###
 	# #################
 	public GDT_Order $order;
+
 	public GDT_PageMenu $pagemenu;
 
 	# #####################
 	# ## Drag&Drop sort ###
 	# #####################
 	public Result $result;
+
 	public Query $query;
 
 	# ################
 	# ## Searching ###
 	# ################
-	public $countQuery;
+
+	public Query $countQuery;
+
 	public int $countItems;
 
 	# ################
 	# ## Filtering ###
 	# ################
-	public bool $fetchInto = false;
 	public GDO $fetchAs;
+	public bool $fetchInto = false;
 	public bool $striped = true;
 
 	# ###############
@@ -150,7 +157,7 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	public function sorted(string $sortableURL = null)
+	public function sorted(string $sortableURL = null): static
 	{
 		if ($sortableURL)
 		{
@@ -163,13 +170,13 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	public function searched(bool $searched = true)
+	public function searched(bool $searched = true): static
 	{
 		$this->searched = $searched;
 		return $this;
 	}
 
-	public function filtered(bool $filtered = true, GDT_Filter $filter = null)
+	public function filtered(bool $filtered = true, GDT_Filter $filter = null): static
 	{
 		$this->filtered = $filtered;
 		unset($this->filter);
@@ -284,17 +291,17 @@ class GDT_Table extends GDT
 			}
 		}
 
-		if ($this->searched)
-		{
-// 			$s = $this->headers->name;
-// 			if (isset($_REQUEST[$s]['search']))
-// 			{
-// 				if ($searchTerm = trim($_REQUEST[$s]['search'], "\r\n\t "))
-// 				{
-// 					$this->bigSearchQuery($query, $searchTerm);
-// 				}
-// 			}
-		}
+//		if ($this->searched)
+//		{
+//// 			$s = $this->headers->name;
+//// 			if (isset($_REQUEST[$s]['search']))
+//// 			{
+//// 				if ($searchTerm = trim($_REQUEST[$s]['search'], "\r\n\t "))
+//// 				{
+//// 					$this->bigSearchQuery($query, $searchTerm);
+//// 				}
+//// 			}
+//		}
 
 		return $this->getOrderedQuery($query);
 	}
@@ -312,7 +319,7 @@ class GDT_Table extends GDT
 	### Count ###
 	#############
 
-	public function countQuery(Query $query)
+	public function countQuery(Query $query): static
 	{
 		$this->countQuery = $this->getFilteredQuery($query->copy());
 		return $this;
@@ -323,35 +330,28 @@ class GDT_Table extends GDT
 	 * Supports multiple terms at once, split via whitespaces.
 	 * Objects that are searchable JOIN automatically and offer more searchable fields.
 	 * In general, GDT_String and GDT_Int is searchable.
+	 * GDT_Object mostly inherits from GDT_Int.
 	 *
-	 * @todo GDT_Enum is not searchable yet.
+	 * @TODO GDT_Enum is not searchable yet.
 	 */
 	public function bigSearchQuery(Query $query, string $searchTerm): Query
 	{
 		$split = preg_split("/\\s+/iD", trim($searchTerm, "\t\r\n "));
-		$first = true;
+//		$first = true;
 		foreach ($split as $searchTerm)
 		{
-			$where = [];
-			foreach ($this->gdtTable->gdoColumnsCache() as $gdt)
+//			$where = [];
+			foreach ($this->fetchAs->gdoColumnsCache() as $gdt)
 			{
-				if ($gdt->searchable)
-				{
-					if (
-						$condition = $gdt->searchQuery($query, $searchTerm,
-							$first)
-					)
-					{
-						$where[] = $condition;
-					}
-				}
+				$gdt->searchQuery($query, $searchTerm);
 			}
-			if ($where)
-			{
-				$query->where(implode(' OR ', $where));
-			}
-			$first = false;
+//			if ($where)
+//			{
+//				$query->where(implode(' OR ', $where));
+//			}
+//			$first = false;
 		}
+		return $query;
 	}
 
 	/**
@@ -439,8 +439,10 @@ class GDT_Table extends GDT
 	 * Calculate the page for a gdo.
 	 * We do this by examin the order from our filtered query.
 	 * We count(*) the elements that are before or after orderby.
+	 *
+	 * @throws GDO_Exception
 	 */
-	public function getPageFor(GDO $gdo)
+	public function getPageFor(GDO $gdo): int
 	{
 		$result = $this->getResult();
 
@@ -469,9 +471,11 @@ class GDT_Table extends GDT
 			}
 			$q->selectOnly('COUNT(*)');#->noOrder();
 			$itemsBefore = $q->exec()->fetchValue();
-			return $this->getPageForB($itemsBefore);
+			return $this->getPageForB((int)$itemsBefore);
 		}
-	}	public function gdo(GDO $gdo = null): self
+	}
+
+	public function gdo(?GDO $gdo): GDT
 	{
 		if ($gdo === null)
 		{
@@ -484,24 +488,15 @@ class GDT_Table extends GDT
 		return parent::gdo($gdo);
 	}
 
-	private function getPageForB($itemsBefore)
+	private function getPageForB(int $itemsBefore): int
 	{
 		$ipp = $this->getPageMenu()->ipp;
 		return intval(($itemsBefore + 1) / $ipp) + 1;
 	}
 
-	#####################
-	### Zebra stripes ###
-	#####################
-
-
-
-
-
 	# #############
 	# ## Render ###
 	# #############
-
 
 	public function renderHTML(): string
 	{
@@ -539,7 +534,7 @@ class GDT_Table extends GDT
 		return $this->renderHTML();
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		$json = array_merge($this->configJSON(),
 			[

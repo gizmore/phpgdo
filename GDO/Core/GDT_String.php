@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\DB\Query;
 use GDO\Form\GDT_Hidden;
 use GDO\Table\GDT_Filter;
 use GDO\Util\Strings;
@@ -14,28 +16,31 @@ use GDO\Util\Strings;
  * - Supports Binary,ASCII,UTF8
  * - Supports CaseI/S
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  */
 class GDT_String extends GDT_DBField
 {
 
-	public const BINARY = 1;
+	final public const BINARY = 1;
+	final public const ASCII = 2;
+	final public const UTF8 = 3;
 
 	#######################
 	### CaseSensitivity ###
 	#######################
-	public const ASCII = 2;
-	public const UTF8 = 3;
+
 	public bool $caseSensitive = false;
+
 
 	################
 	### Encoding ###
 	################
+
 	public int $encoding = self::UTF8;
-	public int $min = 0;
-	public int $max = 191;
+	public ?int $min = 0;
+	public ?int $max = 191;
 	public string $pattern;
 
 	/**
@@ -47,23 +52,24 @@ class GDT_String extends GDT_DBField
 		return 'text';
 	}
 
-	public function caseI(): self
+	public function caseI(): static
 	{
 		return $this->caseS(false);
 	}
 
-	public function caseS(bool $caseSensitive = true): self
+	public function caseS(bool $caseSensitive = true): static
 	{
 		$this->caseSensitive = $caseSensitive;
 		return $this;
 	}
 
-	public function utf8(): self { return $this->encoding(self::UTF8); }
+	public function utf8(): static { return $this->encoding(self::UTF8); }
 
-// 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
-// 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
+ 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
 
-	public function encoding(int $encoding): self
+ 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
+
+	public function encoding(int $encoding): static
 	{
 		$this->encoding = $encoding;
 		return $this;
@@ -73,25 +79,25 @@ class GDT_String extends GDT_DBField
 	### Min / Max ###
 	#################
 
-	public function ascii(): self { return $this->encoding(self::ASCII); }
+	public function ascii(): static { return $this->encoding(self::ASCII); }
 
-	public function binary(): self { return $this->encoding(self::BINARY); } # utf8mb4 max length for keys
+	public function binary(): static { return $this->encoding(self::BINARY); } # utf8mb4 max length for keys
 
 	public function isBinary(): bool { return $this->encoding === self::BINARY; }
 
-	public function min(int $min): self
+	public function min(?int $min): static
 	{
 		$this->min = $min;
 		return $this;
 	}
 
-	public function max(int $max): self
+	public function max(?int $max): static
 	{
 		$this->max = $max;
 		return $this;
 	}
 
-	public function pattern(string $pattern = null): self
+	public function pattern(?string $pattern): static
 	{
 		if ($pattern === null)
 		{
@@ -108,46 +114,53 @@ class GDT_String extends GDT_DBField
 	### Pattern ###
 	###############
 
-	public function noPattern(): self
+	public function noPattern(): static
 	{
-		unset($this->pattern);
-		return $this;
+		return $this->pattern(null);
 	}
 
 	public function htmlPattern(): string
 	{
 		if (isset($this->pattern))
 		{
-			$pattern = trim(rtrim($this->pattern, 'iuDs'), $this->pattern[0] . '^$');
+			$pattern = html(trim(rtrim($this->pattern, 'iuDs'), $this->pattern[0] . '^$'));
 			return " pattern=\"{$pattern}\"";
 		}
 		return GDT::EMPTY_STRING;
 	}
 
-	public function validate($value): bool
+	/**
+	 * @throws GDO_Error
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 */
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!parent::validate($value))
 		{
 			return false;
 		}
-
-		return $value === null ? true :
-			($this->validateUnique($value) &&
-				$this->validatePattern($value) &&
-				$this->validateLength($value));
+		return $value === null || $this->validateUnique($value) &&
+			$this->validatePattern($value) &&
+			$this->validateLength($value);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 * @throws GDO_Error
+	 */
 	protected function validateUnique($value): bool
 	{
 		if (isset($this->gdo) && $this->unique)
 		{
-			$condition = "{$this->identifier()}=" . quote($value);
+			$condition = "{$this->getName()}=" . quote($value);
 			if ($this->gdo->isPersisted())
 			{
 				# ignore own row
 				$condition .= ' AND NOT ( ' . $this->gdo->getPKWhere() . ' )';
 			}
-			if ($this->gdo->table()->select('1')->where($condition)->first()->exec()->fetchValue() === '1')
+			if ($this->gdo->tbl()->select(GDT::ONE)->where($condition)->first()->exec()->fetchValue() === GDT::ONE)
 			{
 				return $this->error('err_db_unique');
 			}
@@ -177,7 +190,7 @@ class GDT_String extends GDT_DBField
 	### Validate ###
 	################
 
-	public function validateLength($value)
+	public function validateLength($value): bool
 	{
 		$len = mb_strlen($value);
 		if ($this->min > $len)
@@ -216,6 +229,10 @@ class GDT_String extends GDT_DBField
 				return Strings::compare($va, $vb, $this->caseSensitive);
 			case self::BINARY:
 				return strcmp($va, $vb);
+			default:
+				return 0;
+//			default:
+//				throw new GDO_ErrorFatal('err_invalid_gdo_encoding', [$this->encoding]);
 		}
 	}
 
@@ -269,10 +286,22 @@ class GDT_String extends GDT_DBField
 	public function plugVars(): array
 	{
 		$str = 'str<i>ng</i>s';
-		$str = mb_substr($str, 0, $this->max);
 		return [
-			[$this->getName() => $str],
+			[$this->getName() => mb_substr($str, 0, $this->max)],
 		];
+	}
+
+	##############
+	### Search ###
+	##############
+	public function searchQuery(Query $query, string $searchTerm): static
+	{
+		if ($this->isSearchable())
+		{
+			$search = GDO::escapeSearchS($searchTerm);
+			$query->orWhere("{$this->name} LIKE '%{$search}%'");
+		}
+		return $this;
 	}
 
 }

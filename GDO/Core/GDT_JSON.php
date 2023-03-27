@@ -18,15 +18,15 @@ class GDT_JSON extends GDT_Text
 
 	public function getDefaultName(): string { return 'data'; }
 
-	public function toVar($value): ?string { return $value === null ? null : self::encode($value); }
+	public function toVar(null|bool|int|float|string|object|array $value): ?string { return $value === null ? null : self::encode($value); }
 
 	public static function encode($data): ?string { return @json_encode($data, GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0); }
 
-	public function toValue($var = null) { return $var === null ? null : self::decode($var); }
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array { return $var === null ? null : self::decode($var); }
 
 	public static function decode(string $string): ?array { return @json_decode($string, true); }
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return $this->getValue();
 	}
@@ -36,7 +36,7 @@ class GDT_JSON extends GDT_Text
 // 		return self::make()->value($data);
 // 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!$this->validateNull($value))
 		{

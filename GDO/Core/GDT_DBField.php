@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -9,54 +10,52 @@ namespace GDO\Core;
  * - Attributes bool $primary
  * - Attributes bool $unique
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
+ * @see GDO
  * @see GDT_String
  */
 abstract class GDT_DBField extends GDT_Field
 {
 
+	use WithGDO;
+
 	###############
 	### Primary ###
 	###############
 	public bool $primary = false;
-	public bool $unique = false;
 
-	public function primary(bool $primary = true): self
+
+	public function primary(bool $primary = true): static
 	{
 		$this->primary = $primary;
-		$this->notNull($primary);
-		return $this;
+		return $this->notNull($primary);
 	}
-
-	##############
-	### Unique ###
-	##############
 
 	public function isPrimary(): bool
 	{
 		return $this->primary;
 	}
 
+
+	##############
+	### Unique ###
+	##############
+
+
+	public bool $unique = false;
+
+
 	public function isUnique(): bool
 	{
 		return $this->unique;
 	}
 
-	public function unique(bool $unique = true): self
+	public function unique(bool $unique = true): static
 	{
 		$this->unique = $unique;
 		return $this;
-	}
-
-	##################
-	### Identifier ###
-	##################
-
-	public function identifier(): string
-	{
-		return $this->name;
 	}
 
 }

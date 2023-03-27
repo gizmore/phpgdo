@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\DB;
 
 use GDO\Core\GDO;
@@ -9,7 +10,7 @@ use GDO\Table\GDT_Filter;
  * Mimics a GDO Result from database.
  * Used in, e.g. Admin_Modules overview, as its loaded from FS.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  */
@@ -28,7 +29,7 @@ final class ArrayResult extends Result
 
 	private int $index = -1;
 
-	public function __construct(array &$data, GDO $table)
+	public function __construct(array $data, GDO $table)
 	{
 		$this->data = &$data;
 		$this->fullData = &$data;
@@ -101,10 +102,6 @@ final class ArrayResult extends Result
 	##############
 	/**
 	 * Filter an Array Result data array.
-	 *
-	 * @param GDO[] $data
-	 * @param GDT[] $filters
-	 * @param string[] $filter
 	 */
 	public function filterResult(array $data, array $filters, GDT_Filter $f): self
 	{
@@ -142,8 +139,8 @@ final class ArrayResult extends Result
 	 */
 	public function searchResult(array $data, GDO $table, array $filters, string $searchTerm): self
 	{
-		if ($searchTerm !== null)
-		{
+//		if ($searchTerm !== null)
+//		{
 			$hits = [];
 			foreach ($data as $gdo)
 			{
@@ -160,7 +157,7 @@ final class ArrayResult extends Result
 				}
 			}
 			$data = $hits;
-		}
+//		}
 
 		$this->data = $data;
 

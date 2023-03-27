@@ -164,7 +164,7 @@ class Installer
 				'module_name' => $module->getModuleName(),
 				'module_enabled' => '1',
 				'module_version' => $module->version,
-				'module_priority' => $module->priority,
+				'module_priority' => (string) $module->priority,
 			])->insert();
 		}
 		else
@@ -199,12 +199,13 @@ class Installer
 			{
 				if (is_subclass_of($class, 'GDO\Core\GDO'))
 				{
-					$gdo = $class::table();
-					$gdo instanceof GDO;
-					if (!$gdo->gdoAbstract())
+					if ($gdo = $class::table())
 					{
 						self::installModuleClass($gdo);
 					}
+//					if (!$gdo->gdoAbstract())
+//					{
+//					}
 				}
 			}
 		}

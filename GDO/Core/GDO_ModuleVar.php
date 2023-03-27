@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -7,7 +8,7 @@ namespace GDO\Core;
  *
  * @TODO Write a configure page that condenses all the module configs into a single page, like settings.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  * @see \GDO\User\GDO_UserSetting
@@ -20,16 +21,26 @@ final class GDO_ModuleVar extends GDO
 	 */
 	public static function createModuleVar(GDO_Module $module, GDT $gdt): GDT
 	{
-//		$inputs = [];
 		foreach ($gdt->getGDOData() as $key => $var)
 		{
-			self::table()->blank([
+			self::blank([
 				'mv_module' => $module->getID(),
 				'mv_name' => $key,
 				'mv_value' => $var,
 			])->softReplace();
-//			$inputs[$key] = $var;
 		}
+		return $gdt;
+	}
+
+	/**
+	 * @throws GDO_DBException
+	 */
+	public static function removeModuleVar(GDO_Module $module, GDT $gdt): GDT
+	{
+		$names = array_keys($gdt->getGDOData());
+		$id = $module->getID();
+		$in = implode("','", $names);
+		self::table()->deleteWhere("mv_module={$id} AND mv_name IN ('{$in}')");
 		return $gdt;
 	}
 
@@ -50,7 +61,7 @@ final class GDO_ModuleVar extends GDO
 
 	public function gdoAfterCreate(GDO $gdo): void
 	{
-		$gdo->reset(true);
+		$gdo->reset();
 	}
 
 	###########
@@ -59,7 +70,7 @@ final class GDO_ModuleVar extends GDO
 
 	public function gdoAfterUpdate(GDO $gdo): void
 	{
-		$gdo->reset(true);
+		$gdo->reset();
 	}
 
 	#############
@@ -68,7 +79,7 @@ final class GDO_ModuleVar extends GDO
 
 	public function gdoAfterDelete(GDO $gdo): void
 	{
-		$gdo->reset(true);
+		$gdo->reset();
 	}
 
 	public function getVarName(): string { return $this->gdoVar('mv_name'); }

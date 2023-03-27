@@ -18,7 +18,7 @@ class GDT_PasswordHash extends GDT_Password
 		return false;
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $var === null ? null : new BCrypt($var);
 	}

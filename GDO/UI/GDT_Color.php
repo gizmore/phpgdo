@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT_String;
@@ -7,23 +8,23 @@ use GDO\Core\GDT_String;
  * Color selection input.
  * Include the hash/pound character in DB to keep readability.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.1.0
  * @author gizmore
  */
 class GDT_Color extends GDT_String
 {
 
-	public int $min = 4;
+	public ?int $min = 4;
 
 	##############
 	### String ###
 	##############
-	public int $max = 7;
+	public ?int $max = 7;
 	public string $icon = 'color';
 	public string $pattern = '/^#(?:[a-z0-9]{3}){1,2}$/iD';
 
-	public static function html2rgb($input)
+	public static function html2rgb($input): array
 	{
 		$input = $input[0] === '#' ? substr($input, 1, 6) : substr($input, 0, 6);
 		return [

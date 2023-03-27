@@ -48,8 +48,8 @@ final class Module_Date extends GDO_Module
 	public function getACLDefaults(): array
 	{
 		return [
-			'timezone' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
-			'activity_accuracy' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
+			'timezone' => [GDT_ACLRelation::FRIEND_FRIENDS, '0', null],
+			'activity_accuracy' => [GDT_ACLRelation::FRIEND_FRIENDS, '0', null],
 		];
 	}
 
@@ -80,7 +80,7 @@ final class Module_Date extends GDO_Module
 	### Settings ###
 	################
 
-	public function onModuleInit()
+	public function onModuleInit(): void
 	{
 		if (
 			(!Application::$INSTANCE->isInstall()) &&
@@ -141,7 +141,7 @@ final class Module_Date extends GDO_Module
 
 	public function cfgUserTimezoneId(GDO_User $user = null): string
 	{
-		$user = $user ? $user : GDO_User::current();
+		$user = $user ?: GDO_User::current();
 		return $this->userSettingVar($user, 'timezone');
 	}
 

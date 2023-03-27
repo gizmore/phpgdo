@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use Exception;
@@ -10,14 +11,14 @@ use Throwable;
 /**
  * Base GDOv7 Exception class.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 5.0.3
  * @author gizmore
  */
 class GDO_Exception extends Exception
 {
 
-	public const DEFAULT_ERROR_CODE = 409;
+	final public const DEFAULT_ERROR_CODE = 409;
 
 	public function __construct(string $message = null, int $code = self::DEFAULT_ERROR_CODE, Throwable $previous = null)
 	{
@@ -32,8 +33,6 @@ class GDO_Exception extends Exception
 		$args = [
 			Color::red(get_class($this)),
 			TextStyle::italic($this->getMessage()),
-// 			TextStyle::bold(Debug::shortpath($this->getFile())),
-// 			TextStyle::bold($this->getLine()),
 		];
 		return t('err_exception', $args);
 	}

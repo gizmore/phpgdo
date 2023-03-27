@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
  * Object is an integer in the database. Uses WithObject trait for magic.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.4.0
  * @author gizmore
  * @see WithObject
@@ -15,7 +16,9 @@ class GDT_Object extends GDT_UInt
 	use WithObject;
 	use WithCompletion;
 
-	public const MAX_SUGGESTIONS = 10;
+	final public const MAX_SUGGESTIONS = 15;
+
+
 	public bool $searchable = true;
 
 	public function htmlClass(): string
@@ -23,7 +26,7 @@ class GDT_Object extends GDT_UInt
 		return ' gdt-object';
 	}
 
-	public function searchable(bool $searchable): self
+	public function searchable(bool $searchable): static
 	{
 		$this->searchable = $searchable;
 		return $this;
@@ -38,7 +41,7 @@ class GDT_Object extends GDT_UInt
 		{
 			return $obj->renderHTML();
 		}
-		if ($var = $this->getVar())
+		if (null !== ($var = $this->getVar()))
 		{
 			return $var;
 		}
@@ -47,7 +50,7 @@ class GDT_Object extends GDT_UInt
 
 	public function renderOption(): string
 	{
-		/** @var $obj GDO * */
+		/** @var GDO $obj * */
 		if ($obj = $this->getValue())
 		{
 			return $obj->renderOption();
@@ -90,16 +93,17 @@ class GDT_Object extends GDT_UInt
 		}
 		else
 		{
+			$ph = $this->renderPlaceholder();
 			$selected = [
 				'id' => null,
-				'text' => $this->renderPlaceholder(),
-				'display' => $this->renderPlaceholder(),
+				'text' => $ph,
+				'display' => $ph,
 			];
 		}
 		return array_merge(parent::configJSON(), [
 			'cascade' => $this->cascade,
 			'selected' => $selected,
-			'completionHref' => isset($this->completionHref) ? $this->completionHref : null,
+			'completionHref' => $this->completionHref ?? null,
 		]);
 	}
 

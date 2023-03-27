@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Hook;
 use GDO\Core\Module_Core;
 use GDO\DB\Cache;
@@ -20,7 +22,7 @@ use GDO\Util\FileUtil;
  *
  * Does not save last url. Calls last url.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.1
  * @author gizmore
  * @see GDO
@@ -42,7 +44,7 @@ class ClearCache extends MethodForm
 		$form->actions()->addField(GDT_Submit::make());
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$this->clearCache();
 		return GDT_Redirect::make()->redirectMessage('msg_cache_flushed')->back();
@@ -61,11 +63,8 @@ class ClearCache extends MethodForm
 			# needs a db set up :/
 			Database::instance()->clearCache();
 		}
-		# Flush memcached.
+		# Flush memcached and filecache.
 		Cache::flush();
-		# Flush filecache
-//		Cache::fileFlush();
-		# Flush GDO cache
 		# Reset application state
 		Application::$INSTANCE->reset();
 		# Remove minified JS

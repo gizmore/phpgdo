@@ -74,7 +74,7 @@ final class GDT_Path extends GDT_ComboBox
 		return $this->completionHref(href('Core', 'PathCompletion', $append));
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (parent::validate($value))
 		{

@@ -2,6 +2,7 @@
 namespace GDO\Tests;
 
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Method;
 use GDO\Form\GDT_Form;
 use GDO\User\GDO_User;
@@ -37,7 +38,7 @@ final class GDT_MethodTest extends GDT_Method
 	############
 	### Exec ###
 	############
-	public function execute(string $button = null): mixed
+	public function execute(string $button = null): GDT
 	{
 		$this->inputs = isset($this->inputs) ? $this->inputs : [];
 		if (!$button)

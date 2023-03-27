@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDO;
@@ -11,45 +12,42 @@ use GDO\Core\GDT_Index;
 /**
  * Table for user<=>permission relation.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
- * @see GDO_Permission
- *
- * @author gizmore
  * @see GDO_Permission
  */
 final class GDO_UserPermission extends GDO
 {
 
+	/**
+	 * Fetch all user permissions.
+	 *
+	 * @return string[]
+	 */
 	public static function load(GDO_User $user): array
 	{
 		if (!$user->isPersisted())
 		{
 			return GDT::EMPTY_ARRAY;
 		}
-		return self::table()->select('perm_name, perm_level')->
+		return self::table()->select('perm_name')->
 		joinObject('perm_perm_id')->
 		where("perm_user_id={$user->getID()}")->
-		exec()->fetchAllArray2dPair();
+		exec()->fetchColumn();
 	}
 
 	/**
 	 * Grant via name.
 	 */
-	public static function grant(GDO_User $user, string $permission)
+	public static function grant(GDO_User $user, string $permission): void
 	{
-		return self::grantPermission($user, GDO_Permission::getByName($permission));
+		self::grantPermission($user, GDO_Permission::getByName($permission));
 	}
 
 	/**
 	 * Grant via permission object.
-	 *
-	 * @param GDO_User $user
-	 * @param GDO_Permission $permission
-	 *
-	 * @return static
 	 */
-	public static function grantPermission(GDO_User $user, GDO_Permission $permission)
+	public static function grantPermission(GDO_User $user, GDO_Permission $permission): void
 	{
 		if (!$user->hasPermissionObject($permission))
 		{
@@ -61,14 +59,14 @@ final class GDO_UserPermission extends GDO
 		}
 	}
 
-	public static function revoke(GDO_User $user, string $permission)
+	public static function revoke(GDO_User $user, string $permission): void
 	{
-		return self::revokePermission($user, GDO_Permission::getByName($permission));
+		self::revokePermission($user, GDO_Permission::getByName($permission));
 	}
 
-	public static function revokePermission(GDO_User $user, GDO_Permission $permission)
+	public static function revokePermission(GDO_User $user, GDO_Permission $permission): void
 	{
-		return self::table()->deleteWhere("perm_user_id={$user->getID()} AND perm_perm_id={$permission->getID()}");
+		self::table()->deleteWhere("perm_user_id={$user->getID()} AND perm_perm_id={$permission->getID()}");
 	}
 
 	public function gdoCached(): bool { return false; }

@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Redirect;
@@ -14,7 +15,7 @@ use GDO\UI\GDT_Redirect;
 final class ForceSSL extends Method
 {
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$url = $_SERVER['REQUEST_URI'];
 		$url = GDT_Link::absolute($url, true);

@@ -59,7 +59,7 @@ abstract class MethodSort extends MethodAjax
 	 *
 	 * @see Method::execute()
 	 */
-	public function execute()
+	public function execute(): GDT
 	{
 		# Compatibility check
 		$table = $this->gdoSortObjects();

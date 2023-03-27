@@ -24,7 +24,7 @@ class GDT_Label extends GDT
 
 	public function renderXML(): string { return '<label>' . $this->renderLabelText() . '</label>'; }
 
-	public function renderJSON() { return $this->renderLabelText(); }
+	public function renderJSON(): array|string|null { return $this->renderLabelText(); }
 
 	public function renderHTML(): string { return "<label>{$this->renderLabelText()}</label>"; }
 

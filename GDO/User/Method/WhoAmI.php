@@ -1,6 +1,7 @@
 <?php
 namespace GDO\User\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\User\GDO_User;
 use GDO\User\GDT_ProfileLink;
@@ -25,7 +26,7 @@ final class WhoAmI extends Method
 		return t('gdo_user');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		return GDT_ProfileLink::make('user')->user(GDO_User::current())->nickname();
 	}

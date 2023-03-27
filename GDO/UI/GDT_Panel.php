@@ -37,7 +37,7 @@ class GDT_Panel extends GDT
 
 	public function renderCLI(): string
 	{
-		return $this->renderText() . "\n";
+		return $this->renderText(); # . "\n";
 	}
 
 }

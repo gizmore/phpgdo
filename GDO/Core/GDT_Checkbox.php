@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Table\GDT_Filter;
@@ -8,15 +9,15 @@ use GDO\UI\Color;
  * Boolean tri-state Checkbox; NULL, 1 and 0
  * Implemented as select to reflect undetermined status. Also HTML does not send unchecked boxes over HTTP.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  */
 class GDT_Checkbox extends GDT_Select
 {
 
-	public const TRUE = '1';
-	public const FALSE = '0';
+	public const TRUE = GDT::ONE;
+	public const FALSE = GDT::ZERO;
 	public const UNDETERMINED = '2';
 	public bool $undetermined = false;
 
@@ -26,7 +27,7 @@ class GDT_Checkbox extends GDT_Select
 		$this->emptyVar = '2';
 		$this->min = 0;
 		$this->max = 1;
-		$this->ascii(); # This enables string search (not binary).
+		$this->ascii();
 		$this->caseS();
 	}
 
@@ -41,8 +42,8 @@ class GDT_Checkbox extends GDT_Select
 	public function getChoices(): array
 	{
 		$choices = [
-			'0' => t('enum_no'),
-			'1' => t('enum_yes'),
+			self::FALSE => t('enum_no'),
+			self::TRUE => t('enum_yes'),
 		];
 		if ($this->undetermined)
 		{
@@ -52,19 +53,19 @@ class GDT_Checkbox extends GDT_Select
 		return $choices;
 	}
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		if ($value === true)
 		{
-			return '1';
+			return self::TRUE;
 		}
 		elseif ($value === false)
 		{
-			return '0';
+			return self::FALSE;
 		}
 		else
 		{
-			return '2';
+			return self::UNDETERMINED;
 		}
 	}
 
@@ -72,13 +73,13 @@ class GDT_Checkbox extends GDT_Select
 	### Var / Value ###
 	###################
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
-		if ($var === '0')
+		if ($var === self::FALSE)
 		{
 			return false;
 		}
-		elseif ($var === '1')
+		elseif ($var === self::TRUE)
 		{
 			return true;
 		}
@@ -88,7 +89,7 @@ class GDT_Checkbox extends GDT_Select
 		}
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		$this->initChoices();
 		if ($value === true)
@@ -122,12 +123,10 @@ class GDT_Checkbox extends GDT_Select
 		return $this;
 	}
 
-	protected function errorInvalidVar($var)
+	protected function errorInvalidVar(string $var): string
 	{
 		return t('err_invalid_gdt_var', [$this->gdoHumanName(), html($var)]);
 	}
-
-
 
 	##############
 	### Render ###

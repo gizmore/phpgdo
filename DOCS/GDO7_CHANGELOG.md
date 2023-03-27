@@ -1,6 +1,6 @@
 # GDOv7 Changelog (and Roadmap)
 
-###### [INDEX](./_GDO7_INDEX.md)
+###### [INDEX](./__GDO7_INDEX.md)
 
 Welcome to the GDOv7 changelog + combined roadmap.
 
@@ -8,28 +8,30 @@ Welcome to the GDOv7 changelog + combined roadmap.
 
 Please read it upside down, from bottom to top and sometimes again.
 
-## 7.0.3 (*planned*)
+## 7.0.3 (**planned**)
 
-- Modules versioned with 7.0.3 are unit tested in `gdo_test.sh --auto` mode and pass the phpgdo StormPHP code inspections.
+- Modules marked as 7.0.3 are unit tested in fuzzing mode and all pass phpgdo's StormPHP Code Inspections, well... very rarely with a warning i do not want 
+  to disable.
+- The source files marked as 7.0.3 are declared as strict.
 - The gdo_test.sh fuzzer. now only tries up to a valid value for a parameter. This is faster but misses conjunctured parameters.
-- Support for [PostGres DBMS](//github.com/gizmore/phpgdo-dbms-mysql)
+- Support for [PostGres DBMS](https:////github.com/gizmore/phpgdo-dbms-mysql)
 - The [Module_Docs](https://github.com/gizmore/phpgdo-docs) module is operable and produces usable docs.
   . There are usable docs.phpgdo.com and gdo7.phpgdo.com websites.
-- New providers for Module_DBMS. [MySQL](https://github.com/gizmore/phpgdo-dbms-mysql), [SQLite](https://github.com/gizmore/phpgdo-dbms-sqlite)
-  and [Postgres](https://github.com/gizmore/phpgdo-dbms-postgres).
 - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
 - New Website Module [Hydra](https://github.com/gizmore/phpgdo-hydra) to monitor services.
 
-## 7.0.2-r1 20.Mar.2023
 
+## 7.0.2-r2 26.Mar.2023
+
+- [Methods](../GDO/Core/Method.php) can now have a meta image to display in Chat clients.
+- The permission level has been removed from permissions.
 - StormPHP support added.
 - Almost all, and plenty, unit tests are passing. (**in progress**)
 - SEO URLs now control their rendering mode via a file suffix like `.txt`, `.html`, `.json` and `.xml`. (thx spaceone)
 - A new Core module *DBMS*, which is provided by two packages now; [phpgdo-mysql](https://github.com/gizmore/phpgdo-mysql)
   and [phpgdo-sqlite](https://github.com/gizmore/phpgdo-sqlite).
 - A new utility in my automated toolchain for productive environments; [php-preprocessor](https://github.com/gizmore/php-preprocessor). This build
-  step eliminates debug and profiler calls
-  en enabled via GDO_PREPROCESSOR for zero cost debugging.
+  step eliminates debug and profiler calls enabled via GDO_PREPROCESSOR for zero cost debugging.
 - New method Install.Website to generate configurations for various httpd.
 - The use of .htaccess is now discouraged for performance reasons. (untested)
 - the defaultName() method has been removed. The way for default names is to use ->name() in the constructor. (TODO)
@@ -76,12 +78,12 @@ Please read it upside down, from bottom to top and sometimes again.
   has been moved to
   [Module_User](../GDO/User/Module_User.php) ... **finally** :)
 
-- [AutomatedTests](../GDO/Tests/Test/AutomatedTests)
+- [AutomatedTests](../GDO/Tests/Test)
   now test all GDO to be gdoSaveable() when initial + plugged.
 
-- [AutomatedTests](../GDO/Tests/Test/AutomatedTests)
+- [AutomatedTests](../GDO/Tests/Test)
   now test all rendering modes on all
-  [GDO](GDO7_GDO.md) + [GDT](GDO7_GDT.md) automatically.
+  [GDO](./GDO7_GDO.md) + [GDT](./GDO7_GDT.md) automatically.
   Tests are performed With plugged and unplugged initials.
 
 ## 7.0.0 / released 22.May.2022 22:22:22, almost :)
@@ -107,10 +109,7 @@ core.
 
 - [GDO_Module]s(../GDO/Core/GDO_Module.php) can now have "Friendency" modules. Suggestions that would enhance the features of an installed module.
 
-- Modules can now come with a [LOGFILE.md](../GDO/Core/LOGFILE.md) which will be the default location for a module's changelog. I chose LOGFILE.md because it
-  fits a nice position in a module directory tree.
-
-- These GDT have been removed: [GDT_IconButton](../)
+- These GDTs have been removed: **GDT_IconButton**, **GDT_HTML**, **GDT_DIV**
 
 - Confusion resolved. RENDER_LIST is for <ul> and RENDER_OPTION is for <option>.
 
@@ -146,9 +145,11 @@ core.
 
 - The core has been rewritten with better CLI and Chatbots in mind.
 
-- A slightly changed bunch of [core modules](../GDO/). As their stuff is almost always needed anyway. These do not require an additional module repository.
+- A slightly changed bunch of [core modules](../GDO). As their stuff is almost always needed anyway. These do not require an additional module repository.
 
-- [Module_Websocket](../GDO/Websocket/Module Websocket.php) makes now use of the new rendering method `renderBinary` - seems perfect to fuse websocket szenarios
+- [Module_Websocket](https://github.com/gizmore/phpgdo-websocket/Module Websocket.php) makes now use of the new rendering method 
+  `renderBinary` - seems 
+  perfect to fuse websocket szenarios
   with a binary GDT driven protocol.
 
 - There is no more global GDT_Response with hacks and quirks. Methods can return any GDT now. The response code is stored in Application.

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDO;
@@ -18,7 +19,7 @@ use GDO\Table\GDT_Filter;
  *
  * @TODO: rename fallbackCurrentUser()
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
@@ -33,17 +34,17 @@ class GDT_User extends GDT_Object
 	### Ghost ###
 	#############
 	public string $withPermission;
-	public $noFilter = false;
-	private bool $ghost = false;
+	public bool $noFilter = false;
+	public bool $ghost = false;
 
 	protected function __construct()
 	{
 		parent::__construct();
-// 		$this->orderField = 'user_name';
 		$this->table(GDO_User::table());
 		$this->icon('face');
-//         $this->withCompletion();
-	}	public function ghost(bool $ghost = true): self
+	}
+
+	public function ghost(bool $ghost = true): static
 	{
 		$this->ghost = $ghost;
 		return $this;
@@ -53,9 +54,12 @@ class GDT_User extends GDT_Object
 	### Deleted ###
 	###############
 
-	public function defaultLabel(): self { return $this->label('user'); }
+	public function defaultLabel(): self
+	{
+		return $this->label('user');
+	}
 
-	public function withCompletion()
+	public function withCompletion(): static
 	{
 		return $this->completionHref(href('User', 'Completion', '&_fmt=json'));
 	}
@@ -67,13 +71,13 @@ class GDT_User extends GDT_Object
 	/**
 	 * Allow deleted users to be selected.
 	 */
-	public function deleted(bool $deleted = true): self
+	public function deleted(bool $deleted = true): static
 	{
 		$this->deleted = $deleted;
 		return $this;
 	}
 
-	public function fallbackCurrentUser(bool $fallbackCurrentUser = true): self
+	public function fallbackCurrentUser(bool $fallbackCurrentUser = true): static
 	{
 		$this->fallbackCurrentUser = $fallbackCurrentUser;
 		return $this;
@@ -83,13 +87,13 @@ class GDT_User extends GDT_Object
 	### Type ###
 	############
 
-	public function withType(string $withType): self
+	public function withType(string $withType): static
 	{
 		$this->withType = $withType;
 		return $this;
 	}
 
-	public function withPermission(string $withPermission): self
+	public function withPermission(string $withPermission): static
 	{
 		$this->withPermission = $withPermission;
 		return $this;
@@ -99,12 +103,11 @@ class GDT_User extends GDT_Object
 	### Perm ###
 	############
 
-	public function noFilter($noFilter = true)
+	public function noFilter(bool $noFilter = true): static
 	{
 		$this->noFilter = $noFilter;
 		return $this;
 	}
-
 
 
 	#############
@@ -117,26 +120,25 @@ class GDT_User extends GDT_Object
 	 */
 	public function getUser(): ?GDO_User
 	{
-		return $this->getValue();
+		$user = $this->getValue();
+		return $user ?? null;
 	}
 
-	/**
-	 * @return GDO_User
-	 */
-	public function getValue()
+	public function getValue(): bool|int|float|string|array|null|object
 	{
 		if ($user = parent::getValue())
 		{
 			return $user;
 		}
-		if ($this->fallbackCurrentUser)
+		elseif ($this->fallbackCurrentUser)
 		{
 			return GDO_User::current();
 		}
-		if ($this->ghost)
+		elseif ($this->ghost)
 		{
 			return GDO_User::ghost();
 		}
+		return null;
 	}
 
 	protected function getGDOsByName(string $var): array
@@ -157,19 +159,21 @@ class GDT_User extends GDT_Object
 	################
 	### Validate ###
 	################
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
-		/** @var $user GDO_User * */
+		/** @var GDO_User $user * */
 		$user = $value;
 
 		if (!parent::validate($value))
 		{
+			# Error in parent
 			return false;
 		}
 
 		if ($value === null)
 		{
-			return true; # Null check passed already
+			# Null check passed already
+			return true;
 		}
 
 		if (isset($this->withType))
@@ -220,7 +224,7 @@ class GDT_User extends GDT_Object
 		return t('unknown');
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return $this->renderHTML();
 	}
@@ -230,7 +234,7 @@ class GDT_User extends GDT_Object
 	##############
 
 
-	public function filterQuery(Query $query, GDT_Filter $f): self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		if (!$this->noFilter)
 		{
@@ -239,7 +243,7 @@ class GDT_User extends GDT_Object
 				$filter = GDO::escapeSearchS($filter);
 				$filter = "LIKE '%{$filter}%'";
 				$this->filterQueryCondition($query,
-					"user_name $filter OR user_guest_name $filter OR user_real_name $filter");
+					"user_name $filter OR user_guest_name $filter");
 			}
 		}
 		return $this;

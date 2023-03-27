@@ -99,12 +99,12 @@ final class Module_User extends GDO_Module
 	public function getACLDefaults(): array
 	{
 		return [
-			'color' => [GDT_ACLRelation::GUESTS, 0, null],
-			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
-			'last_activity' => [GDT_ACLRelation::FRIEND_FRIENDS, 0, null],
-			'profile_views' => [GDT_ACLRelation::ALL, 0, null],
-			'level_spent' => [GDT_ACLRelation::HIDDEN, 0, null],
-			'probably_malicious' => [GDT_ACLRelation::HIDDEN, 0, null],
+			'color' => [GDT_ACLRelation::GUESTS, '0', null],
+			'gender' => [GDT_ACLRelation::FRIEND_FRIENDS, '0', null],
+			'last_activity' => [GDT_ACLRelation::FRIEND_FRIENDS, '0', null],
+			'profile_views' => [GDT_ACLRelation::ALL, '0', null],
+			'level_spent' => [GDT_ACLRelation::HIDDEN, '0', null],
+			'probably_malicious' => [GDT_ACLRelation::HIDDEN, '0', null],
 		];
 	}
 

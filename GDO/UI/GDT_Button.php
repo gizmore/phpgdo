@@ -4,6 +4,7 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithGDO;
+use GDO\DB\Query;
 use GDO\Form\WithClickHandler;
 use GDO\Form\WithFormAttributes;
 
@@ -67,7 +68,9 @@ class GDT_Button extends GDT
 			$label = $this->htmlGDOHREF();
 		}
 		return $label;
-	}	public function renderHTML(): string
+	}
+
+	public function renderHTML(): string
 	{
 		return $this->renderHTMLCell(false);
 	}
@@ -90,11 +93,8 @@ class GDT_Button extends GDT
 		if (isset($this->gdo))
 		{
 			$method_name = 'href_' . $this->name;
-// 	    	if (method_exists($this->gdo, $method_name))
-// 	    	{
 			return call_user_func([
 				$this->gdo, $method_name]);
-// 	    	}
 		}
 		return null;
 	}
@@ -103,11 +103,12 @@ class GDT_Button extends GDT
 	{
 		$this->checkEnabled = $checkEnabled;
 		return $this;
-	}	public function renderCell(): string
+	}
+
+	public function renderCell(): string
 	{
 		return $this->renderHTMLCell(true);
 	}
-
 
 
 	private function renderHTMLCell(bool $cell): string
@@ -131,29 +132,10 @@ class GDT_Button extends GDT
 	}
 
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return sprintf('<a href="%s">%s</a>', $this->gdoHREF(), $this->htmlIcon());
 	}
-
-
-
-	#############
-	### Proxy ###
-	#############
-
-
-
-
-// 	public function gdoLabel()
-// 	{
-// 		return call_user_func(
-// 			[$this->gdo, 'display_'.$this->name]);
-// 	}
-
-	########################
-	### Enabled callback ###
-	########################
 
 
 }

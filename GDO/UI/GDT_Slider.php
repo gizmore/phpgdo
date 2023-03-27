@@ -32,7 +32,7 @@ class GDT_Slider extends GDT_Field
 
 	public function getGDOData(): array { return [$this->name => $this->var]; }
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (parent::validate($value))
 		{
@@ -52,6 +52,7 @@ class GDT_Slider extends GDT_Field
 			}
 			return true;
 		}
+		return false;
 	}
 
 	public function min($min)

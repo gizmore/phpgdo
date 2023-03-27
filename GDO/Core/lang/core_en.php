@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\lang;
-
 return [
 	# Site
 	'sitename' => def('GDO_SITENAME', 'GDOv7'),
 	'%s' => '%s',
 	'---n/a---' => '---n/a---',
+	'module_core' => 'Core',
 
 	# Errors
 	'error' => 'Error: %s',
@@ -248,6 +249,9 @@ return [
 	'information' => 'Information',
 	'health' => 'Health',
 	'logo' => 'Logo',
+	'admin' => 'Administration',
+	'approve' => 'Accept',
+	'captcha' => 'Captcha',
 
 	# CBX
 	'sel_all' => 'Select All',
@@ -298,6 +302,8 @@ return [
 	'msg_sort_success' => 'Successfully sorted?!',
 
 	### Config ###
+	'cfg_allow_editor_choice' => 'Allow Texteditor Choice?',
+	'cfg_allow_javascript' => 'Allow JavaScript?',
 	'cfg_asset_revision' => 'Asset revision / Client Cache poisoning',
 	'cfg_system_user' => 'System User',
 	'cfg_show_impressum' => 'Show impressum in the footer?',
@@ -370,7 +376,6 @@ The %2$s System',
 
 	'_acl_last_activity_relation' => '`Letzte Aktivität` sichtbar für',
 	'privacy_settings' => 'Privacy Settings',
-	'health' => 'Health',
 	'mt_core_forcessl' => 'Force Encryption',
 
 	'err_nothing_happened' => 'No error occured, but unexpectedly nothing happened.',
@@ -390,4 +395,9 @@ The %2$s System',
 	'edited_info' => 'Edited by %s %s ago',
 
 	'md_on_windows' => 'Run this script to install phpgdo on windows. Caution: git4windows and PHP8.0 is required. Warning: Do not run untrusted code!',
+	'menu_admin' => 'Admin',
+	'menu_profile' => 'Profile',
+	'level_spent' => 'Used Level',
+	'tt_level_spent' => 'Your spent amount of user level on site features.',
+	'md_impressum' => 'The impressum on %s. Who is responsible for it\'s content?',
 ];

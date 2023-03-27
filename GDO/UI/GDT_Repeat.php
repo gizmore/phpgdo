@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_Field;
 use GDO\Core\GDT_Method;
 use GDO\Core\WithInput;
 
@@ -13,7 +15,7 @@ use GDO\Core\WithInput;
  * This means it is always a positional finisher.
  * It is probably not possible at the moment to proxy a GDT_Composite like GDT_Message or GDT_Position.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see WithProxy
@@ -27,7 +29,7 @@ final class GDT_Repeat extends GDT
 	public int $minRepeat = 1;
 	public int $maxRepeat = 10;
 
-	public function proxy(GDT $proxy): self
+	public function proxy(GDT_Field $proxy): self
 	{
 		$this->proxy = $proxy;
 		$proxy->notNull();
@@ -35,7 +37,7 @@ final class GDT_Repeat extends GDT
 		return $this;
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		$vars = [];
 		$p = $this->proxy;
@@ -74,7 +76,7 @@ final class GDT_Repeat extends GDT
 		return array_reverse($back);
 	}
 
-	public function getValue()
+	public function getValue(): bool|int|float|string|array|null|object
 	{
 		$values = [];
 		$p = $this->proxy;
@@ -117,7 +119,7 @@ final class GDT_Repeat extends GDT
 		return $html;
 	}
 
-	private function getRepeatProxyElement(int $i): GDT
+	private function getRepeatProxyElement(int $i): GDT_Field
 	{
 		$newName = "{$this->getName()}[{$i}]";
 		return $this->proxy->gdtCopy($newName);
@@ -153,7 +155,7 @@ final class GDT_Repeat extends GDT
 		return $this->proxy->renderLabel();
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		$p = $this->proxy;
 

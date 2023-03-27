@@ -83,12 +83,12 @@ abstract class MethodQueryTable extends MethodTable
 	# ## Exec ###
 	# ###########
 
-	protected function beforeCalculateTable(GDT_Table $table) {}
+	protected function beforeCalculateTable(GDT_Table $table): void {}
 
 	/**
 	 * Calculate the GDT_Table object for queried tables.
 	 */
-	protected function calculateTable(GDT_Table $table)
+	protected function calculateTable(GDT_Table $table): void
 	{
 		$query = $table->query;
 		// $table->fetchAs($this->gdoFetchAs());
@@ -130,9 +130,9 @@ abstract class MethodQueryTable extends MethodTable
 		{
 			$table->countQuery($query->copy());
 			$table->paginated(true, $this->getCurrentHREF(), $this->getIPP());
-			$table->pagemenu->page($this->getPage());
 			$table->pagemenu->numItems($table->countItems());
 			$table->pagemenu->pageName = $this->getPageName();
+			$table->pagemenu->page($this->getPage());
 			$table->pagemenu->paginateQuery($table->query);
 		}
 	}

@@ -5,15 +5,14 @@ namespace GDO\DB;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDO_DBException;
+use GDO\Core\GDO_Error;
 use GDO\Core\GDT;
 use GDO\Core\Logger;
 use GDO\DBMS\Module_DBMS;
 use Throwable;
 
 /**
- * mySQLi abstraction layer.
- *
- * @TODO support postgres? This can be achieved via making module DB a separate module. Just need to move some classes to core and ifelse them in creation code?
+ * DB abstraction layer.
  *
  * @version 7.0.3
  * @since 3.0.0
@@ -28,7 +27,7 @@ class Database
 {
 
 	# Const
-	public const PRIMARY_USING = 'USING HASH'; # Default index algorithm for primary keys.
+	final public const PRIMARY_USING = 'USING HASH'; # Default index algorithm for primary keys.
 
 	# Instance
 	public static int $LOCKS = 0;
@@ -59,7 +58,7 @@ class Database
 	private static array $COLUMNS = []; # Set to 0/off, 1/on, 2/backtraces
 
 	# Performance single db
-	public $link;
+	public \mysqli|\SQLite3 $link;
 	public ?string $usedb;
 	public int $locks = 0;
 	public int $reads = 0;
@@ -72,7 +71,7 @@ class Database
 	private int $port = 3306;
 	private string $host, $user, $pass;
 	private ?string $db;
-	private int $debug = 0;
+	private int $debug;
 
 	public function __construct(string $host, string $user, string $pass, string $db = null, int $debug = 0)
 	{
@@ -87,7 +86,7 @@ class Database
 	public static function init(?string $databaseName = GDO_DB_NAME): self
 	{
 		Cache::init();
-		return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, $databaseName, intval(GDO_DB_DEBUG));
+		return new self(GDO_DB_HOST, GDO_DB_USER, GDO_DB_PASS, $databaseName, GDO_DB_DEBUG);
 	}
 
 	/**
@@ -108,23 +107,24 @@ class Database
 	{
 		if (!isset(self::$COLUMNS[$classname]))
 		{
-			$gdo = self::tableS($classname);
-			self::$COLUMNS[$classname] = self::hashedColumns($gdo);
+			self::$COLUMNS[$classname] = self::hashedColumns(self::tableS($classname));
 		}
 		return self::$COLUMNS[$classname];
 	}
 
-	public static function tableS(string $classname, bool $initCache = true): ?GDO
+	public static function tableS(string $classname): ?GDO
 	{
 		if (!isset(self::$TABLES[$classname]))
 		{
-			/** @var $gdo GDO * */
-			self::$TABLES[$classname] = $gdo = new $classname();
+			/** @var GDO $gdo * */
+			$gdo = call_user_func([$classname, 'tableGDO']);
 
 			if ($gdo->gdoAbstract())
 			{
 				return null;
 			}
+
+			self::$TABLES[$classname] = $gdo;
 
 			# Always init a cache item.
 			$gdo->initCache();
@@ -145,14 +145,7 @@ class Database
 		$columns = [];
 		foreach ($gdo->gdoColumns() as $gdt)
 		{
-			if ($name = $gdt->getName())
-			{
-				$columns[$name] = $gdt;
-			}
-			else
-			{
-				$columns[] = $gdt;
-			}
+			$columns[$gdt->getName()] = $gdt;
 		}
 		return $columns;
 	}
@@ -165,9 +158,19 @@ class Database
 
 	public function __destruct()
 	{
- 		$this->closeLink();
+		try
+		{
+			$this->closeLink();
+		}
+		catch (GDO_DBException $e)
+		{
+			Logger::logException($e);
+		}
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function closeLink(): void
 	{
 		if (isset($this->link))
@@ -177,6 +180,9 @@ class Database
 		}
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public static function DBMS(bool $withLink = true): Module_DBMS
 	{
 		if (!self::$DBMS)
@@ -199,7 +205,10 @@ class Database
 		return self::$INSTANCE;
 	}
 
-	public function getLink()
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function getLink(): \mysqli|\SQLite3
 	{
 		if (!isset($this->link))
 		{
@@ -208,21 +217,22 @@ class Database
 		return $this->link;
 	}
 
-	private function openLink()
+	/**
+	 * @throws GDO_DBException
+	 */
+	private function openLink(): \SQLite3|\mysqli
 	{
 		try
 		{
 			$t1 = microtime(true); #PP#delete#
-			if ($this->link = $this->connect())
-			{
-				return $this->link;
-			}
+			$this->link = $this->connect();
+			return $this->link;
 		}
 		catch (Throwable $e)
 		{
 			throw new GDO_DBException('err_db_connect', [$e->getMessage()]);
 		}
-			#PP#start#
+		#PP#start#
 		finally
 		{
 			$timeTaken = microtime(true) - $t1;
@@ -232,7 +242,10 @@ class Database
 		#PP#end#
 	}
 
-	public function connect()
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function connect(): \mysqli|\SQLite3
 	{
 		return self::DBMS(false)->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
 	}
@@ -242,7 +255,10 @@ class Database
 		return isset($this->link);
 	}
 
-	public function queryRead(string $query, bool $buffered = true)
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function queryRead(string $query, bool $buffered = true): \mysqli_result|\SQLite3Result
 	{
 		self::$READS++; #PP#delete#
 		$this->reads++; #PP#delete#
@@ -253,24 +269,20 @@ class Database
 	### Table cache ###
 	###################
 
-	private function query(string $query, bool $buffered = true)
+	/**
+	 * @throws GDO_DBException
+	 */
+	private function query(string $query, bool $buffered = true): \mysqli_result|\SQLite3Result|bool
 	{
+		$dbms = self::DBMS();
 		$t1 = microtime(true); #PP#delete#
 
-		$result = self::DBMS()->dbmsQuery($query, $buffered);
+		$result = $dbms->dbmsQuery($query, $buffered);
 
 		if (!$result)
 		{
-			if ($this->link)
-			{
-				$error = self::DBMS()->dbmsError($this->link);
-				$errno = self::DBMS()->dbmsErrno($this->link);
-			}
-			else
-			{
-				$error = t('err_db_no_link');
-				$errno = 0;
-			}
+			$error = $dbms->dbmsError();
+			$errno = $dbms->dbmsErrno();
 			throw new GDO_DBException('err_db', [$errno, html($error), html($query)]);
 		}
 
@@ -289,7 +301,7 @@ class Database
 			if ($this->debug > 1)
 			{
 				$trace = Debug::backtrace('#' . self::$QUERIES . ' Backtrace', false);
-				$sep = str_repeat('- ', 80);
+				$sep = str_repeat('--', 120);
 				Logger::log('queries', "{$trace}\n\n{$sep}\n\n");
 			}
 		}
@@ -297,7 +309,10 @@ class Database
 		return $result;
 	}
 
-	public function queryWrite($query)
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function queryWrite(string $query): bool
 	{
 		if (GDO_DB_READONLY)
 		{
@@ -322,6 +337,9 @@ class Database
 	### Table create ###
 	####################
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function tableExists(string $tableName): bool
 	{
 		return Database::DBMS()->dbmsTableExists($tableName);
@@ -329,6 +347,8 @@ class Database
 
 	/**
 	 * Create a database table from a GDO.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function createTable(GDO $gdo): void
 	{
@@ -343,37 +363,54 @@ class Database
 		}
 	}
 
-	public function
-	disableForeignKeyCheck()
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function disableForeignKeyCheck(): void
 	{
-		return $this->enableForeignKeyCheck(false);
+		$this->enableForeignKeyCheck(false);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function enableForeignKeyCheck(bool $bool = true): void
 	{
 		Database::DBMS()->dbmsForeignKeys($bool);
 	}
 
-	public function dropTable(GDO $gdo)
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function dropTable(GDO $gdo): void
 	{
-		return $this->dropTableName($gdo->gdoTableIdentifier());
+		$this->dropTableName($gdo->gdoTableIdentifier());
 	}
 
 	###################
 	### DB Creation ###
 	###################
 
-	public function dropTableName(string $tableName)
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function dropTableName(string $tableName): void
 	{
-		return self::DBMS()->dbmsDropTable($tableName);
+		self::DBMS()->dbmsDropTable($tableName);
 	}
 
-	public function truncateTable(GDO $gdo)
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function truncateTable(GDO $gdo): void
 	{
 		$tableName = $gdo->gdoTableIdentifier();
-		return self::DBMS()->dbmsTruncateTable($tableName);
+		self::DBMS()->dbmsTruncateTable($tableName);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function createDatabase(string $databaseName): void
 	{
 		self::DBMS()->dbmsCreateDB($databaseName);
@@ -383,11 +420,17 @@ class Database
 	### Transaction ###
 	###################
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function dropDatabase(string $databaseName): void
 	{
 		self::DBMS()->dbmsDropDB($databaseName);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function useDatabase(string $databaseName): void
 	{
 		$this->db = $databaseName;
@@ -423,7 +466,10 @@ class Database
 		self::$QUERY_TIME += $tt; #PP#delete#
 	}
 
-	public function transactionRollback()
+	/**
+	 * @throws GDO_DBException
+	 */
+	public function transactionRollback(): void
 	{
 		self::DBMS()->dbmsRollback();
 	}
@@ -432,6 +478,9 @@ class Database
 	### FKCheck ###
 	###############
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function lock(string $lock, int $timeout = 30): bool
 	{
 		$this->locks++; #PP#delete#
@@ -439,6 +488,9 @@ class Database
 		return self::DBMS()->dbmsLock($lock, $timeout);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function unlock(string $lock): bool
 	{
 		return self::DBMS()->dbmsUnlock($lock);
@@ -450,6 +502,8 @@ class Database
 
 	/**
 	 * Import a large SQL file.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function parseSQLFile(string $path): void
 	{

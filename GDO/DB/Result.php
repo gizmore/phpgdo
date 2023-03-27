@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\DB;
 
 use GDO\Core\GDO;
@@ -7,7 +8,7 @@ use GDO\Core\GDO;
  * A Database query result.
  * Use fetchTable() to control the object type for fetching objects.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see ArrayResult
@@ -19,10 +20,7 @@ class Result
 
 	private bool $useCache;
 
-	/**
-	 * @var resource
-	 */
-	private $result;
+	private \mysqli_result|\SQLite3Result $result;
 
 	###################
 	### Instanciate ###
@@ -93,9 +91,9 @@ class Result
 			else
 			{
 				$class = $table->gdoClassName();
-				/** @var $object GDO * */
-				$object = new $class();
-				return $object->setGDOVars($gdoData)->setPersisted();
+				/** @var GDO $object * */
+				$object = call_user_func([$class, 'entity'], $gdoData);
+				return $object->setPersisted();
 			}
 		}
 		return null;
@@ -123,7 +121,7 @@ class Result
 	public function fetchAllObjectsAs(GDO $table, bool $json = false): array
 	{
 		$objects = [];
-		while ($object = $this->fetchAs($table, $json))
+		while ($object = $this->fetchAs($table))
 		{
 			$objects[] = $json ? $object->toJSON() : $object;
 		}
@@ -190,6 +188,18 @@ class Result
 	}
 
 	/**
+	 * Fetch the first value of the next row. @TODO rename to fetchVar()
+	 */
+	public function fetchValue(): ?string
+	{
+		if ($row = $this->fetchRow())
+		{
+			return $row[0];
+		}
+		return null;
+	}
+
+	/**
 	 * Fetch all, but only a single column as simple array.
 	 */
 	public function fetchAllValues(): array
@@ -200,18 +210,6 @@ class Result
 			$values[] = $value;
 		}
 		return $values;
-	}
-
-	/**
-	 * Fetch the first value of the next row. @TODO rename to fetchVar()
-	 */
-	public function fetchValue(): ?string
-	{
-		if ($row = $this->fetchRow())
-		{
-			return $row[0];
-		}
-		return null;
 	}
 
 	public function getDummy(): GDO

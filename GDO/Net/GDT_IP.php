@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\GDT_String;
@@ -7,7 +8,7 @@ use GDO\Core\GDT_String;
  * IP datatype.
  * Current IP is assigned at the very bottom.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 4.0.0
  * @author gizmore
  */
@@ -19,8 +20,8 @@ final class GDT_IP extends GDT_String
 	###############
 	### IP Util ###
 	###############
-	public int $min = 3; # for connections like websocket too!
-	public int $max = 45;
+	public ?int $min = 3; # for connections like websocket too!
+	public ?int $max = 45;
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	public string $pattern = '/^[.:0-9a-f]{3,45}$/D';
@@ -30,7 +31,11 @@ final class GDT_IP extends GDT_String
 	### Current ###
 	###############
 
-	public static function current(): string { return self::$CURRENT; }
+	public static function current(): string
+	{
+		return self::$CURRENT;
+	}
+
 
 	##############
 	### String ###
@@ -38,17 +43,17 @@ final class GDT_IP extends GDT_String
 
 	public static function isIPv4(string $ip): bool
 	{
-		return strpos($ip, '.') !== false;
+		return str_contains($ip, '.');
 	}
 
 	public static function isIPv6(string $ip): bool
 	{
-		return strpos($ip, ':') !== false;
+		return str_contains($ip, ':');
 	}
 
 	public static function isLocal(string $ip = null): bool
 	{
-		$ip = $ip ? $ip : self::$CURRENT;
+		$ip = $ip ?: self::$CURRENT;
 		return
 			($ip === '::1') ||
 			(str_starts_with($ip, '127')) ||
@@ -61,12 +66,9 @@ final class GDT_IP extends GDT_String
 	/**
 	 * Get the IP netmask for a number of bits.
 	 *
-	 * @param int $bits
-	 *
-	 * @return int
-	 * @example netmask(8) => 11111111 00000000 00000000 00000000 =>
+	 * @example netmask(8) => 11111111 00000000 00000000 00000000
 	 */
-	public static function netmask($bits)
+	public static function netmask(int $bits): int
 	{
 		return bindec(str_repeat('1', $bits) . str_repeat('0', 32 - $bits));
 	}
@@ -90,11 +92,9 @@ final class GDT_IP extends GDT_String
 
 	public function useCurrent(bool $useCurrent = true): self
 	{
-		$initial = $useCurrent ? self::$CURRENT : null;
-		return $this->initial($initial);
+		return $this->initial($useCurrent ? self::$CURRENT : null);
 	}
 
 }
 
-# Assign current IP.
-GDT_IP::$CURRENT = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+GDT_IP::$CURRENT = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';

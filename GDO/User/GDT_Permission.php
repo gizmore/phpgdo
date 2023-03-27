@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDT_ObjectSelect;
@@ -6,14 +7,14 @@ use GDO\Core\GDT_ObjectSelect;
 /**
  * Permission select.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.1.0
  * @author gizmore
  */
 final class GDT_Permission extends GDT_ObjectSelect
 {
 
-	public $onlyPermitted = false;
+	public bool $onlyPermitted = false;
 
 	protected function __construct()
 	{
@@ -27,7 +28,10 @@ final class GDT_Permission extends GDT_ObjectSelect
 	### Permitted ###
 	#################
 
-	public function defaultLabel(): self { return $this->label('permission'); }
+	public function defaultLabel(): self
+	{
+		return $this->label('permission');
+	}
 
 	public function getChoices(): array
 	{

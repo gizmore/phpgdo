@@ -14,7 +14,7 @@ class GDT_Float extends GDT_Int
 	#######################
 	public int $decimals = 4;
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		if ($var === null)
 		{

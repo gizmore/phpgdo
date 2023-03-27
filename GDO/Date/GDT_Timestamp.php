@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date;
 
 use DateTime;
 use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\Core\GDT_DBField;
+use GDO\Core\GDT_Method;
 use GDO\Core\GDT_Template;
 use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
@@ -24,7 +26,7 @@ use GDO\UI\WithLabel;
  *
  * @TODO: DateTimes transfer as string for the websocket protocol.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.7
  * @author gizmore
  */
@@ -42,29 +44,26 @@ class GDT_Timestamp extends GDT_DBField
 	#############
 	public string $dateStartView = 'month';
 	public string $format = Time::FMT_SHORT;
-	public string $minDate;
-	public string $maxDate;
+	public ?string $minDate = null;
+	public ?string $maxDate = null;
 	public int $millis = 3;
-	public $defaultNow = false;
+	public bool $defaultNow = false;
 
 	#####################
 	### Starting view ###
 	#####################
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
-		if ($var !== null)
-		{
-			return Time::parseDateDB($var);
-		}
+		return $var === null ? null : Time::parseDateDB($var);
 	}
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
-		return $value === null ? null : Time::displayTimestamp($value, 'db', null, Time::UTC);
+		return $value === null ? null : Time::displayTimestamp($value, 'db', '', Time::UTC);
 	}
 
-	public function initialSnap($mod)
+	public function initialSnap(int $mod): static
 	{
 		$time = Application::$TIME;
 		$time = $time - ($time % $mod) + $mod;
@@ -75,12 +74,12 @@ class GDT_Timestamp extends GDT_DBField
 	### Format ###
 	##############
 
-	public function initialNow()
+	public function initialNow(): static
 	{
 		return $this->initialAgo(0);
 	}
 
-	public function initialAgo(int $secondsAgo): self
+	public function initialAgo(int $secondsAgo): static
 	{
 		return $this->initial(Time::getDate(Application::$MICROTIME - $secondsAgo));
 	}
@@ -89,24 +88,15 @@ class GDT_Timestamp extends GDT_DBField
 	### Min/Max ###
 	###############
 
-	public function getDate()
+	public function getDate(): ?string
 	{
 		return $this->getVar();
-	}
-
-	public function getVar()
-	{
-		if ($var = parent::getVar())
-		{
-			$var = trim($var);
-		}
-		return $var ? $var : null;
 	}
 
 	/**
 	 * Validate a Datetime.
 	 */
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!parent::validate($value))
 		{
@@ -118,7 +108,7 @@ class GDT_Timestamp extends GDT_DBField
 			return true;
 		}
 
-		/** @var $value DateTime * */
+		/** @var DateTime $value * */
 		if (isset($this->minDate))
 		{
 			$t = Time::getTimestamp($this->minDate);
@@ -150,9 +140,8 @@ class GDT_Timestamp extends GDT_DBField
 
 	public function plugVars(): array
 	{
-		$name = $this->name;
 		return [
-			[$name => Time::getDate()],
+			[$this->name => Time::getDate()],
 		];
 	}
 
@@ -167,7 +156,10 @@ class GDT_Timestamp extends GDT_DBField
 
 	public function renderCLI(): string { return $this->renderLabel() . ': ' . $this->getVar(); }
 
-	public function renderJSON() { return Time::getTimestamp($this->getVar()) * 1000; }
+	public function renderJSON(): array|string|null
+	{
+		return (string) (Time::getTimestamp($this->getVar()) * 1000.0);
+	}
 
 	public function displayVar(string $var = null): string
 	{
@@ -178,7 +170,7 @@ class GDT_Timestamp extends GDT_DBField
 		return GDT::EMPTY_STRING;
 	}
 
-	public function inputToVar($input): ?string
+	public function inputToVar(array|string|null|GDT_Method $input): ?string
 	{
 		if ($input === null)
 		{
@@ -219,8 +211,8 @@ class GDT_Timestamp extends GDT_DBField
 		return array_merge(parent::configJSON(), [
 			'dateStartView' => $this->dateStartView,
 			'format' => $this->format,
-			'minDate' => isset($this->minDate) ? $this->minDate : null,
-			'minDate' => isset($this->maxDate) ? $this->maxDate : null,
+			'minDate' => $this->minDate,
+			'maxDate' => $this->maxDate,
 			'millis' => $this->millis,
 		]);
 	}
@@ -234,20 +226,17 @@ class GDT_Timestamp extends GDT_DBField
 	### Now ###
 	###########
 
-	public function filterQuery(Query $query, GDT_Filter $f): self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		$filter = $this->filterVar($f);
 		if ($filter)
 		{
-			if ($condition = $this->searchQuery($query, $filter, true))
-			{
-				$this->filterQueryCondition($query, $condition);
-			}
+			$this->searchQuery($query, $filter);
 		}
 		return $this;
 	}
 
-	public function startWithYear()
+	public function startWithYear(): static
 	{
 		$this->dateStartView = 'year';
 		return $this;
@@ -257,13 +246,13 @@ class GDT_Timestamp extends GDT_DBField
 	### Validate ###
 	################
 
-	public function startWithMonth()
+	public function startWithMonth(): static
 	{
 		$this->dateStartView = 'month';
 		return $this;
 	}
 
-	public function format(string $format): self
+	public function format(string $format): static
 	{
 		$this->format = $format;
 		return $this;
@@ -273,38 +262,39 @@ class GDT_Timestamp extends GDT_DBField
 	### Render ###
 	##############
 
-	public function minAge(int $duration): self { return $this->minTimestamp(Application::$TIME - $duration); }
+	public function minAge(int $duration): static
+	{
+		return $this->minTimestamp(Application::$TIME - $duration);
+	}
 
-	public function minTimestamp($minTimestamp)
+	public function minTimestamp($minTimestamp): static
 	{
 		return $this->minDate(Time::getDate($minTimestamp));
 	}
 
-	public function minDate($minDate)
+	public function minDate(?string $minDate): static
 	{
 		$this->minDate = $minDate;
 		return $this;
 	}
 
-	public function maxAge(int $duration): self { return $this->maxTimestamp(Application::$TIME + $duration); }
+	public function maxAge(int $duration): self
+	{
+		return $this->maxTimestamp(Application::$TIME + $duration);
+	}
 
-	public function maxTimestamp($maxTimestamp)
+	public function maxTimestamp($maxTimestamp): static
 	{
 		return $this->maxDate(Time::getDate($maxTimestamp));
 	}
 
-	public function maxDate($maxDate)
+	public function maxDate($maxDate): static
 	{
 		$this->maxDate = $maxDate;
 		return $this;
 	}
 
-// 	public function renderCard() : string
-// 	{
-// 		die('XXXXX');
-// 	}
-
-	public function maxNow()
+	public function maxNow(): static
 	{
 		return $this->maxDate(Time::getDate());
 	}
@@ -313,12 +303,12 @@ class GDT_Timestamp extends GDT_DBField
 	### Config ###
 	##############
 
-	public function minNow(): self
+	public function minNow(): static
 	{
 		return $this->minTimestamp(Application::$TIME);
 	}
 
-	public function millis(int $millis = 3): self
+	public function millis(int $millis = 3): static
 	{
 		$this->millis = $millis;
 		return $this;
@@ -328,26 +318,15 @@ class GDT_Timestamp extends GDT_DBField
 	### Filter ###
 	##############
 
-	public function defaultNow($defaultNow = true)
+	public function defaultNow($defaultNow = true): static
 	{
 		$this->defaultNow = $defaultNow;
 		return $this->initial(Time::getDate());
 	}
 
-	public function renderAge(): string { return Time::displayAge($this->getVar()); }
-
-//	##############
-//	### Search ###
-//	##############
-//	public function searchQuery(Query $query, $searchTerm, $first)
-//	{
-//		return $this->searchCondition($searchTerm);
-//	}
-//
-//	protected function searchCondition($searchTerm)
-//	{
-//		$searchTerm = GDO::escapeSearchS($searchTerm);
-//		return "{$this->name} LIKE '%{$searchTerm}%'";
-//	}
+	public function renderAge(): string
+	{
+		return Time::displayAge($this->getVar());
+	}
 
 }

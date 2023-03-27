@@ -1,20 +1,22 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Util;
 
 use FilesystemIterator;
 use GDO\Core\GDO_Error;
 use GDO\Core\GDT_Float;
 use GDO\Core\Logger;
+use GDO\File\Module_File;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Throwable;
 
 /**
- * File system utilities which are too common for the bigger file handling module.
+ * File system utilities which are too common for Module_File.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
+ * @see Module_File
  */
 final class FileUtil
 {
@@ -22,30 +24,45 @@ final class FileUtil
 	##############
 	### Basics ###
 	##############
-	public static function createdDir(string $path, bool $throw = true): ?string
+	/**
+	 * Create a dir, do not crash, but rather just log errors.
+	 * Return back the parameter.
+	 */
+	public static function createdDir(string $path): string
 	{
-		if (self::createDir($path, $throw))
+		try
 		{
-			return $path;
+			self::createDir($path);
 		}
-		return null;
+		catch (GDO_Error $ex)
+		{
+			Logger::logException($ex);
+		}
+		return $path;
 	}
 
-	public static function createDir(string $path, bool $throw = true): bool
+	/**
+	 * Try to create a directory, but crash with exception on failure.
+	 * @throws GDO_Error
+	 */
+	public static function createDir(string $path): true
 	{
 		if (self::isDir($path))
 		{
 			if (!is_writeable($path))
 			{
-				if ($throw)
-				{
-					throw new GDO_Error('err_cannot_write', [html($path)]);
-				}
-				return false;
+				throw new GDO_Error('err_cannot_write', [html($path)]);
 			}
-			return true;
 		}
-		return mkdir($path, GDO_CHMOD, true);
+		elseif (is_file($path))
+		{
+			throw new GDO_Error('err_cannot_write', [html($path)]);
+		}
+		elseif (!mkdir($path, GDO_CHMOD, true))
+		{
+			throw new GDO_Error('err_cannot_write', [html($path)]);
+		}
+		return true;
 	}
 
 	/**
@@ -74,7 +91,6 @@ final class FileUtil
 	public static function isFile(string $filename): bool
 	{
 		return is_file($filename) && is_readable($filename);
-#    	return stream_resolve_include_path($filename) !== false; IS TOLD TO BE FAST... lies?
 	}
 
 	/**
@@ -86,16 +102,19 @@ final class FileUtil
 	}
 
 	/**
-	 * Copy a file. ???
-	 *
-	 * @deprecated
+	 * Copy a file.
 	 */
 	public static function copy(string $src, string $dest): bool
 	{
-		$destDir = Strings::rsubstrTo($dest, '/');
-		if (self::createDir($destDir))
+		try
 		{
+			$destDir = Strings::rsubstrTo($dest, '/');
+			self::createDir($destDir);
 			return copy($src, $dest);
+		}
+		catch (GDO_Error $ex)
+		{
+			Logger::logException($ex);
 		}
 		return false;
 	}
@@ -109,14 +128,7 @@ final class FileUtil
 	 */
 	public static function path(string $path): string
 	{
-// 		if (Process::isWindows())
-// 		{
-// 			return str_replace('/', '\\', $path);
-// 		}
-// 		else
-// 		{
 		return str_replace('\\', '/', $path);
-// 		}
 	}
 
 	###############
@@ -156,6 +168,8 @@ final class FileUtil
 	##############
 	/**
 	 * Delete a single file.
+	 *
+	 * @throws GDO_Error
 	 */
 	public static function removeFile(string $path, bool $throw = true): bool
 	{
@@ -178,44 +192,49 @@ final class FileUtil
 		{
 			throw new GDO_Error('err_delete_file', [html($path)]);
 		}
-		else
+		elseif (is_writable($path))
 		{
 			return true;
+		}
+		elseif ($throw)
+		{
+			throw new GDO_Error('err_write_file', [html($path)]);
+		}
+		else
+		{
+			return false;
 		}
 	}
 
 	/**
 	 * Remove a dir recursively, file by file.
 	 *
-	 * @deprecated use system(rm -rf) because this is slow.
+	 * @throws GDO_Error
 	 */
 	public static function removeDir(string $dir, bool $throw = true): bool
 	{
 		if (is_dir($dir))
 		{
-			$objects = scandir($dir);
+			$objects = self::scandir($dir);
 			foreach ($objects as $object)
 			{
-				if ($object !== '.' && $object !== '..')
-				{
+//				if ($object !== '.' && $object !== '..')
+//				{
 					$obj = "{$dir}/{$object}";
 					if (is_dir($obj))
 					{
-						self::removeDir($obj, $throw);
+						return self::removeDir($obj, $throw);
 					}
-					else
+					elseif (!@unlink($obj))
 					{
-						if (!@unlink($obj))
+						if ($throw)
 						{
-							if ($throw)
-							{
-								throw new GDO_Error('err_delete_file', [html($obj)]);
-							}
-							Logger::logError(ten('err_delete_file', [html($obj)]));
-							return false;
+							throw new GDO_Error('err_delete_file', [html($obj)]);
 						}
+//						Logger::logError(ten('err_delete_file', [html($obj)]));
+						return false;
 					}
-				}
+//				}
 			}
 			if (!@rmdir($dir))
 			{
@@ -223,10 +242,9 @@ final class FileUtil
 				{
 					throw new GDO_Error('err_delete_dir', [html($dir)]);
 				}
-				Logger::logError(ten('err_delete_dir', [html($dir)]));
+//				Logger::logError(ten('err_delete_dir', [html($dir)]));
 				return false;
 			}
-			return @rmdir($dir);
 		}
 		elseif (is_file($dir))
 		{
@@ -252,21 +270,22 @@ final class FileUtil
 		$txt = self::getTextArray();
 		$i = 0;
 		$rem = '0';
-		while (bccomp($bytes, $factor) >= 0)
+		$sbytes = (string) $bytes;
+		$sfactor = (string) $factor;
+		while (bccomp($sbytes, $sfactor) >= 0)
 		{
-			$rem = bcmod($bytes, $factor);
-			$bytes = bcdiv($bytes, $factor);
+			$rem = bcmod($sbytes, $sfactor);
+			$bytes = bcdiv($sbytes, $sfactor);
 			$i++;
 		}
 
 		if ($i === 0)
 		{
-			# empty?
-			return sprintf('%s %s', $bytes, $txt[$i]);
+			return sprintf('%s %s', $sbytes, $txt[$i]);
 		}
 
 		$var = $bytes + ($rem / $factor);
-		return GDT_Float::displayS($var, $digits) . ' ' . $txt[$i];
+		return GDT_Float::displayS((string)$var, $digits) . ' ' . $txt[$i];
 	}
 
 	private static function getTextArray(): array
@@ -281,6 +300,7 @@ final class FileUtil
 				'GB',
 				'TB',
 				'PB',
+				'EB',
 			];
 		}
 		return $txt;
@@ -300,12 +320,12 @@ final class FileUtil
 			{
 				if (stripos($s, $b) !== false)
 				{
-					$mul = preg_replace('/[^\\.0-9]/', '', $s);
-					return (int)bcmul($mul, bcpow(1024, $pow));
+					$mul = preg_replace('/[^.0-9]/', '', $s);
+					return (int)bcmul($mul, bcpow('1024', (string)$pow));
 				}
 			}
 		}
-		return (int)$s;
+		return (int) $s;
 	}
 
 	#########################
@@ -313,17 +333,25 @@ final class FileUtil
 	#########################
 	/**
 	 * Merge two directories recursively.
-	 * Used in TBS Importer only *chuckle*
+	 * Used in TBS Importer. Only *chuckles*
 	 */
 	public static function mergeDirectory(string $source, string $target): bool
 	{
-		Filewalker::traverse($source, null, function ($entry, $fullpath) use ($source, $target)
+		try
 		{
-			$newpath = str_replace($source, $target, $fullpath);
-			FileUtil::createDir(Strings::rsubstrTo($newpath, '/'));
-			copy($fullpath, $newpath);
-		});
-		return true;
+			Filewalker::traverse($source, null, function ($entry, $fullpath) use ($source, $target)
+			{
+				$newpath = str_replace($source, $target, $fullpath);
+				self::createDir(Strings::rsubstrTo($newpath, '/'));
+				copy($fullpath, $newpath);
+			});
+			return true;
+		}
+		catch (\Throwable $ex)
+		{
+			Logger::logException($ex);
+			return false;
+		}
 	}
 
 	############
@@ -355,7 +383,7 @@ final class FileUtil
 	 */
 	public static function saneFilename(string $filename): string
 	{
-		return str_replace(['/', '\\', '$', ':'], '#', $filename);
+		return str_replace(['/', '\\', '$', ':', '!', '^', '~'], '#', $filename);
 	}
 
 	################
@@ -363,11 +391,6 @@ final class FileUtil
 	################
 	/**
 	 * Get the last line of a file.
-	 *
-	 * @param string $filename
-	 *
-	 * @throws Throwable
-	 * @return string
 	 */
 	public static function lastLine(string $filename): string
 	{
@@ -375,10 +398,6 @@ final class FileUtil
 		{
 			$fh = fopen($filename, 'r');
 			return self::_lastLine($fh);
-		}
-		catch (Throwable $ex)
-		{
-			throw $ex;
 		}
 		finally
 		{
@@ -392,7 +411,6 @@ final class FileUtil
 	/**
 	 * Get the last line from a filehandle.
 	 * Destroys seek.
-	 *
 	 * @param resource $fh
 	 */
 	public static function _lastLine($fh): string

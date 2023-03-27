@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
 use GDO\Core\GDT_Tuple;
 use GDO\Core\Method;
@@ -31,7 +32,7 @@ final class PrivacyToggles extends Method
 		return t('privacy_settings');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		ModuleLoader::instance()->loadModuleFS('Install')->onLoadLanguage();
 		Trans::inited();

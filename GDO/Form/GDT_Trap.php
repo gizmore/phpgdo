@@ -24,7 +24,7 @@ final class GDT_Trap extends GDT_String
 		return "<div class=\"dc\">$html</div>";
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if ($value === null)
 		{

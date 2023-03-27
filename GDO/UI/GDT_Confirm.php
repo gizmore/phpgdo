@@ -21,7 +21,7 @@ final class GDT_Confirm extends GDT_String
 		return $this->label('please_confirm_with', [t($confirmation)]);
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		return $this->confirmation === $value ? true : $this->error('err_confirm', [t($this->confirmation)]);
 	}

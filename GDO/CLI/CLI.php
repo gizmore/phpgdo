@@ -1,21 +1,22 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI;
 
-use GDO\Core\GDO_Exception;
-use GDO\Core\GDO_Module;
-use GDO\Core\GDT;
-use GDO\Core\GDT_Response;
+use GDO\Core\GDO_Error;
+use GDO\Core\GDO_ErrorFatal;
 use GDO\Core\Method;
+use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Session\GDO_Session;
 use GDO\UI\Color;
+use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Page;
 use GDO\User\GDO_User;
 
 /**
  * CLI utility.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.10.2
  * @author gizmore
  * @see Method
@@ -33,6 +34,10 @@ final class CLI
 		return stream_isatty(STDIN);
 	}
 
+	/**
+	 * @throws GDO_Error
+	 * @throws GDO_ErrorFatal
+	 */
 	public static function setupUser(): GDO_User
 	{
 		$username = self::getUsername();
@@ -43,7 +48,7 @@ final class CLI
 				'user_type' => 'member',
 			])->insert();
 		}
-		GDO_User::setCurrent($user, true);
+		GDO_User::setCurrent($user);
 		return $user;
 	}
 
@@ -62,19 +67,13 @@ final class CLI
 		return implode(' ', $argv);
 	}
 
-	public static function flushTopResponse()
+	public static function flushTopResponse(): void
 	{
 		echo self::getTopResponse();
-		@ob_flush();
-//		if (!Application::$INSTANCE->isUnitTests())
-//		{
-//			# Get
-//			$response = GDT_Page::instance()->topResponse();
-//			# Render
-//			echo $response->renderCLI();
-//	    	# Clear
-//	    	self::clearFlash($response);
-//    	}
+		if (ob_get_level())
+		{
+			ob_flush();
+		}
 	}
 
 	##############
@@ -91,7 +90,7 @@ final class CLI
 		return $result;
 	}
 
-	private static function clearFlash(GDT $response): void
+	private static function clearFlash(GDT_Container $response): void
 	{
 		$response->removeFields();
 		if (module_enabled('Session'))
@@ -108,24 +107,21 @@ final class CLI
 
 	/**
 	 * Turn html into CLI output by stripping tags.
-	 *
-	 * @deprecated only needed for bad code (Mail). It is required!
 	 */
 	public static function htmlToCLI(string $html): string
 	{
 		$html = preg_replace('#<a *href="([^"]+)">([^<]+)</a>#i', '$1 ($2)', $html);
 		$html = self::br2nl($html);
 		$html = preg_replace('#<[^>]*>#', '', $html);
-		$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
-		return $html;
+		return html_entity_decode($html, ENT_QUOTES, 'UTF-8');
 	}
 
 	/**
 	 * Turn <br/> into newlines.
 	 */
-	public static function br2nl(string $s, string $nl = PHP_EOL): string
+	public static function br2nl(string $s, string $nl = "\n"): string
 	{
-		return preg_replace('#< *br */? *>#is', $nl, $s);
+		return preg_replace('#< *br */? *>#i', $nl, $s);
 	}
 
 	public static function red(string $s): string { return Color::red($s); }
@@ -161,22 +157,21 @@ final class CLI
 		$_SERVER['HTTPS'] = 'off';
 		$_SERVER['HTTP_HOST'] = GDO_DOMAIN;
 		$_SERVER['SERVER_NAME'] = GDO_DOMAIN; # @TODO use machines host name.
-		$_SERVER['SERVER_PORT'] = defined('GDO_PORT') ? GDO_PORT : (GDO_PROTOCOL === 'https' ? 443 : 80);
+		$_SERVER['SERVER_PORT'] = def('GDO_PORT', GDO_PROTOCOL === 'https' ? 443 : 80);
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1'; # @TODO use machines IP
 		$_SERVER['HTTP_USER_AGENT'] = 'Firefox Gecko MS Opera';
 		$_SERVER['REQUEST_URI'] = '/index.php?_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
-		$_SERVER['REQUEST_METHOD'] = 'GET';
-		$_SERVER['HTTP_REFERER'] = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/index.php';
-		$_SERVER['HTTP_ORIGIN'] = '127.0.0.2';
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
+		$_SERVER['HTTP_REFERER'] = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/referrer';
+		$_SERVER['HTTP_ORIGIN'] = '127.0.0.1';
+		$_SERVER['SCRIPT_NAME'] = GDO_WEB_ROOT . 'index.php';
 		$_SERVER['SERVER_SOFTWARE'] = 'Apache/2.4.41 (Win64) PHP/7.4.0';
 		$_SERVER['HTTPS'] = 'off';
 		$_SERVER['CONTENT_TYPE'] = 'application/gdo';
 		$_SERVER['PHP_SELF'] = '/index.php';
 		$_SERVER['REQUEST_URI'] = '/index.php';
 		$_SERVER['QUERY_STRING'] = '_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
-		$_SERVER['REQUEST_METHOD'] = 'GET';
-		# @TODO CLI::setServerVars() use output of locale command?
+		$_SERVER['REQUEST_METHOD'] = GDT_Form::GET;
+//		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = locale_get_default(); #'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
 	}
 
@@ -189,7 +184,7 @@ final class CLI
 	 */
 	public static function removeColorCodes(string $s): string
 	{
-		return preg_replace('/\x1B\[[0-9;]\{1,\}[A-Za-z]/', '', $s);
+		return trim(preg_replace('/\x1B\\[[0-9;]\\{1,}[A-Za-z]/', '', $s));
 	}
 
 	#############
@@ -218,15 +213,13 @@ final class CLI
 	### Escape ###
 	##############
 
-	private static function showHelp(Method $method)
-	{
-		return $method->renderCLIHelp();
-	}
+//	private static function showHelp(Method $method)
+//	{
+//		return $method->renderCLIHelp();
+//	}
 
 	/**
 	 * Render help line for gdt parameters.
-	 *
-	 * @param GDT[] $fields
 	 */
 	public static function renderCLIHelp(Method $method): string
 	{
@@ -238,7 +231,7 @@ final class CLI
 		{
 			$method->onMethodInit();
 		}
-		catch (GDO_Exception $ex)
+		catch (\Throwable)
 		{
 		}
 
@@ -254,17 +247,14 @@ final class CLI
 				$label = $gdt->renderLabel();
 				$xmplvars = $gdt->gdoExampleVars();
 				$xmplvars = $xmplvars ?
-					sprintf('<%s>(%s)', $label, $xmplvars,) :
+					sprintf('<%s>(%s)', $label, $xmplvars) :
 					sprintf('<%s>', $label);
 				$usage1[] = $xmplvars;
 			}
-			else
+			elseif (!($gdt instanceof GDT_Submit))
 			{
-				if (!($gdt instanceof GDT_Submit))
-				{
-					$usage2[] = sprintf('[--%s=<%s>(%s)]',
-						$gdt->getParameterAlias(), $gdt->gdoExampleVars(), $gdt->getVar());
-				}
+				$usage2[] = sprintf('[--%s=<%s>(%s)]',
+					$gdt->getParameterAlias(), $gdt->gdoExampleVars(), $gdt->getVar());
 			}
 		}
 		$usage = implode(',', $usage2) . ',' . implode(',', $usage1);
@@ -274,23 +264,23 @@ final class CLI
 				trim(strtolower($mome) . ' ' . $usage), $method->getMethodDescription()]);
 	}
 
-	private static function showMethods(GDO_Module $module)
-	{
-		$methods = $module->getMethods();
-
-		$methods = array_filter($methods, function (Method $method)
-		{
-			return $method->isCLI();
-		});
-
-		$methods = array_map(function (Method $m)
-		{
-			return $m->gdoShortName();
-		}, $methods);
-
-		return GDT_Response::makeWithHTML(t('cli_methods', [
-			$module->renderName(), implode(', ', $methods)]));
-	}
+//	private static function showMethods(GDO_Module $module): GDT_HTML
+//	{
+//		$methods = $module->getMethods();
+//
+//		$methods = array_filter($methods, function (Method $method)
+//		{
+//			return $method->isCLI();
+//		});
+//
+//		$methods = array_map(function (Method $m)
+//		{
+//			return $m->gdoShortName();
+//		}, $methods);
+//
+//		return GDT_HTML::make()->var(t('cli_methods', [
+//			$module->renderName(), implode(', ', $methods)]));
+//	}
 
 	public static function isCLI(): bool
 	{

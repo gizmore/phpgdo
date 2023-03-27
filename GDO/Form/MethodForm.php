@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Form;
 
 use GDO\Core\GDO;
@@ -10,7 +11,7 @@ use GDO\File\GDT_File;
 /**
  * A method with a form.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.2
  * @author gizmore
  */
@@ -69,7 +70,7 @@ abstract class MethodForm extends Method
 			$fields = $this->form->getAllFields();
 			foreach ($fields as $gdt)
 			{
-				$gdt->reset($removeInput);
+				$gdt->reset();
 			}
 			unset($this->form);
 		}
@@ -122,7 +123,7 @@ abstract class MethodForm extends Method
 		parent::applyInput();
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		### validation result
 		$this->submitted = false;
@@ -138,29 +139,20 @@ abstract class MethodForm extends Method
 
 		$form->titleRaw($this->getMethodTitle());
 
-// 		if (isset($this->inputs))
-// 		{
-// 			$form->inputs($this->inputs);
-// 			$this->applyInput();
-
 		### Flow upload
-		if ($flowField = (@$this->inputs['flowField']))
+		if ($flowField = ($this->inputs['flowField'] ?? null))
 		{
-			/** @var $formField GDT_File * */
+			/** @var GDT_File $formField * */
 			if ($formField = $form->getField($flowField))
 			{
 				return $formField->flowUpload();
 			}
 		}
-// 		}
-
 
 		### Execute action
-// 		$inputs = $this->getInputs();
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
-			/** @var $gdt GDT_Submit * */
-// 			$gdt->inputs($inputs);
+			/** @var GDT_Submit $gdt * */
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;
@@ -268,7 +260,7 @@ abstract class MethodForm extends Method
 		}
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$this->message('msg_form_validated');
 		return $this->renderPage();
@@ -295,7 +287,7 @@ abstract class MethodForm extends Method
 
 	### Override ###
 
-	public function formInvalid(GDT_Form $form)
+	public function formInvalid(GDT_Form $form): GDT
 	{
 		return $this->renderPage();
 	}

@@ -2,8 +2,10 @@
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\Application;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDO_ModuleVar;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDT_Module;
 use GDO\Core\GDT_Name;
@@ -47,7 +49,7 @@ class Configure extends MethodForm
 		];
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		# Response
 		$response = GDT_Tuple::make();
@@ -196,7 +198,7 @@ class Configure extends MethodForm
 // 		parent::afterExecute();
 // 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$mod = $this->configModule();
 
@@ -207,7 +209,10 @@ class Configure extends MethodForm
 		{
 			if ((!$gdt->isHidden()) && $gdt->isWriteable() && $gdt->hasChanged())
 			{
-				$info[] = '<br/>';
+				if (count($info))
+				{
+					$info[] = Application::$INSTANCE->isCLIOrUnitTest() ? " - " : '<br/>';
+				}
 				GDO_ModuleVar::createModuleVar($mod, $gdt);
 				$info[] = t('msg_modulevar_changed',
 					[
@@ -222,16 +227,13 @@ class Configure extends MethodForm
 		if ($moduleVarsChanged)
 		{
 			Cache::flush();
-//			Cache::fileFlush();
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);
 		}
-
-// 		$this->resetConfig();
 
 		# Announce
 		return $this->message('msg_module_saved',
 			[
-				implode("\n", $info),
+				trim(implode("\n", $info)),
 			])->addField($this->renderPage());
 	}
 

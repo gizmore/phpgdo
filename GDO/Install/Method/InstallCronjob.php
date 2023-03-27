@@ -31,7 +31,7 @@ final class InstallCronjob extends Method
 		return $this->getMethodTitle();
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		Database::init();
 		$hasdb = GDO_DB_HOST !== null;

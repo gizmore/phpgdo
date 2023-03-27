@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Perf\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Perf\GDT_PerfBar;
 
@@ -14,7 +15,7 @@ use GDO\Perf\GDT_PerfBar;
 final class Bar extends Method
 {
 
-	public function execute()
+	public function execute(): GDT
 	{
 		return GDT_PerfBar::make();
 	}

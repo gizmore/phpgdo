@@ -3,6 +3,7 @@ namespace GDO\CLI\Method;
 
 use GDO\CLI\CLI;
 use GDO\CLI\MethodCLI;
+use GDO\Core\GDT;
 use GDO\Core\GDT_MethodSelect;
 use GDO\Core\GDT_String;
 use GDO\Core\Method;
@@ -18,7 +19,7 @@ use GDO\Form\GDT_Submit;
 final class Help extends MethodCLI
 {
 
-	public function getCLITrigger() { return 'help'; }
+	public function getCLITrigger(): string { return 'help'; }
 
 	public function createForm(GDT_Form $form): void
 	{
@@ -31,7 +32,7 @@ final class Help extends MethodCLI
 		);
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$method = $this->getParameterMethod();
 		$help = CLI::renderCLIHelp($method);

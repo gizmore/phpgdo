@@ -168,7 +168,7 @@ final class ModuleProviders
 'Backup' => ['ZIP', 'Cronjob'],
 'BasicAuth' => [],
 'Birthday' => [],
-'Bootstrap5' => ['Core', 'JQuery'],
+'Bootstrap5' => ['JQuery'],
 'Bootstrap5Theme' => ['Bootstrap5', 'Moment'],
 'Captcha' => [],
 'Category' => [],
@@ -249,7 +249,7 @@ final class ModuleProviders
 'Maps' => ['JQuery'],
 'Markdown' => ['HTML', 'JQuery', 'FontAwesome'],
 'Math' => [],
-'Mettwitze' => ['Account', 'Admin', 'Bootstrap5Theme', 'Classic', 'Comments', 'JQueryAutocomplete', 'Login', 'Register', 'Recovery', 'Sitemap', 'Votes'],
+'Mettwitze' => ['Account', 'Admin', 'Bootstrap5Theme', 'Classic', 'Comments', 'JQueryAutocomplete', 'Login', 'Recovery', 'Register', 'Sitemap', 'Votes'],
 'Mibbit' => [],
 'Moment' => [],
 'Net' => [],
@@ -356,6 +356,7 @@ final class ModuleProviders
 				return $modname;
 			}
 		}
+		throw new GDO_ErrorFatal('err_unknown_module', [html($moduleName)]);
 	}
 
 	public static function getDependencies(string $moduleName): array

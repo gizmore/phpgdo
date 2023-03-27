@@ -1,6 +1,7 @@
 <?php
 namespace GDO\UI\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Method;
 use GDO\Core\ModuleLoader;
 use GDO\Form\GDT_Form;
@@ -30,7 +31,7 @@ final class Russlette extends MethodForm
 		$form->actions()->addFields(GDT_Submit::make());
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		return $this->doRandStuff();
 	}

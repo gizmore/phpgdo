@@ -26,7 +26,7 @@ trait WithFileCache
 		return $this;
 	}
 
-	protected function executeB()
+	protected function executeB(): GDT
 	{
 		if (!$this->isFileCacheEnabled())
 		{

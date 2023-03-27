@@ -2,6 +2,7 @@
 namespace GDO\Install\Method;
 
 use GDO\CLI\Process;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Util\FileUtil;
 
@@ -24,7 +25,7 @@ final class SystemTest extends Method
 		return t('install_title_2');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$tVars = [
 			'tests' => [

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Date\Time;
@@ -20,7 +21,7 @@ use Throwable;
  * Checks permission.
  * Sets up SEO method meta data.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 3.0.1
  * @author gizmore
  * @see GDT
@@ -36,23 +37,20 @@ abstract class Method #extends GDT
 	use WithDescription;
 
 	/**
-	 * @var Method[string]
+	 * @var string[]
 	 */
-	public static array $CLI_ALIASES;
+	public static array $CLI_ALIASES = [];
 
 	################
 	### Override ###
 	################
 	# execution
 	public string $button;
+
 	private bool $locked = false;
 
 	/**
 	 * Get a method by cli convention. Aliases first, then module DOT method.
-	 *
-	 * @param string $alias
-	 *
-	 * @return Method
 	 */
 	public static function getMethod(string $alias, bool $throw = true): ?self
 	{
@@ -60,7 +58,7 @@ abstract class Method #extends GDT
 		if (isset(self::$CLI_ALIASES[$alias]))
 		{
 			$klass = self::$CLI_ALIASES[$alias];
-			return $klass::make();
+			return call_user_func([$klass, 'make']);
 		}
 		else
 		{
@@ -93,7 +91,7 @@ abstract class Method #extends GDT
 		return new static();
 	}
 
-	public function getCLITrigger()
+	public function getCLITrigger(): string
 	{
 		$trigger = "{$this->getModuleName()}.{$this->getMethodName()}";
 		return strtolower($trigger);
@@ -134,18 +132,11 @@ abstract class Method #extends GDT
 			{
 				if (in_array($key, $keys, true))
 				{
-//					Application::$INSTANCE->verb(GDT_Form::POST);
 					return $key;
 				}
-				$first = $first ?? $gdt->getName();
+				$first ??= $gdt->getName();
 			}
 		}
-
-//		if ($first)
-//		{
-//			Application::$INSTANCE->verb(GDT_Form::POST);
-//		}
-
 		return $first;
 	}
 
@@ -172,7 +163,7 @@ abstract class Method #extends GDT
 	/**
 	 * Test permissions and execute method.
 	 */
-	public function exec()
+	public function exec(): GDT
 	{
 		return $this->execWrap();
 	}
@@ -180,45 +171,40 @@ abstract class Method #extends GDT
 	/**
 	 * Wrap execution in transaction if desired from method.
 	 */
-	public function execWrap()
+	public function execWrap(): GDT
 	{
-		$response = $this->executeWithInit();
-		return $response;
+		return $this->executeWithInit();
 	}
 
 	/**
 	 * Execute this method with all hooks.
-	 * Quite a long method.
 	 */
-	public function executeWithInit(bool $checkPermission = true)
+	public function executeWithInit(bool $checkPermission = true): GDT
 	{
 		$db = Database::instance();
-// 		$app = Application::$INSTANCE;
-		$response = GDT_Response::make();
 		$transactional = false;
+		$response = GDT_Response::make();
 		try
 		{
+			$this->applyInput();
+
+			# 0) Init
 			if ($result = $this->onMethodInit())
 			{
 				$response->addField($result);
 			}
-
-			# 0) Init
-			$this->applyInput();
-
-			$user = GDO_User::current();
-
-			if ($checkPermission)
-			{
-				if (true !== ($error = $this->checkPermission($user)))
-				{
-					return $error;
-				}
-			}
-
 			if (Application::isError())
 			{
 				return $response;
+			}
+
+			$user = GDO_User::current();
+			if ($checkPermission)
+			{
+				if ($error = $this->checkPermission($user))
+				{
+					return $error;
+				}
 			}
 
 			# 1) Start the transaction
@@ -256,7 +242,7 @@ abstract class Method #extends GDT
 			{
 				if ($result->hasError())
 				{
-					$response->code(GDO_Error::DEFAULT_ERROR_CODE);
+					$response->code(GDO_Exception::DEFAULT_ERROR_CODE);
 					$response->errorRaw($result->renderError());
 				}
 				$response->addField($result);
@@ -332,7 +318,7 @@ abstract class Method #extends GDT
 			{
 				$db->transactionRollback();
 			}
-			return GDT_Redirect::make()->redirectErrorRaw($e->getMessage())->href($e->href);
+			return GDT_Redirect::make()->redirectError($e->key, $e->args)->href($e->href);
 		}
 //		catch (GDO_PermissionException $e)
 //		{
@@ -353,19 +339,11 @@ abstract class Method #extends GDT
 		}
 		finally
 		{
-// 			foreach ($this->gdoParameterCache() as $gdt)
-// 			{
-// 				$gdt->inputs(null);
-// 			}
 			$this->unlock();
-// 			if (Application::$INSTANCE->isCLI())
-// 			{
-// 				return CLI::getTopResponse();
-// 			}
 		}
 	}
 
-	public function onMethodInit() {}
+	public function onMethodInit(): ?GDT { return null; }
 
 	# events
 
@@ -378,7 +356,11 @@ abstract class Method #extends GDT
 		}
 	}
 
-	public function checkPermission(GDO_User $user)
+	/**
+	 * Check permissions.
+	 * @note return "null" for no errors!
+	 */
+	public function checkPermission(GDO_User $user): ?GDT
 	{
 		if (!($this->isEnabled()))
 		{
@@ -444,10 +426,10 @@ abstract class Method #extends GDT
 			return $this->error('err_permission_required');
 		}
 
-		return true;
+		return null;
 	}
 
-	public function isEnabled(): bool { return $this->getModule()->isEnabled(); }
+	public function isEnabled(): string { return $this->getModule()->isEnabled(); }
 
 	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true): GDT
 	{
@@ -466,7 +448,7 @@ abstract class Method #extends GDT
 //		self::$CLI_ALIASES[$alias] = $className;
 //	}
 
-	public function isGuestAllowed(): bool { return Module_Core::instance()->cfgAllowGuests(); }
+	public function isGuestAllowed(): string { return Module_Core::instance()->cfgAllowGuests(); }
 
 
 	############
@@ -511,8 +493,7 @@ abstract class Method #extends GDT
 	private function lockKey(): string
 	{
 		$user = GDO_User::current();
-		$lock = GDO_SITENAME . "_USERLOCK_{$user->getID()}";
-		return $lock;
+		return GDO_SITENAME . "_USERLOCK_{$user->getID()}";
 	}
 
 	/**
@@ -541,7 +522,7 @@ abstract class Method #extends GDT
 
 	public function onRenderTabs(): void {}
 
-	protected function executeB()
+	protected function executeB(): GDT
 	{
 		return $this->execute();
 	}
@@ -550,7 +531,7 @@ abstract class Method #extends GDT
 	### Lock ###
 	############
 
-	abstract public function execute();
+	abstract public function execute(): GDT;
 
 	public function afterExecute(): void {}
 
@@ -579,7 +560,7 @@ abstract class Method #extends GDT
 	{
 		$key = sprintf('mt_%s_%s', $this->getModuleName(), $this->getMethodName());
 		$key = strtolower($key);
-		return Trans::hasKey($key) ? t($key) : GDT::EMPTY_STRING;
+		return t($key);
 	}
 
 	public function getMethodKeywords(): string
@@ -649,7 +630,7 @@ abstract class Method #extends GDT
 	### Input ###
 	#############
 
-	public function executeWithInputs(array $inputs = null, bool $checkPermission = true)
+	public function executeWithInputs(array $inputs = null, bool $checkPermission = true): GDT
 	{
 		$this->inputs = $inputs;
 		return $this->executeWithInit($checkPermission);
@@ -659,7 +640,7 @@ abstract class Method #extends GDT
 	 * Execute this method without any checks or events.
 	 * Used when invoking methods inside other methods.
 	 */
-	public function execWithInputs(array $inputs = null)
+	public function execWithInputs(array $inputs = null): GDT
 	{
 		$this->inputs = $inputs;
 		$this->applyInput();
@@ -676,8 +657,6 @@ abstract class Method #extends GDT
 
 	/**
 	 * Get plug variables.
-	 *
-	 * @return [string[string]]
 	 */
 	public function plugVars(): array
 	{

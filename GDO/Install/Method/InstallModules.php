@@ -2,6 +2,7 @@
 namespace GDO\Install\Method;
 
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
 use GDO\DB\Cache;
@@ -43,7 +44,7 @@ final class InstallModules extends Method
 		return t('install_title_4');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		Cache::flush();
 		Database::init();

@@ -1,22 +1,23 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
  * Index db column definition.
  * The default algo is HASH. BTREE available.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.5.0
  * @author gizmore
  */
-class GDT_Index extends GDT
+final class GDT_Index extends GDT
 {
 
 	use WithName;
 
-	public const FULLTEXT = 'FULLTEXT';
-	public const HASH = 'USING HASH';
-	public const BTREE = 'USING BTREE';
+	final public const FULLTEXT = 'FULLTEXT';
+	final public const HASH = 'USING HASH';
+	final public const BTREE = 'USING BTREE';
 
 	###########
 	### GDT ###
@@ -49,13 +50,15 @@ class GDT_Index extends GDT
 		return true;
 	}
 
+	/**
+	 * Set the columns to index.
+	 * Set's GDT name to regarding value, if not set yet.
+	 */
 	public function indexColumns(string...$indexColumns): self
 	{
 		$this->indexColumns = implode(',', $indexColumns);
-		# Default name if none is given?
-		$this->name = $this->getName() ?
-			$this->name : str_replace(',', '_', $this->indexColumns);
-		return $this;
+		return $this->name ? $this :
+			$this->name(str_replace(',', '_', $this->indexColumns));
 	}
 
 	public function hash(): self
@@ -70,7 +73,7 @@ class GDT_Index extends GDT
 		return $this;
 	}
 
-	public function fulltext()
+	public function fulltext(): self
 	{
 		$this->indexFulltext = self::FULLTEXT;
 		return $this;

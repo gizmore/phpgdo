@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Language;
 
-use GDO\Util\FileUtil;
+use GDO\Core\GDO_DBException;
 
 /**
  * This class contains Language data.
@@ -12,25 +13,28 @@ use GDO\Util\FileUtil;
 final class LanguageData
 {
 
-	public static function onInstall()
+	/**
+	 * @throws GDO_DBException
+	 */
+	public static function onInstall(): void
 	{
-		foreach (self::getLanguages() as $data)
+		$cols = GDO_Language::table()->gdoColumnsOnly('lang_iso');
+		$data = [];
+		foreach (self::getLanguages() as $dat)
 		{
-// 			list($en, $native, $iso3, $iso2) = $data;
-			$iso2 = $data[3];
-			if (FileUtil::isFile(GDO_PATH . 'GDO/Language/img/' . strtolower($iso2) . '.png'))
+// 			list($en, $native, $iso3, $iso2) = $dat;
+			$iso2 = $dat[3];
+			if (!GDO_Language::table()->getById($iso2))
 			{
-				if (!GDO_Language::getById($iso2))
-				{
-					GDO_Language::blank([
-						'lang_iso' => $iso2,
-					])->insert();
-				}
+				$data[] = [
+					$iso2,
+				];
 			}
 		}
+		GDO_Language::bulkInsert($cols, $data);
 	}
 
-	public static function getLanguages()
+	public static function getLanguages(): array
 	{
 		# English Name | Native Name | iso-639-3 | iso-639-1
 		static $languages = [
@@ -83,7 +87,7 @@ final class LanguageData
 			['Romanian', 'română / limba română', 'rom', 'ro'],
 			['Russian', 'Русский язык', 'rus', 'ru'],
 			['Slovak', 'slovenčina', 'slo', 'sk'],
-			['Mandarin', '官話 / Guānhuà', 'man', 'zh'],
+//			['Mandarin', '官話 / Guānhuà', 'man', 'zh'],
 			['Tamil', 'தமிழ', 'tam', 'ta'],
 			['Slovene', 'slovenščina', 'slv', 'sl'],
 			['Zulu', 'isiZulu', 'zul', 'zu'],

@@ -4,6 +4,7 @@ namespace GDO\Net;
 use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
+use GDO\DB\Query;
 use GDO\UI\WithAnchorRelation;
 use GDO\UI\WithTitle;
 use GDO\Util\Arrays;
@@ -87,12 +88,12 @@ class GDT_Url extends GDT_String
 	### Var / Value ###
 	###################
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $var ? new URL($var) : null;
 	}
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		return $value ? $value->raw : null;
 	}
@@ -109,7 +110,7 @@ class GDT_Url extends GDT_String
 	### Options ###
 	###############
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!parent::validate($value ? $value->raw : null))
 		{
@@ -243,5 +244,6 @@ class GDT_Url extends GDT_String
 		unset($this->schemes);
 		return $this;
 	}
+
 
 }

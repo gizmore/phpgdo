@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\GDT_Enum;
 use GDO\Core\MethodAjax;
@@ -17,7 +18,7 @@ use GDO\Core\ModuleLoader;
 final class GetEnums extends MethodAjax
 {
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$columns = [];
 

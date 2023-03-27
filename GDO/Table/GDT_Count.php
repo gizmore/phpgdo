@@ -1,19 +1,21 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDT_UInt;
+use GDO\DB\Query;
 
 /**
  * Simple row number counter++
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 6.3.0
  * @author gizmore
  */
 class GDT_Count extends GDT_UInt
 {
 
-	private $num = 1;
+	private int $num = 1;
 
 	public function isVirtual(): bool { return true; }
 
@@ -21,9 +23,14 @@ class GDT_Count extends GDT_UInt
 
 	public function defaultLabel(): self { return $this; }
 
-	public function render(): string
+	public function render(): array|string|null
 	{
-		return $this->num++;
+		return (string) ($this->num++);
+	}
+
+	public function searchQuery(Query $query, string $searchTerm): self
+	{
+		return $this;
 	}
 
 }

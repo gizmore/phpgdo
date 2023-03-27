@@ -2,6 +2,7 @@
 namespace GDO\Language\Method;
 
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodAjax;
 use GDO\Language\Trans;
@@ -27,7 +28,7 @@ final class GetTransData extends MethodAjax
 		return 'Get Translation Data via Ajax for JS.';
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$data = Trans::getCache(Trans::$ISO);
 
@@ -40,11 +41,12 @@ final class GetTransData extends MethodAjax
 		# HTML requests output a javascript markup.
 		$langdata = json($data);
 		$js = sprintf('window.GDO_TRANS = {}; window.GDO_TRANS.CACHE = %s;', $langdata);
+		hdr('Content-Type: text/javascript');
 		if (!Application::$INSTANCE->isUnitTests())
 		{
-			hdr('Content-Type: text/javascript');
-			die($js);
+			echo $js;
 		}
+		return Application::exit();
 	}
 
 }

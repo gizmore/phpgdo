@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_JSON;
 use GDO\Core\MethodAjax;
 use GDO\Core\ModuleLoader;
@@ -21,7 +22,7 @@ final class GetTypes extends MethodAjax
 
 	use WithFileCache;
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$tables = [];
 		# Add non abstract module tables

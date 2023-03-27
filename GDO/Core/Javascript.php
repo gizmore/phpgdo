@@ -1,13 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Javascript\MinifyJS;
 
 /**
  * Add JS here.
- * Can make use of minifier.
+ * Can make use of a minifier.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see Module_Javascript

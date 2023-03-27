@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Backwards compatibility. @TODO make use of the php preprocessor to make shim zero cost.
@@ -9,7 +10,7 @@ if (!function_exists('getallheaders'))
 	/**
 	 * Get all HTTP header key/values as an associative array for the current request.
 	 *
-	 * @return string[string] The HTTP header key/value pairs.
+	 * @return string[] The HTTP header key/value pairs.
 	 */
 	function getallheaders(): array
 	{
@@ -47,7 +48,7 @@ if (!function_exists('getallheaders'))
 			}
 			elseif (isset($_SERVER['PHP_AUTH_USER']))
 			{
-				$basic_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
+				$basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
 				$headers['Authorization'] = 'Basic ' .
 					base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
 			}

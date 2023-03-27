@@ -36,7 +36,7 @@ final class GDT_Filter extends GDT
 		return GDT::EMPTY_ARRAY;
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		return isset($this->inputs) ? @$this->inputs[$this->name] : null;
 	}

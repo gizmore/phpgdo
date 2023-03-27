@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Net;
 
+use GDO\Core\GDT_Method;
 use GDO\Core\GDT_String;
 
 /**
@@ -32,7 +33,7 @@ final class GDT_PackedIP extends GDT_String
 	### Pack ###
 	############
 
-	public function inputToVar($input): string
+	public function inputToVar(array|string|null|GDT_Method $input): string
 	{
 		return self::ip2packed($input);
 	}

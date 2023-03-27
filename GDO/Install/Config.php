@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Install;
 
 use GDO\Core\Application;
@@ -6,10 +7,10 @@ use GDO\Core\GDO;
 use GDO\Core\GDT_Checkbox;
 use GDO\Core\GDT_Enum;
 use GDO\Core\GDT_EnumNoI18n;
+use GDO\Core\GDT_Int;
 use GDO\Core\GDT_Path;
 use GDO\Core\GDT_Select;
 use GDO\Core\GDT_String;
-use GDO\Core\GDT_TinyInt;
 use GDO\Core\GDT_UInt;
 use GDO\Core\Logger;
 use GDO\Date\Time;
@@ -30,7 +31,7 @@ use GDO\Util\Strings;
  *
  * @TODO: reduce defined config.php variables by moving them to module configs, example mail and mailer.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
@@ -106,7 +107,7 @@ class Config
 		deff('GDO_GDT_DEBUG', 0);
 		deff('GDO_JSON_DEBUG', false);
 		# HTTP
-		deff('GDO_DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+		deff('GDO_DOMAIN', $_SERVER['HTTP_HOST'] ?? 'localhost');
 		deff('GDO_SERVER', self::detectServerSoftware());
 		deff('GDO_PROTOCOL', @$_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
 		deff('GDO_PORT', @$_SERVER['SERVER_PORT'] ? $_SERVER['SERVER_PORT'] : (GDO_PROTOCOL === 'https' ? 443 : 80));
@@ -119,7 +120,7 @@ class Config
 		# Logging
 		deff('GDO_LOG_REQUEST', $pro);
 		deff('GDO_LOG_PROFILE', '');
-		deff('GDO_ERROR_LEVEL', Logger::_DEFAULT);
+		deff('GDO_ERROR_LEVEL', Logger::ALL);
 		deff('GDO_ERROR_STACKTRACE', true);
 		deff('GDO_ERROR_DIE', true);
 		deff('GDO_ERROR_MAIL', false);
@@ -167,11 +168,11 @@ class Config
 		$software = $_SERVER['SERVER_SOFTWARE'];
 		if (stripos($software, 'Apache') !== false)
 		{
-			if (strpos($software, '2.4') !== false)
+			if (str_contains($software, '2.4'))
 			{
 				return 'apache2.4';
 			}
-			if (strpos($software, '2.2') !== false)
+			if (str_contains($software, '2.2'))
 			{
 				return 'apache2.2';
 			}
@@ -211,7 +212,7 @@ class Config
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
 			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
 			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG)->tooltipRaw('IPC event logging.'),
-			GDT_TinyInt::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2)->tooltipRaw('GDT debugging level. 0: off, 1: counters, 2: instancelog.'),
+			GDT_Int::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2)->tooltipRaw('GDT debugging level. 0: off, 1: counters, 2: instancelog.'),
 			GDT_Checkbox::make('json_debug')->initialValue(!!GDO_JSON_DEBUG)->tooltipRaw('global JSON_PRETTY toggle.'),
 
 			# HTTP
@@ -227,7 +228,7 @@ class Config
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
 			GDT_Path::make('files_dir')->label('files_dir')->initial(GDO_FILES_DIR)->tooltipRaw('Filepath for physical files. Change this in config_test.php'),
-			GDT_Enum::make('chmod')->enumValues('0700', '0770', '0777')->initial('0' . base_convert(GDO_CHMOD, 10, 8))->tooltipRaw('File creation chmod value. Ignore on windows.'),
+			GDT_Enum::make('chmod')->enumValues('0700', '0770', '0777')->initial('0' . (base_convert((string)GDO_CHMOD, 10, 8)))->tooltipRaw('File creation chmod value. Ignore on windows.'),
 			GDT_Checkbox::make('preprocessor')->initial('0')->tooltipRaw('File preprocessor to speed up dev code.'),
 
 			# Logging
@@ -250,14 +251,14 @@ class Config
 			GDT_String::make('db_pass')->initialValue(GDO_DB_PASS)->tooltipRaw('DB password'),
 			GDT_String::make('db_name')->initialValue(GDO_DB_NAME)->tooltipRaw('DB database name or SQLite filename'),
 			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM, GDO::SQL3_PERSIST, GDO::SQL3_WAL)->tooltipRaw('DB engine: InnoDB,MyIsam(MySQL), JournalMode(SQLite).'),
-			GDT_TinyInt::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2)->tooltipRaw('GDO debugging level. 0: off, 1: counters, 2: instancelog.'),
+			GDT_Int::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2)->tooltipRaw('GDO debugging level. 0: off, 1: counters, 2: instancelog.'),
 
 
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
 			GDT_UInt::make('cache_debug')->initialValue((int)GDO_CACHE_DEBUG)->min(0)->max(2)->tooltipRaw('Cache debugging level. 0: off, 1: setters, 2: setter-with-backtraces.'),
 			GDT_Checkbox::make('filecache')->initialValue(!!GDO_FILECACHE)->tooltipRaw('Enable phpgdo filecache?'),
-			GDT_TinyInt::make('memcache')->unsigned()->min(0)->max(2)->initialValue((int)GDO_MEMCACHE)->tooltipRaw('Enable memcached? 0: off, 1: on, 2: fallback via filecache.'),
+			GDT_Int::make('memcache')->unsigned()->min(0)->max(2)->initialValue((int)GDO_MEMCACHE)->tooltipRaw('Enable memcached? 0: off, 1: on, 2: fallback via filecache.'),
 			GDT_String::make('memcache_host')->initialValue(GDO_MEMCACHE_HOST)->notNull()->tooltipRaw('memcached host.'),
 			GDT_Port::make('memcache_port')->initialValue((int)GDO_MEMCACHE_PORT)->notNull()->tooltipRaw('memcached port.'),
 			GDT_UInt::make('memcache_ttl')->unsigned()->initialValue((int)GDO_MEMCACHE_TTL)->notNull()->tooltipRaw('memcached time to live.'),

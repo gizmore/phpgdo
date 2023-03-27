@@ -222,7 +222,7 @@ class GDT_Template extends GDT
 			Strings::rsubstrFrom(Strings::substrTo($this->templatePath, '.'), '/');
 	}
 
-	public function render(): string
+	public function render(): array|string|null
 	{
 		return $this->renderTemplate();
 	}
@@ -241,7 +241,7 @@ class GDT_Template extends GDT
 		return self::php($this->templateModule, $this->templatePath, $tVars);
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return null;
 	}

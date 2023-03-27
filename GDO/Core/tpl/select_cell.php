@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\tpl;
 
 use GDO\Core\GDO;
 use GDO\Core\GDT_Select;
 
-/** @var $field GDT_Select * */
+/** @var GDT_Select $field * */
 if (isset($field->completionHref))
 {
 	$field->addClass('gdo-autocomplete');
@@ -42,7 +43,8 @@ if (isset($field->completionHref))
 	else : ?>
 		<?php
 		foreach ($field->initChoices() as $var => $choice) : ?>
-            <option<?=$field->htmlChoiceVar($var, $choice)?><?=$field->htmlSelected($var)?>><?=$choice instanceof GDO ? $choice->renderOption() : $field->displayVar($var)?></option>
+			<?php $vv = (string) $var; ?>
+            <option<?=$field->htmlChoiceVar($vv, $choice)?><?=$field->htmlSelected($vv)?>><?= ($choice instanceof GDO) ? $choice->renderOption() : $field->displayVar($vv) ?></option>
 		<?php
 		endforeach; ?>
 	<?php

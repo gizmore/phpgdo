@@ -38,7 +38,7 @@ class Permissions extends MethodQueryTable
 			GDT_EditButton::make('edit'),
 			$perms->gdoColumn('perm_name'),
 			$perms->gdoColumn('perm_usercount'),
-			$perms->gdoColumn('perm_level'),
+//			$perms->gdoColumn('perm_level'),
 		];
 	}
 

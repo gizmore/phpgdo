@@ -32,7 +32,7 @@ abstract class MethodCompletion extends MethodAjax
 		return 2;
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$query = $this->buildQuery();
 		$result = $query->exec();

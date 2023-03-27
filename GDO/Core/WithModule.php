@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Language\Trans;
@@ -13,13 +14,14 @@ use GDO\Util\Strings;
  * Extract the gdo module name.
  * This is easy for any \GDO\ class.
  *
- * @TODO: If a class is not \GDO\ it is a 3rd party lib, and we could try to get the gdo module via the absolute realpath of the class definition via reflection.
+ * @TODO: If a class is not \GDO\ it is a 3rd party lib,
+ * and we could try to get the gdo module via the absolute realpath of the class definition via reflection.
  *
  * Provide human names for classes.
  *
  * Offers static and non static versions.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see WithName
@@ -68,11 +70,7 @@ trait WithModule
 	{
 		$shortname = self::gdoShortNameS();
 		$key = strtolower($shortname);
-		if (Trans::hasKey($key))
-		{
-			return t($key);
-		}
-		return $shortname;
+		return Trans::hasKey($key) ? Trans::t($key) : $shortname;
 	}
 
 	# #############
@@ -93,12 +91,12 @@ trait WithModule
 	private static function getModuleByKlass(string $klass): GDO_Module
 	{
 		$moduleName = self::getModuleNameByKlass($klass);
-		return ModuleLoader::instance()->getModule($moduleName, true, true);
+		return ModuleLoader::instance()->getModule($moduleName);
 	}
 
 	private static function getModuleNameByKlass(string $klass): string
 	{
-		return Regex::firstMatch('#GDO\\\\([\\dA-Z_]+)#iD', $klass);
+		return Regex::firstMatch('#GDO\\\\([\\dA-Z_]+)#i', $klass);
 	}
 
 }

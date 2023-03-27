@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
-
 
 use GDO\Table\GDT_Filter;
 use GDO\Util\Arrays;
@@ -10,7 +10,7 @@ use GDO\Util\Arrays;
  * It behaves a tiny bit different than GDT_Select, for the selected value.
  * It inits the choices with a call to $table->all()!
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  */
@@ -21,7 +21,7 @@ class GDT_ObjectSelect extends GDT_Select
 
 	public bool $searchable = true;
 
-	public function searchable(bool $searchable): self
+	public function searchable(bool $searchable): static
 	{
 		$this->searchable = $searchable;
 		return $this;
@@ -32,6 +32,9 @@ class GDT_ObjectSelect extends GDT_Select
 // 		return parent::multiple($multiple);
 // 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function getChoices(): array
 	{
 		return isset($this->table) ? $this->table->allCached() : GDT::EMPTY_ARRAY;
@@ -68,10 +71,10 @@ class GDT_ObjectSelect extends GDT_Select
 	### Render ###
 	##############
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		/**
-		 * @var $value GDO
+		 * @var GDO $value
 		 */
 		if ($value = $this->getValue())
 		{
@@ -89,9 +92,10 @@ class GDT_ObjectSelect extends GDT_Select
 				return $value->toJSON();
 			}
 		}
+		return null;
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 // 		$this->initChoices();
 		if ($value === null)
@@ -108,10 +112,10 @@ class GDT_ObjectSelect extends GDT_Select
 		return true;
 	}
 
-	public function getVar()
-	{
-		return parent::getVar(); # required to overwrite trait.
-	}
+//	public function getVar(): string|array|null
+//	{
+//		return parent::getVar(); # required to overwrite trait.
+//	}
 
 	public function errorNotFound(): bool
 	{
@@ -128,7 +132,7 @@ class GDT_ObjectSelect extends GDT_Select
 		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
 	}
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		if ($value === null)
 		{
@@ -139,10 +143,8 @@ class GDT_ObjectSelect extends GDT_Select
 
 	/**
 	 * @param GDO[] $value
-	 *
-	 * @return string
 	 */
-	public function multipleToVar(array $value)
+	public function multipleToVar(array $value): string
 	{
 		$ids = array_map(function (GDO $gdo)
 		{
@@ -151,6 +153,10 @@ class GDT_ObjectSelect extends GDT_Select
 		return json_encode(array_values($ids));
 	}
 
+
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function plugVars(): array
 	{
 		if (isset($this->table))
@@ -166,15 +172,14 @@ class GDT_ObjectSelect extends GDT_Select
 		return GDT::EMPTY_ARRAY;
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
-		if ($var)
-		{
-			return $this->multiple ? $this->getValueMulti($var) : $this->getValueSingle($var);
-		}
+		return $this->multiple ?
+			$this->getValueMulti($var) :
+			$this->getValueSingle($var);
 	}
 
-	public function getValueMulti(string $var)
+	public function getValueMulti($var): array
 	{
 		$back = [];
 
@@ -193,7 +198,7 @@ class GDT_ObjectSelect extends GDT_Select
 		return $back;
 	}
 
-	public function getValueSingle(string $id)
+	public function getValueSingle(?string $id): ?GDO
 	{
 		return $this->selectToValue($id);
 	}
@@ -202,7 +207,7 @@ class GDT_ObjectSelect extends GDT_Select
 	 * Try the choices from GDT_Select.
 	 * But we are an Object and read from DB!
 	 */
-	public function selectToValue(string $var = null)
+	public function selectToValue(?string $var): null|GDO|array
 	{
 		if ($var !== null)
 		{
@@ -212,6 +217,7 @@ class GDT_ObjectSelect extends GDT_Select
 			}
 			return $this->table->getById($var);
 		}
+		return null;
 	}
 
 	##############
@@ -225,7 +231,7 @@ class GDT_ObjectSelect extends GDT_Select
 		]);
 	}
 
-	private function configJSONSelected()
+	private function configJSONSelected(): array
 	{
 		if ($this->multiple)
 		{
@@ -239,24 +245,21 @@ class GDT_ObjectSelect extends GDT_Select
 				];
 			}
 		}
+		elseif ($value = $this->getValue())
+		{
+			$selected = [
+				'id' => $value->getID(),
+				'text' => $value->renderName(),
+				'display' => $value->renderOption(),
+			];
+		}
 		else
 		{
-			if ($value = $this->getValue())
-			{
-				$selected = [
-					'id' => $value->getID(),
-					'text' => $value->renderName(),
-					'display' => $value->renderOption(),
-				];
-			}
-			else
-			{
-				$selected = [
-					'id' => $this->emptyVar,
-					'text' => $this->displayEmptyLabel(),
-					'display' => $this->displayEmptyLabel(),
-				];
-			}
+			$selected = [
+				'id' => $this->emptyVar,
+				'text' => $this->displayEmptyLabel(),
+				'display' => $this->displayEmptyLabel(),
+			];
 		}
 		return $selected;
 	}

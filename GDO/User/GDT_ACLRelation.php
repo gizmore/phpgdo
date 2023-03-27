@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDT_Enum;
@@ -9,7 +10,7 @@ use GDO\Friends\GDO_Friendship;
  * It checks access based on user relation and member status.
  * It helps to construct queries to reflect ACL permission.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.8.0
  * @author gizmore@wechall.net
  * @see GDT_ACL
@@ -17,13 +18,14 @@ use GDO\Friends\GDO_Friendship;
 final class GDT_ACLRelation extends GDT_Enum
 {
 
-	public const ALL = 'acl_all';
-	public const GUESTS = 'acl_guests';
-	public const MEMBERS = 'acl_members';
-	public const FRIENDS = 'acl_friends';
-	public const FRIEND_FRIENDS = 'acl_friend_friends';
-	public const NOONE = 'acl_noone';
-	public const HIDDEN = 'acl_hidden';
+	final public const ALL = 'acl_all';
+	final public const GUESTS = 'acl_guests';
+	final public const MEMBERS = 'acl_members';
+	final public const FRIENDS = 'acl_friends';
+	final public const FRIEND_FRIENDS = 'acl_friend_friends';
+	final public const NOONE = 'acl_noone';
+
+	final public const HIDDEN = 'acl_hidden';
 
 	protected function __construct()
 	{
@@ -59,7 +61,7 @@ final class GDT_ACLRelation extends GDT_Enum
 				return $result;
 
 			case self::FRIEND_FRIENDS:
-				$result = module_enabled('Friends') ? GDO_Friendship::isFriendFriend($user, $target) : false;
+				$result = module_enabled('Friends') && GDO_Friendship::isFriendFriend($user, $target);
 				if (!$result)
 				{
 					$reason = t('err_only_friend_friend_access');
@@ -67,7 +69,7 @@ final class GDT_ACLRelation extends GDT_Enum
 				return $result;
 
 			case self::FRIENDS:
-				$result = module_enabled('Friends') ? GDO_Friendship::areRelated($user, $target) : false;
+				$result = module_enabled('Friends') && GDO_Friendship::areRelated($user, $target);
 				if (!$result)
 				{
 					$reason = t('err_only_friend_access');
@@ -87,49 +89,5 @@ final class GDT_ACLRelation extends GDT_Enum
 				return false;
 		}
 	}
-
-// 	/**
-// 	 * Add where conditions to a query that reflect acl settings.
-// 	 * @param Query $query
-// 	 * @param GDO_User $user
-// 	 * @param string $creatorColumn
-// 	 * @return self
-// 	 */
-// 	public function aclQuery(Query $query, GDO_User $user, $creatorColumn)
-// 	{
-// 		# All
-// 		$idf = $this->identifier();
-// 		$condition = "$idf = 'acl_all'";
-
-// 		if ($user->isUser())
-// 		{
-// 			$condition .= " OR $idf = 'acl_guests'";
-// 		}
-
-// 		# Members
-// 		if ($user->isMember())
-// 		{
-// 			$condition .= " OR $idf = 'acl_members'";
-// 		}
-
-// 		# Friends and own require a owner column
-// 		if ($creatorColumn)
-// 		{
-// 			# Own
-// 			$uid = $user->getID();
-// 			$condition .= " OR $creatorColumn = {$uid}";
-
-// 			# Friends
-// 			if (module_enabled('Friends'))
-// 			{
-// 				$subquery = "SELECT 1 FROM gdo_friendship WHERE friend_user=$uid AND friend_friend=$creatorColumn";
-// 				$condition .= " OR ( $idf = 'acl_friends' AND ( $subquery ) )";
-// 			}
-// 		}
-
-// 		# Apply condition
-// 		$query->where($condition);
-// 		return $this;
-// 	}
 
 }

@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\lang;
-
 return [
+
+	'module_cli' => 'Command-Line',
 
 	'cli_usage' => 'Usage: %s. %s',
 
@@ -34,5 +36,7 @@ return [
 	'md_cli_rename' => 'Rename multiple files with a pattern and a replacemment. Optionally works on folders.',
 	'msg_file_renamed' => '%s has been renamed to %s.',
 	'msg_files_renamed' => '%s files have been renamed successfully.',
+
+	'mt_cli_debase64' => 'Base64Decode',
 
 ];

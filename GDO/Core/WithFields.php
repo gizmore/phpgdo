@@ -322,7 +322,7 @@ trait WithFields
 		$app->mode($renderMode);
 		foreach ($this->getFields() as $gdt)
 		{
-			$rendered .= $gdt->renderGDT();
+			$rendered .= $gdt->render();
 		}
 		$app->mode($old);
 		return $rendered;
@@ -333,7 +333,7 @@ trait WithFields
 	 */
 	public function getFields(): array
 	{
-		return isset($this->fields) ? $this->fields : GDT::EMPTY_ARRAY;
+		return $this->fields ?? GDT::EMPTY_ARRAY;
 	}
 
 	##############
@@ -348,7 +348,7 @@ trait WithFields
 		return $this;
 	}
 
-	public function render()
+	public function render(): array|string|null
 	{
 		return $this->renderGDT();
 	}
@@ -359,7 +359,7 @@ trait WithFields
 
 	public function renderXML(): string { return $this->renderFields(GDT::RENDER_XML); }
 
-	public function renderGTK() { return $this->renderFields(GDT::RENDER_GTK); }
+	public function renderGTK(): null { $this->renderFields(GDT::RENDER_GTK); return null; }
 
 	####################
 	### Render modes ### Proxy them to renderFields().
@@ -392,7 +392,7 @@ trait WithFields
 	# html table rendering
 // 	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		$json = [];
 		$this->withFields(function (GDT $gdt) use (&$json)

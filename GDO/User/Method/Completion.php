@@ -2,6 +2,7 @@
 namespace GDO\User\Method;
 
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_JSON;
 use GDO\Core\MethodCompletion;
 use GDO\User\GDO_User;
@@ -31,7 +32,7 @@ class Completion extends MethodCompletion
 		return 'Autocompletion for users on ' . sitename();
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$q = $this->getSearchTerm();
 		$q = GDO::escapeSearchS($q);

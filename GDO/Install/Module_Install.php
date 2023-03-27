@@ -29,7 +29,7 @@ final class Module_Install extends GDO_Module
 		return false;
 	}
 
-	public function defaultEnabled(): bool
+	public function defaultEnabled(): string
 	{
 		return false;
 	}
@@ -42,7 +42,7 @@ final class Module_Install extends GDO_Module
 	/**
 	 * Forcefully register install theme.
 	 */
-	public function onModuleInit()
+	public function onModuleInit(): void
 	{
 		$path = $this->filePath('thm/install/');
 		GDT_Template::registerTheme('install', $path);

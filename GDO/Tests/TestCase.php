@@ -1,12 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests;
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\Debug;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Core\WithModule;
+use GDO\Crypto\BCrypt;
 use GDO\Date\GDO_Timezone;
 use GDO\Date\Time;
 use GDO\Form\GDT_Form;
@@ -37,7 +40,7 @@ use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
  *
  * Provides MethodTest->execute() helper for convinient testing.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.1
  * @author gizmore
  * @see MethodTest
@@ -58,7 +61,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ################
 	/**
 	 *
-	 * @var GDO_Session[string]
+	 * @var GDO_Session[]
 	 */
 	protected array $sessions = [];
 	protected array $plugVariants;
@@ -80,7 +83,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$app = Application::$INSTANCE;
 		$app->reset();
-		$app->cli(true);
+		$app->cli();
 		$expression = GDT_Expression::fromLine($command);
 		$response = $expression->execute();
 		$app->cli(false);
@@ -93,12 +96,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		return trim($res, "\r\n");
 	}
 
-	public function lang($iso)
+	public function lang($iso): void
 	{
 		Trans::setISO($iso);
 	}
 
-	public function timezone($tz)
+	public function timezone($tz): void
 	{
 		$tz = GDO_Timezone::getBy('tz_name', $tz);
 		Time::setTimezone($tz->getID());
@@ -106,10 +109,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function setUp(): void
 	{
-		$this->message('Running %s', CLI::bold($this->gdoClassName()));
+		$this->message("\nRunning %s", CLI::bold($this->gdoClassName()));
 
 		$app = Application::$INSTANCE;
-		$app->reset(true);
+		$app->reset();
 		$app->verb(GDT_Form::GET);
 
 		# Increase IP
@@ -131,7 +134,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## User switch ###
 	# ##################
 
-	protected function message($message, ...$args)
+	protected function message($message, ...$args): void
 	{
 		$this->out(STDOUT, $message, $args);
 	}
@@ -143,6 +146,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		fwrite($fh, vsprintf($message, $args));
 		fwrite($fh, "\n");
+		flush();
 		if (ob_get_level())
 		{
 			ob_flush();
@@ -159,8 +163,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 			$this->ipd = 1;
 			$this->ipc++;
 		}
-		$ip = sprintf('127.0.%d.%d', $this->ipc, $this->ipd);
-		return $ip;
+		return sprintf('127.0.%d.%d', $this->ipc, $this->ipd);
 	}
 
 	# user_id: 2
@@ -233,6 +236,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$user->saveSettingVar('User', 'gender', 'male');
 // 		$user->saveSettingVar('Country', 'country', 'DE');
 		$user->saveSettingVar('Language', 'language', GDO_LANGUAGE);
+		$hash = BCrypt::create('11111111')->__toString();
+		$user->saveSettingVar('Login', 'password', $hash);
 	}
 
 	# ID 0
@@ -325,7 +330,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		return GDT_MethodTest::$TEST_USERS[4];
 	}
 
-	protected function assertNoCrash(string $message)
+	protected function assertNoCrash(string $message): void
 	{
 		assertLessThan(500, Application::$RESPONSE_CODE, $message);
 	}
@@ -345,12 +350,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 // 		return $result;
 // 	}
 
-	protected function assert200(string $message)
+	protected function assert200(string $message): void
 	{
 		$this->assertCode(200, $message);
 	}
 
-	protected function assertCode(int $code, string $message)
+	protected function assertCode(int $code, string $message): void
 	{
 		try
 		{
@@ -367,12 +372,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## CLI Tests ###
 	# ################
 
-	protected function assert403(string $message)
+	protected function assert403(string $message): void
 	{
 		$this->assertCode(403, $message);
 	}
 
-	protected function assertStringContainsStrings(array $needles, string $haystack, string $message = '')
+	protected function assertStringContainsStrings(array $needles, string $haystack, string $message = ''): void
 	{
 		foreach ($needles as $needle)
 		{
@@ -384,7 +389,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## Lang ###
 	# ###########
 
-	protected function assertStringContainsStringsIgnoringCase(array $needles, string $haystack, string $message = '')
+	protected function assertStringContainsStringsCI(array $needles, string $haystack, string $message = ''): void
 	{
 		foreach ($needles as $needle)
 		{
@@ -392,7 +397,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	protected function callMethod(Method $method, array $inputs, bool $assertOk = true)
+	protected function callMethod(Method $method, array $inputs, bool $assertOk = true): GDT
 	{
 		$m = GDT_MethodTest::make()->method($method);
 		$m->inputs($inputs);
@@ -413,17 +418,17 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## Output ###
 	# #############
 
-	protected function assertOK(string $message)
+	protected function assertOK(string $message): void
 	{
 		assertLessThan(400, Application::$RESPONSE_CODE, $message);
 	}
 
-	protected function assert409(string $message)
+	protected function assert409(string $message): void
 	{
 		$this->assertCode(409, $message);
 	}
 
-	protected function fakeFileUpload($fieldName, $fileName, $path)
+	protected function fakeFileUpload($fieldName, $fileName, $path): void
 	{
 		$dest = Module_Tests::instance()->tempPath($fileName);
 		$error = 5;
@@ -441,12 +446,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		];
 	}
 
-	protected function error($message, ...$args)
+	protected function error($message, ...$args): void
 	{
 		$this->out(STDERR, $message, $args);
 	}
 
-	protected function boldmome(Method $method)
+	protected function boldmome(Method $method): string
 	{
 		return CLI::bold(self::mome($method));
 	}
@@ -455,7 +460,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## PlugVars ###
 	# ###############
 
-	protected function mome(Method $method)
+	protected function mome(Method $method): string
 	{
 		return sprintf('%s/%s', $method->getModuleName(), $method->getMethodName());
 	}

@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
+use GDO\Core\GDO_ErrorFatal;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\ModuleLoader;
@@ -11,14 +13,13 @@ use GDO\Session\GDO_Session;
  * A website page object.
  * Adds 4 sidebars and 1 top response box.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  */
 final class GDT_Page extends GDT
 {
 
-	use WithHTML;
 	use WithTitle;
 	use WithInstance;
 	use WithDescription;
@@ -47,7 +48,7 @@ final class GDT_Page extends GDT
 	/**
 	 * Reset the global page object.
 	 */
-	public function reset(bool $removeInput = false): self
+	public function reset(): static
 	{
 		unset($this->topBar);
 		unset($this->leftBar);
@@ -102,6 +103,8 @@ final class GDT_Page extends GDT
 				return $this->rightBar();
 			case 'bottom':
 				return $this->bottomBar();
+			default:
+				throw new GDO_ErrorFatal('err_invalid_yield_slot', [html($slot)]);
 		}
 	}
 
@@ -118,7 +121,7 @@ final class GDT_Page extends GDT
 		return $this->topResponse;
 	}
 
-	private function restoreSessionRedirectResponse()
+	private function restoreSessionRedirectResponse(): void
 	{
 		if ($error = GDO_Session::get('redirect_error'))
 		{
@@ -157,6 +160,14 @@ final class GDT_Page extends GDT
 			$this->bottomBar = GDT_Bar::make('bottom')->horizontal();
 		}
 		return $this->bottomBar;
+	}
+
+	public string $html;
+
+	public function html(string $html): self
+	{
+		$this->html = $html;
+		return $this;
 	}
 
 }

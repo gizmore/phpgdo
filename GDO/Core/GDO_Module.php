@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
@@ -22,7 +23,7 @@ use GDO\Util\FileUtil;
  *
  * 1337 lines is huge.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 2.0.1
  * @author gizmore
  */
@@ -38,40 +39,55 @@ class GDO_Module extends GDO
 	private static string $NC;
 
 	public int $priority = 50;
-	public string $version = '7.0.1';
+
+	public string $version = '7.0.2';
+
 	public string $license = GDO::LICENSE;
-	public string $authors = 'gizmore <gizmore@wechall.net>';
-	public bool $inited = false;
+
 	/**
-	 *
+	 * @var string[] - The authors of a module, usually just,... me - gizmore :)
+	 */
+	protected array $authors = ['gizmore <gizmore@wechall.net>'];
+
+	public function renderAuthors(): string
+	{
+		return implode("<br/>\n", $this->authors);
+	}
+
+
+	public bool $inited = false;
+
+	/**
 	 * @var GDT[]
 	 */
 	private array $configCache;
+
+	/**
+	 * @var array @TODO The config varcache should be in serialized filecache.
+	 */
 	private array $configVarCache = [];
 	/**
 	 *
 	 * @var GDT[]
 	 */
 	private array $userConfigCache;
+
 	/**
-	 *
 	 * @var GDT_ACL[]
 	 */
 	private array $settingsACL;
 
-	# Overrides the GDT behaviour. GDO_Module is abstract.
 	/**
-	 *
 	 * @var GDT[]
 	 */
 	private array $settingsContainers;
+
 	/**
-	 *
 	 * @var GDT[]
 	 */
 	private array $settingsConfigs;
+
 	/**
-	 *
 	 * @var GDT[]
 	 */
 	private array $settingsSettings;
@@ -89,9 +105,9 @@ class GDO_Module extends GDO
 		return false;
 	}
 
-	public function defaultEnabled(): bool
+	public function defaultEnabled(): string
 	{
-		return !$this->isSiteModule();
+		return $this->isSiteModule() ? GDT::ZERO : GDT::ONE;
 	}
 
 	public function isSiteModule(): bool
@@ -152,8 +168,6 @@ class GDO_Module extends GDO
 	/**
 	 * Run system checks for this module, for example if bcmath is installed.
 	 * return errorSystemDependency('err_key') for a system dependency error.
-	 *
-	 * @see Module_Core
 	 */
 	public function checkSystemDependencies(): bool
 	{
@@ -162,7 +176,6 @@ class GDO_Module extends GDO
 
 	/**
 	 * Skip these folders in unit tests using strpos.
-	 *
 	 * @return string[]
 	 */
 	public function thirdPartyFolders(): array
@@ -193,10 +206,6 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
-//	public function onModuleInitCLI(): void
-//	{
-//	}
-
 	/**
 	 * Get all license filenames.
 	 * If the filename is not "LICENSE", the module is considered to have a non GDOv7-LICENSE and the GDO license is not shown.
@@ -224,22 +233,17 @@ class GDO_Module extends GDO
 	{
 		if (!$this->inited)
 		{
-			// $this->onLoadLanguage();
+			$this->inited = true;
 			if (!Application::$INSTANCE->isInstall())
 			{
 				$this->onModuleInit();
-//				if (CLI::isCLI())
-//				{
-//					$this->onModuleInitCLI();
-//				}
-				$this->inited = true;
 			}
 		}
 	}
 
 	# Polymorph fix
 
-	public function onModuleInit() {}
+	public function onModuleInit(): void {}
 
 	# Polymorph fix
 
@@ -260,13 +264,9 @@ class GDO_Module extends GDO
 		return static::class;
 	}
 
-	public function isEnabled(): bool
+	public function isEnabled(): string
 	{
-		if (GDO_DB_ENABLED)
-		{
-			return $this->gdoValue('module_enabled');
-		}
-		return true;
+		return $this->gdoVar('module_enabled');
 	}
 
 	# #############
@@ -275,8 +275,7 @@ class GDO_Module extends GDO
 
 	public function enabled(bool $enabled): self
 	{
-		$this->saveValue('module_enabled', $enabled);
-		return $this;
+		return $this->saveValue('module_enabled', $enabled);
 	}
 
 	public function isInstalled(): bool
@@ -299,16 +298,23 @@ class GDO_Module extends GDO
 
 	public function getName(): ?string
 	{
-		$name = $this->gdoVar('module_name');
-		return $name ? $name : $this->getModuleName();
+		return $this->gdoVar('module_name') ?: $this->getModuleName();
 	}
+
+	public function gdoHumanName(): string
+	{
+		$name = $this->getModuleName();
+		$key = strtolower("module_{$name}");
+		return Trans::hasKey($key) ? Trans::t($key) : $name;
+	}
+
 
 	/**
 	 * After creation reset the module version so the install form is up-to-date.
 	 */
-	public function gdoAfterCreate(GDO $gdo): void
+	public function gdoBeforeCreate(GDO $gdo, Query $query): void
 	{
-		$gdo->setVar('module_version', $gdo->version, false);
+		$gdo->setVar('module_version', Module_Core::GDO_VERSION);
 	}
 
 	# ##############
@@ -327,7 +333,7 @@ class GDO_Module extends GDO
 
 	public function hrefNoSEO(string $methodName, string $append = ''): string
 	{
-		return hrefNoSEO($this->getName(), $methodName, $append);
+		return hrefNoSeo($this->getName(), $methodName, $append);
 	}
 
 	public function href_install_module(): string
@@ -354,9 +360,10 @@ class GDO_Module extends GDO
 	# ## Hooks ###
 	# ############
 
-	public function getVersion(): Version
+	public function getVersion(): ?Version
 	{
-		return $this->gdoValue('module_version');
+		$value = $this->gdoValue('module_version');
+		return $value instanceof Version ? $value : null;
 	}
 
 	# #############
@@ -375,9 +382,9 @@ class GDO_Module extends GDO
 	public function tempPath(string $path = ''): string
 	{
 		$base = Application::$INSTANCE->isUnitTests() ? 'temp_test' : 'temp';
-		$dir = GDO_PATH . "{$base}/" . $this->getLowerName() . '/';
-		FileUtil::createDir($dir);
-		return $dir . $path;
+		$full = GDO_PATH . "{$base}/" . $this->getLowerName() . '/' - $path;
+		FileUtil::createdDir(dirname($full));
+		return $full;
 	}
 
 	# ###########
@@ -427,7 +434,6 @@ class GDO_Module extends GDO
 		{
 			case GDT::RENDER_JSON:
 				return GDT_JSON::make()->value(...$tVars);
-			// case GDT::RENDER_WEBSITE:
 			default:
 				return $this->templatePHP($file, $tVars);
 		}
@@ -438,13 +444,7 @@ class GDO_Module extends GDO
 	 */
 	public function templatePHP(string $path, array $tVars = null): GDT
 	{
-		switch (Application::$MODE_DETECTED)
-		{
-			case GDT::RENDER_JSON:
-				return $tVars; # @TODO here is the spot to enable json for generic templates.
-			default:
-				return GDT_Template::make()->template($this->getName(), $path, $tVars);
-		}
+		return GDT_Template::make()->template($this->getName(), $path, $tVars);
 	}
 
 	public function loadLanguage($path): self
@@ -477,12 +477,6 @@ class GDO_Module extends GDO
 	{
 		$this->configVarCache[$key] = $var;
 	}
-
-	// public function inited(bool $inited = true): self
-	// {
-	// $this->inited = true;
-	// return $this;
-	// }
 
 	public function &getConfigCache(): array
 	{
@@ -555,7 +549,7 @@ class GDO_Module extends GDO
 		Cache::remove('gdo_modules');
 	}
 
-	public function getConfigColumn(string $key, bool $throwError = true): ?GDT
+	public function getConfigColumn(string $key): ?GDT
 	{
 		if (!isset($this->configCache))
 		{
@@ -565,13 +559,6 @@ class GDO_Module extends GDO
 		{
 			return $this->configCache[$key];
 		}
-		if ($throwError)
-		{
-			throw new GDO_ErrorFatal('err_unknown_config', [
-				$this->renderName(),
-				html($key),
-			]);
-		}
 		return null;
 	}
 
@@ -580,9 +567,7 @@ class GDO_Module extends GDO
 	 */
 	public function renderName(): string
 	{
-		$name = $this->getName();
-		$key = strtolower("module_{$name}");
-		return t($key);
+		return $this->gdoHumanName();
 	}
 
 	public function &gdoColumnsCache(): array
@@ -611,27 +596,24 @@ class GDO_Module extends GDO
 		];
 	}
 
+	/**
+	 * @throws GDO_ErrorFatal
+	 */
 	public function removeConfigVar(string $key): void
 	{
-		if ($gdt = $this->getConfigColumn($key))
-		{
-			$gdt->initial(null);
-			GDO_ModuleVar::removeModuleVar($this, $key);
-		}
+		$gdt = $this->getConfigColumn($key);
+		GDO_ModuleVar::removeModuleVar($this, $gdt);
+		Cache::remove('gdo_modules');
 	}
 
-	public function increaseConfigVar(string $key, $by = 1): void
+	public function increaseConfigVar(string $key, float|int $by = 1): void
 	{
-		$value = $this->getConfigValue($key);
-		$this->saveConfigVar($key, $value + $by);
+		$this->saveConfigVar($key, (string)($this->getConfigValue($key) + $by));
 	}
 
-	public function getConfigValue(string $key)
+	public function getConfigValue(string $key): float|object|int|bool|array|string|null
 	{
-		if ($gdt = $this->getConfigColumn($key))
-		{
-			return $gdt->getValue();
-		}
+		return $this->getConfigColumn($key)->getValue();
 	}
 
 	public function saveConfigVar(string $key, ?string $var): void
@@ -662,11 +644,8 @@ class GDO_Module extends GDO
 		$settings = $this->loadUserSettings($user);
 		if ($acl = @$this->settingsACL[$key])
 		{
-			if ($def = $this->getACLDefaultsFor($key))
-			{
-				$acl->initialACL($def[0], $def[1], $def[2]);
-			}
-// 			$acl->setGDOData($settings);
+			$def = $this->getACLDefaultsFor($key);
+			$acl->initialACL($def[0], $def[1], $def[2]);
 		}
 		if ($settings)
 		{
@@ -678,36 +657,32 @@ class GDO_Module extends GDO
 	/**
 	 * Get a setting var **without** user assign.
 	 */
-	private function getSetting(string $key): GDT
+	private function getSetting(string $key): ?GDT
 	{
 		$this->buildSettingsCache();
 		# Try by key
 		if (isset($this->userConfigCache[$key]))
 		{
-			return $this->userConfigCache[$key];
+			return $this->userConfigCache[$key]->reset();
 		}
 		# Try subcomponents foreach
 		foreach ($this->userConfigCache as $gdt)
 		{
-			foreach ($gdt->gdoColumnNames() as $k)
+			if (in_array($key, $gdt->gdoColumnNames(), true))
 			{
-				if ($key === $k)
-				{
-					return $gdt;
-				}
+				return $gdt->reset();
 			}
 		}
-
-		throw new GDO_ErrorFatal('err_unknown_user_setting', [
-			$this->renderName(),
-			html($key),
-		]);
+		return null;
 	}
 
 	# ###################
 	# ## Settings API ###
 	# ###################
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public function &buildSettingsCache(): array
 	{
 		if (!isset($this->userConfigCache))
@@ -748,7 +723,7 @@ class GDO_Module extends GDO
 	 *
 	 * @return GDT[]
 	 */
-	public function getUserSettings()
+	public function getUserSettings(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
@@ -759,11 +734,14 @@ class GDO_Module extends GDO
 	 *
 	 * @return GDT[]
 	 */
-	public function getUserSettingBlobs()
+	public function getUserSettingBlobs(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
 
+	/**
+	 * @throws GDO_Error
+	 */
 	private function _buildSettingsCacheB(array $gdts, bool $writeable): void
 	{
 		$first = true;
@@ -813,17 +791,16 @@ class GDO_Module extends GDO
 		# Each var results in 3 GDT ACL vars in config cache.
 		if ($mu->cfgACLRelations())
 		{
-// 			$this->userConfigCache[$relation->name] = $relation;
 			$cont->addField($relation);
 		}
+
 		if ($mu->cfgACLLevels())
 		{
-// 			$this->userConfigCache[$level->name] = $level;
 			$cont->addField($level);
 		}
+
 		if ($mu->cfgACLPermissions())
 		{
-// 			$this->userConfigCache[$permission->name] = $permission;
 			$cont->addField($permission);
 		}
 
@@ -836,12 +813,12 @@ class GDO_Module extends GDO
 		return self::getByName(self::getNameS());
 	}
 
-	public static function getByName(string $moduleName, bool $throw = true): ?self
+	public static function getByName(string $moduleName): ?self
 	{
-		return ModuleLoader::$INSTANCE->getModule($moduleName, $throw);
+		return ModuleLoader::$INSTANCE->getModule($moduleName);
 	}
 
-	public static function getNameS()
+	public static function getNameS(): string
 	{
 		return substr(self::gdoShortNameS(), 7);
 	}
@@ -851,7 +828,7 @@ class GDO_Module extends GDO
 	 *
 	 * @return GDT[]
 	 */
-	public function getUserConfig()
+	public function getUserConfig(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
@@ -891,14 +868,13 @@ class GDO_Module extends GDO
 
 	private function getACLDefaultsFor(string $key): array
 	{
-		if ($defaults = $this->getACLDefaults())
+		$defaults = $this->getACLDefaults();
+		if (isset($defaults[$key]))
 		{
-			if (isset($defaults[$key]))
-			{
-				return $defaults[$key];
-			}
+			$defaults[$key][1] = $defaults[$key][1] > 0 ? (string) $defaults[$key][1] : null;
+			return $defaults[$key];
 		}
-		return [GDT_ACLRelation::NOONE, 0, null];
+		return [GDT_ACLRelation::NOONE, null, null];
 	}
 
 	protected function getACLDefaults(): array
@@ -915,19 +891,17 @@ class GDO_Module extends GDO
 
 	public function userSettingVar(GDO_User $user, string $key): ?string
 	{
-		$gdt = $this->userSetting($user, $key);
-		return $gdt->var;
+		return $this->userSetting($user, $key)->getVar();
 	}
 
-	public function settingValue(string $key)
+	public function settingValue(string $key): float|object|int|bool|array|string|null
 	{
 		return $this->userSettingValue(GDO_User::current(), $key);
 	}
 
-	public function userSettingValue(GDO_User $user, string $key)
+	public function userSettingValue(GDO_User $user, string $key): float|object|int|bool|array|string|null
 	{
-		$gdt = $this->userSetting($user, $key);
-		return $gdt->getValue();
+		return $this->userSetting($user, $key)->getValue();
 	}
 
 	public function saveSetting(string $key, string $var): GDT
@@ -960,13 +934,13 @@ class GDO_Module extends GDO
 		}
 
 		$data = $gdt->var($var)->getGDOData();
-		foreach ($data as $key => $var)
+		foreach ($data as $kk => $vv)
 		{
 			$acl = $this->getACLDataFor($user, $gdt, $key);
 			$data = [
 				'uset_user' => $user->getID(),
-				'uset_name' => $key,
-				'uset_var' => $var,
+				'uset_name' => $kk,
+				'uset_var' => $vv,
 				'uset_relation' => $acl[0],
 				'uset_level' => $acl[1],
 				'uset_permission' => $acl[2],
@@ -1029,7 +1003,8 @@ class GDO_Module extends GDO
 		}
 	}
 
-	public function saveUserSettingACLLevel(GDO_User $user, string $key, ?int $level): void
+
+	public function saveUserSettingACLLevel(GDO_User $user, string $key, ?string $level): void
 	{
 		$this->saveUserSettingACL($user, $key, 'uset_level', $level);
 	}
@@ -1039,14 +1014,15 @@ class GDO_Module extends GDO
 		$this->saveUserSettingACL($user, $key, 'uset_permission', $permission);
 	}
 
-	public function increaseSetting($key, $by = 1)
+	public function increaseSetting(string $key, int|float $by = 1): GDT
 	{
 		return $this->increaseUserSetting(GDO_User::current(), $key, $by);
 	}
 
-	public function increaseUserSetting(GDO_User $user, $key, $by = 1)
+	public function increaseUserSetting(GDO_User $user, string $key, int|float $by = 1): GDT
 	{
-		return $this->saveUserSetting($user, $key, $this->userSettingValue($user, $key) + $by);
+		$new = (string) ($this->userSettingValue($user, $key) + $by);
+		return $this->saveUserSetting($user, $key, $new);
 	}
 
 	public function hasUserSettings(): bool
@@ -1062,7 +1038,6 @@ class GDO_Module extends GDO
 	}
 
 	/**
-	 *
 	 * @return GDT[]
 	 */
 	public function &getSettingsCache(): array
@@ -1121,7 +1096,7 @@ class GDO_Module extends GDO
 	public function getSettingACL(string $name): ?GDT_ACL
 	{
 		$this->buildSettingsCache();
-		return isset($this->settingsACL[$name]) ? $this->settingsACL[$name] : null;
+		return $this->settingsACL[$name] ?? null;
 	}
 
 	/**
@@ -1138,7 +1113,7 @@ class GDO_Module extends GDO
 	public function getUserConfigACLField(string $key, GDO_User $user = null): ?GDT_ACL
 	{
 		$c = $this->settingsACL;
-		$user = $user ? $user : GDO_User::current();
+		$user = $user ?: GDO_User::current();
 		return isset($c[$key]) ? $this->_ucacl($key, $c[$key], $user) : null;
 	}
 
@@ -1230,11 +1205,10 @@ class GDO_Module extends GDO
 			if (strcasecmp($methodName, $file) === 0)
 			{
 				$className = "\\GDO\\{$this->getName()}\\Method\\{$file}";
-				$method = call_user_func([
+				return call_user_func([
 					$className,
 					'make',
 				]);
-				return $method;
 			}
 		}
 		if ($throw)
@@ -1250,7 +1224,6 @@ class GDO_Module extends GDO
 	# #############
 	# ## Method ###
 	# #############
-
 	public function getMethodNames(bool $withPermission = true): array
 	{
 		$methods = $this->getMethods($withPermission);
@@ -1266,8 +1239,7 @@ class GDO_Module extends GDO
 	public function cfgMinAppend(): string
 	{
 		$mode = self::config_var('Javascript', 'minify_js', 'no');
-		return $mode === 'no' ?
-			GDT::EMPTY_STRING : '.min';
+		return $mode === 'no' ? GDT::EMPTY_STRING : '.min';
 	}
 
 	/**
@@ -1275,11 +1247,11 @@ class GDO_Module extends GDO
 	 */
 	public static function config_var(string $moduleName, string $key, string $default = null): ?string
 	{
-		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
+		if ($module = ModuleLoader::instance()->getModule($moduleName, false))
 		{
 			return $module->getConfigVar($key);
 		}
-		return null;
+		return $default;
 	}
 
 	public function getConfigVar(string $key): ?string
@@ -1295,9 +1267,9 @@ class GDO_Module extends GDO
 	# ## Assets ###
 	# #############
 
-	public function addBowerJS(string $path)
+	public function addBowerJS(string $path): void
 	{
-		return $this->addJS('bower_components/' . $path);
+		$this->addJS('bower_components/' . $path);
 	}
 
 	public function addJS(string $path): void
@@ -1345,37 +1317,6 @@ class GDO_Module extends GDO
 		return $this->error('err_system_dependency', [
 			t($key, $args),
 		]);
-	}
-
-	# ############
-	# ## Error ###
-	# ############
-
-	private function getACLDefaultRelation(string $key): string
-	{
-		if ($defaults = $this->getACLDefaultsFor($key))
-		{
-			return $defaults[0];
-		}
-		return 'acl_noone';
-	}
-
-	private function getACLDefaultLevel(string $key): int
-	{
-		if ($defaults = $this->getACLDefaultsFor($key))
-		{
-			return $defaults[1];
-		}
-		return 0;
-	}
-
-	private function getACLDefaultPermission(string $key): ?string
-	{
-		if ($defaults = $this->getACLDefaultsFor($key))
-		{
-			return $defaults[2];
-		}
-		return null;
 	}
 
 }

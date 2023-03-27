@@ -15,10 +15,12 @@ use GDO\UI\GDT_Page;
 final class GDT_Response extends GDT_Tuple
 {
 
-	public function render(): string
+	public function render(): array|string|null
 	{
 		switch (Application::$MODE)
 		{
+			case GDT::RENDER_BINARY:
+				return $this->renderFields($renderMode);
 			case GDT::RENDER_WEBSITE:
 				return $this->renderWebsite();
 			case GDT::RENDER_XML:

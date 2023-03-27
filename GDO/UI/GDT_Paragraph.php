@@ -19,12 +19,12 @@ class GDT_Paragraph extends GDT
 	##############
 	### Render ###
 	##############
-	public function render(): string { return $this->renderHTML(); }
+	public function render(): array|string|null { return $this->renderHTML(); }
 
 	public function renderHTML(): string { return sprintf("<p class=\"gdt-paragraph\">%s</p>\n", $this->renderText()); }
 
 	public function renderCLI(): string { return $this->renderText() . "\n"; }
 
-	public function renderJSON() { return $this->renderText(); }
+	public function renderJSON(): array|string|null { return $this->renderText(); }
 
 }

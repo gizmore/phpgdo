@@ -3,6 +3,7 @@ namespace GDO\Core\Method;
 
 use GDO\Core\Application;
 use GDO\Core\GDO_FileCache;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Hook;
 use GDO\Core\Method;
 use GDO\Core\Module_Core;
@@ -35,7 +36,7 @@ final class Fileserver extends Method
 		];
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$url = $this->gdoParameterVar('url', false);
 		$url = ltrim($url, '/');

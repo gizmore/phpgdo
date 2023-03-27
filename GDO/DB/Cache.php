@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\DB;
 
 use GDO\Core\Application;
@@ -29,7 +30,7 @@ use Memcached;
  *
  * The other memcached keys work on a per row basis with table_name_id as key.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  */
@@ -84,20 +85,25 @@ class Cache
 	 */
 	public array $all;
 
+	public int $expires = GDO_MEMCACHE_TTL;
+
 	/**
 	 * Expire time in seconds for allCached().
 	 */
-	public int $allExpire;
+	public int $allExpire = GDO_MEMCACHE_TTL;
+
 	/**
 	 * The single identity GDO cache
 	 *
 	 * @var GDO[]
 	 */
 	public array $cache = [];
+
 	/**
 	 * The table object is fine to keep clean?
 	 */
 	private GDO $table;
+
 
 	#PP#start#
 	/**
@@ -107,6 +113,8 @@ class Cache
 	private GDO $dummy;
 
 	#PP#end#
+
+
 	/**
 	 * Full classname
 	 */
@@ -119,7 +127,10 @@ class Cache
 		$this->tableName = strtolower($gdo->gdoShortName());
 	}
 
-	public static function init()
+	/**
+	 * @throws GDO_Error
+	 */
+	public static function init(): void
 	{
 		if (GDO_MEMCACHE == 1)
 		{
@@ -128,7 +139,7 @@ class Cache
 		}
 		if ((GDO_FILECACHE) || (GDO_MEMCACHE == 2))
 		{
-			FileUtil::createDir(self::filePath());
+			FileUtil::createDir(self::filePath(), false);
 		}
 	}
 
@@ -155,9 +166,11 @@ class Cache
 		return str_replace([
 			'"',
 			'/',
+			'\\',
 			'<',
 			'>',
 			'?',
+			'!',
 			':',
 		],
 			'_',
@@ -166,11 +179,12 @@ class Cache
 
 	public static function recacheHooks(): void
 	{
-		if (GDO_IPC && Application::$INSTANCE->isWebServer())
+		$app = Application::$INSTANCE;
+		if ($app->isIPC() && $app->isWebserver())
 		{
 			foreach (self::$RECACHING as $gdo)
 			{
-				GDT_Hook::callWithIPC('CacheInvalidate', $gdo->table()->cache->klass, $gdo->getID());
+				GDT_Hook::callWithIPC('CacheInvalidate', $gdo->tbl()->cache->klass, $gdo->getID());
 			}
 		}
 	}
@@ -193,9 +207,8 @@ class Cache
 		{
 			if ($mcached = self::get($this->tableName . $id))
 			{
-				$this->cache[$id] = $mcached;
 				self::$CACHE_HITS++; #PP#delete#
-				return $mcached;
+				return $this->cache[$id] = $mcached;
 			}
 		}
 		else
@@ -226,9 +239,12 @@ class Cache
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
-				return defined('GDO_MEMCACHED_FALLBACK') ? null : self::$MEMCACHED->get(MEMCACHEPREFIX . $key);
+				return defined('GDO_MEMCACHED_FALLBACK') ? null :
+					self::$MEMCACHED->get(MEMCACHEPREFIX . $key);
 			case 2:
 				return self::fileGetSerialized($key);
+			default:
+				return null;
 		}
 	}
 
@@ -348,20 +364,19 @@ class Cache
 
 	public function getDummy(): GDO
 	{
-		return isset($this->dummy) ? $this->dummy : $this->newDummy();
+		return $this->dummy ?? $this->newDummy();
 	}
 
 	private function newDummy(): GDO
 	{
-		$this->dummy = new $this->klass();
-		return $this->dummy;
+		return $this->dummy = call_user_func([$this->klass, 'tableGDO']);
 	}
 
 	public function clearCache(): void
 	{
 		unset($this->all);
 		$this->cache = [];
-		$this->flush();
+		self::flush();
 	}
 
 	/**
@@ -379,11 +394,11 @@ class Cache
 	/**
 	 * Remove the whole filecache.
 	 */
-	private static function fileFlush(string $key = null): bool
+	private static function fileFlush(): bool
 	{
+		$dir = GDO_TEMP_PATH . 'cache/';
 		self::$CACHE_FLUSH++; #PP#delete#
-		return FileUtil::removeDir(GDO_TEMP_PATH . 'cache/')
-			&& FileUtil::createDir(GDO_TEMP_PATH . 'cache/');
+		return FileUtil::removeDir($dir) && FileUtil::createDir($dir);
 	}
 
 	public function recache(GDO $object): GDO
@@ -435,6 +450,8 @@ class Cache
 
 	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL)
 	{
+		self::debug('replace', $key, $value); #PP#delete#
+
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
@@ -461,8 +478,7 @@ class Cache
 	{
 		if (GDO_FILECACHE)
 		{
-			$content = serialize($value);
-			return self::fileSet($key, $content);
+			return self::fileSet($key, serialize($value));
 		}
 		return false;
 	}
@@ -474,6 +490,7 @@ class Cache
 	{
 		if (GDO_FILECACHE)
 		{
+			self::debug('fileset', $key, $content); #PP#delete#
 			$path = self::filePath($key);
 			FileUtil::createDir(dirname($path));
 			return file_put_contents($path, $content) !== false;
@@ -503,6 +520,13 @@ class Cache
 	 */
 	public static function remove(string $key): void
 	{
+		#PP#start#
+		if (GDO_CACHE_DEBUG)
+		{
+			self::debug('rem', $key, null);
+		}
+		#PP#end#
+
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
@@ -568,15 +592,9 @@ class Cache
 	/**
 	 * Set a memcached item.
 	 */
-	public static function set(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
+	public static function set(string $key, mixed $value, int $expire = GDO_MEMCACHE_TTL): void
 	{
-		#PP#start#
-		if (GDO_CACHE_DEBUG)
-		{
-			self::debug('set', $key, $value);
-		}
-		#PP#end#
-
+		self::debug('setmem', $key, $value); #PP#delete#
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
@@ -591,18 +609,20 @@ class Cache
 		}
 	}
 
-	private static function debug(string $event, string $key, $value)
+	private static function debug(string $event, string $key, mixed $value): void
 	{
-		Logger::log('cache', sprintf('%s %s', $event, $key));
-		if (GDO_CACHE_DEBUG >= 2)
+		if (GDO_CACHE_DEBUG >= 1)
 		{
-			$isHTML = Application::instance()->isHTML();
-			Logger::log('cache', Debug::backtrace('Backtrace', $isHTML));
+			Logger::log('cache', sprintf('%s %s (%s)', $event, $key, mb_substr($value, 0, 64)));
+			if (GDO_CACHE_DEBUG >= 2)
+			{
+				Logger::log('cache', Debug::backtrace('Backtrace', false));
+			}
 		}
 	}
 
 	/**
-	 * Check if the parameter is the GDO table object.
+	 * Check if a GDO is the table entity.
 	 */
 	public function isTable(GDO $gdo): bool
 	{
@@ -616,7 +636,8 @@ define('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
 define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
 define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));
 #PP#start#
-deff('GDO_FILECACHE', 1);   # enable filecache
-deff('GDO_MEMCACHE', 2);    # fallback to filecache
-deff('GDO_CACHE_DEBUG', 0); # off
+deff('GDO_FILECACHE', 1);       # enable filecache
+deff('GDO_MEMCACHE', 2);        # fallback to it
+deff('GDO_MEMCACHE_TTL', 1800); # expire time
+deff('GDO_CACHE_DEBUG', 0);     # debug off
 #PP#end#

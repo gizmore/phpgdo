@@ -19,7 +19,7 @@ final class GDO_SEO_URL extends GDO
 		return self::blank([
 			'su_file' => $path,
 			'su_url' => $url,
-		])->replace();
+		])->softReplace();
 	}
 
 	###########

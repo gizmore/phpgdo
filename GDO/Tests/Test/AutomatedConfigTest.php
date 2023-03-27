@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
 use GDO\Core\GDO_Module;
@@ -9,11 +10,11 @@ use function PHPUnit\Framework\assertTrue;
 /**
  * Test if module default configs and settings are valid.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
-final class AutomatedModuleConfigTest extends TestCase
+final class AutomatedConfigTest extends TestCase
 {
 
 	public function testModulesConfigDefaults(): void
@@ -24,7 +25,7 @@ final class AutomatedModuleConfigTest extends TestCase
 		}
 	}
 
-	private function singleModuleTest(GDO_Module $module)
+	private function singleModuleTest(GDO_Module $module): void
 	{
 		foreach ($module->getConfigCache() as $gdt)
 		{

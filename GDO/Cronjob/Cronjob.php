@@ -35,6 +35,8 @@ final class Cronjob
 		$modules = $loader->loadModulesCache();
 		$loader->initModules();
 
+		GDO_Cronjob::cleanup();
+
 		if (module_enabled('Cronjob'))
 		{
 			foreach ($modules as $module)

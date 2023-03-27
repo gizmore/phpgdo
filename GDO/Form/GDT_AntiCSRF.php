@@ -143,7 +143,7 @@ class GDT_AntiCSRF extends GDT_String
 		return [];
 	}
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (Module_Form::instance()->cfgXSRFMode() === 'off')
 		{

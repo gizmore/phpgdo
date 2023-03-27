@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User\lang;
-
 return [
 	'module_user' => 'Benutzer',
 	'gdo_user' => 'Benutzer',
@@ -9,6 +9,10 @@ return [
 	'profile_views' => 'Profiltreffer',
 	'profile_visibility' => 'Profil sichtbar für',
 	'probably_malicious' => 'Wahrscheinlicher Störenfried',
+
+	'cfg_acl_levels' => 'Sichtbarkeit über Nutzerlevel?',
+	'cfg_acl_permissions' => 'Sichtbarkeit über Berechtigungen?',
+	'cfg_acl_relations' => 'Sichtbarkeit über Beziehungen?',
 
 	'enum_none' => 'keine Angabe',
 	'enum_male' => 'Männlich',

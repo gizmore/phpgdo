@@ -31,7 +31,7 @@ class GDO_UserSetting extends GDO
 	{
 		foreach (array_keys($gdt->getGDOData()) as $key)
 		{
-			if ($row = self::table()->getById($user->getID(), $key))
+			if ($row = self::getById($user->getID(), $key))
 			{
 				$row->saveVar($aclField, $aclVar);
 			}
@@ -44,7 +44,7 @@ class GDO_UserSetting extends GDO
 	 */
 	public static function usersWithLike(string $moduleName, string $key, string $var): Result
 	{
-		return self::usersWithLike($moduleName, $key, $var, true);
+		return self::usersWithLike($moduleName, $key, $var);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class GDO_UserSetting extends GDO
 			GDT_ACLRelation::make('uset_relation'),
 			GDT_Level::make('uset_level'),
 			GDT_Permission::make('uset_permission'),
-			GDT_Index::make('uset_user_index')->indexColumns('uset_user,uset_name')->hash(),
+			GDT_Index::make('uset_user_index')->indexColumns('uset_user'),
 		];
 	}
 
@@ -122,17 +122,17 @@ class GDO_UserSetting extends GDO
 
 	public function gdoAfterCreate(GDO $gdo): void
 	{
-		$gdo->reset(true);
+		$gdo->reset();
 	}
 
 	public function gdoAfterUpdate(GDO $gdo): void
 	{
-		$gdo->reset(true);
+		$gdo->reset();
 	}
 
 	public function gdoAfterDelete(GDO $gdo): void
 	{
-		$gdo->reset(true);
+		$gdo->reset();
 	}
 
 	##
@@ -150,12 +150,12 @@ class GDO_UserSetting extends GDO
 	### Hooks ###
 	#############
 
-	public function getRelation(): ?string
+	public function getRelation(): string
 	{
 		return $this->gdoVar('uset_relation');
 	}
 
-	public function getLevel(): int
+	public function getLevel(): string
 	{
 		return $this->gdoVar('uset_level');
 	}

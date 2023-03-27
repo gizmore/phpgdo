@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_HealthCard;
 use GDO\Core\Method;
 
@@ -18,7 +19,7 @@ final class Health extends Method
 		return t('health');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		return GDT_HealthCard::make('health');
 	}

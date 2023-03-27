@@ -24,12 +24,12 @@ final class GDT_Filesize extends GDT_UInt
 		return GDT::EMPTY_STRING;
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		return $this->getValue();
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $var === null ? null : (int)FileUtil::humanToBytes($var);
 	}

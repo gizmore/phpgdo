@@ -34,7 +34,7 @@ final class Security extends MethodForm
 		return t('mt_install_security');
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		Database::init();
 		ModuleLoader::instance()->loadModulesA();
@@ -51,7 +51,7 @@ final class Security extends MethodForm
 		$form->actions()->addField(GDT_Submit::make()->label('protect_folders'));
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		return $this->onProtect();
 	}

@@ -2,6 +2,7 @@
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Array;
 use GDO\Core\MethodAjax;
 use GDO\Core\ModuleLoader;
@@ -17,7 +18,7 @@ use GDO\Core\ModuleLoader;
 final class Config extends MethodAjax
 {
 
-	public function execute()
+	public function execute(): GDT
 	{
 		$json = [];
 		$modules = ModuleLoader::instance()->getEnabledModules();

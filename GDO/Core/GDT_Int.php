@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Query;
@@ -20,7 +21,7 @@ use GDO\Util\Arrays;
  * Is searchable and orderable.
  * Uses WithLabel, WithFormFields, WithDatabase and WithOrder.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see GDT_UInt
@@ -32,39 +33,45 @@ class GDT_Int extends GDT_DBField
 {
 
 	public string $icon = 'numeric';
+
 	public int $bytes = 4;
 
 	#############
 	### Bytes ###
 	#############
-	public float $step = 1.0;
+
+
+	public int|float $step = 1;
+
 	public bool $unsigned = false;
 
 	############
 	### Step ###
 	############
-	public ?float $min = null;
-	public ?float $max = null;
+	public null|int|float $min = null;
+
+	public null|int|float $max = null;
 
 	################
 	### Unsigned ###
 	################
 
-	public function toValue($var = null)
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
-		return $var === null ? null : intval($var, 10);
+		return $value === null ? null : (string)$value;
 	}
 
-	public function validate($value): bool
+	/**
+	 * @throws GDO_Error
+	 * @throws GDO_Exception
+	 * @throws GDO_DBException
+	 */
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (parent::validate($value))
 		{
 			if ($value !== null)
 			{
-// 				if (!$this->is_numeric($this->getRequestVar()))
-// 				{
-// 					return $this->numericError();
-// 				}
 				if (($this->max !== null) && ($this->max < $this->min))
 				{
 					return $this->error('err_min_max_confusion');
@@ -86,14 +93,17 @@ class GDT_Int extends GDT_DBField
 		return false;
 	}
 
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
+	{
+		return $var === null ? null : intval($var);
+	}
+
 	###############
 	### Min/Max ###
 	###############
 
 	/**
 	 * Appropiate min / max validation.
-	 *
-	 * @return bool
 	 */
 	private function intError(): bool
 	{
@@ -109,18 +119,27 @@ class GDT_Int extends GDT_DBField
 		{
 			return $this->error('err_int_too_large', [$this->max]);
 		}
+		return false;
 	}
 
+	/**
+	 * @throws GDO_Error
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 */
 	protected function validateUnique($value): bool
 	{
 		if ($this->unique)
 		{
-			$condition = "{$this->identifier()}=" . GDO::quoteS($value);
+			$condition = "{$this->getName()}=" . GDO::quoteS($value);
+
+			# @TODO: polymorph fix for int gdo uniques.
 			if ($this->gdo->isPersisted()) // persisted
 			{ // ignore own row
 				$condition .= ' AND NOT ( ' . $this->gdo->getPKWhere() . ' )';
 			}
-			return $this->gdo->table()->select('1')->where($condition)->first()->exec()->fetchValue() !== '1';
+			return $this->gdo->tbl()->select(GDT::ONE)->where($condition)->
+				first()->exec()->fetchValue() !== GDT::ONE;
 		}
 		return true;
 	}
@@ -159,14 +178,10 @@ class GDT_Int extends GDT_DBField
 	################
 	### Validate ###
 	################
-// 	public function is_numeric(string $input) : bool
-// 	{
-// 		return !!Regex::firstMatch('/^([0-9][-+\\d\\.,]*)$/iD', $input);
-// 	}
 
 	public function htmlClass(): string
 	{
-		return sprintf(' gdt-num %s', parent::htmlClass());
+		return ' gdt-num ' . parent::htmlClass();
 	}
 
 	public function renderForm(): string
@@ -179,43 +194,48 @@ class GDT_Int extends GDT_DBField
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
-		return $this->getValue();
+		return $this->getVar();
 	}
 
 	public function configJSON(): array
 	{
 		return array_merge(parent::configJSON(), [
-			'bytes' => $this->bytes,
-			'signed' => true,
 			'min' => $this->min,
 			'max' => $this->max,
+			'bytes' => $this->bytes,
+			'signed' => !$this->unsigned,
 		]);
 	}
 
 	public function renderFilter(GDT_Filter $f): string
 	{
-		return GDT_Template::php('Core', 'integer_filter.php', ['field' => $this, 'f' => $f]);
+		return GDT_Template::php('Core', 'integer_filter.php', [
+			'field' => $this, 'f' => $f]);
 	}
 
 	##############
 	### Render ###
 	##############
 
-	public function filterQuery(Query $query, GDT_Filter $f): self
+	/**
+	 * @throws GDO_Error
+	 */
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
-		if ($filter = $this->filterVar($f))
+		if (null !== ($filter = $this->filterVar($f)))
 		{
-			if ($condition = $this->searchQuery($query, $filter, true))
-			{
-				$this->filterQueryCondition($query, $condition);
-			}
+			$this->searchQuery($query, $filter);
+//			if ($condition = )
+//			{
+//				$this->filterQueryCondition($query, $condition);
+//			}
 		}
 		return $this;
 	}
 
-	public function filterVar(GDT_Filter $f): ?string
+	public function filterVar(GDT_Filter $f): null|string|array
 	{
 		$fv = parent::filterVar($f);
 		return Arrays::empty($fv) ? null : self::intFilterVar($fv);
@@ -235,19 +255,27 @@ class GDT_Int extends GDT_DBField
 		return $fv;
 	}
 
-	public function searchQuery(Query $query, string $term): self
+	/**
+	 * @throws GDO_Error
+	 */
+	public function searchQuery(Query $query, string $searchTerm): static
 	{
-		$term = GDO::escapeS($term);
-		$query->orWhere("{$this->name} = '{$term}'");
+		if ($this->isSearchable())
+		{
+			$searchTerm = GDO::quoteS($searchTerm);
+			$query->orWhere("{$this->name} = {$searchTerm}");
+		}
 		return $this;
-//	    return $this->searchCondition($searchTerm);
 	}
 
-	public function filterGDO(GDO $gdo, $filtervalue): bool
+	/**
+	 * @throws GDO_ErrorFatal
+	 */
+	public function filterGDO(GDO $gdo, $filterInput): bool
 	{
-		$min = $filtervalue['min'];
-		$max = $filtervalue['max'];
-		$var = $this->getVar();
+		$min = $filterInput['min'];
+		$max = $filterInput['max'];
+		$var = $gdo->gdoValue($this->name);
 		if (($min !== null) && ($var < $min))
 		{
 			return false;
@@ -265,6 +293,8 @@ class GDT_Int extends GDT_DBField
 
 	/**
 	 * Comparing two integers is not that hard.
+	 *
+	 * @throws GDO_ErrorFatal
 	 */
 	public function gdoCompare(GDO $a, GDO $b): int
 	{
@@ -279,7 +309,7 @@ class GDT_Int extends GDT_DBField
 		return $this;
 	}
 
-	public function step(float $step): self
+	public function step(int|float $step): self
 	{
 		$this->step = $step;
 		return $this;
@@ -291,37 +321,16 @@ class GDT_Int extends GDT_DBField
 		return $this;
 	}
 
-	public function min(float $min): self
+	public function min(null|int|float $min): self
 	{
 		$this->min = $min;
 		return $this;
 	}
 
-	public function max(float $max): self
+	public function max(null|int|float $max): self
 	{
 		$this->max = $max;
 		return $this;
 	}
-
-	##############
-	### Search ###
-	##############
-
-	private function numericError(): bool
-	{
-		return $this->error('err_input_not_numeric');
-	}
-
-// 	public function searchGDO($searchTerm)
-// 	{
-// 	    $haystack = (string) $this->getVar();
-// 	    return strpos($haystack, $searchTerm) !== false;
-// 	}
-
-//	public function searchCondition($searchTerm) : string
-//	{
-//		$searchTerm = (int)$searchTerm;
-//		return "{$this->name} = {$searchTerm}";
-//	}
 
 }

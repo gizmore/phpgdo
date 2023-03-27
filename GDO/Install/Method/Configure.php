@@ -29,7 +29,7 @@ class Configure extends MethodForm
 		return false;
 	}
 
-	public function isEnabled(): bool
+	public function isEnabled(): string
 	{
 		return true;
 	}

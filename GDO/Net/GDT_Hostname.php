@@ -42,7 +42,7 @@ final class GDT_Hostname extends GDT_String
 	################
 	### Validate ###
 	################
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (parent::validate($value))
 		{

@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
-use GDO\Core\GDT;
+use GDO\Core\GDT_Field;
 use GDO\Table\GDT_Filter;
 
 /**
@@ -9,30 +10,29 @@ use GDO\Table\GDT_Filter;
  * Rendering methods are all directed to the proxy GDT.
  * Used in GDT_Repeat for reapeated arguments, like concat a;b;c;...
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
- * @see GDT
  */
 trait WithProxy
 {
 
-	public GDT $proxy;
+	public GDT_Field $proxy;
 
-	public static function makeAs(string $name = null, GDT $proxy): self
+	public static function makeAs(string $name, GDT_Field $proxy): static
 	{
-		$obj = parent::make($name);
+		$obj = self::make($name);
 		$proxy->name($name);
 		return $obj->proxy($proxy);
 	}
 
-	public function proxy(GDT $proxy): self
+	public function proxy(GDT_Field $proxy): static
 	{
 		$this->proxy = $proxy;
 		return $this;
 	}
 
-	public function getDefaultName(): string { return 'proxy'; }
+//	public function getDefaultName(): string { return 'proxy'; }
 
 	public function isTestable(): bool
 	{
@@ -43,7 +43,7 @@ trait WithProxy
 	### Render ###
 	##############
 	# various output/rendering formats
-	public function render() { return $this->proxy->renderGDT(); }
+	public function render(): array|string|null { return $this->proxy->renderGDT(); }
 
 	public function renderBinary(): string { return $this->proxy->renderBinary(); }
 
@@ -51,7 +51,7 @@ trait WithProxy
 
 	public function renderPDF(): string { return $this->proxy->renderPDF(); }
 
-	public function renderJSON() { return $this->proxy->renderJSON(); }
+	public function renderJSON(): array|string|null { return $this->proxy->renderJSON(); }
 
 	public function renderXML(): string { return $this->proxy->renderXML(); }
 
@@ -76,12 +76,12 @@ trait WithProxy
 		return $this->proxy->getName();
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		return $this->proxy->getVar();
 	}
 
-	public function getValue()
+	public function getValue(): bool|int|float|string|array|null|object
 	{
 		return $this->proxy->getValue();
 	}
@@ -90,12 +90,12 @@ trait WithProxy
 	### Input / Var / Value ###
 	###########################
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		return $this->proxy->toVar($value);
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $this->proxy->toValue($var);
 	}

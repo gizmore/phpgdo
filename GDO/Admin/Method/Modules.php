@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Admin\Method;
 
 use GDO\Admin\GDT_ModuleAdminButton;
@@ -7,17 +8,19 @@ use GDO\Admin\GDT_ModuleVersionFS;
 use GDO\Admin\MethodAdmin;
 use GDO\Core\GDO;
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Checkbox;
 use GDO\Core\GDT_UInt;
 use GDO\Core\GDT_Version;
 use GDO\Core\ModuleLoader;
 use GDO\DB\ArrayResult;
 use GDO\Table\MethodTable;
+use GDO\User\GDO_Permission;
 
 /**
  * Overview of all modules in FS and DB.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.2
  * @author gizmore
  */
@@ -37,17 +40,17 @@ class Modules extends MethodTable
 
 	public function useFetchInto(): bool { return false; }
 
-	public function isPaginated() { return false; }
+	public function isPaginated(): bool { return false; }
 
 	public function getDefaultOrder(): ?string { return 'module_name ASC'; }
 
-	public function onMethodInit()
+	public function onMethodInit(): ?GDT
 	{
-		$this->modules = ModuleLoader::instance()->loadModules(false, true, false);
+		$this->modules = ModuleLoader::instance()->loadModules(false, true);
 		return parent::onMethodInit();
 	}
 
-	public function execute()
+	public function execute(): GDT
 	{
 		unset($this->modules['install']);
 		return parent::execute();
@@ -70,6 +73,6 @@ class Modules extends MethodTable
 		];
 	}
 
-	public function getPermission(): ?string { return 'staff'; }
+	public function getPermission(): ?string { return GDO_Permission::STAFF; }
 
 }

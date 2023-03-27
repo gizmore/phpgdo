@@ -28,7 +28,7 @@ class GDT_DateTime extends GDT_Date
 		return sprintf(' value="%s"', $isodate);
 	}
 
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		if ($value)
 		{

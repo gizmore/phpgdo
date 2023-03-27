@@ -49,7 +49,7 @@ final class GDT_Order extends GDT_String
 	### Validate ###
 	################
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if ($value)
 		{
@@ -129,7 +129,7 @@ final class GDT_Order extends GDT_String
 		}, $os);
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		$name = $this->name;
 		if (isset($this->inputs[$name]))

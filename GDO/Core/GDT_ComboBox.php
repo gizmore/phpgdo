@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Table\GDT_Filter;
@@ -6,7 +7,7 @@ use GDO\Table\GDT_Filter;
 /**
  * A combobox is a string with additional completion and dropdown.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see GDT_Select
@@ -19,9 +20,6 @@ class GDT_ComboBox extends GDT_String
 	###############
 	### Choices ###
 	###############
-	/**
-	 * @var string[]
-	 */
 	public array $choices;
 
 	public function choices(array $choices): self
@@ -35,14 +33,15 @@ class GDT_ComboBox extends GDT_String
 	############
 	public function configJSON(): array
 	{
+		$var = $this->getVar();
 		return array_merge(parent::configJSON(), [
+			'combobox' => 1,
 			'selected' => [
-				'id' => $this->getVar(),
-				'text' => $this->getVar(),
+				'id' => $var,
+				'text' => $var,
 				'display' => $this->renderOption(),
 			],
-			'completionHref' => isset($this->completionHref) ? $this->completionHref : null,
-			'combobox' => 1,
+			'completionHref' => $this->completionHref ?? null,
 		]);
 	}
 

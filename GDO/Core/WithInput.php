@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /** ______________
@@ -8,7 +9,7 @@ namespace GDO\Core;
  *°|.|´
  * / \
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @license GDOv7-LICENSE
@@ -28,7 +29,7 @@ trait WithInput
 	 *
 	 * @param GDT|string[] $inputs
 	 */
-	public function inputs(?array $inputs): self
+	public function inputs(?array $inputs): static
 	{
 		if ($inputs === null)
 		{
@@ -68,7 +69,7 @@ trait WithInput
 		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
 	}
 
-	public function addInput(?string $key, $var): self
+	public function addInput(?string $key, $var): static
 	{
 		if ($key)
 		{

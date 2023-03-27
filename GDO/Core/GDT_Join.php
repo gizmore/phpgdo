@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Query;
@@ -6,7 +7,7 @@ use GDO\DB\Query;
 /**
  * Can be used with $query->joinObject('col_name') to add a predefined join to a query.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.1
  * @author gizmore
  * @see GDT_Object
@@ -26,7 +27,9 @@ final class GDT_Join extends GDT
 		$this->table = $table;
 		$this->join = "{$type} JOIN {$table->gdoTableIdentifier()} AS {$as} ON {$on}";
 		return $this;
-	}	public function isSearchable(): bool { return true; }
+	}
+
+	public function isSearchable(): bool { return true; }
 
 // 	public static function make(string $name = null): self
 // 	{
@@ -49,26 +52,21 @@ final class GDT_Join extends GDT
 	public function isTestable(): bool { return false; }
 
 
-
-
-
-
-
 	###################
 	### Render stub ###
 	###################
-	public function searchQuery(Query $query, $term): self
+	public function searchQuery(Query $query, $searchTerm): static
 	{
 //	    if ($this->table)
 //	    {
 //	        $conditions = [];
 		foreach ($this->table->gdoColumnsCache() as $gdt)
 		{
-			if ($gdt->isSearchable())
-			{
-				$gdt->searchQuery($query, $term);
+//			if ($gdt->isSearchable())
+//			{
+				$gdt->searchQuery($query, $searchTerm);
 //	                $conditions[] = $gdt->searchCondition($searchTerm, $this->as);
-			}
+//			}
 		}
 //	        return implode(' OR ', $conditions);
 //	    }

@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
-use GDO\Table\GDT_Table;
 use GDO\UI\WithIcon;
 use GDO\UI\WithLabel;
 
@@ -13,13 +13,13 @@ use GDO\UI\WithLabel;
  *
  * You need to provide subquery sql and gdt proxy
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.0
  *
  * @author gizmore
  * @see GDT_Join
  */
-class GDT_Virtual extends GDT
+final class GDT_Virtual extends GDT
 {
 
 	use WithGDO;
@@ -27,12 +27,11 @@ class GDT_Virtual extends GDT
 	use WithLabel;
 
 	public string $subquery;
+
 	/**
 	 * Encapsulated virtual GDT Proxy
-	 *
-	 * @var GDT
 	 **/
-	public $gdtType;
+	public GDT_Field $gdtType;
 
 	public function isTestable(): bool { return false; }
 
@@ -65,14 +64,15 @@ class GDT_Virtual extends GDT
 	### Proxy ###
 	#############
 
-	public function htmlClass(): string { return $this->proxy()->htmlClass(); }
+	public function htmlClass(): string
+	{
+		return $this->proxy()->htmlClass();
+	}
 
 	/**
 	 * Get and setup the proxy GDT
-	 *
-	 * @return GDT
 	 */
-	private function proxy()
+	private function proxy(): GDT_Field
 	{
 		$gdt = isset($this->gdo) ? $this->gdtType->gdo($this->gdo) : $this->gdtType;
 		if (isset($this->labelKey))
@@ -86,15 +86,21 @@ class GDT_Virtual extends GDT
 		return $gdt;
 	}
 
-	public function render() { return $this->proxy()->render(); }
 
 	##############
 	### Render ###
 	##############
 
+
+
+	public function render(): array|string|null
+	{
+		return $this->proxy()->render();
+	}
+
 	public function renderHTML(): string { return $this->proxy()->renderHTML(); }
 
-	public function renderJSON() { return $this->proxy()->renderJSON(); }
+	public function renderJSON(): array|string|null { return $this->proxy()->renderJSON(); }
 
 	public function renderCard(): string { return $this->proxy()->renderCard(); }
 
@@ -102,7 +108,7 @@ class GDT_Virtual extends GDT
 
 	public function renderFilter(GDT_Filter $f): string { return $this->proxy()->renderFilter($f); }
 
-	public function filterQuery(Query $query, GDT_Filter $f): self
+	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
 		$this->proxy()->filterQuery($query, $f);
 		return $this;
@@ -114,25 +120,19 @@ class GDT_Virtual extends GDT
 		return $this;
 	}
 
-	public function gdtType(GDT $gdt): self
+	public function gdtType(GDT_Field $gdt): self
 	{
 		$this->gdtType = $gdt;
 		$this->gdtType->name($this->getName());
-//         if (isset($gdt->virtual))
-//         {
-//             $this->gdtType->virtual = true;
-//         }
-//         $this->filterable = $gdt->filterable;
-//         $this->orderable = $gdt->orderable;
-//         $this->searchable = $gdt->searchable;
 		return $this;
 	}
 
-	public function renderHeader(): string { return $this->proxy()->renderHeader(); }
+//	public function renderHeader(): string { return $this->proxy()->renderHeader(); }
 
-	public function displayTableOrder(GDT_Table $table)
-	{
-		return $this->proxy()->displayTableOrder($table);
-	}
+//	public function displayTableOrder(GDT_Table $table)
+//	{
+//		return $this->proxy()->displayTableOrder($table);
+//	}
+
 
 }

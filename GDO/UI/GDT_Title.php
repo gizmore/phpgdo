@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT_String;
@@ -10,7 +11,7 @@ use GDO\Core\GDT_String;
  * NotNull because if we have a title it is mandatory.
  * Also has a nice big T as default icon.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  *
@@ -20,8 +21,8 @@ class GDT_Title extends GDT_String
 
 	use WithTitle;
 
-	public int $min = 2;
-	public int $max = 128;
+	public ?int $min = 2;
+	public ?int $max = 128;
 	public string $icon = 'title';
 	public bool $notNull = true;
 	public int $encoding = self::UTF8;
@@ -47,7 +48,7 @@ class GDT_Title extends GDT_String
 		return $this->renderTitle();
 	}
 
-	public function var(string $var = null): self
+	public function var(?string $var): static
 	{
 		if ($var === null)
 		{
@@ -59,10 +60,5 @@ class GDT_Title extends GDT_String
 		}
 		return parent::var($var);
 	}
-
-// 	public function gdoExampleVars() : ?string
-// 	{
-// 		return t('title');
-// 	}
 
 }

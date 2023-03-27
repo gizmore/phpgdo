@@ -45,7 +45,7 @@ final class GDT_CreatedBy extends GDT_User
 		return [$this->name => $user->getID()];
 	}
 
-	public function getValue()
+	public function getValue(): bool|int|float|string|array|null|object
 	{
 		$value = parent::getValue();
 		return $value ? $value : GDO_User::system();

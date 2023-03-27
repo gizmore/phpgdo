@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date;
 
+use GDO\Core\GDO_DBException;
+use GDO\Core\GDT_Method;
 use GDO\Core\GDT_ObjectSelect;
 
 /**
@@ -8,7 +11,7 @@ use GDO\Core\GDT_ObjectSelect;
  * inputToVar() does convert +NNNN to the first timezone matching the offset.
  * Likes an autocompletion provider.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.0
  * @author gizmore
  */
@@ -40,7 +43,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
 		return false;
 	}
 
-	public function inputToVar($input): ?string
+	public function inputToVar(array|string|null|GDT_Method $input): ?string
 	{
 		if ($input !== null)
 		{
@@ -49,7 +52,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
 			if ($this->wasNoCompletion())
 			{
 				$input = trim($input);
-				if (preg_match('#^[\\-\\+]?\\d{3,4}$#D', $input))
+				if (preg_match('#^[\\-+]?\\d{3,4}$#D', $input))
 				{
 					$input = $this->getBestTimezoneIdForOffset($input);
 				}
@@ -74,6 +77,8 @@ final class GDT_Timezone extends GDT_ObjectSelect
 	/**
 	 * Get a timezone ID matching our offset.
 	 * Not perfect.
+	 *
+	 * @throws GDO_DBException
 	 */
 	private function getBestTimezoneIdForOffset(int $offset): string
 	{

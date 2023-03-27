@@ -33,7 +33,7 @@ final class GDT_ListItem extends GDT_Card
 		return GDT_Template::php('Table', 'list_item.php', ['gdt' => $this]);
 	}
 
-	public function renderJSON()
+	public function renderJSON(): array|string|null
 	{
 		$data = [];
 		if ($this->hasTitle())

@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Date\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Date\GDO_Timezone;
 use GDO\Date\GDT_Timezone;
@@ -43,7 +44,7 @@ final class TimezoneDetect extends MethodForm
 		$form->actions()->addField(GDT_Submit::make()->label('btn_set'));
 	}
 
-	public function formValidated(GDT_Form $form)
+	public function formValidated(GDT_Form $form): GDT
 	{
 		$inputs = [
 			'timezone' => $this->gdoParameterValue('timezone')->getID(),

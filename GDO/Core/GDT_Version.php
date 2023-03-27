@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -9,7 +10,7 @@ namespace GDO\Core;
  *
  * Validation via GDT_String::$pattern
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  * @see Version
@@ -18,8 +19,8 @@ namespace GDO\Core;
 class GDT_Version extends GDT_String
 {
 
-	public int $min = 5;
-	public int $max = 14;
+	public ?int $min = 5;
+	public ?int $max = 16;
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	public string $pattern = "/^\\d+\\.\\d+\\.\\d+$/iD";
@@ -28,14 +29,14 @@ class GDT_Version extends GDT_String
 	### Var / Value ###
 	###################
 	/**
-	 * @param Version $value
+	 * @param null|bool|int|float|string|object|array $value
 	 */
-	public function toVar($value): ?string
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		return $value ? $value->__toString() : null;
 	}
 
-	public function toValue($var = null)
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $var ? new Version($var) : null;
 	}

@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
+use SysvMessageQueue;
 
 /**
  * Hooks can add messages to the IPC queue, which are/can be consumed by the websocket server.
@@ -14,7 +16,7 @@ use GDO\DB\Cache;
  *
  * @TODO: write an event system for games.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  */
@@ -23,21 +25,32 @@ final class GDT_Hook extends GDT
 
 	# Hook cache key
 	public const CACHE_KEY = 'HOOKS.GDOv7';
+
+	/**
+	 * @var int Num total calls.
+	 */
 	public static int $CALLS = 0;
+
+	/**
+	 * @var int Num IPC calls
+	 */
 	public static int $IPC_CALLS = 0;
 
 	# Performance counter
 	/**
-	 * @var string[string]
+	 * @var string[]
 	 */
-	private static ?array $CACHE = null;     # Num Hook calls.
-	private static $QUEUE; # Num Hook calls with additional IPC overhead for CLI process sync.
+	private static ?array $CACHE = null;
+
+	private static ?SysvMessageQueue $QUEUE = null;
 
 	###########
 	### GDT ###
 	###########
 	public string $event;
+
 	public array $eventArgs;
+
 	public bool $ipc = false;
 
 	public static function clearCache(): void
@@ -45,7 +58,7 @@ final class GDT_Hook extends GDT
 		self::$CACHE = null;
 	}
 
-	public static function callHook(string $event, ...$args)
+	public static function callHook(string $event, ...$args): ?GDT
 	{
 		return self::call($event, false, $args);
 	}
@@ -54,7 +67,7 @@ final class GDT_Hook extends GDT
 	 * Call a hook.
 	 * Only registered modules are called since 6.10.6
 	 */
-	private static function call(string $event, bool $ipc, array $args): ?GDT_Response
+	private static function call(string $event, bool $ipc, array $args): ?GDT
 	{
 		self::init();
 
@@ -62,22 +75,16 @@ final class GDT_Hook extends GDT
 
 		if ($ipc && GDO_IPC && (GDO_IPC !== 'none'))
 		{
-			if ($r2 = self::callIPCHooks($event, $args))
-			{
-				if ($response === null)
-				{
-					$response = GDT_Response::make();
-				}
-				$response->addField($r2);
-			}
+			self::callIPCHooks($event, $args);
 		}
+
 		return $response;
 	}
 
 	/**
 	 * Initialize the hooks from filesystem cache.
 	 */
-	public static function init()
+	public static function init(): void
 	{
 		if (!isset(self::$CACHE))
 		{
@@ -132,14 +139,8 @@ final class GDT_Hook extends GDT
 				if (str_starts_with($methodName, 'hook'))
 				{
 					$event = substr($methodName, 4);
-					if (!isset($cache[$event]))
-					{
-						$cache[$event] = [$module->getName()];
-					}
-					else
-					{
-						$cache[$event][] = $module->getName();
-					}
+					$cache[$event] ??= [];
+					$cache[$event][] = $module->getName();
 				}
 			}
 		}
@@ -147,17 +148,12 @@ final class GDT_Hook extends GDT
 	}
 
 	/**
-	 * Call hook on all signed modules.
-	 *
-	 * @param string $event
-	 * @param array $args
-	 *
-	 * @return GDT_Response
+	 * Call hook on all modules.
 	 */
-	private static function callWebHooks(string $event, array $args): ?GDT_Response
+	private static function callWebHooks(string $event, array $args): ?GDT
 	{
 		# Count num calls up.
-		self::$CALLS++;
+		self::$CALLS++; #PP#delete#
 
 		$response = null;
 
@@ -170,15 +166,14 @@ final class GDT_Hook extends GDT
 			{
 				if ($module = $loader->getModule($moduleName))
 				{
-					if ($module->isEnabled())
-					{
-						$callable = [$module, $method_name];
-						if ($result = call_user_func_array($callable, $args))
+//					if ($module->isEnabled())
+//					{
+						if ($result = call_user_func_array([$module, $method_name], $args))
 						{
 							$response = $response ?? GDT_Response::make();
 							$response->addField($result);
 						}
-					}
+//					}
 				}
 			}
 		}
@@ -189,24 +184,20 @@ final class GDT_Hook extends GDT
 	### Private ###
 	###############
 
-	private static function getHookModuleNames($event): array
+	private static function getHookModuleNames(string $event): array
 	{
-		if (isset(self::$CACHE[$event]))
-		{
-			return self::$CACHE[$event];
-		}
-		return GDT::EMPTY_ARRAY;
+		return self::$CACHE[$event] ?? GDT::EMPTY_ARRAY;
 	}
 
-	private static function callIPCHooks(string $event, array $args)
+	private static function callIPCHooks(string $event, array $args): void
 	{
+		#PP#begin#
 		self::$IPC_CALLS++;
-
 		if (GDO_IPC_DEBUG)
 		{
 			Logger::log('ipc', self::encodeHookMessage($event, $args));
 		}
-
+		#PP#end#
 		if (GDO_IPC === 'db')
 		{
 			self::callIPCDB($event, $args);
@@ -217,7 +208,7 @@ final class GDT_Hook extends GDT
 		}
 	}
 
-	private static function encodeHookMessage($event, array $args)
+	private static function encodeHookMessage(string $event, array $args): string
 	{
 		return json_encode([
 			'event' => $event,
@@ -231,11 +222,8 @@ final class GDT_Hook extends GDT
 
 	/**
 	 * Sends a message to another process via the db.
-	 *
-	 * @param string $event
-	 * @param array $args
 	 */
-	private static function callIPCDB($event, array $args)
+	private static function callIPCDB(string $event, array $args): void
 	{
 		$args = self::encodeIPCArgs($args);
 		GDO_Hook::blank([
@@ -246,10 +234,8 @@ final class GDT_Hook extends GDT
 	/**
 	 * Map GDO Objects to IDs.
 	 * The IPC Service will refetch the Objects on their end.
-	 *
-	 * @param array $args
 	 */
-	private static function encodeIPCArgs(array $args)
+	private static function encodeIPCArgs(array $args): array
 	{
 		foreach ($args as $k => $arg)
 		{
@@ -261,7 +247,7 @@ final class GDT_Hook extends GDT
 		return $args;
 	}
 
-	public static function QUEUE()
+	public static function QUEUE(): SysvMessageQueue|false
 	{
 		if (!self::$QUEUE)
 		{
@@ -271,7 +257,7 @@ final class GDT_Hook extends GDT
 		return self::$QUEUE;
 	}
 
-	private static function callIPCQueue($ipc, $event, array $args)
+	private static function callIPCQueue($ipc, $event, array $args): void
 	{
 		$args = self::encodeIPCArgs($args);
 
@@ -291,7 +277,7 @@ final class GDT_Hook extends GDT
 	 * This will call the hook an all probably gdo daemons and server technologies for your setup.
 	 * Fallback is an IPC emulation via Database/Filecache.
 	 */
-	public static function callWithIPC(string $event, ...$args)
+	public static function callWithIPC(string $event, ...$args): ?GDT
 	{
 		return self::call($event, true, $args);
 	}
@@ -309,7 +295,7 @@ final class GDT_Hook extends GDT
 	public function event(string $event = null): self
 	{
 		$this->event = $event;
-		return $this->name($event);
+		return $this;
 	}
 
 	public function eventArgs(...$args): self

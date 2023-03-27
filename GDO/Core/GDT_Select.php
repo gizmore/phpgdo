@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Table\GDT_Filter;
@@ -10,19 +11,22 @@ use GDO\UI\TextStyle;
  * Validates min/max selected.
  * Fill choices in getChoices()
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
 class GDT_Select extends GDT_ComboBox
 {
 
-	public const SELECTED = ' selected="selected"'; # for options
+	/**
+	 * For options
+	 */
+	final public const SELECTED = ' selected="selected"';
 
 	###################
 	### Var / Value ###
 	###################
-	public string $emptyVar = '0';
+	public string $emptyVar = GDT::ZERO;
 	public string $emptyLabelRaw;
 	public string $emptyLabelKey;	public function getSelectedVar(): ?string
 	{
@@ -31,22 +35,24 @@ class GDT_Select extends GDT_ComboBox
 	}
 	public ?array $emptyLabelArgs;
 	public bool $multiple = false;
-	public int $minSelected = 0;
-	public ?int $maxSelected = null;
+	public ?int $minSelected = 0;
+	public ?int $maxSelected = 1;
 
-	public function emptyVar(string $emptyVar): self
+	public function emptyVar(string $emptyVar): static
 	{
 		$this->emptyVar = $emptyVar;
 		return $this;
 	}
 
-	public function emptyLabelRaw(string $text): self
+	public function emptyLabelRaw(string $text): static
 	{
 		$this->emptyLabelRaw = $text;
 		unset($this->emptyLabelKey);
 		unset($this->emptyLabelArgs);
 		return $this;
-	}	public function getValue()
+	}
+
+	public function getValue(): bool|int|float|string|array|null|object
 	{
 		if ($this->valueConverted)
 		{
@@ -71,43 +77,43 @@ class GDT_Select extends GDT_ComboBox
 		return isset($this->emptyLabelRaw) || isset($this->emptyLabelKey);
 	}
 
-	public function emptyInitial(string $labelKey, string $emptyVar = '0')
+	public function emptyInitial(string $labelKey, string $emptyVar = GDT::ZERO): static
 	{
 		return $this->emptyLabel($labelKey)->initial($emptyVar);
 	}
 
-	public function emptyLabel(string $key, $args = null): self
+	public function emptyLabel(string $key, array $args = null): static
 	{
 		unset($this->emptyLabelRaw);
 		$this->emptyLabelKey = $key;
 		$this->emptyLabelArgs = $args;
 		return $this;
-	}	public function inputToVar($input): ?string
-	{
-		if ($input === $this->emptyVar)
-		{
-			$input = null;
-		}
-		return parent::inputToVar($input);
 	}
 
-	public function minSelected(int $minSelected): self
+	public function inputToVar(array|string|null|GDT_Method $input): ?string
+	{
+		return parent::inputToVar($input === $this->emptyVar ? null : $input);
+	}
+
+	public function minSelected(int $minSelected): static
 	{
 		$this->minSelected = $minSelected;
 		return $this;
 	}
 
-	public function maxSelected(int $maxSelected): self
+	public function maxSelected(int $maxSelected): static
 	{
 		$this->maxSelected = $maxSelected;
 		return $this->multiple($maxSelected > 1);
 	}
 
-	public function multiple(bool $multiple = true): self
+	public function multiple(bool $multiple = true): static
 	{
 		$this->multiple = $multiple;
 		return $this->initial($this->initial);
-	}	public function toVar($value): ?string
+	}
+
+	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
 		if ($value === null)
 		{
@@ -125,6 +131,7 @@ class GDT_Select extends GDT_ComboBox
 		{
 			return null;
 		}
+
 		if (false !== ($var = array_search($value, $this->initChoices(), true)))
 		{
 			return $var;
@@ -153,8 +160,9 @@ class GDT_Select extends GDT_ComboBox
 	{
 		if ($this->multiple)
 		{
-			if ($selected = @json_decode($this->var, true))
+			if ($var)
 			{
+				$selected = json_decode($this->var, true);
 				if (in_array($var, $selected, true))
 				{
 					return self::SELECTED;
@@ -164,11 +172,11 @@ class GDT_Select extends GDT_ComboBox
 		}
 		else
 		{
-			return $this->getVar() === $var ? self::SELECTED : '';
+			return $this->getVar() === $var ? self::SELECTED : GDT::EMPTY_STRING;
 		}
 	}
 
-	public function getVar()
+	public function getVar(): string|array|null
 	{
 		if (null === ($var = parent::getVar()))
 		{
@@ -182,7 +190,9 @@ class GDT_Select extends GDT_ComboBox
 		{
 			return $var;
 		}
-	}	public function toValue($var = null)
+	}
+
+	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $this->selectToValue($var);
 	}
@@ -192,7 +202,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this->multiple ? ' multiple="multiple" size="8"' : '';
 	}
 
-	public function htmlChoiceVar($var, $value): string
+	public function htmlChoiceVar(string $var, $value): string
 	{
 		if ($value === null)
 		{
@@ -206,10 +216,10 @@ class GDT_Select extends GDT_ComboBox
 		{
 			$var = $value->getID();
 		}
-		return sprintf(' value="%s"', $var);
+		return " value=\"{$var}\"";
 	}
 
-	public function selectToValue(string $var = null)
+	public function selectToValue(?string $var): null|string|array|GDO
 	{
 		if ($var === null)
 		{
@@ -221,32 +231,16 @@ class GDT_Select extends GDT_ComboBox
 		}
 		if ($var === $this->emptyVar)
 		{
-			return $this->emptyVar;
+			return $var;
 		}
 		$this->initChoices();
-		if (isset($this->choices[$var]))
-		{
-			return $this->choices[$var];
-		}
-		else
-		{
-			$value = $this->toClosestChoiceValue($var);
-			return $value;
-		}
+		return $this->choices[$var] ?? $this->toClosestChoiceValue($var);
 	}
-
-
-
-
 
 	public function getChoices(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
-
-
-
-
 
 	public function initChoices(): array
 	{
@@ -258,8 +252,7 @@ class GDT_Select extends GDT_ComboBox
 	}
 
 
-
-	protected function toClosestChoiceValue($var)
+	protected function toClosestChoiceValue($var): null|string|GDO
 	{
 		$candidatesZero = [];
 		$candidatesMiddle = [];
@@ -276,8 +269,7 @@ class GDT_Select extends GDT_ComboBox
 			$pos = stripos($vaar, $var);
 			if ($pos === false)
 			{
-				$pos = stripos($name, $var);
-				if ($pos === false)
+				if (false === ($pos = stripos($name, $var)))
 				{
 					continue;
 				}
@@ -285,12 +277,8 @@ class GDT_Select extends GDT_ComboBox
 			if ($pos === 0)
 			{
 				$candidatesZero[] = $value;
-				$candidatesMiddle[] = $value;
 			}
-			else
-			{
-				$candidatesMiddle[] = $value;
-			}
+			$candidatesMiddle[] = $value;
 		}
 
 		if (count($candidatesZero) === 1)
@@ -315,6 +303,8 @@ class GDT_Select extends GDT_ComboBox
 			}
 			$this->error('err_select_candidates', [implode('|', $candidatesMiddle)]);
 		}
+
+		return null;
 	}
 
 
@@ -330,7 +320,7 @@ class GDT_Select extends GDT_ComboBox
 	################
 
 
-	public function validate($value): bool
+	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		return $this->multiple ?
 			$this->validateMultiple($value) :
@@ -338,15 +328,15 @@ class GDT_Select extends GDT_ComboBox
 	}
 
 
-	private function validateMultiple($values)
+	private function validateMultiple(?array $values): bool
 	{
 		if ($values === null)
 		{
 			return $this->validateNull($values);
 		}
 
-		if ($values)
-		{
+//		if ($values)
+//		{
 			foreach ($values as $value)
 			{
 				if (!$this->validateSingle($value))
@@ -354,11 +344,11 @@ class GDT_Select extends GDT_ComboBox
 					return false;
 				}
 			}
-		}
+//		}
 
 		if ((isset($this->minSelected)) && (count($values) < $this->minSelected))
 		{
-			return $this->error('err_select_min', [$this->maxSelected]);
+			return $this->error('err_select_min', [$this->minSelected]);
 		}
 
 		if ((isset($this->maxSelected)) && (count($values) > $this->maxSelected))
@@ -370,33 +360,28 @@ class GDT_Select extends GDT_ComboBox
 	}
 
 
-	protected function validateSingle($value)
+	protected function validateSingle(string|bool|null|GDT $value): bool
 	{
-		if (($value === null) || ($value === $this->emptyVar))
+		if ($value === null)
 		{
-			if ($this->getVar() && ($this->getVar() !== $this->emptyVar))
-			{
-				return $this->errorInvalidChoice();
-			}
-			return $this->notNull ? $this->errorNull() : true;
+			return !$this->notNull || $this->errorNull();
+		}
+
+		if ($value === $this->emptyVar)
+		{
+			return !$this->notNull || $this->errorNull();
 		}
 
 		$this->initChoices();
 
 		if ($value instanceof GDO)
 		{
-			if (isset($this->choices[$value->getID()]))
-			{
-				return true;
-			}
+			return isset($this->choices[$value->getID()]) ?? $this->errorInvalidChoice();
 		}
 
 		if ($value instanceof GDT)
 		{
-			if (isset($this->choices[$value->getVar()]))
-			{
-				return true;
-			}
+			return isset($this->choices[$value->getVar()]) ?? $this->errorInvalidChoice();
 		}
 
 		if (in_array($value, $this->choices, true)) # check single identity
@@ -404,19 +389,11 @@ class GDT_Select extends GDT_ComboBox
 			return true;
 		}
 
-		if (!$this->multiple)
-		{
-			if (array_key_exists($this->toVar($value), $this->choices))
-			{
-				return true;
-			}
-		}
-
 		return $this->errorInvalidChoice();
 	}
 
 
-	protected function errorInvalidChoice()
+	protected function errorInvalidChoice(): bool
 	{
 		return $this->error('err_invalid_choice');
 	}
@@ -424,7 +401,6 @@ class GDT_Select extends GDT_ComboBox
 	#############
 	### Empty ###
 	#############
-
 
 	public function displayEmptyLabel(): string
 	{
@@ -438,10 +414,6 @@ class GDT_Select extends GDT_ComboBox
 		}
 		return GDT::EMPTY_STRING;
 	}
-
-	################
-	### Multiple ###
-	################
 
 
 	##############
