@@ -553,7 +553,7 @@ final class GDO_User extends GDO
 
 	public function saveSettingVar(string $moduleName, string $key, ?string $var): self
 	{
-		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
+		if ($module = ModuleLoader::instance()->getModule($moduleName))
 		{
 			$module->saveUserSetting($this, $key, $var);
 		}

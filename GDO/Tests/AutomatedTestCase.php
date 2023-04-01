@@ -265,7 +265,7 @@ abstract class AutomatedTestCase extends TestCase
 
 	protected function doAllMethods()
 	{
-		$this->message('This Test is testing all trivial methods automagically...');
+		$this->message(get_called_class() . ' is testing all trivial methods automagically...');
 
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		foreach ($modules as $module)

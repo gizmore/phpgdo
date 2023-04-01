@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date\Method;
 
 use GDO\Core\GDT;
@@ -16,6 +17,7 @@ use GDO\User\GDO_User;
 /**
  * Change a user's timezone.
  *
+ * @version 7.0.3
  * @author gizmore
  */
 final class Timezone extends MethodForm
@@ -63,45 +65,27 @@ final class Timezone extends MethodForm
 		return parent::formValidated($form);
 	}
 
-	public function setTimezone(GDO_Timezone $timezone, $redirect = true)
+	public function setTimezone(GDO_Timezone $timezone, $redirect = true): GDT
 	{
 		$user = GDO_User::current();
-		$old = $user->getTimezone();
 		$new = $timezone->getID();
-		if ($old != $new)
+		if ($user->isPersisted())
 		{
-			if (!is_numeric($new))
-			{
-				xdebug_break();
-			}
-
-			if ($user->isPersisted())
-			{
-				Module_Date::instance()->saveUserSetting($user, 'timezone', $new);
-			}
-			else
-			{
-				if (module_enabled('Session'))
-				{
-					GDO_Session::set('timezone', $new);
-				}
-				else
-				{
-					$user->tempSet('timezone', $new);
-					$user->recache();
-				}
-			}
-			if ($redirect)
-			{
-				return GDT_Redirect::make()->redirectMessage('msg_timezone_changed', [$new]);
-			}
+			Module_Date::instance()->saveUserSetting($user, 'timezone', $new);
+		}
+		elseif (module_enabled('Session'))
+		{
+			GDO_Session::set('timezone', $new);
 		}
 		else
 		{
-			if ($redirect)
-			{
-				return GDT_Redirect::make()->redirectMessage('err_nothing_happened');
-			}
+			$user->tempSet('timezone', $new);
+			$user->recache();
+		}
+
+		if ($redirect)
+		{
+			return GDT_Redirect::make()->redirectMessage('msg_timezone_changed', [$new]);
 		}
 
 		return GDT_Response::make();

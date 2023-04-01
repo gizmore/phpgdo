@@ -4,6 +4,7 @@ namespace GDO\Tests\Test;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
+use GDO\Date\Method\Timezone;
 use GDO\Language\Method\SwitchLanguage;
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
@@ -33,10 +34,10 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	{
 		$method = $mt->method;
 
-//		if ($method instanceof SwitchLanguage)
-//		{
-//			xdebug_break();
-//		}
+		if ($method instanceof Timezone)
+		{
+			xdebug_break();
+		}
 
 		$this->message("Running command: {$method->getCLITrigger()}");
 

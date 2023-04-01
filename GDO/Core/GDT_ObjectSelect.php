@@ -154,9 +154,6 @@ class GDT_ObjectSelect extends GDT_Select
 	}
 
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function plugVars(): array
 	{
 		if (isset($this->table))

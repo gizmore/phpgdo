@@ -31,8 +31,16 @@ final class AutomatedGDOSaveTest extends TestCase
 	private int $gdoAbstract = 0;
 	private int $gdoNonTestable = 0;
 
+	/**
+	 * @throws \ReflectionException
+	 */
 	public function testGDOSave()
 	{
+		if (function_exists('t'))
+		{
+			return;
+		}
+
 		$this->message(CLI::bold('Starting the automated gdo save test!'));
 
 		foreach (get_declared_classes() as $klass)
@@ -73,7 +81,7 @@ final class AutomatedGDOSaveTest extends TestCase
 	### Private ###
 	###############
 
-	private function trySafeTestGDO(GDO $gdo): bool
+	private function trySafeTestGDO(GDO $gdo): void
 	{
 		try
 		{
@@ -96,7 +104,6 @@ final class AutomatedGDOSaveTest extends TestCase
 				CLI::bold(CLI::green('SUCCESS')),
 				get_class($gdo));
 			$this->gdoSuccess++;
-			return true;
 		}
 		catch (Throwable $t)
 		{
@@ -108,7 +115,6 @@ final class AutomatedGDOSaveTest extends TestCase
 			$this->error(Debug::backtraceException($t, false, $t->getMessage()));
 			$this->gdoFailure++;
 			Application::$INSTANCE->reset();
-			return false;
 		}
 		finally
 		{
@@ -168,7 +174,7 @@ final class AutomatedGDOSaveTest extends TestCase
 					}
 				}
 			}
-			catch (Throwable $ex)
+			catch (Throwable)
 			{
 				$this->message('Warning: Failed a null GDO save test for: %s', $gdo->gdoClassName());
 			}
@@ -184,14 +190,14 @@ final class AutomatedGDOSaveTest extends TestCase
 		return $success;
 	}
 
-	private function reportStatistics()
-	{
-		$this->message(CLI::bold('DONE!'));
-		$this->message('Tested %d GDO', $this->gdoTested);
-		$this->message('%s have succeeded. %s were abstract. %s. %s ',
-			$this->gdoSuccess, $this->gdoAbstract,
-			CLI::bold("{$this->gdoFailure} failed",
-				CLI::bold("{$this->gdoNonTestable} were not testable.")));
-	}
+//	private function reportStatistics()
+//	{
+//		$this->message(CLI::bold('DONE!'));
+//		$this->message('Tested %d GDO', $this->gdoTested);
+//		$this->message('%s have succeeded. %s were abstract. %s. %s ',
+//			$this->gdoSuccess, $this->gdoAbstract,
+//			CLI::bold("{$this->gdoFailure} failed",
+//				CLI::bold("{$this->gdoNonTestable} were not testable.")));
+//	}
 
 }

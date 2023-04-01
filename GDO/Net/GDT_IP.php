@@ -97,4 +97,4 @@ final class GDT_IP extends GDT_String
 
 }
 
-GDT_IP::$CURRENT = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+GDT_IP::$CURRENT = $_SERVER['REMOTE_ADDR'] ?? '::1';

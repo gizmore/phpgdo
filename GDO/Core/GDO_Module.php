@@ -637,8 +637,6 @@ class GDO_Module extends GDO
 
 	/**
 	 * Get a user setting.
-	 *
-	 * @throws GDO_DBException
 	 */
 	public function userSetting(GDO_User $user, string $key): GDT
 	{
@@ -835,9 +833,6 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	private function loadUserSettings(GDO_User $user): array
 	{
 		if (null === ($settings = $user->tempGet('gdo_setting')))
@@ -851,8 +846,6 @@ class GDO_Module extends GDO
 
 	/**
 	 * Load a user's settings into their temp cache.
-	 *
-	 * @throws GDO_DBException
 	 */
 	private function loadUserSettingsB(GDO_User $user): array
 	{
@@ -916,9 +909,6 @@ class GDO_Module extends GDO
 		return self::saveUserSetting(GDO_User::current(), $key, $var);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
 		$gdt = $this->userSetting($user, $key);

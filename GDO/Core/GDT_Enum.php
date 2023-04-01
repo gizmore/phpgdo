@@ -64,4 +64,11 @@ class GDT_Enum extends GDT_Select
 		return $index === false ? 0 : $index + 1;
 	}
 
+//	public function plugVars(): array
+//	{
+//		return [
+//			[$this->name => $this->enumValues[0]],
+//		];
+//	}
+
 }
