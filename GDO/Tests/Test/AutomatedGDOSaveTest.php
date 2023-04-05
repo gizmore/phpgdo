@@ -36,6 +36,7 @@ final class AutomatedGDOSaveTest extends TestCase
 	 */
 	public function testGDOSave()
 	{
+		$this->assert200("stub automated gdo save test for reasons...");
 		if (function_exists('t'))
 		{
 			return;

@@ -129,18 +129,18 @@ class GDT_String extends GDT_DBField
 		return GDT::EMPTY_STRING;
 	}
 
-	/**
-	 * @throws GDO_Error
-	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
-	 */
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!parent::validate($value))
 		{
 			return false;
 		}
-		return $value === null || $this->validateUnique($value) &&
+		if ($value === null)
+		{
+			return true;
+		}
+		$value = (string) $value;
+		return $this->validateUnique($value) &&
 			$this->validatePattern($value) &&
 			$this->validateLength($value);
 	}

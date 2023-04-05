@@ -16,7 +16,7 @@ use GDO\Core\GDT_Version;
 final class GDT_ModuleVersionFS extends GDT_Version
 {
 
-	public function gdo(?GDO $gdo): GDT
+	public function gdo(?GDO $gdo): static
 	{
 		$this->var = $gdo->version;
 		return $this;

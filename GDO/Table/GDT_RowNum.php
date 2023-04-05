@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDT;
@@ -38,13 +39,13 @@ final class GDT_RowNum extends GDT_Checkbox
 		return GDT_Template::php('Table', 'rownum_html.php', ['field' => $this]);
 	}
 
-	public function toggleAll($toggleAll)
+	public function toggleAll($toggleAll): static
 	{
 		$this->toggleAll = $toggleAll;
 		return $this;
 	}
 
-	public function searchQuery(Query $query, string $searchTerm): self
+	public function searchQuery(Query $query, string $searchTerm): static
 	{
 		return $this;
 	}

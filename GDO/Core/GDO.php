@@ -581,7 +581,7 @@ abstract class GDO extends GDT
 	 * Get a row by ID(s).
 	 * Tries GDO process cache first.
 	 */
-	public static function getById(string... $id): ?self
+	public static function getById(string... $id): ?static
 	{
 		$table = self::table();
 		if ((!$table->cached()) || (!($object = $table->cache->findCached(...$id))))
@@ -765,7 +765,11 @@ abstract class GDO extends GDT
 
 	public function gdoDisplay(string $key): string
 	{
-		return $this->gdoColumn($key)->displayVar($this->gdoVar($key));
+		if ($this->hasColumn($key))
+		{
+			return $this->gdoColumn($key)->displayVar($this->gdoVar($key));
+		}
+		return $this->displayVar($this->gdoVar($key));
 	}
 
 	/**
@@ -1727,10 +1731,6 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 *
-	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
-	 *
 	 * @return static[]
 	 */
 	public function &all(string $order = null, bool $json = false): array
@@ -1759,10 +1759,6 @@ abstract class GDO extends GDT
 	##############
 
 	/**
-	 *
-	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
-	 *
 	 * @return static[]
 	 */
 	public function &allWhere($condition = 'true', $order = null, $json = false): array

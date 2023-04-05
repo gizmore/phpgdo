@@ -123,7 +123,7 @@ trait WithLabel
 	 */
 	private function charRequired(): string
 	{
-		return $this->notNull ? self::renderRequiredIcon() : GDT::EMPTY_STRING;
+		return $this->isRequired() ? self::renderRequiredIcon() : GDT::EMPTY_STRING;
 	}
 
 	public function renderTHead(): string

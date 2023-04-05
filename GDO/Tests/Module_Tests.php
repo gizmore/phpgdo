@@ -40,7 +40,7 @@ final class Module_Tests extends GDO_Module
 			$argv = [
 				'--bootstrap=vendor/autoload.php',
 				'--no-progress',
-				'--no-result',
+//				'--no-result',
 				'--do-not-cache-result',
 				'--no-configuration',
 				$testDir,

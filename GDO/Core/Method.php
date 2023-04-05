@@ -181,6 +181,7 @@ abstract class Method #extends GDT
 	public function executeWithInit(bool $checkPermission = true): GDT
 	{
 		$db = Database::instance();
+		$this->locked = false;
 		$transactional = false;
 		$response = GDT_Response::make();
 		try
@@ -207,12 +208,12 @@ abstract class Method #extends GDT
 			}
 
 			# 1) Start the transaction
-			$this->lock();
 			if ($this->transactional())
 			{
-				$transactonal = true;
+				$transactional = true;
 				$db->transactionBegin();
 			}
+//			$this->lock();
 
 			# 2) Before execute
 			$this->beforeExecute();
@@ -223,10 +224,10 @@ abstract class Method #extends GDT
 			}
 			if ($response->hasError())
 			{
-				if ($transactional)
-				{
-					$db->transactionRollback();
-				}
+//				if ($transactional)
+//				{
+//					$db->transactionRollback();
+//				}
 				return $response;
 			}
 
@@ -250,10 +251,10 @@ abstract class Method #extends GDT
 			# 4b) Error
 			if (Application::isError())
 			{
-				if ($transactional)
-				{
-					$db->transactionRollback();
-				}
+//				if ($transactional)
+//				{
+//					$db->transactionRollback();
+//				}
 				return $response;
 			}
 
@@ -266,10 +267,10 @@ abstract class Method #extends GDT
 			}
 			if ($response->hasError())
 			{
-				if ($transactional)
-				{
-					$db->transactionRollback();
-				}
+//				if ($transactional)
+//				{
+//					$db->transactionRollback();
+//				}
 				return $response;
 			}
 
@@ -290,8 +291,8 @@ abstract class Method #extends GDT
 
 			return $response;
 		}
-//		catch (GDO_Error $e)
-//		{
+		catch (GDO_Error $e)
+		{
 //			if ($transactional)
 //			{
 //				$db->transactionRollback();
@@ -301,8 +302,8 @@ abstract class Method #extends GDT
 //			{
 //				throw $e;
 //			}
-//			return $this->error('error', [$e->getMessage()]);
-//		}
+			return $this->error('error', [$e->getMessage()]);
+		}
 //		catch (GDO_ArgException $e)
 //		{
 //			if ($transactional)
@@ -313,10 +314,10 @@ abstract class Method #extends GDT
 //		}
 		catch (GDO_RedirectError $e)
 		{
-			if ($transactional)
-			{
-				$db->transactionRollback();
-			}
+//			if ($transactional)
+//			{
+//				$db->transactionRollback();
+//			}
 			return GDT_Redirect::make()->redirectError($e->key, $e->args)->href($e->href);
 		}
 //		catch (GDO_PermissionException $e)
@@ -328,17 +329,20 @@ abstract class Method #extends GDT
 //			Logger::logException($e);
 //			return $this->error('error', [$e->getMessage()]);
 //		}
-		catch (Throwable $e)
-		{
-			if ($transactional)
-			{
-				$db->transactionRollback();
-			}
-			return $this->error('error', [$e->getMessage()]);
-		}
+//		catch (Throwable $e)
+//		{
+//			return $this->error('error', [$e->getMessage()]);
+//		}
 		finally
 		{
-			$this->unlock();
+			if (Application::isError())
+			{
+				if ($transactional)
+				{
+					$db->transactionRollback();
+				}
+			}
+//			$this->unlock();
 		}
 	}
 

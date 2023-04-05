@@ -371,7 +371,7 @@ class GDT_Table extends GDT
 	{
 		if (!isset($this->countItems))
 		{
-			if ($this->countQuery)
+			if (isset($this->countQuery))
 			{
 				$this->countItems = (int)$this->countQuery->selectOnly('COUNT(*)')
 					->noOrder()

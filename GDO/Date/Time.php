@@ -130,7 +130,7 @@ final class Time
 	/**
 	 * Get a datetime object from a timestamp.
 	 */
-	public static function getDateTime(float|int|null $time): ?DateTime
+	public static function getDateTime(float|int|null $time=0): ?DateTime
 	{
 		if ($time === null)
 		{
@@ -140,12 +140,12 @@ final class Time
 		return DateTime::createFromFormat('U.u', sprintf('%.06f', $time), self::$UTC);
 	}
 
-	public static function getDateSec(float|int|null $time): ?string
+	public static function getDateSec(float|int $time=0): ?string
 	{
 		return self::getDate($time, 'Y-m-d H:i:s');
 	}
 
-	public static function getDateWithoutTime(float|int|null $time): ?string
+	public static function getDateWithoutTime(float|int|null $time=0): ?string
 	{
 		if ($date = self::getDate($time))
 		{

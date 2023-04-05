@@ -5,6 +5,8 @@ use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\Core\Website;
 use GDO\Session\GDO_Session;
+use GDO\User\GDO_User;
+use GDO\User\Module_User;
 
 /**
  * A redirect.
@@ -21,7 +23,7 @@ final class GDT_Redirect extends GDT
 	use WithHREF;
 	use WithText;
 
-	public const CODE = 307;
+	final public const CODE = 307;
 
 	public static bool $REDIRECTED = false; # Only once
 	public int $redirectTime = 0;
@@ -58,11 +60,10 @@ final class GDT_Redirect extends GDT
 			$sess = GDO_Session::instance();
 		}
 
-		if ((!$sess) || (!($url = $sess->getLastURL())))
+		$url = GDO_User::current()->settingVar('User', 'last_url');
+		if (!$url)
 		{
-			$url = isset($_SERVER['HTTP_REFERER']) ?
-				$_SERVER['HTTP_REFERER'] :
-				($default ? $default : hrefDefault());
+			$url = $_SERVER['HTTP_REFERER'] ?? ($default ?: hrefDefault());
 		}
 
 		return $url;

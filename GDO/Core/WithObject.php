@@ -325,7 +325,8 @@ trait WithObject
 		}
 		else
 		{
-			return self::filterQuery($query, $f);
+			$this->table->filterQuery($query, $f);
+			return $this;
 		}
 	}
 

@@ -131,6 +131,7 @@ trait WithParameters
 		# Add to cache
 		foreach ($params as $gdt)
 		{
+			$gdt->inputs($this->getInputs());
 			$this->parameterCache[$gdt->getName()] = $gdt;
 		}
 //		$this->applyInputComposeParams();

@@ -31,8 +31,8 @@ use GDO\User\GDT_User;
 final class Module_Core extends GDO_Module
 {
 
-	public const GDO_VERSION = '7.0.2';
-	public const GDO_REVISION = '7.0.2-r1768';
+	final public const GDO_VERSION = '7.0.2';
+	final public const GDO_REVISION = '7.0.2-r1769';
 
 	final public const GDO_CODENAME = 'Hailing Hermelin';
 

@@ -273,7 +273,7 @@ final class FileUtil
 		while (bccomp($sbytes, $sfactor) >= 0)
 		{
 			$rem = bcmod($sbytes, $sfactor);
-			$bytes = bcdiv($sbytes, $sfactor);
+			$sbytes = bcdiv($sbytes, $sfactor);
 			$i++;
 		}
 
@@ -282,7 +282,7 @@ final class FileUtil
 			return sprintf('%s %s', $sbytes, $txt[$i]);
 		}
 
-		$var = $bytes + ($rem / $factor);
+		$var = $sbytes + ($rem / $factor);
 		return GDT_Float::displayS((string)$var, $digits) . ' ' . $txt[$i];
 	}
 

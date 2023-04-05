@@ -4,6 +4,7 @@ namespace GDO\Core;
 
 use GDO\Table\GDT_Filter;
 use GDO\UI\TextStyle;
+use GDO\Util\Arrays;
 
 /**
  * An HTML select.
@@ -101,10 +102,10 @@ class GDT_Select extends GDT_ComboBox
 		return $this;
 	}
 
-	public function maxSelected(int $maxSelected): static
+	public function maxSelected(null|int $maxSelected): static
 	{
 		$this->maxSelected = $maxSelected;
-		return $this->multiple($maxSelected > 1);
+		return $this->multiple(($maxSelected > 1)||($maxSelected === null));
 	}
 
 	public function multiple(bool $multiple = true): static
@@ -163,7 +164,7 @@ class GDT_Select extends GDT_ComboBox
 			if ($var)
 			{
 				$selected = json_decode($this->var, true);
-				if (in_array($var, $selected, true))
+				if (in_array($var, Arrays::arrayed($selected), true))
 				{
 					return self::SELECTED;
 				}
@@ -219,7 +220,7 @@ class GDT_Select extends GDT_ComboBox
 		return " value=\"{$var}\"";
 	}
 
-	public function selectToValue(?string $var): null|string|array|GDO
+	public function selectToValue(?string $var)
 	{
 		if ($var === null)
 		{
@@ -266,7 +267,7 @@ class GDT_Select extends GDT_ComboBox
 				return $value;
 			}
 
-			$pos = stripos($vaar, $var);
+			$pos = stripos((string)$vaar, $var);
 			if ($pos === false)
 			{
 				if (false === ($pos = stripos($name, $var)))
@@ -360,7 +361,7 @@ class GDT_Select extends GDT_ComboBox
 	}
 
 
-	protected function validateSingle(string|bool|null|GDT $value): bool
+	protected function validateSingle($value): bool
 	{
 		if ($value === null)
 		{

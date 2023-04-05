@@ -120,8 +120,8 @@ abstract class MethodForm extends Method
 
 	protected function applyInput(): void
 	{
-		$this->getForm();
 		parent::applyInput();
+		$this->getForm();
 	}
 
 	/**
@@ -214,7 +214,6 @@ abstract class MethodForm extends Method
 		if (!isset($this->parameterCache))
 		{
 			$this->parameterCache = [];
-// 			$this->applyInput();
 			$this->addComposeParameters($this->gdoParameters());
 			$form = $this->getForm(true);
 			$this->addComposeParameters($form->getAllFields());

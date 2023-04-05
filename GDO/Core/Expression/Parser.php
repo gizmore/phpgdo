@@ -104,7 +104,7 @@ final class Parser
 					{
 						$arg .= $l[$i++];
 					}
-					elseif ($arg)
+					elseif ($arg !== '')
 					{
 						$this->addArg($current, $arg);
 					}

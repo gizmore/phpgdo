@@ -20,7 +20,7 @@ final class GDT_Response extends GDT_Tuple
 		switch (Application::$MODE)
 		{
 			case GDT::RENDER_BINARY:
-				return $this->renderFields($renderMode);
+				return $this->renderFields(Application::$MODE);
 			case GDT::RENDER_WEBSITE:
 				return $this->renderWebsite();
 			case GDT::RENDER_XML:

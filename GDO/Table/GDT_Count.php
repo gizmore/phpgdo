@@ -28,7 +28,7 @@ class GDT_Count extends GDT_UInt
 		return (string) ($this->num++);
 	}
 
-	public function searchQuery(Query $query, string $searchTerm): self
+	public function searchQuery(Query $query, string $searchTerm): static
 	{
 		return $this;
 	}

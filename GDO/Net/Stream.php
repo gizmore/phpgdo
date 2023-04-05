@@ -2,6 +2,7 @@
 namespace GDO\Net;
 
 use GDO\Core\Application;
+use GDO\Core\GDT_Response;
 use GDO\File\GDO_File;
 
 /**
@@ -24,6 +25,7 @@ final class Stream
 		}
 		self::file($file, $variant);
 		Application::exit();
+		return GDT_Response::make();
 	}
 
 	public static function file(GDO_File $file, $variant = '')

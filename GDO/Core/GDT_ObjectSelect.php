@@ -204,7 +204,7 @@ class GDT_ObjectSelect extends GDT_Select
 	 * Try the choices from GDT_Select.
 	 * But we are an Object and read from DB!
 	 */
-	public function selectToValue(?string $var): null|GDO|array
+	public function selectToValue(?string $var)
 	{
 		if ($var !== null)
 		{

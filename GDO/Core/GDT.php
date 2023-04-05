@@ -324,10 +324,10 @@ abstract class GDT
 	 */
 	public function renderMode(int $mode): null|string|array
 	{
-//		$old = Application::$MODE;
-//		Application::$MODE = $mode;
+		$old = Application::$MODE;
+		Application::$MODE = $mode;
 		$result = $this->renderGDT();
-//		Application::$MODE = $old;
+		Application::$MODE = $old;
 		return $result;
 	}
 
@@ -778,8 +778,7 @@ abstract class GDT
 		}
 		if (is_string($input))
 		{
-			$input = trim($input);
-			return $input === '' ? null : $input;
+			return $input;
 		}
 		if ($input instanceof GDT_Method)
 		{
@@ -790,7 +789,7 @@ abstract class GDT
 
 	public function toVar(null|bool|int|float|string|object|array $value) : ?string
 	{
-		return $value;
+		return $value === null ? null : (string) $value;
 	}
 
 	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
