@@ -287,6 +287,11 @@ final class CLI
 		return php_sapi_name() === 'cli';
 	}
 
+	public static function init()
+	{
+		self::setServerVars();
+	}
+
 }
 
 # Required gdo constants

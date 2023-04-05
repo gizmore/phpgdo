@@ -22,7 +22,7 @@ use GDO\Util\Arrays;
 use Throwable;
 
 /**
- * @var $argv string[]
+ * @var string[] $argv
  */
 # The GDOv7 CLI bootstrap.
 require __DIR__ . '/../protected/config.php';
@@ -50,6 +50,7 @@ global $me;
 $gdo->cli()->verb(GDT_Form::GET)->modeDetected(GDT::RENDER_CLI);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();
+CLI::init();
 Cache::init();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # init without username

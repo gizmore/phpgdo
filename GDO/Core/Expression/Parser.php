@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Expression;
 
 use GDO\Core\GDO_NoSuchMethodError;
@@ -15,7 +16,7 @@ use GDO\Util\Strings;
  *
  * Syntax:
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @example gdo cli.echo hi there.
  * @example gdo math.calc 1+2+3
@@ -32,14 +33,14 @@ use GDO\Util\Strings;
 final class Parser
 {
 
-	public const SPACE = ' '; # seperates named args.
-	public const QUOTES = '"';
-	public const CMD_PREAMBLE = '$';
-	public const CMD_BEGIN = '(';
-	public const CMD_ENDIN = ')';
-	public const ARG_SEPARATOR = ',';
-	public const VAL_SEPERATOR = '=';
-	public const ESCAPE_CHARACTER = '\\';
+	final public const SPACE = ' '; # seperates named args.
+	final public const QUOTES = '"';
+	final public const CMD_PREAMBLE = '$';
+	final public const CMD_BEGIN = '(';
+	final public const CMD_ENDIN = ')';
+	final public const ARG_SEPARATOR = ',';
+	final public const VAL_SEPERATOR = '=';
+	final public const ESCAPE_CHARACTER = '\\';
 
 	private string $line;
 
@@ -60,7 +61,6 @@ final class Parser
 		$len = mb_strlen($l);
 		$method = $this->parseMethod($l, $i, $len);
 		$current->method($method);
-//		$current->method->clibutton();
 		$arg = '';
 		while ($i < $len)
 		{
@@ -109,18 +109,6 @@ final class Parser
 						$this->addArg($current, $arg);
 					}
 					break;
-
-// 				case self::SPACE:
-// 					# space means next arg, if not yet positional
-// 					$arg .= $c;
-// 					if (!$current->hasPositionalInput())
-// 					{
-// 						if (str_starts_with($arg, '--'))
-// 						{
-// 							$this->addArg($current, $arg);
-// 						}
-// 					}
-// 					break;
 
 				default:
 					$arg .= $c;

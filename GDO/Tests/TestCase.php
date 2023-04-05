@@ -189,6 +189,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		if (module_enabled('Session'))
 		{
+			@session_start();
+			$_SESSION = [];
 			$uid = $user->getID();
 			if (!isset($this->sessions[$uid]))
 			{

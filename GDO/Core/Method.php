@@ -180,6 +180,8 @@ abstract class Method #extends GDT
 	 */
 	public function executeWithInit(bool $checkPermission = true): GDT
 	{
+		global $me;
+		$me = $this;
 		$db = Database::instance();
 		$this->locked = false;
 		$transactional = false;
