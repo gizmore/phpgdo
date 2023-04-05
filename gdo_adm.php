@@ -136,15 +136,27 @@ function printUsage(int $code = -1, string $cmd = null): void
 		echo "\n";
 	}
 
+	echo "Usage:\n";
 	if ($cmd)
 	{
-		echo "Usage:\n";
+		foreach ($commands as $c => $usage)
+		{
+
+			if (strpos($c, $cmd) === 0)
+			{
+				$usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c,  $usage);
+				print($usage);
+				print("\n");
+			}
+		}
 	}
 	else
 	{
-		foreach ($commands as $cmd => $usage)
+		foreach ($commands as $c => $usage)
 		{
-
+			$usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c, $usage);
+			print($usage);
+			print("\n");
 		}
 	}
 	die($code);
@@ -182,7 +194,7 @@ $app = new class extends Application
 		global $argv, $argc;
 
 		$i = 0;
-		$o = getopt('aciqrsv3', ['all', 'configured', 'interactive', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
+		$o = getopt('achiqrsv3', ['all', 'configured', 'help', 'interactive', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
 
 		if (isset($o['a']) || isset($o['all']))
 		{
@@ -224,9 +236,19 @@ $app = new class extends Application
 			$this->vendor();
 		}
 
+		$cmd = null;
+		if (isset($argv[$i]))
+		{
+			$cmd = $argv[$i];
+		}
+
+		if (isset($o['h']) || isset($o['help']) )
+		{
+			printUsage(0, $cmd);
+		}
+
 		# Fix argc/argv
 		$exe = $argv[0];
-		$cmd = $argv[$i];
 		$argv = array_slice($argv, $i + 1);
 		array_unshift($argv, $exe, $cmd);
 		$argc = count($argv);
