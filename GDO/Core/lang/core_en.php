@@ -400,4 +400,10 @@ The %2$s System',
 	'level_spent' => 'Used Level',
 	'tt_level_spent' => 'Your spent amount of user level on site features.',
 	'md_impressum' => 'The impressum on %s. Who is responsible for it\'s content?',
+
+	# 7.0.3
+	'force_ssl' => 'force TLS?',
+	'log_request' => 'log every Request?',
+	'sess_https' => 'TLS Session only?',
+	'sess_samesite' => 'Session SameSite behaviour',
 ];
