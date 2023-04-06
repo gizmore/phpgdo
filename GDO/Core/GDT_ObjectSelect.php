@@ -212,7 +212,7 @@ class GDT_ObjectSelect extends GDT_Select
 			{
 				return $value;
 			}
-			return $this->table->getById($var);
+			return $this->table::getById($var);
 		}
 		return null;
 	}

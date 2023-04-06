@@ -304,7 +304,8 @@ final class Query
 	{
 		$this->type = self::DELETE;
 		$this->write = true;
-		return $this->onlyFrom($tableName);
+		unset($this->from);
+		return $this; #->onlyFrom($tableName);
 	}
 
 	public function onlyFrom(string $tableName): self
@@ -496,7 +497,8 @@ final class Query
 			case self::UPDATE:
 				return 'UPDATE ';
 			case self::DELETE:
-				return "DELETE {$this->from} FROM ";
+				return "DELETE FROM ";
+//				return "DELETE {$this->from} FROM ";
 			default:
 				return "!INVALID!QRY!TYPE!{$this->type}";
 		}

@@ -283,6 +283,12 @@ final class GDO_User extends GDO
 		return href('Admin', 'PermissionGrant', "&perm_user_id={$this->getID()}");
 	}
 
+	public function href_perm_revoke(): string
+	{
+		return href('Admin', 'PermissionRevoke', "&perm_user_id={$this->getID()}");
+	}
+
+
 	public function hrefProfile(): string
 	{
 		return href('User', 'Profile', "&for={$this->renderUserName()}");

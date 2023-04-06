@@ -148,7 +148,6 @@ class GDT_String extends GDT_DBField
 	/**
 	 * @throws GDO_DBException
 	 * @throws GDO_ErrorFatal
-	 * @throws GDO_Error
 	 */
 	protected function validateUnique($value): bool
 	{

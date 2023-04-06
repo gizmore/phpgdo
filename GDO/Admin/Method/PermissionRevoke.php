@@ -37,18 +37,18 @@ class PermissionRevoke extends MethodForm
 
 	public function getPermission(): ?string { return 'admin'; }
 
-	public function onMethodInit(): ?GDT
-	{
-		if ($userid = Common::getRequestString('user'))
-		{
-			$this->user = GDO_User::table()->getById($userid);
-		}
-		if ($permid = Common::getRequestString('perm'))
-		{
-			$this->permission = GDO_Permission::table()->getById($permid);
-		}
-		return null;
-	}
+//	public function onMethodInit(): ?GDT
+//	{
+//		if ($userid = Common::getRequestString('user'))
+//		{
+//			$this->user = GDO_User::getById($userid);
+//		}
+//		if ($permid = Common::getRequestString('perm'))
+//		{
+//			$this->permission = GDO_Permission::getById($permid);
+//		}
+//		return null;
+//	}
 
 	public function execute(): GDT
 	{
@@ -74,8 +74,6 @@ class PermissionRevoke extends MethodForm
 	 */
 	public function formValidated(GDT_Form $form): GDT
 	{
-		/** @var $user GDO_User * */
-		/** @var $perm GDO_Permission * */
 		$user = $form->getFormValue('perm_user_id');
 		$perm = $form->getFormValue('perm_perm_id');
 

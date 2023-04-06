@@ -165,10 +165,7 @@ abstract class GDO extends GDT
 
 	public static function escapeSearchS(string $var): string
 	{
-		return str_replace(
-			['%', "'", '"', '\\'],
-			['\\%', "\\'", '\\"', '\\\\'],
-			$var);
+		return Module_DBMS::instance()->dbmsEscapeSearch($var);
 	}
 
 	public static function escapeS(string $var): string

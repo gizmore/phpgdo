@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\GDT_Method;
@@ -7,7 +8,7 @@ use GDO\Core\GDT_String;
 /**
  * Packed IP datatype for lots of IP data.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 4.0.0
  * @author gizmore
  */

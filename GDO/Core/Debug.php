@@ -26,8 +26,8 @@ use Throwable;
 final class Debug
 {
 
-	public const CLI_MAX_ARG_LEN = 100; # it's intersting that CLI can handle longer output
-	public const WWW_MAX_ARG_LEN = 50;
+	final public const CLI_MAX_ARG_LEN = 100; # it's intersting that CLI can handle longer output
+	final public const WWW_MAX_ARG_LEN = 50;
 
 	public static int $MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;
 
@@ -222,7 +222,14 @@ final class Debug
 		// Send error to admin
 		if (self::$MAIL_ON_ERROR)
 		{
-			self::sendDebugMail(self::backtrace($messageCLI, false));
+			try
+			{
+				self::sendDebugMail(self::backtrace($messageCLI, false));
+			}
+			catch (Throwable)
+			{
+//				echo $ex->getTraceAsString();
+			}
 		}
 
 		hdrc('HTTP/1.1 500 Server Error');

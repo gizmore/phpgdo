@@ -99,7 +99,7 @@ trait WithObject
 		if ($var !== null)
 		{
 			if (
-				($gdo = $this->table->getById($var)) ||
+				($gdo = $this->table::getById($var)) ||
 				($gdo = $this->getByName($var))
 			)
 			{

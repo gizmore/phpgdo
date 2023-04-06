@@ -32,7 +32,7 @@ final class Module_Core extends GDO_Module
 {
 
 	final public const GDO_VERSION = '7.0.2';
-	final public const GDO_REVISION = '7.0.2-r1771';
+	final public const GDO_REVISION = '7.0.2-r1772';
 
 	final public const GDO_CODENAME = 'Hailing Hermelin';
 
