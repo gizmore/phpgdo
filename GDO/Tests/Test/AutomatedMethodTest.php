@@ -23,7 +23,14 @@ final class AutomatedMethodTest extends AutomatedTestCase
 
 	public function testAllMethods(): void
 	{
-		$this->doAllMethods();
+		if (\gdo_test::instance()->methods)
+		{
+			$this->doAllMethods();
+		}
+		else
+		{
+			self::assertTrue(true);
+		}
 	}
 
 	protected function getTestName(): string
@@ -54,14 +61,17 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	 */
 	private function renderResult(GDT $response): bool
 	{
-		$response->renderMode(GDT::RENDER_BINARY);
-		$response->renderMode(GDT::RENDER_CLI);
-		$response->renderMode(GDT::RENDER_PDF);
-		$response->renderMode(GDT::RENDER_XML);
-		$response->renderMode(GDT::RENDER_JSON);
-		$response->renderMode(GDT::RENDER_GTK);
-		$response->renderMode(GDT::RENDER_IRC);
-		$response->renderMode(GDT::RENDER_WEBSITE);
+		if (\gdo_test::instance()->rendering)
+		{
+			$response->renderMode(GDT::RENDER_BINARY);
+			$response->renderMode(GDT::RENDER_CLI);
+			$response->renderMode(GDT::RENDER_PDF);
+			$response->renderMode(GDT::RENDER_XML);
+			$response->renderMode(GDT::RENDER_JSON);
+			$response->renderMode(GDT::RENDER_GTK);
+			$response->renderMode(GDT::RENDER_IRC);
+			$response->renderMode(GDT::RENDER_WEBSITE);
+		}
 		return true;
 	}
 

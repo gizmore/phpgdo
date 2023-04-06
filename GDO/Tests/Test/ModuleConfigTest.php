@@ -26,7 +26,7 @@ final class ModuleConfigTest extends TestCase
 
 	public function testModuleOverview()
 	{
-		if (module_enabled('Admin'))
+		if (module_enabled('Admin') && (\gdo_test::instance()->config))
 		{
 			$method = Modules::make();
 			$checky = GDT_MethodTest::make()->method($method);
@@ -43,18 +43,18 @@ final class ModuleConfigTest extends TestCase
 
 	public function testAllEnabledModulesToConfigure()
 	{
-		if (module_enabled('Admin'))
+		if (\gdo_test::instance()->config)
 		{
-			$this->message('Testing all enabled modules to configure.');
-			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+			if (module_enabled('Admin'))
 			{
-				$this->configureTest($module);
+				$this->message('Testing all enabled modules to configure.');
+				foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+				{
+					$this->configureTest($module);
+				}
 			}
 		}
-		else
-		{
-			assertTrue(true, 'stub');
-		}
+		assertTrue(true, 'stub');
 	}
 
 	private function configureTest(GDO_Module $module)

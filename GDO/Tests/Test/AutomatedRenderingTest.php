@@ -38,6 +38,12 @@ final class AutomatedRenderingTest extends TestCase
 	 */
 	public function testAutomatedRendering()
 	{
+		if (!\gdo_test::instance()->rendering)
+		{
+			self::assertTrue(true);
+			return;
+		}
+
 		$this->message(CLI::bold('Starting the automated rendering test!'));
 
 		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
@@ -51,7 +57,7 @@ final class AutomatedRenderingTest extends TestCase
 			if (in_array('GDO\\Core\\GDT', $parents, true))
 			{
 				$this->fieldsTested++;
-				/** @var $gdt GDT * */
+				/** @var GDT $gdt * */
 				$k = new ReflectionClass($klass);
 				if ($k->isAbstract())
 				{

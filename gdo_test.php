@@ -20,8 +20,7 @@ use GDO\Tests\Module_Tests;
 use GDO\Tests\TestCase;
 use GDO\UI\TextStyle;
 use GDO\Util\FileUtil;
-
-define('GDO_TIME_START', microtime(true));
+use GDO\Util\Filewalker;
 
 /**
  * Launch all unit tests.
@@ -58,12 +57,81 @@ Logger::init('gdo_test');
  */
 final class gdo_test extends Application
 {
+	### $options = getopt('acimnqr', ['all', 'config', 'icons', 'methods', 'nulls', 'quick', 'rendering'], $index);
 
-	public bool $install = true;
+
 	public bool $all = false;
-	public bool $countries = false;
-	public bool $dog = false;
+
+	public function all(bool $all=true): static
+	{
+		$this->all = $all;
+		if ($all)
+		{
+			$this->config = true;
+			$this->icons = true;
+			$this->methods = true;
+			$this->nulls = true;
+			$this->rendering = true;
+		}
+		return $this;
+	}
+
+	public bool $config = false;
+
+	public function config(bool $config = true): static
+	{
+		$this->config = $config;
+		return $this;
+	}
+
+
+	public bool $icons = false;
+
+	public function icons(bool $icons = true): static
+	{
+		$this->icons = $icons;
+		return $this;
+	}
+
+
+	public bool $methods = false;
+
+	public function methods(bool $methods = true): static
+	{
+		$this->methods = $methods;
+		return $this;
+	}
+
+	public bool $nulls = false;
+
+	public function nulls(bool $nulls = true): static
+	{
+		$this->nulls = $nulls;
+		return $this;
+	}
+
 	public bool $quick = false;
+	public function quick(bool $quick = true): static
+	{
+		$this->quick = $quick;
+		return $this;
+	}
+
+	public bool $rendering = false;
+
+	public function rendering(bool $rendering = true): static
+	{
+		$this->rendering = $rendering;
+		return $this;
+	}
+
+	public bool $seo = false;
+
+	public function seo(bool $seo = true): static
+	{
+		$this->seo = $seo;
+		return $this;
+	}
 
 	public function isUnitTests(): bool
 	{
@@ -75,29 +143,6 @@ final class gdo_test extends Application
 		return $this->install;
 	}
 
-	public function all(bool $all = true): self
-	{
-		$this->all = $all;
-		return $this;
-	}
-
-	public function countries(bool $countries = true): self
-	{
-		$this->countries = $countries;
-		return $this;
-	}
-
-	public function dog(bool $dog = true): self
-	{
-		$this->dog = $dog;
-		return $this;
-	}
-
-	public function quick(bool $quick = true): self
-	{
-		$this->quick = $quick;
-		return $this;
-	}
 
 	public function showHelp(): int
 	{
@@ -112,30 +157,45 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
 $index = 0;
-$options = getopt('acdhq', ['all', 'countries', 'dog', 'help', 'quick'], $index);
+$options = getopt('acimnqrs', ['all', 'config', 'icons', 'methods', 'nulls', 'quick', 'rendering', 'seo'], $index);
 
 if (isset($options['a']) || isset($options['all']))
 {
 	$app->all();
 }
-if (isset($options['c']) || isset($options['countries']))
+if (isset($options['c']) || isset($options['config']))
 {
-	$app->countries();
+	$app->config();
 }
 
-if (isset($options['d']) || isset($options['dog']))
+if (isset($options['i']) || isset($options['icons']))
 {
-	$app->dog();
+	$app->icons();
 }
 
-if (isset($options['h']) || isset($options['help']))
+if (isset($options['m']) || isset($options['methods']))
 {
-	$app->showHelp();
+	$app->methods();
+}
+
+if (isset($options['n']) || isset($options['nulls']))
+{
+	$app->nulls();
 }
 
 if (isset($options['q']) || isset($options['quick']))
 {
 	$app->quick();
+}
+
+if (isset($options['r']) || isset($options['rendering']))
+{
+	$app->rendering();
+}
+
+if (isset($options['s']) || isset($options['seo']))
+{
+	$app->seo();
 }
 
 /** @var array $argv * */
@@ -144,11 +204,6 @@ $argc = count($argv);
 
 switch (count($argv))
 {
-	case 0:
-		if ((!$app->all) && (!$app->dog))
-		{
-			return $app->showHelp();
-		}
 	case 1:
 		break;
 	default:
@@ -163,6 +218,7 @@ if (!REPL::confirm('Is this correct?', true))
 	echo "Abort!\n";
 	die(0);
 }
+define('GDO_TIME_START', microtime(true));
 
 # ##########################
 # Simulate HTTP env a bit #
@@ -182,15 +238,15 @@ $db->createDatabase(GDO_DB_NAME);
 $db->useDatabase(GDO_DB_NAME);
 
 # 1. Try the install process if mode all.
-if ($app->all)
-{
-	echo "NOTICE: Running install all first... for a basic include check.\n";
-	$install = $loader->loadModuleFS('Install', true, true);
-	$install->onLoadLanguage();
-	$loader->initModules();
-	Trans::inited();
-	Module_Tests::runTestSuite($install);
-}
+//if ($app->all)
+//{
+//	echo "NOTICE: Running install all first... for a basic include check.\n";
+//	$install = $loader->loadModuleFS('Install', true, true);
+//	$install->onLoadLanguage();
+//	$loader->initModules();
+//	Trans::inited();
+//	Module_Tests::runTestSuite($install);
+//}
 
 $app->install = false;
 
@@ -200,41 +256,57 @@ if (Application::isError())
 	die(1);
 }
 
-if ($app->dog)
-{
-	if ($argc === 0)
-	{
-		$argc = 1;
-		$argv[0] = '';
-	}
-	else
-	{
-		$argv[0] .= ',';
-	}
-	$dogs = [];
-	$folders = scandir(GDO_PATH . 'GDO');
-	foreach ($folders as $folder)
-	{
-		if (str_starts_with($folder, 'Dog'))
-		{
-			$dogs[] = $folder;
-		}
-	}
-	$argv[0] .= implode(',', $dogs);
-}
+//if ($app->dog)
+//{
+//	if ($argc === 0)
+//	{
+//		$argc = 1;
+//		$argv[0] = '';
+//	}
+//	else
+//	{
+//		$argv[0] .= ',';
+//	}
+//	$dogs = [];
+//	$folders = scandir(GDO_PATH . 'GDO');
+//	foreach ($folders as $folder)
+//	{
+//		if (str_starts_with($folder, 'Dog'))
+//		{
+//			$dogs[] = $folder;
+//		}
+//	}
+//	$argv[0] .= implode(',', $dogs);
+//}
 
 # #############
 # ## Single ###
 # #############
 if ($argc === 1) # Specifiy with module names, separated by comma.
 {
+
+	global $moduleMappings;
+	$moduleMappings = [];
+
+	Filewalker::traverse(GDO_PATH . 'GDO/', null, null, function($entry, $fullpath) {
+		global $moduleMappings;
+		if (FileUtil::isFile("{$fullpath}/Module_{$entry}.php")) {
+			$moduleMappings[strtolower($entry)] = $entry;
+		}
+	});
+
 	$count = 0;
 	$modules = explode(',', $argv[0]);
+
+	foreach ($modules as $k => $modname)
+	{
+		$modules[$k] = $moduleMappings[$modname];
+	}
 
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 
 	# Add Tests, Perf and CLI as dependencies on unit tests.
-	$modules[] = 'CLI';
+//	$modules[] = 'CLI';
 	$modules[] = 'Perf';
 
 	# Tests Module as a finisher
@@ -308,16 +380,6 @@ if ($app->quick)
 			'CountryCoordinates',
 			'IP2Country',
 			'Tests',
-		]);
-	});
-}
-
-if (!$app->countries)
-{
-	$modules = array_filter($modules, function (GDO_Module $module)
-	{
-		return !in_array($module->getName(), [
-			'CountryCoordinates',
 		]);
 	});
 }

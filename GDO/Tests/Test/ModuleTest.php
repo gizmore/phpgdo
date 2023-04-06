@@ -19,7 +19,7 @@ final class ModuleTest extends TestCase
 		$loader = ModuleLoader::instance();
 		$mod1 = Module_Core::instance();
 		$mod2 = $loader->loadModuleFS('Core');
-		$this->assertTrue($mod1 === $mod2, 'Test if single identity cache works for twice loaded modules');
+		self::assertTrue($mod1 === $mod2, 'Test if single identity cache works for twice loaded modules');
 	}
 
 }

@@ -778,6 +778,7 @@ class GDO_Module extends GDO
 	{
 		$name = $gdt->getName();
 		$acl = GDT_ACL::make("relation_{$name}");
+		$acl->label($name);
 		$this->settingsACL[$name] = $acl;
 
 		$relation = $acl->aclRelation;

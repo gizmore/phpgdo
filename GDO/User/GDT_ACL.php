@@ -49,7 +49,7 @@ final class GDT_ACL extends GDT
 
 	public static function make(string $name = null): static
 	{
-		return static::makeNamed($name)->initACLFields();
+		return static::makeNamed($name)->initACLFields()->label($name);
 	}
 
 	private function initACLFields(): static

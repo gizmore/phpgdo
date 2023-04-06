@@ -162,7 +162,7 @@ final class GDT_Page extends GDT
 		return $this->bottomBar;
 	}
 
-	public string $html;
+	public string $html = '';
 
 	public function html(string $html): self
 	{

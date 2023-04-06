@@ -111,7 +111,7 @@ class GDT_Select extends GDT_ComboBox
 	public function multiple(bool $multiple = true): static
 	{
 		$this->multiple = $multiple;
-		return $this->initial($this->initial);
+		return $this;
 	}
 
 	public function toVar(null|bool|int|float|string|object|array $value): ?string

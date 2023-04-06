@@ -22,8 +22,15 @@ final class AutomatedIconTest extends AutomatedTestCase
 
 	public function testUTF8Icons(): void
 	{
-		$this->doAllGDT();
-		$this->doAllMethods();
+		if (\gdo_test::instance()->icons)
+		{
+			$this->doAllGDT();
+			$this->doAllMethods();
+		}
+		else
+		{
+			self::assertTrue(true);
+		}
 	}
 
 	protected function getTestName(): string

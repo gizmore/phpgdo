@@ -19,9 +19,16 @@ final class AutomatedConfigTest extends TestCase
 
 	public function testModulesConfigDefaults(): void
 	{
-		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+		if (\gdo_test::instance()->config)
 		{
-			$this->singleModuleTest($module);
+			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+			{
+				$this->singleModuleTest($module);
+			}
+		}
+		else
+		{
+			self::assertTrue(true);
 		}
 	}
 

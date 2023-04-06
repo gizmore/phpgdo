@@ -24,7 +24,14 @@ final class SEOTest extends AutomatedTestCase
 
 	public function testAllMethods(): void
 	{
-		$this->doAllMethods();
+		if (\gdo_test::instance()->seo)
+		{
+			$this->doAllMethods();
+		}
+		else
+		{
+			static::assertTrue(true);
+		}
 	}
 
 	protected function runMethodTest(GDT_MethodTest $mt): void

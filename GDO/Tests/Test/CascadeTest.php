@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
 use GDO\Core\GDO_DBException;
@@ -12,7 +13,7 @@ use function PHPUnit\Framework\assertTrue;
 /**
  * Test foreign keys and related functionality.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.0
  * @see GDO_UserPermission
  */
