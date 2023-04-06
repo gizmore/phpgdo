@@ -225,7 +225,7 @@ abstract class GDO extends GDT
 			$name = $gdt->getName();
 			if (isset($initial[$name]))
 			{
-				$gdt->var($initial[$name]);
+				$gdt->var((string)$initial[$name]);
 			}
 			else
 			{
@@ -240,7 +240,7 @@ abstract class GDO extends GDT
 					if (isset($initial[$k]))
 					{
 						# override with initial
-						$gdoVars[$k] = $initial[$k];
+						$gdoVars[$k] = (string) $initial[$k];
 					}
 					else
 					{
@@ -429,7 +429,7 @@ abstract class GDO extends GDT
 	 * Get a row by a single column value.
 	 * Throw exception if not found.
 	 */
-	public static function findBy(string $key, string $var): self
+	public static function findBy(string $key, string $var): static
 	{
 		if (!($gdo = self::getBy($key, $var)))
 		{
@@ -1579,7 +1579,7 @@ abstract class GDO extends GDT
 			{
 				if ($var !== $this->gdoVars[$key])
 				{
-					$query->set(sprintf('%s=%s', $key, self::quoteS($var)));
+					$query->set("{$key}=" . self::quoteS($var));
 					$this->markClean($key);
 					$worthy = true; # We got a change
 				}

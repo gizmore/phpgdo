@@ -168,7 +168,7 @@ final class Website
 	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
 	{
 		$app = Application::$INSTANCE;
-		$app->setResponseCode($code);
+		$app::setResponseCode($code);
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));
@@ -188,7 +188,7 @@ final class Website
 	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200)
 	{
 		$app = Application::$INSTANCE;
-		$app->setResponseCode($code);
+		$app::setResponseCode($code);
 		if ($log)
 		{
 			Logger::logMessage(ten($key, $args));

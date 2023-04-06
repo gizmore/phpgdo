@@ -85,15 +85,21 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$app->reset();
 		$app->cli();
 		$expression = GDT_Expression::fromLine($command);
+		ob_start();
 		$response = $expression->execute();
+		$res = $response->render();
 		$app->cli(false);
-		$res = CLI::getTopResponse();
-		$res .= $response->renderCLI();
-		if (Application::isError())
-		{
-			$res .= CLI::renderCLIHelp($expression->method->method);
-		}
-		return trim($res, "\r\n");
+		$res = ob_get_contents() . $res;
+		ob_end_clean();
+		return $res;
+
+//		$res = CLI::getTopResponse();
+//		$res .= $response->renderCLI();
+//		if (Application::isError())
+//		{
+//			$res .= CLI::renderCLIHelp($expression->method->method);
+//		}
+//		return trim($res, "\r\n");
 	}
 
 	public function lang($iso): void
@@ -234,6 +240,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function restoreUserSettings(GDO_User $user): void
 	{
+		$user->tempReset();
 		# english and male
 		$user->saveSettingVar('User', 'gender', 'male');
 // 		$user->saveSettingVar('Country', 'country', 'DE');

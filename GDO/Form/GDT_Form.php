@@ -216,8 +216,10 @@ final class GDT_Form extends GDT
 	public function getFormVars(): array
 	{
 		$back = [];
+		$inputs = $this->getInputs();
 		foreach ($this->getAllFields() as $gdt)
 		{
+			$gdt->inputs($inputs);
 			if ($gdt instanceof GDT_Repeat)
 			{
 				$back[$gdt->getName()] = $gdt->getRepeatInput();

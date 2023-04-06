@@ -158,6 +158,7 @@ final class CLI
 		$_SERVER['HTTP_HOST'] = GDO_DOMAIN;
 		$_SERVER['SERVER_NAME'] = GDO_DOMAIN; # @TODO use machines host name.
 		$_SERVER['SERVER_PORT'] = def('GDO_PORT', GDO_PROTOCOL === 'https' ? 443 : 80);
+		$_SERVER['SERVER_ADDR'] = '127.0.0.1';
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1'; # @TODO use machines IP
 		$_SERVER['HTTP_USER_AGENT'] = 'Firefox Gecko MS Opera';
 		$_SERVER['REQUEST_URI'] = '/index.php?_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;

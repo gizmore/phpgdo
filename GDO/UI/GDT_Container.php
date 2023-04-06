@@ -23,8 +23,8 @@ class GDT_Container extends GDT
 	use WithFields;
 	use WithPHPJQuery;
 
-	public const HORIZONTAL = 1;
-	public const VERTICAL = 2;
+	final public const HORIZONTAL = 1;
+	final public const VERTICAL = 2;
 
 	##############
 	### Render ###
@@ -78,8 +78,9 @@ class GDT_Container extends GDT
 				}
 				$rendered .= $field->renderCLI();
 			}
+			return $rendered;
 		}
-		return trim($rendered);
+		return GDT::EMPTY_STRING;
 	}
 
 }

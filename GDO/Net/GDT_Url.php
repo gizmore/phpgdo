@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Template;
-use GDO\DB\Query;
 use GDO\UI\WithAnchorRelation;
 use GDO\UI\WithTitle;
 use GDO\Util\Arrays;
@@ -12,7 +12,8 @@ use GDO\Util\Arrays;
 /**
  * URL field.
  * Features link checking.
- * Value is a @version 7.0.1
+ *
+ * @version 7.0.3
  *
  * @since 5.0.0
  * @see URL.
@@ -71,9 +72,9 @@ class GDT_Url extends GDT_String
 	### Options ###
 	###############
 
-	public static function port(): ?int { return def('GDO_PORT', @$_SERVER['SERVER_PORT']); }
+	public static function port(): ?int { return def('GDO_PORT', $_SERVER['SERVER_PORT']); }
 
-	public static function host(): string { return isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : GDO_DOMAIN; }
+	public static function host(): string { return $_SERVER['SERVER_NAME']; }
 
 	public static function relative($url): string { return GDO_WEB_ROOT . $url; }
 
@@ -119,7 +120,7 @@ class GDT_Url extends GDT_String
 		return $this->validateUrl($value);
 	}
 
-	public function validateUrl(URL $url = null)
+	public function validateUrl(URL $url = null): bool
 	{
 		# null allowed by parent validator
 		if ((!$url) || (null === ($value = $url->raw)))
@@ -142,7 +143,7 @@ class GDT_Url extends GDT_String
 			{
 				return $this->errorLocal($value);
 			}
-			if ($ip === @$_SERVER['SERVER_ADDR'])
+			if ($ip === $_SERVER['SERVER_ADDR'])
 			{
 				return $this->errorLocal($value);
 			}
@@ -181,7 +182,7 @@ class GDT_Url extends GDT_String
 		return true;
 	}
 
-	private function errorLocal($value)
+	private function errorLocal($value): bool
 	{
 		return $this->error('err_local_url_not_allowed');
 	}
@@ -200,14 +201,14 @@ class GDT_Url extends GDT_String
 		return $plugs;
 	}
 
-	public function allowAll(bool $reachable = true): self
+	public function allowAll(bool $reachable = true): static
 	{
 		$this->allowInternal = true;
 		$this->allowExternal = true;
 		return $this->reachable($reachable);
 	}
 
-	public function reachable(bool $reachable = true): self
+	public function reachable(bool $reachable = true): static
 	{
 		$this->reachable = $reachable;
 		return $this;
@@ -217,19 +218,19 @@ class GDT_Url extends GDT_String
 	### Validate ###
 	################
 
-	public function allowInternal(bool $allowInternal = true): self
+	public function allowInternal(bool $allowInternal = true): static
 	{
 		$this->allowInternal = $allowInternal;
 		return $this;
 	}
 
-	public function allowExternal(bool $allowExternal = true, bool $reachable = true): self
+	public function allowExternal(bool $allowExternal = true, bool $reachable = true): static
 	{
 		$this->allowExternal = $allowExternal;
 		return $this->reachable($reachable);
 	}
 
-	public function schemes(string...$schemes): self
+	public function schemes(string...$schemes): static
 	{
 		$this->schemes = $schemes;
 		return $this;
@@ -239,7 +240,7 @@ class GDT_Url extends GDT_String
 	### Tests ###
 	#############
 
-	public function allSchemes()
+	public function allSchemes(): static
 	{
 		unset($this->schemes);
 		return $this;

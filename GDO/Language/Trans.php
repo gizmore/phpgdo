@@ -36,11 +36,11 @@ final class Trans
 	 */
 	public static array $CACHE = [];
 
-	/**
-	 * @TODO Shall sitename be appended to seo titles? Implement it? Shall be an option in module UI or Core.
-	 * @deprecated
-	 */
-	public static bool $NO_SITENAME = false;
+//	/**
+//	 * @TODO Shall sitename be appended to seo titles? Implement it? Shall be an option in module UI or Core.
+//	 * @deprecated
+//	 */
+//	public static bool $NO_SITENAME = false;
 	/**
 	 * Number of missing translation keys for stats and testing.
 	 */

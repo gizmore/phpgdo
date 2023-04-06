@@ -38,6 +38,11 @@ class ClearCache extends MethodForm
 
 	public function isSavingLastUrl(): bool { return false; }
 
+	public function getMethodTitle(): string
+	{
+		return t('btn_clearcache');
+	}
+
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addField(GDT_AntiCSRF::make());
@@ -61,7 +66,7 @@ class ClearCache extends MethodForm
 			$assetVersion->increase();
 			$core->saveConfigVar('asset_revision', $assetVersion->__toString());
 			# needs a db set up :/
-			Database::instance()->clearCache();
+			Database::clearCache();
 		}
 		# Flush memcached and filecache.
 		Cache::flush();

@@ -61,6 +61,7 @@ final class gdo_test extends Application
 
 	public bool $install = true;
 	public bool $all = false;
+	public bool $countries = false;
 	public bool $dog = false;
 	public bool $quick = false;
 
@@ -77,6 +78,12 @@ final class gdo_test extends Application
 	public function all(bool $all = true): self
 	{
 		$this->all = $all;
+		return $this;
+	}
+
+	public function countries(bool $countries = true): self
+	{
+		$this->countries = $countries;
 		return $this;
 	}
 
@@ -105,11 +112,15 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
 $index = 0;
-$options = getopt('adhq', ['all', 'dog', 'help', 'quick'], $index);
+$options = getopt('acdhq', ['all', 'countries', 'dog', 'help', 'quick'], $index);
 
 if (isset($options['a']) || isset($options['all']))
 {
 	$app->all();
+}
+if (isset($options['c']) || isset($options['countries']))
+{
+	$app->countries();
 }
 
 if (isset($options['d']) || isset($options['dog']))
@@ -301,11 +312,22 @@ if ($app->quick)
 	});
 }
 
+if (!$app->countries)
+{
+	$modules = array_filter($modules, function (GDO_Module $module)
+	{
+		return !in_array($module->getName(), [
+			'CountryCoordinates',
+		]);
+	});
+}
+
 # ######################
 # ## Install and run ###
 # ######################
 if (Installer::installModules($modules))
 {
+	\GDO\Core\Method\ClearCache::make()->execute();
 	$loader->initModules();
 	Trans::inited(false);
 	if (module_enabled('Session'))

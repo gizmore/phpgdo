@@ -8,6 +8,7 @@ use GDO\Table\MethodQueryTable;
 use GDO\UI\GDT_Button;
 use GDO\UI\GDT_EditButton;
 use GDO\User\GDO_User;
+use GDO\User\GDT_UserType;
 
 /**
  * GDO_User table for staff.
@@ -45,11 +46,10 @@ class Users extends MethodQueryTable
 		return [
 			GDT_EditButton::make()->labelNone(),
 			$gdo->gdoColumn('user_id'),
-			$gdo->gdoColumn('user_type'),
+			GDT_UserType::make('user_type'),
 			$gdo->gdoColumn('user_name'),
-// 			$gdo->gdoColumn('user_guest_name'),
+ 			$gdo->gdoColumn('user_guest_name'),
 			$gdo->gdoColumn('user_level'),
-// 			$gdo->gdoColumn('user_last_activity'),
 			$gdo->gdoColumn('user_deleted'),
 			$gdo->gdoColumn('user_deletor'),
 		];

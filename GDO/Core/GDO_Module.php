@@ -399,8 +399,7 @@ class GDO_Module extends GDO
 	public function storagePath(string $path = ''): string
 	{
 		$dir = GDO_PATH . GDO_FILES_DIR . '/' . $this->getLowerName() . '/';
-		FileUtil::createDir($dir);
-		return $dir . $path;
+		return FileUtil::createdDir($dir) . $path;
 	}
 
 	/**
@@ -833,13 +832,15 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
+	final public const SETTINGS_KEY = 'user_settings';
+
 	private function loadUserSettings(GDO_User $user): array
 	{
-		if (null === ($settings = $user->tempGet('gdo_setting')))
+		if (null === ($settings = $user->tempGet(self::SETTINGS_KEY)))
 		{
 			$settings = self::loadUserSettingsB($user);
-			$user->tempSet('gdo_setting', $settings);
-			$user->recache();
+			$user->tempSet(self::SETTINGS_KEY, $settings);
+//			$user->recache();
 		}
 		return $settings;
 	}
@@ -934,8 +935,10 @@ class GDO_Module extends GDO
 		}
 
 		$data = $gdt->var($var)->getGDOData();
+		$settings = $user->tempGet(self::SETTINGS_KEY);
 		foreach ($data as $kk => $vv)
 		{
+			$settings[$kk] = $vv;
 			$acl = $this->getACLDataFor($user, $gdt, $key);
 			$data = [
 				'uset_user' => $user->getID(),
@@ -951,9 +954,7 @@ class GDO_Module extends GDO
 			$entry->softReplace();
 		}
 		GDT_Hook::callHook('UserSettingChanged', $user, $key, $old, $var);
-		$settings = $user->tempGet('gdo_setting');
-		$settings[$key] = $var;
-		$user->tempSet('gdo_setting', $settings);
+		$user->tempSet(self::SETTINGS_KEY, $settings);
 		$user->recache();
 		return $gdt;
 	}

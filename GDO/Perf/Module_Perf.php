@@ -34,7 +34,7 @@ final class Module_Perf extends GDO_Module
 	public function getConfig(): array
 	{
 		return [
-			GDT_Enum::make('hook_sidebar')->enumValues('all', 'none', 'staff')->initial('staff'),
+			GDT_Enum::make('hook_sidebar')->notNull()->enumValues('all', 'none', 'staff')->initial('staff'),
 		];
 	}
 

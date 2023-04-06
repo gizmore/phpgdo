@@ -5,7 +5,7 @@ namespace GDO\Admin\Test;
 use GDO\Tests\TestCase;
 use function PHPUnit\Framework\assertStringContainsString;
 
-class TableTest extends TestCase
+class AdminTableTest extends TestCase
 {
 
 	public function testTableOrder()

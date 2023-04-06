@@ -1,20 +1,23 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
  * An enum.
  * It is a select with special rendering.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
 class GDT_Enum extends GDT_Select
 {
 
+//	public string $emptyVar = 'none';
+
 	public array $enumValues;
 
-	public function enumValues(string...$enumValues): self
+	public function enumValues(string...$enumValues): static
 	{
 		$this->enumValues = $enumValues;
 		return $this;
@@ -22,9 +25,15 @@ class GDT_Enum extends GDT_Select
 
 	public function getChoices(): array
 	{
+		$choices = [];
+//		if (!$this->notNull)
+//		{
+//			$choices[$this->emptyVar] = $this->renderEmptyLabel();
+//		}
 		if (isset($this->enumValues))
 		{
-			return array_combine($this->enumValues, $this->enumValues);
+			$choices = array_merge($choices, array_combine($this->enumValues, $this->enumValues));
+			return $choices;
 		}
 		return GDT::EMPTY_ARRAY;
 	}
@@ -33,7 +42,7 @@ class GDT_Enum extends GDT_Select
 	{
 		return [
 			'name' => $this->getName(),
-			'enumValues' => isset($this->enumValues) ? $this->enumValues : null,
+			'enumValues' => $this->enumValues ?? null,
 			'selected' => $this->getVar(),
 			'notNull' => $this->notNull,
 		];
@@ -53,22 +62,15 @@ class GDT_Enum extends GDT_Select
 	### Render ###
 	##############
 
-	public function enumIndex()
+	public function enumIndex(): int
 	{
 		return $this->enumIndexFor($this->getVar());
 	}
 
-	public function enumIndexFor($enumValue)
+	public function enumIndexFor($enumValue): int
 	{
 		$index = array_search($enumValue, $this->enumValues, true);
 		return $index === false ? 0 : $index + 1;
 	}
-
-//	public function plugVars(): array
-//	{
-//		return [
-//			[$this->name => $this->enumValues[0]],
-//		];
-//	}
 
 }

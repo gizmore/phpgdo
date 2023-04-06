@@ -40,12 +40,12 @@ abstract class GDT_Field extends GDT
 	##################
 	public bool $aclcapable = true;
 
-	public bool $searchable = true;
+	public bool $searchable = false;
 
 	################
 	### Creation ###
 	################
-	public bool $filterable = true;
+	public bool $filterable = false;
 
 	############
 	### Data ###

@@ -74,12 +74,9 @@ trait WithValue
 
 	public function reset(): static
 	{
-		if ($this->hasError())
-		{
-			unset($this->errorRaw);
-			unset($this->errorKey);
-			unset($this->errorArgs);
-		}
+		unset($this->errorRaw);
+		unset($this->errorKey);
+		unset($this->errorArgs);
 		return $this->var($this->initial);
 	}
 

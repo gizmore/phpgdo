@@ -199,6 +199,7 @@ abstract class Method #extends GDT
 			{
 				return $response;
 			}
+			$this->applyInput();
 
 			$user = GDO_User::current();
 			if ($checkPermission)

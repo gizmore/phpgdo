@@ -61,20 +61,28 @@ final class GDT_ACLRelation extends GDT_Enum
 				return $result;
 
 			case self::FRIEND_FRIENDS:
-				$result = module_enabled('Friends') && GDO_Friendship::isFriendFriend($user, $target);
-				if (!$result)
+				if (module_enabled('Friends'))
 				{
+					if (GDO_Friendship::isFriendFriend($user, $target))
+					{
+						return true;
+					}
 					$reason = t('err_only_friend_friend_access');
+					return false;
 				}
-				return $result;
+				return true;
 
 			case self::FRIENDS:
-				$result = module_enabled('Friends') && GDO_Friendship::areRelated($user, $target);
-				if (!$result)
+				if (module_enabled('Friends'))
 				{
+					if (GDO_Friendship::areRelated($user, $target))
+					{
+						return true;
+					}
 					$reason = t('err_only_friend_access');
+					return false;
 				}
-				return $result;
+				return true;
 
 			case self::NOONE:
 				$reason = t('err_only_private_access');

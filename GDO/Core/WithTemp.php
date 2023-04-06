@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
@@ -6,7 +7,7 @@ use GDO\DB\Cache;
 /**
  * Add temp variables to a GDT.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.0
  *
  * @author gizmore
@@ -44,7 +45,7 @@ trait WithTemp
 	/**
 	 * Set a temp var.
 	 */
-	public function tempSet(string $key, $value): self
+	public function tempSet(string $key, $value): static
 	{
 		Cache::$TEMP_WRITE++; #PP#delete#
 		if (!isset($this->temp))
@@ -58,7 +59,7 @@ trait WithTemp
 	/**
 	 * Remove a temp var.
 	 */
-	public function tempUnset(string $key): self
+	public function tempUnset(string $key): static
 	{
 		Cache::$TEMP_CLEAR++; #PP#delete#
 		unset($this->temp[$key]);
@@ -68,7 +69,7 @@ trait WithTemp
 	/**
 	 * Remove all temp vars.
 	 */
-	public function tempReset(): self
+	public function tempReset(): static
 	{
 		Cache::$TEMP_CLEAR_ALL++; #PP#delete#
 		unset($this->temp);

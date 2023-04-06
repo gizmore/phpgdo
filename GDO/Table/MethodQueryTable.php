@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDO_Exception;
@@ -11,7 +12,7 @@ use GDO\User\GDO_User;
 /**
  * A method that displays a table via a query.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  * @see GDT_Table
@@ -24,7 +25,7 @@ abstract class MethodQueryTable extends MethodTable
 		return array_merge($this->gdoButtonHeaders(), $this->gdoTable()->gdoColumnsCache());
 	}
 
-	protected function gdoButtonHeaders()
+	protected function gdoButtonHeaders(): array
 	{
 		$user = GDO_User::current();
 		$headers = [];
@@ -39,7 +40,7 @@ abstract class MethodQueryTable extends MethodTable
 		return $headers;
 	}
 
-	public function createCollection(): GDT_Table
+	protected function createCollection(): GDT_Table
 	{
 		$table = parent::createCollection();
 		return $table->query($this->getQuery());
@@ -69,15 +70,6 @@ abstract class MethodQueryTable extends MethodTable
 		throw new GDO_Exception('Shuld not return result for queried methods!');
 	}
 
-//	/**
-//	 * Return a query to count items for pagination.
-//	 * Usually you can leave this to gdo, letting it transform your query above.
-//	 * But it's possible to return an own CountQuery.
-//	 */
-//	public function getCountQuery(): Query
-//	{
-//		return $this->getQuery();
-//	}
 
 	# ###########
 	# ## Exec ###

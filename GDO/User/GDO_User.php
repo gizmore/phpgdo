@@ -211,16 +211,16 @@ final class GDO_User extends GDO
 		$currId = self::$CURRENT->getID();
 		self::$SYSTEM = null;
 		self::$CURRENT = self::ghost();
-		$this->tempReset();
+//		$this->tempReset();
 		parent::clearCache();
 		if ($currId)
 		{
 			self::$CURRENT = self::getById($currId);
 		}
-		else
-		{
-			self::$CURRENT = self::ghost();
-		}
+//		else
+//		{
+//			self::$CURRENT = self::ghost();
+//		}
 		return $this;
 	}
 
@@ -246,8 +246,8 @@ final class GDO_User extends GDO
 	{
 		return [
 			GDT_AutoInc::make('user_id'),
-			GDT_UserType::make('user_type'),
-			GDT_Username::make('user_name')->unique(),
+			GDT_UserType::make('user_type')->notNull(),
+			GDT_Username::make('user_name')->notNull(false)->unique(),
 			GDT_Username::make('user_guest_name')->unique()->notNull(false)->label('user_guest_name'),
 			GDT_Level::make('user_level'),
 			GDT_DeletedAt::make('user_deleted'),
@@ -548,7 +548,7 @@ final class GDO_User extends GDO
 	public function increaseSetting(string $moduleName, string $key, float $by = 1): self
 	{
 		$now = $this->settingVar($moduleName, $key);
-		return $this->saveSettingVar($moduleName, $key, $now + $by);
+		return $this->saveSettingVar($moduleName, $key, (string)($now + $by));
 	}
 
 	public function saveSettingVar(string $moduleName, string $key, ?string $var): self
