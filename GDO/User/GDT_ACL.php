@@ -54,7 +54,7 @@ final class GDT_ACL extends GDT
 
 	private function initACLFields(): static
 	{
-		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation")->noacl();
+		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation")->label('relation_for', [t($this->name)])->noacl();
 		$this->aclLevel = GDT_Level::make("{$this->name}_level")->noacl();
 		$this->aclPermission = GDT_Permission::make("{$this->name}_permission")->onlyPermitted()->noacl();
 		return $this;

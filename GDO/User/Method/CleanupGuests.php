@@ -1,26 +1,25 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User\Method;
 
 use GDO\Core\Application;
 use GDO\Cronjob\MethodCronjob;
 use GDO\Date\Time;
-use GDO\DB\Database;
-use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 
 /**
  * Cleanup old guest accounts that are unused.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.3
  * @author gizmore
  */
 final class CleanupGuests extends MethodCronjob
 {
 
-	public function runEvery()
+	public function runAt(): string
 	{
-		return Time::ONE_DAY;
+		return $this->runDailyAt(1);
 	}
 
 	public function run(): void
@@ -30,12 +29,14 @@ final class CleanupGuests extends MethodCronjob
 		$query = GDO_UserSetting::usersWithQuery('User', 'last_activity', $cut, '<');
 		# And we want only guests
 		$query->where('user_type="guest"');
-		# And we turn this into a delete
-		$query->delete(GDO_User::table()->gdoTableName());
-		# Exec
-		$query->exec();
-		# Stats
-		$numDeleted = Database::instance()->affectedRows();
+
+		$result = $query->exec();
+		$numDeleted = 0;
+		while ($user = $result->fetchObject())
+		{
+			$user->delete();
+			$numDeleted++;
+		}
 		if ($numDeleted > 0)
 		{
 			$this->logNotice(sprintf('Deleted %d guest users', $numDeleted));

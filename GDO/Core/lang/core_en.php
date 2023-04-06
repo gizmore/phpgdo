@@ -374,7 +374,6 @@ The %2$s System',
 	'info_privacy_related_module' => '%s is a privacy related module that is currently enabled.',
 	't_privacy_core_toggles' => 'Core Configuration',
 
-	'_acl_last_activity_relation' => '`Letzte Aktivität` sichtbar für',
 	'privacy_settings' => 'Privacy Settings',
 	'mt_core_forcessl' => 'Force Encryption',
 
