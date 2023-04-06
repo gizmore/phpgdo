@@ -81,4 +81,11 @@ final class Javascript
 		return self::displayJavascriptInline(self::$_JAVASCRIPT_POST_INLINE);
 	}
 
+	public static function reset(): void
+	{
+		self::$_JAVASCRIPTS = [];
+		self::$_JAVASCRIPT_PRE_INLINE = '';
+		self::$_JAVASCRIPT_POST_INLINE = '';
+	}
+
 }

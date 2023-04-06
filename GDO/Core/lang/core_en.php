@@ -415,4 +415,5 @@ The %2$s System',
 		'TB',
 		'PB',
 	],
+	'text_editor' => 'Editor',
 ];

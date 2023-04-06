@@ -5,6 +5,7 @@ namespace GDO\UI;
  * A success is a panel with a special css class and icon.
  *
  * @author gizmore
+ * @see GDT_Error
  */
 final class GDT_Success extends GDT_Panel
 {

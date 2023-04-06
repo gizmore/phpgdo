@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\CLI\CLI;
@@ -10,7 +11,7 @@ use GDO\UI\GDT_Success;
  * General Website utility and storage for header and javascript elements.
  * Keeps lists of assets and feeds them to minifiers.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.5
  * @author gizmore
  * @see Module_Website
@@ -29,7 +30,7 @@ final class Website
 	 * HTML page LINK elements.
 	 */
 	private static array $LINKS = [];
-	private static $META = [];
+	private static array $META = [];
 	private static string $HEAD = '';
 
 	############
@@ -43,7 +44,7 @@ final class Website
 	 *
 	 * @see http://www.w3schools.com/tags/tag_link.asp
 	 */
-	public static function addLink(array $data)
+	public static function addLink(array $data): void
 	{
 		self::$LINKS[] = $data;
 	}
@@ -75,13 +76,6 @@ final class Website
 
 	/**
 	 * add an html <meta> tag
-	 *
-	 * @param array $meta = array($name, $content, 0=>name;1=>http-equiv);
-	 * @param bool $overwrite overwrite key if exist?
-	 *
-	 * @return bool false if metakey was not overwritten, otherwise true
-	 * @TODO possible without key but same functionality?
-	 * @TODO strings as params? addMeta($name, $content, $mode, $overwrite)
 	 */
 	public static function addMeta(array $metaA, bool $overwrite = true): bool
 	{
@@ -98,7 +92,7 @@ final class Website
 	 *
 	 * @see addMeta()
 	 */
-	public static function displayMeta()
+	public static function displayMeta(): string
 	{
 		/** @var Method $me * */
 		global $me;
@@ -165,7 +159,7 @@ final class Website
 	#############
 	### Error ###
 	#############
-	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Error::DEFAULT_ERROR_CODE)
+	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Exception::DEFAULT_ERROR_CODE): GDT_Response
 	{
 		$app = Application::$INSTANCE;
 		$app::setResponseCode($code);
@@ -185,7 +179,7 @@ final class Website
 		return GDT_Response::make()->code($code);
 	}
 
-	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200)
+	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200): GDT_Response
 	{
 		$app = Application::$INSTANCE;
 		$app::setResponseCode($code);

@@ -190,6 +190,7 @@ class Application extends GDT
 		GDT_Page::instance()->reset();
 //		self::$MODE = self::$MODE_DETECTED;
 		self::updateTime();
+		Javascript::reset();
 		return $this;
 	}
 

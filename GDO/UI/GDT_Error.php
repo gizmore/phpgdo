@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\Application;
@@ -10,7 +11,7 @@ use Throwable;
  * An error is a message box with a special css class.
  * It can be configured via an exception.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  */
@@ -65,7 +66,7 @@ final class GDT_Error extends GDT_Panel
 
 	public function renderCLI(): string
 	{
-		return Color::red($this->renderText());
+		return Color::red($this->renderText()) . "\n";
 	}
 
 }
