@@ -70,5 +70,6 @@ return [
 
 	'link_account' => 'Your account',
 	'p_info_own_profile' => 'This is your own Profile. You can edit it here: %s',
+	'relation_for' => 'Visibilità `%s`',
 
 ];

@@ -71,4 +71,5 @@ return [
 	'link_account' => 'Your account',
 	'p_info_own_profile' => 'This is your own Profile. You can edit it here: %s',
 	'err_user_deleted' => 'This user got deleted by %s on %s.',
+	'relation_for' => 'Visibility for `%s`',
 ];

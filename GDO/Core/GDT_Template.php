@@ -163,7 +163,7 @@ class GDT_Template extends GDT
 		$path13 = Strings::rsubstrFrom($path, '.', '');
 
 		# Try themes first
-		foreach (Application::$INSTANCE->getThemes() as $theme)
+		foreach (self::$THEMES as $theme => $path)
 		{
 //			if (isset(self::$THEMES[$theme]))
 //			{

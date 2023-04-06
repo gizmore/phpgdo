@@ -777,7 +777,7 @@ class GDO_Module extends GDO
 	private function _buildSettingsCacheD(GDT $gdt): void
 	{
 		$name = $gdt->getName();
-		$acl = GDT_ACL::make("_acl_{$name}");
+		$acl = GDT_ACL::make("relation_{$name}");
 		$this->settingsACL[$name] = $acl;
 
 		$relation = $acl->aclRelation;
