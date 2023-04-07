@@ -5,6 +5,7 @@ use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Error;
+use GDO\Core\GDO_ErrorFatal;
 use GDO\Core\GDO_NoSuchMethodError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
@@ -58,6 +59,10 @@ Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
 $loader->loadLangFiles();
 $loader->initModules();
+if (!module_enabled('CLI'))
+{
+	throw new GDO_Error('err_module', ['CLI']);
+}
 Trans::inited();
 if (!CLI::isCLI())
 {
