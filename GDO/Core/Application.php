@@ -193,7 +193,7 @@ class Application extends GDT
 		self::$RESPONSE_CODE = 200;
 		$_FILES = [];
 		GDT_Page::instance()->reset();
-//		self::$MODE = self::$MODE_DETECTED;
+		self::$MODE = self::$MODE_DETECTED;
 		self::updateTime();
 		Javascript::reset();
 		return $this;

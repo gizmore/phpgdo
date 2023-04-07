@@ -37,6 +37,11 @@ final class DirectoryIndex extends MethodTable
 		];
 	}
 
+	public function getCLITrigger(): string
+	{
+		return 'ls';
+	}
+
 	public function gdoParameters(): array
 	{
 		return [

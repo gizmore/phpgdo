@@ -405,14 +405,14 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	protected function callMethod(Method $method, array $inputs, bool $assertOk = true): string
+	protected function callMethod(Method $method, array $inputs=null, string $button=null, bool $assertOk = true): string
 	{
 		try
 		{
 			ob_start();
 			$m = GDT_MethodTest::make()->method($method);
 			$m->inputs($inputs);
-			$r = $m->execute();
+			$r = $m->execute($button);
 			$t = $r->renderWebsite(); # This will trigger 409 to be set -.-
 			if ($assertOk)
 			{

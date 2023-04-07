@@ -175,6 +175,7 @@ final class Website
 		if (Application::$INSTANCE->isCLI())
 		{
 			CLI::flushTopResponse();
+			echo $error->renderMode(GDT::RENDER_CLI);
 		}
 		return GDT_Response::make()->code($code);
 	}

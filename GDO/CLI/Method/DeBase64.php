@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\Method;
 
 use GDO\Core\GDT;
@@ -10,11 +11,16 @@ use GDO\Form\MethodForm;
 /**
  * Server-Side Base64 Decoding.
  *
- * @since 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class DeBase64 extends MethodForm
 {
+
+	public function getCLITrigger(): string
+	{
+		return 'de64';
+	}
 
 	public function createForm(GDT_Form $form): void
 	{

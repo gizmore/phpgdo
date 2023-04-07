@@ -99,8 +99,10 @@ abstract class MethodForm extends Method
 			$this->form = GDT_Form::make($this->getFormName());
 			$this->createForm($this->form);
 			$this->form->inputs($inputs);
+			$this->addComposeParameters($this->form->getAllFields());
+			$this->addComposeParameters($this->form->actions()->getAllFields());
 			$this->applyInput();
-			$this->form->actions()->inputs($inputs);
+//			$this->form->actions()->inputs($inputs);
 // 			$this->form->titleRaw($this->getMethodTitle());
 		}
 		return $this->form;
@@ -130,9 +132,9 @@ abstract class MethodForm extends Method
 		$this->pressedButton = null;
 
 		### Generate form
-		unset($this->parameterCache);
-		$this->gdoParameterCache();
-		$form = $this->getForm();
+//		unset($this->parameterCache);
+//		$this->gdoParameterCache();
+		$form = $this->getForm(true);
 
 		$this->appliedInputs($this->getInputs());
 
@@ -152,6 +154,7 @@ abstract class MethodForm extends Method
 		foreach ($form->actions()->getAllFields() as $gdt)
 		{
 			/** @var GDT_Submit $gdt * */
+			$gdt->inputs($this->getInputs());
 			if ($gdt->hasInput() && $gdt->isWriteable())
 			{
 				$this->submitted = true;
@@ -166,6 +169,13 @@ abstract class MethodForm extends Method
 					# submit events
 					$this->onSubmitted();
 
+					#PP#begin#
+					if ($this->isDebugging())
+					{
+						xdebug_break();
+					}
+					#PP#end#
+
 					# Click it
 					if ($gdt->onclick)
 					{
@@ -179,11 +189,6 @@ abstract class MethodForm extends Method
 					{
 						return GDT_Response::make();
 					}
-//					else
-//					{
-//						throw new GDO_Error('err_submit_without_click_handler', [
-//							$this->renderMoMe(), $gdt->getName()]);
-//					}
 
 					$this->afterValidation();
 

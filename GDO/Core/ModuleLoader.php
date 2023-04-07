@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
+use GDO\Language\Trans;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
 use Throwable;
@@ -334,6 +335,8 @@ final class ModuleLoader
 	/**
 	 * Load all modules.
 	 *
+	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 * @return GDO_Module[]
 	 */
 	public function loadModules(bool $loadDB = true, bool $loadFS = false): array
@@ -356,7 +359,7 @@ final class ModuleLoader
 		if ($loaded)
 		{
 			$this->modules = $this->sortModules();
-			$this->setupCLIAliases();
+//			$this->setupCLIAliases();
 		}
 		return $this->modules;
 	}
@@ -536,6 +539,7 @@ final class ModuleLoader
 	{
 		# Init modules
 		$app = Application::$INSTANCE;
+		Trans::inited();
 		if (!$app->isInstall())
 		{
 			foreach ($this->getEnabledModules() as $module)

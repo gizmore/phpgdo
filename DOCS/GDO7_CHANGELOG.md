@@ -10,6 +10,7 @@ Please read it upside down, from bottom to top and sometimes again.
 
 ## 7.0.3 (**planned**)
 
+- `gdo_test.sh` now features several options. Easy to use are `--all`, `--quick` and `--parents`.
 - Modules marked as 7.0.3 are unit tested in fuzzing mode and all pass phpgdo's StormPHP Code Inspections, well... very rarely with a warning i do not want 
   to disable.
 - The source files marked as 7.0.3 are declared as strict.

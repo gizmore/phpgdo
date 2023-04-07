@@ -275,10 +275,10 @@ final class Logger
 	public static function logCron(string $message): void
 	{
 		self::rawLog('cron', $message);
-		if (!Application::$INSTANCE->isUnitTests())
-		{
+//		if (!Application::$INSTANCE->isUnitTests())
+//		{
 			echo $message . "\n";
-		}
+//		}
 	}
 
 	public static function rawLog(string $filename, string $message, int $logmode = 0): void

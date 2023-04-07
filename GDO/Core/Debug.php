@@ -235,7 +235,7 @@ final class Debug
 		hdrc('HTTP/1.1 500 Server Error');
 
 		// Output error
-		if ($app->isCLI() || $app->isUnitTests())
+		if ($app->isCLI())
 		{
 			fwrite(STDERR, self::backtrace($messageCLI, false) . PHP_EOL);
 		}

@@ -5,6 +5,7 @@ namespace GDO\Tests;
 use GDO\Core\GDO_Error;
 use GDO\Core\GDO_Module;
 use GDO\Core\Logger;
+use GDO\UI\TextStyle;
 use GDO\Util\FileUtil;
 use PHPUnit\TextUI\Application;
 
@@ -32,9 +33,10 @@ final class Module_Tests extends GDO_Module
 	{
 		global $argv, $argc;
 
+		$app = \gdo_test::instance();
 		$skip = [];
 		$name = $module->getName();
-		if (!\gdo_test::instance()->utility)
+		if (!$app->utility)
 		{
 			$skip[] = 'CLI';
 			$skip[] = 'Crypto';
@@ -49,12 +51,18 @@ final class Module_Tests extends GDO_Module
 			return;
 		}
 
+		if (!$app->isParentWanted($name, true))
+		{
+			return;
+		}
+
 		$testDir = $module->filePath('Test/');
 		if (FileUtil::isDir($testDir))
 		{
+			$bn = TextStyle::bold($name);
 			echo "---------------------------------------\n";
 			echo "---------------------------------------\n";
-			echo "Running tests for {$name}!\n";
+			echo "Running tests for {$bn}!\n";
 			flush();
 			$argv = [
 				'--bootstrap=vendor/autoload.php',

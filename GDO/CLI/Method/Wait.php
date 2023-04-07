@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
@@ -12,7 +13,7 @@ use GDO\UI\GDT_Success;
 /**
  * Wait a specified duration.
  *
- * @version 6.11.5
+ * @version 7.0.3
  * @author gizmore
  */
 final class Wait extends MethodCLI
@@ -26,13 +27,13 @@ final class Wait extends MethodCLI
 			GDT_Duration::make('duration')->notNull(),
 			GDT_AntiCSRF::make(),
 		);
-		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onExecute']));
+		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'execute']));
 	}
 
 	public function execute(): GDT
 	{
 		$seconds = $this->gdoParameterValue('duration');
-		usleep($seconds * 1000000);
+		usleep((int)round($seconds * 1000000));
 		return GDT_Success::make();
 	}
 

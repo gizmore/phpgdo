@@ -23,7 +23,10 @@ final class AutomatedConfigTest extends TestCase
 		{
 			foreach (ModuleLoader::instance()->getEnabledModules() as $module)
 			{
-				$this->singleModuleTest($module);
+				if (\gdo_test::instance()->isParentWanted($module->getName()))
+				{
+					$this->singleModuleTest($module);
+				}
 			}
 		}
 		else

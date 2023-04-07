@@ -15,6 +15,11 @@ use GDO\UI\MethodPage;
 final class Error extends MethodPage
 {
 
+	public function isCLI(): bool
+	{
+		return false;
+	}
+
 	public function isTrivial(): bool { return false; } # Auto-Test's for 200 code, so not trivial to test.
 
 	public function gdoParameters(): array

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\Method;
 
 use GDO\CLI\CLI;
@@ -16,14 +17,17 @@ use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 
 /**
- * Display help for a method.
+ * Display help for a method or a command overview.
  *
  * @author gizmore
  */
 final class Help extends MethodCLI
 {
 
-	public function getCLITrigger(): string { return 'help'; }
+	public function getCLITrigger(): string
+	{
+		return 'help';
+	}
 
 	public function createForm(GDT_Form $form): void
 	{
@@ -54,8 +58,8 @@ final class Help extends MethodCLI
 	private function showAllCommands(): GDT
 	{
 		$user = GDO_User::current();
-		$back = [];
 		$grps = [];
+		$trgs = [];
 		foreach (Method::$CLI_ALIASES as $alias => $command)
 		{
 			$me = call_user_func([$command, 'make']);
@@ -64,24 +68,40 @@ final class Help extends MethodCLI
 			$grps[$name] = isset($grps[$name]) ? $grps[$name] : [];
 			$grps[$name][] = $me;
 		}
-		foreach ($grps as $mo => $mes)
+		foreach ($grps as $mon => $mes)
 		{
-			$mo = ModuleLoader::instance()->getModule($mo);
+			$mo = ModuleLoader::instance()->getModule($mon);
 			$triggers = [];
 			/** @var Method $me * */
 			foreach ($mes as $me)
 			{
 				if (($me->isCLI()) &&
+					(!$me->isHiddenMethod()) &&
 					(null === $me->checkPermission($user, true)) &&
 					(!$me->isAjax()))
 				{
-					$triggers[] = $me->getCLITrigger();
+					$triggers[] = $me;
 				}
 			}
 			if (count($triggers))
 			{
-				$back[] = sprintf('%s: %s.', TextStyle::bold($mo->getCLITrigger()), implode(', ', $triggers));
+				usort($triggers, function (Method $a, Method $b)
+				{
+					return $a->priority - $b->priority;
+				});
+
+				$trgs[$mon] = $triggers;
 			}
+		}
+
+		$back = [];
+		ksort($trgs);
+		foreach ($trgs as $mon => $triggers)
+		{
+			$aliases = array_map(function (Method $me) {
+				return $me->getCLITrigger();
+			}, $triggers);
+			$back[] = sprintf('%s: %s.', TextStyle::bold($mon), implode(', ', $aliases));
 		}
 
 		return GDT_String::make()->var(implode(' ', $back));

@@ -48,7 +48,7 @@ trait WithInput
 
 	public function getInputs(): array
 	{
-		return isset($this->inputs) ? $this->inputs : GDT::EMPTY_ARRAY;
+		return $this->inputs ?? GDT::EMPTY_ARRAY;
 	}
 
 	public function hasInput(): bool

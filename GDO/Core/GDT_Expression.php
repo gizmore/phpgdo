@@ -66,7 +66,7 @@ final class GDT_Expression extends GDT
 		}
 		catch (GDO_ArgException|GDO_CRUDException $ex)
 		{
-			return $ex->renderCLI() . trim(CLI::renderCLIHelp($this->method->method));
+			return GDT_String::make()->var($ex->renderCLI() . CLI::renderCLIHelp($this->method->method));
 		}
 	}
 

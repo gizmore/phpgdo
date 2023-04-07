@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
@@ -10,12 +11,13 @@ use GDO\Core\GDT_String;
 use GDO\Core\Website;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
+use GDO\User\GDO_Permission;
 use GDO\Util\Filewalker;
 
 /**
  * Mass rename utility.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.2
  * @author gizmore
  * @example gdo cli.rename .,^(.*\.)mp3$,$1ogg
@@ -24,6 +26,11 @@ use GDO\Util\Filewalker;
  */
 final class Rename extends MethodCLI
 {
+
+	public function getPermission(): ?string
+	{
+		return GDO_Permission::ADMIN;
+	}
 
 	public static function rename(string $entry, string $fullpath, $args = null): int
 	{

@@ -80,7 +80,7 @@ final class gdo_test extends Application
 			$this->icons = true;
 			$this->methods = true;
 			$this->nulls = true;
-			$this->perf = true;
+			$this->parents = true;
 			$this->rendering = true;
 			$this->seo = true;
 			$this->utility = true;
@@ -140,12 +140,29 @@ final class gdo_test extends Application
 		return $this;
 	}
 
-	public bool $perf = false;
+	public bool $parents = false;
 
-	public function perf(bool $perf = true): static
+	public function parents(bool $parents = true): static
 	{
-		$this->perf = $perf;
+		$this->parents = $parents;
 		return $this;
+	}
+
+	public array $childs;
+	public function addParents(array $parents): static
+	{
+		$this->childs = $parents;
+		return $this;
+	}
+
+	public function isParentWanted(string $moduleName, bool $allowCore=false): bool
+	{
+		if ($allowCore && ModuleLoader::instance()->getModule($moduleName)->isCoreModule())
+		{
+			return true;
+		}
+		return ($this->parents) || ($moduleName === 'Tests') ||
+			in_array($moduleName, $this->childs, true);
 	}
 
 	public bool $quick = false;
@@ -180,6 +197,13 @@ final class gdo_test extends Application
 		return $this;
 	}
 
+	public bool $verbose = false;
+	public function verbose(bool $verbose=true): static
+	{
+		$this->verbose = $verbose;
+		return $this;
+	}
+
 	public function isUnitTests(): bool
 	{
 		return true;
@@ -203,13 +227,15 @@ final class gdo_test extends Application
 		echo "--all = Run all test options.\n";
 		echo "--blanks = Run blank GDO creation tests.\n";
 		echo "--config = Run all configuration and settings test options.\n";
-		echo "--icons = Run all test options.\n";
+		echo "--double = Run the install process two times.\n";
+		echo "--icons = Run icon tests (DELETE?).\n";
 		echo "--methods = Run execution tests.\n";
 		echo "--nulls = Run all empty creation tests (DELETE?).\n";
 		echo "--quick = Skip slow big data tests.\n";
 		echo "--rendering = Run rendering tests.\n";
 		echo "--seo = Run i18n tests.\n";
 		echo "--utility = Run utility tests.\n";
+		echo "--verbose = Print verbose runtime information.\n";
 		return $code;
 	}
 
@@ -262,9 +288,9 @@ if (isset($options['n']) || isset($options['nulls']))
 	$app->nulls();
 }
 
-if (isset($options['p']) || isset($options['perf']))
+if (isset($options['p']) || isset($options['parents']))
 {
-	$app->perf();
+	$app->parents();
 }
 
 if (isset($options['q']) || isset($options['quick']))
@@ -285,6 +311,11 @@ if (isset($options['s']) || isset($options['seo']))
 if (isset($options['u']) || isset($options['utility']))
 {
 	$app->utility();
+}
+
+if (isset($options['v']) || isset($options['verbose']))
+{
+	$app->verbose();
 }
 
 /** @var array $argv * */
@@ -366,24 +397,35 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 		}
 	}
 
+	if (!count($modules))
+	{
+		throw new \GDO\Core\GDO_Exception("No module found for " . html($argv[0]));
+	}
+	else
+	{
+		printf("%d Modules match the pattern %s.\n", count($modules), html($argv[0]));
+	}
+
+	$modules = array_unique($modules);
+	$app->addParents($modules);
+
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
+	$modules = array_unique($modules);
+
 
 	# Tests Module as a finisher
 	$modules[] = 'Tests';
 
-	if ($app->all)
+	if ($app->utility)
 	{
 		$modules[] = 'CLI';
 		$modules[] = 'Admin';
 	}
 
-	# Fix lowercase names
-	$modules = array_map(
-		function (string $moduleName)
-		{
-			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
-			return $module?->getModuleName();
-		}, $modules);
+	if ($app->config)
+	{
+		$modules[] = 'Admin';
+	}
 
 	$modules = array_unique($modules);
 
@@ -403,15 +445,11 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 			$modules[] = $module->getModuleName();
 		}
 
-//		$loader->initModules();
-
 		$modules = array_unique($modules);
 	}
 
-	# While loading...
-
 	# Map
-	$modules = array_map(function ($m)
+	$modules = array_map(function (string $m)
 	{
 		return ModuleLoader::instance()->getModule($m);
 	}, $modules);
@@ -435,11 +473,10 @@ if ($app->quick)
 {
 	$skip[] = 'CountryCoordinates';
 	$skip[] = 'IP2Country';
-	$skip[] = 'Tests';
 }
 $modules = array_filter($modules, function (GDO_Module $module) use ($skip)
 {
-	return !in_array($module->getModuleName(), $skip, true);
+	return !in_array($module->getName(), $skip, true);
 });
 
 # ######################
@@ -454,7 +491,6 @@ if (Installer::installModules($modules))
 	$app->install = false;
 	\GDO\Core\Method\ClearCache::make()->execute();
 	$loader->initModules();
-	Trans::inited(false);
 	if (module_enabled('Session'))
 	{
 		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);

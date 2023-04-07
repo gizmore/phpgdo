@@ -416,5 +416,6 @@ The %2$s System',
 		'PB',
 	],
 	'text_editor' => 'Editor',
+	'cfg_default_editor' => 'Default Editor',
 	'cfg_fav_color' => 'Favorite Color',
 ];

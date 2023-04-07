@@ -313,6 +313,11 @@ abstract class AutomatedTestCase extends TestCase
 					'make',
 				]);
 
+				if ($method->isDebugging())
+				{
+					xdebug_break();
+				}
+
 				# Skip special marked
 				if (!$method->isTrivial())
 				{
@@ -420,6 +425,12 @@ abstract class AutomatedTestCase extends TestCase
 
 	private function tryTrivialMethod(Method $method): void
 	{
+		if (!\gdo_test::instance()->isParentWanted($method->getModuleName()))
+		{
+			$this->automatedSkippedAuto++;
+			return;
+		}
+
 		$this->automatedTested++;
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $plugVars)

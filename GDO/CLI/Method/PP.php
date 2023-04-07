@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\Method;
 
 use GDO\Core\GDT;
@@ -8,6 +9,7 @@ use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
+use GDO\User\GDO_Permission;
 
 /**
  * PP - The PHP Preprocessor
@@ -18,11 +20,16 @@ use GDO\Form\MethodForm;
  * @link https://github.com/gizmore/php-preprocessor
  *
  * @author gizmore
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.2
  */
 final class PP extends MethodForm
 {
+
+	public function getPermission(): ?string
+	{
+		return GDO_Permission::ADMIN;
+	}
 
 	public function isTrivial(): bool
 	{

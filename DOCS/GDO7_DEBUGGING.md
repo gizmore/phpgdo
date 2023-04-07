@@ -14,6 +14,15 @@ Javascript errors are similiar and trigger an GDOv7 Method to send E-Mails, also
 
 This is quite useful, but *can* also cause mail havoc on frequented hosts. Handle with care.
 
+
+## GDOv7 Debugging: Methods
+
+[Methods](../GDO/Core/Method.php)
+can be easily debugged by overriding `isDebugging()`.
+This triggers a few breakpoints in the execution process,
+precisely before init, validation, and execution.
+
+
 ## GDOv7 Debugging: Database
 
 We all want to know what the raw queries are.

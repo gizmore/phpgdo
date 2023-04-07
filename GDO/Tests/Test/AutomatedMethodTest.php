@@ -9,6 +9,7 @@ use GDO\Date\Method\Timezone;
 use GDO\Language\Method\SwitchLanguage;
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
+use GDO\UI\TextStyle;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertTrue;
@@ -41,17 +42,10 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		$method = $mt->method;
-
-//		if ($method instanceof SwitchLanguage)
-//		{
-//			xdebug_break();
-//		}
-
-		$this->message("Running command: {$method->getCLITrigger()}");
-
+		$this->message('Running command: ' . TextStyle::bold($method->getCLITrigger()));
 		$mt->runAs($mt->method->plugUser());
-		$result = $mt->execute(null, false);
 		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
+		$result = $mt->execute();
 		assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
 		assertTrue(!!$this->renderResult($result), 'Test if method response renders all outputs without crash.');
 	}

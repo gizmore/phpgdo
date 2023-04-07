@@ -41,6 +41,7 @@ class Database
 	public static float $QUERY_TIME = 0.0; # config
 	private static Database $INSTANCE; # config
 	private static ?Module_DBMS $DBMS = null; # configured db.
+
 	/**
 	 * Available GDO classes.
 	 *
@@ -157,25 +158,22 @@ class Database
 
 	public function __destruct()
 	{
-		try
-		{
-			$this->closeLink();
-		}
-		catch (GDO_DBException $e)
-		{
-			Logger::logException($e);
-		}
+		$this->closeLink();
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function closeLink(): void
 	{
 		if (isset($this->link))
 		{
-			self::DBMS(false)->dbmsClose();
 			unset($this->link);
+			try
+			{
+				self::DBMS(false)->dbmsClose();
+			}
+			catch (GDO_DBException $ex)
+			{
+				Debug::debugException($ex);
+			}
 		}
 	}
 
@@ -324,12 +322,28 @@ class Database
 
 	public function insertId(): int
 	{
-		return self::DBMS()->dbmsInsertId();
+		try
+		{
+			return self::DBMS()->dbmsInsertId();
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return -1;
+		}
 	}
 
 	public function affectedRows(): int
 	{
-		return self::DBMS()->dbmsAffected();
+		try
+		{
+			return self::DBMS()->dbmsAffected();
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return -1;
+		}
 	}
 
 	####################
@@ -398,33 +412,42 @@ class Database
 		self::DBMS()->dbmsDropTable($tableName);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function truncateTable(GDO $gdo): void
 	{
 		$tableName = $gdo->gdoTableIdentifier();
 		self::DBMS()->dbmsTruncateTable($tableName);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function createDatabase(string $databaseName): void
+	public function createDatabase(string $databaseName): bool
 	{
-		self::DBMS()->dbmsCreateDB($databaseName);
+		try
+		{
+			self::DBMS()->dbmsCreateDB($databaseName);
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	###################
 	### Transaction ###
 	###################
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function dropDatabase(string $databaseName): void
+	public function dropDatabase(string $databaseName): bool
 	{
-		self::DBMS()->dbmsDropDB($databaseName);
+		try
+		{
+			self::DBMS()->dbmsDropDB($databaseName);
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	public function useDatabase(string $databaseName): bool
@@ -438,15 +461,26 @@ class Database
 			}
 			return true;
 		}
-		catch (GDO_DBException)
+		catch (GDO_DBException $ex)
 		{
+			$this->db = null;
+			Debug::debugException($ex);
 			return false;
 		}
 	}
 
-	public function transactionBegin(): void
+	public function transactionBegin(): bool
 	{
-		self::DBMS()->dbmsBegin();
+		try
+		{
+			self::DBMS()->dbmsBegin();
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	############
@@ -470,34 +504,50 @@ class Database
 		self::$QUERY_TIME += $tt; #PP#delete#
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function transactionRollback(): void
+	public function transactionRollback(): bool
 	{
-		self::DBMS()->dbmsRollback();
+		try
+		{
+			self::DBMS()->dbmsRollback();
+			return true;
+		}
+		catch (Throwable $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	###############
 	### FKCheck ###
 	###############
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function lock(string $lock, int $timeout = 30): bool
 	{
-		$this->locks++; #PP#delete#
-		self::$LOCKS++; #PP#delete#
-		return self::DBMS()->dbmsLock($lock, $timeout);
+		try
+		{
+			$this->locks++; #PP#delete#
+			self::$LOCKS++; #PP#delete#
+			return self::DBMS()->dbmsLock($lock, $timeout);
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function unlock(string $lock): bool
 	{
-		return self::DBMS()->dbmsUnlock($lock);
+		try
+		{
+			return self::DBMS()->dbmsUnlock($lock);
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	##############

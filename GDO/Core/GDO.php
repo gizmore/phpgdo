@@ -456,7 +456,7 @@ abstract class GDO extends GDT
 	/**
 	 * Get a row by condition.
 	 */
-	public function getWhere(string $condition): ?self
+	public function getWhere(string $condition): ?static
 	{
 		return $this->select()->where($condition)->
 		first()->exec()->fetchObject();
@@ -824,7 +824,7 @@ abstract class GDO extends GDT
 		return $this;
 	}
 
-	public function setVar(string $key, ?string $var, bool $markDirty = true): self
+	public function setVar(string $key, ?string $var, bool $markDirty = true): static
 	{
 		if (!$this->hasColumn($key))
 		{

@@ -15,6 +15,11 @@ use GDO\UI\GDT_Repeat;
 final class Concat extends Method
 {
 
+	public function getCLITrigger(): string
+	{
+		return 'concat';
+	}
+
 	public function gdoParameters(): array
 	{
 		return [

@@ -36,12 +36,12 @@ trait WithFields
 	/**
 	 * Call unnamed make and add fields.
 	 */
-	public static function makeWith(GDT ...$gdt): self
+	public static function makeWith(GDT ...$gdt): static
 	{
 		return self::make()->addFields(...$gdt);
 	}
 
-	public function addFields(GDT ...$gdts): self
+	public function addFields(GDT ...$gdts): static
 	{
 		foreach ($gdts as $gdt)
 		{
@@ -50,12 +50,12 @@ trait WithFields
 		return $this;
 	}
 
-	public function addField(GDT $gdt, GDT $after = null, bool $last = true): self
+	public function addField(GDT $gdt, GDT $after = null, bool $last = true): static
 	{
 		return $this->addFieldB($gdt, $after, $last);
 	}
 
-	protected function addFieldB(GDT $gdt, GDT $after = null, bool $last = true): self
+	protected function addFieldB(GDT $gdt, GDT $after = null, bool $last = true): static
 	{
 		$this->addFieldA($gdt, $after, $last);
 
@@ -84,8 +84,6 @@ trait WithFields
 				}
 			}
 		}
-
-// 		$gdt->inputs($this->getInputs());
 
 		return $this;
 	}
@@ -164,12 +162,6 @@ trait WithFields
 		}
 	}
 
-// 	public function addFieldAfterNamed(GDT $gdt, string $afterName): self
-// 	{
-// 		$after = $this->getField($afterName);
-// 		return $this->addFieldAfter($gdt, $after);
-// 	}
-
 	/**
 	 * Get all fields in a flattened array.
 	 *
@@ -180,12 +172,12 @@ trait WithFields
 		return $this->fieldsFlat ?? GDT::EMPTY_ARRAY;
 	}
 
-	public function addFieldFirst(GDT $gdt): self
+	public function addFieldFirst(GDT $gdt): static
 	{
 		return $this->addFieldB($gdt, null, false);
 	}
 
-	public function addFieldAfterName(GDT $gdt, string $afterName): self
+	public function addFieldAfterName(GDT $gdt, string $afterName): static
 	{
 		$after = $this->getField($afterName);
 		return $this->addFieldAfter($gdt, $after);
@@ -196,30 +188,30 @@ trait WithFields
 		return $this->fieldsFlat[$key] ?: null;
 	}
 
-	public function addFieldAfter(GDT $gdt, GDT $after): self
+	public function addFieldAfter(GDT $gdt, GDT $after): static
 	{
 		return $this->addFieldB($gdt, $after, false);
 	}
 
-	public function addFieldLast(GDT $gdt): self
+	public function addFieldLast(GDT $gdt): static
 	{
 		return $this->addFieldB($gdt);
 	}
 
-	public function removeFields(): self
+	public function removeFields(): static
 	{
 		unset($this->fields);
 		unset($this->fieldsFlat);
 		return $this;
 	}
 
-	public function removeFieldNamed(string $key): self
+	public function removeFieldNamed(string $key): static
 	{
 		$field = $this->getField($key);
 		return $this->removeField($field);
 	}
 
-	public function removeField(GDT $field): self
+	public function removeField(GDT $field): static
 	{
 		if (false !== ($i = array_search($field, $this->fields, true)))
 		{

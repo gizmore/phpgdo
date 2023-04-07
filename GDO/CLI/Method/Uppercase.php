@@ -19,6 +19,11 @@ use GDO\Form\MethodForm;
 final class Uppercase extends MethodForm
 {
 
+	public function getCLITrigger(): string
+	{
+		return 'upper';
+	}
+
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(

@@ -312,7 +312,7 @@ abstract class GDT
 		return TextStyle::italic(t('not_specified'));
 	}
 
-	public function displayChoice($choice) : string
+	public function displayChoice(string|GDT $choice): string
 	{
 		return is_string($choice) ? $choice : $choice->renderOption();
 	}
@@ -645,6 +645,11 @@ abstract class GDT
 	public function hasFields() : bool
 	{
 		return false;
+	}
+
+	public function addField(GDT $field, GDT $after=null, bool $last=true): static
+	{
+		return $this->var($this->getVar() . $field->getVar());
 	}
 
 	public function getFields() : array

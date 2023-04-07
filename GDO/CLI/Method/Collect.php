@@ -23,6 +23,7 @@ use GDO\Util\Filewalker;
 final class Collect extends MethodCLI
 {
 
+
 	public function isTrivial(): bool { return false; }
 
 	public function getPermission(): ?string

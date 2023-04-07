@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests;
 
 use GDO\Core\Application;
@@ -14,7 +15,7 @@ use function PHPUnit\Framework\assertTrue;
  * Holds global user objects for test cases.
  * This is ensured by a quirky and important module priority and dependency graph.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.11.2
  * @author gizmore
  */

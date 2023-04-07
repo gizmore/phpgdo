@@ -137,39 +137,39 @@ trait WithParameters
 //		$this->applyInputComposeParams();
 	}
 
-	private function applyInputComposeParams(): void
-	{
-		# Map positional to now named input
-		$pos = -1;
-		$newInput = [];
-		foreach ($this->gdoParameterCache() as $key => $gdt)
-		{
-			if ($gdt->isPositional())
-			{
-				$pos++;
-				if (isset($this->inputs[$pos]))
-				{
-					$newInput[$key] = $this->inputs[$pos];
-				}
-			}
-		}
-
-		# Copy previously already named input
-		foreach ($this->getInputs() as $key => $input)
-		{
-			if (!is_numeric($key))
-			{
-				$newInput[$key] = $input;
-			}
-		}
-		$this->inputs = $newInput;
-
-		# Apply all input to all GDT
-		foreach ($this->gdoParameterCache() as $gdt)
-		{
-			$gdt->inputs($this->inputs);
-		}
-	}
+//	private function applyInputComposeParams(): void
+//	{
+//		# Map positional to now named input
+//		$pos = -1;
+//		$newInput = [];
+//		foreach ($this->gdoParameterCache() as $key => $gdt)
+//		{
+//			if ($gdt->isPositional())
+//			{
+//				$pos++;
+//				if (isset($this->inputs[$pos]))
+//				{
+//					$newInput[$key] = $this->inputs[$pos];
+//				}
+//			}
+//		}
+//
+//		# Copy previously already named input
+//		foreach ($this->getInputs() as $key => $input)
+//		{
+//			if (!is_numeric($key))
+//			{
+//				$newInput[$key] = $input;
+//			}
+//		}
+//		$this->inputs = $newInput;
+//
+//		# Apply all input to all GDT
+//		foreach ($this->gdoParameterCache() as $gdt)
+//		{
+//			$gdt->inputs($this->inputs);
+//		}
+//	}
 
 	/**
 	 * Get method parameters.

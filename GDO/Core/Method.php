@@ -6,7 +6,9 @@ use GDO\Date\Time;
 use GDO\DB\Database;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
+use GDO\Form\MethodForm;
 use GDO\Language\Trans;
+use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Redirect;
 use GDO\UI\WithDescription;
@@ -24,6 +26,7 @@ use Throwable;
  * @version 7.0.3
  * @since 3.0.1
  * @author gizmore
+ * @see MethodForm
  * @see GDT
  * @see GDO
  */
@@ -48,6 +51,8 @@ abstract class Method #extends GDT
 	public string $button;
 
 	private bool $locked = false;
+
+	public int $priority = 50;
 
 	/**
 	 * Get a method by cli convention. Aliases first, then module DOT method.
@@ -113,6 +118,8 @@ abstract class Method #extends GDT
 	public function isShownInSitemap(): bool { return true; }
 
 	public function isHiddenMethod() { return false; }
+
+	public function isDebugging(): bool { return false; }
 
 
 	public function isIndexed(): bool { return true; }
@@ -187,6 +194,13 @@ abstract class Method #extends GDT
 		try
 		{
 			$this->applyInput();
+
+			#PP#begin#
+			if ($this->isDebugging())
+			{
+				xdebug_break();
+			}
+			#PP#end#
 
 			# 0) Init
 			if ($result = $this->onMethodInit())
@@ -367,17 +381,32 @@ abstract class Method #extends GDT
 	 */
 	public function checkPermission(GDO_User $user, bool $silent=false): ?GDT
 	{
-		$error = '';
-		$args = [];
-		if (!$this->checkPermissionB($user, $error, $args))
+		try
+		{
+			$error = '';
+			$args = [];
+			if (!$this->checkPermissionB($user, $error, $args))
+			{
+				if (!$silent)
+				{
+					return $this->error($error, $args);
+				}
+				return GDT_Response::make();
+			}
+			return null;
+		}
+		catch (Throwable $ex)
 		{
 			if (!$silent)
 			{
-				return $this->error($error, $args);
+				return GDT_Error::fromException($ex);
 			}
-			return GDT_Response::make();
+			else
+			{
+				Debug::debugException($ex);
+			}
+			return null;
 		}
-		return null;
 	}
 
 	private function checkPermissionB(GDO_User $user, string &$error, array &$args): bool

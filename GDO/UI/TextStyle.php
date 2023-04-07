@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\GDT;
+use GDO\DogIRC\Connector\IRC;
 
 /**
  * A utility class that renders strings with a text style.
@@ -11,9 +13,7 @@ use GDO\Core\GDT;
  * CLI does use bash stuff, HTML uses CSS style.
  * For coloring text, see the UI Color class.
  *
- * @TODO What about IRC and co?
- *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  * @see Color
@@ -31,8 +31,9 @@ final class TextStyle
 		$app = Application::$INSTANCE;
 		switch (Application::$MODE)
 		{
-// 			case GDT::RENDER_IRC:
-// 				return call_user_func([CLI::class, $cliMethod], $s);
+			case GDT::RENDER_IRC:
+				return call_user_func([IRC::class, $cliMethod], $s);
+				break;
 			case GDT::RENDER_CLI:
 				return call_user_func([CLI::class, $cliMethod], $s);
 			default:
