@@ -24,7 +24,7 @@ final class Help extends MethodCLI
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
-			GDT_MethodSelect::make('method')->notNull()->onlyPermitted(false),
+			GDT_MethodSelect::make('method')->onlyPermitted(false),
 			GDT_AntiCSRF::make(),
 		);
 		$form->actions()->addFields(
@@ -34,14 +34,27 @@ final class Help extends MethodCLI
 
 	public function formValidated(GDT_Form $form): GDT
 	{
-		$method = $this->getParameterMethod();
-		$help = CLI::renderCLIHelp($method);
-		return GDT_String::make()->var($help);
+		if ($method = $this->getParameterMethod())
+		{
+			$help = CLI::renderCLIHelp($method);
+			return GDT_String::make()->var($help);
+		}
+		return $this->showAllCommands();
 	}
 
-	private function getParameterMethod(): Method
+	private function getParameterMethod(): ?Method
 	{
 		return $this->gdoParameterValue('method');
+	}
+
+	private function showAllCommands(): GDT
+	{
+		$back = 'all';
+		foreach (Method::$CLI_ALIASES as $alias => $command)
+		{
+
+		}
+		return GDT_String::make()->var($back);
 	}
 
 }

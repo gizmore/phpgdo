@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
@@ -14,7 +15,7 @@ use GDO\Util\Filewalker;
  * An input s either a string or a GDT_Method.
  * A method saves it response [WithResult.php]()
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
@@ -28,26 +29,10 @@ class GDT_Method extends GDT
 
 	public GDT $result;
 
-//	private function getCLIAutoButton(array $inputs) : ?string
-//	{
-//		return $this->method->appliedInputs($inputs)->getAutoButton(array_keys($inputs));
-//	}
 	public bool $withPermissionCheck = true;
+
 	private int $positionalPosition = 0;
 
-//	###########
-//	### CLI ###
-//	###########
-//	public bool $clibutton = false;
-//
-//	/**
-//	 * Toggle if we should autodetect a button.
-//	 */
-//	public function clibutton(bool $clibutton = true): self
-//	{
-//		$this->clibutton = $clibutton;
-//		return $this;
-//	}
 
 	############
 	### Perm ###
@@ -55,8 +40,8 @@ class GDT_Method extends GDT
 
 	public function setupCLIButton(): self
 	{
-		try
-		{
+//		try
+//		{
 			if (!isset($this->method->button))
 			{
 				if ($initResponse = $this->method->onMethodInit())
@@ -68,10 +53,10 @@ class GDT_Method extends GDT
 					$this->method->cliButton($button);
 				}
 			}
-		}
-		catch (GDO_CRUDException $ex)
-		{
-		}
+//		}
+//		catch (GDO_CRUDException $ex)
+//		{
+//		}
 		return $this;
 	}
 
@@ -143,7 +128,7 @@ class GDT_Method extends GDT
 		});
 	}
 
-	public function fileCacheKeyGroup()
+	public function fileCacheKeyGroup(): string
 	{
 		return sprintf('method_%s_%s_',
 			$this->getModuleName(), $this->getMethodName());
@@ -155,12 +140,8 @@ class GDT_Method extends GDT
 
 	/**
 	 * Get a path for this module in it's GDO folder.
-	 *
-	 * @param string $path
-	 *
-	 * @return string
 	 */
-	public function filePath($path = '')
+	public function filePath(string $path = ''): string
 	{
 		$module = $this->getModule();
 		return $module->filePath($path);
@@ -168,12 +149,8 @@ class GDT_Method extends GDT
 
 	/**
 	 * Get the temp path for a method. Like temp/Module/Method/
-	 *
-	 * @param string $path - append
-	 *
-	 * @return string
 	 */
-	public function tempPath($path = '')
+	public function tempPath(string $path = ''): string
 	{
 		$module = $this->getModule();
 		$tempDir = $module->tempPath($this->gdoShortName());

@@ -66,7 +66,7 @@ class Application extends GDT
 	/**
 	 * Call this at least.
 	 */
-	public static function init(): static
+	public static function init(): self
 	{
 		global $me;
 		$me = Stub::make();

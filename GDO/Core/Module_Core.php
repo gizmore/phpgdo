@@ -31,10 +31,10 @@ use GDO\User\GDT_User;
 final class Module_Core extends GDO_Module
 {
 
-	final public const GDO_VERSION = '7.0.2';
-	final public const GDO_REVISION = '7.0.2-r1773';
+	final public const GDO_VERSION = '7.0.3';
+	final public const GDO_REVISION = '7.0.3-r1779';
 
-	final public const GDO_CODENAME = 'Hailing Hermelin';
+	final public const GDO_CODENAME = 'Idiomatic Indian';
 
 	##############
 	### Module ###

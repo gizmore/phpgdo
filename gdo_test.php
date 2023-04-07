@@ -110,7 +110,16 @@ final class gdo_test extends Application
 		return $this;
 	}
 
+	public bool $perf = false;
+
+	public function perf(bool $perf = true): static
+	{
+		$this->perf = $perf;
+		return $this;
+	}
+
 	public bool $quick = false;
+
 	public function quick(bool $quick = true): static
 	{
 		$this->quick = $quick;
@@ -157,7 +166,7 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
 $index = 0;
-$options = getopt('acimnqrs', ['all', 'config', 'icons', 'methods', 'nulls', 'quick', 'rendering', 'seo'], $index);
+$options = getopt('acimnpqrs', ['all', 'config', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo'], $index);
 
 if (isset($options['a']) || isset($options['all']))
 {
@@ -181,6 +190,11 @@ if (isset($options['m']) || isset($options['methods']))
 if (isset($options['n']) || isset($options['nulls']))
 {
 	$app->nulls();
+}
+
+if (isset($options['p']) || isset($options['perf']))
+{
+	$app->perf();
 }
 
 if (isset($options['q']) || isset($options['quick']))
@@ -256,29 +270,6 @@ if (Application::isError())
 	die(1);
 }
 
-//if ($app->dog)
-//{
-//	if ($argc === 0)
-//	{
-//		$argc = 1;
-//		$argv[0] = '';
-//	}
-//	else
-//	{
-//		$argv[0] .= ',';
-//	}
-//	$dogs = [];
-//	$folders = scandir(GDO_PATH . 'GDO');
-//	foreach ($folders as $folder)
-//	{
-//		if (str_starts_with($folder, 'Dog'))
-//		{
-//			$dogs[] = $folder;
-//		}
-//	}
-//	$argv[0] .= implode(',', $dogs);
-//}
-
 # #############
 # ## Single ###
 # #############
@@ -300,17 +291,44 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 
 	foreach ($modules as $k => $modname)
 	{
+		$beg = $modname[0] === '*' ? 100 : 0;
+		$id2 = $modname[0] === '*' ? 1 : 0;
+		$id3 = $modname[-1] === '*' ? 1 : 0;
+		$str = substr($modname, $id2, -$id3);
+		foreach ($moduleMappings as $modname2)
+		{
+			if (false === ($idx = stripos($modname2, $str)))
+			{
+				continue;
+			}
+			if ((!$id2) && ($idx !== 0))
+			{
+				continue;
+			}
+			if ((!$id3) && (!str_ends_with($modname2, $str)))
+			{
+				continue;
+			}
+		}
 		$modules[$k] = $moduleMappings[$modname];
 	}
 
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 
 	# Add Tests, Perf and CLI as dependencies on unit tests.
-//	$modules[] = 'CLI';
-	$modules[] = 'Perf';
+	if ($app->all || $app->perf)
+	{
+		$modules[] = 'Perf';
+	}
 
 	# Tests Module as a finisher
 	$modules[] = 'Tests';
+
+	if ($app->all)
+	{
+		$modules[] = 'CLI';
+		$modules[] = 'Admin';
+	}
 
 	# Fix lowercase names
 	$modules = array_map(

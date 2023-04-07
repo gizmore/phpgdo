@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core\Expression;
 
+use GDO\Core\GDO_NoSuchCommandError;
 use GDO\Core\GDO_NoSuchMethodError;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
@@ -127,9 +128,6 @@ final class Parser
 		return $current;
 	}
 
-	/**
-	 * @throws GDO_NoSuchMethodError
-	 */
 	private function parseMethod(string $line, int &$i, int $len): Method
 	{
 		$parsed = '';
@@ -172,6 +170,11 @@ final class Parser
 		}
 
 		$method = Method::getMethod($parsed, true);
+
+		if (!$method)
+		{
+			throw new GDO_NoSuchCommandError($parsed);
+		}
 
 //		if (!$button)
 //		{

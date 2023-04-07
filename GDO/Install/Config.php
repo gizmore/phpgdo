@@ -109,8 +109,8 @@ class Config
 		# HTTP
 		deff('GDO_DOMAIN', $_SERVER['HTTP_HOST'] ?? 'localhost');
 		deff('GDO_SERVER', self::detectServerSoftware());
-		deff('GDO_PROTOCOL', @$_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
-		deff('GDO_PORT', @$_SERVER['SERVER_PORT'] ? $_SERVER['SERVER_PORT'] : (GDO_PROTOCOL === 'https' ? 443 : 80));
+		deff('GDO_PROTOCOL', $_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
+		deff('GDO_PORT', $_SERVER['SERVER_PORT'] ?: (GDO_PROTOCOL === 'https' ? 443 : 80));
 		deff('GDO_WEB_ROOT', Strings::substrTo($_SERVER['SCRIPT_NAME'], 'install/wizard.php'));
 		deff('GDO_FORCE_SSL', false);
 		# Files

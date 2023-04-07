@@ -68,16 +68,11 @@ abstract class Method #extends GDT
 			{
 				return null;
 			}
-
 			$methodName = Strings::substrFrom($alias, '.', t('none'));
 			if ($method = $module->getMethod($methodName, false))
 			{
 				return $method;
 			}
-//			if ($throw)
-//			{
-//				throw new GDO_NoSuchMethodError($module, $methodName);
-//			}
 		}
 		return null;
 	}

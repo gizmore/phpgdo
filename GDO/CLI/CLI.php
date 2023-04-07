@@ -34,10 +34,6 @@ final class CLI
 		return stream_isatty(STDIN);
 	}
 
-	/**
-	 * @throws GDO_Error
-	 * @throws GDO_ErrorFatal
-	 */
 	public static function setupUser(): GDO_User
 	{
 		$username = self::getUsername();
@@ -70,10 +66,10 @@ final class CLI
 	public static function flushTopResponse(): void
 	{
 		echo self::getTopResponse();
-		if (ob_get_level())
-		{
-			ob_flush();
-		}
+//		if (ob_get_level())
+//		{
+//			ob_flush();
+//		}
 	}
 
 	##############

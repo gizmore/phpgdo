@@ -13,11 +13,11 @@ trait WithInstance
 
 	public static self $INSTANCE;
 
-	public static function instance(): static
+	public static function instance(): self
 	{
 		if (!isset(self::$INSTANCE))
 		{
-			self::$INSTANCE = self::make();
+			self::$INSTANCE = static::make();
 		}
 		return self::$INSTANCE;
 	}
