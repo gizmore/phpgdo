@@ -641,7 +641,7 @@ class GDO_Module extends GDO
 	{
 		$gdt = $this->getSetting($key);
 		$settings = $this->loadUserSettings($user);
-		if ($acl = @$this->settingsACL[$key])
+		if ($acl = $this->settingsACL[$key] ?? null)
 		{
 			$def = $this->getACLDefaultsFor($key);
 			$acl->initialACL($def[0], $def[1], $def[2]);
@@ -1311,6 +1311,11 @@ class GDO_Module extends GDO
 	{
 		Website::message($this->gdoHumanName(), $key, $args);
 		return true;
+	}
+
+	public function getCLITrigger(): string
+	{
+		return strtolower($this->getModuleName());
 	}
 
 	protected function errorSystemDependency(string $key, array $args = null): bool

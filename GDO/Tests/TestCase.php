@@ -16,6 +16,7 @@ use GDO\Form\GDT_Form;
 use GDO\Language\Trans;
 use GDO\Net\GDT_IP;
 use GDO\Session\GDO_Session;
+use GDO\UI\GDT_Page;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\Module_User;
@@ -81,25 +82,23 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	public function cli(string $command, bool $permissions = true): string
 	{
-		$app = Application::$INSTANCE;
-		$app->reset();
-		$app->cli();
-		$expression = GDT_Expression::fromLine($command);
-		ob_start();
-		$response = $expression->execute();
-		$res = $response->render();
-		$app->cli(false);
-		$res = ob_get_contents() . $res;
-		ob_end_clean();
-		return $res;
-
-//		$res = CLI::getTopResponse();
-//		$res .= $response->renderCLI();
-//		if (Application::isError())
-//		{
-//			$res .= CLI::renderCLIHelp($expression->method->method);
-//		}
-//		return trim($res, "\r\n");
+		try
+		{
+			ob_start();
+			$app = Application::$INSTANCE;
+			$app->reset();
+			$app->cli();
+			$expression = GDT_Expression::fromLine($command);
+			$response = $expression->execute();
+			$res = $response->render();
+			$app->cli(false);
+			$res = ob_get_contents() . $res;
+			return $res;
+		}
+		finally
+		{
+			ob_end_clean();
+		}
 	}
 
 	public function lang($iso): void
@@ -406,21 +405,29 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	protected function callMethod(Method $method, array $inputs, bool $assertOk = true): GDT
+	protected function callMethod(Method $method, array $inputs, bool $assertOk = true): string
 	{
-		$m = GDT_MethodTest::make()->method($method);
-		$m->inputs($inputs);
-		$r = $m->execute();
-// 		$r->render(); # This will trigger 409 to be set -.-
-		if ($assertOk)
+		try
 		{
-			$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");
+			ob_start();
+			$m = GDT_MethodTest::make()->method($method);
+			$m->inputs($inputs);
+			$r = $m->execute();
+			$t = $r->renderWebsite(); # This will trigger 409 to be set -.-
+			if ($assertOk)
+			{
+				$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");
+			}
+			else
+			{
+				$this->assert409("Test if callMethod {$method->gdoClassName()} errors!");
+			}
+			return ob_get_contents() . $t;
 		}
-		else
+		finally
 		{
-			$this->assert409("Test if callMethod {$method->gdoClassName()} errors!");
+			ob_end_clean();
 		}
-		return $r;
 	}
 
 	# #############

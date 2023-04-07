@@ -66,10 +66,10 @@ final class CLI
 	public static function flushTopResponse(): void
 	{
 		echo self::getTopResponse();
-//		if (ob_get_level())
-//		{
-//			ob_flush();
-//		}
+		if (ob_get_level())
+		{
+			ob_flush();
+		}
 	}
 
 	##############
@@ -224,13 +224,13 @@ final class CLI
 		$usage2 = [];
 
 		# Ugly
-		try
-		{
-			$method->onMethodInit();
-		}
-		catch (\Throwable)
-		{
-		}
+//		try
+//		{
+//			$method->onMethodInit();
+//		}
+//		catch (\Throwable)
+//		{
+//		}
 
 		$fields = $method->gdoParameterCache();
 		foreach ($fields as $gdt)
@@ -246,6 +246,7 @@ final class CLI
 				$xmplvars = $xmplvars ?
 					sprintf('<%s>(%s)', $label, $xmplvars) :
 					sprintf('<%s>', $label);
+				$xmplvars = isset($gdt->notNull) && $gdt->notNull ? $xmplvars : "[{$xmplvars}]";
 				$usage1[] = $xmplvars;
 			}
 			elseif (!($gdt instanceof GDT_Submit))
@@ -257,7 +258,7 @@ final class CLI
 		$usage = implode(',', $usage2) . ',' . implode(',', $usage1);
 		$usage = trim($usage, ', ');
 		$mome = $method->getCLITrigger();
-		return ' ' . t('cli_usage', [
+		return t('cli_usage', [
 				trim(strtolower($mome) . ' ' . $usage), $method->getMethodDescription()]);
 	}
 

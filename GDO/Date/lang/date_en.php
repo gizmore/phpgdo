@@ -51,6 +51,7 @@ return [
 
 	# Clock
 	'cfg_clock_sidebar' => 'Show clock in sidebar?',
+	'cfg_tz_default' => 'Default Timezone',
 
 	# Activity Accuracy
 	'activity_accuracy' => 'Activity Accuracy',

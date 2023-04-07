@@ -10,7 +10,7 @@ namespace GDO\Core\Event;
 final class Table
 {
 
-	public const TIMER_EVENTS = 'time';
+	final public const TIMER_EVENTS = 'time';
 
 	/**
 	 * @var Entry[]
@@ -31,7 +31,7 @@ final class Table
 	public static function dispatch(string $event): void
 	{
 		self::$EVENTS[$event] ??= [];
-		foreach (self::$EVENTS as $i => $event)
+		foreach (self::$EVENTS[$event] as $i => $event)
 		{
 			if ($event->isTime())
 			{

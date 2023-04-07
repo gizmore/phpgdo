@@ -285,25 +285,17 @@ final class ModuleLoader
 		$name = $moduleData['module_name'];
 		$klass = "GDO\\$name\\Module_$name";
 		/** @var GDO_Module $instance */
-//		if (class_exists($klass))
-//		{
-			$instance = self::$INSTANCES[$name] ?? (self::$INSTANCES[$name] = call_user_func([$klass, 'tableGDO']));
-			$moduleData['module_priority'] = (string) $instance->priority;
-			$moduleData['module_enabled'] = $dirty ?
+		$instance = self::$INSTANCES[$name] ?? (self::$INSTANCES[$name] = call_user_func([$klass, 'tableGDO']));
+		$moduleData['module_priority'] = (string) $instance->priority;
+		$moduleData['module_enabled'] = $dirty ?
 				'0' : $moduleData['module_enabled'];
-			$instance->setGDOVars($moduleData, $dirty);
-			return $instance;
-//		}
+		$instance->setGDOVars($moduleData, $dirty);
+		return $instance;
 	}
 
 	##################
 	### Massloader ###
 	##################
-
-//	private function initModule(GDO_Module $module): void
-//	{
-//		$module->onModuleInit();
-//	}
 
 	/**
 	 * Load active modules, preferably from cache.
@@ -334,6 +326,7 @@ final class ModuleLoader
 	public function loadModulesA(): array
 	{
 		$modules = $this->loadModules(!!GDO_DB_ENABLED, !GDO_DB_ENABLED);
+		$this->initModules();
 		$this->initModuleVars();
 		return $modules;
 	}

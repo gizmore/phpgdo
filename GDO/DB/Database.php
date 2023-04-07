@@ -5,7 +5,6 @@ namespace GDO\DB;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDO_DBException;
-use GDO\Core\GDO_Error;
 use GDO\Core\GDT;
 use GDO\Core\Logger;
 use GDO\DBMS\Module_DBMS;
@@ -428,15 +427,20 @@ class Database
 		self::DBMS()->dbmsDropDB($databaseName);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function useDatabase(string $databaseName): void
+	public function useDatabase(string $databaseName): bool
 	{
-		$this->db = $databaseName;
-		if ($this->isConnected())
+		try
 		{
-			self::DBMS()->dbmsUseDB($databaseName);
+			$this->db = $databaseName;
+			if ($this->isConnected())
+			{
+				self::DBMS()->dbmsUseDB($databaseName);
+			}
+			return true;
+		}
+		catch (GDO_DBException)
+		{
+			return false;
 		}
 	}
 

@@ -51,6 +51,7 @@ return [
 
 	# Clock
 	'cfg_clock_sidebar' => 'Uhr in der Navigation anzeigen?',
+	'cfg_tz_default' => 'Standard-Zeitzone',
 
 	# Activity Accuracy
 	'activity_accuracy' => 'Activity Accuracy',

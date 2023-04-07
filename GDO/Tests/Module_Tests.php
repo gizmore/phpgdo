@@ -31,11 +31,30 @@ final class Module_Tests extends GDO_Module
 	public static function runTestSuite(GDO_Module $module): void
 	{
 		global $argv, $argc;
+
+		$skip = [];
+		$name = $module->getName();
+		if (!\gdo_test::instance()->utility)
+		{
+			$skip[] = 'CLI';
+			$skip[] = 'Crypto';
+			$skip[] = 'Date';
+			$skip[] = 'Net';
+			$skip[] = 'Table';
+			$skip[] = 'UI';
+			$skip[] = 'User';
+		}
+		if (in_array($name, $skip, true))
+		{
+			return;
+		}
+
 		$testDir = $module->filePath('Test/');
 		if (FileUtil::isDir($testDir))
 		{
 			echo "---------------------------------------\n";
-			echo "Running tests for {$module->getName()}!\n";
+			echo "---------------------------------------\n";
+			echo "Running tests for {$name}!\n";
 			flush();
 			$argv = [
 				'--bootstrap=vendor/autoload.php',
@@ -48,9 +67,6 @@ final class Module_Tests extends GDO_Module
 			$argc = count($argv);
 			$app = new Application();
 			$app->run($argv);
-			#
-			#echo "Done with {$module->getName()}.\n";
-//			flush();
 		}
 	}
 

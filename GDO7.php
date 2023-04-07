@@ -91,11 +91,11 @@ function hrefDefault(): string
 	return href(GDO_MODULE, GDO_METHOD);
 }
 
-function profile_link(string $username, int $avatarSize = 0): string
-{
-	$user = GDO_User::getByName($username);
-	return $user->renderProfileLink(true, $avatarSize);
-}
+//function profile_link(string $username, int $avatarSize = 0): string
+//{
+//	$user = GDO_User::getByName($username);
+//	return $user->renderProfileLink(true, $avatarSize);
+//}
 
 /**
  * Create a GDOv7 href.
@@ -299,7 +299,7 @@ function uridecode(string $url = null): string
 /**
  * Check if a module is enabled.
  */
-function  module_enabled(string $moduleName): string
+function module_enabled(string $moduleName): string
 {
 	if ($module = ModuleLoader::instance()->getModule($moduleName, false))
 	{

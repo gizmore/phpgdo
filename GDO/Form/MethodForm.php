@@ -82,11 +82,6 @@ abstract class MethodForm extends Method
 		unset($this->parameterCache); # :)
 	}
 
-//	protected function initFromGDO(GDO $gdo): self
-//	{
-//		$this->getForm()->initFromGDO($gdo);
-//		return $this;
-//	}
 
 	public function getForm(bool $reset = false): GDT_Form
 	{

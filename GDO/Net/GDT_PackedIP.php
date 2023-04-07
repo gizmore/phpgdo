@@ -51,7 +51,7 @@ final class GDT_PackedIP extends GDT_String
 
 	public static function packed2ip(string $packed): string
 	{
-		return inet_ntop($packed);
+		return (string) inet_ntop($packed);
 	}
 
 	###############

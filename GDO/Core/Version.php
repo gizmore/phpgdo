@@ -7,7 +7,7 @@ use GDO\Util\Strings;
 /**
  * Version number. Major.Minor.Patch.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see GDO_Module
@@ -15,7 +15,6 @@ use GDO\Util\Strings;
 final class Version
 {
 
-	final public const MAX_MAJOR = 8;
 	final public const MAX_MINOR = 9;
 	final public const MAX_PATCH = 9;
 
@@ -41,8 +40,6 @@ final class Version
 
 	/**
 	 * Increase the version by 1 patch level.
-	 *
-	 * @throws GDO_Exception
 	 */
 	public function increase(): self
 	{
@@ -55,10 +52,6 @@ final class Version
 			{
 				$this->major++;
 				$this->minor = 0;
-				if ($this->major > self::MAX_MAJOR)
-				{
-					throw new GDO_Exception('You have reached the end of all code.');
-				}
 			}
 		}
 		return $this;

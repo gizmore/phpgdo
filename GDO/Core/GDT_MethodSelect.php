@@ -1,11 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
+
+use GDO\CLI\Method\Ekko;
+use GDO\CLI\Method\Help;
 
 /**
  * Select a method.
  * Optional permission validation.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  */
@@ -37,6 +41,13 @@ final class GDT_MethodSelect extends GDT_Select
 			}
 		}
 		return $choices;
+	}
+
+	public function gdoExampleVars(): ?string
+	{
+		$ekko = Ekko::make()->getCLITrigger();
+		$help = Help::make()->getCLITrigger();
+		return "{$ekko}|{$help}|...";
 	}
 
 }

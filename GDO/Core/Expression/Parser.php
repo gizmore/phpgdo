@@ -57,10 +57,11 @@ final class Parser
 	###############
 	private function parseB(GDT_Expression $current, string $line): GDT_Expression
 	{
+		global $me;
 		$i = 0;
 		$l = $line;
 		$len = mb_strlen($l);
-		$method = $this->parseMethod($l, $i, $len);
+		$method = $me = $this->parseMethod($l, $i, $len);
 		$current->method($method);
 		$arg = '';
 		while ($i < $len)

@@ -73,11 +73,13 @@ final class Logger
 
 	public static function enable($bits): void { self::$logbits |= $bits; }
 
-//	public static function disableBuffer()
-//	{
-//		self::flush();
-//		self::disable(self::BUFFERED);
-//	}
+	public static function disable($bits): void { self::$logbits &= ~$bits; }
+
+	public static function disableBuffer()
+	{
+		self::disable(self::BUFFERED);
+		self::flush();
+	}
 
 	/**
 	 * Flush all logfiles.
@@ -273,10 +275,10 @@ final class Logger
 	public static function logCron(string $message): void
 	{
 		self::rawLog('cron', $message);
-//		if (!Application::$INSTANCE->isUnitTests())
-//		{
-//			echo $message . "\n";
-//		}
+		if (!Application::$INSTANCE->isUnitTests())
+		{
+			echo $message . "\n";
+		}
 	}
 
 	public static function rawLog(string $filename, string $message, int $logmode = 0): void

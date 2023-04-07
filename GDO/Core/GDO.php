@@ -1170,7 +1170,7 @@ abstract class GDO extends GDT
 		}
 	}
 
-	public function insert(bool $withHooks = true): self
+	public function insert(bool $withHooks = true): static
 	{
 		$query = $this->query()->
 		insert($this->gdoTableIdentifier())->
@@ -1181,7 +1181,7 @@ abstract class GDO extends GDT
 	/**
 	 * Save this entity.
 	 */
-	public function save(bool $withHooks = true): self
+	public function save(bool $withHooks = true): static
 	{
 		if (!$this->persisted)
 		{
@@ -1529,7 +1529,7 @@ abstract class GDO extends GDT
 	### Cache ###
 	#############
 
-	public function replace(bool $withHooks = true): self
+	public function replace(bool $withHooks = true): static
 	{
 		# Check for empty id.
 		# Checking for $persisted is wrong, as replace rows can be constructed from scratch.

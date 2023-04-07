@@ -21,7 +21,7 @@ use GDO\User\GDO_User;
 final class Module_Perf extends GDO_Module
 {
 
-	public int $priority = 100;
+	public int $priority = 99;
 
 	public function onLoadLanguage(): void
 	{

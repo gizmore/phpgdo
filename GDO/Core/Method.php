@@ -84,7 +84,7 @@ abstract class Method #extends GDT
 
 	public function getCLITrigger(): string
 	{
-		return strtolower("{$this->getModuleName()}.{$this->getMethodName()}");
+		return strtolower("{$this->getModule()->getCLITrigger()}.{$this->getMethodName()}");
 	}
 
 	public function getMethodName(): string
@@ -111,6 +111,9 @@ abstract class Method #extends GDT
 	public function isSavingLastUrl(): bool { return true; }
 
 	public function isShownInSitemap(): bool { return true; }
+
+	public function isHiddenMethod() { return false; }
+
 
 	public function isIndexed(): bool { return true; }
 
@@ -289,19 +292,19 @@ abstract class Method #extends GDT
 
 			return $response;
 		}
-		catch (GDO_Error $e)
-		{
-//			if ($transactional)
-//			{
-//				$db->transactionRollback();
-//			}
-//			# In CLI/Chat we need to bubble up.
-//			if (!Application::$INSTANCE->isWebserver())
-//			{
-//				throw $e;
-//			}
-			return $this->error('error', [$e->getMessage()]);
-		}
+//		catch (GDO_Error $e)
+//		{
+////			if ($transactional)
+////			{
+////				$db->transactionRollback();
+////			}
+////			# In CLI/Chat we need to bubble up.
+////			if (!Application::$INSTANCE->isWebserver())
+////			{
+////				throw $e;
+////			}
+//			return $this->error('error', [$e->getMessage()]);
+//		}
 //		catch (GDO_ArgException $e)
 //		{
 //			if ($transactional)
@@ -359,19 +362,39 @@ abstract class Method #extends GDT
 
 	/**
 	 * Check permissions.
+	 *
 	 * @note return "null" for no errors!
 	 */
-	public function checkPermission(GDO_User $user): ?GDT
+	public function checkPermission(GDO_User $user, bool $silent=false): ?GDT
+	{
+		$error = '';
+		$args = [];
+		if (!$this->checkPermissionB($user, $error, $args))
+		{
+			if (!$silent)
+			{
+				return $this->error($error, $args);
+			}
+			return GDT_Response::make();
+		}
+		return null;
+	}
+
+	private function checkPermissionB(GDO_User $user, string &$error, array &$args): bool
 	{
 		if (!($this->isEnabled()))
 		{
-			return $this->error('err_method_disabled', [$this->getModuleName(), $this->getMethodName()], 403);
+			$error = 'err_method_disabled';
+			$args = [$this->getModuleName(), $this->getMethodName()];
+			return false;
 		}
 
 		if (($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()))
 		{
 			$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
-			return $this->error('err_members_only', [$hrefAuth]);
+			$error = 'err_members_only';
+			$args = [$hrefAuth];
+			return false;
 		}
 
 		if (($this->isUserRequired()) && (!$user->isUser()))
@@ -379,13 +402,16 @@ abstract class Method #extends GDT
 			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
 			{
 				$hrefGuest = href('Register', 'Guest', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
-				return $this->error('err_user_required', [$hrefGuest]);
+				$error = 'err_user_required';
+				$args = [$hrefGuest];
 			}
 			else
 			{
 				$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
-				return $this->error('err_members_only', [$hrefAuth]);
+				$error = 'err_members_only';
+				$args = [$hrefAuth];
 			}
+			return false;
 		}
 
 		if ($mt = $this->getUserType())
@@ -396,7 +422,9 @@ abstract class Method #extends GDT
 				$ut = $user->getType();
 				if (!in_array($ut, $mt, true))
 				{
-					return $this->error('err_user_type', [Arrays::implodeHuman($mt, 'or')]);
+					$error = 'err_user_type';
+					$args = [Arrays::implodeHuman($mt, 'or')];
+					return false;
 				}
 			}
 		}
@@ -417,17 +445,19 @@ abstract class Method #extends GDT
 				}
 				if (!$has)
 				{
-					return $this->error('err_permission_required');
+					$error = 'err_permission_required';
+					return false;
 				}
 			}
 		}
 
 		if (!$this->hasPermission($user))
 		{
-			return $this->error('err_permission_required');
+			$error = 'err_permission_required';
+			return false;
 		}
 
-		return null;
+		return true;
 	}
 
 	public function isEnabled(): string { return $this->getModule()->isEnabled(); }

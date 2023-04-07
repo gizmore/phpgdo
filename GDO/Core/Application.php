@@ -66,11 +66,11 @@ class Application extends GDT
 	/**
 	 * Call this at least.
 	 */
-	public static function init(): self
+	public static function init(): static
 	{
 		global $me;
 		$me = Stub::make();
-		return self::instance();
+		return static::instance();
 	}
 
 	#################
@@ -92,6 +92,11 @@ class Application extends GDT
 	}
 
 	public function isUnitTests(): bool { return false; }
+
+	public static function setUser(\GDO\User\GDO_User $user)
+	{
+		Logger::init($user->getUserName(), GDO_ERROR_LEVEL); # 1st init as guest
+	}
 
 	public function isCLIOrUnitTest(): bool
 	{

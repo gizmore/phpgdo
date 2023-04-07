@@ -72,9 +72,9 @@ final class LanguageTest extends TestCase
 			'user_name' => 'gizmore',
 			'user_type' => 'member',
 		])->replace();
-		GDO_UserPermission::table()->grant($user, 'admin');
-		GDO_UserPermission::table()->grant($user, 'cronjob');
-		GDO_UserPermission::table()->grant($user, 'staff');
+		GDO_UserPermission::grant($user, 'admin');
+		GDO_UserPermission::grant($user, 'cronjob');
+		GDO_UserPermission::grant($user, 'staff');
 		GDT_MethodTest::$TEST_USERS[] = $user;
 		$user->changedPermissions();
 		assertTrue($user->isAdmin(), 'Test if admin permissions can be granted.');
@@ -85,7 +85,7 @@ final class LanguageTest extends TestCase
 			'user_name' => 'Peter',
 			'user_type' => 'member',
 		])->replace();
-		GDO_UserPermission::table()->grant($user, 'staff');
+		GDO_UserPermission::grant($user, 'staff');
 		GDT_MethodTest::$TEST_USERS[] = $user;
 		$user->changedPermissions();
 		assertFalse($user->isAdmin(), 'Test if admin permissions are assigned correctly.');
@@ -122,7 +122,7 @@ final class LanguageTest extends TestCase
 			'user_name' => 'Sven',
 			'user_type' => 'member',
 		])->replace();
-		GDO_UserPermission::table()->grant($user, 'staff');
+		GDO_UserPermission::grant($user, 'staff');
 		GDT_MethodTest::$TEST_USERS[] = $user;
 		$user->changedPermissions();
 		assertFalse($user->isGhost(), 'Test if staff is not ghost.');

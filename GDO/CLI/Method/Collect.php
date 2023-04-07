@@ -1,26 +1,34 @@
 <?php
+declare(strict_types=1);
 namespace GDO\CLI\Method;
 
 use GDO\CLI\MethodCLI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Path;
+use GDO\Core\GDT_Response;
 use GDO\Core\GDT_String;
 use GDO\Core\Website;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
+use GDO\User\GDO_Permission;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
 
 /**
  * Copy all files from all subdirectories in the path to the path itself.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class Collect extends MethodCLI
 {
 
 	public function isTrivial(): bool { return false; }
+
+	public function getPermission(): ?string
+	{
+		return GDO_Permission::ADMIN;
+	}
 
 	public function createForm(GDT_Form $form): void
 	{
@@ -37,6 +45,7 @@ final class Collect extends MethodCLI
 		$pattern = $this->getPattern();
 		$callback = [$this, 'callbackPath'];
 		Filewalker::traverse($path, $pattern, $callback, null, 100, $path);
+		return GDT_Response::make();
 	}
 
 	public function getPath(): string

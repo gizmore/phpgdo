@@ -20,7 +20,7 @@ use GDO\Core\WithInput;
  * @author gizmore
  * @see WithProxy
  */
-final class GDT_Repeat extends GDT
+class GDT_Repeat extends GDT
 {
 
 	use WithInput;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Form;
 
 use GDO\Core\GDO_Module;
@@ -8,6 +9,9 @@ use GDO\Core\Website;
 use GDO\Date\GDT_Duration;
 use GDO\Date\Time;
 
+/**
+ * Form related functionality for phpgdo.
+ */
 final class Module_Form extends GDO_Module
 {
 
@@ -25,10 +29,10 @@ final class Module_Form extends GDO_Module
 		];
 	}
 
-//	public function onLoadLanguage(): void
-//	{
-//		$this->loadLanguage('lang/form');
-//	}
+	public function onLoadLanguage(): void
+	{
+		$this->loadLanguage('lang/form');
+	}
 
 	##############
 	### Config ###
@@ -54,12 +58,12 @@ final class Module_Form extends GDO_Module
 		}
 	}
 
-	public function cfgXSRFHeader(): bool { return $this->getConfigValue('xsrf_header'); }
+	public function cfgXSRFHeader(): string { return $this->getConfigVar('xsrf_header'); }
 
 	public function cfgXSRFMode(): string { return $this->getConfigVar('xsrf_mode'); }
 
 	### init
 
-	public function cfgXSRFDuration(): int { return $this->getConfigValue('xsrf_expire'); }
+	public function cfgXSRFDuration(): float { return $this->getConfigValue('xsrf_expire'); }
 
 }

@@ -32,7 +32,10 @@ if (PHP_SAPI !== 'cli')
 	die(-1);
 }
 
+/** @var int $argc */
+/** @var string[] $argv */
 system('clear');
+define('GDO_TIME_START', microtime(true));
 
 echo "######################################\n";
 echo "### Welcome to the GDOv7 Testsuite ###\n";
@@ -49,16 +52,20 @@ if ((is_file('protected/config_test2.php')) && (!is_file('protected/config_test.
 require 'protected/config_test.php';
 require 'vendor/autoload.php';
 require 'GDO7.php';
+CLI::init();
 Debug::init();
 Logger::init('gdo_test');
+Logger::disableBuffer();
 
 /**
  * Override a few toggles for unit test mode.
  */
 final class gdo_test extends Application
 {
-	### $options = getopt('acimnqr', ['all', 'config', 'icons', 'methods', 'nulls', 'quick', 'rendering'], $index);
 
+	public static function setUser(\GDO\User\GDO_User $user)
+	{
+	}
 
 	public bool $all = false;
 
@@ -67,20 +74,43 @@ final class gdo_test extends Application
 		$this->all = $all;
 		if ($all)
 		{
+			$this->blanks = true;
 			$this->config = true;
+			$this->double = true;
 			$this->icons = true;
 			$this->methods = true;
 			$this->nulls = true;
+			$this->perf = true;
 			$this->rendering = true;
+			$this->seo = true;
+			$this->utility = true;
 		}
 		return $this;
 	}
+
+	public bool $blanks = false;
+
+	public function blanks(bool $blanks = true): static
+	{
+		$this->blanks = $blanks;
+		return $this;
+	}
+
 
 	public bool $config = false;
 
 	public function config(bool $config = true): static
 	{
 		$this->config = $config;
+		return $this;
+	}
+
+
+	public bool $double = false;
+
+	public function double(bool $double = true): static
+	{
+		$this->double = $double;
 		return $this;
 	}
 
@@ -142,21 +172,45 @@ final class gdo_test extends Application
 		return $this;
 	}
 
+	public bool $utility = false;
+
+	public function utility(bool $utility = true): static
+	{
+		$this->utility = $utility;
+		return $this;
+	}
+
 	public function isUnitTests(): bool
 	{
 		return true;
 	}
 
+	public bool $install = true;
 	public function isInstall(): bool
 	{
 		return $this->install;
 	}
 
 
-	public function showHelp(): int
+	public function showHelp(int $code=0): int
 	{
-		echo "HELP!\n";
-		return 0;
+		global $argv;
+		$app = "php {$argv[0]}";
+		echo "{$app}  <modules_by_comma_and_asterisk>\n";
+		echo "\n";
+		echo "Use $app '*' to run tests on all modules\n";
+		echo "\n";
+		echo "--all = Run all test options.\n";
+		echo "--blanks = Run blank GDO creation tests.\n";
+		echo "--config = Run all configuration and settings test options.\n";
+		echo "--icons = Run all test options.\n";
+		echo "--methods = Run execution tests.\n";
+		echo "--nulls = Run all empty creation tests (DELETE?).\n";
+		echo "--quick = Skip slow big data tests.\n";
+		echo "--rendering = Run rendering tests.\n";
+		echo "--seo = Run i18n tests.\n";
+		echo "--utility = Run utility tests.\n";
+		return $code;
 	}
 
 }
@@ -166,15 +220,31 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
 $index = 0;
-$options = getopt('acimnpqrs', ['all', 'config', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo'], $index);
+$options = getopt('abcdhimnpqrsu', ['all', 'blanks', 'config', 'double', 'help', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo', 'utility'], $index);
 
 if (isset($options['a']) || isset($options['all']))
 {
 	$app->all();
 }
+
+if (isset($options['b']) || isset($options['blanks']))
+{
+	$app->blanks();
+}
+
 if (isset($options['c']) || isset($options['config']))
 {
 	$app->config();
+}
+
+if (isset($options['d']) || isset($options['double']))
+{
+	$app->double();
+}
+
+if (isset($options['h']) || isset($options['help']))
+{
+	return $app->showHelp();
 }
 
 if (isset($options['i']) || isset($options['icons']))
@@ -212,11 +282,16 @@ if (isset($options['s']) || isset($options['seo']))
 	$app->seo();
 }
 
+if (isset($options['u']) || isset($options['utility']))
+{
+	$app->utility();
+}
+
 /** @var array $argv * */
 $argv = array_slice($argv, $index);
 $argc = count($argv);
 
-switch (count($argv))
+switch ($argc)
 {
 	case 1:
 		break;
@@ -232,15 +307,6 @@ if (!REPL::confirm('Is this correct?', true))
 	echo "Abort!\n";
 	die(0);
 }
-define('GDO_TIME_START', microtime(true));
-
-# ##########################
-# Simulate HTTP env a bit #
-CLI::setServerVars();
-# ###########################
-
-/** @var int $argc */
-/** @var string[] $argv */
 
 echo 'Dropping Test Database: ' . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
@@ -250,19 +316,6 @@ FileUtil::removeDir(GDO_PATH . 'files_test/');
 FileUtil::removeDir(GDO_TEMP_PATH);
 $db->createDatabase(GDO_DB_NAME);
 $db->useDatabase(GDO_DB_NAME);
-
-# 1. Try the install process if mode all.
-//if ($app->all)
-//{
-//	echo "NOTICE: Running install all first... for a basic include check.\n";
-//	$install = $loader->loadModuleFS('Install', true, true);
-//	$install->onLoadLanguage();
-//	$loader->initModules();
-//	Trans::inited();
-//	Module_Tests::runTestSuite($install);
-//}
-
-$app->install = false;
 
 if (Application::isError())
 {
@@ -275,7 +328,6 @@ if (Application::isError())
 # #############
 if ($argc === 1) # Specifiy with module names, separated by comma.
 {
-
 	global $moduleMappings;
 	$moduleMappings = [];
 
@@ -284,18 +336,19 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 		if (FileUtil::isFile("{$fullpath}/Module_{$entry}.php")) {
 			$moduleMappings[strtolower($entry)] = $entry;
 		}
-	});
+	}, 0);
 
 	$count = 0;
-	$modules = explode(',', $argv[0]);
+	$modules2 = explode(',', $argv[0]);
+	$modules = [];
 
-	foreach ($modules as $k => $modname)
+	foreach ($modules2 as $k => $modname)
 	{
 		$beg = $modname[0] === '*' ? 100 : 0;
 		$id2 = $modname[0] === '*' ? 1 : 0;
 		$id3 = $modname[-1] === '*' ? 1 : 0;
-		$str = substr($modname, $id2, -$id3);
-		foreach ($moduleMappings as $modname2)
+		$str = substr($modname, $id2, ($id3 && (!$id2)) ? -$id3 : null);
+		foreach ($moduleMappings as $modname2 => $modname)
 		{
 			if (false === ($idx = stripos($modname2, $str)))
 			{
@@ -309,17 +362,11 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 			{
 				continue;
 			}
+			$modules[] = $modname;
 		}
-		$modules[$k] = $moduleMappings[$modname];
 	}
 
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
-
-	# Add Tests, Perf and CLI as dependencies on unit tests.
-	if ($app->all || $app->perf)
-	{
-		$modules[] = 'Perf';
-	}
 
 	# Tests Module as a finisher
 	$modules[] = 'Tests';
@@ -335,7 +382,7 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 		function (string $moduleName)
 		{
 			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
-			return $module->getModuleName();
+			return $module?->getModuleName();
 		}, $modules);
 
 	$modules = array_unique($modules);
@@ -376,37 +423,35 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	});
 	# Inited!
 }
-
-# ##################
-# ## All modules ###
-# ##################
-elseif ($app->all)
-{
-	echo "Loading and install all modules from filesystem again...\n";
-	$modules = $loader->loadModules();
-}
 else
 {
-	return $app->showHelp();
+	return $app->showHelp(-1);
 }
+
+# Filter
+$skip = [];
 
 if ($app->quick)
 {
-	$modules = array_filter($modules, function (GDO_Module $module)
-	{
-		return !in_array($module->getName(), [
-			'CountryCoordinates',
-			'IP2Country',
-			'Tests',
-		]);
-	});
+	$skip[] = 'CountryCoordinates';
+	$skip[] = 'IP2Country';
+	$skip[] = 'Tests';
 }
+$modules = array_filter($modules, function (GDO_Module $module) use ($skip)
+{
+	return !in_array($module->getModuleName(), $skip, true);
+});
 
 # ######################
 # ## Install and run ###
 # ######################
 if (Installer::installModules($modules))
 {
+	if ($app->double)
+	{
+		\PHPUnit\Framework\assertTrue(Installer::installModules($modules, true), 'Test if double install works with forced migration.');
+	}
+	$app->install = false;
 	\GDO\Core\Method\ClearCache::make()->execute();
 	$loader->initModules();
 	Trans::inited(false);

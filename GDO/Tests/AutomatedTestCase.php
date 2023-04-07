@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests;
 
 use GDO\CLI\CLI;
@@ -20,7 +21,7 @@ use function PHPUnit\Framework\assertGreaterThanOrEqual;
 /**
  * Run a test for all trivial methods / GDT / GDO
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  */
@@ -53,7 +54,6 @@ abstract class AutomatedTestCase extends TestCase
 	protected int $automatedSkippedAuto = 0;
 	protected int $automatedSkippedHard = 0;
 	protected int $automatedSkippedAbstract = 0;
-	private $i = 0;
 
 	##############
 	### Method ###
@@ -89,8 +89,16 @@ abstract class AutomatedTestCase extends TestCase
 
 	protected function class_is_abstract(string $classname): bool
 	{
-		$k = new ReflectionClass($classname);
-		return $k->isAbstract();
+		try
+		{
+			$k = new ReflectionClass($classname);
+			return $k->isAbstract();
+		}
+		catch (\ReflectionException $ex)
+		{
+			Debug::debugException($ex);
+			return true;
+		}
 	}
 
 	private function testGDOVariants(GDO $table): bool
@@ -299,7 +307,7 @@ abstract class AutomatedTestCase extends TestCase
 				}
 
 				# Check others
-				/** @var $method Method * */
+				/** @var Method $method * */
 				$method = call_user_func([
 					$klass,
 					'make',
@@ -316,7 +324,6 @@ abstract class AutomatedTestCase extends TestCase
 				if ($this->isPluggableMethod($method))
 				{
 					$this->tryTrivialMethod($method);
-// 					CLI::flushTopResponse();
 				}
 				else
 				{
@@ -326,14 +333,14 @@ abstract class AutomatedTestCase extends TestCase
 		} # foreach classes
 
 		$this->message(Color::green(CLI::bold("Done with automated method test {$this->getTestName()}.")));
-		$this->message('Tested %s trivial methods.', TextStyle::bold($this->automatedTested));
+		$this->message('Tested %s trivial methods.', TextStyle::bold((string)$this->automatedTested));
 		$this->message(CLI::bold($this->automatedFailed . ' FAILED!'));
-		$this->message('%s were skipped because they were abstract.', CLI::bold($this->automatedSkippedAbstract));
-		$this->message('%s were skipped because they were unpluggable.', CLI::bold($this->automatedSkippedAuto));
-		$this->message('%s have been manually skipped via Method settings.', CLI::bold($this->automatedSkippedHard));
+		$this->message('%s were skipped because they were abstract.', CLI::bold((string)$this->automatedSkippedAbstract));
+		$this->message('%s were skipped because they were unpluggable.', CLI::bold((string)$this->automatedSkippedAuto));
+		$this->message('%s have been manually skipped via Method settings.', CLI::bold((string)$this->automatedSkippedHard));
 	}
 
-	private function isPluggableMethod(Method $method)
+	private function isPluggableMethod(Method $method): bool
 	{
 		$trivial = true;
 		$this->plugVariants = [];
@@ -374,13 +381,14 @@ abstract class AutomatedTestCase extends TestCase
 		return $trivial;
 	}
 
-	private function firstPlugPermutation()
+	private function firstPlugPermutation(): array|null
 	{
 		$permutations = new Permutations($this->plugVariants);
 		foreach ($permutations->generate() as $p)
 		{
 			return $p;
 		}
+		return null;
 	}
 
 	private function isPluggableParameters(Method $method, array $fields): bool
@@ -410,7 +418,7 @@ abstract class AutomatedTestCase extends TestCase
 		return $trivial;
 	}
 
-	private function tryTrivialMethod(Method $method)
+	private function tryTrivialMethod(Method $method): void
 	{
 		$this->automatedTested++;
 		$permutations = new Permutations($this->plugVariants);
@@ -422,22 +430,10 @@ abstract class AutomatedTestCase extends TestCase
 		}
 	}
 
-	private function tryTrivialMethodVariant(Method $method, array $plugVars)
+	private function tryTrivialMethodVariant(Method $method, array $plugVars): void
 	{
 		try
 		{
-// 			if ($method instanceof CreateThread)
-// 			{
-// 				$this->i++;
-// 				echo "tryTrivialMethodVariant({$method->getCLITrigger()} $this->i)\n";
-// 				@ob_flush();
-// 				if ($this->i === 3)
-// 				{
-// 					xdebug_break();
-// 				}
-// 			}
-
-
 			Application::$INSTANCE->reset();
 			$n = $this->automatedTested;
 			$this->automatedCalled++;
@@ -463,10 +459,6 @@ abstract class AutomatedTestCase extends TestCase
 	##############
 	### Helper ###
 	##############
-// 	protected function class_uses_trait(string $classname, string $traitname) : bool
-// 	{
-// 		return in_array($traitname, class_uses($classname, true), true);
-// 	}
 
 	abstract protected function runMethodTest(GDT_MethodTest $mt): void;
 

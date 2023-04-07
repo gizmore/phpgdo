@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\User;
 
+use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDO_Error;
 use GDO\Core\GDT;
@@ -125,6 +126,7 @@ final class GDO_User extends GDO
 		self::$CURRENT = $user;
 		Time::setTimezone($user->getTimezone());
 		Trans::setISO($user->getLangISO());
+		Application::setUser($user);
 		return $user;
 	}
 
@@ -488,7 +490,7 @@ final class GDO_User extends GDO
 
 	public function getLevelAvailable(): int
 	{
-		return $this->getLevel() - $this->getLevelSpent();
+		return (int)$this->getLevel() - (int)$this->getLevelSpent();
 	}
 
 	################
