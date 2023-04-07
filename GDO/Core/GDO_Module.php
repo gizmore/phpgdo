@@ -40,7 +40,7 @@ class GDO_Module extends GDO
 
 	public int $priority = 50;
 
-	public string $version = '7.0.2';
+	public string $version = '7.0.3';
 
 	public string $license = GDO::LICENSE;
 

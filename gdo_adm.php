@@ -882,14 +882,6 @@ elseif (($command === 'config') || ($command === 'conf'))
 
 elseif ($command === 'provide')
 {
-//	if ($argc < 3)
-//	{
-//		if (($argc < 2) && ($command === 'provide'))
-//		{
-//			printUsage(-1);
-//		}
-//	}
-
 	$isme = $app->configured;
 #		command === 'provide_me';
 	$isall = $app->all;

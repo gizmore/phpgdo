@@ -132,7 +132,7 @@ class Installer
 		});
 
 		/**
-		 * @var $module GDO_Module
+		 * @var GDO_Module $module
 		 */
 		foreach ($modules as $module)
 		{
@@ -173,7 +173,7 @@ class Installer
 		}
 
 		$upgraded = false;
-		while ($module->getVersion()->__toString() !== $module->version)
+		while ($module->getVersion()->__toString() < $module->version)
 		{
 			self::upgrade($module);
 			$upgraded = true;
