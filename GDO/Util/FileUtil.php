@@ -173,7 +173,7 @@ final class FileUtil
 	{
 		if (is_file($path))
 		{
-			if (@unlink($path))
+			if (unlink($path))
 			{
 				return true;
 			}
@@ -216,23 +216,19 @@ final class FileUtil
 			$objects = self::scandir($dir);
 			foreach ($objects as $object)
 			{
-//				if ($object !== '.' && $object !== '..')
-//				{
-					$obj = "{$dir}/{$object}";
-					if (is_dir($obj))
+				$obj = "{$dir}{$object}";
+				if (is_dir($obj))
+				{
+					return self::removeDir("{$obj}/", $throw);
+				}
+				elseif (!@unlink($obj))
+				{
+					if ($throw)
 					{
-						return self::removeDir($obj, $throw);
+						throw new GDO_Error('err_delete_file', [html($obj)]);
 					}
-					elseif (!@unlink($obj))
-					{
-						if ($throw)
-						{
-							throw new GDO_Error('err_delete_file', [html($obj)]);
-						}
-//						Logger::logError(ten('err_delete_file', [html($obj)]));
-						return false;
-					}
-//				}
+					return false;
+				}
 			}
 			if (!@rmdir($dir))
 			{
@@ -240,7 +236,6 @@ final class FileUtil
 				{
 					throw new GDO_Error('err_delete_dir', [html($dir)]);
 				}
-//				Logger::logError(ten('err_delete_dir', [html($dir)]));
 				return false;
 			}
 		}
@@ -276,32 +271,17 @@ final class FileUtil
 			$sbytes = bcdiv($sbytes, $sfactor);
 			$i++;
 		}
-
 		if ($i === 0)
 		{
 			return sprintf('%s %s', $sbytes, $txt[$i]);
 		}
-
-		$var = $sbytes + ($rem / $factor);
+		$var = floatval($sbytes) + (floatval($rem) / floatval($factor));
 		return GDT_Float::displayS((string)$var, $digits) . ' ' . $txt[$i];
 	}
 
 	private static function getTextArray(): array
 	{
-		$txt = t('_filesize');
-		if (!is_array($txt))
-		{
-			$txt = [
-				'B',
-				'KB',
-				'MB',
-				'GB',
-				'TB',
-				'PB',
-				'EB',
-			];
-		}
-		return $txt;
+		return t('_filesize');
 	}
 
 	/**

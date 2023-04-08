@@ -5,7 +5,7 @@ namespace GDO\UI;
 use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\GDT;
-use GDO\DogIRC\Connector\IRC;
+use GDO\DogIRC\IRCLib;
 
 /**
  * A utility class that renders strings with a text style.
@@ -32,8 +32,7 @@ final class TextStyle
 		switch (Application::$MODE)
 		{
 			case GDT::RENDER_IRC:
-				return call_user_func([IRC::class, $cliMethod], $s);
-				break;
+				return call_user_func([IRCLib::class, $cliMethod], $s);
 			case GDT::RENDER_CLI:
 				return call_user_func([CLI::class, $cliMethod], $s);
 			default:
@@ -46,9 +45,9 @@ final class TextStyle
 		return self::bold(self::italic($s));
 	}
 
-	public static function bold(string $s): string
+	public static function bold(string $s, bool $apply=true): string
 	{
-		return self::display($s, 'b', 'b', 'bold');
+		return $apply ? self::display($s, 'b', 'b', 'bold') : $s;
 	}
 
 	public static function italic(string $s): string

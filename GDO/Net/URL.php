@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\Application;
@@ -8,7 +9,7 @@ use GDO\Util\Regex;
  * This class holds url parts and the raw url.
  * It is the return value of GDT_Url->toValue().
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @sinve 6.0.2
  *
  * @author gizmore
@@ -20,12 +21,12 @@ final class URL
 	##############
 	### Static ###
 	##############
-	public $raw;
+	public string $raw;
 
 	###############
 	### Members ###
 	###############
-	public $parts;
+	public array $parts;
 
 	public function __construct($url)
 	{
@@ -33,12 +34,12 @@ final class URL
 		$this->parts = parse_url($url);
 	}
 
-	public function getScheme()
+	public function getScheme(): ?string
 	{
-		return isset($this->parts['scheme']) ? $this->parts['scheme'] : self::localScheme();
+		return $this->parts['scheme'] ?? self::localScheme();
 	}
 
-	public static function localScheme()
+	public static function localScheme() :string
 	{
 		if (Application::$INSTANCE->isCLI())
 		{
@@ -47,17 +48,17 @@ final class URL
 		return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
 	}
 
-	public function getPort()
+	public function getPort(): int
 	{
 		return $this->parts['port'];
 	}
 
-	public function getTLD()
+	public function getTLD(): ?string
 	{
 		return Regex::firstMatch('/([^.]+\\.[^.]+)$/ui', $this->getHost());
 	}
 
-	public function getHost()
+	public function getHost(): ?string
 	{
 		if (isset($this->parts['host']))
 		{
@@ -67,6 +68,7 @@ final class URL
 		{
 			return $this->parts['path'];
 		}
+		return null;
 	}
 
 }

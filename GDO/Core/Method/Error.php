@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDT;
@@ -8,7 +9,7 @@ use GDO\UI\MethodPage;
 /**
  * Render an arbitrary error.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
@@ -20,7 +21,7 @@ final class Error extends MethodPage
 		return false;
 	}
 
-	public function isTrivial(): bool { return false; } # Auto-Test's for 200 code, so not trivial to test.
+	public function isTrivial(): bool { return false; }
 
 	public function gdoParameters(): array
 	{

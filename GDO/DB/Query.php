@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace GDO\DB;
 
+use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDO_DBException;
-use GDO\Core\GDO_ErrorFatal;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Join;
 use GDO\Core\GDT_Object;
@@ -128,8 +128,6 @@ final class Query
 
 	/**
 	 * Copy this query.
-	 *
-	 * @return self
 	 */
 	public function copy(): self
 	{
@@ -232,10 +230,6 @@ final class Query
 	/**
 	 * Select a field as first column in query.
 	 * Useful to build count queries out of filtered tables etc.
-	 *
-	 * @param string $columns
-	 *
-	 * @return self
 	 */
 	public function selectAtFirst(string $columns = 'COUNT(*)'): self
 	{
@@ -280,20 +274,12 @@ final class Query
 
 	/**
 	 * Limit results to one.
-	 *
-	 * @return self
 	 */
 	public function first(): self
 	{
 		return $this->limit(1);
 	}
 
-	/**
-	 * @param int $count
-	 * @param int $start
-	 *
-	 * @return self
-	 */
 	public function limit(int $count, int $start = 0): self
 	{
 		$this->limit = " LIMIT {$start}, {$count}";
@@ -304,7 +290,6 @@ final class Query
 	{
 		$this->type = self::DELETE;
 		$this->write = true;
-//		unset($this->from);
 		return $this->onlyFrom($tableName);
 	}
 
@@ -336,13 +321,17 @@ final class Query
 		return $this;
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function orderRand(): self
 	{
-		$rand = Database::DBMS()->dbmsRandom();
-		return $this->order($rand);
+		try
+		{
+			return $this->order(Database::DBMS()->dbmsRandom());
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return $this;
+		}
 	}
 
 	/**
@@ -366,8 +355,6 @@ final class Query
 
 	/**
 	 * Automatically build a join based on a GDT_Object column of this queries GDO table.
-	 *
-	 * @throws GDO_ErrorFatal
 	 */
 	public function joinObject(string $key, string $join = 'JOIN'): self
 	{
@@ -395,11 +382,10 @@ final class Query
 			$tableAlias = " AS {$ftbl}";
 			$join = "{$join} {$table->gdoTableIdentifier()}{$tableAlias} ON {$ftbl}.{$table->gdoPrimaryKeyColumn()->getName()}=$atbl.{$gdt->getName()}";
 		}
-		else
-		{
-			throw new GDO_DBException('err_join_object', [html($key), html($this->table->renderName())]);
-		}
-
+//		else
+//		{
+//			throw new GDO_DBException('err_join_object', [html($key), html($this->table->renderName())]);
+//		}
 		return $this->join($join);
 	}
 
@@ -498,7 +484,7 @@ final class Query
 				return 'UPDATE ';
 			case self::DELETE:
 //				return "DELETE FROM ";
-				return "DELETE FROM  {$this->from}";
+				return "DELETE FROM {$this->from}";
 			default:
 				return "!INVALID!QRY!TYPE!{$this->type}";
 		}
@@ -586,37 +572,43 @@ final class Query
 
 	public function getLimit(): string
 	{
-		return $this->limit ?? GDT::EMPTY_STRING;
+		return $this->limit ?? '';
 	}
 
 	/**
 	 * Execute a query.
 	 * Returns boolean on writes and a Result on reads.
-	 *
-	 * @throws GDO_DBException
-	 * @see Result
 	 */
 	public function exec(): bool|Result
 	{
-		$db = Database::instance();
-
-		$query = $this->buildQuery();
-
-		#PP#begin#
-		if ($this->debug)
+		try
 		{
-			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
-			Logger::rawLog('query', $query);
+			$db = Database::instance();
+
+			$query = $this->buildQuery();
+
+			#PP#begin#
+			if ($this->debug)
+			{
+				printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
+				Logger::rawLog('query', $query);
+			}
+			#PP#end#
+
+			if ($this->write)
+			{
+				return $db->queryWrite($query);
+			}
+			else
+			{
+				return new Result($this->fetchTable,
+					$db->queryRead($query, $this->buffered), $this->cached);
+			}
 		}
-		#PP#end#
-
-		if ($this->write)
+		catch (GDO_DBException $ex)
 		{
-			return $db->queryWrite($query);
-		}
-		else
-		{
-			return new Result($this->fetchTable, $db->queryRead($query, $this->buffered), $this->cached);
+			Debug::debugException($ex);
+			return false;
 		}
 	}
 

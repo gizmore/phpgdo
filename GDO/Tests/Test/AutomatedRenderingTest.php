@@ -160,7 +160,6 @@ final class AutomatedRenderingTest extends TestCase
 //		$this->message('Rendering all modes %s', $gdt->gdoClassName());
 
 		# various output/rendering formats
-		$gdt->renderNIL();
 		$gdt->renderBinary();
 		$gdt->renderCLI();
 		$gdt->renderPDF();

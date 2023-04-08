@@ -60,7 +60,7 @@ trait WithParameters
 		return $gdt;
 	}
 
-	private function gdoParameterB(string $key, bool $throw = true): ?GDT
+	private function gdoParameterB(string $key): ?GDT
 	{
 		$cache = $this->gdoParameterCache();
 
@@ -71,18 +71,16 @@ trait WithParameters
 
 		if (is_numeric($key))
 		{
-			$pos = -1;
+			$pos = 0;
 			foreach ($cache as $gdt)
 			{
 				if ($gdt->isPositional())
 				{
-					$pos++;
-					if ($key == $pos)
+					if ($key == $pos++)
 					{
 						return $gdt;
 					}
 				}
-
 				if ($gdt instanceof GDT_Repeat)
 				{
 					return $gdt;
@@ -96,11 +94,6 @@ trait WithParameters
 			{
 				return $gdt;
 			}
-		}
-
-		if ($throw)
-		{
-			throw new GDO_Error('err_unknown_parameter', [html($key), $this->gdoHumanName()]);
 		}
 
 		return null;
@@ -128,13 +121,11 @@ trait WithParameters
 	 */
 	protected function addComposeParameters(array $params): void
 	{
-		# Add to cache
+		$inputs = $this->getInputs();
 		foreach ($params as $gdt)
 		{
-			$gdt->inputs($this->getInputs());
-			$this->parameterCache[$gdt->getName()] = $gdt;
+			$this->parameterCache[$gdt->getName()] = $gdt->inputs($inputs);
 		}
-//		$this->applyInputComposeParams();
 	}
 
 //	private function applyInputComposeParams(): void

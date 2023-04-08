@@ -139,7 +139,7 @@ class Cache
 		}
 		if ((GDO_FILECACHE) || (GDO_MEMCACHE == 2))
 		{
-			FileUtil::createDir(self::filePath(), false);
+			FileUtil::createDir(self::filePath());
 		}
 	}
 
@@ -543,8 +543,6 @@ class Cache
 
 	/**
 	 * Remove a file from filecache if it exists.
-	 *
-	 * @throws GDO_Error
 	 */
 	public static function fileRemove(string $key = null): bool
 	{
@@ -572,7 +570,7 @@ class Cache
 				$mcached = $this->dummy->setGDOVars($assoc)->setPersisted();
 				if (GDO_MEMCACHE)
 				{
-					self::set($gkey, $mcached, GDO_MEMCACHE_TTL);
+					self::set($gkey, $mcached);
 				}
 				$this->newDummy();
 			}

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\Application;
@@ -18,12 +19,14 @@ use GDO\Util\FileUtil;
  * Might be forbidden if it's a dotfile.
  *
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
 final class Fileserver extends Method
 {
+
+	public function isHiddenMethod(): bool { return false; }
 
 	public function isTrivial(): bool { return false; }
 
@@ -72,18 +75,17 @@ final class Fileserver extends Method
 		}
 
 		# Try cached or serve
-		$last_modified_time = filemtime($url);
-		# @TODO: Cache etag-md5 via modified time
-		$etag = $this->md5_file($url, $last_modified_time);
-		hdr('Last-Modified: ' . gmdate('D, d M Y H:i:s', $last_modified_time) . ' GMT');
+		$mtime = filemtime($url);
+		$etag = $this->md5_file($url, $mtime);
+		hdr('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
 		hdr("Etag: $etag");
-		hdr('Expires: ' . gmdate('D, d M Y H:i:s', $last_modified_time + Time::ONE_MONTH) . ' GMT');
+		hdr('Expires: ' . gmdate('D, d M Y H:i:s', $mtime + Time::ONE_MONTH) . ' GMT');
 
 		$app = Application::$INSTANCE;
 
 		# cache hit
 		if (
-			@strtotime(@$_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
+			@strtotime(@$_SERVER['HTTP_IF_MODIFIED_SINCE']) == $mtime ||
 			trim((string)@$_SERVER['HTTP_IF_NONE_MATCH']) == $etag
 		)
 		{

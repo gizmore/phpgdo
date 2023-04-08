@@ -34,6 +34,10 @@ class ClearCache extends MethodForm
 
 	use MethodAdmin;
 
+	public function getCLITrigger(): string { return 'cc'; }
+
+	public function getPermission(): ?string { return 'staff'; }
+
 	public function isTrivial(): bool { return false; } # Clearing the cache during tests randomly is not a good idea.
 
 	public function isSavingLastUrl(): bool { return false; }
@@ -57,17 +61,18 @@ class ClearCache extends MethodForm
 
 	public function clearCache(): void
 	{
+		$core = Module_Core::instance();
 		# Retrigger assets (requires db)
 		if (!Application::$INSTANCE->isInstall())
 		{
-			$core = Module_Core::instance();
 			# needs a db set up.
 			$assetVersion = $core->cfgAssetVersion();
 			$assetVersion->increase();
 			$core->saveConfigVar('asset_revision', $assetVersion->__toString());
 			# needs a db set up :/
-			Database::clearCache();
 		}
+		# DB
+		Database::clearCache();
 		# Flush memcached and filecache.
 		Cache::flush();
 		# Reset application state
@@ -80,7 +85,5 @@ class ClearCache extends MethodForm
 		GDT_Hook::clearCache();
 		GDT_Hook::callWithIPC('ClearCache');
 	}
-
-	public function getPermission(): ?string { return 'staff'; }
 
 }

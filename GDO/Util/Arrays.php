@@ -1,17 +1,24 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Util;
+
+use GDO\Core\GDT;
 
 /**
  * Array utility.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.5.0
  * @author gizmore
  */
 final class Arrays
 {
 
-	public static function arrayed($value)
+	/**
+	 * Turn a value into an array.
+	 * Empty array on nulls.
+	 */
+	public static function arrayed($value): array
 	{
 		if (is_array($value))
 		{
@@ -45,10 +52,8 @@ final class Arrays
 
 	/**
 	 * Recursive array_filter.
-	 *
-	 * @param callable $callback
 	 */
-	public static function filter(array $array, $callback): array
+	public static function filter(array $array, callable $callback): array
 	{
 		$keep = [];
 		foreach ($array as $k => $v)
@@ -88,7 +93,7 @@ final class Arrays
 		switch (count($array))
 		{
 			case 0:
-				return '';
+				return GDT::EMPTY_STRING;
 			case 1:
 				return array_pop($array);
 			default:
@@ -139,7 +144,7 @@ final class Arrays
 	/**
 	 * Sum each field on all arrays.
 	 */
-	public static function sumEach(array $arrays)
+	public static function sumEach(array $arrays): array
 	{
 		$result = [];
 		foreach ($arrays as $array)
@@ -159,28 +164,11 @@ final class Arrays
 		return $result;
 	}
 
-// 	/**
-// 	 * Recursive count.
-// 	 * @since 7.0.1
-// 	 */
-// 	public static function countr(array $array) : int
-// 	{
-// 		$result = 0;
-// 		foreach ($array as $ele)
-// 		{
-// 			if (is_array($ele))
-// 			{
-// 				$result += self::countr($ele);
-// 			}
-// 			$result++;
-// 		}
-// 		return $result;
-// 	}
 
 	/**
 	 * Remove a single element from an array.
 	 */
-	public static function remove(array &$array, $object): array
+	public static function remove(array &$array, mixed $object): array
 	{
 		foreach ($array as $key => $element)
 		{

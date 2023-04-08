@@ -418,4 +418,5 @@ The %2$s System',
 	'text_editor' => 'Editor',
 	'cfg_default_editor' => 'Default Editor',
 	'cfg_fav_color' => 'Favorite Color',
+	'section' => 'Section',
 ];

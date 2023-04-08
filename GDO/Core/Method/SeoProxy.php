@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\Application;
@@ -11,7 +12,7 @@ use GDO\Util\Strings;
  * Proxy an HTTP request / URL to a Method via GDOv7 SEO url rules.
  * Is not trivial, means it does not get run in automated tests.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  * @see Method
@@ -21,7 +22,6 @@ final class SeoProxy extends Method
 
 	/**
 	 * Makes no sense to test this in the usual stack, as it builds method params.
-	 *
 	 * @TODO Write a test for 403, 404 and SEOProxy.
 	 */
 	public function isTrivial(): bool { return false; }

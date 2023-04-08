@@ -8,7 +8,7 @@ use GDO\Core\MethodAjax;
 /**
  * Print phpinfo()
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  */

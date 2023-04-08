@@ -38,12 +38,12 @@ abstract class MethodPage extends Method
 		return "page/{$name}.php";
 	}
 
-	protected function getTemplateVars()
+	protected function getTemplateVars(): array
 	{
 		$tVars = [];
 		foreach ($this->gdoParameterCache() as $param)
 		{
-			$tVars[$param->name] = $param->getValue();
+			$tVars[$param->getName()] = $param->getValue();
 		}
 		return $tVars;
 	}

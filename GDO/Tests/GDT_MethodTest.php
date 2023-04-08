@@ -7,8 +7,6 @@ use GDO\Core\GDT;
 use GDO\Core\GDT_Method;
 use GDO\Form\GDT_Form;
 use GDO\User\GDO_User;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertTrue;
 
 /**
  * Helper Class to test GDOv7 methods.

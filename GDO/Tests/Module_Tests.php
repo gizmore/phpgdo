@@ -60,14 +60,13 @@ final class Module_Tests extends GDO_Module
 		if (FileUtil::isDir($testDir))
 		{
 			$bn = TextStyle::bold($name);
-			echo "---------------------------------------\n";
-			echo "---------------------------------------\n";
-			echo "Running tests for {$bn}!\n";
+			echo "\n---------------------------------------\n";
+			echo "Running tests for: {$bn}";
+			echo "\n---------------------------------------\n";
 			flush();
 			$argv = [
 				'--bootstrap=vendor/autoload.php',
 				'--no-progress',
-//				'--no-result',
 				'--do-not-cache-result',
 				'--no-configuration',
 				$testDir,

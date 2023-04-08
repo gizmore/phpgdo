@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO;
@@ -12,7 +13,7 @@ use GDO\UI\TextStyle;
  * Path completion for GDT_Path.
  * Can filter for dirs or for files.
  *
- * @since 7.0.1
+ * @since 7.0.3
  * @author gizmore
  */
 final class PathCompletion extends MethodCompletion

@@ -136,9 +136,6 @@ final class Trans
 		return self::$CACHE[$iso] ?? self::reload($iso);
 	}
 
-	/**
-	 * @TODO: This algorithm is bad and i should feel bad.
-	 */
 	private static function reload(string $iso): array
 	{
 		$cacheKey = self::getCacheKey($iso);
@@ -146,13 +143,11 @@ final class Trans
 		# Try cache
 		if (Cache::fileHas($cacheKey))
 		{
-			self::$CACHE[$iso] = Cache::fileGetSerialized($cacheKey);
-			return self::$CACHE[$iso];
+			return self::$CACHE[$iso] = Cache::fileGetSerialized($cacheKey);
 		}
 
-		ModuleLoader::instance()->loadLangFiles();
-
 		self::$CACHE[$iso] = [];
+		ModuleLoader::instance()->loadLangFiles();
 		foreach (self::$PATHS as $path)
 		{
 			$pathISO = "{$path}_{$iso}.php";
@@ -162,9 +157,7 @@ final class Trans
 			}
 			self::$CACHE[$iso] = array_merge(self::$CACHE[$iso], include($pathISO));
 		}
-
 		Cache::fileSetSerialized($cacheKey, self::$CACHE[$iso]);
-
 		return self::$CACHE[$iso] ?? GDT::EMPTY_ARRAY;
 	}
 
@@ -212,11 +205,6 @@ final class Trans
 	{
 		if (self::$INITED)
 		{
-//			if ($key === '_acl_timezone_relation')
-//			{
-//				xdebug_break();
-//			}
-
 			self::$MISS++;
 			self::$MISSING[$key] = $key;
 		}

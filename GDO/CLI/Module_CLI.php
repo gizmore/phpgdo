@@ -21,4 +21,13 @@ final class Module_CLI extends GDO_Module
 		$this->loadLanguage('lang/cli');
 	}
 
+	public function checkSystemDependencies(): bool
+	{
+		if (!function_exists('readline'))
+		{
+			return $this->errorSystemDependency('err_php_extension', ['readline']);
+		}
+		return true;
+	}
+
 }

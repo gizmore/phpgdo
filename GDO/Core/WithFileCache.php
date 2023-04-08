@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\DB\Cache;
@@ -9,7 +10,7 @@ use GDO\UI\GDT_HTML;
  * This method decorator adds file cache behaviour to a method.
  * File cache key is generated from all Method::gdoParameterCache()
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  * @see Cache
@@ -20,7 +21,7 @@ trait WithFileCache
 
 	public int $fileCacheExpire = GDO_MEMCACHE_TTL;
 
-	public function fileCacheExpire(int $expire): self
+	public function fileCacheExpire(int $expire): static
 	{
 		$this->fileCacheExpire = $expire;
 		return $this;
@@ -28,7 +29,7 @@ trait WithFileCache
 
 	protected function executeB(): GDT
 	{
-		if (!$this->isFileCacheEnabled())
+		if (!$this->fileCacheEnabled())
 		{
 			return $this->execute();
 		}
@@ -64,7 +65,7 @@ trait WithFileCache
 		}
 	}
 
-	protected function isFileCacheEnabled(): bool
+	protected function fileCacheEnabled(): bool
 	{
 		return true;
 	}

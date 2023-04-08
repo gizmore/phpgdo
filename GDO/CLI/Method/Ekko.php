@@ -15,7 +15,7 @@ use GDO\UI\GDT_Repeat;
  * @since 7.0.0
  * @author gizmore
  */
-final class Ekko extends Method
+class Ekko extends Method
 {
 
 	public function getCLITrigger(): string
@@ -30,10 +30,14 @@ final class Ekko extends Method
 		];
 	}
 
+	protected function getText(): string
+	{
+		return implode(",", $this->gdoParameterValue('text'));
+	}
+
 	public function execute(): GDT
 	{
-		return GDT_String::make()->var(implode(",",
-			$this->gdoParameterValue('text')));
+		return GDT_String::make()->var($this->getText());
 	}
 
 }

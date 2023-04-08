@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDT;
@@ -11,11 +12,16 @@ use GDO\UI\GDT_Card;
 /**
  * Print GDO and PHP version number.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class Version extends Method
 {
+
+	public function getCLITrigger(): string
+	{
+		return 'version';
+	}
 
 	public function getMethodTitle(): string
 	{

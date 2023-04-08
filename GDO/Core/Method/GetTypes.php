@@ -13,7 +13,7 @@ use GDO\Core\WithFileCache;
  * Get the type class hierarchy.
  * Is file cached.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.7.0
  * @author gizmore
  */

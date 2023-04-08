@@ -74,7 +74,7 @@ abstract class Method #extends GDT
 				return null;
 			}
 			$methodName = Strings::substrFrom($alias, '.', t('none'));
-			if ($method = $module->getMethod($methodName, false))
+			if ($method = $module->getMethod($methodName))
 			{
 				return $method;
 			}
@@ -117,7 +117,7 @@ abstract class Method #extends GDT
 
 	public function isShownInSitemap(): bool { return true; }
 
-	public function isHiddenMethod() { return false; }
+	public function isHiddenMethod(): bool { return false; }
 
 	public function isDebugging(): bool { return false; }
 
@@ -480,9 +480,9 @@ abstract class Method #extends GDT
 			}
 		}
 
-		if (!$this->hasPermission($user))
+		if (!$this->hasPermission($user, $error, $args))
 		{
-			$error = 'err_permission_required';
+			$error ??= 'err_permission_required';
 			return false;
 		}
 
@@ -519,7 +519,10 @@ abstract class Method #extends GDT
 
 	public function getPermission(): ?string { return null; }
 
-	public function hasPermission(GDO_User $user): bool { return true; }
+	public function hasPermission(GDO_User $user, string &$error, array &$args): bool
+	{
+		return true;
+	}
 
 	###################
 	### Instanciate ###

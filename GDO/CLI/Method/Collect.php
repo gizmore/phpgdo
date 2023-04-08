@@ -23,6 +23,10 @@ use GDO\Util\Filewalker;
 final class Collect extends MethodCLI
 {
 
+	public function isHiddenMethod(): bool
+	{
+		return true;
+	}
 
 	public function isTrivial(): bool { return false; }
 

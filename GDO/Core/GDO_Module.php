@@ -607,7 +607,10 @@ class GDO_Module extends GDO
 
 	public function increaseConfigVar(string $key, float|int $by = 1): void
 	{
-		$this->saveConfigVar($key, (string)($this->getConfigValue($key) + $by));
+		if ($by !== 0)
+		{
+			$this->saveConfigVar($key, (string)($this->getConfigValue($key) + $by));
+		}
 	}
 
 	public function getConfigValue(string $key): float|object|int|bool|array|string|null
@@ -777,7 +780,6 @@ class GDO_Module extends GDO
 	private function _buildSettingsCacheD(GDT $gdt): void
 	{
 		$name = $gdt->getName();
-//		$acl = GDT_ACL::make("relation_{$name}");
 		$acl = GDT_ACL::make("{$name}");
 		$acl->label($name);
 		$this->settingsACL[$name] = $acl;
@@ -842,7 +844,6 @@ class GDO_Module extends GDO
 		{
 			$settings = self::loadUserSettingsB($user);
 			$user->tempSet(self::SETTINGS_KEY, $settings);
-//			$user->recache();
 		}
 		return $settings;
 	}

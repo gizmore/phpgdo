@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Util;
 
 /**
  * Random utility functions.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 3.0.5
  * @author dloser
  *
@@ -14,17 +15,17 @@ namespace GDO\Util;
 final class Random
 {
 
-	public const TOKEN_LEN = 16;
-	public const RAND_MAX = 4294967295;
+	final public const TOKEN_LEN = 16;
+	final public const RAND_MAX = 4294967295;
 
-	public const NUMERIC = '0123456789';
-	public const ALPHAUP = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	public const ALPHALOW = 'abcdefghijklmnopqrstuvwxyz';
-	public const HEXLOWER = 'abcdef0123456789';
-	public const HEXUPPER = 'ABCDEF0123456789';
-	public const ALPHANUMLOW = 'abcdefghijklmnopqrstuvwxyz0123456789';
-	public const ALPHANUMUPLOW = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	public const ALPHANUMUPLOWSPECIAL = '!"\'_.,%&/()=<>;:#+-*~@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	final public const NUMERIC = '0123456789';
+	final public const ALPHAUP = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	final public const ALPHALOW = 'abcdefghijklmnopqrstuvwxyz';
+	final public const HEXLOWER = 'abcdef0123456789';
+	final public const HEXUPPER = 'ABCDEF0123456789';
+	final public const ALPHANUMLOW = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	final public const ALPHANUMUPLOW = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	final public const ALPHANUMUPLOWSPECIAL = '!"\'_.,%&/()=<>;:#+-*~@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 	/**
 	 * Generate a randomkey from a charset. A bit slow but should be secure random.
@@ -104,7 +105,7 @@ final class Random
 	/**
 	 * Get an insecure random number.
 	 */
-	public static function mrand(int $min = null, int $max = null): int
+	public static function mrand(int $min = 0, int $max = self::RAND_MAX): int
 	{
 		return rand($min, $max);
 	}
@@ -115,6 +116,38 @@ final class Random
 	public static function mrandomItem(array $array)
 	{
 		return count($array) ? $array[array_rand($array, 1)] : null;
+	}
+
+	/**
+	 * @param mixed[] $array
+	 * @param float[] $chances The chances as 0.0 - 1.0
+	 * @return mixed the random array element.
+	 */
+	public static function mrandomItemBiased(array $array, array $chances)
+	{
+		if (!count($array))
+		{
+			return null;
+		}
+		$sum = 0.0;
+		foreach ($chances as $flt)
+		{
+			$sum += $flt;
+		}
+		$i = 0;
+		$j = 0;
+		$r = self::mrand();
+		while ($i < $r)
+		{
+			$i += round(self::RAND_MAX / ($sum / $chances[$j++]));
+		}
+		return array_values($array)[$j-1];
+	}
+
+	public static function mrandomItemCallback(array $array, callable $chanceCallback)
+	{
+		$chances = array_map($chanceCallback, array_values($array));
+		return self::mrandomItemBiased($array, $chances);
 	}
 
 	/**

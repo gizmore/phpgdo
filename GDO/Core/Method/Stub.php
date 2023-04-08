@@ -18,6 +18,11 @@ use GDO\Core\Method;
 final class Stub extends Method
 {
 
+	public function isHiddenMethod(): bool
+	{
+		return true;
+	}
+
 	public function isTrivial(): bool
 	{
 		return false;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Util;
 
 use Generator;
@@ -8,13 +9,13 @@ use Generator;
  * Works for mixed[mixed]?
  * If you have empty values, you have one permutation with an empty array.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class Permutations
 {
 
-	private int $count = 0;
+	private int $count;
 	private array $values;
 	private array $lastPermutation;
 
@@ -64,7 +65,7 @@ final class Permutations
 		}
 	}
 
-	private function lastPermutation()
+	private function lastPermutation(): array
 	{
 		$back = [];
 		foreach ($this->lastPermutation as $k => $v)

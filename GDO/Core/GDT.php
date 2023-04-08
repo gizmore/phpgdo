@@ -413,10 +413,7 @@ abstract class GDT
 		return true; # all empty GDT does nothing... what can it do? randomly fail?!
 	}
 
-	/**
-	 * @throws GDO_ArgException
-	 */
-	public function validated(bool $throw=false) : ?static
+	public function validated() : ?static
 	{
 		$var = $this->noError()->getVar();
 		$value = $this->toValue($var);
@@ -424,10 +421,6 @@ abstract class GDT
 		{
 			$this->onValidated();
 			return $this;
-		}
-		elseif ($throw)
-		{
-			throw new GDO_ArgException($this);
 		}
 		return null;
 	}

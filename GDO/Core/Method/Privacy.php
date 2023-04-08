@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDT;
@@ -8,7 +9,7 @@ use GDO\UI\MethodPage;
 /**
  * Show the privacy informational page.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.8.0
  * @author gizmore
  */

@@ -203,12 +203,6 @@ abstract class GDO extends GDT
 
 	/**
 	 * Raw initial string data.
-	 *
-	 * @TODO throw error on unknown initial vars.
-	 *
-	 * @param string[] $initial gdovars data to copy
-	 *
-	 * @return string[] the new blank data
 	 */
 	public static function getBlankData(array $initial = null): array
 	{
@@ -425,6 +419,8 @@ abstract class GDO extends GDT
 	/**
 	 * Get a row by a single column value.
 	 * Throw exception if not found.
+	 *
+	 * @throws GDO_Error
 	 */
 	public static function findBy(string $key, string $var): static
 	{
@@ -537,16 +533,13 @@ abstract class GDO extends GDT
 	public static function notFoundException(string $id): void
 	{
 		throw new GDO_Error('err_gdo_not_found', [
-			TextStyle::bold(self::table()->gdoHumanName()),
+			TextStyle::bold(self::gdoHumanNameS()),
 			TextStyle::boldi(html($id)),
 		]);
 	}
 
 	/**
 	 * @param string[] $vars
-	 *
-	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
 	 */
 	public static function getByVars(array $vars): ?static
 	{
@@ -1088,9 +1081,6 @@ abstract class GDO extends GDT
 	### Update ###
 	##############
 
-	/**
-	 * @throws GDO_ArgException
-	 */
 	public function isValid(): bool
 	{
 		$invalid = 0;
@@ -1256,10 +1246,10 @@ abstract class GDO extends GDT
 		}
 	}
 
-	private function insertOrReplace(Query $query, bool $withHooks): self
+	private function insertOrReplace(Query $query, bool $withHooks): static
 	{
-		try
-		{
+//		try
+//		{
 			if ($withHooks)
 			{
 				$this->beforeCreate($query);
@@ -1272,11 +1262,11 @@ abstract class GDO extends GDT
 				$this->afterCreate();
 			}
 			$this->cache(); # not needed for new rows?
-		}
-		catch (GDO_DBException $ex)
-		{
-			Debug::debugException($ex);
-		}
+//		}
+//		catch (GDO_DBException $ex)
+//		{
+//			Debug::debugException($ex);
+//		}
 		return $this;
 	}
 
@@ -1563,10 +1553,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * @param string[] $vars
-	 *
-	 * @throws GDO_DBException
 	 */
-	public function saveVars(array $vars, bool $withHooks = true, bool &$worthy = false): self
+	public function saveVars(array $vars, bool $withHooks = true, bool &$worthy = false): static
 	{
 		$worthy = false; # Anything changed?
 		$query = $this->updateQuery();
@@ -1680,11 +1668,7 @@ abstract class GDO extends GDT
 		return self::table()->cache->tableName . $this->getID();
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
-	 */
-	public function reload($id): self
+	public function reload($id): static
 	{
 		$table = self::table();
 		if ($table->cached() && $table->cache->hasID($id))
@@ -1785,8 +1769,6 @@ abstract class GDO extends GDT
 	/**
 	 * Get all rows via allcache.
 	 *
-	 * @throws GDO_DBException
-	 *
 	 * @return static[]
 	 */
 	public function &allCached(string $order = null, bool $json = false): array
@@ -1840,7 +1822,7 @@ abstract class GDO extends GDT
 		return $this->tbl()->cache->isTable($this);
 	}
 
-	public function createTable(bool $reinstall = false): bool
+	public function createTable(): bool
 	{
 		$db = Database::instance();
 		$db->createTable($this);

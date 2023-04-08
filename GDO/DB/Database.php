@@ -360,15 +360,19 @@ class Database
 
 	/**
 	 * Create a database table from a GDO.
-	 *
-	 * @throws GDO_DBException
 	 */
-	public function createTable(GDO $gdo): void
+	public function createTable(GDO $gdo): bool
 	{
 		try
 		{
 			$this->disableForeignKeyCheck();
 			self::DBMS()->dbmsCreateTable($gdo);
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
 		}
 		finally
 		{
@@ -376,20 +380,23 @@ class Database
 		}
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function disableForeignKeyCheck(): void
+	public function disableForeignKeyCheck(): bool
 	{
-		$this->enableForeignKeyCheck(false);
+		return $this->enableForeignKeyCheck(false);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function enableForeignKeyCheck(bool $bool = true): void
+	public function enableForeignKeyCheck(bool $bool=true): bool
 	{
-		Database::DBMS()->dbmsForeignKeys($bool);
+		try
+		{
+			Database::DBMS()->dbmsForeignKeys($bool);
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	/**

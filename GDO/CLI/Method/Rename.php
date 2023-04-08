@@ -27,6 +27,11 @@ use GDO\Util\Filewalker;
 final class Rename extends MethodCLI
 {
 
+	public function isHiddenMethod(): bool
+	{
+		return true;
+	}
+
 	public function getPermission(): ?string
 	{
 		return GDO_Permission::ADMIN;

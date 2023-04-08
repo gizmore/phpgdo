@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Language;
 
 use GDO\Core\GDO;
@@ -8,7 +9,7 @@ use GDO\Core\GDT_Template;
 /**
  * Language table.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 3.0.1
  * @author gizmore
  */
@@ -18,6 +19,16 @@ final class GDO_Language extends GDO
 	###########
 	### GDO ###
 	###########
+
+	/**
+	 * Cannot get render-tested because of random GDT_Char ISO.
+	 */
+	public function isTestable(): bool
+	{
+		return false;
+	}
+
+
 	public static function current(): self
 	{
 		return self::getByISOOrUnknown(Trans::$ISO);

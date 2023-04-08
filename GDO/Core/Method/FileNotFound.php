@@ -17,6 +17,11 @@ use GDO\User\GDO_User;
 final class FileNotFound extends MethodPage
 {
 
+	public function isHiddenMethod(): bool
+	{
+		return true;
+	}
+
 	public function isSavingLastUrl(): bool { return false; }
 
 	protected function isFileCacheEnabled(): bool

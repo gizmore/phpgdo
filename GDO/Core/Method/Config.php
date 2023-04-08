@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO_Module;
@@ -11,7 +12,7 @@ use GDO\Core\ModuleLoader;
  * API Request to get all module configs.
  * Useful for JS Apps.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.9.0
  * @author gizmore
  */
@@ -29,7 +30,7 @@ final class Config extends MethodAjax
 		return GDT_Array::make()->value($json);
 	}
 
-	private function getModuleConfig(GDO_Module $module)
+	private function getModuleConfig(GDO_Module $module): array
 	{
 		$json = [];
 		if ($config = $module->getConfigCache())

@@ -4,8 +4,6 @@ namespace GDO\Tests;
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
-use GDO\Core\Debug;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Core\WithModule;
@@ -16,13 +14,11 @@ use GDO\Form\GDT_Form;
 use GDO\Language\Trans;
 use GDO\Net\GDT_IP;
 use GDO\Session\GDO_Session;
-use GDO\UI\GDT_Page;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserPermission;
 use GDO\User\Module_User;
 use GDO\Util\FileUtil;
 use PHPUnit\Framework\Assert;
-use Throwable;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertLessThan;
 use function PHPUnit\Framework\assertStringContainsString;
@@ -92,8 +88,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 			$response = $expression->execute();
 			$res = $response->render();
 			$app->cli(false);
-			$res = ob_get_contents() . $res;
-			return $res;
+			return ob_get_contents() . $res;
 		}
 		finally
 		{
@@ -139,7 +134,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## User switch ###
 	# ##################
 
-	protected function message($message, ...$args): void
+	protected function message(string $message, mixed ...$args): void
 	{
 		$this->out(STDOUT, $message, $args);
 	}
@@ -183,8 +178,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	protected function user(GDO_User $user): GDO_User
 	{
 		$this->session($user);
-		Trans::setISO($user->getLangISO());
-		Time::setTimezone($user->getTimezone());
 		return GDO_User::setCurrent($user);
 	}
 
@@ -194,7 +187,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		if (module_enabled('Session'))
 		{
-			@session_start();
+			#@session_start();
 			$_SESSION = [];
 			$uid = $user->getID();
 			if (!isset($this->sessions[$uid]))
@@ -212,8 +205,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * Restore gizmore because auto coverage messes with him a lot.
-	 *
-	 * @param GDO_User $user
 	 */
 	protected function restoreUserPermissions(GDO_User $user): void
 	{
@@ -222,14 +213,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 			# IF GIZMORE
 			if ($user->getID() === GDT_MethodTest::$TEST_USERS[0]->getID())
 			{
-				$table = GDO_UserPermission::table();
-				$table->grant($user, 'admin');
-				$table->grant($user, 'staff');
-				$table->grant($user, 'cronjob');
+				GDO_UserPermission::grant($user, 'admin');
+				GDO_UserPermission::grant($user, 'staff');
+				GDO_UserPermission::grant($user, 'cronjob');
 				$user->changedPermissions();
 				$user->saveVar('user_deleted', null);
 				$user->saveVar('user_deletor', null);
-
 				$this->restoreUserSettings($user);
 			}
 		}
@@ -242,7 +231,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$user->tempReset();
 		# english and male
 		$user->saveSettingVar('User', 'gender', 'male');
-// 		$user->saveSettingVar('Country', 'country', 'DE');
 		$user->saveSettingVar('Language', 'language', GDO_LANGUAGE);
 		$hash = BCrypt::create('11111111')->__toString();
 		$user->saveSettingVar('Login', 'password', $hash);
@@ -255,8 +243,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$new = Assert::getCount();
 		$add = $new - self::$LAST_COUNT;
 		self::$ASSERT_COUNT += $add;
-		// self::$LAST_COUNT = self::$ASSERT_COUNT;
-		CLI::flushTopResponse();
 	}
 
 	# ID 1
@@ -265,22 +251,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		return $this->user(GDO_User::ghost());
 	}
-
-	# Admin
-
-	protected function ghost(): GDO_User
-	{
-		return GDO_User::ghost();
-	}
-
-	# Staff
-
-	protected function userSystem(): GDO_User
-	{
-		return $this->user(GDO_User::system());
-	}
-
-	# Member
 
 	protected function userGizmore(): GDO_User
 	{
@@ -338,25 +308,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		return GDT_MethodTest::$TEST_USERS[4];
 	}
 
+
+	###############
+	### Asserts ###
+	###############
+
 	protected function assertNoCrash(string $message): void
 	{
 		assertLessThan(500, Application::$RESPONSE_CODE, $message);
 	}
-
-	# ##################
-	# ## Call method ###
-	# ##################
-// 	protected function callMethod(Method $method, array $parameters = null, array $getParameters = null)
-// 	{
-// 		$gdt_method = GDT_MethodTest::make()->method($method)
-// 			->runAs($method->plugUser())
-// 			->addFields(...$getParameters)
-// 			->addFields(...$parameters);
-// 		$result = $gdt_method->execute();
-// 		$gdt_method->result($result);
-// 		$this->assert200(sprintf('Test if %s response code is 200.', $method->gdoClassName()));
-// 		return $result;
-// 	}
 
 	protected function assert200(string $message): void
 	{
@@ -365,20 +325,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function assertCode(int $code, string $message): void
 	{
-		try
-		{
-			assertEquals($code, Application::$RESPONSE_CODE, $message);
-		}
-		catch (Throwable $ex)
-		{
-			echo Debug::debugException($ex);
-			throw $ex;
-		}
+		assertEquals($code, Application::$RESPONSE_CODE, $message);
 	}
 
-	# ################
-	# ## CLI Tests ###
-	# ################
 
 	protected function assert403(string $message): void
 	{
@@ -391,6 +340,26 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		{
 			assertStringContainsString($needle, $haystack, $message . "; $needle not found!");
 		}
+	}
+
+	/**
+	 * Check if at least one string is contained.
+	 *
+	 * @param string[] $needles
+	 */
+	protected function assertOneStringContained(array $needles, string $haystack, string $message): void
+	{
+		$matches = 0;
+		# Scorpions "o
+		foreach ($needles as $pin)
+		{
+			if (stripos($haystack, $pin) !== false)
+			{
+				$matches++;
+			}
+		}
+		$pins = implode('|', $needles);
+		self::assertGreaterThanOrEqual(1, $matches, "{$message}\nNo {$pins} found\nIn {$haystack}");
 	}
 
 	# ###########

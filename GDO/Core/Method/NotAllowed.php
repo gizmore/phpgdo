@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\Module_Core;
@@ -11,7 +12,7 @@ use GDO\User\GDO_User;
  * Show a 403 page.
  * Send an email if opted-in.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
@@ -38,7 +39,7 @@ final class NotAllowed extends MethodPage
 		return t('err_forbidden');
 	}
 
-	public function getTemplateName(): string
+	protected function getTemplateName(): string
 	{
 		return 'page/403_page.php';
 	}

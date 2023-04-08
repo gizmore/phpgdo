@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO;
@@ -11,7 +12,7 @@ use GDO\Core\ModuleLoader;
 /**
  * Get all possible enum values for all entities and GDT.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.8.0
  * @author gizmore
  */

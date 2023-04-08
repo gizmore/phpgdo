@@ -26,6 +26,11 @@ use GDO\User\GDO_Permission;
 final class PP extends MethodForm
 {
 
+	public function isHiddenMethod(): bool
+	{
+		return true;
+	}
+
 	public function getPermission(): ?string
 	{
 		return GDO_Permission::ADMIN;

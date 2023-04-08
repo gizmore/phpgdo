@@ -132,8 +132,6 @@ abstract class MethodForm extends Method
 		$this->pressedButton = null;
 
 		### Generate form
-//		unset($this->parameterCache);
-//		$this->gdoParameterCache();
 		$form = $this->getForm(true);
 
 		$this->appliedInputs($this->getInputs());

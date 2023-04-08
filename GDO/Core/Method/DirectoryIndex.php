@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\GDO;
@@ -75,8 +76,7 @@ final class DirectoryIndex extends MethodTable
 	public function getUrl(): string
 	{
 		$var = $this->gdoParameterVar('url');
-		$var = ltrim($var, '/ ');
-		return $var;
+		return ltrim($var, '/ ');
 	}
 
 	public function gdoTable(): GDO
@@ -113,7 +113,7 @@ final class DirectoryIndex extends MethodTable
 		return new ArrayResult($data, $this->gdoTable());
 	}
 
-	private function entry($path, $filename)
+	private function entry(string $path, string $filename): GDO_DirectoryIndex
 	{
 		if (is_dir($path))
 		{

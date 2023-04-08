@@ -179,7 +179,7 @@ final class GDO_User extends GDO
 	 *
 	 * @return self[]
 	 */
-	public static function withSetting(string $moduleName, string $key, string $var, string $op = '='): array
+	public static function withSetting(string $moduleName, string $key, string $var, string $op='='): array
 	{
 		return self::withSettingResult($moduleName, $key, $var, $op)->fetchAllObjects();
 	}
@@ -193,6 +193,9 @@ final class GDO_User extends GDO
 	### Getter ###
 	##############
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op = '='): self
 	{
 		$users = self::withSetting($moduleName, $key, $var, $op);
@@ -208,23 +211,23 @@ final class GDO_User extends GDO
 		}
 	}
 
-	public function clearCache(): self
-	{
-		$currId = self::$CURRENT->getID();
-		self::$SYSTEM = null;
-		self::$CURRENT = self::ghost();
-//		$this->tempReset();
-		parent::clearCache();
-		if ($currId)
-		{
-			self::$CURRENT = self::getById($currId);
-		}
-//		else
+//	public function clearCache(): self
+//	{
+//		$currId = self::$CURRENT->getID();
+//		self::$SYSTEM = null;
+//		self::$CURRENT = self::ghost();
+////		$this->tempReset();
+//		parent::clearCache();
+//		if ($currId)
 //		{
-//			self::$CURRENT = self::ghost();
+//			self::$CURRENT = self::getById($currId);
 //		}
-		return $this;
-	}
+////		else
+////		{
+////			self::$CURRENT = self::ghost();
+////		}
+//		return $this;
+//	}
 
 	public function getID(): ?string
 	{
@@ -301,7 +304,6 @@ final class GDO_User extends GDO
 		if ($name = $this->getName())
 		{
 			return html($name);
-			return html($name);
 		}
 
 		$p = self::GUEST_NAME_PREFIX;
@@ -369,18 +371,18 @@ final class GDO_User extends GDO
 	public function isGuest(bool $andAuthenticated = true): bool
 	{
 		$a = $andAuthenticated;
-		return $this->isType(GDT_UserType::GUEST) ?
-			($a ? (!!$this->getGuestName()) : true) : # guest type checks for auth or true
-			false; # non guest
+		return $this->isType(GDT_UserType::GUEST) &&
+			((!$a || !!$this->getGuestName())); # non guest
 	}
 
-	public function isMember(): bool { return $this->isType(GDT_UserType::MEMBER); }
+	public function isMember(): bool
+	{
+		return $this->isType(GDT_UserType::MEMBER);
+	}
 
 	/**
 	 * Check if it is a legit user.
 	 * Either a guest with a name or a member.
-	 *
-	 * @return bool
 	 */
 	public function isUser(): bool
 	{
@@ -400,7 +402,7 @@ final class GDO_User extends GDO
 		return $this->getTimezone() > 1;
 	}
 
-	public function getTimezoneObject()
+	public function getTimezoneObject(): \DateTimeZone
 	{
 		return Time::getTimezoneObject($this->getTimezone());
 	}
@@ -440,8 +442,6 @@ final class GDO_User extends GDO
 
 	/**
 	 * Check if the user has at least one permisson.
-	 *
-	 * @param string $permission CSV permissions
 	 */
 	public function hasPermission(string $permissions): bool
 	{
@@ -517,7 +517,7 @@ final class GDO_User extends GDO
 
 	public function setting(string $moduleName, string $key): GDT
 	{
-		$module = ModuleLoader::instance()->getModule($moduleName, true);
+		$module = ModuleLoader::instance()->getModule($moduleName);
 		return $module->userSetting($this, $key);
 	}
 
@@ -586,7 +586,7 @@ final class GDO_User extends GDO
 	### Email ###
 	#############
 
-	public function hasMail(bool $confirmed = true)
+	public function hasMail(bool $confirmed = true): bool
 	{
 		return !!$this->getMail($confirmed);
 	}
@@ -600,7 +600,9 @@ final class GDO_User extends GDO
 	public function getMail(bool $confirmed = true): ?string
 	{
 		$email = $this->settingVar('Mail', 'email');
-		return $confirmed ? ($this->settingVar('Mail', 'email_confirmed') ? $email : null) : $email;
+		return $confirmed ?
+			($this->settingVar('Mail', 'email_confirmed') ? $email : null)
+			: $email;
 	}
 
 	public function getMailFormat(): string
@@ -621,7 +623,7 @@ final class GDO_User extends GDO
 		return $this->settingValue('PaymentCredits', 'credits');
 	}
 
-	public function settingValue(string $moduleName, string $key)
+	public function settingValue(string $moduleName, string $key): float|object|int|bool|array|string|null
 	{
 		return $this->setting($moduleName, $key)->getValue();
 	}

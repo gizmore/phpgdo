@@ -8,7 +8,7 @@ use GDO\Core\GDT_Method;
 use GDO\Core\WithInput;
 
 /**
- * A parameter repeater. @TODO: Move to Core module
+ * A parameter repeater.
  *
  * Used for CLI parameter lists, like $sum 1,2,3,...
  * These need to be notNull and may not have an initial value.
@@ -29,11 +29,17 @@ class GDT_Repeat extends GDT
 	public int $minRepeat = 1;
 	public int $maxRepeat = 10;
 
-	public function proxy(GDT_Field $proxy): self
+	public function proxy(GDT_Field $proxy): static
 	{
 		$this->proxy = $proxy;
 		$proxy->notNull();
 		$proxy->initialValue(null);
+		return $this;
+	}
+
+	public function notNull(bool $notNull=true): static
+	{
+		$this->proxy->notNull($notNull);
 		return $this;
 	}
 
@@ -177,13 +183,13 @@ class GDT_Repeat extends GDT
 		return true;
 	}
 
-	public function minRepeat(int $minRepeat): self
+	public function minRepeat(int $minRepeat): static
 	{
 		$this->minRepeat = $minRepeat;
 		return $this;
 	}
 
-	public function maxRepeat(int $maxRepeat): self
+	public function maxRepeat(int $maxRepeat): static
 	{
 		$this->maxRepeat = $maxRepeat;
 		return $this;

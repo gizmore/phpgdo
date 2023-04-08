@@ -17,16 +17,21 @@ use GDO\Net\HTTP;
 final class Get extends MethodForm
 {
 
+	public function getCLITrigger(): string
+	{
+		return 'wget';
+	}
+
 	public function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
-			GDT_Url::make('url')->notNull()->reachable()->allowExternal(),
+			GDT_Url::make('url')->notNull()->allowExternal(),
 			GDT_AntiCSRF::make(),
 		);
 		$form->actions()->addField(GDT_Submit::make()->onclick([$this, 'onExecute']));
 	}
 
-	public function onExecute()
+	public function onExecute(): GDT_String
 	{
 		$url = $this->gdoParameterVar('url');
 		$response = HTTP::getFromURL($url);

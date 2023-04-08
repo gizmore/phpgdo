@@ -13,12 +13,12 @@ use GDO\Core\ModuleProviders;
 use GDO\Date\Time;
 use GDO\DB\Database;
 use GDO\Install\Installer;
-use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
 use GDO\Tests\Module_Tests;
 use GDO\Tests\TestCase;
 use GDO\UI\TextStyle;
+use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
 
@@ -63,7 +63,7 @@ Logger::disableBuffer();
 final class gdo_test extends Application
 {
 
-	public static function setUser(\GDO\User\GDO_User $user)
+	public static function setUser(GDO_User $user)
 	{
 	}
 
@@ -247,25 +247,30 @@ $db = Database::init();
 
 $index = 0;
 $options = getopt('abcdhimnpqrsu', ['all', 'blanks', 'config', 'double', 'help', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo', 'utility'], $index);
+$opcount = 0;
 
 if (isset($options['a']) || isset($options['all']))
 {
 	$app->all();
+	$opcount++;
 }
 
 if (isset($options['b']) || isset($options['blanks']))
 {
 	$app->blanks();
+	$opcount++;
 }
 
 if (isset($options['c']) || isset($options['config']))
 {
 	$app->config();
+	$opcount++;
 }
 
 if (isset($options['d']) || isset($options['double']))
 {
 	$app->double();
+	$opcount++;
 }
 
 if (isset($options['h']) || isset($options['help']))
@@ -276,21 +281,26 @@ if (isset($options['h']) || isset($options['help']))
 if (isset($options['i']) || isset($options['icons']))
 {
 	$app->icons();
+	$opcount++;
 }
 
 if (isset($options['m']) || isset($options['methods']))
 {
 	$app->methods();
+	$opcount++;
 }
 
 if (isset($options['n']) || isset($options['nulls']))
 {
 	$app->nulls();
+	$opcount++;
 }
+
 
 if (isset($options['p']) || isset($options['parents']))
 {
 	$app->parents();
+	$opcount++;
 }
 
 if (isset($options['q']) || isset($options['quick']))
@@ -301,16 +311,19 @@ if (isset($options['q']) || isset($options['quick']))
 if (isset($options['r']) || isset($options['rendering']))
 {
 	$app->rendering();
+	$opcount++;
 }
 
 if (isset($options['s']) || isset($options['seo']))
 {
 	$app->seo();
+	$opcount++;
 }
 
 if (isset($options['u']) || isset($options['utility']))
 {
 	$app->utility();
+	$opcount++;
 }
 
 if (isset($options['v']) || isset($options['verbose']))
@@ -412,9 +425,11 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 	$modules = array_unique($modules);
 
-
 	# Tests Module as a finisher
-	$modules[] = 'Tests';
+	if ($opcount > 0)
+	{
+		$modules[] = 'Tests';
+	}
 
 	if ($app->utility)
 	{
@@ -486,7 +501,9 @@ if (Installer::installModules($modules))
 {
 	if ($app->double)
 	{
-		\PHPUnit\Framework\assertTrue(Installer::installModules($modules, true), 'Test if double install works with forced migration.');
+		\PHPUnit\Framework\assertTrue(
+			Installer::installModules($modules, true),
+			'Test if double install works with forced migration.');
 	}
 	$app->install = false;
 	\GDO\Core\Method\ClearCache::make()->execute();
