@@ -43,7 +43,8 @@ echo "###       Enjoy your flight!       ###\n";
 echo "######################################\n";
 
 # Rename the config in case an accident happened.
-if ((is_file('protected/config_test2.php')) && (!is_file('protected/config_test.php')))
+if ((is_file('protected/config_test2.php')) &&
+	(!is_file('protected/config_test.php')))
 {
 	rename('protected/config_test2.php', 'protected/config_test.php');
 }
@@ -388,31 +389,35 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 
 	foreach ($modules2 as $k => $modname)
 	{
+		$modname = trim(strtolower($modname));
 		$beg = $modname[0] === '*' ? 100 : 0;
 		$id2 = $modname[0] === '*' ? 1 : 0;
 		$id3 = $modname[-1] === '*' ? 1 : 0;
-		$str = substr($modname, $id2, ($id3 && (!$id2)) ? -$id3 : null);
-		foreach ($moduleMappings as $modname2 => $modname)
+		$str = trim($modname, "* \t\n\r\0\x0B");
+		if ($str)
 		{
-			if (false === ($idx = stripos($modname2, $str)))
+			foreach ($moduleMappings as $modname2 => $modname)
 			{
-				continue;
+				if (false === ($idx = stripos($modname2, $str)))
+				{
+					continue;
+				}
+				if ((!$id2) && ($idx !== 0))
+				{
+					continue;
+				}
+				if ((!$id3) && (!str_ends_with($modname2, $str)))
+				{
+					continue;
+				}
+				$modules[] = $modname;
 			}
-			if ((!$id2) && ($idx !== 0))
-			{
-				continue;
-			}
-			if ((!$id3) && (!str_ends_with($modname2, $str)))
-			{
-				continue;
-			}
-			$modules[] = $modname;
 		}
 	}
 
 	if (!count($modules))
 	{
-		throw new \GDO\Core\GDO_Exception("No module found for " . html($argv[0]));
+		throw new \GDO\Core\GDO_Exception('No module found for ' . html($argv[0]));
 	}
 	else
 	{
