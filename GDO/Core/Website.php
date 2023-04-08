@@ -156,9 +156,20 @@ final class Website
 		return $title;
 	}
 
+
 	#############
 	### Error ###
 	#############
+
+	/**
+	 * Raw error message.
+	 * @deprecated No I18n logging.
+	 */
+	public static function errorRaw(string $titleRaw, string $errorRaw, bool $log = true, int $code = GDO_Exception::DEFAULT_ERROR_CODE): GDT_Response
+	{
+		return self::error($titleRaw, '%s', [$errorRaw], $log, $code);
+	}
+
 	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Exception::DEFAULT_ERROR_CODE): GDT_Response
 	{
 		$app = Application::$INSTANCE;
@@ -179,6 +190,18 @@ final class Website
 		}
 		return GDT_Response::make()->code($code);
 	}
+
+
+	/**
+	 * Raw success message.
+	 *
+	 * @deprecated No I18n logging.
+	 */
+	public static function messageRaw(string $titleRaw, string $messageRaw, bool $log = true, int $code = 200): GDT_Response
+	{
+		return self::message($titleRaw, '%s', [$messageRaw], $log, $code);
+	}
+
 
 	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200): GDT_Response
 	{

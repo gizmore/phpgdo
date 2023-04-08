@@ -640,6 +640,16 @@ abstract class GDT
 		return false;
 	}
 
+	public function addFields(GDT ...$fields): static
+	{
+		foreach ($fields as $field)
+		{
+			$this->addField($field);
+		}
+		return $this;
+	}
+
+
 	public function addField(GDT $field, GDT $after=null, bool $last=true): static
 	{
 		return $this->var($this->getVar() . $field->getVar());

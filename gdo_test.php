@@ -8,6 +8,7 @@ use GDO\Core\Debug;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT;
 use GDO\Core\Logger;
+use GDO\Core\Method\ClearCache;
 use GDO\Core\ModuleLoader;
 use GDO\Core\ModuleProviders;
 use GDO\Date\Time;
@@ -21,6 +22,7 @@ use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
+use function PHPUnit\Framework\assertTrue;
 
 /**
  * Launch all unit tests.
@@ -205,6 +207,11 @@ final class gdo_test extends Application
 		return $this;
 	}
 
+	public function isUnitTestVerbose(): bool
+	{
+		return $this->verbose;
+	}
+
 	public function isUnitTests(): bool
 	{
 		return true;
@@ -232,6 +239,7 @@ final class gdo_test extends Application
 		echo "--icons = Run icon tests (DELETE?).\n";
 		echo "--methods = Run execution tests.\n";
 		echo "--nulls = Run all empty creation tests (DELETE?).\n";
+		echo "--parents = Run automated tests on all dependencies.\n";
 		echo "--quick = Skip slow big data tests.\n";
 		echo "--rendering = Run rendering tests.\n";
 		echo "--seo = Run i18n tests.\n";
@@ -390,10 +398,10 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	foreach ($modules2 as $k => $modname)
 	{
 		$modname = trim(strtolower($modname));
-		$beg = $modname[0] === '*' ? 100 : 0;
-		$id2 = $modname[0] === '*' ? 1 : 0;
-		$id3 = $modname[-1] === '*' ? 1 : 0;
-		$str = trim($modname, "* \t\n\r\0\x0B");
+		$beg = $modname[0] === '%' ? 100 : 0;
+		$id2 = $modname[0] === '%' ? 1 : 0;
+		$id3 = $modname[-1] === '%' ? 1 : 0;
+		$str = trim($modname, "% \t\n\r\0\x0B");
 		if ($str)
 		{
 			foreach ($moduleMappings as $modname2 => $modname)
@@ -412,6 +420,10 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 				}
 				$modules[] = $modname;
 			}
+		}
+		else
+		{
+			$modules = array_values($moduleMappings);
 		}
 	}
 
@@ -452,10 +464,9 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	while ($count != count($modules))
 	{
 		$count = count($modules);
-
 		foreach ($modules as $moduleName)
 		{
-			$module = $loader->loadModuleFS($moduleName, true, true);
+			$module = $loader->loadModuleFS($moduleName);
 			$more = Installer::getDependencyModules($moduleName);
 			$more = array_map(function ($m)
 			{
@@ -464,7 +475,6 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 			$modules = array_merge($modules, $more);
 			$modules[] = $module->getModuleName();
 		}
-
 		$modules = array_unique($modules);
 	}
 
@@ -506,12 +516,12 @@ if (Installer::installModules($modules))
 {
 	if ($app->double)
 	{
-		\PHPUnit\Framework\assertTrue(
+		assertTrue(
 			Installer::installModules($modules, true),
 			'Test if double install works with forced migration.');
 	}
 	$app->install = false;
-	\GDO\Core\Method\ClearCache::make()->execute();
+	ClearCache::make()->execute();
 	$loader->initModules();
 	if (module_enabled('Session'))
 	{

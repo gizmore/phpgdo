@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Mail\Mail;
-use GDO\Session\GDO_Session;
 use GDO\UI\Color;
-use GDO\UI\GDT_Page;
 use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
@@ -15,8 +14,11 @@ use Throwable;
  * Can send email on PHP errors, even fatals, if Module_Mail is installed.
  * Has a method to get debug timings.
  *
- * @version 7.0.2
+ * In Unit Tests, verbose has to be enabled to show stack traces for exceptions.
+ *
+ * @version 7.0.3
  * @since 3.0.1
+ *
  * @example Debug::enableErrorHandler(); fatal_ooops();
  *
  * @author gizmore
@@ -95,25 +97,25 @@ final class Debug
 		register_shutdown_function([self::class, 'shutdown_function']);
 	}
 
-	/**
-	 * Trigger a breakpoint and gather global variables.
-	 *
-	 * @deprecated unused
-	 */
-	public static function break(): bool
-	{
-		global $me;
-		$app = Application::$INSTANCE;
-		$page = GDT_Page::instance();
-		$user = GDO_User::current();
-		$modules = ModuleLoader::instance()->getModules();
-		if (module_enabled('Session'))
-		{
-			$session = GDO_Session::instance();
-		}
-		xdebug_break();
-		return $me && $app && $page && $user && $modules && isset($session);
-	}
+//	/**
+//	 * Trigger a breakpoint and gather global variables.
+//	 *
+//	 * @deprecated unused
+//	 */
+//	public static function break(): bool
+//	{
+//		global $me;
+//		$app = Application::$INSTANCE;
+//		$page = GDT_Page::instance();
+//		$user = GDO_User::current();
+//		$modules = ModuleLoader::instance()->getModules();
+//		if (module_enabled('Session'))
+//		{
+//			$session = GDO_Session::instance();
+//		}
+//		xdebug_break();
+//		return $me && $app && $page && $user && $modules && isset($session);
+//	}
 
 	#####################
 	## Error Handlers ###
@@ -132,30 +134,21 @@ final class Debug
 	 * @TODO: shutdown function shall show debug stacktrace on fatal error. If an error was already shown, print nothing.
 	 * No stacktrace available and some vars are messed up.
 	 */
-	public static function shutdown_function()
+	public static function shutdown_function(): void
 	{
 		if ($error = error_get_last())
 		{
 			$type = $error['type'];
-//			if ($type === 64)
-//			{
-			self::error_handler($type, $error['message'], self::shortpath($error['file']), $error['line'], null);
-//			}
-//			die(-1);
+			self::error_handler($type, $error['message'], self::shortpath($error['file']), $error['line']);
+			die(Application::EXIT_FATAL);
 		}
-		die(11112);
+		die(0);
 	}
 
 	/**
 	 * Error handler creates some html backtrace and can die on _every_ warning etc.
-	 *
-	 * @param int $errno
-	 * @param string $errstr
-	 * @param string $errfile
-	 * @param int $errline
-	 * @param mixed $errcontext
 	 */
-	public static function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+	public static function error_handler(int $errno, string $errstr, string $errfile, int $errline, mixed $errcontext = null): void
 	{
 		if (!(error_reporting() & $errno))
 		{
@@ -212,11 +205,10 @@ final class Debug
 		}
 
 		$app = Application::$INSTANCE;
-		$is_html = $app->isHTML();
-		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
+		$is_html = !($app->isCLIOrUnitTest()) && $app->isHTML();
 
 		$messageHTML = sprintf('<p>%s(EH %s):&nbsp;%s&nbsp;in&nbsp;<b style=\"font-size:16px;\">%s</b>&nbsp;line&nbsp;<b style=\"font-size:16px;\">%s</b></p>', $errnostr, $errno, $errstr, $errfile, $errline);
-		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, TextStyle::boldi($errstr), TextStyle::bold($errfile), TextStyle::bold($errline));
+		$messageCLI = sprintf('%s(EH %s) %s in %s line %s.', Color::red($errnostr), $errno, TextStyle::boldi($errstr), TextStyle::bold($errfile), TextStyle::bold((string)$errline));
 		$message = $is_html ? $messageHTML : $messageCLI;
 
 		// Send error to admin
@@ -226,9 +218,9 @@ final class Debug
 			{
 				self::sendDebugMail(self::backtrace($messageCLI, false));
 			}
-			catch (Throwable)
+			catch (Throwable $ex)
 			{
-//				echo $ex->getTraceAsString();
+				echo $ex->getTraceAsString();
 			}
 		}
 
@@ -245,7 +237,10 @@ final class Debug
 			echo self::renderError($message);
 		}
 
-		return self::$DIE ? die(1) : true;
+		if (self::$DIE)
+		{
+			die(Application::EXIT_FATAL);
+		}
 	}
 
 	/**
@@ -254,7 +249,7 @@ final class Debug
 	 * HTML means (x)html(5) and <pre> style.
 	 * Plaintext means nice for logfiles.
 	 */
-	public static function backtrace(string $message = '', bool $html = true)
+	public static function backtrace(string $message = '', bool $html = true): string
 	{
 		return self::backtraceMessage($message, $html, debug_backtrace());
 	}
@@ -264,7 +259,7 @@ final class Debug
 		// Fix full path disclosure
 		$message = self::shortpath($message);
 
-		if (!GDO_ERROR_STACKTRACE)
+		if ( (!GDO_ERROR_STACKTRACE) || (!Application::instance()->isUnitTestVerbose()) )
 		{
 			return $html ? sprintf('<div class="gdo-exception">%s</div>', $message) . PHP_EOL : $message;
 		}
@@ -292,7 +287,7 @@ final class Debug
 				$function = sprintf('%s%s(%s)',
 					isset($row['class']) ? $row['class'] . $row['type'] : '',
 					$row['function'],
-					self::backtraceArgs(isset($row['args']) ? $row['args'] : null));
+					self::backtraceArgs($row['args'] ?? null));
 
 				# Collect relevant stack frame
 				$implode[] = [
@@ -307,8 +302,8 @@ final class Debug
 			}
 
 			# Use line in next frame.
-			$preline = isset($row['line']) ? $row['line'] : '?';
-			$prefile = isset($row['file']) ? $row['file'] : '[unknown file]';
+			$preline = $row['line'] ?? '?';
+			$prefile = $row['file'] ?? '[unknown file]';
 		}
 
 		$copy = [];
@@ -334,17 +329,12 @@ final class Debug
 
 	/**
 	 * Strip full pathes so we don't have a full path disclosure.
-	 *
-	 * @param string $path
-	 *
-	 * @return string
 	 */
 	public static function shortpath(string $path, string $newline = ''): string
 	{
 		$path = str_replace('\\', '/', $path); #PP#windows#
 		$path = str_replace(GDO_PATH, '', $path);
-		$path = trim($path, ' /');
-		return $path;
+		return trim($path, ' /');
 	}
 
 	private static function backtraceArgs(array $args = null): string
@@ -360,7 +350,7 @@ final class Debug
 		return implode(', ', $out);
 	}
 
-	private static function backtraceArg($arg): string
+	private static function backtraceArg(mixed $arg=null): string
 	{
 		if ($arg === null)
 		{
@@ -384,7 +374,7 @@ final class Debug
 				{
 					if (!$arg->gdoAbstract())
 					{
-						$back .= '#' . $arg->getID();
+						$back .= '#' . $arg->getID()??'0';
 					}
 				}
 			}
@@ -396,17 +386,14 @@ final class Debug
 		}
 
 		$app = Application::$INSTANCE;
-		$is_html = $app ? $app->isHTML() : (php_sapi_name() !== 'cli');
-		$is_html = ($app->isCLI() || $app->isUnitTests()) ? false : $is_html;
-// 		$is_html = $app ? $app->isHTML() && (!$app->isUnitTests()) : true;
-
-		$arg = $is_html ? html($arg) : $arg;
+//		$is_html = ($app->isCLIOrUnitTest()) ? false : $app->isHTML();
+		$arg = html($arg);
 		$arg = str_replace('&quot;', '"', $arg); # It is safe to inject quotes. Turn back to get length calc right.
 		$arg = str_replace('\\\\', '\\', $arg); # Double backslash was escaped always via json encode?
 		$arg = str_replace('\\/', '/', $arg); # Double backslash was escaped always via json encode?
 		if (mb_strlen($arg) > self::$MAX_ARG_LEN)
 		{
-			if ($app->isCLI() || $app->isUnitTests())
+			if ($app->isCLIOrUnitTest())
 			{
 				self::$MAX_ARG_LEN = self::CLI_MAX_ARG_LEN;
 			}
@@ -444,14 +431,14 @@ final class Debug
 		{
 			return json_encode(['error' => $message]);
 		}
-		if ($app->isCLI() || $app->isUnitTests())
+		if ($app->isCLIOrUnitTest())
 		{
 			return "$message\n";
 		}
 		return $message;
 	}
 
-	public static function error(Throwable $ex)
+	public static function error(Throwable $ex): void
 	{
 		self::error_handler($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine());
 	}
@@ -459,7 +446,6 @@ final class Debug
 	public static function exception_handler($ex): void
 	{
 		echo self::debugException($ex);
-// 	    die(1);
 	}
 
 	public static function debugException(Throwable $ex, bool $render = true): string
@@ -469,7 +455,7 @@ final class Debug
 		$firstLine = sprintf('%s in %s Line %s',
 			$ex->getMessage(), $ex->getFile(), $ex->getLine());
 
-		$log = true;
+//		$log = true;
 		$mail = self::$MAIL_ON_ERROR;
 		$message = self::backtraceException($ex, $is_html, ' (XH)');
 
@@ -480,11 +466,11 @@ final class Debug
 		}
 
 		// Log it?
-		if ($log)
-		{
+//		if ($log)
+//		{
 			Logger::logException($ex);
 			Logger::flush();
-		}
+//		}
 
 		if ($app->isUnitTests())
 		{
@@ -507,8 +493,8 @@ final class Debug
 		$message = sprintf('%s: ´%s´ in %s line %s',
 			Color::red(get_class($ex)), TextStyle::italic($ex->getMessage()),
 			TextStyle::bold(self::shortpath($ex->getFile())),
-			TextStyle::bold($ex->getLine()));
-		return self::backtraceMessage($message, $html, $ex->getTrace(), $ex->getLine(), $ex->getFile());
+			TextStyle::bold((string)$ex->getLine()));
+		return self::backtraceMessage($message, $html, $ex->getTrace(), (string)$ex->getLine(), $ex->getFile());
 	}
 
 	public static function disableExceptionHandler(): void
@@ -522,8 +508,6 @@ final class Debug
 
 	/**
 	 * Get some additional information
-	 *
-	 * @TODO move?
 	 */
 	public static function getDebugText(string $message): string
 	{
@@ -536,6 +520,7 @@ final class Debug
 			}
 			catch (Throwable $ex)
 			{
+				echo $ex->getTraceAsString();
 			}
 		}
 
@@ -547,11 +532,11 @@ final class Debug
 
 		$args = [
 			GDO_HOSTNAME,
-			isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'NULL',
+			$_SERVER['REQUEST_METHOD'] ?? 'NULL',
 			isset($_SERVER['REQUEST_URI']) ? $url : self::getMoMe(),
-			isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'NULL',
-			isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'NULL',
-			isset($_SERVER['USER_AGENT']) ? $_SERVER['USER_AGENT'] : 'NULL',
+			$_SERVER['HTTP_REFERER'] ?? 'NULL',
+			$_SERVER['REMOTE_ADDR'] ?? 'NULL',
+			$_SERVER['USER_AGENT'] ?? 'NULL',
 			$user,
 			$message,
 			print_r($_REQUEST, true),

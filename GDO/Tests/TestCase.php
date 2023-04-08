@@ -4,6 +4,7 @@ namespace GDO\Tests;
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Core\WithModule;
@@ -86,9 +87,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
 			$app->cli();
 			$expression = GDT_Expression::fromLine($command);
 			$response = $expression->execute();
+			CLI::flushTopResponse();
 			$res = $response->render();
 			$app->cli(false);
-			return ob_get_contents() . $res;
+			return $res;
 		}
 		finally
 		{

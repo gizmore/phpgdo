@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace GDO\CLI;
 
-use GDO\Core\GDO_Error;
-use GDO\Core\GDO_ErrorFatal;
 use GDO\Core\Method;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -11,6 +9,7 @@ use GDO\Session\GDO_Session;
 use GDO\UI\Color;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Page;
+use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 
 /**
@@ -20,6 +19,7 @@ use GDO\User\GDO_User;
  * @since 6.10.2
  * @author gizmore
  * @see Method
+ * @see TextStyle
  */
 final class CLI
 {
@@ -44,8 +44,7 @@ final class CLI
 				'user_type' => 'member',
 			])->insert();
 		}
-		GDO_User::setCurrent($user);
-		return $user;
+		return GDO_User::setCurrent($user);
 	}
 
 	/**
@@ -113,27 +112,35 @@ final class CLI
 	}
 
 	/**
-	 * Turn <br/> into newlines.
+	 * Turn <br/> into CLI newlines.
+	 * An appended newline is taken into account.
 	 */
 	public static function br2nl(string $s, string $nl = "\n"): string
 	{
-		return preg_replace('#< *br */? *>#i', $nl, $s);
+		return preg_replace("#<\s*br\s*/?\s*>\n?#i", $nl, $s);
 	}
 
-	public static function red(string $s): string { return Color::red($s); }
+
+	/**
+	 * Remove any terminal control characters.
+	 */
+	public static function removeColorCodes(string $s): string
+	{
+		return trim(preg_replace('/\x1B\\[[0-9;]\\{1,}[A-Za-z]/', '', $s));
+	}
+
+
 
 	#############
 	### Style ###
 	#############
 
+
+	public static function red(string $s): string { return Color::red($s); }
+
 	public static function green(string $s): string { return Color::green($s); }
 
 	public static function bold(string $s): string { return self::typemode($s, '1'); }
-
-	private static function typemode(string $s, string $mode): string
-	{
-		return sprintf("\033[%sm%s\033[0m", $mode, $s);
-	}
 
 	public static function dim(string $s): string { return self::typemode($s, '2'); }
 
@@ -144,6 +151,17 @@ final class CLI
 	public static function blinking(string $s): string { return self::typemode($s, '5'); }
 
 	public static function invisible(string $s): string { return self::typemode($s, '6'); }
+
+	private static function typemode(string $s, string $mode): string
+	{
+		return sprintf("\033[%sm%s\033[0m", $mode, $s);
+	}
+
+
+	##############
+	### Server ###
+	##############
+
 
 	/**
 	 * Simulate PHP $_SERVER vars.
@@ -172,28 +190,20 @@ final class CLI
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
 	}
 
-	##############
-	### Server ###
-	##############
-
-	/**
-	 * Remove any terminal control characters.
-	 */
-	public static function removeColorCodes(string $s): string
-	{
-		return trim(preg_replace('/\x1B\\[[0-9;]\\{1,}[A-Za-z]/', '', $s));
-	}
 
 	#############
 	### Usage ###
 	#############
+
 
 	/**
 	 * Own implementation of escapeshellarg, because PHP limits it to 8kb.
 	 */
 	public static function escapeShell(string $s): string
 	{
-		return Process::isWindows() ? self::escapeShellWindows($s) : self::escapeShellLinux($s);
+		return Process::isWindows() ?
+			self::escapeShellWindows($s) :
+			self::escapeShellLinux($s);
 	}
 
 	private static function escapeShellWindows(string $s): string
@@ -210,10 +220,6 @@ final class CLI
 	### Escape ###
 	##############
 
-//	private static function showHelp(Method $method)
-//	{
-//		return $method->renderCLIHelp();
-//	}
 
 	/**
 	 * Render help line for gdt parameters.
@@ -222,15 +228,6 @@ final class CLI
 	{
 		$usage1 = [];
 		$usage2 = [];
-
-		# Ugly
-//		try
-//		{
-//			$method->onMethodInit();
-//		}
-//		catch (\Throwable)
-//		{
-//		}
 
 		$fields = $method->gdoParameterCache();
 		foreach ($fields as $gdt)
@@ -262,38 +259,19 @@ final class CLI
 				trim(strtolower($mome) . ' ' . $usage), $method->getMethodDescription()]);
 	}
 
-//	private static function showMethods(GDO_Module $module): GDT_HTML
-//	{
-//		$methods = $module->getMethods();
-//
-//		$methods = array_filter($methods, function (Method $method)
-//		{
-//			return $method->isCLI();
-//		});
-//
-//		$methods = array_map(function (Method $m)
-//		{
-//			return $m->gdoShortName();
-//		}, $methods);
-//
-//		return GDT_HTML::make()->var(t('cli_methods', [
-//			$module->renderName(), implode(', ', $methods)]));
-//	}
-
 	public static function isCLI(): bool
 	{
 		return php_sapi_name() === 'cli';
 	}
 
-	public static function init()
+	public static function init(): void
 	{
 		self::setServerVars();
 	}
 
 }
-
-# Required gdo constants
 #PP#start#
+# Required gdo constants
 deff('GDO_DOMAIN', 'localhost');
 deff('GDO_MODULE', 'Core');
 deff('GDO_METHOD', 'Welcome');

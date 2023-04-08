@@ -93,6 +93,9 @@ class Application extends GDT
 
 	public function isUnitTests(): bool { return false; }
 
+
+	public function isUnitTestVerbose(): bool { return false; }
+
 	public static function setUser(\GDO\User\GDO_User $user)
 	{
 		Logger::init($user->getUserName(), GDO_ERROR_LEVEL); # 1st init as guest
@@ -172,9 +175,6 @@ class Application extends GDT
 		}
 	}
 
-	/**
-	 * @throws GDO_Exception
-	 */
 	public function __destruct()
 	{
 		parent::__destruct();

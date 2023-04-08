@@ -273,7 +273,7 @@ abstract class AutomatedTestCase extends TestCase
 
 	protected function doAllMethods()
 	{
-		$this->message(get_called_class() . ' is testing all trivial methods automagically...');
+		$this->message(get_called_class() . ' is testing automagically...');
 
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		foreach ($modules as $module)
@@ -433,12 +433,15 @@ abstract class AutomatedTestCase extends TestCase
 
 		$this->automatedTested++;
 		$permutations = new Permutations($this->plugVariants);
+
+		$before = $this->automatedPassed;
 		foreach ($permutations->generate() as $plugVars)
 		{
 			# This fixes old input in method from previous permutations.
 			$method = call_user_func([get_class($method), 'make']);
 			$this->tryTrivialMethodVariant($method, $plugVars);
 		}
+		self::assertGreaterThanOrEqual($before + 1, $this->automatedPassed, "Test if {$method->gdoClassName()} can succeed.");
 	}
 
 	private function tryTrivialMethodVariant(Method $method, array $plugVars): void
@@ -459,11 +462,14 @@ abstract class AutomatedTestCase extends TestCase
 		}
 		catch (Throwable $ex)
 		{
-			Logger::logException($ex);
-			Debug::exception_handler($ex);
 			$this->automatedFailed++;
-			$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
-			$this->error('Error: %s', CLI::bold($ex->getMessage()));
+			Logger::logException($ex);
+			if (\gdo_test::instance()->isUnitTestVerbose())
+			{
+				Debug::exception_handler($ex);
+				$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
+				$this->error('Error: %s', CLI::bold($ex->getMessage()));
+			}
 		}
 	}
 

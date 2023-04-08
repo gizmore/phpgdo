@@ -178,13 +178,13 @@ class GDT_Method extends GDT
 	{
 		if (!isset($this->result))
 		{
-			$this->changeUser();
 			$inputs = $this->getInputs();
-			if (isset($this->method->button))
-			{
-				Application::instance()->verb(GDT_Form::POST);
-				$inputs[$this->method->button] = '1';
-			}
+			$this->changeUser();
+//			if (isset($this->method->button))
+//			{
+//				Application::instance()->verb(GDT_Form::POST);
+//				$inputs[$this->method->button] = '1';
+//			}
 			$this->result = $this->method->executeWithInputs($inputs, $this->withPermissionCheck);
 		}
 		return $this->result;

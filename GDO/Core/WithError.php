@@ -95,7 +95,7 @@ trait WithError
 		}
 		if ($errors)
 		{
-			return implode("\n", $errors);
+			return implode(" ", $errors);
 		}
 		return GDT::EMPTY_STRING;
 	}

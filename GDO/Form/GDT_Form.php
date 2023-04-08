@@ -9,6 +9,7 @@ use GDO\Core\GDO_Error;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Core\Website;
 use GDO\Core\WithError;
 use GDO\Core\WithFields;
 use GDO\Core\WithGDO;
@@ -183,8 +184,10 @@ final class GDT_Form extends GDT
 	public function errorFormInvalid(): bool
 	{
 		$numErrors = $this->countErrors();
-		Application::setResponseCode(GDO_Exception::DEFAULT_ERROR_CODE);
-		return $this->error('err_form_invalid', [$numErrors]);
+//		Application::setResponseCode(GDO_Exception::DEFAULT_ERROR_CODE);
+		$errors = $this->renderError();
+		Website::errorRaw($this->getModule()->gdoHumanName(), $errors);
+		return $this->error('err_form_invalid', [$numErrors, $errors]);
 	}
 
 	private function countErrors(): int
@@ -192,7 +195,7 @@ final class GDT_Form extends GDT
 		$count = 0;
 		foreach ($this->getAllFields() as $gdt)
 		{
-			$count += $gdt->hasError(); # And this ladies and gentlemen, seems to be the first non branching algo i wrote :)
+			$count += $gdt->hasError();
 		}
 		return $count;
 	}
