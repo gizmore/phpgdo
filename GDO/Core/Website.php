@@ -185,7 +185,7 @@ final class Website
 		GDT_Page::instance()->topResponse()->addField($error);
 		if (Application::$INSTANCE->isCLI())
 		{
-			CLI::flushTopResponse();
+//			CLI::flushTopResponse();
 			echo $error->renderMode(GDT::RENDER_CLI);
 		}
 		return GDT_Response::make()->code($code);
@@ -218,7 +218,7 @@ final class Website
 		GDT_Page::instance()->topResponse()->addField($success);
 		if (Application::$INSTANCE->isCLIOrUnitTest())
 		{
-			CLI::flushTopResponse();
+//			CLI::flushTopResponse();
 			echo $success->renderMode(GDT::RENDER_CLI);
 		}
 		return GDT_Response::make()->code($code);

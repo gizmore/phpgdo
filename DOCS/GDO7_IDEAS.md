@@ -188,3 +188,5 @@ LATEST IDEAS LAST:
  - CGX: Configure the windows firewall for fun and profit.
  
  - GDO_String - A better string storage engine. (PoC in phpgdo, as i love my cache).
+
+ - new regex challenge like wordle but you have to manipulate the solution with sed/regex

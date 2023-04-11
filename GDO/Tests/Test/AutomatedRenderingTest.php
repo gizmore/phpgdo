@@ -111,7 +111,7 @@ final class AutomatedRenderingTest extends TestCase
 			}
 		}
 		$this->reportStatistics();
-		assertEquals(0, $this->fieldsFailed);
+		assertEquals(0, $this->fieldsFailed, 'Test if all renderings succeeded failed!');
 	}
 
 	private function fieldTestGDO(GDO $gdo): bool

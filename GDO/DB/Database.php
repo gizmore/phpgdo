@@ -399,24 +399,26 @@ class Database
 		}
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function dropTable(GDO $gdo): void
+	public function dropTable(GDO $gdo): bool
 	{
-		$this->dropTableName($gdo->gdoTableIdentifier());
+		return $this->dropTableName($gdo->gdoTableIdentifier());
 	}
 
 	###################
 	### DB Creation ###
 	###################
 
-	/**
-	 * @throws GDO_DBException
-	 */
-	public function dropTableName(string $tableName): void
+	public function dropTableName(string $tableName): bool
 	{
-		self::DBMS()->dbmsDropTable($tableName);
+		try
+		{
+			return self::DBMS()->dbmsDropTable($tableName);
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	public function truncateTable(GDO $gdo): void

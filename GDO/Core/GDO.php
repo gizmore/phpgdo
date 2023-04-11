@@ -552,12 +552,18 @@ abstract class GDO extends GDT
 	}
 
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public static function findByGID(string $id): static
 	{
 		return self::findById(...explode(':', $id));
 	}
 
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public static function findById(string...$id): static
 	{
 		if ($object = self::getById(...$id))
@@ -1067,6 +1073,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Find a row by condition. Throws GDO::notFoundException.
+	 *
+	 * @throws GDO_Error
 	 */
 	public function findWhere(string $condition): ?self
 	{
@@ -1369,15 +1377,8 @@ abstract class GDO extends GDT
 	### Get ID ###
 	##############
 
-	/**
-	 * @throws GDO_Error
-	 */
 	public function entityQuery(): Query
 	{
-		if (!$this->persisted)
-		{
-			throw new GDO_Error('err_save_unpersisted_entity', [$this->gdoClassName()]);
-		}
 		return $this->query()->where($this->getPKWhere());
 	}
 

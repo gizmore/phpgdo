@@ -565,7 +565,9 @@ elseif ($command === 'install')
 {
 	if (!$db)
 	{
-		echo "You do not have GDO_DB_ENABLED. I cannot install anything.\n";
+		echo \GDO\UI\TextStyle::bold($s, true, 'red');
+
+		"You do not have GDO_DB_ENABLED. I cannot install anything.\n";
 		die(1);
 	}
 

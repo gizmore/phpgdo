@@ -344,6 +344,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		}
 	}
 
+	protected function assertStringContainsStringsCI(array $needles, string $haystack, string $message = ''): void
+	{
+		foreach ($needles as $needle)
+		{
+			assertStringContainsStringIgnoringCase($needle, $haystack, $message . "; $needle not found!");
+		}
+	}
+
+
 	/**
 	 * Check if at least one string is contained.
 	 *
@@ -367,14 +376,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ###########
 	# ## Lang ###
 	# ###########
-
-	protected function assertStringContainsStringsCI(array $needles, string $haystack, string $message = ''): void
-	{
-		foreach ($needles as $needle)
-		{
-			assertStringContainsStringIgnoringCase($needle, $haystack, $message . "; $needle not found!");
-		}
-	}
 
 	protected function callMethod(Method $method, array $inputs=null, string $button=null, bool $assertOk = true): string
 	{

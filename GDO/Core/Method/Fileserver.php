@@ -83,9 +83,11 @@ final class Fileserver extends Method
 
 		$app = Application::$INSTANCE;
 
+		$mtime2 = @$_SERVER['HTTP_IF_MODIFIED_SINCE'] ?: Time::getDate();
+
 		# cache hit
 		if (
-			@strtotime(@$_SERVER['HTTP_IF_MODIFIED_SINCE']) == $mtime ||
+			@strtotime($mtime2)||
 			trim((string)@$_SERVER['HTTP_IF_NONE_MATCH']) == $etag
 		)
 		{
