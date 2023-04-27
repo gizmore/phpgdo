@@ -1,6 +1,7 @@
 <?php
 namespace GDO\User;
 
+use GDO\Core\ModuleLoader;
 use GDO\Core\DTO;
 use GDO\Core\GDT_CreatedAt;
 

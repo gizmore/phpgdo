@@ -185,7 +185,7 @@ trait WithFields
 
 	public function getField(string $key): ?GDT
 	{
-		return $this->fieldsFlat[$key] ?: null;
+		return isset($this->fieldsFlat[$key]) ? $this->fieldsFlat[$key] : null;
 	}
 
 	public function addFieldAfter(GDT $gdt, GDT $after): static
@@ -207,8 +207,11 @@ trait WithFields
 
 	public function removeFieldNamed(string $key): static
 	{
-		$field = $this->getField($key);
-		return $this->removeField($field);
+		if ($field = $this->getField($key))
+		{
+			return $this->removeField($field);
+		}
+		return $this;
 	}
 
 	public function removeField(GDT $field): static

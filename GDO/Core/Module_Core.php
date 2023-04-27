@@ -32,7 +32,7 @@ final class Module_Core extends GDO_Module
 {
 
 	final public const GDO_VERSION = '7.0.3';
-	final public const GDO_REVISION = '7.0.3-r1782';
+	final public const GDO_REVISION = '7.0.3-r1783';
 
 	final public const GDO_CODENAME = 'Idiomatic Indian';
 

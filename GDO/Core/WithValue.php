@@ -119,8 +119,16 @@ trait WithValue
 
 	public function hasChanged(): bool
 	{
-		return $this->var !== $this->getVar();
+		$old = $this->var;
+		$new = $this->getVar();
+		return $old !== $new;
 	}
+
+//	public  function addInputValue($value): GDT
+//	{
+//		$this->addInput($this->getName(), (string)$value);
+//		return $this->value($value);
+//	}
 
 	/**
 	 * Setup this GDT from a GDO.

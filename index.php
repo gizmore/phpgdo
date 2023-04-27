@@ -267,7 +267,7 @@ try
 		$result = GDT_HTML::make()->var($result);
 	}
 
-	if ($app->isError())
+	if ($app::isError())
 	{
 		if ($app->isAPI())
 		{
@@ -303,7 +303,7 @@ if (isset($session) && $session)
 {
 	if (!Application::isCrash())
 	{
-		$session->commit(); # setting headers sometimes
+		$session::commit(); # setting headers sometimes
 	}
 }
 # Render the response.

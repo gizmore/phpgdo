@@ -537,7 +537,8 @@ class Database
 		{
 			$this->locks++; #PP#delete#
 			self::$LOCKS++; #PP#delete#
-			return self::DBMS()->dbmsLock($lock, $timeout);
+			self::DBMS()->dbmsLock($lock, $timeout);
+			return true;
 		}
 		catch (GDO_DBException $ex)
 		{
@@ -550,7 +551,8 @@ class Database
 	{
 		try
 		{
-			return self::DBMS()->dbmsUnlock($lock);
+			self::DBMS()->dbmsUnlock($lock);
+			return true;
 		}
 		catch (GDO_DBException $ex)
 		{

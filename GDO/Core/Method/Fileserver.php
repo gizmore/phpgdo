@@ -87,8 +87,8 @@ final class Fileserver extends Method
 
 		# cache hit
 		if (
-			@strtotime($mtime2)||
-			trim((string)@$_SERVER['HTTP_IF_NONE_MATCH']) == $etag
+			(@strtotime($mtime2) < $mtime) ||
+			(trim((string)@$_SERVER['HTTP_IF_NONE_MATCH']) == $etag)
 		)
 		{
 			hdrc('HTTP/1.1 304 Not Modified');

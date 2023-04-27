@@ -143,12 +143,17 @@ class GDT_Card extends GDT
 
 	public function render(): array|string|null
 	{
-		if (Application::$MODE === GDT::RENDER_CLI)
+		switch (Application::$MODE)
 		{
-			return $this->renderCLI();
+			case GDT::RENDER_CLI:
+				return $this->renderCLI();
+			case GDT::RENDER_BINARY:
+				return $this->renderBinary();
+			default:
+				return $this->renderHTML();
 		}
-		return $this->renderHTML();
 	}
+
 
 	public function renderCLI(): string
 	{

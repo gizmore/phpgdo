@@ -75,7 +75,7 @@ final class Profile extends MethodCard
 		}
 	}
 
-	private function addAvatarImageToMeta()
+	private function addAvatarImageToMeta(): void
 	{
 		$user = $this->getUser();
 		$avatar = GDO_Avatar::forUser($user);
@@ -112,10 +112,11 @@ final class Profile extends MethodCard
 		Module_User::instance()->increaseUserSetting($user, 'profile_views');
 	}
 
-	protected function createCard(GDT_Card $card): void
+	public function createCard(GDT_Card $card): void
 	{
-		/** @var $user GDO_User * */
+		/** @var GDO_User $user * */
 		$user = $card->gdo->getUser();
+//		$user = $card->gdo->getUser();
 		$card->creatorHeader('profile_user', 'profile_activity');
 		$card->title('mt_user_profile', [$user->renderUserName()]);
 		$modules = ModuleLoader::instance()->getEnabledModules();
@@ -174,8 +175,8 @@ final class Profile extends MethodCard
 			}
 			$gdt = $module->userSetting($target, $name);
 			$reason = '';
-			if ($gdt->var)
-			{
+//			if ($gdt->var)
+//			{
 				if (!$acl->hasAccess($user, $target, $reason))
 				{
 					if ($reason)
@@ -187,7 +188,7 @@ final class Profile extends MethodCard
 				{
 					$card->addField($gdt);
 				}
-			}
+//			}
 		}
 	}
 

@@ -94,7 +94,14 @@ class Application extends GDT
 	public function isUnitTests(): bool { return false; }
 
 
-	public function isUnitTestVerbose(): bool { return false; }
+	public function isUnitTestVerbose(): bool
+	{
+		if (!$this->isUnitTests())
+		{
+			return true; # Enable stacktraces when not in unit
+		}
+		return false;
+	}
 
 	public static function setUser(\GDO\User\GDO_User $user)
 	{

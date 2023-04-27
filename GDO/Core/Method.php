@@ -198,7 +198,7 @@ abstract class Method #extends GDT
 			#PP#begin#
 			if ($this->isDebugging())
 			{
-				xdebug_break();
+//				xdebug_break();
 			}
 			#PP#end#
 

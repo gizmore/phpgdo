@@ -73,4 +73,13 @@ class GDT_Enum extends GDT_Select
 		return $index === false ? 0 : $index + 1;
 	}
 
+	public function enumForId(int $id): ?string
+	{
+		if ($id === 0)
+		{
+			return null;
+		}
+		return $this->enumValues[$id-1];
+	}
+
 }

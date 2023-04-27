@@ -382,7 +382,12 @@ final class Debug
 		}
 		else
 		{
+			$arg2 = $arg;
 			$arg = json_encode($arg);
+			if ($arg === false)
+			{
+				$arg = print_r($arg2, true);
+			}
 		}
 
 		$app = Application::$INSTANCE;

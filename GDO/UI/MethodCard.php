@@ -65,7 +65,7 @@ abstract class MethodCard extends Method
 		return $this->object;
 	}
 
-	protected function executeFor(GDO $gdo): GDT
+	public function executeFor(GDO $gdo): GDT
 	{
 		return $this->getCard($gdo);
 	}

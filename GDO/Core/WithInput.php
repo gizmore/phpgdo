@@ -71,6 +71,7 @@ trait WithInput
 
 	public function addInput(?string $key, $var): static
 	{
+		$this->inputs = $this->inputs ?? [];
 		if ($key)
 		{
 			$this->inputs[$key] = (string)$var;
