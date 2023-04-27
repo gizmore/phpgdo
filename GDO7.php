@@ -155,12 +155,12 @@ function href(string $module, string $method, string $append = null, bool $seo =
 			$href .= '?' . implode('&', $q);
 		}
 
-//		if ($lang)
-//		{
+		if (!isset($q['_lang']))
+		{
 			$href .= $q ? '&' : '?';
 			$href .= '_lang=';
 			$href .= Trans::$ISO;
-//		}
+		}
 
 		#PP#start#
 		if (GDO_LOG_PROFILE)
