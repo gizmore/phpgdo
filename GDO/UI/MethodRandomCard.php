@@ -27,7 +27,7 @@ abstract class MethodRandomCard extends MethodCard
 		{
 			$query->where($delete->name . ' IS NULL');
 		}
-		$max = $query->exec()->fetchValue();
+		$max = $query->exec()->fetchVar();
 		if (!$max)
 		{
 			return null;

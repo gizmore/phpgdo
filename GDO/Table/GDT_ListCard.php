@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDT_Template;
@@ -9,7 +10,7 @@ use GDO\Core\GDT_Template;
  * Control ->itemTemplate(GDT) which defaults to GDT_GDO.
  * Control ->listMode(1|2) for cards or list items.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0
  *
  * @author gizmore

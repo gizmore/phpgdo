@@ -184,28 +184,25 @@ class Result
 	 */
 	public function fetchColumn(): array
 	{
-		return $this->fetchAllValues();
+		return $this->fetchAllVars();
 	}
 
 	/**
-	 * Fetch the first value of the next row. @TODO rename to fetchVar()
+	 * Fetch the first var of the next row.
 	 */
-	public function fetchValue(): ?string
+	public function fetchVar(): ?string
 	{
-		if ($row = $this->fetchRow())
-		{
-			return $row[0];
-		}
-		return null;
+		$row = $this->fetchRow();
+		return $row ? $row[0] : null;
 	}
 
 	/**
 	 * Fetch all, but only a single column as simple array.
 	 */
-	public function fetchAllValues(): array
+	public function fetchAllVars(): array
 	{
 		$values = [];
-		while ($value = $this->fetchValue())
+		while ($value = $this->fetchVar())
 		{
 			$values[] = $value;
 		}

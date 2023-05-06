@@ -119,11 +119,6 @@ final class ModuleLoader
 	 */
 	public function initModuleVars(): void
 	{
-// 	    foreach ($this->getEnabledModules() as $module)
-// 	    {
-// 	        $module->buildConfigCache();
-// 	    }
-
 		# Query all module vars
 		try
 		{
@@ -132,62 +127,37 @@ final class ModuleLoader
 				if (null === ($data = Cache::fileGetSerialized('gdo_modulevars')))
 				{
 					$query = GDO_ModuleVar::table()->select('mv_module, mv_name, mv_value');
-// 		    		if ($singleModuleName)
-// 		    		{
-// 		    			$query->where('module_name='.quote($singleModuleName));
-// 		    		}
 					$data = $query->exec()->fetchAllRows();
-// 		    		if (!$singleModuleName)
-// 		    		{
 					Cache::fileSetSerialized('gdo_modulevars', $data);
-// 		    		}
 				}
 
 				# Assign them to the modules
 				foreach ($data as $row)
 				{
-// 		    		if ())
-// 		    		{
 					$module = $this->getModuleByID($row[0]);
 					$module->addConfigVarForCache($row[1], $row[2]);
-// 		    		}
-//         		while ($row = $result->fetchRow())
-//         		{
-//					/** @var GDO_Module $module * */
-//         			if ($module = @$this->modules[strtolower($row[0])])
-//         			{
-//         				if ($gdt = $module->getConfigColumn($row[1], false))
-//         				{
-//         				    $gdt->initial($row[2]);
-//         				}
-//         			}
 				}
 			}
 		}
-		catch (GDO_DBException)
-		{
-			$app = Application::$INSTANCE;
-			if ($app->isCLI()) # && (!$app->isInstall()))
-			{
-				if (!$app->isUnitTests())
-				{
-					echo "No database available yet...\n";
-				}
-				else
-				{
-					Application::$RESPONSE_CODE = 200;
-				}
-			}
-		}
+//		catch (GDO_DBException)
+//		{
+//			$app = Application::$INSTANCE;
+//			if ($app->isCLI()) # && (!$app->isInstall()))
+//			{
+//				if (!$app->isUnitTests())
+//				{
+//					echo "No database available yet...\n";
+//				}
+//				else
+//				{
+//					Application::$RESPONSE_CODE = 200;
+//				}
+//			}
+//		}
 		catch (Throwable $e)
 		{
 			Logger::logException($e);
 		}
-
-// 		foreach ($this->getEnabledModules() as $module)
-// 		{
-//     		$module->buildSettingsCache();
-// 		}
 	}
 
 	/**
@@ -237,8 +207,6 @@ final class ModuleLoader
 		if (!isset($this->modules[$lowerName]))
 		{
 			$className = "GDO\\$name\\Module_$name";
-// 			try
-// 			{
 			if (class_exists($className))
 			{
 				$moduleData = GDO_Module::getBlankData([
@@ -247,34 +215,13 @@ final class ModuleLoader
 				if ($module = self::instanciate($moduleData, true))
 				{
 					$this->modules[$lowerName] = $module;
-// 					    $module->onLoadLanguage();
-// 					    if ($theme = $module->getTheme())
-// 					    {
-// 					        GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
-// 					    }
 				}
 			}
-//			elseif ($throw)
-//			{
-//				throw new GDO_Error('err_module', [html($name)]);
-//			}
 			else
 			{
 				return null;
 			}
-// 			}
-// 			catch (\Throwable $t)
-// 			{
-// 				return null;
-// 			}
 		}
-//		if ($init)
-//		{
-//			$module = $this->modules[$lowerName];
-//// 			$module->buildConfigCache();
-//// 			$this->initModuleVars($module->getName());
-//			$this->initModule($module);
-//		}
 		return $this->modules[$lowerName];
 	}
 
@@ -359,7 +306,6 @@ final class ModuleLoader
 		if ($loaded)
 		{
 			$this->modules = $this->sortModules();
-//			$this->setupCLIAliases();
 		}
 		return $this->modules;
 	}
@@ -411,19 +357,19 @@ final class ModuleLoader
 			}
 			return $this->modules;
 		}
-		catch (GDO_DBException)
+//		catch (GDO_DBException)
+//		{
+//			if (Application::$INSTANCE->isCLI())
+//			{
+//				echo "The table gdo_module does not exist yet.\n";
+//				echo "You can ignore this error if you are using the CLI installer.\n";
+//				flush();
+//			}
+//			return false;
+//		}
+		catch (Throwable $ex)
 		{
-			if (Application::$INSTANCE->isCLI())
-			{
-				echo "The table gdo_module does not exist yet.\n";
-				echo "You can ignore this error if you are using the CLI installer.\n";
-				flush();
-			}
-			return false;
-		}
-		catch (Throwable $e)
-		{
-			Logger::logException($e);
+			Debug::debugException($ex);
 			return false;
 		}
 	}

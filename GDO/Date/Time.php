@@ -154,6 +154,9 @@ final class Time
 		return null;
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public static function parseDateDB(?string $date): float
 	{
 		return self::parseDate($date, self::UTC, 'db');
@@ -162,6 +165,8 @@ final class Time
 	/**
 	 * Convert DateTime input from a user.
 	 * This is usually in the users language format and timezone
+	 *
+	 * @throws GDO_Exception
 	 */
 	public static function parseDate(?string $date, string $timezone = null, string $format = 'parse'): ?float
 	{
@@ -173,6 +178,8 @@ final class Time
 	###############
 	/**
 	 * Convert a user date input to a timestamp.
+	 *
+	 * @throws GDO_Exception
 	 */
 	public static function parseDateIso(string $iso, ?string $date, string $timezone = null, string $format = 'parse'): ?float
 	{
@@ -185,6 +192,8 @@ final class Time
 
 	/**
 	 * Parse a string into a datetime.
+	 *
+	 * @throws GDO_Exception
 	 */
 	public static function parseDateTimeISO(string $iso, ?string $date, string $timezone = null, string $format = 'parse'): ?DateTime
 	{
@@ -235,6 +244,9 @@ final class Time
 			self::_getTZCached($timezoneId);
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	private static function _getTZCached(string $timezoneId): DateTimeZone
 	{
 		if (isset(self::$TIMEZONE_OBJECTS[$timezoneId]))
@@ -259,6 +271,9 @@ final class Time
 		return $tz;
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public static function parseDateTime(?string $date, string $timezone = null, string $format = 'parse'): ?DateTime
 	{
 		return self::parseDateTimeISO(Trans::$ISO, $date, $timezone, $format);
@@ -336,6 +351,8 @@ final class Time
 
 	/**
 	 * Parse a date from user input in user timezone, but Y-m-d format.
+	 *
+	 * @throws GDO_Exception
 	 */
 	public static function parseDateTimeDB(?string $date, ?string $timezone = self::UTC): ?DateTime
 	{
@@ -514,6 +531,9 @@ final class Time
 	### Is-Day ###
 	##############
 
+	/**
+	 * @throws \Exception
+	 */
 	public static function weekTimestamp(string|int $year, string|int $week): int
 	{
 		$week_start = new DateTime('now', Time::$UTC);
@@ -549,7 +569,7 @@ final class Time
 	 * Convert a human duration to seconds.
 	 *
 	 * Input may be like 3d5h8m 7s.
-	 * Also possible is 1 month 3 days or 1year2sec.
+	 * @TODO Also possible will be 1 month 3 days or 1year2sec.
 	 * No unit means default unit, which is seconds.
 	 *
 	 * Supported units are:
@@ -569,18 +589,6 @@ final class Time
 		{
 			return null;
 		}
-//		if (is_int($duration))
-//		{
-//			return $duration;
-//		}
-//		if (!is_string($duration))
-//		{
-//			return 0.0;
-//		}
-//		if (is_numeric($duration))
-//		{
-//			return floatval($duration);
-//		}
 		$matches = null;
 		if (!preg_match_all('/(?:([0-9]+)\\s*([smhdwoy]{0,2}))+/i', $duration, $matches))
 		{
@@ -604,7 +612,7 @@ final class Time
 			$unit = $multis[$matches[2][$j]] ?? 1.0;
 			$back += $d * $unit;
 		}
-		return $back;
+		return floatval($back);
 	}
 
 	public static function getYear(string $date): string { return substr($date, 0, 4); }

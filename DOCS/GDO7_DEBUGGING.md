@@ -20,7 +20,7 @@ This is quite useful, but *can* also cause mail havoc on frequented hosts. Handl
 [Methods](../GDO/Core/Method.php)
 can be easily debugged by overriding `isDebugging()`.
 This triggers a few breakpoints in the execution process,
-precisely before init, validation, and execution.
+precisely, before init, validation, and execution.
 
 
 ## GDOv7 Debugging: Database

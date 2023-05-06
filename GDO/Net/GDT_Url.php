@@ -237,7 +237,7 @@ class GDT_Url extends GDT_String
 	}
 
 	#############
-	### Tests ###
+	### Test ###
 	#############
 
 	public function allSchemes(): static

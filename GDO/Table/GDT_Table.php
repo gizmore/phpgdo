@@ -378,7 +378,7 @@ class GDT_Table extends GDT
 					->noLimit()
 					->first()
 					->exec()
-					->fetchValue();
+					->fetchVar();
 			}
 			else
 			{
@@ -454,7 +454,7 @@ class GDT_Table extends GDT
 	 */
 	public function getPageFor(GDO $gdo): int
 	{
-		$result = $this->getResult();
+		$this->getResult();
 
 		$q = $this->query->copy(); # ->noJoins();
 		if (isset($this->order))
@@ -474,7 +474,7 @@ class GDT_Table extends GDT
 			}
 		}
 		$q->selectOnly('COUNT(*)');#->noOrder();
-		$itemsBefore = $q->exec()->fetchValue();
+		$itemsBefore = $q->exec()->fetchVar();
 		return $this->getPageForB((int)$itemsBefore);
 	}
 
@@ -587,7 +587,7 @@ class GDT_Table extends GDT
 					}
 					else
 					{
-						$dat[$gdt->name] = $json;
+						$dat[$gdt->getName()] = $json;
 					}
 				}
 			}

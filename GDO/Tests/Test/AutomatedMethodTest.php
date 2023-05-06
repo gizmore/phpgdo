@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
 use GDO\Core\GDO;
@@ -18,6 +19,7 @@ use function PHPUnit\Framework\assertTrue;
  * Test all GDOv7 methods with plugvar fuzzing.
  *
  * @author gizmore
+ * @version 7.0.3
  */
 final class AutomatedMethodTest extends AutomatedTestCase
 {
@@ -43,11 +45,16 @@ final class AutomatedMethodTest extends AutomatedTestCase
 	{
 		$method = $mt->method;
 		$this->message('Running command: ' . TextStyle::bold($method->getCLITrigger()));
+		if ($method->isDebugging())
+		{
+			xdebug_break();
+		}
 		$mt->runAs($mt->method->plugUser());
-		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
 		$result = $mt->execute();
+		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
 		assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
 		assertTrue(!!$this->renderResult($result), 'Test if method response renders all outputs without crash.');
+		$this->assertNoCrash("Test if trivial method renderingh {$this->mome($method)} does not crash.");
 	}
 
 	/**

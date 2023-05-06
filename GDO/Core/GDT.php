@@ -459,7 +459,7 @@ abstract class GDT
 	 */
 	public function configJSON() : array
 	{
-		return self::EMPTY_ARRAY;
+		return GDT::EMPTY_ARRAY;
 	}
 
 	/**
@@ -806,7 +806,7 @@ abstract class GDT
 	}
 
 	#############
-	### Tests ###
+	### Test ###
 	#############
 	public function isTestable() : bool
 	{
@@ -827,6 +827,11 @@ abstract class GDT
 	public function gdoExampleVars() : ?string
 	{
 		return null;
+	}
+
+	public function hasLabel(): bool
+	{
+		return false;
 	}
 
 }

@@ -5,6 +5,7 @@ namespace GDO\Core;
 use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
 use GDO\Util\Arrays;
+use GDO\Util\WS;
 
 /**
  * Database capable base integer class.
@@ -122,11 +123,6 @@ class GDT_Int extends GDT_DBField
 		return false;
 	}
 
-	/**
-	 * @throws GDO_Error
-	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
-	 */
 	protected function validateUnique($value): bool
 	{
 		if ($this->unique)
@@ -139,15 +135,16 @@ class GDT_Int extends GDT_DBField
 				$condition .= ' AND NOT ( ' . $this->gdo->getPKWhere() . ' )';
 			}
 			return $this->gdo->tbl()->select(GDT::ONE)->where($condition)->
-				first()->exec()->fetchValue() !== GDT::ONE;
+				first()->exec()->fetchVar() !== GDT::ONE;
 		}
 		return true;
 	}
 
 	public function plugVars(): array
 	{
+		$max4 = min(4, $this->max ?: 4);
 		return [
-			[$this->getName() => '4'],
+			[$this->getName() => (string) $max4],
 		];
 	}
 
@@ -178,6 +175,12 @@ class GDT_Int extends GDT_DBField
 	################
 	### Validate ###
 	################
+
+	public function renderBinary(): string
+	{
+		return WS::wrN($this->bytes, (int)$this->getVar());
+	}
+
 
 	public function htmlClass(): string
 	{

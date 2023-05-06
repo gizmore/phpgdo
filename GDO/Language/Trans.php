@@ -36,11 +36,7 @@ final class Trans
 	 */
 	public static array $CACHE = [];
 
-//	/**
-//	 * @TODO Shall sitename be appended to seo titles? Implement it? Shall be an option in module UI or Core.
-//	 * @deprecated
-//	 */
-//	public static bool $NO_SITENAME = false;
+
 	/**
 	 * Number of missing translation keys for stats and testing.
 	 */
@@ -55,7 +51,6 @@ final class Trans
 
 	/**
 	 * Are all pathes added?
-	 * @TODO: This can be removed? - just i18n install process is ugly?
 	 */
 	private static bool $INITED = false;
 

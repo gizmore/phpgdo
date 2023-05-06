@@ -227,7 +227,7 @@ class Application extends GDT
 		return self::$RESPONSE_CODE >= 400;
 	}
 
-	# Install / Tests
+	# Install / Test
 
 	/**
 	 * Perf headers as cheap as possible.

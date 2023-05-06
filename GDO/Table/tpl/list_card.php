@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table\tpl;
 
 use GDO\Core\GDT_Template;
 use GDO\Table\GDT_List;
 
-/** @var $field GDT_List * */
+/** @var GDT_List $field * */
 
 echo GDT_Template::php('Table', 'list_filter.php', ['field' => $field]);
 
@@ -25,12 +26,12 @@ $pages = $pagemenu ? $pagemenu->render() : '';
 		// $template = $field->getItemTemplate();
 		// if ($field->fetchInto)
 		// {
-		$gdo = $field->fetchAs->cache->getDummy();
+		$gdo = $field->fetchAs::table()->cache->getDummy();
 		while ($gdo = $result->fetchInto($gdo))
 		{
 			echo "<li>\n";
 			echo $gdo->renderCard();
-			echo "</gdoli>\n";
+			echo "</li>\n";
 		}
 		// }
 		// else

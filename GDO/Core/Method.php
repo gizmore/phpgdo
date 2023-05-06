@@ -198,7 +198,7 @@ abstract class Method #extends GDT
 			#PP#begin#
 			if ($this->isDebugging())
 			{
-//				xdebug_break();
+				xdebug_break();
 			}
 			#PP#end#
 
@@ -344,10 +344,10 @@ abstract class Method #extends GDT
 //			Logger::logException($e);
 //			return $this->error('error', [$e->getMessage()]);
 //		}
-//		catch (Throwable $e)
-//		{
-//			return $this->error('error', [$e->getMessage()]);
-//		}
+		catch (Throwable $e)
+		{
+			return $this->error('error', [$e->getMessage()]);
+		}
 		finally
 		{
 			if (Application::isError())
@@ -537,13 +537,10 @@ abstract class Method #extends GDT
 			(!$user->isPersisted())
 		)
 		{
-			return false;
+			return true;
 		}
 		$lock = $this->lockKey();
-		if (Database::instance()->lock($lock))
-		{
-			$this->locked = true;
-		}
+		$this->locked = Database::instance()->lock($lock);
 		return $this->locked;
 	}
 
@@ -668,14 +665,12 @@ abstract class Method #extends GDT
 
 	private function unlock(): bool
 	{
-		if (!$this->locked)
+		if ($this->locked)
 		{
-			return true;
-		}
-		$lock = $this->lockKey();
-		if (Database::instance()->unlock($lock))
-		{
-			$this->locked = false;
+			if (Database::instance()->unlock($this->lockKey()))
+			{
+				$this->locked = false;
+			}
 		}
 		return !$this->locked;
 	}
@@ -711,7 +706,7 @@ abstract class Method #extends GDT
 	}
 
 	/**
-	 * Return a @see Website compatible meta data, for an image in teams links.
+	 * Return a @see Website compatible meta data, for an image in teams/whatsapp/etc card links.
 	 */
 	public function seoMetaImage(): array
 	{
@@ -726,6 +721,9 @@ abstract class Method #extends GDT
 		return GDT::EMPTY_ARRAY;
 	}
 
+	/**
+	 * @throws GDO_Error
+	 */
 	public function plugUser(): GDO_User
 	{
 		return GDO_User::findById($this->plugUserID());
@@ -803,8 +801,7 @@ abstract class Method #extends GDT
 
 	public function tempPath(string $path = ''): string
 	{
-		$module = $this->getModule();
-		return $module->tempPath($this->getMethodName() . '/' . $path);
+		return $this->getModule()->tempPath($this->getMethodName() . '/' . $path);
 	}
 
 	public function cliButton(string $button): self

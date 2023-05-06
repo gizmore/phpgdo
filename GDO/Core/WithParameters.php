@@ -30,19 +30,20 @@ trait WithParameters
 
 	/**
 	 * Get a parameter's GDT db var string.
+	 *
+	 * @throws GDO_ArgException
 	 */
 	public function gdoParameterVar(string $key, bool $validate = true): ?string
 	{
-		if ($gdt = $this->gdoParameter($key, $validate))
-		{
-			return $gdt->getVar();
-		}
-		return null;
+		$gdt = $this->gdoParameter($key, $validate);
+		return $gdt ? $gdt->getVar() : null;
 	}
 
 	/**
 	 * Get a parameter by key.
 	 * If key is an int, get positional parameter N.
+	 *
+	 * @throws GDO_ArgException
 	 */
 	public function gdoParameter(string $key, bool $validate = true, bool $throw = true): ?GDT
 	{
@@ -128,57 +129,24 @@ trait WithParameters
 		}
 	}
 
-//	private function applyInputComposeParams(): void
-//	{
-//		# Map positional to now named input
-//		$pos = -1;
-//		$newInput = [];
-//		foreach ($this->gdoParameterCache() as $key => $gdt)
-//		{
-//			if ($gdt->isPositional())
-//			{
-//				$pos++;
-//				if (isset($this->inputs[$pos]))
-//				{
-//					$newInput[$key] = $this->inputs[$pos];
-//				}
-//			}
-//		}
-//
-//		# Copy previously already named input
-//		foreach ($this->getInputs() as $key => $input)
-//		{
-//			if (!is_numeric($key))
-//			{
-//				$newInput[$key] = $input;
-//			}
-//		}
-//		$this->inputs = $newInput;
-//
-//		# Apply all input to all GDT
-//		foreach ($this->gdoParameterCache() as $gdt)
-//		{
-//			$gdt->inputs($this->inputs);
-//		}
-//	}
 
 	/**
 	 * Get method parameters.
 	 *
 	 * @return GDT[]
 	 */
-	public function gdoParameters(): array # @TODO: make gdoParameters() protected
+	public function gdoParameters(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}
 
+	/**
+	 * @throws GDO_ArgException
+	 */
 	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): int|float|string|array|null|object
 	{
-		if ($gdt = $this->gdoParameter($key, $validate, $throw))
-		{
-			return $gdt->getValue();
-		}
-		return null;
+		$gdt = $this->gdoParameter($key, $validate, $throw);
+		return $gdt ? $gdt->getValue() : null;
 	}
 
 }

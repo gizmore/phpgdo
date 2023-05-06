@@ -148,11 +148,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		fwrite($fh, vsprintf($message, $args));
 		fwrite($fh, "\n");
-		flush();
 		if (ob_get_level())
 		{
 			ob_flush();
 		}
+		flush();
 	}
 
 	# 1
@@ -379,9 +379,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function callMethod(Method $method, array $inputs=null, string $button=null, bool $assertOk = true): string
 	{
-		try
-		{
-			ob_start();
+//		try
+//		{
+//			ob_start();
 			$m = GDT_MethodTest::make()->method($method);
 			$m->inputs($inputs);
 			$r = $m->execute($button);
@@ -394,12 +394,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
 			{
 				$this->assert409("Test if callMethod {$method->gdoClassName()} errors!");
 			}
-			return ob_get_contents() . $t;
-		}
-		finally
-		{
-			ob_end_clean();
-		}
+			return $t;
+//		}
+//		finally
+//		{
+//			ob_end_clean();
+//		}
 	}
 
 	# #############
@@ -457,10 +457,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		foreach ($_plugs as $plugs)
 		{
-			if (!is_array($plugs))
-			{
-				xdebug_break();
-			}
 			$this->addPlugVarsB($plugs);
 		}
 	}

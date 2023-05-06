@@ -86,7 +86,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
 			->order('tzd ASC, rand()')
 			->first()
 			->exec()
-			->fetchValue();
+			->fetchVar();
 	}
 
 	/**

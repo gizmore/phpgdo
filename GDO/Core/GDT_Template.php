@@ -105,9 +105,6 @@ class GDT_Template extends GDT
 					# make tVars locals for the template.
 					$$__key = $__value;
 				}
-//				unset($tVars);
-//				unset($__key);
-//				unset($__value);
 			}
 
 			include $path; # a hell of a bug is to supress errors here.

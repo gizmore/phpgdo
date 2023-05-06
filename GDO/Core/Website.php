@@ -182,13 +182,22 @@ final class Website
 		code($code)->
 		titleRaw($titleRaw)->
 		text($key, $args);
-		GDT_Page::instance()->topResponse()->addField($error);
-		if (Application::$INSTANCE->isCLI())
+		$response = GDT_Response::make()->code($code);
+		if ($app->isCLIOrUnitTest())
 		{
-//			CLI::flushTopResponse();
-			echo $error->renderMode(GDT::RENDER_CLI);
+			$response->addField($error);
+			if ($app->isUnitTests())
+			{
+				echo $error->renderCLI();
+				@ob_flush();
+				flush();
+			}
 		}
-		return GDT_Response::make()->code($code);
+		else
+		{
+			GDT_Page::instance()->topResponse()->addField($error);
+		}
+		return $response;
 	}
 
 
@@ -215,13 +224,22 @@ final class Website
 		code($code)->
 		titleRaw($titleRaw)->
 		text($key, $args);
-		GDT_Page::instance()->topResponse()->addField($success);
-		if (Application::$INSTANCE->isCLIOrUnitTest())
+		$response = GDT_Response::make()->code($code);
+		if ($app->isCLIOrUnitTest())
 		{
-//			CLI::flushTopResponse();
-			echo $success->renderMode(GDT::RENDER_CLI);
+			$response->addField($success);
+			if ($app->isUnitTests())
+			{
+				echo $success->renderCLI();
+				@ob_flush();
+				flush();
+			}
 		}
-		return GDT_Response::make()->code($code);
+		else
+		{
+			GDT_Page::instance()->topResponse()->addField($success);
+		}
+		return $response;
 	}
 
 }

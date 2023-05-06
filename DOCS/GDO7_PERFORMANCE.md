@@ -11,12 +11,16 @@ and both systems were beaten, even thought GDO had way more to load (empty larav
 
 Real benchmarks are planned.
 
+_In summary_: Wordpress is like 5 times slower and and memory hungry than gdo.
 However, Laravel8 was only beaten marginally in memory and CPU footprint.
+
 
 ## GDOv7 Performance: Headers
 
 Watch out for the X-GDO-TIME and X-GDO-MEM headers.
+
 I am aiming for 5ms pages and 2MB ram on modest complex projects/pages.
+
 
 ## GDOv7 Performance: [GDT_PerfBar](../GDO/Perf/GDT_PerfBar.php)
 

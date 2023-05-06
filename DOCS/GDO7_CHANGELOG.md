@@ -4,14 +4,22 @@
 
 Welcome to the GDOv7 changelog + combined roadmap.
 
-7.0.2 is almost finished. 7.0.3 is roadmap.
+7.0.2 is almost finished. 7.0.3 is roadmap and in the makings.
 
 Please read it upside down, from bottom to top and sometimes again.
 
+## 7.0.4 (**planned**)
+
+- The Websocket methods now obey the gdo style better, by making use of gdoParameters() and utilizing the [WS](../GDO/Util/WS.php) helper rendererer.
+- New Module [Geo2City](https://github.com/gizmore/phpgdo-geo2city) to detect a city from geocoordinates.
+- The IRC render mode can now optionally filter user input color and fat / italic printing.
+
+
 ## 7.0.3 (**planned**)
 
+- New config.php option: GDO_LOG_PROFILE, appending your xdebug trigger to method routes.
 - `gdo_test.sh` now features several options. Easy to use are `--all`, `--quick` and `--parents`.
-- Modules marked as 7.0.3 are unit tested in fuzzing mode and all pass phpgdo's StormPHP Code Inspections, well... very rarely with a warning i do not want 
+- Modules marked as 7.0.3 are unit tested in fuzzing mode and pass all phpgdo's StormPHP Code Inspections, well... very rarely with a warning i do not want 
   to disable.
 - The source files marked as 7.0.3 are declared as strict.
 - The gdo_test.sh fuzzer. now only tries up to a valid value for a parameter. This is faster but misses conjunctured parameters.
@@ -20,7 +28,7 @@ Please read it upside down, from bottom to top and sometimes again.
   . There are usable docs.phpgdo.com and gdo7.phpgdo.com websites.
 - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
 - New Website Module [Hydra](https://github.com/gizmore/phpgdo-hydra) to monitor services.
-
+- Methods and GDT can now be more easily debugged by overriding `Method->isDebugging()`. This triggers breakpoints at important spots.
 
 ## 7.0.2-r2 26.Mar.2023
 
@@ -45,13 +53,14 @@ Please read it upside down, from bottom to top and sometimes again.
 - The automated [todo](../gdo_todo.sh) [generation](GDO7_TODO_AUTO.md) is working again. (TODO)
 - The only core dependency was htmlpurifier. This has changed by moving it to [phpgdo-html](https://github.com/gizmore/phpgdo-html), which is a message provider
   using it. The core now simply htmlspecialchars() the input for the output. All more enhanced message providers,
-  like [CKEditor](https://github.com/gizmore/phpgdo-ckeditor) or [Markdown](https://github.com/gizmore/phpgdo-markdown), depend on it for security reasons.
+  like [CKEditor](https://github.com/gizmore/phpgdo-ckeditor) or [Markdown](https://github.com/gizmore/phpgdo-markdown), depend on html for security reasons.
 - Users may now switch their message editor.
   Implemented [core.health](https://github.com/gizmore/phpgdo/blob/main/GDO/Core/Method/Health.php) for a phpgdo compatible endpoint that renders
   a [health card](https://github.com/gizmore/phpgdo/blob/main/GDO/Core/GDT_HealthCard.php). You can see it in
   action [here](https://kassierercard.org/core/health): [html](https://kassierercard.org/core/health?_fmt=html&_ajax=1) [json](https://kassierercard.org/core/health?_fmt=json) [cli](https://kassierercard.org/core/health?_fmt=cli).
 - New Website Module [KassiererCard](https://github.com/gizmore/phpgdo-kassierer-card) - A website about local worker and customer bonus point
   systems. [Demo](https://kassierercard.org)
+
 
 ## 7.0.1 / released 01.Sep.2022
 

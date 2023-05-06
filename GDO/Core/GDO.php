@@ -515,16 +515,12 @@ abstract class GDO extends GDT
 		}
 		elseif (is_numeric($var))
 		{
-			return (string)$var;
+			return (string) $var;
 		}
-		else # if (is_bool($var))
+		else
 		{
 			return $var ? '1' : '0';
 		}
-//		else
-//		{
-//			throw new GDO_Exception('Unquoteable var: ' . print_r($var, true));
-//		}
 	}
 
 	/**
@@ -1068,7 +1064,7 @@ abstract class GDO extends GDT
 	public function countWhere(string $condition = 'true'): int
 	{
 		return (int) $this->select('COUNT(*)', false)->where($condition)->
-		noOrder()->exec()->fetchValue();
+		noOrder()->exec()->fetchVar();
 	}
 
 	/**
@@ -1839,8 +1835,7 @@ abstract class GDO extends GDT
 
 	public function dropTable(): bool
 	{
-		Database::instance()->dropTable($this);
-		return true;
+		return Database::instance()->dropTable($this);
 	}
 
 	/**

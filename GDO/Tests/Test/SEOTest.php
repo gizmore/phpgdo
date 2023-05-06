@@ -1,17 +1,21 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
+use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
 use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
+use GDO\UI\Color;
+use GDO\UI\TextStyle;
 use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotEquals;
 
 /**
  * Test if all methods have a title and description.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class SEOTest extends AutomatedTestCase
@@ -36,59 +40,63 @@ final class SEOTest extends AutomatedTestCase
 
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
-		$this->methodSEOTest($mt);
-	}
-
-	private function methodSEOTest(GDT_MethodTest $mt)
-	{
-		$plugged = [];
-
-		$method = $mt->method;
-
-		foreach ($method->gdoParameters() as $gdt)
+		try
 		{
-			if ($name = $gdt->getName())
+			$plugged = [];
+
+			$method = $mt->method;
+
+			if ($method->isDebugging())
 			{
-				if ($plugs = @$gdt->plugVars()[0])
+				xdebug_break();
+			}
+
+			foreach ($method->gdoParameters() as $gdt)
+			{
+				if ($name = $gdt->getName())
 				{
-					foreach ($plugs as $name => $var)
+					if ($plugs = @$gdt->plugVars()[0])
 					{
-						$plugged[$name] = $var;
+						foreach ($plugs as $name => $var)
+						{
+							$plugged[$name] = $var;
+						}
 					}
 				}
 			}
-		}
 
-		$method->inputs($plugged);
-		$method->onMethodInit();
+			$method->inputs($plugged);
+			$method->onMethodInit();
 
-		foreach ($method->gdoParameterCache() as $gdt)
-		{
-			if ($name = $gdt->getName())
+			foreach ($method->gdoParameterCache() as $gdt)
 			{
-				if ($plugs = @$gdt->plugVars()[0])
+				if ($gdt->getName())
 				{
-					foreach ($plugs as $name => $var)
+					if ($plugs = @$gdt->plugVars()[0])
 					{
-						$plugged[$name] = $var;
+						foreach ($plugs as $name => $var)
+						{
+							$plugged[$name] = $var;
+						}
 					}
 				}
 			}
-		}
 
-// 		$method->inputs($plugged);
-		$method->appliedInputs($plugged);
-		$title = $method->getMethodTitle();
-		$descr = $method->getMethodDescription();
-		assertNotEmpty($title, "Test if {$method->gdoClassName()} has a method title.");
-		assertNotEmpty($descr, "Test if {$method->gdoClassName()} has a method description.");
-// 		if ($title === $descr)
-// 		{
-// 			$this->eWrror("%s: %s has no real method description.",
-// 				Color::red('Warning'),
-// 				TextStyle::bold(get_class($method)),
-// 			);
-// 		}
+			$method->appliedInputs($plugged);
+			$title = $method->getMethodTitle();
+			$descr = $method->getMethodDescription();
+			assertNotEmpty($title, "Test if {$method->gdoClassName()} has a method title.");
+			assertNotEmpty($descr, "Test if {$method->gdoClassName()} has a method description.");
+		}
+		catch (\Throwable $ex)
+		{
+			$this->error("%s %s: %s",
+				Color::red('Failure'),
+				TextStyle::bold($method->gdoClassName()),
+				$ex->getMessage());
+//			echo Debug::debugException($ex);
+			throw $ex;
+		}
 	}
 
 	protected function getTestName(): string

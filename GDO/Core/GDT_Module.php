@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -8,7 +9,7 @@ namespace GDO\Core;
  * Loads modules via module loader.
  * Plugs vars for auto tests is module UI first, so nothing get's horribly hurt?
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  *
  * @author gizmore
@@ -21,6 +22,7 @@ final class GDT_Module extends GDT_ObjectSelect
 	### GDT ###
 	###########
 	public bool $installed = true;
+
 	public bool $uninstalled = false;
 
 	# ###################
@@ -38,13 +40,15 @@ final class GDT_Module extends GDT_ObjectSelect
 		return 'module';
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 * @throws GDO_Error
+	 */
 	public function getChoices(): array
 	{
 		$choices = [];
-
 		$modules = ModuleLoader::instance()->loadModules(
 			$this->installed, $this->uninstalled);
-
 		foreach ($modules as $module)
 		{
 			if (
@@ -52,7 +56,7 @@ final class GDT_Module extends GDT_ObjectSelect
 				((!$module->isInstalled()) && $this->uninstalled)
 			)
 			{
-				$choices[$module->getLowerName()] = $module;
+				$choices[$module->getName()] = $module;
 			}
 		}
 		return $choices;
@@ -60,11 +64,15 @@ final class GDT_Module extends GDT_ObjectSelect
 
 	public function getValueSingle(?string $moduleName): ?GDO_Module
 	{
-		if ($module = ModuleLoader::instance()->getModule($moduleName, false, false))
+		if ($moduleName)
 		{
-			return $module;
+			if ($module = ModuleLoader::instance()->getModule($moduleName, false))
+			{
+				return $module;
+			}
+			return $this->toClosestChoiceValue($moduleName);
 		}
-		return $this->toClosestChoiceValue($moduleName);
+		return  null;
 	}
 
 	# ##############
@@ -108,7 +116,7 @@ final class GDT_Module extends GDT_ObjectSelect
 	}
 
 	#############
-	### Tests ###
+	### Test ###
 	#############
 
 	/**

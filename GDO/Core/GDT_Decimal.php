@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Util\WS;
+
 /**
  * A fixed decimal, database driven field.
  *
@@ -46,6 +48,11 @@ class GDT_Decimal extends GDT_Int
 	public function renderHTML(): string
 	{
 		return GDT_Float::displayS($this->getVar(), $this->digitsAfter);
+	}
+
+	public function renderBinary(): string
+	{
+		return WS::wrDouble($this->getVar());
 	}
 
 	#############

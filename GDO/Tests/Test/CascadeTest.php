@@ -28,7 +28,7 @@ final class CascadeTest extends TestCase
 		try
 		{
 			GDO_Permission::getById('1')->delete();
-			$perm = GDO_Permission::table()->select()->where('perm_id=1')->uncached()->first()->exec()->fetchObject();
+			$perm = GDO_Permission::table()->select()->where('perm_id=1')->uncached()->first()->exec(false)->fetchObject();
 			assertIsObject($perm, 'Test if permissions cannot be deleted.');
 		}
 		catch (GDO_DBException $ex)

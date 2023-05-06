@@ -30,7 +30,7 @@ use function PHPUnit\Framework\assertTrue;
  */
 if (PHP_SAPI !== 'cli')
 {
-	echo "Tests can only be run from the command line.\n";
+	echo "Test can only be run from the command line.\n";
 	die(-1);
 }
 
@@ -228,9 +228,9 @@ final class gdo_test extends Application
 	{
 		global $argv;
 		$app = "php {$argv[0]}";
-		echo "{$app}  <modules_by_comma_and_asterisk>\n";
+		echo "{$app}  <modules_by_comma_and_percent_wildcard>\n";
 		echo "\n";
-		echo "Use $app '*' to run tests on all modules\n";
+		echo "Use $app '%' to run tests on all modules\n";
 		echo "\n";
 		echo "--all = Run all test options.\n";
 		echo "--blanks = Run blank GDO creation tests.\n";
@@ -244,8 +244,16 @@ final class gdo_test extends Application
 		echo "--rendering = Run rendering tests.\n";
 		echo "--seo = Run i18n tests.\n";
 		echo "--utility = Run utility tests.\n";
-		echo "--verbose = Print verbose runtime information.\n";
+		echo "--verbose = Print verbose message information.\n";
 		return $code;
+	}
+
+	public function verboseMessage(string $string): void
+	{
+		if ($this->isUnitTestVerbose())
+		{
+			echo "{$string}\n";
+		}
 	}
 
 }
@@ -255,8 +263,14 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
 $index = 0;
-$options = getopt('abcdhimnpqrsu', ['all', 'blanks', 'config', 'double', 'help', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo', 'utility'], $index);
+$options = getopt('abcdhimnpqrsuv', ['all', 'blanks', 'config', 'double', 'help', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo', 'utility', 'verbose'], $index);
 $opcount = 0;
+
+if (isset($options['v']) || isset($options['verbose']))
+{
+	$app->verbose();
+	echo "Verbosity got enabled!\n";
+}
 
 if (isset($options['a']) || isset($options['all']))
 {
@@ -335,10 +349,6 @@ if (isset($options['u']) || isset($options['utility']))
 	$opcount++;
 }
 
-if (isset($options['v']) || isset($options['verbose']))
-{
-	$app->verbose();
-}
 
 /** @var array $argv * */
 $argv = array_slice($argv, $index);
@@ -372,7 +382,7 @@ $db->useDatabase(GDO_DB_NAME);
 
 if (Application::isError())
 {
-	CLI::flushTopResponse();
+	$app->verboseMessage("Application error. Halting!");
 	die(1);
 }
 
@@ -433,7 +443,8 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	}
 	else
 	{
-		printf("%d Modules match the pattern %s.\n", count($modules), html($argv[0]));
+		$msg = sprintf("%d Modules match the pattern %s.\n", count($modules), TextStyle::bold(html($argv[0])));
+		$app->verboseMessage($msg);
 	}
 
 	$modules = array_unique($modules);
@@ -442,7 +453,7 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 	$modules = array_merge(ModuleProviders::getCoreModuleNames(), $modules);
 	$modules = array_unique($modules);
 
-	# Tests Module as a finisher
+	# Test Module as a finisher
 	if ($opcount > 0)
 	{
 		$modules[] = 'Tests';
@@ -502,7 +513,9 @@ $skip = [];
 if ($app->quick)
 {
 	$skip[] = 'CountryCoordinates';
+	$skip[] = 'Geo2City';
 	$skip[] = 'IP2Country';
+	$app->verboseMessage('Skipping a few modules in quick mode: ' . implode(', ', $skip));
 }
 $modules = array_filter($modules, function (GDO_Module $module) use ($skip)
 {
@@ -516,15 +529,18 @@ if (Installer::installModules($modules))
 {
 	if ($app->double)
 	{
+		$app->verboseMessage('Installing all selected modules again, for double installer check.');
 		assertTrue(
 			Installer::installModules($modules, true),
 			'Test if double install works with forced migration.');
 	}
+	$app->verboseMessage('Leaving installer mode.');
 	$app->install = false;
 	ClearCache::make()->execute();
 	$loader->initModules();
 	if (module_enabled('Session'))
 	{
+		$app->verboseMessage('Activating CLI Session handling.');
 		GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 		GDO_Session::instance();
 	}

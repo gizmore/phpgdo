@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDT_Template;
 
 /**
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0
  *
  * @author gizmore
- * @see GDT_GDO
+ * @see GDO
  * @see GDT_Table
  */
 class GDT_List extends GDT_Table

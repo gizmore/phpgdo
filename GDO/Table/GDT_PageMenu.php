@@ -8,6 +8,7 @@ use GDO\DB\Query;
 use GDO\UI\GDT_Link;
 use GDO\UI\WithHREF;
 use GDO\Util\Math;
+use GDO\Util\WS;
 
 /**
  * Pagemenu widget.
@@ -40,15 +41,6 @@ class GDT_PageMenu extends GDT
 		return $this;
 	}
 
-// 	public function getIPPField() : GDT_IPP
-// 	{
-// 		if (!isset($this->ipp))
-// 		{
-// 			$this->ipp = GDT_IPP::make();
-// 		}
-// 		return $this->ipp;
-// 	}
-
 	################
 	### Page Num ###
 	################
@@ -64,15 +56,6 @@ class GDT_PageMenu extends GDT
 		$this->ipp = $ipp;
 		return $this;
 	}
-
-// 	public function getPageNumField() : GDT_PageNum
-// 	{
-// 		if (!isset($this->pageNum))
-// 		{
-// 			$this->pageNum = GDT_PageNum::make();
-// 		}
-// 		return $this->pageNum;
-// 	}
 
 	public function page(int $page): self
 	{
@@ -93,7 +76,7 @@ class GDT_PageMenu extends GDT
 	 */
 	public function query(Query $query): self
 	{
-		$this->numItems = $query->copy()->selectOnly('COUNT(*)')->exec()->fetchValue();
+		$this->numItems = $query->copy()->selectOnly('COUNT(*)')->exec()->fetchVar();
 		return $this;
 	}
 
@@ -113,9 +96,6 @@ class GDT_PageMenu extends GDT
 		return ($page - 1) * $ipp;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getPage(): int
 	{
 		$min = 1;
@@ -162,15 +142,20 @@ class GDT_PageMenu extends GDT
 		return t('pagemenu_cli', [$this->getPage(), $this->getPageCount()]);
 	}
 
+	public function renderBinary(): string
+	{
+		return WS::wr16($this->getPage()) .
+			WS::wr16($this->getPageCount()) .
+			WS::wr32($this->numItems) .
+			WS::wr16($this->ipp);
+	}
+
+
 	/**
 	 * Get anchor relation for a page. Either next, prev or nofollow.
-	 *
-	 * @param PageMenuItem $page
-	 *
-	 * @return string
 	 * @see GDT_Link
 	 */
-	public function relationForPage(PageMenuItem $page)
+	public function relationForPage(PageMenuItem $page): string
 	{
 		$current = $this->getPage();
 		if (!is_numeric($page->page))

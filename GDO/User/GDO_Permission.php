@@ -28,11 +28,7 @@ final class GDO_Permission extends GDO
 
 	public static function create(string $name): self
 	{
-		if (!($perm = self::getByName($name)))
-		{
-			$perm = self::blank(['perm_name' => $name])->insert();
-		}
-		return $perm;
+		return self::getByName($name) ?: self::blank(['perm_name' => $name])->insert();
 	}
 
 	public static function getByName(string $name): ?self
@@ -86,6 +82,5 @@ final class GDO_Permission extends GDO
 	{
 		return sprintf('%s–%s', $this->getID(), $this->renderName());
 	}
-
 
 }

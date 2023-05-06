@@ -14,7 +14,7 @@ use Throwable;
  * Can send email on PHP errors, even fatals, if Module_Mail is installed.
  * Has a method to get debug timings.
  *
- * In Unit Tests, verbose has to be enabled to show stack traces for exceptions.
+ * In Unit Test, verbose has to be enabled to show stack traces for exceptions.
  *
  * @version 7.0.3
  * @since 3.0.1
@@ -460,7 +460,6 @@ final class Debug
 		$firstLine = sprintf('%s in %s Line %s',
 			$ex->getMessage(), $ex->getFile(), $ex->getLine());
 
-//		$log = true;
 		$mail = self::$MAIL_ON_ERROR;
 		$message = self::backtraceException($ex, $is_html, ' (XH)');
 
@@ -470,27 +469,17 @@ final class Debug
 			self::sendDebugMail($firstLine . "\n\n" . $message);
 		}
 
-		// Log it?
-//		if ($log)
-//		{
-			Logger::logException($ex);
-			Logger::flush();
-//		}
+		Logger::logException($ex);
+		Logger::flush();
 
-		if ($app->isUnitTests())
+		if ($app->isCLIOrUnitTest())
 		{
 			echo $message . "\n";
 			@ob_flush();
+			flush();
 		}
-
 		hdrc('HTTP/1.1 500 Server Error');
-
-		if ($render)
-		{
-			return self::renderError($message);
-		}
-
-		return '';
+		return $render ? self::renderError($message) : '';
 	}
 
 	public static function backtraceException(Throwable $ex, bool $html = true, string $message = ''): string

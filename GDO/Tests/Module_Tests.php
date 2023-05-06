@@ -10,7 +10,7 @@ use GDO\Util\FileUtil;
 use PHPUnit\TextUI\Application;
 
 /**
- * Module that generates Tests from Methods automatically.
+ * Module that generates Test from Methods automatically.
  * A good start to easily try many code paths.
  *
  * @version 7.0.3
@@ -48,11 +48,13 @@ final class Module_Tests extends GDO_Module
 		}
 		if (in_array($name, $skip, true))
 		{
+			$app->verboseMessage("Skipping Module_{$name} for not checking utitlity tests.");
 			return;
 		}
 
 		if (!$app->isParentWanted($name, true))
 		{
+			$app->verboseMessage("Skipping Module_{$name} for not being selected.");
 			return;
 		}
 

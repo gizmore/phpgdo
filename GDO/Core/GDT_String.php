@@ -129,6 +129,10 @@ class GDT_String extends GDT_DBField
 		return GDT::EMPTY_STRING;
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 * @throws GDO_ErrorFatal
+	 */
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		if (!parent::validate($value))
@@ -159,7 +163,7 @@ class GDT_String extends GDT_DBField
 				# ignore own row
 				$condition .= ' AND NOT ( ' . $this->gdo->getPKWhere() . ' )';
 			}
-			if ($this->gdo->tbl()->select(GDT::ONE)->where($condition)->first()->exec()->fetchValue() === GDT::ONE)
+			if ($this->gdo->tbl()->select(GDT::ONE)->where($condition)->first()->exec()->fetchVar() === GDT::ONE)
 			{
 				return $this->error('err_db_unique');
 			}
@@ -244,6 +248,13 @@ class GDT_String extends GDT_DBField
 			'min' => $this->min,
 			'max' => $this->max,
 		]);
+	}
+
+	public function renderBinary(): string
+	{
+		$binary = $this->getVar();
+		$binary = $binary ? urlencode($binary) : GDT::EMPTY_STRING;
+		return $binary . "\0";
 	}
 
 	public function renderForm(): string

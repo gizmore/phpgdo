@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -10,7 +11,7 @@ namespace GDO\Core;
  * - Is not indexed by robots.
  * - Do not render the website boilerplate.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  */
@@ -23,13 +24,17 @@ abstract class MethodAjax extends Method
 
 	public function isSavingLastUrl(): bool { return false; }
 
+
+	public function isLocking(): bool { return false; }
+
+
 	public function isShownInSitemap(): bool { return false; }
+
 
 	public function getMethodTitle(): string
 	{
-		return t('mt_ajax', [$this->getModuleName()]);
+		return $this->gdoHumanName(); # t('mt_ajax', [$this->getModuleName()]);
 	}
 
-	public function isLockingSession() { return false; }
 
 }

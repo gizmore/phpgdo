@@ -188,9 +188,6 @@ final class GDT_ACL extends GDT
 	### Private ###
 	###############
 
-	/**
-	 * @throws GDO_Error
-	 */
 	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason): bool
 	{
 		$mu = Module_User::instance();

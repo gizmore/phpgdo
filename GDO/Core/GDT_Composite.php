@@ -18,7 +18,7 @@ class GDT_Composite extends GDT_Container
 
 	use WithLabel;
 	use WithValue;
-	use WithInput;
+	use WithInput { inputs as private inputsB; }
 	use WithError;
 	use WithFormAttributes;
 
@@ -69,10 +69,6 @@ class GDT_Composite extends GDT_Container
 		return $this;
 	}
 
-//	public function getValue(): bool|int|float|string|array|null|object
-//	{
-//		return parent::getValue();
-//	}
 
 	public function getGDOData(): array
 	{
@@ -88,6 +84,9 @@ class GDT_Composite extends GDT_Container
 		return $gdodata;
 	}
 
+	/**
+	 * @throws GDO_ArgException
+	 */
 	public function validated(bool $throw = false): ?static
 	{
 		$valid = true;
@@ -108,7 +107,7 @@ class GDT_Composite extends GDT_Container
 
 	public function inputs(?array $inputs): static
 	{
-		parent::inputs($inputs);
+		$this->inputsB($inputs);
 		foreach ($this->getAllFields() as $gdt)
 		{
 			$gdt->inputs($inputs);

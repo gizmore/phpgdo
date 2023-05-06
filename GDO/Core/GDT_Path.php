@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\UI\TextStyle;
@@ -7,16 +8,15 @@ use GDO\Util\FileUtil;
 /**
  * A path variable with existance validator.
  *
- * @TODO: Make a GDT_PathCompleted that is GDT_ComboBox with auto completion.
- *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
  */
 final class GDT_Path extends GDT_ComboBox
 {
 
-	public string $pattern = '/^[^?!]+$/iD';
+	public string $pattern = '/^[^?!:]+$/iD';
+
 	/**
 	 * @var bool|callable
 	 */
@@ -57,7 +57,7 @@ final class GDT_Path extends GDT_ComboBox
 	### Completion ###
 	##################
 
-	private function setupCompletionHref()
+	private function setupCompletionHref(): void
 	{
 		switch ($this->existing)
 		{
@@ -71,7 +71,7 @@ final class GDT_Path extends GDT_ComboBox
 				$append = '&check=any';
 				break;
 		}
-		return $this->completionHref(href('Core', 'PathCompletion', $append));
+		$this->completionHref(href('Core', 'PathCompletion', $append));
 	}
 
 	public function validate(int|float|string|array|null|object|bool $value): bool
@@ -104,8 +104,7 @@ final class GDT_Path extends GDT_ComboBox
 			{
 				return $this->error('err_path_not_exists', [
 						TextStyle::bold(html($filename)),
-						t($this->existing)]
-				);
+						t((string)$this->existing)]);
 			}
 		}
 		return true;

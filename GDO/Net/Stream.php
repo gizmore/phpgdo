@@ -1,21 +1,23 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
 use GDO\File\GDO_File;
 
 /**
  * File utility to stream downloads in chunks.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  */
 final class Stream
 {
 
-	public static function serve(GDO_File $file, $variant = '', $disposition = true)
+	public static function serve(GDO_File $file, string $variant = '', bool $disposition = true): GDT
 	{
 		hdr('Content-Type: ' . $file->getType());
 		hdr('Content-Size: ' . $file->getSize());
@@ -28,37 +30,34 @@ final class Stream
 		return GDT_Response::make();
 	}
 
-	public static function file(GDO_File $file, $variant = '')
+	public static function file(GDO_File $file, string $variant = ''): bool
 	{
-		self::path($file->getVariantPath($variant));
+		return self::path($file->getVariantPath($variant));
 	}
 
-	public static function path($path)
+	public static function path($path): bool
 	{
 		if (Application::$INSTANCE->isUnitTests())
 		{
 			echo "Sending file: $path\n";
-			return '';
+			return true;
 		}
-		else
+		$out = false;
+		if (ob_get_level())
 		{
-			$out = false;
-			if (ob_get_level() > 0)
-			{
-				$out = ob_get_contents();
-				ob_end_clean();
-			}
-			$result = self::_path($path);
-			if ($out !== false)
-			{
-				ob_start();
-				echo $out;
-			}
-			return $result;
+			$out = ob_get_contents();
+			ob_end_clean();
 		}
+		$result = self::_path($path);
+		if ($out !== false)
+		{
+			ob_start();
+			echo $out;
+		}
+		return $result;
 	}
 
-	private static function _path($path)
+	private static function _path(string $path): bool
 	{
 		if ($fh = fopen($path, 'rb'))
 		{
@@ -67,19 +66,15 @@ final class Stream
 				echo fread($fh, 1024 * 1024);
 				flush();
 			}
-			fclose($fh);
-			return true;
+			return fclose($fh);
 		}
 		return false;
 	}
 
 	/**
 	 * Serve a HTTP range request if desired.
-	 *
-	 * @param GDO_File $file
-	 * @param string $variant
 	 */
-	public static function serveWithRange(GDO_File $file, $variant = '')
+	public static function serveWithRange(GDO_File $file, string $variant = ''): void
 	{
 		$die = !Application::$INSTANCE->isUnitTests();
 		$size = $length = $file->getSize();
@@ -131,7 +126,7 @@ final class Stream
 		hdr("Content-Range: bytes $start-$end/$size");
 		hdr('Content-Length: ' . $length);
 
-		$buffer = 1024 * 8;
+		$buffer = 1024 * 32;
 		while (!feof($fp) && ($p = ftell($fp)) <= $end)
 		{
 			if ($p + $buffer > $end)
@@ -157,7 +152,7 @@ final class Stream
 		}
 	}
 
-	public static function serveText($content, $fileName)
+	public static function serveText(string $content, string $fileName): void
 	{
 		hdr('Content-Type: application/octet-stream');
 		hdr('Content-Disposition: attachment; filename=' . html($fileName));

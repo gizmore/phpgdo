@@ -1,4 +1,9 @@
 # GDOv7 GDO
 
-# GDOv7 GDO: Overview
 
+###### [INDEX](./__GDO7_INDEX.md)
+
+
+A GDO is a database and cache driven collection of GDTs.
+
+They can automatically serialize for various rendering modes.

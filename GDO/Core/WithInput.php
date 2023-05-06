@@ -35,10 +35,10 @@ trait WithInput
 		{
 			unset($this->inputs);
 		}
-//		elseif (isset($this->inputs))
-//		{
-//			$this->inputs = array_merge($this->inputs, $inputs);
-//		}
+		elseif (isset($this->inputs))
+		{
+			$this->inputs = array_merge($this->inputs, $inputs);
+		}
 		else
 		{
 			$this->inputs = $inputs;
@@ -55,10 +55,7 @@ trait WithInput
 	{
 		if ($name = $this->getName())
 		{
-			if (isset($this->inputs[$name]))
-			{
-				return $this->inputs[$name] !== null;
-			}
+			return isset($this->inputs[$name]) ? $this->inputs[$name] !== null : false;
 		}
 		return false;
 	}
@@ -66,19 +63,22 @@ trait WithInput
 	public function getInput(): ?string
 	{
 		$key = $this->getName();
-		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
+		return $this->inputs[$key] ?? null;
 	}
 
+	/**
+	 * @deprecated because not wanted / used much?
+	 */
 	public function addInput(?string $key, $var): static
 	{
 		$this->inputs = $this->inputs ?? [];
 		if ($key)
 		{
-			$this->inputs[$key] = (string)$var;
+			$this->inputs[$key] = (string) $var;
 		}
 		else
 		{
-			$this->inputs[] = (string)$var;
+			$this->inputs[] = (string) $var;
 		}
 		return $this;
 	}

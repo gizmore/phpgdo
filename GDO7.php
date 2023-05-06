@@ -91,12 +91,6 @@ function hrefDefault(): string
 	return href(GDO_MODULE, GDO_METHOD);
 }
 
-//function profile_link(string $username, int $avatarSize = 0): string
-//{
-//	$user = GDO_User::getByName($username);
-//	return $user->renderProfileLink(true, $avatarSize);
-//}
-
 /**
  * Create a GDOv7 href.
  * SEO: Turn an url like " Forum, Board, &id=3 " into " /forum/board/id/3 ".
@@ -107,8 +101,6 @@ function hrefDefault(): string
  */
 function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS): string
 {
-//	$lang = true;
-
 	$module = strtolower($module);
 	$method = strtolower($method);
 
@@ -231,8 +223,14 @@ function html(?string $html): string
 	$html = (string) $html;
 	switch (Application::$MODE)
 	{
-		case GDT::RENDER_CLI: return CLI::removeColorCodes($html);
-		default: return str_replace(
+		case GDT::RENDER_CLI:
+			return CLI::removeColorCodes($html);
+
+		case GDT::RENDER_BINARY:
+			return $html;
+
+		default:
+			return str_replace(
 				[
 					'&',
 					'"',
@@ -277,8 +275,7 @@ function hdr(string $header, bool $replace = true): void
 	$app = Application::$INSTANCE;
 	if ($app->isUnitTests())
 	{
-		echo $header;
-		echo "\n";
+		echo "$header\n";
 		if (ob_get_level())
 		{
 			ob_flush();

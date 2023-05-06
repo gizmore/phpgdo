@@ -33,19 +33,25 @@ final class Logger
 
 	final public const IP = 0x400;
 	final public const BUFFERED = 0x1000;
+
 	final public const DEBUG = 0x2000;
 
 	final public const ALL = 0x37ff;
 
 	public static int $WRITES = 0;
+
 	public static string $POST_DELIMITER = '.::.';
+
 	public static ?DateTimeZone $TIMEZONE;
 
 	private static ?string $username;
+
 	private static string $basedir = GDO_PATH . 'protected/logs';
+
 	private static int $logbits = self::ALL;
+
 	private static string $logformat = "%s [%s%s] - %s\n";
-	private static int $cache = 0; # cached logbits
+
 	private static array $logs = [];
 
 	/**
@@ -59,17 +65,9 @@ final class Logger
 		self::$TIMEZONE = new DateTimeZone(GDO_TIMEZONE);
 	}
 
-	public static function cache(int $newLogbits): void
-	{
-		self::$cache = self::$logbits;
-		self::$logbits = $newLogbits;
-	}
-
-	public static function restore(): void { self::$logbits = self::$cache; }
-
-	public static function setLogFormat($format): void { self::$logformat = $format; }
-
-	public static function enableBuffer(): void { self::enable(self::BUFFERED); }
+//	public static function setLogFormat($format): void { self::$logformat = $format; }
+//
+//	public static function enableBuffer(): void { self::enable(self::BUFFERED); }
 
 	public static function enable($bits): void { self::$logbits |= $bits; }
 
@@ -192,12 +190,12 @@ final class Logger
 
 	public static function isEnabled(int $bits): bool
 	{
-		return ($bits === (self::$logbits & $bits));
+		return $bits === (self::$logbits & $bits);
 	}
 
 	public static function isDisabled(int $bits): bool
 	{
-		return ($bits !== (self::$logbits & $bits));
+		return !self::isEnabled($bits);
 	}
 
 	private static function logB(string $filename, string $message): void
@@ -238,11 +236,7 @@ final class Logger
 	}
 
 	/**
-	 * strip values from arraykeys which begin with 'pass'
-	 *
-	 * @TODO faster way without foreach...
-	 * print_r and preg_match ?
-	 * array_map stripos('pass') return '';
+	 * strip values from arraykeys which contain 'pass'
 	 */
 	private static function stripPassword(array $a): string
 	{
@@ -275,10 +269,7 @@ final class Logger
 	public static function logCron(string $message): void
 	{
 		self::rawLog('cron', $message);
-//		if (!Application::$INSTANCE->isUnitTests())
-//		{
-			echo $message . "\n";
-//		}
+		echo $message . "\n";
 	}
 
 	public static function rawLog(string $filename, string $message, int $logmode = 0): void
@@ -292,7 +283,6 @@ final class Logger
 
 	public static function logWebsocket(string $message): void
 	{
-//		echo $message . PHP_EOL;
 		self::rawLog('websocket', $message,  self::$logbits);
 	}
 
@@ -328,10 +318,6 @@ final class Logger
 		$log = Debug::backtraceException($e, false) . PHP_EOL . self::stripPassword($_REQUEST) . PHP_EOL . $message;
 		self::log('critical', $log, self::GDO_CRITICAL);
 	}
-
-//	public static function logInstall($message) { self::log('install', $message, self::ALL); }
-
-//	public static function logHTTP($message) { self::rawLog('http', $message, self::HTTP_ERROR); }
 
 }
 

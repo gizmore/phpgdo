@@ -27,11 +27,4 @@ class GDT_UInt extends GDT_Int
 		return false;
 	}
 
-	public function configJSON(): array
-	{
-		return array_merge(parent::configJSON(), [
-			'signed' => false,
-		]);
-	}
-
 }

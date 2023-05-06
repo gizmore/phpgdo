@@ -205,9 +205,9 @@ abstract class AutomatedTestCase extends TestCase
 		}
 		catch (Throwable $ex)
 		{
-			echo Debug::backtraceException($ex);
+			echo Debug::debugException($ex);
 			@ob_flush();
-			throw $ex;
+			flush();
 		}
 	}
 
@@ -396,6 +396,37 @@ abstract class AutomatedTestCase extends TestCase
 		return null;
 	}
 
+	private function tryTrivialMethod(Method $method): void
+	{
+		if (!\gdo_test::instance()->isParentWanted($method->getModuleName()))
+		{
+			$this->automatedSkippedAuto++;
+			return;
+		}
+
+		$this->automatedTested++;
+		$permutations = new Permutations($this->plugVariants);
+		if ($method->isDebugging())
+		{
+			xdebug_break();
+		}
+		$before = $this->automatedPassed;
+		foreach ($permutations->generate() as $plugVars)
+		{
+			# This fixes old input in method from previous permutations.
+			$method = call_user_func([get_class($method), 'make']);
+			$this->tryTrivialMethodVariant($method, $plugVars);
+		}
+		try
+		{
+			self::assertGreaterThanOrEqual($before + 1, $this->automatedPassed, "Test if {$method->gdoClassName()} can succeed.");
+		}
+		catch (Throwable $ex)
+		{
+			Debug::debugException($ex);
+		}
+	}
+
 	private function isPluggableParameters(Method $method, array $fields): bool
 	{
 		$trivial = true;
@@ -423,31 +454,15 @@ abstract class AutomatedTestCase extends TestCase
 		return $trivial;
 	}
 
-	private function tryTrivialMethod(Method $method): void
-	{
-		if (!\gdo_test::instance()->isParentWanted($method->getModuleName()))
-		{
-			$this->automatedSkippedAuto++;
-			return;
-		}
-
-		$this->automatedTested++;
-		$permutations = new Permutations($this->plugVariants);
-
-		$before = $this->automatedPassed;
-		foreach ($permutations->generate() as $plugVars)
-		{
-			# This fixes old input in method from previous permutations.
-			$method = call_user_func([get_class($method), 'make']);
-			$this->tryTrivialMethodVariant($method, $plugVars);
-		}
-		self::assertGreaterThanOrEqual($before + 1, $this->automatedPassed, "Test if {$method->gdoClassName()} can succeed.");
-	}
-
 	private function tryTrivialMethodVariant(Method $method, array $plugVars): void
 	{
 		try
 		{
+			$app = Application::instance();
+			if ($app->isUnitTestVerbose())
+			{
+				$this->message('Trying %s with %s', $method->gdoClassName(), json_encode($plugVars));
+			}
 			Application::$INSTANCE->reset();
 			$n = $this->automatedTested;
 			$this->automatedCalled++;
@@ -463,13 +478,13 @@ abstract class AutomatedTestCase extends TestCase
 		catch (Throwable $ex)
 		{
 			$this->automatedFailed++;
-			Logger::logException($ex);
-			if (\gdo_test::instance()->isUnitTestVerbose())
-			{
-				Debug::exception_handler($ex);
+//			Logger::logException($ex);
+//			if (\gdo_test::instance()->isUnitTestVerbose())
+//			{
+				Debug::debugException($ex);
 				$this->error('%4d.) %s: %s', $n, CLI::red('FAILURE'), $this->boldmome($mt->method));
 				$this->error('Error: %s', CLI::bold($ex->getMessage()));
-			}
+//			}
 		}
 	}
 

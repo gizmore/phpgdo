@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\Util\WS;
+
 /**
  * An enum.
  * It is a select with special rendering.
@@ -13,9 +15,7 @@ namespace GDO\Core;
 class GDT_Enum extends GDT_Select
 {
 
-//	public string $emptyVar = 'none';
-
-	public array $enumValues;
+	public array $enumValues = GDT::EMPTY_ARRAY;
 
 	public function enumValues(string...$enumValues): static
 	{
@@ -25,27 +25,17 @@ class GDT_Enum extends GDT_Select
 
 	public function getChoices(): array
 	{
-		$choices = [];
-//		if (!$this->notNull)
-//		{
-//			$choices[$this->emptyVar] = $this->renderEmptyLabel();
-//		}
-		if (isset($this->enumValues))
-		{
-			$choices = array_merge($choices, array_combine($this->enumValues, $this->enumValues));
-			return $choices;
-		}
-		return GDT::EMPTY_ARRAY;
+		return array_combine($this->enumValues, $this->enumValues);
 	}
 
 	public function configJSON(): array
 	{
-		return [
+		return array_merge(parent::configJSON(), [
 			'name' => $this->getName(),
-			'enumValues' => $this->enumValues ?? null,
+			'enumValues' => $this->enumValues,
 			'selected' => $this->getVar(),
 			'notNull' => $this->notNull,
-		];
+		]);
 	}
 
 	public function displayVar(string $var = null): string
@@ -80,6 +70,12 @@ class GDT_Enum extends GDT_Select
 			return null;
 		}
 		return $this->enumValues[$id-1];
+	}
+
+
+	public function renderBinary(): string
+	{
+		return WS::wr8($this->enumIndex());
 	}
 
 }

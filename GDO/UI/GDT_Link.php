@@ -24,33 +24,31 @@ class GDT_Link extends GDT_Url
 
 	public bool $searchable = false;
 
-	public const REL_ALTERNATE = 'alternate';
-	public const REL_AUTHOR = 'author';
+	final public const REL_ALTERNATE = 'alternate';
+	final public const REL_AUTHOR = 'author';
 
 	###########
 	### GDT ###
 	###########
-	public const REL_BOOKMARK = 'bookmark';
-
-// 	public function getVar() { return $this->href; }
+	final public const REL_BOOKMARK = 'bookmark';
 
 	###########
 	### URL ###
 	###########
-	public const REL_EXTERNAL = 'external';
+	final public const REL_EXTERNAL = 'external';
 
 	################
 	### Relation ###
 	################
-	public const REL_HELP = 'help';
-	public const REL_LICENSE = 'license';
-	public const REL_NEXT = 'next';
-	public const REL_NOFOLLOW = 'nofollow';
-	public const REL_NOREFERRER = 'noreferrer';
-	public const REL_NOOPENER = 'noopener';
-	public const REL_PREV = 'prev';
-	public const REL_SEARCH = 'search';
-	public const REL_TAG = 'tag';
+	final public const REL_HELP = 'help';
+	final public const REL_LICENSE = 'license';
+	final public const REL_NEXT = 'next';
+	final public const REL_NOFOLLOW = 'nofollow';
+	final public const REL_NOREFERRER = 'noreferrer';
+	final public const REL_NOOPENER = 'noopener';
+	final public const REL_PREV = 'prev';
+	final public const REL_SEARCH = 'search';
+	final public const REL_TAG = 'tag';
 
 	protected function __construct()
 	{

@@ -8,7 +8,9 @@ The bootstrap process:
     require GDO7.php
     Application::init();
 
-That's it. GDO is useable.
+
+That's it. phpgdo should be useable.
+
 
 # GDOv7 Bootstrap: Init
 
@@ -18,4 +20,4 @@ Try to enable the logger, debugger and render something.
 
     Debug::init(true, true) # init debugger with die and mail.
     Logger::init('testuser', 0xffffffff); # all log levels
-    GDT_String::make()->initial("Hello world")->render();
+    echo GDT_String::make()->initial("Hello world")->render();

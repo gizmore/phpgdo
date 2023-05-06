@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
+use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
@@ -11,9 +13,9 @@ use Throwable;
 
 /**
  * Test if all default icons exist.
- * Tests all GDO/GDT and Methods automatically.
+ * Test all GDO/GDT and Methods automatically.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.1
  * @author gizmore
  */
@@ -40,9 +42,17 @@ final class AutomatedIconTest extends AutomatedTestCase
 
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
-		foreach ($mt->method->gdoParameterCache() as $gdt)
+		$params = $mt->method->gdoParameterCache();
+		if (count($params))
 		{
-			$this->runGDTTest($gdt);
+			foreach ($params as $gdt)
+			{
+				$this->runGDTTest($gdt);
+			}
+		}
+		else
+		{
+			$this->automatedPassed++;
 		}
 	}
 
@@ -50,23 +60,19 @@ final class AutomatedIconTest extends AutomatedTestCase
 	{
 		try
 		{
-// 			if ($gdt instanceof GDT_CreatedBy)
-// 			{
-// 				xdebug_break();
-// 			}
-// 			echo "GDT: {$gdt->gdoClassName()}\n";
-// 			@ob_flush();
+			if (Application::instance()->isUnitTestVerbose())
+			{
+				$this->message('Trying icons for GDT %s...', $gdt->gdoClassName());
+			}
 			$classname = get_class($gdt);
-// 			if ($this->class_uses_trait($classname, WithIcon::class))
-// 			{
 			if (isset($gdt->icon))
 			{
 				assert(isset(GDT_IconUTF8::$MAP[$gdt->icon]), 'Test if icon ' . $gdt->icon . ' exists for ' . $classname);
 			}
-// 			}
 		}
 		catch (Throwable $ex)
 		{
+			Debug::debugException($ex);
 			echo "GDT: {$gdt->gdoClassName()}\n";
 			echo Debug::debugException($ex);
 			@ob_flush();

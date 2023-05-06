@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
@@ -28,7 +29,7 @@ use GDO\Util\Arrays;
 /**
  * Configure a module.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.4.0
  * @author gizmore
  */
@@ -36,6 +37,13 @@ class Configure extends MethodForm
 {
 
 	use MethodAdmin;
+
+
+	public function isTrivial(): bool
+	{
+		return false;
+	}
+
 
 	public function getPermission(): ?string
 	{
@@ -68,16 +76,13 @@ class Configure extends MethodForm
 		$response->addField($install->executeWithInit());
 
 		# Configuration if installed
-		if ($this->configModule()->isPersisted())
+		if ($mod->isPersisted())
 		{
 			$response->addField(parent::execute()); # configure
 		}
-		else
+		elseif ($text = $this->getDependencyText())
 		{
-			if ($text = $this->getDependencyText())
-			{
-				$response->addField(GDT_Panel::make()->text('info_module_deps', [$text]));
-			}
+			$response->addField(GDT_Panel::make()->text('info_module_deps', [$text]));
 		}
 
 		if ($text = $this->getFriendencyText())
@@ -144,12 +149,6 @@ class Configure extends MethodForm
 	public function createForm(GDT_Form $form): void
 	{
 		$mod = $this->configModule();
-// 		if ($deps = $this->getFriendencyText())
-// 		{
-// 			$form->text('info_module_deps', [
-// 				$deps
-// 			]);
-// 		}
 		$form->addField(GDT_Name::make('module_name')->initial($mod->getModuleName())->writeable(false));
 		$form->addField(GDT_Path::make('module_path')->writeable(false)->initial($mod->filePath()));
 		$c = GDT_Container::make('versions')->horizontal();
@@ -163,7 +162,10 @@ class Configure extends MethodForm
 					'form_div_config_vars'));
 			foreach ($config as $gdt)
 			{
-				$gdt->label('cfg_' . $gdt->name);
+				if (!$gdt->hasLabel())
+				{
+					$gdt->label('cfg_' . $gdt->name);
+				}
 				$key = 'tt_cfg_' . $gdt->name;
 				if (Trans::hasKey($key))
 				{
@@ -211,7 +213,7 @@ class Configure extends MethodForm
 			{
 				if (count($info))
 				{
-					$info[] = Application::$INSTANCE->isCLIOrUnitTest() ? " - " : '<br/>';
+					$info[] = Application::$INSTANCE->isCLIOrUnitTest() ? ' - ' : '<br/>';
 				}
 				GDO_ModuleVar::createModuleVar($mod, $gdt);
 				$info[] = t('msg_modulevar_changed',

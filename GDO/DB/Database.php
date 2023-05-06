@@ -421,10 +421,19 @@ class Database
 		}
 	}
 
-	public function truncateTable(GDO $gdo): void
+	public function truncateTable(GDO $gdo): bool
 	{
-		$tableName = $gdo->gdoTableIdentifier();
-		self::DBMS()->dbmsTruncateTable($tableName);
+		try
+		{
+			$tableName = $gdo->gdoTableIdentifier();
+			self::DBMS()->dbmsTruncateTable($tableName);
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	public function createDatabase(string $databaseName): bool
@@ -496,21 +505,30 @@ class Database
 	### Lock ###
 	############
 
-	public function transactionEnd(): void
+	public function transactionEnd(): bool
 	{
-		# Perf
-		$this->commits++; #PP#delete#
-		self::$COMMITS++; #PP#delete#
+		try
+		{
+			# Exec and perf
+			$t1 = microtime(true); #PP#delete#
 
-		# Exec and perf
-		$t1 = microtime(true); #PP#delete#
-		self::DBMS()->dbmsCommit();
-		$t2 = microtime(true); #PP#delete#
-		$tt = $t2 - $t1; #PP#delete#
+			self::DBMS()->dbmsCommit();
 
-		# Perf
-		$this->queryTime += $tt; #PP#delete#
-		self::$QUERY_TIME += $tt; #PP#delete#
+			$t2 = microtime(true); #PP#delete#
+			$tt = $t2 - $t1; #PP#delete#
+
+			$this->commits++; #PP#delete#
+			self::$COMMITS++; #PP#delete#
+			$this->queryTime += $tt; #PP#delete#
+			self::$QUERY_TIME += $tt; #PP#delete#
+
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	public function transactionRollback(): bool
@@ -567,12 +585,19 @@ class Database
 
 	/**
 	 * Import a large SQL file.
-	 *
-	 * @throws GDO_DBException
 	 */
-	public function parseSQLFile(string $path): void
+	public function parseSQLFile(string $path): bool
 	{
-		Database::DBMS()->dbmsExecFile($path);
+		try
+		{
+			Database::DBMS()->dbmsExecFile($path);
+			return true;
+		}
+		catch (GDO_DBException $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
 	}
 
 }

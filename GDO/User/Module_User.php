@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDO_Module;
@@ -16,7 +17,7 @@ use GDO\UI\GDT_Page;
  *
  * Adds user config and settings: last url, gender, ...
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.4
  * @author gizmore
  * @see GDO
@@ -41,18 +42,20 @@ final class Module_User extends GDO_Module
 	public function getFriendencies(): array
 	{
 		return [
-			'Account', 'Avatar', 'Cronjob',
-			'Friends', 'Session',
+			'Account',
+			'Avatar',
+			'Cronjob',
+			'Friends',
+			'Session',
 		];
 	}
 
 	public function getClasses(): array
 	{
-		$classes = [
+		return [
 			GDO_UserSetting::class,
 			GDO_UserSettingBlob::class,
 		];
-		return $classes;
 	}
 
 	public function onInstall(): void { OnInstall::onInstall(); }

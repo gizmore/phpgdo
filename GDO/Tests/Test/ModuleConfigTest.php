@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Tests\Test;
 
 use GDO\Admin\Method\Configure;
@@ -20,6 +21,7 @@ use function PHPUnit\Framework\assertTrue;
  * Test if all modules can be configured.
  *
  * @author gizmore
+ * @version 7.0.3
  */
 final class ModuleConfigTest extends TestCase
 {
@@ -70,11 +72,6 @@ final class ModuleConfigTest extends TestCase
 		$inputs = ['module' => $module->getModuleName(), 'submit' => 'submit'];
 		$method = GDT_Method::make()->method(Configure::make())->runAs()->inputs($inputs);
 		$result = $method->execute();
-
-//     	if ($module instanceof Module_Session)
-//     	{
-//     		xdebug_break();
-//     	}
 
 		# Check
 		$errors = [];

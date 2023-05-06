@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Util\Random;
@@ -6,7 +7,7 @@ use GDO\Util\Random;
 /**
  * Default random token is 16 chars alphanumeric.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 4.0.0
  * @author gizmore
  */

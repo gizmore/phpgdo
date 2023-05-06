@@ -51,10 +51,10 @@ final class REPL
 					die(self::abortmsg());
 			}
 		}
-		if ($default === null)
-		{
-			throw new GDO_Error('err_repl_input');
-		}
+//		if ($default === null)
+//		{
+//			throw new GDO_Error('err_repl_input');
+//		}
 		return !!$default;
 
 	}
@@ -77,13 +77,6 @@ final class REPL
 		return self::confirm($prompt, $default, false);
 	}
 
-	/**
-	 *
-	 * @param GDT $gdt
-	 * @param string $prompt
-	 *
-	 * @return bool - has the user changed  the value?
-	 */
 	public static function changedGDTVar(GDT $gdt, string $prompt = ''): bool
 	{
 		$old = $gdt->getVar();
