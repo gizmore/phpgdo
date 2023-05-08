@@ -47,7 +47,7 @@ define('GDO_TIME_START', microtime(true));
 #######################
 ### Bootstrap GDOv7 ###
 #######################
-@include 'protected/config.php';
+require 'protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
 	require 'index_install.php'; # no config. bail out
@@ -64,7 +64,6 @@ Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
-//$loader->initModuleVars();
 if (!module_enabled('Core'))
 {
 	require 'index_install.php';
@@ -248,8 +247,8 @@ $app->ajax($ajax);
 ############
 ### Exec ###
 ############
-$_GET = null; # from this point we have everything only in gdo.
-$_POST = null;
+#$_GET = null; # from this point we have everything only in gdo.
+#$_POST = null;
 # plug together GDT_Method
 $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 #

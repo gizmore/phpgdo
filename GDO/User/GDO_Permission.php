@@ -74,7 +74,7 @@ final class GDO_Permission extends GDO
 		{
 			return t($key);
 		}
-		return $name ? $name : t('unknown_permission');
+		return $name ?: t('unknown_permission');
 	}
 
 

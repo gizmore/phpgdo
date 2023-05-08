@@ -163,14 +163,13 @@ final class Website
 
 	/**
 	 * Raw error message.
-	 * @deprecated No I18n logging.
 	 */
-	public static function errorRaw(string $titleRaw, string $errorRaw, bool $log = true, int $code = GDO_Exception::DEFAULT_ERROR_CODE): GDT_Response
+	public static function errorRaw(string $titleRaw, string $errorRaw, bool $log = true, int $code = GDO_Exception::GDT_ERROR_CODE): GDT_Response
 	{
 		return self::error($titleRaw, '%s', [$errorRaw], $log, $code);
 	}
 
-	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Exception::DEFAULT_ERROR_CODE): GDT_Response
+	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Exception::GDT_ERROR_CODE): GDT_Response
 	{
 		$app = Application::$INSTANCE;
 		$app::setResponseCode($code);
@@ -185,26 +184,19 @@ final class Website
 		$response = GDT_Response::make()->code($code);
 		if ($app->isCLIOrUnitTest())
 		{
-			$response->addField($error);
-			if ($app->isUnitTests())
+			echo $error->renderCLI();
+			if (ob_get_level())
 			{
-				echo $error->renderCLI();
-				@ob_flush();
-				flush();
+				ob_flush();
 			}
 		}
-		else
-		{
-			GDT_Page::instance()->topResponse()->addField($error);
-		}
+		GDT_Page::instance()->topResponse()->addField($error);
 		return $response;
 	}
 
 
 	/**
 	 * Raw success message.
-	 *
-	 * @deprecated No I18n logging.
 	 */
 	public static function messageRaw(string $titleRaw, string $messageRaw, bool $log = true, int $code = 200): GDT_Response
 	{
@@ -227,18 +219,13 @@ final class Website
 		$response = GDT_Response::make()->code($code);
 		if ($app->isCLIOrUnitTest())
 		{
-			$response->addField($success);
-			if ($app->isUnitTests())
+			echo $success->renderCLI();
+			if (ob_get_level())
 			{
-				echo $success->renderCLI();
-				@ob_flush();
-				flush();
+				ob_flush();
 			}
 		}
-		else
-		{
-			GDT_Page::instance()->topResponse()->addField($success);
-		}
+		GDT_Page::instance()->topResponse()->addField($success);
 		return $response;
 	}
 

@@ -15,7 +15,7 @@ use GDO\Form\MethodForm;
 final class Webserver extends MethodForm
 {
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->text('install_info_webservers');
 		$form->actions()->addFields(

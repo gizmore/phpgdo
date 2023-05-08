@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * This prints all modules and their providers.
  * The list can be copied by authors to Core/ModuleProviders.php
@@ -13,15 +15,25 @@ require 'GDO7.php';
 
 global $mode;
 
-/** @var $argv string * */
-$mode = @$argv[1];
+$mode = isset($argv[1]);
+
+/**
+ * Manually manage multi-providers.
+ */
+$multi = [
+	'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],
+	'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],
+	'Mailer' => ['phpgdo-mailer', 'phpgdo-mailer-symfony'],
+	'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],
+];
 
 if ($mode)
 {
-	echo "'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],\n";
-	echo "'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],\n";
-	echo "'Mailer' => ['phpgdo-mailer', 'phpgdo-mailer-symfony'],\n";
-	echo "'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],\n";
+	foreach ($multi as $mod => $prov)
+	{
+		$multiprov = implode("', '", $prov);
+		printf("'%s' => [%s],\n", $mod, "'{$multiprov}'");
+	}
 }
 
 Filewalker::traverse('GDO', null, null,
@@ -29,10 +41,11 @@ Filewalker::traverse('GDO', null, null,
 	{
 		if (is_dir('GDO/' . $entry . '/.git'))
 		{
-			global $mode;
+			global $mode, $multi;
 			$c = file_get_contents('GDO/' . $entry . '/.git/config');
 			$c = Regex::firstMatch('#/gizmore/([-_a-z0-9]+)#miD', $c);
-			if (!str_starts_with($entry, 'phpgdo-'))
+			if ((!str_starts_with($entry, 'phpgdo-')) &&
+				(!isset($multi[$entry])))
 			{
 				if (!$mode)
 				{

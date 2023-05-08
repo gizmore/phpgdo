@@ -824,12 +824,18 @@ abstract class GDT
 	###########
 	### CLI ###
 	###########
+
 	public function gdoExampleVars() : ?string
 	{
 		return null;
 	}
 
 	public function hasLabel(): bool
+	{
+		return false;
+	}
+
+	public function hasChangedFromDefault(): bool
 	{
 		return false;
 	}

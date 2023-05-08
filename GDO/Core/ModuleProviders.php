@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 /**
@@ -9,14 +10,14 @@ namespace GDO\Core;
  *
  * You can generate providers and dependenices with providers.php and provider_dependenciews.php
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.0
  * @author gizmore
  */
 final class ModuleProviders
 {
 
-	public const GIT_PROVIDER = 'https://github.com/gizmore/';
+	final public const GIT_PROVIDER = 'https://github.com/gizmore/';
 	/**
 	 * Provider packages.
 	 * Multi-Provided is first
@@ -302,14 +303,9 @@ final class ModuleProviders
 	];
 
 	/**
-	 * Get URL for a module.
-	 *
-	 * @param string $moduleName
-	 * @param number $which
-	 *
-	 * @return string
+	 * Get the URL for a module.
 	 */
-	public static function getGitUrl(string $moduleName, int $which = 1, bool $ssh = false)
+	public static function getGitUrl(string $moduleName, int $which = 1, bool $ssh = false): string
 	{
 		$git = self::GIT_PROVIDER;
 		$which = (int)$which;
@@ -358,7 +354,7 @@ final class ModuleProviders
 				return $modname;
 			}
 		}
-		throw new GDO_ErrorFatal('err_unknown_module', [html($moduleName)]);
+		throw new GDO_ExceptionFatal('err_unknown_module', [html($moduleName)]);
 	}
 
 	public static function getDependencies(string $moduleName): array

@@ -227,15 +227,15 @@ final class Debug
 		hdrc('HTTP/1.1 500 Server Error');
 
 		// Output error
-		if ($app->isCLI())
-		{
-			fwrite(STDERR, self::backtrace($messageCLI, false) . PHP_EOL);
-		}
-		else
-		{
-			$message = GDO_ERROR_STACKTRACE ? self::backtrace($message, $is_html) : $message;
-			echo self::renderError($message);
-		}
+//		if ($app->isCLIOrUnitTest())
+//		{
+//			fwrite(STDERR, self::backtrace($messageCLI, false) . PHP_EOL);
+//		}
+//		else
+//		{
+		$message = GDO_ERROR_STACKTRACE ? self::backtrace($message, $is_html) : $message;
+		fwrite(STDERR, self::renderError($message));
+//		}
 
 		if (self::$DIE)
 		{
@@ -443,11 +443,6 @@ final class Debug
 		return $message;
 	}
 
-	public static function error(Throwable $ex): void
-	{
-		self::error_handler($ex->getCode(), $ex->getMessage(), $ex->getFile(), $ex->getLine());
-	}
-
 	public static function exception_handler($ex): void
 	{
 		echo self::debugException($ex);
@@ -474,9 +469,12 @@ final class Debug
 
 		if ($app->isCLIOrUnitTest())
 		{
-			echo $message . "\n";
-			@ob_flush();
-			flush();
+			fwrite(STDERR, "$message\n");
+			if (ob_get_level())
+			{
+				ob_flush();
+			}
+			return '';
 		}
 		hdrc('HTTP/1.1 500 Server Error');
 		return $render ? self::renderError($message) : '';

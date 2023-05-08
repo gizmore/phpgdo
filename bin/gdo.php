@@ -4,9 +4,9 @@ namespace bin;
 use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\Debug;
-use GDO\Core\GDO_Error;
-use GDO\Core\GDO_ErrorFatal;
-use GDO\Core\GDO_NoSuchMethodError;
+use GDO\Core\GDO_Exception;
+use GDO\Core\GDO_ExceptionFatal;
+use GDO\Core\GDO_MethodError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\Core\GDT_Response;
@@ -57,11 +57,10 @@ Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # init without username
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
 $loader->loadModulesCache();
-$loader->loadLangFiles();
 $loader->initModules();
 if (!module_enabled('CLI'))
 {
-	throw new GDO_Error('err_module', ['CLI']);
+	throw new GDO_Exception('err_module', ['CLI']);
 }
 Trans::inited();
 if (!CLI::isCLI())
@@ -88,7 +87,7 @@ if (CLI::isInteractive())
 			CLI::flushTopResponse();
 			echo $result->render();
 		}
-		catch (GDO_NoSuchMethodError $ex)
+		catch (GDO_MethodError $ex)
 		{
 			$module = $ex->module;
 			$methods = $module->getMethods();
@@ -99,11 +98,6 @@ if (CLI::isInteractive())
 			$methods = Arrays::implodeHuman($methods);
 			echo t('msg_module_methods', [
 				$module->gdoShortName(), $methods]);
-		}
-		catch (GDO_Error $ex)
-		{
-			CLI::flushTopResponse();
-			echo $ex->renderCLI();
 		}
 		catch (Throwable $ex)
 		{

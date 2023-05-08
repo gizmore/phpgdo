@@ -4,6 +4,7 @@ namespace GDO\Core;
 
 use Exception;
 use GDO\CLI\CLI;
+use GDO\Language\Trans;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
 use Throwable;
@@ -18,23 +19,32 @@ use Throwable;
 class GDO_Exception extends Exception
 {
 
-	final public const DEFAULT_ERROR_CODE = 409;
+	final public const GET_OK_CODE = 200;
 
-	public function __construct(string $message = null, int $code = self::DEFAULT_ERROR_CODE, Throwable $previous = null)
+	final public const POST_OK_CODE = 201;
+
+	final public const PERM_ERROR_CODE = 403;
+
+	final public const GDT_ERROR_CODE = 409;
+
+	final public const GDO_ERROR_CODE = 500;
+
+	final public const DB_ERROR_CODE = 500;
+
+
+
+	public function __construct(string $key = null, array $args = null, int $code = self::GDT_ERROR_CODE, Throwable $previous = null)
 	{
+		$message = t($key, $args);
 		parent::__construct($message, $code, $previous);
 		Application::setResponseCode($code);
 		hdr('X-GDO-ERROR: ' . CLI::removeColorCodes(str_replace("\n", ' | ', $message)));
-		Logger::logException($this);
 	}
 
-	public function renderCLI(): string
+
+	public static function raw(string $message, int $code = self::GDO_ERROR_CODE, Throwable $previous): static
 	{
-		$args = [
-			Color::red(get_class($this)),
-			TextStyle::italic($this->getMessage()),
-		];
-		return t('err_exception', $args);
+		return new static('%s', [$message], $code, $previous);
 	}
 
 }

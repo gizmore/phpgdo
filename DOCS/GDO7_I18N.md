@@ -5,7 +5,10 @@ GDOv7 comes with an own i18n impl.
 [Trans](../GDO/Language/Trans.php) might not be feature rich,
 but should be fast.
 
-English is assumed to be spoken by the user, as something is simply not translateable, like the parameter key of an input, like --arg.
+English is assumed to be spoken by the user,
+as some things are simply not easily or worthly translateable,
+like the parameter option key of an input,
+like --force. I won't translate option keys
 Not gonna do that!
 So simple I18n...
 

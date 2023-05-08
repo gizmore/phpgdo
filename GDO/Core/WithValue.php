@@ -119,9 +119,7 @@ trait WithValue
 
 	public function hasChanged(): bool
 	{
-		$old = $this->var;
-		$new = $this->getVar();
-		return $old !== $new;
+		return $this->getVar() !== $this->initial;
 	}
 
 //	public  function addInputValue($value): GDT

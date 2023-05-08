@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\User\GDO_Permission;
@@ -6,20 +7,20 @@ use GDO\User\GDO_Permission;
 /**
  * Thrown when a user has not the right permissions.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @author gizmore
  */
-class GDO_PermissionException extends GDO_Error
+class GDO_PermissionException extends GDO_Exception
 {
 
 	public Method $method;
-	public GDO_Permission $permission;
+	public string $reason;
 
-	public function __construct(Method $method, GDO_Permission $permission)
+	public function __construct(Method $method, string $reason, int $code=GDO_Exception::PERM_ERROR_CODE)
 	{
-		parent::_construct('err_no_permission', [$method->getName(), $permission->renderName()]);
+		parent::__construct('err_no_permission', [$method->getMethodTitle(), $reason], $code);
 		$this->method = $method;
-		$this->permission = $permission;
+		$this->reason = $reason;
 	}
 
 }

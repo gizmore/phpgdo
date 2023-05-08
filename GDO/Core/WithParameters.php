@@ -31,36 +31,35 @@ trait WithParameters
 	/**
 	 * Get a parameter's GDT db var string.
 	 *
-	 * @throws GDO_ArgException
+	 * @throws GDO_ArgError
 	 */
 	public function gdoParameterVar(string $key, bool $validate = true): ?string
 	{
-		$gdt = $this->gdoParameter($key, $validate);
-		return $gdt ? $gdt->getVar() : null;
+		return $this->gdoParameter($key, $validate)?->getVar();
 	}
 
 	/**
 	 * Get a parameter by key.
 	 * If key is an int, get positional parameter N.
 	 *
-	 * @throws GDO_ArgException
+	 * @throws GDO_ArgError
 	 */
-	public function gdoParameter(string $key, bool $validate = true, bool $throw = true): ?GDT
+	public function gdoParameter(string $key, bool $validate = true): ?GDT
 	{
-		if ($gdt = $this->gdoParameterB($key, $throw))
+		if ($gdt = $this->gdoParameterB($key))
 		{
 			if (($validate) && (!$gdt->validated()))
 			{
-				if ($throw)
-				{
-					throw new GDO_ArgException($gdt);
-				}
-				return null;
+				throw new GDO_ArgError($gdt);
 			}
+			return $gdt;
 		}
-		return $gdt;
+		return null;
 	}
 
+	/**
+	 * Get a parameter by either index, name, or the first/only repeater.
+	 */
 	private function gdoParameterB(string $key): ?GDT
 	{
 		$cache = $this->gdoParameterCache();
@@ -118,6 +117,7 @@ trait WithParameters
 	#############
 
 	/**
+	 * Populate the parameter cache with GDTs.
 	 * @param GDT[] $params
 	 */
 	protected function addComposeParameters(array $params): void
@@ -141,12 +141,11 @@ trait WithParameters
 	}
 
 	/**
-	 * @throws GDO_ArgException
+	 * @throws GDO_ArgError
 	 */
-	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): int|float|string|array|null|object
+	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): int|float|string|array|null|GDT
 	{
-		$gdt = $this->gdoParameter($key, $validate, $throw);
-		return $gdt ? $gdt->getValue() : null;
+		return $this->gdoParameter($key, $validate)?->getValue();
 	}
 
 }

@@ -238,7 +238,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this->choices[$var] ?? $this->toClosestChoiceValue($var);
 	}
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		return GDT::EMPTY_ARRAY;
 	}

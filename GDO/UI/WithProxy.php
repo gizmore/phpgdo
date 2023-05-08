@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\UI;
 
+use GDO\Core\GDT;
 use GDO\Core\GDT_Field;
 use GDO\Table\GDT_Filter;
 

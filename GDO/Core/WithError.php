@@ -20,7 +20,7 @@ trait WithError
 
 
 	/**
-	 * Unlike the chain pattern, this returns false!
+	 * @TODO Unlike the chain pattern, this returns false!
 	 */
 	public function error(string $key, array $args = null): bool
 	{

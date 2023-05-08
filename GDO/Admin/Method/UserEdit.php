@@ -49,7 +49,7 @@ class UserEdit extends MethodForm
 		];
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		# Add all columns
 		$table = GDO_User::table();

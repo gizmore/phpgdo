@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Tests;
 
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDO_Module;
 use GDO\Core\Logger;
 use GDO\UI\TextStyle;
@@ -86,7 +86,7 @@ final class Module_Tests extends GDO_Module
 		{
 			FileUtil::createDir($this->tempPath());
 		}
-		catch (GDO_Error $ex)
+		catch (GDO_Exception $ex)
 		{
 			Logger::logException($ex);
 		}

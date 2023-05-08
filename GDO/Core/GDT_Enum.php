@@ -23,7 +23,7 @@ class GDT_Enum extends GDT_Select
 		return $this;
 	}
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		return array_combine($this->enumValues, $this->enumValues);
 	}

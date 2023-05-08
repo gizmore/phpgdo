@@ -34,7 +34,7 @@ final class TimezoneDetect extends MethodForm
 		return t('md_date_timezone', [sitename()]);
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$tz = GDT_Timezone::make('timezone')->notNull();
 		$form->addFields(

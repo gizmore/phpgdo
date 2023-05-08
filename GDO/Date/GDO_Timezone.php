@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date;
 
 use DateTimeZone;
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_Int;
 use GDO\Core\GDT_Name;
@@ -10,7 +12,7 @@ use GDO\Core\GDT_Name;
 /**
  * Timezone mapping entities.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.7
  * @author gizmore
  */
@@ -45,7 +47,6 @@ final class GDO_Timezone extends GDO
 			GDT_AutoInc::make('tz_id')->bytes(2),
 			GDT_Name::make('tz_name')->notNull(),
 			GDT_Int::make('tz_offset')->bytes(2)->notNull()->initial('0'),
-//			GDT_Index::make('tz_index_name')->indexColumns('tz_name')->btree(),
 		];
 	}
 
@@ -53,15 +54,15 @@ final class GDO_Timezone extends GDO
 	### Getters ###
 	###############
 
-	/**
-	 * @return DateTimeZone
-	 */
-	public function getTimezone()
+	public function getTimezone(): DateTimeZone
 	{
 		return Time::getTimezoneObject($this->getID());
 	}
 
-	public function allTimezones()
+	/**
+	 * @return self[]
+	 */
+	public function allTimezones(): array
 	{
 		return array_values($this->allCached('tz_name', true));
 	}
@@ -69,7 +70,7 @@ final class GDO_Timezone extends GDO
 	public function getName(): ?string { return $this->gdoVar('tz_name'); }
 
 
-	public function getOffset() { return $this->gdoVar('tz_offset'); }
+	public function getOffset(): int { return $this->gdoValue('tz_offset'); }
 
 	###############
 	### Display ###
@@ -85,10 +86,10 @@ final class GDO_Timezone extends GDO
 		{
 			return $name;
 		}
-		return '';
+		return GDT::EMPTY_STRING;
 	}
 
-	public function displayOffset()
+	public function displayOffset(): string
 	{
 		$o = $this->getOffset();
 		$oo = abs($o);
@@ -97,15 +98,6 @@ final class GDO_Timezone extends GDO
 			$oo / 60, $oo % 60
 		);
 	}
-
-	#######################
-	### Timezone Object ###
-	#######################
-
-
-	#############
-	### Cache ###
-	#############
 
 
 }

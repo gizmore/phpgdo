@@ -51,7 +51,7 @@ final class GDT_AutoInc extends GDT_UInt
 	/**
 	 * After creation store the auto inc value.
 	 *
-	 * @throws GDO_ErrorFatal
+	 * @throws GDO_ExceptionFatal
 	 */
 	public function gdoAfterCreate(GDO $gdo): void
 	{

@@ -35,7 +35,7 @@ class GDT_ObjectSelect extends GDT_Select
 	/**
 	 * @throws GDO_DBException
 	 */
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		return isset($this->table) ? $this->table->allCached() : GDT::EMPTY_ARRAY;
 	}

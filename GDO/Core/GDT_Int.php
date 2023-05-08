@@ -63,7 +63,7 @@ class GDT_Int extends GDT_DBField
 	}
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 * @throws GDO_Exception
 	 * @throws GDO_DBException
 	 */
@@ -223,7 +223,7 @@ class GDT_Int extends GDT_DBField
 	##############
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
@@ -259,7 +259,7 @@ class GDT_Int extends GDT_DBField
 	}
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function searchQuery(Query $query, string $searchTerm): static
 	{
@@ -272,7 +272,7 @@ class GDT_Int extends GDT_DBField
 	}
 
 	/**
-	 * @throws GDO_ErrorFatal
+	 * @throws GDO_ExceptionFatal
 	 */
 	public function filterGDO(GDO $gdo, $filterInput): bool
 	{
@@ -297,7 +297,7 @@ class GDT_Int extends GDT_DBField
 	/**
 	 * Comparing two integers is not that hard.
 	 *
-	 * @throws GDO_ErrorFatal
+	 * @throws GDO_ExceptionFatal
 	 */
 	public function gdoCompare(GDO $a, GDO $b): int
 	{

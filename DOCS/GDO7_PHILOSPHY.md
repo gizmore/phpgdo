@@ -42,7 +42,7 @@ This way you can chain setters like `GDT_String::make()->label('hi')->max(32)->a
 GDT are plugged together with many traits.
 A complete list of traits is available here.
 
-- [WithModule](../)
+- [WithModule](../GDO/Core/WithModule.php)
 - WithGDO
 - WithPHPJQuery
 

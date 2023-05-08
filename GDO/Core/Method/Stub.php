@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core\Method;
 
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDO_StubException;
 use GDO\Core\GDT;
 use GDO\Core\Method;
@@ -15,7 +16,7 @@ use GDO\Core\Method;
  * @author gizmore
  * @see Method
  */
-final class Stub extends Method
+class Stub extends Method
 {
 
 	public function isHiddenMethod(): bool
@@ -30,15 +31,14 @@ final class Stub extends Method
 
 	public function getMethodTitle(): string
 	{
-		return 'Core::Stub';
+		global $me;
+		return $me->getMethodTitle();
 	}
 
-	/**
-	 * @throws GDO_StubException
-	 */
 	public function execute(): GDT
 	{
-		throw new GDO_StubException('Core::Stub');
+		global $me;
+		throw new GDO_Exception('err_method_is_stub', [$me->gdoClassName()]);
 	}
 
 }

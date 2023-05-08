@@ -273,14 +273,13 @@ function hdrc(string $header, bool $replace = true): void
 function hdr(string $header, bool $replace = true): void
 {
 	$app = Application::$INSTANCE;
-	if ($app->isUnitTests())
+	if ($app->isUnitTestVerbose())
 	{
-		echo "$header\n";
+		echo "HEADER: $header\n";
 		if (ob_get_level())
 		{
 			ob_flush();
 		}
-		flush();
 	}
 	elseif ($app->isWebserver())
 	{
@@ -296,13 +295,13 @@ function uridecode(string $url = null): string
 /**
  * Check if a module is enabled.
  */
-function module_enabled(string $moduleName): string
+function module_enabled(string $moduleName): bool
 {
 	if ($module = ModuleLoader::instance()->getModule($moduleName, false))
 	{
 		return $module->isEnabled();
 	}
-	return GDT::ZERO;
+	return false;
 }
 
 # ######################

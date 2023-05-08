@@ -24,7 +24,7 @@ final class GDT_Hook extends GDT
 {
 
 	# Hook cache key
-	public const CACHE_KEY = 'HOOKS.GDOv7';
+	final public const CACHE_KEY = 'HOOKS.GDOv7';
 
 	/**
 	 * @var int Num total calls.
@@ -86,7 +86,7 @@ final class GDT_Hook extends GDT
 	 */
 	public static function init(): void
 	{
-		if (!isset(self::$CACHE))
+		if (!self::$CACHE)
 		{
 			if ($hooks = Cache::fileGetSerialized(self::CACHE_KEY))
 			{
@@ -132,8 +132,7 @@ final class GDT_Hook extends GDT
 		$modules = ModuleLoader::instance()->getEnabledModules();
 		foreach ($modules as $module)
 		{
-			$classname = $module->gdoRealClassName();
-			$methods = get_class_methods($classname);
+			$methods = get_class_methods($module);
 			foreach ($methods as $methodName)
 			{
 				if (str_starts_with($methodName, 'hook'))
@@ -166,14 +165,11 @@ final class GDT_Hook extends GDT
 			{
 				if ($module = $loader->getModule($moduleName))
 				{
-//					if ($module->isEnabled())
-//					{
-						if ($result = call_user_func_array([$module, $method_name], $args))
-						{
-							$response = $response ?? GDT_Response::make();
-							$response->addField($result);
-						}
-//					}
+					if ($result = call_user_func_array([$module, $method_name], $args))
+					{
+						$response = $response ?? GDT_Response::make();
+						$response->addField($result);
+					}
 				}
 			}
 		}
@@ -259,16 +255,23 @@ final class GDT_Hook extends GDT
 
 	private static function callIPCQueue($ipc, $event, array $args): void
 	{
-		$args = self::encodeIPCArgs($args);
-
-		# Send to IPC
-		$error = 0;
-		$result = @msg_send($ipc, 0x612, array_merge([$event], $args), true, false, $error);
-		if ((!$result) || ($error))
+		try
 		{
-			Logger::logError("IPC msg_send($event) failed with code $error");
-			msg_remove_queue(self::$QUEUE);
-			self::$QUEUE = null;
+			$args = self::encodeIPCArgs($args);
+
+			# Send to IPC
+			$error = 0;
+			$result = msg_send($ipc, 0x612, array_merge([$event], $args), true, false, $error);
+			if ((!$result) || ($error))
+			{
+				Logger::logError("IPC msg_send($event) failed with code $error");
+				msg_remove_queue(self::$QUEUE);
+				self::$QUEUE = null;
+			}
+		}
+		catch (\Throwable $ex)
+		{
+			Debug::debugException($ex);
 		}
 	}
 

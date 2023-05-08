@@ -578,11 +578,13 @@ final class Query
 	/**
 	 * Execute a query.
 	 * Returns boolean on writes and a Result on reads.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function exec(): bool|Result
 	{
-		try
-		{
+//		try
+//		{
 			$db = Database::instance();
 
 			$query = $this->buildQuery();
@@ -604,12 +606,12 @@ final class Query
 				return new Result($this->fetchTable,
 					$db->queryRead($query, $this->buffered), $this->cached);
 			}
-		}
-		catch (GDO_DBException $ex)
-		{
-			Debug::debugException($ex);
-			return false;
-		}
+//		}
+//		catch (GDO_DBException $ex)
+//		{
+//			echo Debug::debugException($ex);
+//			return false;
+//		}
 	}
 
 }

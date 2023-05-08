@@ -264,9 +264,9 @@ class GDO_Module extends GDO
 		return static::class;
 	}
 
-	public function isEnabled(): string
+	public function isEnabled(): bool
 	{
-		return $this->gdoVar('module_enabled');
+		return $this->gdoValue('module_enabled');
 	}
 
 	# #############
@@ -508,7 +508,7 @@ class GDO_Module extends GDO
 					if (isset($this->configVarCache[$name]))
 					{
 						$var = $this->configVarCache[$name];
-						$gdt->initial($var);
+						$gdt->var($var);
 					}
 				}
 			}
@@ -548,17 +548,17 @@ class GDO_Module extends GDO
 		Cache::remove('gdo_modules');
 	}
 
-	public function getConfigColumn(string $key): ?GDT
+	public function getConfigColumn(string $key): GDT
 	{
 		if (!isset($this->configCache))
 		{
 			$this->buildConfigCache();
 		}
-		if (isset($this->configCache[$key]))
-		{
+//		if (isset($this->configCache[$key]))
+//		{
 			return $this->configCache[$key];
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	/**
@@ -595,9 +595,6 @@ class GDO_Module extends GDO
 		];
 	}
 
-	/**
-	 * @throws GDO_ErrorFatal
-	 */
 	public function removeConfigVar(string $key): void
 	{
 		$gdt = $this->getConfigColumn($key);
@@ -683,7 +680,7 @@ class GDO_Module extends GDO
 	# ###################
 
 	/**
-	 * @throws GDO_Error
+	 * @return GDT[]
 	 */
 	public function &buildSettingsCache(): array
 	{
@@ -741,9 +738,6 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
-	/**
-	 * @throws GDO_Error
-	 */
 	private function _buildSettingsCacheB(array $gdts, bool $writeable): void
 	{
 		$first = true;
@@ -781,7 +775,7 @@ class GDO_Module extends GDO
 	{
 		$name = $gdt->getName();
 		$acl = GDT_ACL::make("{$name}");
-		$acl->label($name);
+		$acl->setupLabels($gdt);
 		$this->settingsACL[$name] = $acl;
 
 		$relation = $acl->aclRelation;
@@ -1188,7 +1182,9 @@ class GDO_Module extends GDO
 			$methods = array_filter($methods,
 				function (Method $method)
 				{
-					return $method->hasPermission(GDO_User::current());
+					$error = '';
+					$args = [];
+					return $method->hasPermission(GDO_User::current(), $error, $args);
 				});
 		}
 		return $methods;
@@ -1197,6 +1193,8 @@ class GDO_Module extends GDO
 	/**
 	 * Get a method by name.
 	 * Case insensitive.
+	 *
+	 * @throws GDO_Exception
 	 */
 	public function getMethodByName(string $methodName, bool $throw = true): ?Method
 	{
@@ -1215,7 +1213,7 @@ class GDO_Module extends GDO
 		}
 		if ($throw)
 		{
-			throw new GDO_Error('err_unknown_method', [
+			throw new GDO_Exception('err_unknown_method', [
 				$this->renderName(),
 				html($methodName),
 			]);

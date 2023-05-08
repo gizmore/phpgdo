@@ -39,7 +39,7 @@ class GDT_Checkbox extends GDT_Select
 	### Undetermined ###
 	####################
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$choices = [
 			self::FALSE => t('enum_no'),

@@ -21,7 +21,7 @@ final class GDT_MessageEditor extends GDT_Select
 
 	public function defaultLabel(): self { return $this->label('editor'); }
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$decoders = [];
 		foreach (array_keys(GDT_Message::$DECODERS) as $name)

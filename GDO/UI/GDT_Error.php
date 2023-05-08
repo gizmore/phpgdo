@@ -18,7 +18,7 @@ use Throwable;
 final class GDT_Error extends GDT_Panel
 {
 
-	public int $code = GDO_Exception::DEFAULT_ERROR_CODE;
+	public int $code = GDO_Exception::GDT_ERROR_CODE;
 
 	############
 	### Code ###
@@ -33,11 +33,6 @@ final class GDT_Error extends GDT_Panel
 		$this->addClass('alert-danger');
 	}
 
-	public static function fromException(Throwable $t): self
-	{
-		return self::make()->exception($t)->code(500);
-	}
-
 	###########
 	### GDT ###
 	###########
@@ -48,18 +43,18 @@ final class GDT_Error extends GDT_Panel
 		return $this;
 	}
 
-	public function exception(Throwable $t): self
+	public function fromException(Throwable $t): self
 	{
 		$is_html = Application::$INSTANCE->isHTML();
 		$this->title('exception');
 		$this->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
-		Application::setResponseCode($this->code);
+		Application::setResponseCode($t->getCode());
 		return $this;
 	}
 
 	public function renderHTML(): string
 	{
-		hdrc('HTTP/1.1 ' . $this->code . ' GDO Error');
+		hdrc('HTTP/1.1 ' . $this->code . ' GDT_Error');
 		hdr('X-GDO-ERROR: ' . str_replace(["\r", "\n"], ' - ', $this->renderText()));
 		return parent::renderHTML();
 	}

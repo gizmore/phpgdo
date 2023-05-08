@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Form;
 
-use GDO\Core\GDO_ArgException;
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
 use GDO\Core\Method;
@@ -113,7 +113,7 @@ abstract class MethodForm extends Method
 		return 'form';
 	}
 
-	abstract public function createForm(GDT_Form $form): void;
+	abstract protected function createForm(GDT_Form $form): void;
 
 	protected function applyInput(): void
 	{
@@ -121,9 +121,6 @@ abstract class MethodForm extends Method
 		$this->getForm();
 	}
 
-	/**
-	 * @throws GDO_ArgException
-	 */
 	public function execute(): GDT
 	{
 		### validation result
@@ -281,12 +278,6 @@ abstract class MethodForm extends Method
 		return $form;
 	}
 
-//	protected function renderMoMe(): string
-//	{
-//		$mo = $this->getModuleName();
-//		$me = $this->getMethodName();
-//		return "{$mo}::{$me}";
-//	}
 
 	protected function afterValidation(): void {}
 

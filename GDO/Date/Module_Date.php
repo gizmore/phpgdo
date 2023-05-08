@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date;
 
 use GDO\Core\Application;
@@ -18,7 +19,7 @@ use GDO\User\GDT_ACLRelation;
  * - Keeps timezone after user logout.
  * - Time utility helper
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.1
  * @author gizmore
  * @see Time
@@ -45,7 +46,7 @@ final class Module_Date extends GDO_Module
 		];
 	}
 
-	public function getACLDefaults(): array
+	protected function getACLDefaults(): array
 	{
 		return [
 			'timezone' => [GDT_ACLRelation::FRIEND_FRIENDS, '0', null],
@@ -147,7 +148,7 @@ final class Module_Date extends GDO_Module
 
 	public function cfgUserActivityAccuracy(GDO_User $user = null): int
 	{
-		$user = $user ? $user : GDO_User::current();
+		$user = $user ?: GDO_User::current();
 		return $this->userSettingValue($user, 'activity_accuracy');
 	}
 
@@ -157,20 +158,10 @@ final class Module_Date extends GDO_Module
 
 	/**
 	 * Save timezone on authenticated.
-	 *
-	 * @param GDO_User $user
 	 */
-	public function hookUserAuthenticated(GDO_User $user)
+	public function hookUserAuthenticated(GDO_User $user): void
 	{
 		Module_Date::instance()->saveUserSetting($user, 'timezone', $user->getTimezone());
 	}
-
-//     public function hookUserLoggedOut(GDO_User $user)
-//     {
-//     	if ($tz = GDO_Timezone::getById($this->timezone))
-//     	{
-//     		Timezone::make()->setTimezone($tz, false);
-//     	}
-//     }
 
 }

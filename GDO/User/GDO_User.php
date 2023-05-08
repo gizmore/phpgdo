@@ -4,7 +4,7 @@ namespace GDO\User;
 
 use GDO\Core\Application;
 use GDO\Core\GDO;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_AutoInc;
 use GDO\Core\GDT_DeletedAt;
@@ -124,9 +124,12 @@ final class GDO_User extends GDO
 	public static function setCurrent(GDO_User $user): self
 	{
 		self::$CURRENT = $user;
-		Time::setTimezone($user->getTimezone());
-		Trans::setISO($user->getLangISO());
-		Application::setUser($user);
+		if (!$user->isGhost())
+		{
+			Time::setTimezone($user->getTimezone());
+			Trans::setISO($user->getLangISO());
+			Application::setUser($user);
+		}
 		return $user;
 	}
 
@@ -194,7 +197,7 @@ final class GDO_User extends GDO
 	##############
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function findSingleWithSetting(string $moduleName, string $key, string $var, string $op = '='): self
 	{
@@ -207,7 +210,7 @@ final class GDO_User extends GDO
 			case 1:
 				return $users[0];
 			default:
-				throw new GDO_Error('err_user_ambigious', [$c, $key, $op, $var]);
+				throw new GDO_Exception('err_user_ambigious', [$c, $key, $op, $var]);
 		}
 	}
 
@@ -417,6 +420,9 @@ final class GDO_User extends GDO
 
 	public function getUserName(): ?string { return $this->gdoVar('user_name'); }
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public function hasPermissionID(string $permissionId = null): bool
 	{
 		if ($permissionId)
@@ -474,9 +480,15 @@ final class GDO_User extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
-	public function isAdmin(): bool { return $this->hasPermission(GDO_Permission::ADMIN); }
+	public function isAdmin(): bool
+	{
+		return $this->hasPermission(GDO_Permission::ADMIN);
+	}
 
-	public function isStaff(): bool { return $this->hasPermission(GDO_Permission::STAFF); }
+	public function isStaff(): bool
+	{
+		return $this->hasPermission(GDO_Permission::STAFF);
+	}
 
 	public function changedPermissions(): self
 	{
@@ -490,7 +502,7 @@ final class GDO_User extends GDO
 
 	public function getLevelAvailable(): int
 	{
-		return (int)$this->getLevel() - (int)$this->getLevelSpent();
+		return $this->getLevel() - (int)$this->getLevelSpent();
 	}
 
 	################
@@ -500,9 +512,9 @@ final class GDO_User extends GDO
 	/**
 	 * Get the effective userlevel for this user.
 	 */
-	public function getLevel(): string
+	public function getLevel(): int
 	{
-		return $this->gdoVar('user_level');
+		return (int) $this->gdoVar('user_level');
 	}
 
 	public function getLevelSpent(): string

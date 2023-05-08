@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace GDO\Core\Expression;
 
 use GDO\Core\GDO_NoSuchCommandError;
-use GDO\Core\GDO_NoSuchMethodError;
+use GDO\Core\GDO_MethodError;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Util\Strings;
@@ -228,7 +228,7 @@ final class Parser
 		{
 //			if ($expression->hasPositionalInput())
 //			{
-//				throw new GDO_Error('err_positional_after_named_parameter', [html($arg)]);
+//				throw new GDO_Exception('err_positional_after_named_parameter', [html($arg)]);
 //			}
 			$arg = substr($arg, 2);
 // 			$arg = Strings::substrTo($arg, self::ARG_SEPARATOR, $arg);

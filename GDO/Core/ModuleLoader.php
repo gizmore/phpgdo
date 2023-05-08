@@ -37,7 +37,7 @@ final class ModuleLoader
 	/**
 	 * @var GDO_Module[]
 	 */
-	private array $modules = [];
+	private array $modules;
 
 	#############
 	### Cache ###
@@ -61,17 +61,6 @@ final class ModuleLoader
 		return self::$INSTANCE;
 	}
 
-// 	/**
-// 	 * Get all enabled and loaded modules.
-// 	 * @return GDO_Module[]
-// 	 */
-// 	public function getInstallableModules() : array
-// 	{
-// 		return array_filter($this->modules, function(GDO_Module $module){
-// 			return $module->isInstallable();
-// 		});
-// 	}
-
 	/**
 	 * Get all loaded modules.
 	 *
@@ -82,14 +71,19 @@ final class ModuleLoader
 		return $this->modules;
 	}
 
-	public function addEnabledModule(GDO_Module $module): void
+	public function addEnabledModule(GDO_Module $module): bool
 	{
-		if (!in_array($module, $this->getEnabledModules(), true))
+		if (isset($this->enabledModules))
 		{
-			$this->initModuleVars();
-			$module->initOnce();
-			$this->enabledModules[] = $module;
+			if (!in_array($module, $this->getEnabledModules(), true))
+			{
+//				$this->initModuleVars();
+				$module->initOnce();
+				$this->enabledModules[] = $module;
+			}
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -130,7 +124,6 @@ final class ModuleLoader
 					$data = $query->exec()->fetchAllRows();
 					Cache::fileSetSerialized('gdo_modulevars', $data);
 				}
-
 				# Assign them to the modules
 				foreach ($data as $row)
 				{
@@ -139,24 +132,9 @@ final class ModuleLoader
 				}
 			}
 		}
-//		catch (GDO_DBException)
-//		{
-//			$app = Application::$INSTANCE;
-//			if ($app->isCLI()) # && (!$app->isInstall()))
-//			{
-//				if (!$app->isUnitTests())
-//				{
-//					echo "No database available yet...\n";
-//				}
-//				else
-//				{
-//					Application::$RESPONSE_CODE = 200;
-//				}
-//			}
-//		}
-		catch (Throwable $e)
+		catch (Throwable $ex)
 		{
-			Logger::logException($e);
+			echo Debug::debugException($ex);
 		}
 	}
 
@@ -174,11 +152,6 @@ final class ModuleLoader
 		}
 		return null;
 	}
-
-//	public function flushEnabledModules(): void
-//	{
-//		unset($this->enabledModules);
-//	}
 
 	public function setModule(GDO_Module $module): void
 	{
@@ -268,7 +241,6 @@ final class ModuleLoader
 	}
 
 	/**
-	 * @throws GDO_Exception
 	 * @return GDO_Module[]
 	 */
 	public function loadModulesA(): array
@@ -281,9 +253,6 @@ final class ModuleLoader
 
 	/**
 	 * Load all modules.
-	 *
-	 * @throws GDO_Error
-	 * @throws GDO_Exception
 	 * @return GDO_Module[]
 	 */
 	public function loadModules(bool $loadDB = true, bool $loadFS = false): array
@@ -292,8 +261,7 @@ final class ModuleLoader
 		$loaded = false;
 		if ($loadDB && (!$this->loadedDB))
 		{
-			$this->loadedDB = $this->loadModulesDB() !== false;
-			$loaded = true;
+			$loaded = $this->loadedDB = $this->loadModulesDB() !== false;
 		}
 
 		if ($loadFS && (!$this->loadedFS))
@@ -322,11 +290,11 @@ final class ModuleLoader
 		return $this;
 	}
 
-	private function loadModulesDB(): false|array
+	private function loadModulesDB(): ?array
 	{
 		if (!GDO_DB_ENABLED)
 		{
-			return false;
+			return null;
 		}
 		try
 		{
@@ -357,26 +325,20 @@ final class ModuleLoader
 			}
 			return $this->modules;
 		}
-//		catch (GDO_DBException)
-//		{
-//			if (Application::$INSTANCE->isCLI())
-//			{
-//				echo "The table gdo_module does not exist yet.\n";
-//				echo "You can ignore this error if you are using the CLI installer.\n";
-//				flush();
-//			}
-//			return false;
-//		}
-		catch (Throwable $ex)
+		catch (GDO_DBException $ex)
 		{
-			Debug::debugException($ex);
-			return false;
+			if (Application::instance()->isInstall())
+			{
+				fwrite(STDERR, "A Database exception occured.\nOn installations this might be fine, as the gdo_module table does not exist yet.\n");
+			}
+			else
+			{
+				Debug::debugException($ex);
+			}
+			return null;
 		}
 	}
 
-	/**
-	 * @throws GDO_Error
-	 */
 	private function loadModulesFS(bool $init = true): void
 	{
 // 	    Trans::inited(false);
@@ -459,29 +421,30 @@ final class ModuleLoader
 		}
 	}
 
-	/**
-	 * @throws GDO_Exception
-	 */
-	public function initModules(): void
+	public function initModules(): bool
 	{
-		# Register themes and load language
-		foreach ($this->getEnabledModules() as $module)
+		try
 		{
-			if ($theme = $module->getTheme())
+			foreach ($this->getEnabledModules() as $module)
 			{
-//				if ($module->isEnabled())
-//				{
+				if ($theme = $module->getTheme())
+				{
 					GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
-//				}
+				}
 			}
+			return $this->initModulesB();
 		}
-		$this->initModulesB();
+		catch (\Throwable $ex)
+		{
+			echo Debug::debugException($ex);
+			return false;
+		}
 	}
 
 	/**
 	 * @throws GDO_Exception
 	 */
-	private function initModulesB(): void
+	private function initModulesB(): bool
 	{
 		# Init modules
 		$app = Application::$INSTANCE;
@@ -493,10 +456,20 @@ final class ModuleLoader
 				$module->initOnce();
 			}
 		}
-		if ($app->isCLI())
+		if ($app->isUnitTests())
+		{
+			$this->setupCLIAliases();
+			$this->onIncludeScripts();
+		}
+		elseif ($app->isCLI())
 		{
 			$this->setupCLIAliases();
 		}
+		else
+		{
+			$this->onIncludeScripts();
+		}
+		return true;
 	}
 
 	############

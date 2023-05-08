@@ -4,13 +4,15 @@ namespace GDO\Core;
 
 /**
  * Localized fatal runtime error.
+ *
+ * @version 7.0.3
  */
-class GDO_ErrorFatal extends GDO_Exception
+class GDO_ExceptionFatal extends GDO_Exception
 {
 
-	public function __construct(string $key, array $args = null, $code = GDO_Exception::DEFAULT_ERROR_CODE)
+	public function __construct(string $key, array $args = null, $code = GDO_Exception::GDO_ERROR_CODE, \Throwable $previous = null)
 	{
-		parent::__construct(t($key, $args), $code);
+		parent::__construct($key, $args, $code, $previous);
 	}
 
 }

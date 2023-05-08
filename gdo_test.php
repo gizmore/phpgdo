@@ -14,6 +14,7 @@ use GDO\Core\ModuleProviders;
 use GDO\Date\Time;
 use GDO\DB\Database;
 use GDO\Install\Installer;
+use GDO\Language\Trans;
 use GDO\Perf\GDT_PerfBar;
 use GDO\Session\GDO_Session;
 use GDO\Tests\Module_Tests;
@@ -66,9 +67,6 @@ Logger::disableBuffer();
 final class gdo_test extends Application
 {
 
-	public static function setUser(GDO_User $user)
-	{
-	}
 
 	public bool $all = false;
 
@@ -228,7 +226,7 @@ final class gdo_test extends Application
 	{
 		global $argv;
 		$app = "php {$argv[0]}";
-		echo "{$app}  <modules_by_comma_and_percent_wildcard>\n";
+		echo "{$app} 0 <module1,module2,... Use % as wildcard>\n";
 		echo "\n";
 		echo "Use $app '%' to run tests on all modules\n";
 		echo "\n";
@@ -461,8 +459,10 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 
 	if ($app->utility)
 	{
-		$modules[] = 'CLI';
 		$modules[] = 'Admin';
+		$modules[] = 'CLI';
+		$modules[] = 'Crypto';
+		$modules[] = 'Net';
 	}
 
 	if ($app->config)
@@ -525,8 +525,10 @@ $modules = array_filter($modules, function (GDO_Module $module) use ($skip)
 # ######################
 # ## Install and run ###
 # ######################
+Trans::inited(); // Need langfiles for installer...
 if (Installer::installModules($modules))
 {
+	$loader->initModules(); # now we can init really...
 	if ($app->double)
 	{
 		$app->verboseMessage('Installing all selected modules again, for double installer check.');
@@ -551,7 +553,7 @@ if (Installer::installModules($modules))
 	}
 }
 
-CLI::flushTopResponse();
+//CLI::flushTopResponse();
 
 # ###########
 # ## PERF ###

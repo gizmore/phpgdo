@@ -24,7 +24,7 @@ return [
 	'btn_disable' => 'Disable',
 	'msg_module_enabled' => 'The %s module has been enabled.',
 	'msg_module_disabled' => 'The %s module has been disabled.',
-################################################################		
+################################################################
 	'mt_admin_install' => 'Install %s',
 	'msg_module_installed' => 'The %s module has been successfully installed.',
 	'msg_module_uninstalled' => 'The %s has been wiped from disk. All database records should have been destroyed.',
@@ -72,4 +72,11 @@ return [
 	'list_admin_viewpermission' => '%s Users got this permission',
 	'perm_add' => 'Add Permission',
 	'msg_user_deleted' => 'The user %s has been marked as deleted.',
+
+	####
+	'err_mod_config' => 'The %s module configurations and settings are faulty. From %s checked GDT, %s were errorneous. From %s entries, %s have have been removed to fix them.',
+	'err_mod_config_error' => 'The %s module value `%s` for %s is invalid: %s - Example: `%s`.',
+	'msg_mod_config_fixed' => 'The %s module value `%s` for %s was invalid: %s. I have reset it to the default, `%s`.',
+	'msg_mod_config_ok' => 'The %s module configurations and settings are fine. For %s GDT, in total %s entries were checked.',
+
 ];

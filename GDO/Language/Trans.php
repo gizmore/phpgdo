@@ -11,8 +11,6 @@ use GDO\Util\FileUtil;
  * Trans - a very cheap, high perfomance, translation API.
  * All data is stored in a single Hashmap to reuse translation data.
  *
- * @TODO: Trans: In early loading state errors are handled badly.
- *
  * @version 7.0.3
  * @since 1.0.0
  * @author gizmore
@@ -40,7 +38,7 @@ final class Trans
 	/**
 	 * Number of missing translation keys for stats and testing.
 	 */
-	public static int $MISS = 0;
+	public static int $MISS = 0; #PP#delete#
 
 
 	/**
@@ -87,18 +85,10 @@ final class Trans
 	}
 
 	/**
-	 * Set inited and clear cache.
-	 *
-	 * @TODO separate calls. maybe cache should not be cleared quickly? no idea. Make performance tests for language loading on init.
+	 * Set inited which will laod the i18n on next call.
 	 */
 	public static function inited(bool $inited = true): void
 	{
-		if (!$inited)
-		{
-			self::$PATHS = [];
-			self::$CACHE = [];
-			self::clearCache();
-		}
 		self::$INITED = true;
 	}
 
@@ -133,12 +123,16 @@ final class Trans
 
 	private static function reload(string $iso): array
 	{
-		$cacheKey = self::getCacheKey($iso);
+		if (!self::$INITED)
+		{
+			return [];
+		}
 
 		# Try cache
-		if (Cache::fileHas($cacheKey))
+		$cacheKey = self::getCacheKey($iso);
+		if (null !== ($cache = Cache::fileGetSerialized($cacheKey)))
 		{
-			return self::$CACHE[$iso] = Cache::fileGetSerialized($cacheKey);
+			return self::$CACHE[$iso] = $cache;
 		}
 
 		self::$CACHE[$iso] = [];
@@ -148,7 +142,8 @@ final class Trans
 			$pathISO = "{$path}_{$iso}.php";
 			if (!FileUtil::isFile($pathISO))
 			{
-				$pathISO = "{$path}_en.php";
+				$en = GDO_LANGUAGE;
+				$pathISO = "{$path}_{$en}.php";
 			}
 			self::$CACHE[$iso] = array_merge(self::$CACHE[$iso], include($pathISO));
 		}

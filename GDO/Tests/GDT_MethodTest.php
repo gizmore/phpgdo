@@ -40,10 +40,10 @@ final class GDT_MethodTest extends GDT_Method
 	public function execute(string $button = null): GDT
 	{
 		$this->inputs = $this->inputs ?? [];
-		if (!$button)
-		{
-			$button = $this->method->getAutoButton();
-		}
+//		if (!$button)
+//		{
+//			$button = $this->method->getAutoButton();
+//		}
 		if ($button)
 		{
 			$this->inputs[$button] = '1';

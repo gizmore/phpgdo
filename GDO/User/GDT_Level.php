@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\WithGDO;
@@ -12,7 +13,7 @@ use GDO\UI\GDT_Badge;
  * With trophy icon.
  * Renders effective level in table cells.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.2
  * @author gizmore
  */
@@ -47,7 +48,7 @@ final class GDT_Level extends GDT_Badge
 			{
 				if ($this->gdo instanceof GDO_User)
 				{
-					return $this->gdo->getLevel();
+					return (string) $this->gdo->getLevel();
 				}
 			}
 		}

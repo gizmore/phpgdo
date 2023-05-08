@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace GDO\User;
 
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\WithGDO;
 use GDO\DB\Query;
@@ -54,7 +54,7 @@ final class GDT_ACL extends GDT
 
 	private function initACLFields(): static
 	{
-		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation")->label('relation_for', [t($this->name)])->noacl();
+		$this->aclRelation = GDT_ACLRelation::make("{$this->name}_relation")->noacl();
 		$this->aclLevel = GDT_Level::make("{$this->name}_level")->noacl();
 		$this->aclPermission = GDT_Permission::make("{$this->name}_permission")->onlyPermitted()->noacl();
 		return $this;
@@ -132,17 +132,17 @@ final class GDT_ACL extends GDT
 
 	public function renderHTML(): string
 	{
-		$this->setupOwnLabels();
+//		$this->setupOwnLabels();
 		return GDT_Container::makeWith($this->aclRelation, $this->aclLevel, $this->aclPermission)->horizontal()->renderHTML();
 	}
 
-	private function setupOwnLabels(): void
-	{
-		$label = $this->renderLabel();
-		$this->aclRelation->label('lbl_own_acl_relation', [$label]);
-		$this->aclLevel->label('lbl_own_acl_level', [$label]);
-		$this->aclPermission->label('lbl_own_acl_permission', [$label]);
-	}
+//	private function setupOwnLabels(): void
+//	{
+//		$label = $this->renderLabel();
+//		$this->aclRelation->label('lbl_own_acl_relation', [$label]);
+//		$this->aclLevel->label('lbl_own_acl_level', [$label]);
+//		$this->aclPermission->label('lbl_own_acl_permission', [$label]);
+//	}
 
 	##########
 	### DB ###

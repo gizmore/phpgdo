@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Install;
 
 use GDO\Core\GDT_Select;
@@ -7,7 +8,7 @@ use GDO\Util\Filewalker;
 /**
  * A select for a file in /phpgdo/DOCS/.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 7.0.2
  * @author gizmore
  */
@@ -16,7 +17,7 @@ final class GDT_DocsFile extends GDT_Select
 
 	private static array $DOCS = [];
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		if (!self::$DOCS)
 		{

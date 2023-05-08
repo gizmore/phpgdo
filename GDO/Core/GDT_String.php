@@ -131,7 +131,7 @@ class GDT_String extends GDT_DBField
 
 	/**
 	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
+	 * @throws GDO_ExceptionFatal
 	 */
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
@@ -151,7 +151,7 @@ class GDT_String extends GDT_DBField
 
 	/**
 	 * @throws GDO_DBException
-	 * @throws GDO_ErrorFatal
+	 * @throws GDO_ExceptionFatal
 	 */
 	protected function validateUnique($value): bool
 	{
@@ -235,7 +235,7 @@ class GDT_String extends GDT_DBField
 			default:
 				return 0;
 //			default:
-//				throw new GDO_ErrorFatal('err_invalid_gdo_encoding', [$this->encoding]);
+//				throw new GDO_ExceptionFatal('err_invalid_gdo_encoding', [$this->encoding]);
 		}
 	}
 

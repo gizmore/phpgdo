@@ -186,7 +186,7 @@ class GDT_Template extends GDT
 			}
 		}
 
-		throw new GDO_Error('err_missing_template', [
+		throw new GDO_Exception('err_missing_template', [
 			html("$moduleName/tpl/$path"),
 		]);
 	}

@@ -85,7 +85,7 @@ class GDT_Composite extends GDT_Container
 	}
 
 	/**
-	 * @throws GDO_ArgException
+	 * @throws GDO_ArgError
 	 */
 	public function validated(bool $throw = false): ?static
 	{
@@ -98,7 +98,7 @@ class GDT_Composite extends GDT_Container
 				$valid = false;
 				if ($throw)
 				{
-					throw new GDO_ArgException($gdt);
+					throw new GDO_ArgError($gdt);
 				}
 			}
 		}

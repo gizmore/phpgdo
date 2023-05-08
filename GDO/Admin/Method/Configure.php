@@ -4,9 +4,11 @@ namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
 use GDO\Core\Application;
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDO_ModuleVar;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Field;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDT_Module;
 use GDO\Core\GDT_Name;
@@ -94,6 +96,9 @@ class Configure extends MethodForm
 		return $response;
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function configModule(): GDO_Module
 	{
 		return $this->gdoParameterValue('module');
@@ -146,7 +151,7 @@ class Configure extends MethodForm
 			]);
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$mod = $this->configModule();
 		$form->addField(GDT_Name::make('module_name')->initial($mod->getModuleName())->writeable(false));
@@ -162,14 +167,18 @@ class Configure extends MethodForm
 					'form_div_config_vars'));
 			foreach ($config as $gdt)
 			{
-				if (!$gdt->hasLabel())
+				if ($gdt instanceof GDT_Field)
 				{
-					$gdt->label('cfg_' . $gdt->name);
-				}
-				$key = 'tt_cfg_' . $gdt->name;
-				if (Trans::hasKey($key))
-				{
-					$gdt->tooltip($key);
+					$key = 'cfg_' . $gdt->name;
+					if (Trans::hasKey($key))
+					{
+						$gdt->label($key);
+					}
+					$key = 'tt_cfg_' . $gdt->name;
+					if (Trans::hasKey($key))
+					{
+						$gdt->tooltip($key);
+					}
 				}
 				$form->addField($gdt)->var($mod->getConfigVar($gdt->name));
 			}
@@ -206,27 +215,31 @@ class Configure extends MethodForm
 
 		# Update config
 		$info = [];
-		$moduleVarsChanged = false;
+		$varsChanged = false;
 		foreach ($form->getAllFields() as $gdt)
 		{
-			if ((!$gdt->isHidden()) && $gdt->isWriteable() && $gdt->hasChanged())
+			if (($gdt instanceof GDT_Field) &&
+				(!$gdt->isHidden()) &&
+				($gdt->isWriteable()) &&
+				($gdt->hasChangedFromDefault()))
 			{
 				if (count($info))
 				{
 					$info[] = Application::$INSTANCE->isCLIOrUnitTest() ? ' - ' : '<br/>';
 				}
+				$old = $gdt->var;
 				GDO_ModuleVar::createModuleVar($mod, $gdt);
 				$info[] = t('msg_modulevar_changed',
 					[
 						$gdt->renderLabel(),
-						TextStyle::italic($gdt->displayVar($gdt->initial)),
+						TextStyle::italic($gdt->displayVar($gdt->getInitial())),
 						TextStyle::italic($gdt->displayVar($gdt->getVar())),
 					]);
-				$moduleVarsChanged = true;
+				$varsChanged = true;
 			}
 		}
 
-		if ($moduleVarsChanged)
+		if ($varsChanged)
 		{
 			Cache::flush();
 			GDT_Hook::callWithIPC('ModuleVarsChanged', $mod);

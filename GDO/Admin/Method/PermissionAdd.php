@@ -30,7 +30,7 @@ class PermissionAdd extends MethodForm
 		return parent::execute();
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$gdo = GDO_Permission::table();
 		$form->addFields(

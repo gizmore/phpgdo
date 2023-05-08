@@ -53,22 +53,14 @@ trait WithInput
 
 	public function hasInput(): bool
 	{
-		if ($name = $this->getName())
-		{
-			return isset($this->inputs[$name]) ? $this->inputs[$name] !== null : false;
-		}
-		return false;
+		return $this->hasInputFor($this->getName());
 	}
 
 	public function getInput(): ?string
 	{
-		$key = $this->getName();
-		return $this->inputs[$key] ?? null;
+		return $this->inputs[$this->getName()] ?? null;
 	}
 
-	/**
-	 * @deprecated because not wanted / used much?
-	 */
 	public function addInput(?string $key, $var): static
 	{
 		$this->inputs = $this->inputs ?? [];
@@ -83,12 +75,9 @@ trait WithInput
 		return $this;
 	}
 
-	/**
-	 * @deprecated not type safe
-	 */
 	public function getInputFor(string $key)
 	{
-		return isset($this->inputs[$key]) ? $this->inputs[$key] : null;
+		return $this->inputs[$key] ?? null;
 	}
 
 	public function hasInputFor(string $key): bool

@@ -32,9 +32,6 @@ final class GDO_ModuleVar extends GDO
 		return $gdt;
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public static function removeModuleVar(GDO_Module $module, GDT $gdt): GDT
 	{
 		$names = array_keys($gdt->getGDOData());
@@ -81,9 +78,5 @@ final class GDO_ModuleVar extends GDO
 	{
 		$gdo->reset();
 	}
-
-	public function getVarName(): string { return $this->gdoVar('mv_name'); }
-
-	public function getVarValue(): ?string { return $this->gdoVar('mv_value'); }
 
 }

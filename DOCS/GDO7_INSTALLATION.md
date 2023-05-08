@@ -10,21 +10,23 @@ Many methods can be operated via CLI or chat systems.
 
 Be brave, check the requirementes, and run:
 
-    php -r 'echo eval(fopen(base64_decode("aHR0cHM6Ly9waHBnZG8uY29tL2NvcmUvZ2RvL2ZvcmsvMTMzNw=="),"r"));'
+    # @TODO php -r 'echo eval(fopen(base64_decode("aHR0cHM6Ly9waHBnZG8uY29tL2NvcmUvZ2RvL2ZvcmsvMTMzNw=="),"r"));'
 
 Then follow the white rabbits.
 
 ## GDOv7 Installation: Requirements
 
-core requirements:
+
+Core requirements:
 
 - git (**required** try git4windows)
-  . mysql (**required** or mariadb)
-- PHP<=8 (**required** in PATH)
+- mysql (**required** or sqlíte *broken*)
+- PHP>=8.0 (**required** in PATH)
 - php-mbstring (**required**)
--
+- php-iconv (**required** for some renderers)
 - php-bcmath (need to check.. one spot, ...shim1, PP?)
 - php-fileinfo (need to check)
+
 
 Optional features:
 
@@ -34,8 +36,8 @@ Optional features:
 - nginx (*recommended* for websocket)
 - php-memcached (hmm)
 
-Optional feature dependencies:
 
+Optional feature dependencies:
 -
 
 php-curl ([the core](https://github.com/gizmore/phpgdo) [module](https://github.com/gizmore/phpgdo/tree/main/GDO/Core(GDO_Module.php) [Net](https://github.com/gizmore/phpgdo/tree/main/GDO/Net)
@@ -58,12 +60,12 @@ Please note that you manually have to edit the protected/config.php file in any 
     ./gdo_adm.sh systemtest
     ./gdo_adm.sh configure
     # NOW edit protected/config.php manually (@TODO: write a repl configurator)
+    ./gdo_adm.sh test
     ./gdo_adm.sh provide_all
-    # MAKE your env PATH point to phpgdo/bin (OPTIONAL)
+    # MAKE your env PATH point to phpgdo/bin (*OPTIONAL*)
     gdo core.version # test version method
     gdo mail.send gizmore,hi,there # test mail
 
-## GDOv7 Installation: Configuration
 
 ## GDOv7 Installation: Modules
 
@@ -90,4 +92,4 @@ An overview of official modules is given by.
 
     ./gdo_adm.sh modules
 
-Run ./gdo_adm.sh for a command overview.
+Run `./gdo_adm.sh` for a command overview.

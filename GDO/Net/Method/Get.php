@@ -22,7 +22,7 @@ final class Get extends MethodForm
 		return 'wget';
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_Url::make('url')->notNull()->allowExternal(),

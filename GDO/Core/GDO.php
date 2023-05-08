@@ -420,7 +420,7 @@ abstract class GDO extends GDT
 	 * Get a row by a single column value.
 	 * Throw exception if not found.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function findBy(string $key, string $var): static
 	{
@@ -524,11 +524,11 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function notFoundException(string $id): void
 	{
-		throw new GDO_Error('err_gdo_not_found', [
+		throw new GDO_Exception('err_gdo_not_found', [
 			TextStyle::bold(self::gdoHumanNameS()),
 			TextStyle::boldi(html($id)),
 		]);
@@ -549,7 +549,7 @@ abstract class GDO extends GDT
 
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function findByGID(string $id): static
 	{
@@ -558,7 +558,7 @@ abstract class GDO extends GDT
 
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function findById(string...$id): static
 	{
@@ -661,14 +661,14 @@ abstract class GDO extends GDT
 	/**
 	 * Get the table GDO for a classname.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function tableFor(string $className, bool $throw = true): ?self
 	{
 		$gdo = Database::tableS($className);
 		if ($throw && (!$gdo))
 		{
-			throw new GDO_Error('err_table_gdo', [html($className)]);
+			throw new GDO_Exception('err_table_gdo', [html($className)]);
 		}
 		return $gdo;
 	}
@@ -873,11 +873,11 @@ abstract class GDO extends GDT
 	/**
 	 * Break these GDT functions as they confuse you now.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function getValue(string $var = null): bool|int|float|string|array|null|object
 	{
-		throw new GDO_Error('err_gdo_no_gdt', ['getValue', $this->gdoHumanName()]);
+		throw new GDO_Exception('err_gdo_no_gdt', ['getValue', $this->gdoHumanName()]);
 	}
 
 	public function inputs(?array $inputs): static
@@ -992,7 +992,7 @@ abstract class GDO extends GDT
 	/**
 	 * Copy a GDT column and assign my values.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function gdoColumnCopy(string $key, bool $throw = true): ?GDT
 	{
@@ -1003,7 +1003,7 @@ abstract class GDO extends GDT
 		}
 		elseif ($throw)
 		{
-			throw new GDO_Error('err_unknown_gdo_column', [$this->renderName(), html($key)]);
+			throw new GDO_Exception('err_unknown_gdo_column', [$this->renderName(), html($key)]);
 		}
 		return null;
 	}
@@ -1049,7 +1049,7 @@ abstract class GDO extends GDT
 	/**
 	 * Find a row by AutoInc Id.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 * @throws GDO_Exception
 	 */
 	public function find(string $id): static
@@ -1070,7 +1070,7 @@ abstract class GDO extends GDT
 	/**
 	 * Find a row by condition. Throws GDO::notFoundException.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function findWhere(string $condition): ?self
 	{
@@ -1114,11 +1114,11 @@ abstract class GDO extends GDT
 	/**
 	 * Break these GDT functions as they confuse you now.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function getVar(): string|array|null
 	{
-		throw new GDO_Error('err_gdo_no_gdt', ['getVar', $this->gdoHumanName()]);
+		throw new GDO_Exception('err_gdo_no_gdt', ['getVar', $this->gdoHumanName()]);
 	}
 
 	public function isPersisted(): bool { return $this->persisted; }

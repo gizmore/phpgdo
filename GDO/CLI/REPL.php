@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace GDO\CLI;
 
-use GDO\Core\GDO_ArgException;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_ArgError;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\Website;
 use GDO\UI\TextStyle;
@@ -53,7 +53,7 @@ final class REPL
 		}
 //		if ($default === null)
 //		{
-//			throw new GDO_Error('err_repl_input');
+//			throw new GDO_Exception('err_repl_input');
 //		}
 		return !!$default;
 
@@ -72,7 +72,7 @@ final class REPL
 		}
 	}
 
-	public static function acknowledge(string $prompt, ?bool $default): bool
+	public static function acknowledge(string $prompt, ?bool $default=null): bool
 	{
 		return self::confirm($prompt, $default, false);
 	}

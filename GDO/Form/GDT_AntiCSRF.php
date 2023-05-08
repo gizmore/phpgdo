@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Form;
 
 use GDO\Core\Application;
@@ -16,7 +17,7 @@ use GDO\Util\Random;
  *
  * - Configure $expire
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 1.0.0
  * @author gizmore
  * @see Cache
@@ -25,8 +26,8 @@ use GDO\Util\Random;
 class GDT_AntiCSRF extends GDT_String
 {
 
-	public const KEYLEN = 8;
-	public const MAX_KEYS = 12;
+	final public const KEYLEN = 8;
+	final public const MAX_KEYS = 24;
 	public string $token;
 	public int $csrfExpire = 60 * 60;
 	public bool $fixed = false;
@@ -39,7 +40,7 @@ class GDT_AntiCSRF extends GDT_String
 		{
 			$this->fixed();
 		}
-		$this->csrfExpire($mod->cfgXSRFDuration());
+		$this->csrfExpire((int)$mod->cfgXSRFDuration());
 		$this->token = $this->csrfToken();
 	}
 
@@ -88,7 +89,7 @@ class GDT_AntiCSRF extends GDT_String
 	 */
 	public static function fixedToken(GDO_User $user = null): string
 	{
-		$user = $user ? $user : GDO_User::current();
+		$user = $user ?: GDO_User::current();
 		$time = 1337;
 		$hash = sprintf('%s_%s_%s_%s_%s',
 			GDO_SALT, $user->renderUserName(),
@@ -106,7 +107,7 @@ class GDT_AntiCSRF extends GDT_String
 		{
 			$csrf = json_decode($csrf, true);
 		}
-		return $csrf ? $csrf : [];
+		return $csrf ?: [];
 	}
 
 	private function saveCSRFTokens(array $csrf)

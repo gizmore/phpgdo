@@ -29,7 +29,7 @@ final class Help extends MethodCLI
 		return 'help';
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_MethodSelect::make('method')->onlyPermitted(false)->positional(),

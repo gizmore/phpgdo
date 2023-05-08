@@ -102,7 +102,7 @@ final class Module_Language extends GDO_Module
 	public function onIncludeScripts(): void
 	{
 		# If enabled include js trans data and translation engine.
-		if ($this->cfgJavascript() || Application::$INSTANCE->hasTheme('bs5'))
+		if ($this->cfgJavascript())
 		{
 			# Add js trans
 			$href = sprintf(
@@ -116,7 +116,7 @@ final class Module_Language extends GDO_Module
 		}
 	}
 
-	public function cfgJavascript(): string { return $this->getConfigVar('use_in_javascript'); }
+	public function cfgJavascript(): bool { return $this->getConfigValue('use_in_javascript'); }
 
 	############
 	### Init ###
@@ -153,10 +153,14 @@ final class Module_Language extends GDO_Module
 	 */
 	public function detectISO(): string
 	{
-		if ($iso = (string)@$_REQUEST['_lang'])
+		if (isset($_REQUEST['_lang']))
 		{
+			$iso = (string)@$_REQUEST['_lang'];
 			unset($_REQUEST['_lang']);
-			return $iso;
+			if ($this->isISOSupported($iso))
+			{
+				return $iso;
+			}
 		}
 		if (Application::instance()->hasSession())
 		{
@@ -196,6 +200,12 @@ final class Module_Language extends GDO_Module
 			}
 		}
 		return GDO_LANGUAGE;
+	}
+
+	private function isISOSupported(string $iso): bool
+	{
+		$langs = $this->cfgSupported();
+		return isset($langs[$iso]);
 	}
 
 }

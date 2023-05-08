@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT_Template;
@@ -9,8 +10,7 @@ use GDO\Core\GDT_UInt;
  * A small icon with a badge counter number.
  * Not DB driven.
  *
- * @version 6.10.0
- * @since 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 class GDT_Badge extends GDT_UInt
@@ -25,15 +25,11 @@ class GDT_Badge extends GDT_UInt
 	##############
 	### Render ###
 	##############
+
 	public function renderHTML(): string
 	{
 		return GDT_Template::php('UI', 'badge_html.php', ['field' => $this]);
 	}
-
-// 	public function renderCell(): string
-// 	{
-// 		GDT_Template::php('UI', 'badge_html.php', ['field' => $this]);
-// 	}
 
 	public function renderCard(): string
 	{

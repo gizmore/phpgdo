@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Date\Test;
 
 use DateTime;
 use DateTimeZone;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Date\GDO_Timezone;
 use GDO\Date\GDT_Timezone;
@@ -14,9 +16,9 @@ use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
 /**
- * Test date and time.
+ * Test date, time and related i18n.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.4
  * @see Einstein.A
  * @author gizmore
@@ -31,6 +33,9 @@ final class DateTest extends TestCase
 		assertTrue(!!$dt, 'Test if PHP datetime parsing is ok');
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public function testParseDBDate()
 	{
 		$this->lang('de');
@@ -42,6 +47,9 @@ final class DateTest extends TestCase
 		assertEquals('1626961702.123', sprintf('%.03f', $time), 'Test if DB dates can be parsed');
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	public function testGermanInput()
 	{
 		$this->lang('de');
@@ -86,6 +94,9 @@ final class DateTest extends TestCase
 		assertEquals('1618094423.123', sprintf('%.03f', $time), 'Test if US ms date can be parsed');
 	}
 
+	/**
+	 * A test that breaks in summer- / or wintertime :)
+	 */
 	public function testDisplayDate()
 	{
 		$this->lang('de');

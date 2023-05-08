@@ -315,7 +315,7 @@ final class Logger
 	{
 		$message = sprintf("%s in %s Line %s\n", $e->getMessage(), Debug::shortpath($e->getFile()), $e->getLine());
 		self::log('critical', $message, self::GDO_CRITICAL);
-		$log = Debug::backtraceException($e, false) . PHP_EOL . self::stripPassword($_REQUEST) . PHP_EOL . $message;
+		$log = Debug::backtraceException($e, false) . PHP_EOL . self::stripPassword($_REQUEST);
 		self::log('critical', $log, self::GDO_CRITICAL);
 	}
 

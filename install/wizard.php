@@ -48,7 +48,6 @@ $loader = ModuleLoader::instance();
 $loader->loadModuleFS('Core');
 $install = $loader->loadModuleFS('Install', true, true);
 Trans::$ISO = GDO_LANGUAGE;
-$loader->loadLangFiles(true);
 Trans::inited(true);
 define('GDO_CORE_STABLE', 1);
 global $me;

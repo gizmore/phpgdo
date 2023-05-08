@@ -29,7 +29,7 @@ use GDO\Util\Strings;
  * Holds fields for a configuration form.
  * Is rendering the final protected/config.php via tpl/config.php.
  *
- * @TODO: reduce defined config.php variables by moving them to module configs, example mail and mailer.
+ * @TODO: reduce defined config.php variables by moving them to module configs, example mail and mailer?
  *
  * @version 7.0.3
  * @since 6.0.0
@@ -56,6 +56,9 @@ class Config
 		return $_SERVER['SCRIPT_NAME'] . '?step=' . $step;
 	}
 
+	/**
+	 * @return string[] - Ordererd method names to step N to.
+	 */
 	public static function steps(): array
 	{
 		return [
@@ -85,7 +88,9 @@ class Config
 	}
 
 	/**
-	 * Auto-configure GDOv7.
+	 * Auto-configure GDOv7 constants.
+	 *
+	 * @see self::fields()
 	 */
 	public static function configure(): void
 	{
@@ -210,7 +215,7 @@ class Config
 			GDT_String::make('themes')->notNull()->initial(GDO_THEMES)->tooltipRaw('Comma separated themechain list. Tried from left to right. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
 			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
-			GDT_Select::make('ipc')->emptyInitial('select_ipc_mode', '')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initialValue(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
+			GDT_Select::make('ipc')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initial(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
 			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG)->tooltipRaw('IPC event logging.'),
 			GDT_Int::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2)->tooltipRaw('GDT debugging level. 0: off, 1: counters, 2: instancelog.'),
 			GDT_Checkbox::make('json_debug')->initialValue(!!GDO_JSON_DEBUG)->tooltipRaw('global JSON_PRETTY toggle.'),

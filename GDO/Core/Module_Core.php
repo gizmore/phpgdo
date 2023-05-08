@@ -32,7 +32,7 @@ final class Module_Core extends GDO_Module
 {
 
 	final public const GDO_VERSION = '7.0.3';
-	final public const GDO_REVISION = '7.0.3-r1785';
+	final public const GDO_REVISION = '7.0.3-r1788';
 
 	final public const GDO_CODENAME = 'Idiomatic Indian';
 
@@ -191,7 +191,7 @@ final class Module_Core extends GDO_Module
 
 	public function cfgAssetVersion(): Version { return $this->getConfigValue('asset_revision'); }
 
-	public function cfgAllowGuests(): string { return $this->getConfigVar('allow_guests'); }
+	public function cfgAllowGuests(): bool { return $this->getConfigValue('allow_guests'); }
 
 	public function cfgAllowJavascript(): string { return $this->getConfigVar('allow_javascript'); }
 

@@ -1,11 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Field;
 use GDO\Core\GDT_Module;
 use GDO\Core\GDT_Tuple;
+use GDO\Core\Website;
 use GDO\DB\Cache;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
@@ -20,7 +24,7 @@ use GDO\Util\Strings;
  *
  * @TODO Automatic DB migration for GDO. triggered by re-install module.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 3.0.0
  * @author gizmore
  */
@@ -44,9 +48,12 @@ class Install extends MethodForm
 		];
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function execute(): GDT
 	{
-		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable'];
+		$buttons = ['install', 'reinstall', 'uninstall', 'enable', 'disable', 'config_check', 'config_fix'];
 		foreach ($buttons as $btn)
 		{
 			if ($button = $this->gdoParameter($btn, false, false))
@@ -66,7 +73,6 @@ class Install extends MethodForm
 	{
 		$response = call_user_func([$this, "execute_$button"]);
 		Cache::flush();
-//		Cache::fileFlush();
 		$this->resetForm();
 		return $response;
 	}
@@ -80,7 +86,6 @@ class Install extends MethodForm
 	public function execute_install()
 	{
 		$mod = $this->configModule();
-// 		$oid = spl_object_id($mod);
 		Installer::installModuleWithDependencies($mod);
 		$mod->saveVar('module_enabled', '1');
 		return $this->message('msg_module_installed', [$mod->getName()]);
@@ -103,7 +108,9 @@ class Install extends MethodForm
 		$mod = $this->configModule();
 		Installer::dropModule($mod);
 		return $this->message('msg_module_uninstalled', [$mod->getName()]);
-	}	public function getMethodTitle(): string
+	}
+
+	public function getMethodTitle(): string
 	{
 		if ($module = $this->configModule())
 		{
@@ -129,10 +136,105 @@ class Install extends MethodForm
 		return $this->message('msg_module_disabled', [$mod->getName()]);
 	}
 
+	public function execute_check_config(): GDT
+	{
+		return $this->checkConfiguration($this->configModule());
+	}
+
+	public function execute_fix_config(): GDT
+	{
+		return $this->checkConfiguration($this->configModule(), true);
+	}
+
+	/**
+	 * Check all modules user settings and configrations.
+	 * Optionally fix them by removing the vars.
+	 */
+	public function checkConfiguration(GDO_Module $module, bool $fix = false): GDT
+	{
+		$checked = 0;
+		$entries = 0;
+		$errors = 0;
+		$fixed = 0;
+
+		foreach ($module->getConfigCache() as $gdt)
+		{
+			if ($gdt instanceof GDT_Field)
+			{
+				$checked++;
+				if (!$this->checkConfigGDT($module, $gdt, $fix))
+				{
+					$errors++;
+					if ($fix)
+					{
+						$fixed++;
+					}
+				}
+				if ($gdt->hasChanged())
+				{
+					$entries++;
+				}
+			}
+		}
+
+//		# @TODO Implement for settings. need to walk the user_setting tables!
+//		foreach ($module->getSettingsCache() as $gdt)
+//		{
+//			if ($gdt instanceof GDT_Field)
+//			{
+//				# check for all entries!
+//			}
+//		}
+
+		if ($errors)
+		{
+			return $this->error('err_mod_config', [$module->gdoHumanName(), $checked, $errors, $entries, $fixed]);
+		}
+
+		return $this->message('msg_mod_config_ok', [$module->gdoHumanName(), $checked, $entries]);
+	}
+
+	/**
+	 * Check, and optionally fix a module config var.
+	 */
+	private function checkConfigGDT(GDO_Module $module, GDT $gdt, bool $fix): bool
+	{
+		if (!$gdt->validated())
+		{
+			if (!$fix)
+			{
+				#'The %s module value `%s` for %s is invalid: %s - %s.
+				$args = [
+					$module->gdoHumanName(),
+					$gdt->renderVar(),
+					$gdt->gdoHumanName(),
+					$gdt->renderError(),
+					$gdt->gdoExampleVars(),
+				];
+				Website::error($module->gdoHumanName(), 'err_mod_config_error', $args);
+			}
+			else
+			{
+				$old = $gdt->renderVar();
+				$module->removeConfigVar($gdt->getName());
+				$args = [
+					$module->gdoHumanName(),
+					$old,
+					$gdt->gdoHumanName(),
+					$gdt->renderError(),
+					$gdt->displayVar($gdt->getInitial()),
+				];
+				Website::message($module->gdoHumanName(), 'msg_mod_config_fixed', $args);
+			}
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * The 4 button install form.
 	 */
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$mod = $this->configModule();
 
@@ -168,12 +270,6 @@ class Install extends MethodForm
 
 		$form->addField(GDT_AntiCSRF::make());
 	}
-
-	###############
-	### Execute ###
-	###############
-
-
 
 
 }

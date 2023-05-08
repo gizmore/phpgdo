@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Util;
 
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 
 /**
  * APACHE 2.2 / 2.4 .htaccess utility
@@ -30,7 +30,7 @@ EOF;
 
 		if ((!is_dir($path)) || (!is_readable($path)))
 		{
-			throw new GDO_Error('err_no_dir');
+			throw new GDO_Exception('err_no_dir');
 		}
 		else
 		{

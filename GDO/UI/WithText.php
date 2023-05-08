@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
 
 /**
- * Adds text attributes.
+ * Adds text attributes, either raw or from a lang file.
+ * By default, text is not escaped upon rendering.
  *
  * Adds text($key, $args) for I18n version
  * Adds textRaw($text) for raw version
  * Adds textEscaped() for skipping escaping.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
  * @see [GDO7](../../GDO7.php) - for global functions

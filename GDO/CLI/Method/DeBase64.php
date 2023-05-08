@@ -22,7 +22,7 @@ final class DeBase64 extends MethodForm
 		return 'de64';
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_Text::make('base64')->notNull(),

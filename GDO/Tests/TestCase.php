@@ -4,7 +4,6 @@ namespace GDO\Tests;
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Core\WithModule;
@@ -41,7 +40,6 @@ use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
  * @version 7.0.3
  * @since 6.10.1
  * @author gizmore
- * @see MethodTest
  */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -52,19 +50,22 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	public static int $ASSERT_COUNT = 0;
 
-	// public static int $ASSERT_FAILS = 0; # @TODO: calculate assert fails.
-
 	# ################
 	# ## Init test ###
 	# ################
 	/**
-	 *
 	 * @var GDO_Session[]
 	 */
 	protected array $sessions = [];
 	protected array $plugVariants;
 	private int $ipc = 0;
 	private int $ipd = 0;
+
+
+	protected function needsNewIP(): bool
+	{
+		return false;
+	}
 
 	public function proc(string $command): string
 	{
@@ -79,23 +80,23 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	public function cli(string $command, bool $permissions = true): string
 	{
-		try
-		{
-			ob_start();
+//		try
+//		{
+//			ob_start();
 			$app = Application::$INSTANCE;
 			$app->reset();
 			$app->cli();
 			$expression = GDT_Expression::fromLine($command);
 			$response = $expression->execute();
-			CLI::flushTopResponse();
+//			CLI::flushTopResponse();
 			$res = $response->render();
 			$app->cli(false);
 			return $res;
-		}
-		finally
-		{
-			ob_end_clean();
-		}
+//		}
+//		finally
+//		{
+//			ob_end_clean();
+//		}
 	}
 
 	public function lang($iso): void
@@ -118,7 +119,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$app->verb(GDT_Form::GET);
 
 		# Increase IP
-		GDT_IP::$CURRENT = $this->nextIP();
+		if ($this->needsNewIP())
+		{
+			GDT_IP::$CURRENT = $this->nextIP();
+			\gdo_test::instance()->verboseMessage('Switched IP to ' . GDT_IP::$CURRENT);
+		}
 
 		# Set gizmore user
 		if (Module_User::instance()->isPersisted())
@@ -170,10 +175,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	# user_id: 2
 
-	protected function system(): GDO_User
-	{
-		return GDO_User::system();
-	}
+//	protected function system(): GDO_User
+//	{
+//		return GDO_User::system();
+//	}
 
 	# 3
 
@@ -189,7 +194,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		if (module_enabled('Session'))
 		{
-			#@session_start();
 			$_SESSION = [];
 			$uid = $user->getID();
 			if (!isset($this->sessions[$uid]))
@@ -197,8 +201,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 				$this->sessions[$uid] = GDO_Session::blank();
 				$this->sessions[$uid]->setVar('sess_user', $user->getID());
 			}
-			GDO_Session::$INSTANCE = $this->sessions[$uid];
-			return $this->sessions[$uid];
+			return GDO_Session::$INSTANCE = $this->sessions[$uid];
 		}
 		return null;
 	}
@@ -385,7 +388,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 			$m = GDT_MethodTest::make()->method($method);
 			$m->inputs($inputs);
 			$r = $m->execute($button);
-			$t = $r->renderWebsite(); # This will trigger 409 to be set -.-
+			$t = $r->render();
 			if ($assertOk)
 			{
 				$this->assertOK("Test if callMethod {$method->gdoClassName()} does not fail");

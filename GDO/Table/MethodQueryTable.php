@@ -67,7 +67,7 @@ abstract class MethodQueryTable extends MethodTable
 	 */
 	public function getResult(): ArrayResult
 	{
-		throw new GDO_Exception('Shuld not return result for queried methods!');
+		throw GDO_Exception::raw('Shuld not return result for queried methods!');
 	}
 
 

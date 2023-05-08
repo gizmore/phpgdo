@@ -15,7 +15,7 @@ use GDO\Util\FileUtil;
 final class GDT_Path extends GDT_ComboBox
 {
 
-	public string $pattern = '/^[^?!:]+$/iD';
+	public string $pattern = '/^[^?!]+$/iD';
 
 	/**
 	 * @var bool|callable
@@ -23,10 +23,6 @@ final class GDT_Path extends GDT_ComboBox
 	public $existing = false;
 	public bool $completion = false;
 
-// 	protected function __construct()
-// 	{
-// 		parent::__construct();
-// 	}
 
 	#################
 	### Existance ###
@@ -48,7 +44,8 @@ final class GDT_Path extends GDT_ComboBox
 		}
 		if (isset($this->completionHref))
 		{
-			return GDT_Template::php('Core', 'object_completion_form.php', ['field' => $this]);
+			return GDT_Template::php('Core', 'object_completion_form.php', [
+				'field' => $this]);
 		}
 		return parent::renderForm();
 	}

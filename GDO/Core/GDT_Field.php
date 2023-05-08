@@ -98,8 +98,7 @@ abstract class GDT_Field extends GDT
 		if (isset($this->inputs[$name]))
 		{
 			$input = $this->inputs[$name];
-			$var = $this->inputToVar($input);
-			return $var;
+			return $this->inputToVar($input);
 		}
 		return $this->var;
 	}
@@ -117,7 +116,7 @@ abstract class GDT_Field extends GDT
 		}
 		elseif ($input instanceof GDT_Method)
 		{
-			return $input->execute()->renderCLI();
+			return $input->execute()->render();
 		}
 		elseif (is_array($input))
 		{
@@ -125,7 +124,7 @@ abstract class GDT_Field extends GDT
 		}
 		else
 		{
-			return (string)$input;
+			return (string) $input;
 		}
 	}
 
@@ -217,7 +216,7 @@ abstract class GDT_Field extends GDT
 
 	public function classError(): string
 	{
-		return $this->hasError() ? ' has-error' : '';
+		return $this->hasError() ? ' has-error' : GDT::EMPTY_STRING;
 	}
 
 	public function setGDOData(array $data): static

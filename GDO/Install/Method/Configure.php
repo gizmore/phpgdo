@@ -29,7 +29,7 @@ class Configure extends MethodForm
 		return false;
 	}
 
-	public function isEnabled(): string
+	public function isEnabled(): bool
 	{
 		return true;
 	}
@@ -47,7 +47,7 @@ class Configure extends MethodForm
 		];
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		foreach (Config::fields() as $gdt)
 		{

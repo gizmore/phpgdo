@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\CLI\CLI;
 use GDO\UI\GDT_Page;
 
 /**
@@ -8,7 +10,7 @@ use GDO\UI\GDT_Page;
  * If RENDER_WEBSITE mode, we let GDT_Page do it's job.
  * If you add a response to a response, it will just steal it's fields. (unwrap)
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  */
@@ -30,6 +32,8 @@ final class GDT_Response extends GDT_Tuple
 				hdr('Content-Type: application/json');
 				$this->addFields(...GDT_Page::instance()->topResponse()->getAllFields());
 				return json($this->renderJSON());
+			case GDT::RENDER_CLI:
+				return CLI::getTopResponse() . $this->renderCLI();
 			default:
 				return parent::render();
 		}
@@ -37,8 +41,6 @@ final class GDT_Response extends GDT_Tuple
 
 	/**
 	 * HTML Render this response via GDT_Page
-	 *
-	 * @return string
 	 */
 	public function renderWebsite(): string
 	{
@@ -59,7 +61,7 @@ final class GDT_Response extends GDT_Tuple
 
 	public function code(int $code): self
 	{
-		Application::$INSTANCE->setResponseCode($code);
+		Application::setResponseCode($code);
 		return $this;
 	}
 

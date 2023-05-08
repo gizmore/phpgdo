@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Tests\Test;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
 use GDO\Core\Method\Health;
@@ -41,10 +42,13 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		return 'Method Execution';
 	}
 
+	/**
+	 * @throws GDO_Exception
+	 */
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		$method = $mt->method;
-		$this->message('Running command: ' . TextStyle::bold($method->getCLITrigger()));
+//		$this->message('Running command: ' . TextStyle::bold($method->getCLITrigger()));
 		if ($method->isDebugging())
 		{
 			xdebug_break();
@@ -54,7 +58,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 		$this->assertNoCrash("Test if trivial method {$this->mome($method)} does not crash.");
 		assertInstanceOf(GDT_Response::class, $result, "Test if method {$method->gdoClassName()} execution returns a GDT_Result.");
 		assertTrue(!!$this->renderResult($result), 'Test if method response renders all outputs without crash.');
-		$this->assertNoCrash("Test if trivial method renderingh {$this->mome($method)} does not crash.");
+		$this->assertNoCrash("Test if trivial method rendering {$this->mome($method)} does not crash.");
 	}
 
 	/**
@@ -69,7 +73,7 @@ final class AutomatedMethodTest extends AutomatedTestCase
 			$response->renderMode(GDT::RENDER_PDF);
 			$response->renderMode(GDT::RENDER_XML);
 			$response->renderMode(GDT::RENDER_JSON);
-			$response->renderMode(GDT::RENDER_GTK);
+//			$response->renderMode(GDT::RENDER_GTK);
 			$response->renderMode(GDT::RENDER_IRC);
 			$response->renderMode(GDT::RENDER_WEBSITE);
 		}

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace GDO\Util;
 
 use FilesystemIterator;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT_Float;
 use GDO\Core\Logger;
 use GDO\File\Module_File;
@@ -34,7 +34,7 @@ final class FileUtil
 		{
 			self::createDir($path);
 		}
-		catch (GDO_Error $ex)
+		catch (GDO_Exception $ex)
 		{
 			Logger::logException($ex);
 		}
@@ -43,7 +43,7 @@ final class FileUtil
 
 	/**
 	 * Try to create a directory, but crash with exception on failure.
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function createDir(string $path): true
 	{
@@ -51,16 +51,16 @@ final class FileUtil
 		{
 			if (!is_writeable($path))
 			{
-				throw new GDO_Error('err_cannot_write', [html($path)]);
+				throw new GDO_Exception('err_cannot_write', [html($path)]);
 			}
 		}
 		elseif (is_file($path))
 		{
-			throw new GDO_Error('err_cannot_write', [html($path)]);
+			throw new GDO_Exception('err_cannot_write', [html($path)]);
 		}
 		elseif (!mkdir($path, GDO_CHMOD, true))
 		{
-			throw new GDO_Error('err_cannot_write', [html($path)]);
+			throw new GDO_Exception('err_cannot_write', [html($path)]);
 		}
 		return true;
 	}
@@ -112,7 +112,7 @@ final class FileUtil
 			self::createDir($destDir);
 			return copy($src, $dest);
 		}
-		catch (GDO_Error $ex)
+		catch (GDO_Exception $ex)
 		{
 			Logger::logException($ex);
 		}
@@ -167,7 +167,7 @@ final class FileUtil
 	/**
 	 * Delete a single file.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function removeFile(string $path, bool $throw = true): bool
 	{
@@ -179,7 +179,7 @@ final class FileUtil
 			}
 			elseif ($throw)
 			{
-				throw new GDO_Error('err_delete_file', [html($path)]);
+				throw new GDO_Exception('err_delete_file', [html($path)]);
 			}
 			else
 			{
@@ -188,7 +188,7 @@ final class FileUtil
 		}
 		elseif (is_dir($path))
 		{
-			throw new GDO_Error('err_delete_file', [html($path)]);
+			throw new GDO_Exception('err_delete_file', [html($path)]);
 		}
 		elseif (is_writable($path))
 		{
@@ -196,7 +196,7 @@ final class FileUtil
 		}
 		elseif ($throw)
 		{
-			throw new GDO_Error('err_write_file', [html($path)]);
+			throw new GDO_Exception('err_write_file', [html($path)]);
 		}
 		else
 		{
@@ -207,7 +207,7 @@ final class FileUtil
 	/**
 	 * Remove a dir recursively, file by file.
 	 *
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function removeDir(string $dir, bool $throw = true): bool
 	{
@@ -225,7 +225,7 @@ final class FileUtil
 				{
 					if ($throw)
 					{
-						throw new GDO_Error('err_delete_file', [html($obj)]);
+						throw new GDO_Exception('err_delete_file', [html($obj)]);
 					}
 					return false;
 				}
@@ -234,7 +234,7 @@ final class FileUtil
 			{
 				if ($throw)
 				{
-					throw new GDO_Error('err_delete_dir', [html($dir)]);
+					throw new GDO_Exception('err_delete_dir', [html($dir)]);
 				}
 				return false;
 			}
@@ -243,7 +243,7 @@ final class FileUtil
 		{
 			if ($throw)
 			{
-				throw new GDO_Error('err_delete_file', [html($dir)]);
+				throw new GDO_Exception('err_delete_file', [html($dir)]);
 			}
 			return false;
 		}

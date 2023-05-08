@@ -5,6 +5,7 @@ namespace GDO\Core;
 use GDO\Core\Method\Stub;
 use GDO\DB\Database;
 use GDO\UI\GDT_Page;
+use GDO\User\GDO_User;
 
 /**
  * Application runtime data.
@@ -43,7 +44,7 @@ class Application extends GDT
 	 */
 	public static int $RESPONSE_CODE = 200;
 	/**
-	 * Current global rendering mode. @TODO make static for performance-
+	 * Current global rendering mode.
 	 * For example switches from html to cell to form to table etc.
 	 */
 	public static int $MODE = GDT::RENDER_WEBSITE;
@@ -103,7 +104,7 @@ class Application extends GDT
 		return false;
 	}
 
-	public static function setUser(\GDO\User\GDO_User $user)
+	public static function setUser(GDO_User $user): void
 	{
 		Logger::init($user->getUserName(), GDO_ERROR_LEVEL); # 1st init as guest
 	}
@@ -202,7 +203,7 @@ class Application extends GDT
 		GDT_Page::instance()->reset();
 		self::$MODE = self::$MODE_DETECTED;
 		self::updateTime();
-		Javascript::reset();
+//		Javascript::reset();
 		return $this;
 	}
 
@@ -284,7 +285,7 @@ class Application extends GDT
 	/**
 	 * Is a session handler supported?
 	 */
-	public function hasSession(): string
+	public function hasSession(): bool
 	{
 		return module_enabled('Session');
 	}
@@ -303,7 +304,7 @@ class Application extends GDT
 	 * Change current rendering mode.
 	 * Optionally set detected mode to this.
 	 */
-	public function mode(int $mode): self
+	public function mode(int $mode): static
 	{
 		self::$MODE = $mode;
 		return $this;
@@ -313,19 +314,16 @@ class Application extends GDT
 	### Themes ###
 	##############
 
-	public function ajax(bool $ajax): self
+	public function ajax(bool $ajax): static
 	{
 		$this->ajax = $ajax;
 		return $this;
 	}
 
-	public function cli(bool $cli = true): self
+	public function cli(bool $cli = true): static
 	{
-		if ($this->cli = $cli)
-		{
-			return $this->mode(GDT::RENDER_CLI);
-		}
-		return $this;
+		$mode = ($this->cli = $cli) ? GDT::RENDER_CLI : self::$MODE_DETECTED;
+		return $this->mode($mode);
 	}
 
 	public function hasTheme(string $theme): bool

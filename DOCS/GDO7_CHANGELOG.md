@@ -4,31 +4,49 @@
 
 Welcome to the GDOv7 changelog + combined roadmap.
 
-7.0.2 is almost finished. 7.0.3 is roadmap and in the makings.
+The current version is v7.0.3 is quite far and in the finishings.
 
-Please read it upside down, from bottom to top and sometimes again.
+There is no keeping backwards compat, 
+and the ABI/API might change here and there.
 
-## 7.0.4 (**planned**)
+Please read this document upside down,
+from bottom to top and sometimes again.
 
-- The Websocket methods now obey the gdo style better, by making use of gdoParameters() and utilizing the [WS](../GDO/Util/WS.php) helper rendererer.
-- New Module [Geo2City](https://github.com/gizmore/phpgdo-geo2city) to detect a city from geocoordinates.
-- The IRC render mode can now optionally filter user input color and fat / italic printing.
+## 7.0.4 (All ToDo)
 
-
-## 7.0.3 (**planned**)
-
-- New config.php option: GDO_LOG_PROFILE, appending your xdebug trigger to method routes.
-- `gdo_test.sh` now features several options. Easy to use are `--all`, `--quick` and `--parents`.
-- Modules marked as 7.0.3 are unit tested in fuzzing mode and pass all phpgdo's StormPHP Code Inspections, well... very rarely with a warning i do not want 
-  to disable.
-- The source files marked as 7.0.3 are declared as strict.
-- The gdo_test.sh fuzzer. now only tries up to a valid value for a parameter. This is faster but misses conjunctured parameters.
+- Support for HTTP2/3.
+- Support for [GDT_Image](../GDO/UI/GDT_Image.php) with optional
+[Thumbhash](https://evanw.github.io/thumbhash/).
+- Support for CLI image rendering (would be just nice to have).
+- The Websocket methods will obey the gdo style better. @TODO auto-generate websocket commands from the normal methods and assign a cmdid logically, maybe 
+just sequentiell. Exclusively use the new [WS](../GDO/Util/WS.php) rendererer.
+- Auto Configured Websocket methods, just mark a method as `gdoWebsocket():bool` capable and the protocol will be auto generated as it's the case for CLI 
+  and config and settings already.
+- New Module [Geo2City](https://github.com/gizmore/phpgdo-geo2city) to detect a city by geoposition.
+- In CLI render mode, `html()`'d strings will be safer to use
+- In IRC mode, `html()` will strip colors and text style.
 - Support for [PostGres DBMS](https:////github.com/gizmore/phpgdo-dbms-mysql)
-- The [Module_Docs](https://github.com/gizmore/phpgdo-docs) module is operable and produces usable docs.
-  . There are usable docs.phpgdo.com and gdo7.phpgdo.com websites.
 - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
+- The gdo_test.sh fuzzer will only fuzz until the first valid value for a parameter. This is faster but misses conjunctured parameter problems.
+- New i18n utilites; Check unused lang file entries and report problems in lang files who differ from the englis. Also report untranslated keys in foreign 
+  files.
+
+
+## 7.0.3-r1 (*almost there*)
+
+- New admin function to check and fix configurations and settings for a module.
+- New [Config.php](../GDO/Install/Config.php) option: GDO_LOG_PROFILE, appending your xdebug trigger to urls generated with `href($methodName, $moduleName, 
+  $app='')`.
+- `gdo_test.sh` now features several options. Easy to use are `--all`, `--quick` and `--parents`.
+- Classes marked as 7.0.3 are unit tested in at least fuzzing mode and pass all the GDOv7 Code Guidelines and Inspections in their
+  [StormPHP](https://www.jetbrains.com/phpstorm/)
+  [configuration](../DEV/stormphp/) **far from it**.
+- The [Module_Docs](https://github.com/gizmore/phpgdo-docs) module is operable and produces usable docs.
 - New Website Module [Hydra](https://github.com/gizmore/phpgdo-hydra) to monitor services.
 - Methods and GDT can now be more easily debugged by overriding `Method->isDebugging()`. This triggers breakpoints at important spots.
+- The fuzzing unit tests do not crash the test application anymore when using `gdo_test.sh --all`. Until recently, most simple things turned the fuzzer 
+quite useless to analyze a problem.
+
 
 ## 7.0.2-r2 26.Mar.2023
 

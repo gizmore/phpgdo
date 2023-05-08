@@ -23,25 +23,25 @@ class GDT_Duration extends GDT_String
 
 	public string $pattern = '/^(?:[\\.0-9 ]+[sminohdwy]{0,2} *)+$/iD';
 
-	public int $minDuration = 0;
+	public int|float $minDuration = 0;
 
 	#################
 	### Min / Max ###
 	#################
-	public ?int $maxDuration = null;
+	public null|int|float $maxDuration = null;
 
 	public function defaultLabel(): self
 	{
 		return $this->label('duration');
 	}
 
-	public function min(?int $min): static
+	public function min(int|null $min): static
 	{
-		$this->minDuration = $min;
+		$this->minDuration = (int) $min;
 		return $this;
 	}
 
-	public function max(?int $max): static
+	public function max(int|float|null $max): static
 	{
 		$this->maxDuration = $max;
 		return $this;
@@ -65,7 +65,7 @@ class GDT_Duration extends GDT_String
 	##############
 	public function renderHTML(): string
 	{
-		return html($this->getVar());
+		return $this->renderVar();
 	}
 
 	public function renderForm(): string
@@ -98,6 +98,11 @@ class GDT_Duration extends GDT_String
 		return [
 			[$this->getName() => '500ms'],
 		];
+	}
+
+	public function gdoExampleVars(): ?string
+	{
+		return '3m 14s 155ms';
 	}
 
 }

@@ -42,9 +42,9 @@ final class GDT_Module extends GDT_ObjectSelect
 
 	/**
 	 * @throws GDO_Exception
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$choices = [];
 		$modules = ModuleLoader::instance()->loadModules(

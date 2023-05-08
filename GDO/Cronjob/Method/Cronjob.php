@@ -28,7 +28,7 @@ class Cronjob extends MethodForm
 
 	public function isTransactional(): bool { return false; }
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->actions()->addField(GDT_Submit::make()->label('btn_run_cronjob'));
 		$form->addField(GDT_AntiCSRF::make());

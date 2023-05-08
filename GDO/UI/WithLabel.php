@@ -5,6 +5,7 @@ namespace GDO\UI;
 use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\Core\WithName;
+use GDO\Language\Trans;
 
 /**
  * Add label fields to a GDT.
@@ -49,10 +50,10 @@ trait WithLabel
 	public static function makeWithLabel(string $name = null): static
 	{
 		$obj = self::makeNamed($name);
-		if ($name)
-		{
-			$obj->label($name);
-		}
+//		if ($name)
+//		{
+//			return $obj->label($name);
+//		}
 		return $obj->defaultLabel();
 	}
 
@@ -99,13 +100,13 @@ trait WithLabel
 	 */
 	public function renderLabelText(): string
 	{
-		if ($this->labelNone)
-		{
-			return GDT::EMPTY_STRING;
-		}
 		if (isset($this->labelKey))
 		{
 			return t($this->labelKey, $this->labelArgs);
+		}
+		if ($this->labelNone)
+		{
+			return GDT::EMPTY_STRING;
 		}
 		if (isset($this->labelRaw))
 		{
@@ -151,6 +152,14 @@ trait WithLabel
 
 	public function hasLabel(): bool
 	{
+		if (isset($this->labelRaw))
+		{
+			return true;
+		}
+		if (isset($this->labelKey) && Trans::hasKey($this->labelKey))
+		{
+			return true;
+		}
 		return !$this->labelNone;
 	}
 

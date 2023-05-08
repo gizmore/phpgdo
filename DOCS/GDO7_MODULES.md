@@ -21,14 +21,26 @@ Below i have listed the available modules, categorized a bit.
 
 To install a module type `./gdo_adm.sh provide <module_name>`.
 
+
 ## GDO7_MODULES: Site Modules
 
-These modules are final websites. Feel free to peek at the source.
+These modules are final websites or projects.
+Feel free to peek at the source.
 
 - [Fineprint](https://fineprint.phpgdo.com) [src](https://github.com/gizmore/phpgdo-fineprint) HTML2PDF Conversion service with a security vulnerability for a
-  hacking challenge.
+hacking challenge.
 
 - [Geo2Country](https://geo2country.phpgdo.com) [src](https://github.com/gizmore/phpgdo-geo2country) Convert Lat/Lng map coordinates to country ISO.
+
+- [TBS Reloaded](https://tbs.wechall.net)
+[src](https://github.com/gizmore/phpgdo-tbs) -
+The backup plan project, if [TBS](https://bright-shadows.net) would really die.
+
+## GDO7_MODULES: Core Modules
+
+These modules are part of the gdo core repository.
+
+- [Net](../GDO/Net)
 
 ## GDO7_MODULES: Theme Modules
 
@@ -45,9 +57,3 @@ These modules wrap a 3rd party content editor library, like Markdown, BBCode or 
 ## GDO7_MODULES: GDO Modules
 
 These modules are the result of my coding work. Licensed to me. Prior Art!
-
-## GDO7_MODULES: Core Modules
-
-These modules are part of the gdo core repository.
-
-- [Net](../GDO/Net)

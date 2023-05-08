@@ -44,10 +44,7 @@ class GDT_Method extends GDT
 //		{
 			if (!isset($this->method->button))
 			{
-				if ($initResponse = $this->method->onMethodInit())
-				{
-//				GDT_Page::instance()->topResponse()->addField($initResponse);
-				}
+				$this->method->onMethodInit();
 				if ($button = $this->method->getAutoButton())
 				{
 					$this->method->cliButton($button);
@@ -69,95 +66,95 @@ class GDT_Method extends GDT
 		return $this;
 	}
 
-	##################
-	### File Cache ###
-	##################
-	/**
-	 * Toggle to true for file cache.
-	 */
-	public function fileCached() { return false; }
-
-	/**
-	 * Get the cached content for this method, iso, fmt
-	 *
-	 * @return string|bool
-	 */
-	public function fileCacheContent()
-	{
-		if (!$this->hasUserPermission(GDO_User::current()))
-		{
-			return false;
-		}
-		$key = $this->fileCacheKey();
-		$content = Cache::fileGet($key, $this->fileCacheExpire());
-		return $content;
-	}
-
-	public function fileCacheKey()
-	{
-		$params = $this->gdoParameterCache();
-		$p = '';
-		foreach ($params as $gdt)
-		{
-			if ($gdt->name)
-			{
-				if ($v = $this->gdoParameterVar($gdt->name))
-				{
-					$p .= '_' . $gdt->name . '_' . FileUtil::saneFilename($v);
-				}
-			}
-		}
-
-		$fmt = Application::$INSTANCE->getFormat();
-		return sprintf('method_%s_%s_%s_%s.%s',
-			$this->getModuleName(), $this->getMethodName(),
-			Trans::$ISO, $p, $fmt);
-	}
-
-	public function fileCacheExpire() { return GDO_MEMCACHE_TTL; }
-
-	public function fileUncache()
-	{
-		$start = $this->fileCacheKeyGroup();
-		Filewalker::traverse(Cache::filePath(), null, function ($entry, $path) use ($start)
-		{
-			if (str_starts_with($entry, $start))
-			{
-				unlink($path);
-			}
-		});
-	}
-
-	public function fileCacheKeyGroup(): string
-	{
-		return sprintf('method_%s_%s_',
-			$this->getModuleName(), $this->getMethodName());
-	}
-
-	##############
-	### Pathes ###
-	##############
-
-	/**
-	 * Get a path for this module in it's GDO folder.
-	 */
-	public function filePath(string $path = ''): string
-	{
-		$module = $this->getModule();
-		return $module->filePath($path);
-	}
-
-	/**
-	 * Get the temp path for a method. Like temp/Module/Method/
-	 */
-	public function tempPath(string $path = ''): string
-	{
-		$module = $this->getModule();
-		$tempDir = $module->tempPath($this->gdoShortName());
-		@mkdir($tempDir, GDO_CHMOD, true);
-		$tempDir .= '/';
-		return $tempDir . $path;
-	}
+//	##################
+//	### File Cache ###
+//	##################
+//	/**
+//	 * Toggle to true for file cache.
+//	 */
+//	public function fileCached(): bool { return false; }
+//
+//	/**
+//	 * Get the cached content for this method, iso, fmt
+//	 *
+//	 * @return string|bool
+//	 */
+//	public function fileCacheContent(): bool|string
+//	{
+//		if (!$this->(GDO_User::current()))
+//		{
+//			return false;
+//		}
+//		$key = $this->fileCacheKey();
+//		$content = Cache::fileGet($key, $this->fileCacheExpire());
+//		return $content;
+//	}
+//
+//	public function fileCacheKey()
+//	{
+//		$params = $this->gdoParameterCache();
+//		$p = '';
+//		foreach ($params as $gdt)
+//		{
+//			if ($gdt->name)
+//			{
+//				if ($v = $this->gdoParameterVar($gdt->name))
+//				{
+//					$p .= '_' . $gdt->name . '_' . FileUtil::saneFilename($v);
+//				}
+//			}
+//		}
+//
+//		$fmt = Application::$INSTANCE->getFormat();
+//		return sprintf('method_%s_%s_%s_%s.%s',
+//			$this->getModuleName(), $this->getMethodName(),
+//			Trans::$ISO, $p, $fmt);
+//	}
+//
+//	public function fileCacheExpire() { return GDO_MEMCACHE_TTL; }
+//
+//	public function fileUncache()
+//	{
+//		$start = $this->fileCacheKeyGroup();
+//		Filewalker::traverse(Cache::filePath(), null, function ($entry, $path) use ($start)
+//		{
+//			if (str_starts_with($entry, $start))
+//			{
+//				unlink($path);
+//			}
+//		});
+//	}
+//
+//	public function fileCacheKeyGroup(): string
+//	{
+//		return sprintf('method_%s_%s_',
+//			$this->getModuleName(), $this->getMethodName());
+//	}
+//
+//	##############
+//	### Pathes ###
+//	##############
+//
+//	/**
+//	 * Get a path for this module in it's GDO folder.
+//	 */
+//	public function filePath(string $path = ''): string
+//	{
+//		$module = $this->getModule();
+//		return $module->filePath($path);
+//	}
+//
+//	/**
+//	 * Get the temp path for a method. Like temp/Module/Method/
+//	 */
+//	public function tempPath(string $path = ''): string
+//	{
+//		$module = $this->getModule();
+//		$tempDir = $module->tempPath($this->gdoShortName());
+//		@mkdir($tempDir, GDO_CHMOD, true);
+//		$tempDir .= '/';
+//		return $tempDir . $path;
+//	}
 
 	##############
 	### Render ###
@@ -166,7 +163,7 @@ class GDT_Method extends GDT
 	{
 		if (!isset($this->result))
 		{
-			$this->execute(false);
+			$this->execute();
 		}
 		return $this->result->render();
 	}
@@ -190,6 +187,9 @@ class GDT_Method extends GDT
 		return $this->result;
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function addInput(?string $key, $var): self
 	{
 		if (!isset($this->inputs))
@@ -220,6 +220,9 @@ class GDT_Method extends GDT
 		return $this;
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	private function getGDTForInputKey(?string $key): ?GDT
 	{
 		if ($key !== null)
@@ -233,13 +236,12 @@ class GDT_Method extends GDT
 		{
 			if ($gdt->isPositional())
 			{
-				if ($i === $this->positionalPosition)
+				if ($i++ === $this->positionalPosition)
 				{
 					$this->positionalPosition++;
 					return $gdt;
 				}
 				$last = $gdt;
-				$i++;
 			}
 		}
 		return $last;

@@ -58,7 +58,7 @@ final class Module_Form extends GDO_Module
 		}
 	}
 
-	public function cfgXSRFHeader(): string { return $this->getConfigVar('xsrf_header'); }
+	public function cfgXSRFHeader(): bool { return $this->getConfigValue('xsrf_header'); }
 
 	public function cfgXSRFMode(): string { return $this->getConfigVar('xsrf_mode'); }
 

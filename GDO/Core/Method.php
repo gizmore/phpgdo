@@ -239,10 +239,6 @@ abstract class Method #extends GDT
 			}
 			if ($response->hasError())
 			{
-//				if ($transactional)
-//				{
-//					$db->transactionRollback();
-//				}
 				return $response;
 			}
 
@@ -257,7 +253,7 @@ abstract class Method #extends GDT
 			{
 				if ($result->hasError())
 				{
-					$response->code(GDO_Exception::DEFAULT_ERROR_CODE);
+					$response->code(GDO_Exception::GDT_ERROR_CODE);
 					$response->errorRaw($result->renderError());
 				}
 				$response->addField($result);
@@ -266,10 +262,6 @@ abstract class Method #extends GDT
 			# 4b) Error
 			if (Application::isError())
 			{
-//				if ($transactional)
-//				{
-//					$db->transactionRollback();
-//				}
 				return $response;
 			}
 
@@ -282,10 +274,6 @@ abstract class Method #extends GDT
 			}
 			if ($response->hasError())
 			{
-//				if ($transactional)
-//				{
-//					$db->transactionRollback();
-//				}
 				return $response;
 			}
 
@@ -306,7 +294,7 @@ abstract class Method #extends GDT
 
 			return $response;
 		}
-//		catch (GDO_Error $e)
+//		catch (GDO_Exception $e)
 //		{
 ////			if ($transactional)
 ////			{
@@ -319,7 +307,7 @@ abstract class Method #extends GDT
 ////			}
 //			return $this->error('error', [$e->getMessage()]);
 //		}
-//		catch (GDO_ArgException $e)
+//		catch (GDO_ArgError $e)
 //		{
 //			if ($transactional)
 //			{
@@ -327,14 +315,14 @@ abstract class Method #extends GDT
 //			}
 //			return $this->error('error', [$e->getMessage()]);
 //		}
-		catch (GDO_RedirectError $e)
-		{
-//			if ($transactional)
-//			{
-//				$db->transactionRollback();
-//			}
-			return GDT_Redirect::make()->redirectError($e->key, $e->args)->href($e->href);
-		}
+//		catch (GDO_RedirectError $e)
+//		{
+////			if ($transactional)
+////			{
+////				$db->transactionRollback();
+////			}
+//			return GDT_Redirect::make()->redirectError($e->key, $e->args)->href($e->href);
+//		}
 //		catch (GDO_PermissionException $e)
 //		{
 //			if ($transactional)
@@ -381,32 +369,18 @@ abstract class Method #extends GDT
 	 */
 	public function checkPermission(GDO_User $user, bool $silent=false): ?GDT
 	{
-		try
-		{
-			$error = '';
-			$args = [];
-			if (!$this->checkPermissionB($user, $error, $args))
-			{
-				if (!$silent)
-				{
-					return $this->error($error, $args);
-				}
-				return GDT_Response::make();
-			}
-			return null;
-		}
-		catch (Throwable $ex)
+		$error = '';
+		$args = [];
+		if (!$this->checkPermissionB($user, $error, $args))
 		{
 			if (!$silent)
 			{
-				return GDT_Error::fromException($ex);
+				return $this->error($error, $args, 403);
 			}
-			else
-			{
-				Debug::debugException($ex);
-			}
-			return null;
+			// Error but silent
+			return GDT_Response::make();
 		}
+		return null;
 	}
 
 	private function checkPermissionB(GDO_User $user, string &$error, array &$args): bool
@@ -414,7 +388,7 @@ abstract class Method #extends GDT
 		if (!($this->isEnabled()))
 		{
 			$error = 'err_method_disabled';
-			$args = [$this->getModuleName(), $this->getMethodName()];
+			$args = [$this->gdoHumanName(), $this->gdoClassName()];
 			return false;
 		}
 
@@ -489,9 +463,12 @@ abstract class Method #extends GDT
 		return true;
 	}
 
-	public function isEnabled(): string { return $this->getModule()->isEnabled(); }
+	public function isEnabled(): bool
+	{
+		return $this->getModule()->isEnabled();
+	}
 
-	public function error(string $key, array $args = null, int $code = GDO_Exception::DEFAULT_ERROR_CODE, bool $log = true): GDT
+	public function error(string $key, array $args = null, int $code = GDO_Exception::GDT_ERROR_CODE, bool $log = true): GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
 		return Website::error($titleRaw, $key, $args, $log, $code);
@@ -503,12 +480,8 @@ abstract class Method #extends GDT
 
 	public function isUserRequired(): bool { return false; }
 
-//	public static function addCLIAlias(string $alias, string $className) : void
-//	{
-//		self::$CLI_ALIASES[$alias] = $className;
-//	}
 
-	public function isGuestAllowed(): string { return Module_Core::instance()->cfgAllowGuests(); }
+	public function isGuestAllowed(): bool { return Module_Core::instance()->cfgAllowGuests(); }
 
 
 	############
@@ -722,7 +695,7 @@ abstract class Method #extends GDT
 	}
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public function plugUser(): GDO_User
 	{

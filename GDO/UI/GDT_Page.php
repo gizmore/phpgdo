@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace GDO\UI;
 
-use GDO\Core\GDO_ErrorFatal;
+use GDO\Core\GDO_ExceptionFatal;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\ModuleLoader;
@@ -67,19 +67,16 @@ final class GDT_Page extends GDT
 		global $me;
 		$loader = ModuleLoader::instance();
 		$modules = $loader->getEnabledModules();
-		foreach ($modules as $module)
-		{
-			$module->onIncludeScripts();
-		}
+		$page = 'page_blank.php';
 		if ($me && $me->isSidebarEnabled())
 		{
 			foreach ($modules as $module)
 			{
 				$module->onInitSidebar();
 			}
-			return GDT_Template::php('UI', 'page_html.php', ['page' => $this]);
+			$page = 'page_html.php';
 		}
-		return GDT_Template::php('UI', 'page_blank.php', ['page' => $this]);
+		return GDT_Template::php('UI', $page, ['page' => $this]);
 	}
 
 	public function topBar(): GDT_Bar
@@ -104,7 +101,7 @@ final class GDT_Page extends GDT
 			case 'bottom':
 				return $this->bottomBar();
 			default:
-				throw new GDO_ErrorFatal('err_invalid_yield_slot', [html($slot)]);
+				throw new GDO_ExceptionFatal('err_invalid_yield_slot', [html($slot)]);
 		}
 	}
 

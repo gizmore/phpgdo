@@ -33,7 +33,7 @@ final class GDT_Permission extends GDT_ObjectSelect
 		return $this->label('permission');
 	}
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$choices = parent::getChoices();
 		if ($this->onlyPermitted)

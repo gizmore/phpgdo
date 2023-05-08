@@ -41,7 +41,7 @@ class InstallAdmins extends MethodForm
 		return $this->getMethodTitle();
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		Debug::init();
 		Database::init();

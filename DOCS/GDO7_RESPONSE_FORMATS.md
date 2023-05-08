@@ -2,19 +2,24 @@
 
 A Method returns a GDT on execution, which is your ultimate result.
 A GDT can support the following rendering methods.
-PDF is supported via html2pdf libraries.
 
 - renderHTML() - HTML
 - renderForm() - HTML FORM
 - renderCell() - HTML table CELL
 - renderCard() - HTML cardview
+- renderList() - HTML listview
 - renderHeader() - HTML table HEADER
 - renderFilter() - HTML table FILTER
 - renderCLI() - CLI
-- renderXML() - XML
-- renderPDF() - HTML basic pdf cap.
+- renderIRC() - IRC
+- renderXML() - @TODO XML
+- renderPDF() - @TODO HTML basic pdf cap.
 - renderJSON() - JSON
-- renderBinary() - GDOv7 BINARY
+- renderBinary() - GDOv7 Websocket BINARY
+
+PDF is only supported via 3rd party libraries,
+and still an early draft / @TODO.
+
 
 ## The GDOv7 BINARY RESPONSE FORMAT
 
@@ -28,4 +33,4 @@ Roughly it boils down to:
 - IEEE Floats are supported.
 - Timestamps are 64 bit integers in ms.
 - DateTimes are strings.
-- Objects are IDs (strings atm).
+- Objects are foreign keys according to their primary field(s).

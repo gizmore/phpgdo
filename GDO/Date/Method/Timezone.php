@@ -41,7 +41,7 @@ final class Timezone extends MethodForm
 		return t('md_date_timezone', [sitename()]);
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$tz = GDO_User::current()->getTimezone();
 		$form->action(href('Date', 'Timezone'));

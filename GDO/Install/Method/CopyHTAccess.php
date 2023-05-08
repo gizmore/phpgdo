@@ -38,7 +38,7 @@ final class CopyHTAccess extends MethodForm
 			'form' => $this->getForm()]);
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->actions()->addField(GDT_Submit::make()->label('copy_htaccess'));
 	}

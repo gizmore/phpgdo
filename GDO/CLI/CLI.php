@@ -95,6 +95,9 @@ final class CLI
 		}
 	}
 
+	/**
+	 * @deprecated as rendering should not need it?
+	 */
 	public static function displayCLI(string $html): string
 	{
 		return self::htmlToCLI($html);
@@ -102,6 +105,8 @@ final class CLI
 
 	/**
 	 * Turn html into CLI output by stripping tags.
+	 * Required to convert html mails to plaintext
+	 * Required to convert html editor output to searchable plaintext
 	 */
 	public static function htmlToCLI(string $html): string
 	{
@@ -194,7 +199,6 @@ final class CLI
 	#############
 	### Usage ###
 	#############
-
 
 	/**
 	 * Own implementation of escapeshellarg, because PHP limits it to 8kb.

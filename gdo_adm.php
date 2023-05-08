@@ -85,42 +85,41 @@ use GDO\Util\Strings;
  */
 function printUsage(int $code = -1, string $cmd = null): void
 {
-	global $argv;
-	$exe = $argv[0] . ' %CMD%';
+	global $app, $exe;
 	$commands = [
 
 		'DIV-Spawn',
-		'docs' => "$exe -iv - To print and run install instructions from the DOCS at https://github.com/gizmore/phpgdo",
-		'systemtest' => "$exe [<config.php>] - To generate a `protected/config.php.`.",
-		'configure' => "$exe -i [<config.php>] - To generate a `protected/config.php.`.",
-		'test' => "$exe [<config.php>] - To test a `protected/config.php.`.",
-		'admin' => "$exe -d <username> [<password>] - To (re)-set or delete an admin.",
-		'cronjob' => "$exe - To print cronjob instructions.",
-		'webconf' => "$exe - To print webserver configuration examples.",
-		'secure' => "$exe - To secure your installation after an install.",
+		'docs' => "$exe -iv %CMD% - To print and run install instructions from the DOCS at https://github.com/gizmore/phpgdo",
+		'systemtest' => "$exe %CMD% [<config.php>] - To run the gdo core systemtest.",
+		'configure' => "$exe -iF %CMD% [<config.php>] - To generate a `protected/config.php.`.",
+		'test' => "$exe %CMD% [<config.php>] - To test a `protected/config.php.`.",
+		'admin' => "$exe -d %CMD% <username> [<password>] - To (re)-set or delete an admin.",
+		'cronjob' => "$exe %CMD% - To print cronjob instructions.",
+		'webconf' => "$exe %CMD% - To print webserver configuration examples.",
+		'secure' => "$exe %CMD% - To secure your installation after an install.",
 
 		'DIV-Modules',
-		'modules' => "$exe -a [<module>] - To show a list of modules or show module details.",
-		'provide' => "$exe -a [<module>] - To download all modules that are required to provide a module,",
-		'install' => "$exe -ac [<module>] - To install a module and it's dependencies,",
-		'wipe' => "$exe -a [<module>] - To uninstall modules,",
+		'modules' => "$exe -a %CMD% [<module>] - To show a list of modules or show module details.",
+		'provide' => "$exe -a %CMD% [<module>] - To download all modules that are required to provide a module,",
+		'install' => "$exe -ac %CMD% [<module>] - To install a module and it's dependencies,",
+		'wipe' => "$exe -a %CMD% [<module>] - To uninstall modules,",
 
 		'DIV-Updates',
-		'cc' => "$exe - To clear all caches. Convinient for developing.",
-		'update' => "$exe - To run post processing CI steps after `gdo_update.sh`.",
-		'confgrade' => "$exe - Upgrade your config.php with new config vars.",
-		'vendor' => "$exe -af [<module>] - Clear, needs force, and reinstall, third party libraries.",
-		'migrate' => "$exe -afv [<module>] - To migrate gdo db tables for an installed module. Handle with care.!",
-		'pp' => "$exe pp - To run the PP php-preprocessor on all files.",
+		'cc' => "$exe %CMD% - To clear all caches. Convinient for developing.",
+		'update' => "$exe %CMD% - To run post processing CI steps after `gdo_update.sh`.",
+		'confgrade' => "$exe %CMD% - Upgrade your config.php with new config vars.",
+		'vendor' => "$exe -af %CMD% [<module>] - Clear, needs force, and reinstall, third party libraries.",
+		'migrate' => "$exe -afv %CMD% [<module>] - To migrate gdo db tables for an installed module. Handle with care.!",
+		'pp' => "$exe %CMD% - To run the PP php-preprocessor on all files.",
 
 		'DIV-Config',
-		'config' => "$exe -ar [<module>] - To show or reset all config variables for modules,",
-		'config ' => "$exe -r <module> <key> - To show or reset a single module config variable,",
-		'config  ' => "$exe <module> <key> <var> - To set the value of a config variable.",
+		'config' => "$exe -ar %CMD% [<module>] - To show or reset all config variables for modules,",
+		'config ' => "$exe -r %CMD% <module> <key> - To show or reset a single module config variable,",
+		'config  ' => "$exe %CMD% <module> <key> <var> - To set the value of a config variable.",
+		'configtest' => "$exe -af %CMD% [<module>] - To validate the config for modules.",
 	];
 
-
-	if (Application::$INSTANCE->verbose)
+	if ($app->verbose)
 	{
 		echo "Tip: you can have a 'cli-only' `protected/config_cli.php`.\n";
 		echo "Note: PHP getopts syntax is used here.\n";
@@ -129,6 +128,8 @@ function printUsage(int $code = -1, string $cmd = null): void
 		echo "-a == --all - To select all available modules.\n";
 		echo "-c == --configured - To select all installed modules.\n";
 		echo "-d == --delete - To delete admins.\n";
+		echo "-f == --fix - To fix entries in module configurations and settings.\n";
+		echo "-F == --force - To force auto detection and recreation of a protected/config.php.\n";
 		echo "-r == --reset - To reset config vars.\n";
 		echo "-s == --ssh - To clone via ssh protocol, only for the developers.\n";
 		echo "-v == --verbose - For more output.\n";
@@ -136,17 +137,14 @@ function printUsage(int $code = -1, string $cmd = null): void
 		echo "\n";
 	}
 
-	echo "Usage:\n";
 	if ($cmd)
 	{
 		foreach ($commands as $c => $usage)
 		{
-
-			if (strpos($c, $cmd) === 0)
+			if (str_starts_with((string)$c, $cmd))
 			{
 				$usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c,  $usage);
-				print($usage);
-				print("\n");
+				print("Usage: {$usage}\n");
 			}
 		}
 	}
@@ -155,8 +153,7 @@ function printUsage(int $code = -1, string $cmd = null): void
 		foreach ($commands as $c => $usage)
 		{
 			$usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c, $usage);
-			print($usage);
-			print("\n");
+			print("Usage: {$usage}\n");
 		}
 	}
 	die($code);
@@ -186,74 +183,6 @@ $app = new class extends Application
 	}
 
 
-	/**
-	 * Parse options and purge them from argv.
-	 */
-	public function parseOptions(): void
-	{
-		global $argv, $argc;
-
-		$i = 0;
-		$o = getopt('achiqrsv3', ['all', 'configured', 'help', 'interactive', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
-
-		if (isset($o['a']) || isset($o['all']))
-		{
-			$this->all();
-		}
-
-		if (isset($o['c']) || isset($o['configured']))
-		{
-			$this->configured();
-		}
-
-		if (isset($o['i']) || isset($o['interactive']))
-		{
-			$this->interactive();
-		}
-
-		if (isset($o['q']) || isset($o['quiet']))
-		{
-			$this->quiet();
-		}
-
-		if (isset($o['r']) || isset($o['reset']))
-		{
-			$this->resetting();
-		}
-
-		if (isset($o['s']) || isset($o['ssh']))
-		{
-			$this->ssh();
-		}
-
-		if (isset($o['v']) || isset($o['verbose']))
-		{
-			$this->verbose();
-		}
-
-		if (isset($o['3']) || isset($o['libraries']))
-		{
-			$this->vendor();
-		}
-
-		$cmd = null;
-		if (isset($argv[$i]))
-		{
-			$cmd = $argv[$i];
-		}
-
-		if (isset($o['h']) || isset($o['help']) )
-		{
-			printUsage(0, $cmd);
-		}
-
-		# Fix argc/argv
-		$exe = $argv[0];
-		$argv = array_slice($argv, $i + 1);
-		array_unshift($argv, $exe, $cmd);
-		$argc = count($argv);
-	}
-
 	public function isInstall(): bool
 	{
 		return true;
@@ -275,6 +204,29 @@ $app = new class extends Application
 	public function configured(bool $configured = true): self
 	{
 		$this->configured = $configured;
+		return $this;
+	}
+
+	public bool $delete = false;
+	public function delete(bool $delete = true): self
+	{
+		$this->delete = $delete;
+		return $this;
+	}
+
+	public bool $fix = false;
+
+	public function fix(bool $fix = true): self
+	{
+		$this->fix = $fix;
+		return $this;
+	}
+
+	public bool $force = false;
+
+	public function force(bool $force = true): self
+	{
+		$this->force = $force;
 		return $this;
 	}
 
@@ -349,14 +301,79 @@ $loader = ModuleLoader::instance();
 
 define('GDO_CORE_STABLE', true);
 
-$app->parseOptions();
 if ($argc === 1)
 {
 	printUsage(0);
 }
-
-$command = $argv[1];
+$exe = array_shift($argv);
 $argc = count($argv);
+$i = 0;
+$o = getopt('acdfFhiqrsv3', ['all', 'configured', 'delete', 'fix', 'force', 'help', 'interactive', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
+if (isset($o['a']) || isset($o['all']))
+{
+	$app->all();
+}
+if (isset($o['c']) || isset($o['configured']))
+{
+	$app->configured();
+}
+if (isset($o['d']) || isset($o['delete']))
+{
+	$app->delete();
+}
+if (isset($o['f']) || isset($o['fix']))
+{
+	$app->fix();
+}
+if (isset($o['F']) || isset($o['force']))
+{
+	$app->force();
+}
+if (isset($o['h']) || isset($o['help']))
+{
+	printUsage(0);
+}
+
+if (isset($o['i']) || isset($o['interactive']))
+{
+	$app->interactive();
+}
+if (isset($o['q']) || isset($o['quiet']))
+{
+	$app->quiet();
+}
+if (isset($o['r']) || isset($o['reset']))
+{
+	$app->resetting();
+}
+if (isset($o['s']) || isset($o['ssh']))
+{
+	$app->ssh();
+}
+if (isset($o['v']) || isset($o['verbose']))
+{
+	$app->verbose();
+}
+if (isset($o['3']) || isset($o['libraries']))
+{
+	$app->vendor();
+}
+
+array_unshift($argv, $exe);
+$argv = array_slice($argv, $i);
+array_unshift($argv, $exe);
+$cmd = $argv[1] ?? null;
+$argc = count($argv);
+
+if (isset($o['h']) || isset($o['help']))
+{
+	printUsage(0, $cmd);
+}
+
+# Fix argc/argv
+
+$command = $cmd;
+//$argc = count($argv);
 $db = (bool)GDO_DB_ENABLED;
 switch ($command)
 {
@@ -376,13 +393,19 @@ switch ($command)
 }
 $modules = [];
 
-$core = $loader->loadModuleFS('Core');
-$core->onLoadLanguage();
-$inst = $loader->loadModuleFS('Install');
-$inst->onLoadLanguage();
+if (!$db)
+{
+	$core = $loader->loadModuleFS('Core');
+	$core->onLoadLanguage();
+	$inst = $loader->loadModuleFS('Install');
+	$inst->onLoadLanguage();
+}
 
 $loader->loadModules($db, true);
-
+if ($db && ($command !== 'install'))
+{
+	$loader->initModuleVars();
+}
 $loader->initModules();
 
 # Run!
@@ -565,18 +588,13 @@ elseif ($command === 'install')
 {
 	if (!$db)
 	{
-		echo \GDO\UI\TextStyle::bold($s, true, 'red');
-
-		"You do not have GDO_DB_ENABLED. I cannot install anything.\n";
-		die(1);
+		echo \GDO\UI\TextStyle::bold("You do not have GDO_DB_ENABLED. I cannot install anything.\n", true, 'red');
+		die(-1);
 	}
 
 	$deps = [];
 
 	$mode = $app->all ? 2 : 1;
-
-#	ModuleLoader::instance()->reset()->loadModules(true, true, true);
-#	ModuleLoader::instance()->initModules();
 
 	$git = ModuleProviders::GIT_PROVIDER;
 
@@ -1092,7 +1110,7 @@ elseif ($command === 'secure')
 {
 	$module = Module_Install::instance();
 	$method = GDT_Method::make()->method(Security::make());
-	$result = $method->clibutton()
+	$result = $method->setupCLIButton()
 		->noChecks()
 		->execute();
 	echo $result->renderCLI();
@@ -1209,6 +1227,54 @@ elseif ($command === 'apache')
 	echo $docs->render();
 }
 
+elseif ($command === 'configtest')
+{
+	if ($app->all)
+	{
+		if ($argc === 2)
+		{
+			$modules = $loader->getEnabledModules();
+			$n = count($modules);
+			echo "Checking configuration for {$n} modules.\n";
+		}
+		else
+		{
+			echo "Either specify --all or test a single module.\n";
+			printUsage(-1, $command);
+		}
+	}
+	elseif ($argc === 3)
+	{
+		if (!($module = $loader->getModule($argv[2], false)))
+		{
+			echo "Unknown module!\n";
+		}
+		else
+		{
+			$modules  = [$module];
+		}
+	}
+	else
+	{
+		printUsage(-1, 'configtest');
+	}
+
+	if ($app->fix)
+	{
+		echo "Okay, i will try to fix things...\n";
+	}
+
+	# GO!
+	$checker = Install::make();
+	foreach ($modules as $module)
+	{
+		echo "Checking config for {$module->getName()}\n";
+		$btn = $app->fix ? 'fix_config' : 'check_config';
+		$res = $checker->inputs(['module' => $module->getName()])->checkConfiguration($module, $app->fix);
+		echo $res->render();
+	}
+}
+
 else
 {
 	echo "Unknown command {$command}\n\n";
@@ -1216,5 +1282,3 @@ else
 }
 
 Cache::flush();
-
-CLI::flushTopResponse();

@@ -46,7 +46,7 @@ final class Security extends MethodForm
 		return $this->templatePHP('page/security.php', ['form' => $this->getForm()]);
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->actions()->addField(GDT_Submit::make()->label('protect_folders'));
 	}

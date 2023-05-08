@@ -51,7 +51,7 @@ final class GDT_Protocol extends GDT_Select
 	###############
 	### Choices ###
 	###############
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$choices = $this->emptyVar === null ? [] :
 			[$this->emptyVar => $this->displayEmptyLabel()];

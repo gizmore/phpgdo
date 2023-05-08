@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\CLI\CLI;
@@ -7,7 +8,7 @@ use GDO\Core\Expression\Parser;
 /**
  * An expression executes a command line.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  */
@@ -54,20 +55,13 @@ final class GDT_Expression extends GDT
 	### Input ###
 	#############
 
-	public function execute()
+	public function execute(): GDT
 	{
-		try
+		if (GDO_LOG_REQUEST)
 		{
-			if (GDO_LOG_REQUEST)
-			{
-				Logger::log('cli', $this->line);
-			}
-			return $this->method->execute();
+			Logger::log('cli', $this->line);
 		}
-		catch (GDO_ArgException|GDO_CRUDException $ex)
-		{
-			return GDT_String::make()->var($ex->renderCLI() . CLI::renderCLIHelp($this->method->method));
-		}
+		return $this->method->execute();
 	}
 
 	public function addInput(?string $key, $input): void
@@ -93,23 +87,6 @@ final class GDT_Expression extends GDT
 	{
 		$this->method->inputs($this->inputs);
 		$this->method->method->inputs($this->inputs);
-
-// 		$cache = $this->method->method->gdoParameterCache();
-
-// 		$pos = 0;
-// 		foreach ($this->inputs as $key => $input)
-// 		{
-// 			if (is_numeric($key))
-// 			{
-// 				foreach ($cache as $gdt)
-// 				{
-// 					if ()
-// 					{
-
-// 					}
-// 				}
-// 			}
-// 		}
 	}
 
 }

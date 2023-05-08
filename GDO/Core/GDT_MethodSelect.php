@@ -30,7 +30,7 @@ final class GDT_MethodSelect extends GDT_Select
 	###############
 	### Choices ###
 	###############
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$choices = [];
 		foreach (ModuleLoader::instance()->getEnabledModules() as $module)

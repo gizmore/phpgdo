@@ -6,7 +6,7 @@
 <body>
 <h1>GDOv7 not installed!</h1>
 <p>Please install GDOv7 properly, preferrably with <a href="install/wizard.php">the installation wizard.</a></p>
-<p>Other options are the gdo_adm.sh CLI tool or thermonuclear war.</p>
+<p>Other options are the gdo_adm.sh CLI utilities, or thermonuclear war!</p>
 <code style="white-space: pre;">
     ./gdo_adm.sh systemtest
     ./gdo_adm.sh configure
@@ -17,4 +17,4 @@
 </body>
 </html>
 <?php
-die(-1); ?>
+die(0); ?>

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDO;
+use GDO\Core\GDT;
 use GDO\Core\GDT_Object;
 use GDO\DB\Query;
 use GDO\Table\GDT_Filter;

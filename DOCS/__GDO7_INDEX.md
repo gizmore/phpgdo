@@ -2,10 +2,10 @@
 
 Table of contents in alphabetical order.
 
-- [BOOTSTRAP](GDO7_BOOTSTRAP.md)
-- [CACHE](GDO7_CACHE.md)
-- [CHANGELOG](GDO7_CHANGELOG.md)
-- [COMPATIBILITY](GDO7_COMPATIBILITY.md)
+- [BOOTSTRAP](GDO7_BOOTSTRAP.md) process.
+- [CACHE](GDO7_CACHE.md) implenentations.
+- [CHANGELOG](GDO7_CHANGELOG.md) and history.
+- [COMPATIBILITY](GDO7_COMPATIBILITY.md) with OS, libraries and deployment software.
 - [COMPLETION](GDO7_COMPLETION.md)
 - [CONFIG](GDO7_CONFIG.md)
 - [CONVENTIONS](GDO7_CONVENTIONS.md)

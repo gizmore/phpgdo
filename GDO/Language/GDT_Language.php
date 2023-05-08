@@ -45,7 +45,7 @@ final class GDT_Language extends GDT_ObjectSelect
 	### Current ###
 	###############
 
-	public function getChoices(): array
+	protected function getChoices(): array
 	{
 		$languages = GDO_Language::table();
 		return $this->all ? $languages->all() : $languages->allSupported();

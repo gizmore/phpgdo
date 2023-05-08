@@ -35,7 +35,7 @@ final class Collect extends MethodCLI
 		return GDO_Permission::ADMIN;
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_String::make('pattern'),

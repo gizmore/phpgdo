@@ -47,7 +47,7 @@ class ClearCache extends MethodForm
 		return t('btn_clearcache');
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->addField(GDT_AntiCSRF::make());
 		$form->actions()->addField(GDT_Submit::make());

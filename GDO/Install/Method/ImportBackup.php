@@ -51,7 +51,7 @@ final class ImportBackup extends MethodForm
 		return t('install_title_8');
 	}
 
-	public function createForm(GDT_Form $form): void
+	protected function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_String::make('backup_file'),

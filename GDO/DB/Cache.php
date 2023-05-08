@@ -5,7 +5,7 @@ namespace GDO\DB;
 use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
-use GDO\Core\GDO_Error;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT_Hook;
 use GDO\Core\Logger;
 use GDO\Core\Module_Core;
@@ -128,7 +128,7 @@ class Cache
 	}
 
 	/**
-	 * @throws GDO_Error
+	 * @throws GDO_Exception
 	 */
 	public static function init(): void
 	{

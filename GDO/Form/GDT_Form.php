@@ -4,9 +4,6 @@ namespace GDO\Form;
 
 use GDO\Core\Application;
 use GDO\Core\GDO;
-use GDO\Core\GDO_ArgException;
-use GDO\Core\GDO_Error;
-use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\Website;
@@ -165,7 +162,7 @@ final class GDT_Form extends GDT
 	/**
 	 * Validate the form fields.
 	 *
-	 * @throws GDO_ArgException
+	 * @throws GDO_ArgError
 	 */
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
@@ -203,14 +200,14 @@ final class GDT_Form extends GDT
 	###########
 	### Var ###
 	###########
-	public function getFormVar(string $key, bool $throw = true): ?string
+	public function getFormVar(string $key): ?string
 	{
-		return $this->getField($key, $throw)->getVar();
+		return $this->getField($key)->getVar();
 	}
 
-	public function getFormValue(string $key, bool $throw = true): bool|int|float|string|array|null|object
+	public function getFormValue(string $key): bool|int|float|string|array|null|object
 	{
-		return $this->getField($key, $throw)->getValue();
+		return $this->getField($key)->getValue();
 	}
 
 	/**
