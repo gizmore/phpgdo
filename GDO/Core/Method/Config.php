@@ -19,11 +19,6 @@ use GDO\Core\ModuleLoader;
 final class Config extends MethodAjax
 {
 
-	public function isDebugging(): bool
-	{
-		return false;
-	}
-
 
 	public function execute(): GDT
 	{

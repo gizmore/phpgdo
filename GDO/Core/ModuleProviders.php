@@ -108,7 +108,6 @@ final class ModuleProviders
 'LoC' => 'phpgdo-loc',
 'Login' => 'phpgdo-login',
 'Mail' => 'phpgdo-mail',
-'Mailer' => 'phpgdo-mailer',
 'Maintenance' => 'phpgdo-maintenance',
 'Maps' => 'phpgdo-maps',
 'Markdown' => 'phpgdo-markdown',
