@@ -585,27 +585,27 @@ final class Query
 	{
 //		try
 //		{
-			$db = Database::instance();
+		$db = Database::instance();
 
-			$query = $this->buildQuery();
+		$query = $this->buildQuery();
 
-			#PP#begin#
-			if ($this->debug)
-			{
-				printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
-				Logger::rawLog('query', $query);
-			}
-			#PP#end#
+		#PP#begin#
+		if ($this->debug)
+		{
+			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
+			Logger::rawLog('query', $query);
+		}
+		#PP#end#
 
-			if ($this->write)
-			{
-				return $db->queryWrite($query);
-			}
-			else
-			{
-				return new Result($this->fetchTable,
-					$db->queryRead($query, $this->buffered), $this->cached);
-			}
+		if ($this->write)
+		{
+			return $db->queryWrite($query);
+		}
+		else
+		{
+			return new Result($this->fetchTable,
+				$db->queryRead($query, $this->buffered), $this->cached);
+		}
 //		}
 //		catch (GDO_DBException $ex)
 //		{

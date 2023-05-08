@@ -1,14 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
-use Error;
 use GDO\Core\Application;
 use GDO\Core\GDT;
 
 /**
  * Color utility and conversion object.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.5.0
  */
 final class Color
@@ -17,55 +17,71 @@ final class Color
 	###############
 	### Utility ###
 	###############
-	private $r, $g, $b;
+	private int $r;
+	private int $g;
+	private int $b;
 
 	/**
 	 * Colors are 0 - 255.
-	 *
-	 * @param int $r
-	 * @param int $g
-	 * @param int $b
 	 */
-	public function __construct($r, $g, $b)
+	public function __construct(int $r, int $g, int $b)
 	{
 		$this->r = $r;
 		$this->g = $g;
 		$this->b = $b;
 	}
 
+
 	public static function green(string $s): string
 	{
-		return self::colored($s, 'green', "\033[32m");
+		return self::colored($s, 'green', "\033[32m", '03');
 	}
+
+
+	public static function red(string $s): string
+	{
+		return self::colored($s, 'red', "\033[31m", '04');
+	}
+
 
 	##############
 	### Object ###
 	##############
 
-	public static function colored(string $s, string $colorHTML, string $colorCLI)
+	public static function colored(string $s, string $colorHTML, string $colorCLI, string $colorIRC): string
 	{
 		switch (Application::$MODE)
 		{
+			case GDT::RENDER_NIL: # These renderers have no colors!
+			case GDT::RENDER_GTK:
+			case GDT::RENDER_JSON:
+			case GDT::RENDER_XML:
+			case GDT::RENDER_BINARY:
+				return $s;
+
 			case GDT::RENDER_CLI:
 				return "{$colorCLI}{$s} \033[0m";
-			case GDT::RENDER_HTML:
-			case GDT::RENDER_CELL:
+
+			case GDT::RENDER_IRC:
+				// IRC is not part of phpgdo core
+				return module_enabled('DogIRC') ?
+					\GDO\DogIRC\IRCLib::colored($s, $colorIRC) :
+					$s;
+
+			default: # HTML
 				return sprintf('<span style="color: %s;">%s</span>', $colorHTML, $s);
-			default:
-				return $s;
 		}
 	}
 
-	public static function red(string $s): string
-	{
-		return self::colored($s, 'red', "\033[31m");
-	}
+	/**
+	 * Array[255,255,255]
+	 * @return int[]
+	 */
+	public function asRGB(): array { return [$this->r, $this->g, $this->b]; }
 
-	public function asRGB() { return [$this->r, $this->g, $this->b]; }
+	public function asHex(): string { return sprintf('#%02x%02x%02x', $this->r, $this->g, $this->b); }
 
-	public function asHex() { return sprintf('#%02x%02x%02x', $this->r, $this->g, $this->b); }
-
-	public function complementary()
+	public function complementary(): self
 	{
 		if (($this->r == 0) && ($this->g == 0) && ($this->b == 0))
 		{
@@ -84,18 +100,21 @@ final class Color
 		}
 		else
 		{
-			throw new Error('Cannot parse hex color ' . $hex);
+			throw new \Error('Cannot parse hex color ' . $hex);
 		}
 	}
 
-	public function asHSV()
+	/**
+	 * @return float[]
+	 */
+	public function asHSV(): array
 	{
-		$h = $s = $v = 0;
+		$h = 0;
 		$r = $this->r;
 		$g = $this->g;
 		$b = $this->b;
-		$max = $this->max3($r, $g, $b);
-		$dif = floatval($max - $this->min3($r, $g, $b));
+		$max = max($r, $g, $b);
+		$dif = $max - min($r, $g, $b);
 		$s = $max === 0 ? 0 : (100 * $dif / $max);
 		if ($s === 0)
 		{
@@ -127,25 +146,29 @@ final class Color
 		return [$h, $s, $v];
 	}
 
-	private function max3($a, $b, $c) { return ($a > $b) ? (($a > $c) ? $a : $c) : (($b > $c) ? $b : $c); }
-
-	private function min3($a, $b, $c) { return ($a < $b) ? (($a < $c) ? $a : $c) : (($b < $c) ? $b : $c); }
+//	private function max3($a, $b, $c) { return ($a > $b) ? (($a > $c) ? $a : $c) : (($b > $c) ? $b : $c); }
+//
+//	private function min3($a, $b, $c) { return ($a < $b) ? (($a < $c) ? $a : $c) : (($b < $c) ? $b : $c); }
 
 	###########
 	### CLI ###
 	###########
 
-	public static function fromHSV($h, $s, $v): self
+	public static function fromHSV(float $h, float $s, float $v): self
 	{
 		[$r, $g, $b] = self::hsvToRGB($h, $s, $v);
 		return new self($r, $g, $b);
 	}
 
-	public static function hsvToRGB($h, $s, $v)
+	/**
+	 * The HSV floats are in range 0-1
+	 * @return int[]
+	 */
+	public static function hsvToRGB(float $h, float $s, float $v): array
 	{
 		if ($s === 0)
 		{
-			$r = $g = $b = round($v * 2.55);
+			$r = $g = $b = (int) round($v * 2.55);
 		}
 		else
 		{
@@ -190,14 +213,14 @@ final class Color
 					$b = $q;
 					break;
 			}
-			$r = round($r * 255);
-			$g = round($g * 255);
-			$b = round($b * 255);
+			$r = (int) round($r * 255);
+			$g = (int) round($g * 255);
+			$b = (int) round($b * 255);
 		}
 		return [$r, $g, $b];
 	}
 
-	private function hueShift($h, $s)
+	private function hueShift(float $h, float $s): float
 	{
 		$h += $s;
 		while ($h >= 360.0)

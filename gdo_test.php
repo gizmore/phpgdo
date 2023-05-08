@@ -75,9 +75,11 @@ final class gdo_test extends Application
 		$this->all = $all;
 		if ($all)
 		{
+			$this->verboseMessage('All tests will be run!');
 			$this->blanks = true;
 			$this->config = true;
 			$this->double = true;
+			$this->friends = true;
 			$this->icons = true;
 			$this->methods = true;
 			$this->nulls = true;
@@ -94,6 +96,7 @@ final class gdo_test extends Application
 	public function blanks(bool $blanks = true): static
 	{
 		$this->blanks = $blanks;
+		$this->verboseMessage("The auto test for blanks got enabled!");
 		return $this;
 	}
 
@@ -103,6 +106,7 @@ final class gdo_test extends Application
 	public function config(bool $config = true): static
 	{
 		$this->config = $config;
+		$this->verboseMessage("The auto test for configurations got enabled!");
 		return $this;
 	}
 
@@ -112,6 +116,17 @@ final class gdo_test extends Application
 	public function double(bool $double = true): static
 	{
 		$this->double = $double;
+		$this->verboseMessage("The auto test for double install got enabled!");
+		return $this;
+	}
+
+
+	public bool $friends = false;
+
+	public function friends(bool $friends = true): static
+	{
+		$this->friends = $friends;
+		$this->verboseMessage("The auto test for friendencies got enabled!");
 		return $this;
 	}
 
@@ -121,6 +136,7 @@ final class gdo_test extends Application
 	public function icons(bool $icons = true): static
 	{
 		$this->icons = $icons;
+		$this->verboseMessage("The auto test for icons got enabled!");
 		return $this;
 	}
 
@@ -130,6 +146,7 @@ final class gdo_test extends Application
 	public function methods(bool $methods = true): static
 	{
 		$this->methods = $methods;
+		$this->verboseMessage("The auto test for methods got enabled!");
 		return $this;
 	}
 
@@ -138,6 +155,7 @@ final class gdo_test extends Application
 	public function nulls(bool $nulls = true): static
 	{
 		$this->nulls = $nulls;
+		$this->verboseMessage("The auto test for empties got enabled!");
 		return $this;
 	}
 
@@ -146,6 +164,7 @@ final class gdo_test extends Application
 	public function parents(bool $parents = true): static
 	{
 		$this->parents = $parents;
+		$this->verboseMessage("The auto test for dependencies got enabled!");
 		return $this;
 	}
 
@@ -171,6 +190,7 @@ final class gdo_test extends Application
 	public function quick(bool $quick = true): static
 	{
 		$this->quick = $quick;
+		$this->verboseMessage("The quick mode got enabled!");
 		return $this;
 	}
 
@@ -179,6 +199,7 @@ final class gdo_test extends Application
 	public function rendering(bool $rendering = true): static
 	{
 		$this->rendering = $rendering;
+		$this->verboseMessage("The auto test for rendering got enabled!");
 		return $this;
 	}
 
@@ -187,6 +208,7 @@ final class gdo_test extends Application
 	public function seo(bool $seo = true): static
 	{
 		$this->seo = $seo;
+		$this->verboseMessage("The auto test for SEO got enabled!");
 		return $this;
 	}
 
@@ -195,6 +217,7 @@ final class gdo_test extends Application
 	public function utility(bool $utility = true): static
 	{
 		$this->utility = $utility;
+		$this->verboseMessage("The test for utilites got enabled!");
 		return $this;
 	}
 
@@ -234,6 +257,7 @@ final class gdo_test extends Application
 		echo "--blanks = Run blank GDO creation tests.\n";
 		echo "--config = Run all configuration and settings test options.\n";
 		echo "--double = Run the install process two times.\n";
+		echo "--friends = Treat all friendencies as dependency.\n";
 		echo "--icons = Run icon tests (DELETE?).\n";
 		echo "--methods = Run execution tests.\n";
 		echo "--nulls = Run all empty creation tests (DELETE?).\n";
@@ -250,7 +274,7 @@ final class gdo_test extends Application
 	{
 		if ($this->isUnitTestVerbose())
 		{
-			echo "{$string}\n";
+			printf("%s: %s\n", TextStyle::italic('Note'), $string);
 		}
 	}
 
@@ -261,7 +285,7 @@ $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 $db = Database::init();
 
 $index = 0;
-$options = getopt('abcdhimnpqrsuv', ['all', 'blanks', 'config', 'double', 'help', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo', 'utility', 'verbose'], $index);
+$options = getopt('abcdfhimnpqrsuv', ['all', 'blanks', 'config', 'double', 'friends', 'help', 'icons', 'methods', 'nulls', 'perf', 'quick', 'rendering', 'seo', 'utility', 'verbose'], $index);
 $opcount = 0;
 
 if (isset($options['v']) || isset($options['verbose']))
@@ -291,6 +315,12 @@ if (isset($options['c']) || isset($options['config']))
 if (isset($options['d']) || isset($options['double']))
 {
 	$app->double();
+	$opcount++;
+}
+
+if (isset($options['f']) || isset($options['friends']))
+{
+	$app->friends();
 	$opcount++;
 }
 
@@ -478,11 +508,8 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 		foreach ($modules as $moduleName)
 		{
 			$module = $loader->loadModuleFS($moduleName);
-			$more = Installer::getDependencyModules($moduleName);
-			$more = array_map(function ($m)
-			{
-				return $m->getModuleName();
-			}, $more);
+			$more = Installer::getDependencyNames($moduleName);
+			$more = $app->friends ? array_merge($more, Installer::getFriendencyNames($moduleName)) : $more;
 			$modules = array_merge($modules, $more);
 			$modules[] = $module->getModuleName();
 		}

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
@@ -9,9 +10,9 @@ use GDO\Core\GDT;
  * It is included in the core, and a reference for possible icons.
  * However, the possible icons are not limited to the ones defined here.
  *
- * @TODO: Speed up icon rendering by assigning constants.
+ * @TODO: Speed up icon rendering by assigning constant ints to the map keys.
  *
- * @version 7.0.2
+ * @version 7.0.3
  * @since 6.5.0
  * @author gizmore
  * @see https://www.utf8icons.com/
@@ -99,6 +100,7 @@ final class GDT_IconUTF8
 		'message' => '☰',
 		'minus' => '-',
 		'money' => '$',
+		'name' => '📛',
 		'numeric' => 'π',
 		'password' => '⚷',
 		'pause' => '⏸',
@@ -115,13 +117,16 @@ final class GDT_IconUTF8
 		'required' => '❋',
 		'schedule' => '☷',
 		'search' => '🔍',
+		'select' => '🎚',
 		'settings' => '⚙',
+		'shopping' => '🛒',
 		'spiderweb' => '🕸',
 		'star' => '★',
 		'stop' => '❌',
 		'sun' => '🌞',
 		'table' => '☷',
 		'tag' => '⛓',
+		'text' => '🗟',
 		'thumbs_up' => '👍',
 		'thumbs_down' => '👎',
 		'thumbs_none' => '👉',
@@ -144,7 +149,7 @@ final class GDT_IconUTF8
 	public static function iconS(string $icon, string $iconText = null, string $style = null): string
 	{
 		$title = $iconText ? ' title="' . html($iconText) . '"' : GDT::EMPTY_STRING;
-		$_icon = isset(self::$MAP[$icon]) ? self::$MAP[$icon] : $icon;
+		$_icon = self::$MAP[$icon] ?? $icon;
 		return "<span class=\"gdo-icon gdo-utf8-icon-$icon\"$style$title>$_icon</span>";
 	}
 

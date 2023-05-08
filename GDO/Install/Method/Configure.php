@@ -83,11 +83,7 @@ class Configure extends MethodForm
 	public function onSaveConfig(): GDT
 	{
 		$this->writeConfig($this->configPath());
-		return GDT_Redirect::make()->redirectTime(2)
-			->back()
-			->redirectMessage('msg_config_written', [
-				html($this->cfgConfigName()),
-			], Config::hrefStep(3));
+		return GDT_Redirect::to(Config::hrefStep(3), 'msg_config_written', [$this->cfgConfigName()], 5);
 	}
 
 	public function writeConfig(string $path): bool

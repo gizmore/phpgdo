@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace GDO\UI;
 
-use GDO\Core\GDT;
 use GDO\Core\GDT_Field;
 use GDO\Table\GDT_Filter;
 
@@ -52,7 +51,7 @@ trait WithProxy
 
 	public function renderPDF(): string { return $this->proxy->renderPDF(); }
 
-	public function renderJSON(): array|string|null { return $this->proxy->renderJSON(); }
+	public function renderJSON(): array|string|null|int|bool|float { return $this->proxy->renderJSON(); }
 
 	public function renderXML(): string { return $this->proxy->renderXML(); }
 
@@ -82,7 +81,7 @@ trait WithProxy
 		return $this->proxy->getVar();
 	}
 
-	public function getValue(): bool|int|float|string|array|null|object
+	public function getValue(): mixed
 	{
 		return $this->proxy->getValue();
 	}
@@ -106,8 +105,8 @@ trait WithProxy
 		return $this->proxy->isPositional();
 	}
 
-	public function renderHeader(): string { return $this->proxy->renderHeader(); }
-
 	public function renderOrder(): string { return $this->proxy->renderOrder(); }
+
+	public function renderHeader(): string { return $this->proxy->renderHeader(); }
 
 }

@@ -29,8 +29,12 @@ just sequentiell. Exclusively use the new [WS](../GDO/Util/WS.php) rendererer.
 - Created a [composer.json](../composer.json) for the GDOv7 core. It can be installed with composer require gizmore/phpgdo.
 - The gdo_test.sh fuzzer will only fuzz until the first valid value for a parameter. This is faster but misses conjunctured parameter problems.
 - New i18n utilites; Check unused lang file entries and report problems in lang files who differ from the englis. Also report untranslated keys in foreign 
-  files.
-
+ files.
+- Make use of faster version of `html()` named `htm()`, which can only be used inside double quotes. It skips `<>'`, down to 2 replacements, and never changes 
+the string length. However, markup can be invalid...
+  length. 
+- All [GDT_Field](../GDO/Core/GDT_Field.php) are now required to have an icon via a new unit test.
+- New module [W3CValidator](https://github.com/gizmore/phpgdo-w3c-validator)
 
 ## 7.0.3-r1 (*almost there*)
 

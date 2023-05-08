@@ -4,6 +4,7 @@ namespace GDO\Tests;
 
 use GDO\CLI\CLI;
 use GDO\Core\Application;
+use GDO\Core\GDO_DBException;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Core\WithModule;
@@ -210,6 +211,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * Restore gizmore because auto coverage messes with him a lot.
+	 *
+	 * @throws GDO_DBException
 	 */
 	protected function restoreUserPermissions(GDO_User $user): void
 	{
@@ -248,6 +251,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
 		$new = Assert::getCount();
 		$add = $new - self::$LAST_COUNT;
 		self::$ASSERT_COUNT += $add;
+		if ($this->needsNewIP())
+		{
+			GDT_IP::$CURRENT = $this->nextIP();
+			\gdo_test::instance()->verboseMessage('Switched IP to ' . GDT_IP::$CURRENT);
+		}
 	}
 
 	# ID 1

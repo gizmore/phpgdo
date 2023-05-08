@@ -30,21 +30,21 @@ abstract class MethodCard extends Method
 		];
 	}
 
-	public function isTrivial(): bool
-	{
-		return false;
-	}
-
-	# #############
-	# ## Params ###
-	# #############
-
 	/**
 	 * Parameter name.
 	 */
 	public function idName(): string { return 'id'; }
 
+	# #############
+	# ## Params ###
+	# #############
+
 	abstract public function gdoTable(): GDO;
+
+	public function isTrivial(): bool
+	{
+		return false;
+	}
 
 	public function execute(): GDT
 	{

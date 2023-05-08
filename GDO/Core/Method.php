@@ -8,7 +8,6 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Language\Trans;
-use GDO\UI\GDT_Error;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Redirect;
 use GDO\UI\WithDescription;
@@ -19,9 +18,10 @@ use GDO\Util\Strings;
 use Throwable;
 
 /**
- * Abstract baseclass for all methods.
- * Checks permission.
- * Sets up SEO method meta data.
+ * Abstract baseclass for *ALL* methods.
+ * - Checks permission.
+ * - Sets up SEO method meta data.
+ * - err... no idea
  *
  * @version 7.0.3
  * @since 3.0.1
@@ -30,7 +30,7 @@ use Throwable;
  * @see GDT
  * @see GDO
  */
-abstract class Method #extends GDT
+abstract class Method
 {
 
 	use WithTitle;
@@ -50,14 +50,14 @@ abstract class Method #extends GDT
 	# execution
 	public string $button;
 
-	private bool $locked = false;
+	private string $locked = '';
 
 	public int $priority = 50;
 
 	/**
 	 * Get a method by cli convention. Aliases first, then module DOT method.
 	 */
-	public static function getMethod(string $alias): ?self
+	public static function getMethod(string $alias): ?static
 	{
 		$alias = strtolower($alias);
 		if (isset(self::$CLI_ALIASES[$alias]))
@@ -65,19 +65,15 @@ abstract class Method #extends GDT
 			$klass = self::$CLI_ALIASES[$alias];
 			return call_user_func([$klass, 'make']);
 		}
-		else
+		elseif (str_contains($alias, '.'))
 		{
-			$moduleName = Strings::substrTo($alias, '.', $alias);
-
+			$moduleName = Strings::substrTo($alias, '.');
 			if (!($module = ModuleLoader::instance()->getModule($moduleName, false)))
 			{
 				return null;
 			}
-			$methodName = Strings::substrFrom($alias, '.', t('none'));
-			if ($method = $module->getMethod($methodName))
-			{
-				return $method;
-			}
+			$methodName = Strings::substrFrom($alias, '.');
+			return $module->getMethod($methodName);
 		}
 		return null;
 	}
@@ -188,7 +184,7 @@ abstract class Method #extends GDT
 		global $me;
 		$me = $this;
 		$db = Database::instance();
-		$this->locked = false;
+		$this->locked = '';
 		$transactional = false;
 		$response = GDT_Response::make();
 		try
@@ -228,6 +224,7 @@ abstract class Method #extends GDT
 				$transactional = true;
 				$db->transactionBegin();
 			}
+
 //			$this->lock();
 
 			# 2) Before execute
@@ -501,33 +498,33 @@ abstract class Method #extends GDT
 	### Instanciate ###
 	###################
 
-	private function lock(): bool
-	{
-		$user = GDO_User::current();
-		if (
-			(!module_enabled('Session')) ||
-			(!$this->isLocking()) ||
-			(!$user->isPersisted())
-		)
-		{
-			return true;
-		}
-		$lock = $this->lockKey();
-		$this->locked = Database::instance()->lock($lock);
-		return $this->locked;
-	}
+//	private function lock(): bool
+//	{
+//		$user = GDO_User::current();
+//		if (
+//			(!module_enabled('Session')) ||
+//			(!$this->isLocking()) ||
+//			(!$user->isPersisted())
+//		)
+//		{
+//			return true;
+//		}
+//		$lock = $this->lockKey();
+//		$this->locked = Database::instance()->lock($lock);
+//		return $this->locked;
+//	}
 
 	############
 	### Exec ###
 	############
 
-	public function isLocking(): bool { return false; }
-
-	private function lockKey(): string
-	{
-		$user = GDO_User::current();
-		return GDO_SITENAME . "_USERLOCK_{$user->getID()}";
-	}
+//	public function isLocking(): bool { return false; }
+//
+//	private function lockKey(): string
+//	{
+//		$user = GDO_User::current();
+//		return GDO_SITENAME . "_USERLOCK_{$user->getID()}";
+//	}
 
 	/**
 	 * Detect if we should start a transaction. # @TODO only mark DB transaction ready / lazily
@@ -576,6 +573,10 @@ abstract class Method #extends GDT
 		Website::addMeta(['keywords', $this->getMethodKeywords(), 'name']);
 		Website::addMeta(['description', $description, 'name']);
 		Website::addMeta(['og:description', $description, 'property']);
+		if ($image = $this->seoMetaImage())
+		{
+			Website::addMeta($image);
+		}
 	}
 
 	public function getMethodDescription(): string
@@ -636,26 +637,26 @@ abstract class Method #extends GDT
 		return $this->getModule()->href($this->getMethodName(), $append);
 	}
 
-	private function unlock(): bool
-	{
-		if ($this->locked)
-		{
-			if (Database::instance()->unlock($this->lockKey()))
-			{
-				$this->locked = false;
-			}
-		}
-		return !$this->locked;
-	}
+//	private function unlock(): bool
+//	{
+//		if ($this->locked)
+//		{
+//			if (Database::instance()->unlock($this->lockKey()))
+//			{
+//				$this->locked = false;
+//			}
+//		}
+//		return !$this->locked;
+//	}
 
 	##################
 	### Statistics ###
 	##################
 
-	public function locking(): bool
-	{
-		return $this->isLocking() && $this->transactional();
-	}
+//	public function locking(): bool
+//	{
+//		return $this->isLocking() && $this->transactional();
+//	}
 
 	#############
 	### Input ###
@@ -702,9 +703,6 @@ abstract class Method #extends GDT
 		return GDO_User::findById($this->plugUserID());
 	}
 
-	#############
-	### Error ###
-	#############
 
 	public function plugUserID(): string
 	{
@@ -718,9 +716,11 @@ abstract class Method #extends GDT
 		return $this;
 	}
 
-	################
-	### Redirect ###
-	################
+
+	#############
+	### Error ###
+	#############
+
 
 	public function message(string $key, array $args = null, int $code = 200, bool $log = true): GDT
 	{
@@ -728,39 +728,40 @@ abstract class Method #extends GDT
 		return Website::message($titleRaw, $key, $args, $log, $code);
 	}
 
-	public function redirectBack(string $default = null): GDT_Redirect
+
+	################
+	### Redirect ###
+	################
+
+	/**
+	 * Redirect someone silently and quickly.
+	 */
+	public function redirect(string $href, int $time=0): GDT
 	{
-		$href = GDT_Redirect::hrefBack($default);
-		return $this->redirect($href);
+		$re = GDT_Redirect::to($href)->time($time);
+		GDT_Page::instance()->topResponse()->addField($re);
+		return GDT_Response::make();
 	}
 
-	public function redirect(string $href): GDT_Redirect
+	public function redirectMessage(string $key, array $args = null, string $href = null): GDT
 	{
-		return GDT_Redirect::make()->href($href);
+		$re = GDT_Redirect::to($href)->time(20)->redirectMessage($key, $args);
+		GDT_Page::instance()->topResponse()->addField($re);
+		return GDT_Response::make();
 	}
 
-	public function redirectMessage(string $key, array $args = null, string $href = null): GDT_Redirect
+
+	public function redirectError(string $key, array $args = null, string $href = null): GDT
 	{
-		$href = $href ?: GDT_Redirect::hrefBack();
-		$redirect = GDT_Redirect::make()->href($href)
-			->redirectMessage($key, $args);
-		GDT_Page::instance()->topResponse()->addField($redirect);
-		return $redirect;
+		$re = GDT_Redirect::to($href)->time(20)->redirectError($key, $args);
+		GDT_Page::instance()->topResponse()->addField($re);
+		return GDT_Response::make();
 	}
 
 	################
 	### Template ###
 	################
 
-	public function redirectError(string $key, array $args = null, string $href = null): GDT_Redirect
-	{
-		$href = $href ?: GDT_Redirect::hrefBack();
-		$redirect = GDT_Redirect::make()->href($href)
-			->redirectError($key, $args);
-		GDT_Page::instance()->topResponse()->
-		addField($redirect);
-		return $redirect;
-	}
 
 	public function templatePHP(string $path, array $tVars = null): GDT_Template
 	{
@@ -768,20 +769,22 @@ abstract class Method #extends GDT
 			$this->getModuleName(), $path, $tVars);
 	}
 
-	##################
-	### CLI Button ###
-	##################
 
 	public function tempPath(string $path = ''): string
 	{
 		return $this->getModule()->tempPath($this->getMethodName() . '/' . $path);
 	}
 
+
+	##################
+	### CLI Button ###
+	##################
+
+
 	public function cliButton(string $button): self
 	{
 		$this->button = $button;
-		$this->addInput($button, '1');
-		return $this;
+		return $this->addInput($button, '1');
 	}
 
 }

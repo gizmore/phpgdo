@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace GDO\CLI;
 
 use GDO\Form\MethodForm;
-use GDO\User\GDO_Permission;
 
 /**
  * Abstract CLI method does not work via HTTP.

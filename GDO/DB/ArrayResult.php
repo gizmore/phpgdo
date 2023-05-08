@@ -141,22 +141,22 @@ final class ArrayResult extends Result
 	{
 //		if ($searchTerm !== null)
 //		{
-			$hits = [];
-			foreach ($data as $gdo)
+		$hits = [];
+		foreach ($data as $gdo)
+		{
+			foreach ($filters as $gdt)
 			{
-				foreach ($filters as $gdt)
+				if ($gdt->isSearchable())
 				{
-					if ($gdt->isSearchable())
+					if ($gdt->gdo($gdo)->searchGDO($searchTerm))
 					{
-						if ($gdt->gdo($gdo)->searchGDO($searchTerm))
-						{
-							$hits[] = $gdo;
-							break;
-						}
+						$hits[] = $gdo;
+						break;
 					}
 				}
 			}
-			$data = $hits;
+		}
+		$data = $hits;
 //		}
 
 		$this->data = $data;

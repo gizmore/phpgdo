@@ -102,7 +102,7 @@ trait WithValue
 		return $this->var;
 	}
 
-	public function getValue(): bool|int|float|string|array|null|object
+	public function getValue(): mixed
 	{
 		if (!$this->valueConverted)
 		{

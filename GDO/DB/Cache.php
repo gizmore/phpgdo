@@ -398,77 +398,95 @@ class Cache
 	{
 		$dir = GDO_TEMP_PATH . 'cache/';
 		self::$CACHE_FLUSH++; #PP#delete#
-		return FileUtil::removeDir($dir) && FileUtil::createDir($dir);
+		FileUtil::removedDir($dir);
+		return !!FileUtil::createdDir($dir);
 	}
 
+	/**
+	 * A recache means we poison other processes via IPC.
+	 */
 	public function recache(GDO $object): GDO
 	{
 		if (!$object->isPersisted())
 		{
 			return $object;
 		}
+		self::$RECACHING[] = $object->recaching();
+		return $object;
 
-		$back = $object;
-
-		# GDO cache
-		if ($back->gdoCached())
-		{
-			$id = $object->getID();
-
-			# GDO single cache
-			if (isset($this->cache[$id]))
-			{
-				$old = $this->cache[$id];
-				$old->setGDOVars($object->getGDOVars());
-				$back = $old;
-			}
-			else
-			{
-				$this->cache[$id] = $back;
-			}
-		}
-
-		# Memcached
-		if (GDO_MEMCACHE && $back->memCached())
-		{
-			self::replace($back->gkey(), $back, GDO_MEMCACHE_TTL);
-		}
-
-		# Mark for recache
-		if ($back->gdoCached())
-		{
-			if (isset($back->recache))
-			{
-				self::$RECACHING[] = $back->recaching();
-			}
-		}
-
-// 		$back->tempReset();
-
-		return $back;
+//		$back = $object;
+//
+//		# GDO cache
+//		if ($back->gdoCached())
+//		{
+//			$id = $object->getID();
+//
+//			# GDO single cache
+//			if (isset($this->cache[$id]))
+//			{
+//				$old = $this->cache[$id];
+//				$old->setGDOVars($object->getGDOVars());
+//				$back = $old;
+//			}
+//			else
+//			{
+//				$this->cache[$id] = $back;
+//			}
+//		}
+//
+//		# Memcached
+//		if (GDO_MEMCACHE && $back->memCached())
+//		{
+//			self::replace($back->gkey(), $back, GDO_MEMCACHE_TTL);
+//		}
+//
+//		# Mark for recache
+//		if ($back->gdoCached())
+//		{
+//			if (isset($back->recache))
+//			{
+//				self::$RECACHING[] = $back->recaching();
+//			}
+//		}
+//
+//// 		$back->tempReset();
+//
+//		return $back;
 	}
 
-	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL)
-	{
-		self::debug('replace', $key, $value); #PP#delete#
-
-		switch (GDO_MEMCACHE)
-		{
-			case 1:
-				if (!defined('GDO_MEMCACHED_FALLBACK'))
-				{
-					self::$MEMCACHED->replace(MEMCACHEPREFIX . $key, $value, $expire);
-				}
-				break;
-			case 2:
-				self::fileSetSerialized($key, $value);
-				break;
-		}
-	}
+//	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
+//	{
+//		self::debug('replace', $key, $value); #PP#delete#
+//
+//		switch (GDO_MEMCACHE)
+//		{
+//			case 1:
+//				if (!defined('GDO_MEMCACHED_FALLBACK'))
+//				{
+//					self::$MEMCACHED->replace(MEMCACHEPREFIX . $key, $value, $expire);
+//				}
+//				break;
+//			case 2:
+//				self::fileSetSerialized($key, $value);
+//				break;
+//		}
+//	}
 
 	# #################
 	# ## File cache ###
 	# #################
+
+	private static function debug(string $event, string $key, mixed $value): void
+	{
+		if (GDO_CACHE_DEBUG >= 1)
+		{
+			Logger::log('cache', sprintf('%s %s (%s)', $event, $key, mb_substr($value, 0, 64)));
+			if (GDO_CACHE_DEBUG >= 2)
+			{
+				Logger::log('cache', Debug::backtrace('Backtrace', false));
+			}
+		}
+	}
 
 	/**
 	 * Store an item in a file cash.
@@ -492,13 +510,13 @@ class Cache
 		{
 			self::debug('fileset', $key, $content); #PP#delete#
 			$path = self::filePath($key);
-			FileUtil::createDir(dirname($path));
+			FileUtil::createdDir(dirname($path));
 			return file_put_contents($path, $content) !== false;
 		}
 		return false;
 	}
 
-	public function uncache(GDO $object)
+	public function uncache(GDO $object): void
 	{
 		# Mark for recache
 		if ((!isset($object->recache)) && ($object->gdoCached()))
@@ -506,9 +524,7 @@ class Cache
 			self::$RECACHING[] = $object->recaching();
 		}
 
-		$id = $object->getID();
-		unset($this->cache[$id]);
-
+		unset($this->cache[$object->getID()]);
 		if (GDO_MEMCACHE && $object->memCached())
 		{
 			self::remove($object->gkey());
@@ -550,7 +566,7 @@ class Cache
 		if (FileUtil::isFile($filename))
 		{
 			self::$CACHE_REMOVE++; #PP#delete#
-			return FileUtil::removeFile($filename);
+			return FileUtil::removedFile($filename);
 		}
 		return true;
 	}
@@ -604,18 +620,6 @@ class Cache
 			case 2:
 				self::fileSetSerialized($key, $value);
 				break;
-		}
-	}
-
-	private static function debug(string $event, string $key, mixed $value): void
-	{
-		if (GDO_CACHE_DEBUG >= 1)
-		{
-			Logger::log('cache', sprintf('%s %s (%s)', $event, $key, mb_substr($value, 0, 64)));
-			if (GDO_CACHE_DEBUG >= 2)
-			{
-				Logger::log('cache', Debug::backtrace('Backtrace', false));
-			}
 		}
 	}
 

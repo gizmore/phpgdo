@@ -16,10 +16,12 @@ use GDO\UI\Color;
 class GDT_Checkbox extends GDT_Select
 {
 
-	public const TRUE = GDT::ONE;
-	public const FALSE = GDT::ZERO;
-	public const UNDETERMINED = '2';
+	final public const TRUE = GDT::ONE;
+	final public const FALSE = GDT::ZERO;
+	final public const UNDETERMINED = '2';
 	public bool $undetermined = false;
+
+	public string $icon = 'thumbs_none';
 
 	protected function __construct()
 	{
@@ -181,6 +183,14 @@ class GDT_Checkbox extends GDT_Select
 	####################
 	### Dynamic Icon ###
 	####################
+
+	public function initial(?string $initial): static
+	{
+		parent::initial($initial);
+		return $this->initThumbIcon();
+	}
+
+
 	/**
 	 * Init label icon with thumb up or thumb down.
 	 */

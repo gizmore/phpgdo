@@ -15,7 +15,7 @@ use GDO\Core\GDT;
  * @version 7.0.3
  * @since 6.2.0
  * @author gizmore
- * @see [GDO7](../../GDO7.php) - for global functions
+ * @see /GDO7.php - for global functions
  */
 trait WithText
 {
@@ -25,7 +25,14 @@ trait WithText
 	public ?array $textArgs;
 	public bool $textEscaped = false;
 
-	public function text(?string $key, array $args = null): self
+
+	public static function makeTexted(string $key, array $args = null): static
+	{
+		return static::make()->text($key, $args);
+	}
+
+
+	public function text(?string $key, array $args = null, bool $escaped = false): self
 	{
 		unset($this->textRaw);
 		if (!$key)
@@ -37,7 +44,7 @@ trait WithText
 			$this->textKey = $key;
 		}
 		$this->textArgs = $args;
-		return $this->textUnescaped();
+		return $this->textEscaped($escaped);
 	}
 
 	public function textUnescaped(bool $unescaped = true): self
@@ -51,13 +58,13 @@ trait WithText
 		return $this;
 	}
 
-	public function textArgs(string...$args)
+	public function textArgs(string...$args): static
 	{
 		$this->textArgs = count($args) ? $args : null;
 		return $this;
 	}
 
-	public function textRaw(?string $text): self
+	public function textRaw(?string $text, bool $esacped = false): self
 	{
 		unset($this->textRaw);
 		if ($text)
@@ -66,7 +73,7 @@ trait WithText
 		}
 		unset($this->textKey);
 		unset($this->textArgs);
-		return $this->textUnescaped();
+		return $this->textEscaped($esacped);
 	}
 
 	public function textNone(): self
@@ -74,7 +81,7 @@ trait WithText
 		unset($this->textRaw);
 		unset($this->textKey);
 		unset($this->textArgs);
-		return $this;
+		return $this->textUnescaped();
 	}
 
 	##############

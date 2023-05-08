@@ -125,7 +125,7 @@ class GDT_User extends GDT_Object
 		return $user ?? null;
 	}
 
-	public function getValue(): bool|int|float|string|array|null|object
+	public function getValue(): mixed
 	{
 		if ($user = parent::getValue())
 		{
@@ -225,7 +225,7 @@ class GDT_User extends GDT_Object
 		return t('unknown');
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->renderHTML();
 	}

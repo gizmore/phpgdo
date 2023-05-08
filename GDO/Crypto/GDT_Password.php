@@ -62,7 +62,7 @@ class GDT_Password extends GDT_String
 		return true;
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return null;
 	}

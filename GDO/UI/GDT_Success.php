@@ -39,7 +39,7 @@ final class GDT_Success extends GDT_Panel
 		return Color::green($this->renderText()) . "\n";
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return ['message' => $this->renderText()];
 	}

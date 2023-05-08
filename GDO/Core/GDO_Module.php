@@ -208,13 +208,10 @@ class GDO_Module extends GDO
 
 	/**
 	 * Get all license filenames.
-	 * If the filename is not "LICENSE", the module is considered to have a non GDOv7-LICENSE and the GDO license is not shown.
 	 */
 	public function getLicenseFilenames(): array
 	{
-		return [
-			'LICENSE',
-		];
+		return ['LICENSE'];
 	}
 
 	public function onWipe(): void {}
@@ -844,6 +841,8 @@ class GDO_Module extends GDO
 
 	/**
 	 * Load a user's settings into their temp cache.
+	 *
+	 * @throws GDO_DBException
 	 */
 	private function loadUserSettingsB(GDO_User $user): array
 	{
@@ -892,12 +891,12 @@ class GDO_Module extends GDO
 		return $this->userSetting($user, $key)->getVar();
 	}
 
-	public function settingValue(string $key): float|object|int|bool|array|string|null
+	public function settingValue(string $key): mixed
 	{
 		return $this->userSettingValue(GDO_User::current(), $key);
 	}
 
-	public function userSettingValue(GDO_User $user, string $key): float|object|int|bool|array|string|null
+	public function userSettingValue(GDO_User $user, string $key): mixed
 	{
 		return $this->userSetting($user, $key)->getValue();
 	}
@@ -907,20 +906,21 @@ class GDO_Module extends GDO
 		return self::saveUserSetting(GDO_User::current(), $key, $var);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
 		$gdt = $this->userSetting($user, $key);
-		$old = $gdt->var;
+		$old = $gdt->getVar();
 		if ($old === $var)
 		{
 			return $gdt;
 		}
-
 		if (!$user->getID())
 		{
 			return $gdt; # @TODO either persist the user on save setting or else?
 		}
-
 		if (!$gdt->validate($gdt->toValue($var)))
 		{
 			$this->error('err_invalid_user_setting', [
@@ -952,7 +952,6 @@ class GDO_Module extends GDO
 		}
 		GDT_Hook::callHook('UserSettingChanged', $user, $key, $old, $var);
 		$user->tempSet(self::SETTINGS_KEY, $settings);
-		$user->recache();
 		return $gdt;
 	}
 
@@ -970,17 +969,29 @@ class GDO_Module extends GDO
 			$this->getACLDefaultsFor($key);
 	}
 
-	private function _getACLDataCacheFor(GDO_User $user)
+	/**
+	 * @return GDO_UserSetting[]
+	 */
+	private function _getACLDataCacheFor(GDO_User $user): array
 	{
-		$key = "uset_acl_{$user->getID()}";
-		if (null === ($cache = Cache::get($key)))
+		try
 		{
-			$query1 = GDO_UserSetting::table()->select('uset_name, gdo_usersetting.*')->where('uset_user=' . $user->getID());
-			$query2 = GDO_UserSettingBlob::table()->select('uset_name, gdo_usersettingblob.*')->where('uset_user=' . $user->getID());
-			$cache = $query1->union($query2)->exec()->fetchAllArray2dObject();
-			Cache::set($key, $cache);
+			$key = "uset_acl_{$user->getID()}";
+			if (null === ($cache = Cache::get($key)))
+			{
+				$uid = $user->getID();
+				$query1 = GDO_UserSetting::table()->select('uset_name, gdo_usersetting.*')->where('uset_user=' . $uid);
+				$query2 = GDO_UserSettingBlob::table()->select('uset_name, gdo_usersettingblob.*')->where('uset_user=' . $uid);
+				$cache = $query1->union($query2)->exec()->fetchAllArray2dObject();
+				Cache::set($key, $cache);
+			}
+			return $cache;
 		}
-		return $cache;
+		catch (\Throwable $ex)
+		{
+			Debug::debugException($ex);
+			return [];
+		}
 	}
 
 	public function saveUserSettingACLRelation(GDO_User $user, string $key, string $relation): void
@@ -1320,8 +1331,23 @@ class GDO_Module extends GDO
 	protected function errorSystemDependency(string $key, array $args = null): bool
 	{
 		return $this->error('err_system_dependency', [
+			$this->gdoHumanName(),
 			t($key, $args),
 		]);
 	}
+
+	protected function warningSystemDependency(string $key, array $args = null): bool
+	{
+		return $this->message('warn_system_dependency', [
+			$this->gdoHumanName(),
+			t($key, $args),
+		]);
+	}
+
+	public function isGDOLicense(): bool
+	{
+		return $this->license == GDO::LICENSE;
+	}
+
 
 }

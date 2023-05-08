@@ -78,14 +78,12 @@ trait WithModule
 	# #############
 	public function getModule(): GDO_Module
 	{
-		$klass = get_class($this);
-		return self::getModuleByKlass($klass);
+		return self::getModuleByKlass(get_class($this));
 	}
 
 	public function getModuleName(): string
 	{
-		$klass = get_class($this);
-		return self::getModuleNameByKlass($klass);
+		return self::getModuleNameByKlass(get_class($this));
 	}
 
 	private static function getModuleByKlass(string $klass): GDO_Module

@@ -30,14 +30,14 @@ class Ekko extends Method
 		];
 	}
 
-	protected function getText(): string
-	{
-		return implode(",", $this->gdoParameterValue('text'));
-	}
-
 	public function execute(): GDT
 	{
 		return GDT_String::make()->var($this->getText());
+	}
+
+	protected function getText(): string
+	{
+		return implode(',', $this->gdoParameterValue('text'));
 	}
 
 }

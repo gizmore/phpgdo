@@ -156,7 +156,7 @@ class GDT_Timestamp extends GDT_DBField
 
 	public function renderCLI(): string { return $this->renderLabel() . ': ' . $this->getVar(); }
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return (string) (Time::getTimestamp($this->getVar()) * 1000.0);
 	}

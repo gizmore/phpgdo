@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Tests\Test;
 
+use GDO\Core\Debug;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Module_Core;
 use GDO\Tests\TestCase;
@@ -34,7 +35,12 @@ final class TestCore extends TestCase
 	{
 		$result = GDT_Expression::fromLine('core.directoryindex /GDO/')->execute();
 		$result = $result->renderCLI();
-		assertStringContainsString('GDO', $result, 'Check if directory index works');
+		assertStringContainsString('Net', $result, 'Check if directory index works');
+	}
+
+	public function testExceptionCount() : void
+	{
+		self::assertEquals(0, Debug::$EXCEPTIONS_UNHANDLED, "Assert that we have no more unhandled execptions!");
 	}
 
 }

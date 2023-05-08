@@ -13,11 +13,11 @@ use GDO\UI\GDT_Page;
 <!DOCTYPE html>
 <html lang="<?=Trans::$ISO?>">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title><?=Website::displayTitle()?></title>
-    <meta property="og:title" content="<?=sitename()?>"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="GDO v<?=Module_Core::GDO_REVISION?>">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title><?=Website::displayTitle()?></title>
+	<meta property="og:title" content="<?=sitename()?>"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="generator" content="GDO v<?=Module_Core::GDO_REVISION?>">
 	<?=Website::displayHead()?>
 	<?=Website::displayMeta()?>
 	<?=Website::displayLink()?>
@@ -26,16 +26,16 @@ use GDO\UI\GDT_Page;
 
 <div id="gdo-pagewrap">
 
-    <header id="gdo-header"><?=$page->topBar()->render()?></header>
+	<header id="gdo-header"><?=$page->topBar()->render()?></header>
 
-    <div class="gdo-body">
-        <div class="gdo-main">
+	<div class="gdo-body">
+		<div class="gdo-main">
 			<?=$page->topResponse()->render()?>
 			<?=isset($page->html) ? $page->html : ''?>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <footer id="gdo-footer"><?=$page->bottomBar()->render()?></footer>
+	<footer id="gdo-footer"><?=$page->bottomBar()->render()?></footer>
 
 </div>
 <?=GDT_Loading::make()->render()?>

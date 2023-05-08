@@ -171,7 +171,7 @@ final class ModuleProviders
 'Birthday' => [],
 'Bootstrap5' => ['JQuery'],
 'Bootstrap5Theme' => ['Bootstrap5', 'Moment'],
-'Captcha' => [],
+'Captcha' => ['Session'],
 'Category' => [],
 'ChatGPT' => ['File'],
 'CKEditor' => ['HTML', 'JQuery'],

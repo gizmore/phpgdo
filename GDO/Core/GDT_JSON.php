@@ -26,7 +26,7 @@ class GDT_JSON extends GDT_Text
 
 	public static function decode(string $string): ?array { return @json_decode($string, true); }
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->getValue();
 	}

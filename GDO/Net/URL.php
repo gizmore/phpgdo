@@ -39,7 +39,7 @@ final class URL
 		return $this->parts['scheme'] ?? self::localScheme();
 	}
 
-	public static function localScheme() :string
+	public static function localScheme(): string
 	{
 		if (Application::$INSTANCE->isCLI())
 		{

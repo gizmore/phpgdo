@@ -208,7 +208,8 @@ function json_quote(string $s): string
 
 function json(array|string|int|float|bool|null $value): string
 {
-	return json_encode($value, GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0);
+	$enc = json_encode($value, GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0);
+	return $enc ?: uriencode($value);
 }
 
 /**
@@ -216,18 +217,22 @@ function json(array|string|int|float|bool|null $value): string
  * *Performance stunt*: Replace only the same character count to safe clock cycles. the func is probably a hot spot.
  * In CLI mode, shell paramter escaping and color code removal is done.
  *
+ * @see htm
  * @see htmlspecialchars
  */
-function html(?string $html): string
+function html(?string $s): string
 {
-	$html = (string) $html;
+	$s = (string) $s;
 	switch (Application::$MODE)
 	{
 		case GDT::RENDER_CLI:
-			return CLI::removeColorCodes($html);
+			return CLI::removeColorCodes($s);
 
 		case GDT::RENDER_BINARY:
-			return $html;
+			return $s;
+
+		case GDT::RENDER_JSON:
+			return json($s);
 
 		default:
 			return str_replace(
@@ -241,6 +246,35 @@ function html(?string $html): string
 				'&quot;',
 				'&lt;',
 				'&gt;',
+			], $s);
+	}
+}
+
+/**
+ * A fast version of htmlspecialchars.
+ * It can ONLY only be used inside double quotes!
+ */
+function htm(?string $html): string
+{
+	if ($html === null)
+	{
+		return GDT::EMPTY_STRING;
+	}
+	switch (Application::$MODE)
+	{
+		case GDT::RENDER_CLI:
+		case GDT::RENDER_BINARY:
+		case GDT::RENDER_JSON:
+			return html($html);
+
+		default:
+			return str_replace(
+				[
+					'&',
+					'"',
+				], [
+				'+',
+				'\'',
 			], $html);
 	}
 }
@@ -273,12 +307,15 @@ function hdrc(string $header, bool $replace = true): void
 function hdr(string $header, bool $replace = true): void
 {
 	$app = Application::$INSTANCE;
-	if ($app->isUnitTestVerbose())
+	if ($app->isUnitTests())
 	{
-		echo "HEADER: $header\n";
-		if (ob_get_level())
+		if ($app->isUnitTestVerbose())
 		{
-			ob_flush();
+			printf("%s: %s\n", \GDO\UI\TextStyle::boldi('Header'), $header);
+			if (ob_get_level())
+			{
+				ob_flush();
+			}
 		}
 	}
 	elseif ($app->isWebserver())
@@ -290,6 +327,11 @@ function hdr(string $header, bool $replace = true): void
 function uridecode(string $url = null): string
 {
 	return $url ? urldecode($url) : GDT::EMPTY_STRING;
+}
+
+function uriencode(string $url = null): string
+{
+	return $url ? urlencode($url) : GDT::EMPTY_STRING;
 }
 
 /**

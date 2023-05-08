@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace GDO\Form;
 
-use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Response;
 use GDO\Core\Method;
@@ -36,11 +35,6 @@ abstract class MethodForm extends Method
 	#################
 	### Validated ###
 	#################
-
-	public function isLocking(): bool
-	{
-		return true;
-	}
 
 	public function submitted(bool $submitted = true): self
 	{
@@ -88,7 +82,6 @@ abstract class MethodForm extends Method
 		if ($reset)
 		{
 			unset($this->form);
-// 			unset($this->parameterCache);
 		}
 		if (!isset($this->form))
 		{
@@ -102,8 +95,6 @@ abstract class MethodForm extends Method
 			$this->addComposeParameters($this->form->getAllFields());
 			$this->addComposeParameters($this->form->actions()->getAllFields());
 			$this->applyInput();
-//			$this->form->actions()->inputs($inputs);
-// 			$this->form->titleRaw($this->getMethodTitle());
 		}
 		return $this->form;
 	}
@@ -213,29 +204,9 @@ abstract class MethodForm extends Method
 			$form = $this->getForm(true);
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
-// 			$this->applyInput();
 		}
 		return $this->parameterCache;
 	}
-
-// 	public function executeEditMethods()
-// 	{
-// 		if (count($_POST))
-// 		{
-// 			foreach ($this->getForm()->getAllFields() as $field)
-// 			{
-// 				if ($field instanceof GDT_File)
-// 				{
-// 					$key = 'delete_' . $field->name;
-// 					if (isset($_REQUEST[$this->formName()][$key]))
-// 					{
-// 						$fileIds = array_keys($_REQUEST[$this->formName()][$key]);
-// 						$field->onDeleteFiles($fileIds);
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
 
 	############
 	### Init ###

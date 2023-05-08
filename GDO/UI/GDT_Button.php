@@ -4,7 +4,6 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithGDO;
-use GDO\DB\Query;
 use GDO\Form\WithClickHandler;
 use GDO\Form\WithFormAttributes;
 
@@ -70,11 +69,6 @@ class GDT_Button extends GDT
 		return $label;
 	}
 
-	public function renderHTML(): string
-	{
-		return $this->renderHTMLCell(false);
-	}
-
 	public function htmlGDOHREF(): string
 	{
 		if ($href = $this->gdoHREF())
@@ -82,6 +76,9 @@ class GDT_Button extends GDT
 			return " href=\"{$href}\"";
 		}
 		return GDT::EMPTY_STRING;
+	}	public function renderHTML(): string
+	{
+		return $this->renderHTMLCell(false);
 	}
 
 	public function gdoHREF(): ?string
@@ -104,6 +101,8 @@ class GDT_Button extends GDT
 		$this->checkEnabled = $checkEnabled;
 		return $this;
 	}
+
+
 
 	public function renderCell(): string
 	{
@@ -132,7 +131,7 @@ class GDT_Button extends GDT
 	}
 
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return sprintf('<a href="%s">%s</a>', $this->gdoHREF(), $this->htmlIcon());
 	}

@@ -10,8 +10,9 @@ return [
 
 	# Errors
 	'error' => 'Error: %s',
-	'err_php_extension_missing' => 'This module requires the `%s` PHP extension.',
-	'err_system_dependency' => 'A system requirement is not fulfilled: %s',
+	'err_php_extension' => 'The PHP-Extension `%s`.',
+	'err_system_dependency' => 'Module %s has the following unmet requirement: %s',
+	'warn_system_dependency' => 'Module %s recommends the following: %s',
 	'err_php_major_version' => 'GDOv7 requires PHP version %s.',
 	'err_db' => "SQL Error %s: %s\nQuery: %s",
 	'err_db_connect' => 'The database connection could not be established: %s.',

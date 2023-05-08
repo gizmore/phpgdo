@@ -11,6 +11,8 @@ use GDO\Net\URL;
  * Extends GDT_Url which is a GDT_String configured for URLs.
  * Link renders the HTML anchor.
  *
+ * @TODO Make GDT_Link inherit from GDT instead of GDT_Url
+ *
  * @version 7.0.3
  * @since 6.0.0
  * @author gizmore
@@ -22,25 +24,23 @@ class GDT_Link extends GDT_Url
 	use WithText;
 	use WithTarget;
 
-	public bool $searchable = false;
-
 	final public const REL_ALTERNATE = 'alternate';
 	final public const REL_AUTHOR = 'author';
+	final public const REL_BOOKMARK = 'bookmark';
 
 	###########
 	### GDT ###
 	###########
-	final public const REL_BOOKMARK = 'bookmark';
+	final public const REL_EXTERNAL = 'external';
 
 	###########
 	### URL ###
 	###########
-	final public const REL_EXTERNAL = 'external';
+	final public const REL_HELP = 'help';
 
 	################
 	### Relation ###
 	################
-	final public const REL_HELP = 'help';
 	final public const REL_LICENSE = 'license';
 	final public const REL_NEXT = 'next';
 	final public const REL_NOFOLLOW = 'nofollow';
@@ -50,11 +50,8 @@ class GDT_Link extends GDT_Url
 	final public const REL_SEARCH = 'search';
 	final public const REL_TAG = 'tag';
 
-	protected function __construct()
-	{
-		parent::__construct();
-		unset($this->icon); # @TODO: Optionally give a global icon for all links, like TBS did like the enter key.
-	}
+	public bool $searchable = false;
+
 
 	public static function anchorMain(): string
 	{
@@ -109,7 +106,7 @@ class GDT_Link extends GDT_Url
 		return "<span>$card</span>\n";
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		$out = '';
 		if ($l = $this->renderLabelText())

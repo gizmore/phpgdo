@@ -3,12 +3,15 @@ declare(strict_types=1);
 namespace GDO\Core;
 
 /**
- * Object is an integer in the database. Uses WithObject trait for magic.
+ * Object is an integer in the database.
+ * Uses WithObject trait for magic.
  *
  * @version 7.0.3
  * @since 6.4.0
  * @author gizmore
  * @see WithObject
+ * @see WithCompletion
+ * @see GDT_ObjectSelect
  */
 class GDT_Object extends GDT_UInt
 {
@@ -17,7 +20,6 @@ class GDT_Object extends GDT_UInt
 	use WithCompletion;
 
 	final public const MAX_SUGGESTIONS = 15;
-
 
 	public bool $searchable = true;
 

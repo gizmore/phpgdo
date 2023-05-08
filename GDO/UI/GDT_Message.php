@@ -70,6 +70,7 @@ class GDT_Message extends GDT_Text
 
 	/**
 	 * Available editors.
+	 *
 	 * @var callable[]
 	 */
 	public static array $DECODERS = [
@@ -289,23 +290,21 @@ class GDT_Message extends GDT_Text
 		return $s !== null ? html($s) : null;
 	}
 
-	/**
+	public function textRows(int $rows): self
+	{
+		$this->textRows = $rows;
+		return $this;
+	}	/**
 	 * If we set a var, value and plaintext get's precomputed.
 	 */
 	public function var(?string $var): static
 	{
 		$this->var = $var;
- 		$this->valueConverted = false;
+		$this->valueConverted = false;
 		$this->msgInput = $var;
 		$this->msgOutput = self::decodeText($var);
 		$this->msgText = self::plaintext($this->msgOutput);
 // 		$this->msgEditor = $this->nowysiwyg ? 'HTML' : self::$EDITOR_NAME;
-		return $this;
-	}
-
-	public function textRows(int $rows): self
-	{
-		$this->textRows = $rows;
 		return $this;
 	}
 
@@ -320,7 +319,15 @@ class GDT_Message extends GDT_Text
 		return $this;
 	}
 
-	public function blankData(): array
+	public function classEditor(): string
+	{
+		return $this->nowysiwyg ? 'as-is' : ('wysiwyg gdt-editor-' . $this->getWantedEditorName());
+	}
+
+	protected function getWantedEditorName(): string
+	{
+		return strtolower(self::$EDITOR_NAME);
+	}	public function blankData(): array
 	{
 		return [
 			"{$this->name}_input" => $this->msgInput,
@@ -330,15 +337,9 @@ class GDT_Message extends GDT_Text
 		];
 	}
 
-	public function classEditor(): string
-	{
-		return $this->nowysiwyg ? 'as-is' : ('wysiwyg gdt-editor-' . $this->getWantedEditorName());
-	}
 
-	protected function getWantedEditorName(): string
-	{
-		return strtolower(self::$EDITOR_NAME);
-	}
+
+
 
 	public function getVar(): string|array|null
 	{
@@ -357,7 +358,6 @@ class GDT_Message extends GDT_Text
 		}
 		return $this->inputToVar($input);
 	}
-
 
 
 	public function gdo(?GDO $gdo): static
@@ -429,17 +429,17 @@ class GDT_Message extends GDT_Text
 	# #############
 	public function renderCLI(): string
 	{
-		return (string) $this->getVarText();
+		return (string)$this->getVarText();
 	}
 
 	public function renderHTML(): string
 	{
-		return (string) $this->getVarOutput();
+		return (string)$this->getVarOutput();
 	}
 
 	public function renderList(): string
 	{
-		return (string) $this->getVarOutput();
+		return (string)$this->getVarOutput();
 	}
 
 	public function renderCard(): string

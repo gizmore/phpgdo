@@ -35,6 +35,20 @@ trait WithPHPJQuery
 	private array $css;
 
 	/**
+	 * The returned html string has a leading space.
+	 */
+	public function htmlAttributes(): string
+	{
+		$html = '';
+		if (isset($this->htmlAttributes))
+		{
+			foreach ($this->htmlAttributes as $attr => $var)
+			{
+				$html .= " $attr=\"$var\"";
+			}
+		}
+		return $html;
+	}	/**
 	 * Change an attribute.
 	 *
 	 * @return self|string
@@ -112,20 +126,6 @@ trait WithPHPJQuery
 	##############
 	### Render ###
 	##############
-	/**
-	 * The returned html string has a leading space.
-	 */
-	public function htmlAttributes(): string
-	{
-		$html = '';
-		if (isset($this->htmlAttributes))
-		{
-			foreach ($this->htmlAttributes as $attr => $var)
-			{
-				$html .= " $attr=\"$var\"";
-			}
-		}
-		return $html;
-	}
+
 
 }

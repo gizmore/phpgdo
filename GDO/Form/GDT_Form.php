@@ -205,7 +205,7 @@ final class GDT_Form extends GDT
 		return $this->getField($key)->getVar();
 	}
 
-	public function getFormValue(string $key): bool|int|float|string|array|null|object
+	public function getFormValue(string $key): mixed
 	{
 		return $this->getField($key)->getValue();
 	}

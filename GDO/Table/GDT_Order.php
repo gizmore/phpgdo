@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\GDT;
@@ -14,7 +15,7 @@ use GDO\Util\Strings;
  * Validates if the GDO has a column.
  * Generates href cycle for template.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @author gizmore
  */
 final class GDT_Order extends GDT_String
@@ -24,13 +25,16 @@ final class GDT_Order extends GDT_String
 	use WithFields;
 
 	# current ordering state for a GDT.
-	public const ASC = 0;
-	public const DESC = 1;
-	public const NONE = 2;
+	final public const ASC = 0;
+	final public const DESC = 1;
+	final public const NONE = 2;
 
 	############
 	###  GDT ###
 	############
+
+	public string $icon = 'arrow_up';
+
 	public array $extraFields;
 	/**
 	 * @var GDT[]
@@ -70,8 +74,8 @@ final class GDT_Order extends GDT_String
 
 	private function validateOrder(string $order): bool
 	{
-		$dir = Strings::substrFrom($order, ' ', 'ASC');
-		$dir = stripos($dir, 'desc') === false ? 'ASC' : 'DESC';
+//		$dir = Strings::substrFrom($order, ' ', 'ASC');
+//		$dir = stripos($dir, 'DESC') === false ? 'ASC' : 'DESC';
 		$by = Strings::substrTo($order, ' ', $order);
 		$by = Strings::rsubstrFrom($by, '.', $by);
 		if (isset($this->extraFields) && in_array($by, $this->extraFields, true))
@@ -116,10 +120,11 @@ final class GDT_Order extends GDT_String
 
 	public function getOrderBy(): ?string
 	{
-		return @$this->getOrderBys()[0];
+		$by = $this->getOrderBys();
+		return $by[0] ?: null;
 	}
 
-	public function getOrderBys(): array
+	private function getOrderBys(): array
 	{
 		$o = $this->getVar();
 		$os = explode(',', $o);
@@ -143,29 +148,9 @@ final class GDT_Order extends GDT_String
 		return $this->var;
 	}
 
-	public function getOrderDir(): ?string
-	{
-		return @$this->getOrderDirs()[0];
-	}
-
-	public function getOrderDirs(): array
-	{
-		$o = $this->getVar();
-		$os = explode(',', $o);
-		return array_map(function ($o)
-		{
-			return Strings::substrFrom($o, ' ', self::ASC);
-		}, $os);
-	}
-
 	#############
 	### Query ###
 	#############
-// 	public function filterQuery(Query $query, GDT_Filter $f): self
-// 	{
-// 		$query->order($this->getVar());
-// 		return $this;
-// 	}
 
 	public function orderQuery(Query $query): self
 	{
@@ -204,14 +189,11 @@ final class GDT_Order extends GDT_String
 	private function state(GDT $gdt): int
 	{
 		$name = $gdt->getName();
-		if (null !== ($state = @$this->orders[$name]))
+		if (isset($this->orders[$name]))
 		{
-			return $state ? self::ASC : self::DESC;
+			return $this->orders[$name] ? self::ASC : self::DESC;
 		}
-		else
-		{
-			return self::NONE;
-		}
+		return self::NONE;
 	}
 
 	/**
@@ -273,7 +255,7 @@ final class GDT_Order extends GDT_String
 			case self::DESC:
 				return 'arrow_down';
 			default:
-				return GDT::EMPTY_STRING;
+				return $this->icon;
 		}
 	}
 

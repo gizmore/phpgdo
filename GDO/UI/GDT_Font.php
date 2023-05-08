@@ -20,13 +20,13 @@ class GDT_Font extends GDT_Select
 
 	public string $icon = 'font';
 
-	public function defaultLabel(): self { return $this->label('font'); }
+	protected function __construct()
+	{
+		parent::__construct();
+		$this->initChoices();
+	}
 
- 	protected function __construct()
- 	{
- 	    parent::__construct();
-  	    $this->initChoices();
- 	}
+	public function defaultLabel(): self { return $this->label('font'); }
 
 // 	public function renderForm() : string
 // 	{

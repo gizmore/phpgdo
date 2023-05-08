@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace GDO\DB;
 
-use GDO\Core\GDO;
-
 /**
  * Add nullable option to a GDT.
  *

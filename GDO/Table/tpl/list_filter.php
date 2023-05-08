@@ -62,7 +62,7 @@ if (isset($field->headers))
 			$ascdesc = GDT_Select::make("{$n}_dir")->icon('arrow_up')->label('order_dir');
 			$ascdesc->choices['ASC'] = t('asc');
 			$ascdesc->choices['DESC'] = t('desc');
-			$ascdesc->initial($field->order->getOrderDir());
+			$ascdesc->initial('ASC');
 			$frm->addField($ascdesc);
 		}
 	}

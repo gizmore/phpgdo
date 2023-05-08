@@ -56,7 +56,7 @@ class ClearCache extends MethodForm
 	public function execute(): GDT
 	{
 		$this->clearCache();
-		return GDT_Redirect::make()->redirectMessage('msg_cache_flushed')->back();
+		return $this->redirectMessage('msg_cache_flushed');
 	}
 
 	public function clearCache(): void

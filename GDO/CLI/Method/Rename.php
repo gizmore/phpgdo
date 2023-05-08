@@ -27,16 +27,6 @@ use GDO\Util\Filewalker;
 final class Rename extends MethodCLI
 {
 
-	public function isHiddenMethod(): bool
-	{
-		return true;
-	}
-
-	public function getPermission(): ?string
-	{
-		return GDO_Permission::ADMIN;
-	}
-
 	public static function rename(string $entry, string $fullpath, $args = null): int
 	{
 		$count = 0;
@@ -53,6 +43,16 @@ final class Rename extends MethodCLI
 			'msg_file_renamed',
 			[html($fullpath), html($newPath)]);
 		return $count;
+	}
+
+	public function isHiddenMethod(): bool
+	{
+		return true;
+	}
+
+	public function getPermission(): ?string
+	{
+		return GDO_Permission::ADMIN;
 	}
 
 	/**

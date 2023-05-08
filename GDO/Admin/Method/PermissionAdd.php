@@ -47,4 +47,10 @@ class PermissionAdd extends MethodForm
 		return $this->message('msg_perm_added', [$perm->renderName()]);
 	}
 
+	public function plugVars(): array
+	{
+		return [
+			['perm_name' => 'New_Perm'],
+		];
+	}
 }

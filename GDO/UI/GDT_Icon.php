@@ -22,6 +22,7 @@ class GDT_Icon extends GDT
 
 	/**
 	 * When an icon provider is loaded, it changes the $iconProvider.
+	 *
 	 * @var callable
 	 */
 	public static $iconProvider = [GDT_IconUTF8::class, 'iconS'];
@@ -39,7 +40,7 @@ class GDT_Icon extends GDT
 		return $this->cliIcon();
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		if (isset($this->icon))
 		{

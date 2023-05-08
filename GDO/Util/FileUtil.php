@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Util;
 
 use FilesystemIterator;
+use GDO\Core\Debug;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT_Float;
 use GDO\Core\Logger;
@@ -36,7 +37,7 @@ final class FileUtil
 		}
 		catch (GDO_Exception $ex)
 		{
-			Logger::logException($ex);
+			Debug::debugException($ex, false);
 		}
 		return $path;
 	}
@@ -164,42 +165,52 @@ final class FileUtil
 	##############
 	### Remove ###
 	##############
+
+	public static function removedFile(string $path): bool
+	{
+		try
+		{
+			return self::removeFile($path);
+		}
+		catch (GDO_Exception $ex)
+		{
+			Debug::debugException($ex);
+			return false;
+		}
+	}
+
+
 	/**
 	 * Delete a single file.
 	 *
 	 * @throws GDO_Exception
 	 */
-	public static function removeFile(string $path, bool $throw = true): bool
+	public static function removeFile(string $path): bool
 	{
 		if (is_file($path))
 		{
-			if (unlink($path))
+			if (!unlink($path))
 			{
-				return true;
-			}
-			elseif ($throw)
-			{
-				throw new GDO_Exception('err_delete_file', [html($path)]);
-			}
-			else
-			{
-				return false;
+				throw new GDO_Exception('err_delete_file', [$path]);
 			}
 		}
 		elseif (is_dir($path))
 		{
-			throw new GDO_Exception('err_delete_file', [html($path)]);
+			throw new GDO_Exception('err_file_is_dir', [$path]);
 		}
-		elseif (is_writable($path))
+		// Not there!
+		return true;
+	}
+
+	public static function removedDir(string $dir): bool
+	{
+		try
 		{
-			return true;
+			return self::removeDir($dir);
 		}
-		elseif ($throw)
+		catch (GDO_Exception $ex)
 		{
-			throw new GDO_Exception('err_write_file', [html($path)]);
-		}
-		else
-		{
+			Debug::debugException($ex);
 			return false;
 		}
 	}
@@ -209,7 +220,7 @@ final class FileUtil
 	 *
 	 * @throws GDO_Exception
 	 */
-	public static function removeDir(string $dir, bool $throw = true): bool
+	public static function removeDir(string $dir): true
 	{
 		if (is_dir($dir))
 		{
@@ -219,33 +230,21 @@ final class FileUtil
 				$obj = "{$dir}{$object}";
 				if (is_dir($obj))
 				{
-					return self::removeDir("{$obj}/", $throw);
+					return self::removeDir("{$obj}/");
 				}
-				elseif (!@unlink($obj))
+				elseif (!unlink($obj))
 				{
-					if ($throw)
-					{
-						throw new GDO_Exception('err_delete_file', [html($obj)]);
-					}
-					return false;
+					throw new GDO_Exception('err_delete_file', [$obj]);
 				}
 			}
-			if (!@rmdir($dir))
+			if (!rmdir($dir))
 			{
-				if ($throw)
-				{
-					throw new GDO_Exception('err_delete_dir', [html($dir)]);
-				}
-				return false;
+				throw new GDO_Exception('err_delete_dir', [$dir]);
 			}
 		}
 		elseif (is_file($dir))
 		{
-			if ($throw)
-			{
-				throw new GDO_Exception('err_delete_file', [html($dir)]);
-			}
-			return false;
+			throw new GDO_Exception('err_delete_file_is_dir', [$dir]);
 		}
 		return true;
 	}
@@ -381,7 +380,7 @@ final class FileUtil
 		{
 			if ($fh)
 			{
-				@fclose($fh);
+				fclose($fh);
 			}
 		}
 	}
@@ -422,6 +421,11 @@ final class FileUtil
 		}
 
 		return $line;
+	}
+
+	public static function getContents(string $filename): ?string
+	{
+		return self::isFile($filename) ? file_get_contents($filename) : null;
 	}
 
 }

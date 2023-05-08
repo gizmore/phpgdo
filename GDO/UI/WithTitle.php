@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
@@ -7,7 +8,7 @@ use GDO\Core\GDT;
  * Adds a title to a GDT.
  * This title is not rendered with a H tag.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.1
  * @author gizmore
  * @see GDT_Headline
@@ -20,15 +21,15 @@ trait WithTitle
 	public ?array $titleArgs;
 	public bool $titleEscaped = false;
 
-	public function title(string $key, array $args = null): self
+	public function title(string $key, array $args = null, bool $escaped = false): static
 	{
 		unset($this->titleRaw);
 		$this->titleKey = $key;
 		$this->titleArgs = $args;
-		return $this;
+		return $this->titleEscaped($escaped);
 	}
 
-	public function titleRaw(?string $title): self
+	public function titleRaw(?string $title, bool $escaped = true): static
 	{
 		unset($this->titleRaw);
 		unset($this->titleKey);
@@ -37,16 +38,16 @@ trait WithTitle
 		{
 			$this->titleRaw = $title;
 		}
-		return $this;
+		return $this->titleEscaped($escaped);
 	}
 
-	public function titleEscaped(bool $escaped): self
+	public function titleEscaped(bool $escaped = true): static
 	{
 		$this->titleEscaped = $escaped;
 		return $this;
 	}
 
-	public function noTitle(): self
+	public function titleNone(): static
 	{
 		unset($this->titleRaw);
 		unset($this->titleKey);
@@ -64,18 +65,16 @@ trait WithTitle
 
 	public function renderTitle(): string
 	{
+		$t = GDT::EMPTY_STRING;
 		if (isset($this->titleKey))
 		{
-			return t($this->titleKey, $this->titleArgs);
+			$t = t($this->titleKey, $this->titleArgs);
 		}
 		elseif (isset($this->titleRaw))
 		{
-			return $this->titleRaw;
+			$t = $this->titleRaw;
 		}
-		else
-		{
-			return GDT::EMPTY_STRING;
-		}
+		return $this->titleEscaped ? html($t) : $t;
 	}
 
 }

@@ -9,6 +9,7 @@ use GDO\Tests\AutomatedTestCase;
 use GDO\Tests\GDT_MethodTest;
 use GDO\UI\Color;
 use GDO\UI\TextStyle;
+use GDO\User\GDO_User;
 use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotEquals;
 
@@ -38,6 +39,9 @@ final class SEOTest extends AutomatedTestCase
 		}
 	}
 
+	/**
+	 * @throws \Throwable
+	 */
 	protected function runMethodTest(GDT_MethodTest $mt): void
 	{
 		try
@@ -51,21 +55,22 @@ final class SEOTest extends AutomatedTestCase
 				xdebug_break();
 			}
 
-			foreach ($method->gdoParameters() as $gdt)
+			foreach ($method->gdoParameterCache() as $gdt)
 			{
-				if ($name = $gdt->getName())
+				if ($gdt->getName())
 				{
 					if ($plugs = @$gdt->plugVars()[0])
 					{
-						foreach ($plugs as $name => $var)
+						foreach ($plugs as $key => $var)
 						{
-							$plugged[$name] = $var;
+							$plugged[$key] = $var;
 						}
 					}
 				}
 			}
 
-			$method->inputs($plugged);
+			$method->appliedInputs($plugged);
+
 			$method->onMethodInit();
 
 			foreach ($method->gdoParameterCache() as $gdt)
@@ -74,17 +79,17 @@ final class SEOTest extends AutomatedTestCase
 				{
 					if ($plugs = @$gdt->plugVars()[0])
 					{
-						foreach ($plugs as $name => $var)
+						foreach ($plugs as $key => $var)
 						{
-							$plugged[$name] = $var;
+							$plugged[$key] = $var;
 						}
 					}
 				}
 			}
 
-			$method->appliedInputs($plugged);
 			$title = $method->getMethodTitle();
 			$descr = $method->getMethodDescription();
+
 			assertNotEmpty($title, "Test if {$method->gdoClassName()} has a method title.");
 			assertNotEmpty($descr, "Test if {$method->gdoClassName()} has a method description.");
 		}

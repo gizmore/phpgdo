@@ -26,7 +26,7 @@ final class GDT_Popup extends GDT
 		]);
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->renderText();
 	}

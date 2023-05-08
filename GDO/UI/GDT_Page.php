@@ -27,23 +27,24 @@ final class GDT_Page extends GDT
 	#############
 	### Reset ###
 	#############
-	private GDT_Box $topResponse;
+	public string $html = '';
 
 	##############
 	### Render ###
 	##############
-	private GDT_Bar $topBar;
+	private GDT_Box $topResponse;
 
 	###########
 	### Top ###
 	###########
+	private GDT_Bar $topBar;
 	private GDT_Bar $leftBar;
 	private GDT_Bar $rightBar;
-	private GDT_Bar $bottomBar;
 
 	###############
 	### Navbars ###
 	###############
+	private GDT_Bar $bottomBar;
 
 	/**
 	 * Reset the global page object.
@@ -158,8 +159,6 @@ final class GDT_Page extends GDT
 		}
 		return $this->bottomBar;
 	}
-
-	public string $html = '';
 
 	public function html(string $html): self
 	{

@@ -29,7 +29,7 @@ use GDO\User\GDO_User;
  * - Offers bulk operations
  *
  * @version 7.0.3
- * @since 3.0.0
+ * @since 6.0.0
  * @author gizmore@wechall.net
  * @see GDT
  * @see Cache
@@ -373,7 +373,7 @@ abstract class GDO extends GDT
 		$this->afterLoaded();
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->toJSON();
 	}
@@ -434,6 +434,8 @@ abstract class GDO extends GDT
 	/**
 	 * Get a row by a single arbritary column value.
 	 * Try caches first.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public static function getBy(string $key, string $var): ?static
 	{
@@ -451,6 +453,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Get a row by condition.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function getWhere(string $condition): ?static
 	{
@@ -536,6 +540,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * @param string[] $vars
+	 *
+	 * @throws GDO_DBException
 	 */
 	public static function getByVars(array $vars): ?static
 	{
@@ -865,7 +871,7 @@ abstract class GDO extends GDT
 	/**
 	 * Get the value of a column.
 	 */
-	public function gdoValue(string $key): null|bool|int|float|string|object|array
+	public function gdoValue(string $key): null|bool|int|float|string|array|object
 	{
 		return $this->gdoColumn($key)->getValue();
 	}
@@ -875,7 +881,7 @@ abstract class GDO extends GDT
 	 *
 	 * @throws GDO_Exception
 	 */
-	public function getValue(string $var = null): bool|int|float|string|array|null|object
+	public function getValue(string $var = null): mixed
 	{
 		throw new GDO_Exception('err_gdo_no_gdt', ['getValue', $this->gdoHumanName()]);
 	}
@@ -1061,6 +1067,9 @@ abstract class GDO extends GDT
 		self::notFoundException(html($id));
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function countWhere(string $condition = 'true'): int
 	{
 		return (int) $this->select('COUNT(*)', false)->where($condition)->
@@ -1135,6 +1144,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Mark this GDO as deleted, or delete physically.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function markDeleted(bool $withHooks = true): self
 	{
@@ -1174,6 +1185,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Save this entity.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function save(bool $withHooks = true): static
 	{
@@ -1197,7 +1210,6 @@ abstract class GDO extends GDT
 			if ($withHooks)
 			{
 				$this->afterUpdate();
-				$this->recache(); # save is the only action where we recache!
 			}
 		}
 		return $this;
@@ -1318,11 +1330,7 @@ abstract class GDO extends GDT
 	 */
 	public function recache(): self
 	{
-		if ($this->cached())
-		{
-			self::table()->cache->recache($this);
-		}
-		return $this;
+		return $this->cached() ? self::table()->cache->recache($this) : $this;
 	}
 
 	public function getSetClause(): string
@@ -1415,6 +1423,7 @@ abstract class GDO extends GDT
 		# Flags
 		$this->dirty = false;
 		$this->afterEvent('gdoAfterUpdate');
+		$this->recache();
 	}
 
 	private function afterDelete(bool $persisted = false): void
@@ -1423,8 +1432,12 @@ abstract class GDO extends GDT
 		$this->dirty = false;
 		$this->persisted = $persisted;
 		$this->afterEvent('gdoAfterDelete');
+		$this->uncache();
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	private function deleteB(bool $withHooks = true): self
 	{
 		if ($this->persisted)
@@ -1447,6 +1460,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * Delete this entity.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function delete(bool $withHooks = true): self
 	{
@@ -1474,26 +1489,36 @@ abstract class GDO extends GDT
 	 */
 	public function deleteWhere(string $condition, bool $withHooks = true): int
 	{
-		if ($withHooks)
+		try
 		{
 			$deleted = 0;
-			$result = $this->tbl()->select()->where($condition)->exec();
-			while ($gdo = $result->fetchObject())
+			if ($withHooks)
 			{
-				$deleted++;
-				$gdo->deleteB();
+				$result = $this->tbl()->select()->where($condition)->exec();
+				while ($gdo = $result->fetchObject())
+				{
+					$deleted++;
+					$gdo->deleteB();
+				}
+				return $deleted;
 			}
-			return $deleted;
+			else
+			{
+				$this->query()->delete($this->gdoTableIdentifier())->where($condition)->exec();
+				return Database::instance()->affectedRows();
+			}
 		}
-		else
+		catch (GDO_DBException $ex)
 		{
-			$this->query()->delete($this->gdoTableIdentifier())->where($condition)->exec();
-			return Database::instance()->affectedRows();
+			echo Debug::debugException($ex);
+			return $deleted;
 		}
 	}
 
 	/**
 	 * Does an INSERT, ON DUPLICATE KEY UPDATE. Not all events are supported. I.e. we don't know what event to call before the query is fired.
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function softReplace(bool $withHooks = true): self
 	{
@@ -1538,11 +1563,17 @@ abstract class GDO extends GDT
 		return $this->query()->delete($this->gdoTableName());
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function increase(string $key, float $by = 1): self
 	{
-		return $this->saveVar($key, (string) ($this->gdoValue($key) + $by));
+		return $this->saveVar($key, (string) ($this->gdoVar($key) + $by));
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function saveVar(string $key, ?string $var, bool $withHooks = true, bool &$worthy = false): self
 	{
 		return $this->saveVars([$key => $var], $withHooks, $worthy);
@@ -1550,6 +1581,8 @@ abstract class GDO extends GDT
 
 	/**
 	 * @param string[] $vars
+	 *
+	 * @throws GDO_DBException
 	 */
 	public function saveVars(array $vars, bool $withHooks = true, bool &$worthy = false): static
 	{
@@ -1589,7 +1622,6 @@ abstract class GDO extends GDT
 		if ($withHooks)
 		{
 			$this->afterUpdate();
-			$this->recache();
 		}
 
 		return $this;
@@ -1609,12 +1641,18 @@ abstract class GDO extends GDT
 		return $this;
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function saveValue(string $key, $value, bool $withHooks = true): self
 	{
 		$var = $this->gdoColumn($key)->toVar($value);
 		return $this->saveVar($key, $var, $withHooks);
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function saveValues(array $values, bool $withHooks = true): self
 	{
 		$vars = [];
@@ -1665,6 +1703,9 @@ abstract class GDO extends GDT
 		return self::table()->cache->tableName . $this->getID();
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function reload($id): static
 	{
 		$table = self::table();
@@ -1709,6 +1750,7 @@ abstract class GDO extends GDT
 	}
 
 	/**
+	 * @throws GDO_DBException
 	 * @return static[]
 	 */
 	public function &all(string $order = null, bool $json = false): array
@@ -1737,6 +1779,7 @@ abstract class GDO extends GDT
 	##############
 
 	/**
+	 * @throws GDO_DBException
 	 * @return static[]
 	 */
 	public function &allWhere($condition = 'true', $order = null, $json = false): array
@@ -1766,6 +1809,7 @@ abstract class GDO extends GDT
 	/**
 	 * Get all rows via allcache.
 	 *
+	 * @throws GDO_DBException
 	 * @return static[]
 	 */
 	public function &allCached(string $order = null, bool $json = false): array

@@ -10,8 +10,8 @@ use GDO\UI\GDT_Panel;
 <div<?=$field->htmlAttributes()?>>
 	<?php
 	if ($field->hasTitle()) : ?>
-        <h3><?=$field->htmlIcon()?><?=$field->renderTitle()?></h3>
+		<h3><?=$field->htmlIcon()?><?=$field->renderTitle()?></h3>
 	<?php
 	endif; ?>
-    <p><?=$field->renderText()?></p>
+	<p><?=$field->renderText()?></p>
 </div>

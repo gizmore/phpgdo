@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Table;
 
 use GDO\Core\Application;
+use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDO_DBException;
 use GDO\Core\GDO_Exception;
@@ -364,30 +365,40 @@ class GDT_Table extends GDT
 	}
 
 	/**
-	 * @throws GDO_DBException
 	 * @return int the total number of matching rows.
 	 */
 	public function countItems(): int
 	{
-		if (!isset($this->countItems))
+		try
 		{
-			if (isset($this->countQuery))
+			if (!isset($this->countItems))
 			{
-				$this->countItems = (int)$this->countQuery->selectOnly('COUNT(*)')
-					->noOrder()
-					->noLimit()
-					->first()
-					->exec()
-					->fetchVar();
+				if (isset($this->countQuery))
+				{
+					$this->countItems = (int)$this->countQuery->selectOnly('COUNT(*)')
+															  ->noOrder()
+															  ->noLimit()
+															  ->first()
+															  ->exec()
+															  ->fetchVar();
+				}
+				else
+				{
+					$this->countItems = $this->getResult()->numRows();
+				}
 			}
-			else
-			{
-				$this->countItems = $this->getResult()->numRows();
-			}
+			return $this->countItems;
 		}
-		return $this->countItems;
+		catch (\Throwable $ex)
+		{
+			echo Debug::debugException($ex);
+			return 0;
+		}
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function getResult(): Result
 	{
 		if (!isset($this->result))
@@ -401,6 +412,9 @@ class GDT_Table extends GDT
 	### Fetch Into ###
 	##################
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function queryResult(): ?Result
 	{
 		if (isset($this->query))
@@ -501,6 +515,9 @@ class GDT_Table extends GDT
 	# ## Render ###
 	# #############
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public function renderHTML(): string
 	{
 		if (($this->hideEmpty) && ($this->getResult()->numRows() === 0))
@@ -537,7 +554,7 @@ class GDT_Table extends GDT
 		return $this->renderHTML();
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		$json = array_merge($this->configJSON(),
 			[

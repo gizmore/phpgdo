@@ -29,20 +29,24 @@ trait WithIcon
 	###########################
 	public string $icon;
 	public string $iconTextRaw;
-	public string $iconTextKey;	public static function iconS(string $icon, string $iconText = null, float $size = null, string $color = null): string
+	public string $iconTextKey;
+	public ?array $iconTextArgs;	public static function iconS(string $icon, string $iconText = null, float $size = null, string $color = null): string
 	{
 		$style = self::iconStyle($size, $color);
 		return call_user_func(GDT_Icon::$iconProvider, $icon, $iconText, $style);
 	}
-	public ?array $iconTextArgs;
 	public string $rawIcon;
-	public ?int $iconSize = null;	public static function rawIconS(string $icon, string $iconText = null, float $size = null, string $color = null): string
+	public ?int $iconSize = null;
+	public ?string $iconColor = null;
+
+	public static function rawIconS(string $icon, string $iconText = null, float $size = null, string $color = null): string
 	{
 		$style = self::iconStyle($size, $color);
 		$title = $iconText ? " title=\"{$iconText}\"" : GDT::EMPTY_STRING;
 		return sprintf('<i class="gdo-icon"%s%s>%s</i>', $title, $style, $icon);
 	}
-	public ?string $iconColor = null;
+
+
 
 
 	private static function iconStyle(?float $size, ?string $color): string
@@ -55,7 +59,6 @@ trait WithIcon
 	############
 	### Icon ###
 	############
-
 
 
 	public function icon(string $icon = null): self

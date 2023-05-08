@@ -23,8 +23,6 @@ class GDT_Name extends GDT_String
 	public string $pattern = '/^[A-Za-z][-A-Za-z _0-9;:]{1,63}$/sD';
 	public bool $unique = true;
 
-// 	public bool $notNull = true;
-
 	public function defaultLabel(): self
 	{
 		return $this->label('name');
@@ -51,14 +49,14 @@ class GDT_Name extends GDT_String
 		return $this->renderHTML();
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->renderHTML();
 	}
 
 	public function plugVars(): array
 	{
-		static $plugNum = 0; # @TODO: meh :( I'd like to have some scheme here, but meh
+		static $plugNum = 0; # @TODO: meh :( I'd like to have some scheme here, but meh. It would require to dynamically prepare these plugVars...
 		$plugNum++;
 		return [
 			[$this->getName() => $this->getVar()],

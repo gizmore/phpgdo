@@ -473,7 +473,6 @@ final class GDO_User extends GDO
 			{
 				$cache = GDO_UserPermission::load($this);
 				$this->tempSet('gdo_permission', $cache);
-				$this->recache();
 			}
 			return $cache;
 		}
@@ -492,8 +491,7 @@ final class GDO_User extends GDO
 
 	public function changedPermissions(): self
 	{
-		$this->tempUnset('gdo_permission');
-		return $this->recache();
+		return $this->tempUnset('gdo_permission');
 	}
 
 	############
@@ -590,7 +588,6 @@ final class GDO_User extends GDO
 		$module->saveUserSettingACLLevel($this, $key, $level);
 		$module->saveUserSettingACLPermission($this, $key, $permission);
 		$this->tempUnset('gdo_setting');
-		$this->recache();
 		return $this;
 	}
 

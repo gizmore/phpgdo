@@ -197,7 +197,7 @@ class GDT_Int extends GDT_DBField
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->getVar();
 	}

@@ -2,16 +2,19 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\Form\MethodForm;
 use GDO\UI\GDT_Repeat;
 
 /**
  * Add GDT parameters.
  * Override gdoParameters() in your methods.
+ * Use gdoParamerterCache() to get all params (from everything in a method, including forms and tables and stuff)
  *
  * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see Method
+ * @see MethodForm
  */
 trait WithParameters
 {
@@ -125,7 +128,10 @@ trait WithParameters
 		$inputs = $this->getInputs();
 		foreach ($params as $gdt)
 		{
-			$this->parameterCache[$gdt->getName()] = $gdt->inputs($inputs);
+			if ($name = $gdt->getName())
+			{
+				$this->parameterCache[$name] = $gdt->inputs($inputs);
+			}
 		}
 	}
 
@@ -143,7 +149,7 @@ trait WithParameters
 	/**
 	 * @throws GDO_ArgError
 	 */
-	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): int|float|string|array|null|GDT
+	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): mixed
 	{
 		return $this->gdoParameter($key, $validate)?->getValue();
 	}

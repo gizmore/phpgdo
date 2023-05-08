@@ -37,7 +37,7 @@ class GDT_Repeat extends GDT
 		return $this;
 	}
 
-	public function notNull(bool $notNull=true): static
+	public function notNull(bool $notNull = true): static
 	{
 		$this->proxy->notNull($notNull);
 		return $this;
@@ -82,7 +82,7 @@ class GDT_Repeat extends GDT
 		return array_reverse($back);
 	}
 
-	public function getValue(): bool|int|float|string|array|null|object
+	public function getValue(): mixed
 	{
 		$values = [];
 		$p = $this->proxy;
@@ -183,6 +183,11 @@ class GDT_Repeat extends GDT
 		return true;
 	}
 
+	public function renderError(): string
+	{
+		return $this->proxy->renderError();
+	}
+
 	public function minRepeat(int $minRepeat): static
 	{
 		$this->minRepeat = $minRepeat;
@@ -193,11 +198,6 @@ class GDT_Repeat extends GDT
 	{
 		$this->maxRepeat = $maxRepeat;
 		return $this;
-	}
-
-	public function renderError(): string
-	{
-		return $this->proxy->renderError();
 	}
 
 }

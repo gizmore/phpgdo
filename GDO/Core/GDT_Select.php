@@ -27,6 +27,9 @@ class GDT_Select extends GDT_ComboBox
 	###################
 	### Var / Value ###
 	###################
+
+	public string $icon = 'select';
+
 	public string $emptyVar = GDT::ZERO;
 	public string $emptyLabelRaw;
 	public string $emptyLabelKey;	public function getSelectedVar(): ?string
@@ -53,7 +56,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this;
 	}
 
-	public function getValue(): bool|int|float|string|array|null|object
+	public function getValue(): mixed
 	{
 		if ($this->valueConverted)
 		{

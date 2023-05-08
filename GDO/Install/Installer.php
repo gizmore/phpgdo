@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Install;
 
-use Exception;
 use GDO\Core\Application;
+use GDO\Core\Debug;
 use GDO\Core\GDO;
+use GDO\Core\GDO_DBException;
 use GDO\Core\GDO_Module;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
@@ -15,18 +17,20 @@ use GDO\User\GDO_Permission;
 use GDO\Util\FileUtil;
 use GDO\Util\Filewalker;
 use GDO\Util\Strings;
-use Throwable;
 
 /**
  * Install helper.
  *
- * @version 7.0.1
- * @since 6.0.0
+ * @version 7.0.3
+ * @since 4.0.0
  * @author gizmore
  */
 class Installer
 {
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public static function installModuleWithDependencies(GDO_Module $module, bool $forceMigrate = false): void
 	{
 		$modules = self::getDependencyModules($module->getName());
@@ -34,27 +38,52 @@ class Installer
 		self::installModules($modules, $forceMigrate);
 	}
 
-	public static function getDependencyModules(string $moduleName, bool $friendencies = false): array
+	/**
+	 * @return GDO_Module[]
+	 */
+	public static function getDependencyModules(string $moduleName, bool $core = false): array
 	{
-		return array_map(function (string $moduleName)
-		{
-			return ModuleLoader::instance()->getModule($moduleName, true);
-		}, self::getDependencyModuleNames($moduleName));
+		return self::toModules(self::getDependencyNames($moduleName, $core));
 	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getDependencyNames(string $moduleName, bool $core = false): array
+	{
+		return self::getDepModuleNames($moduleName, false, $core);
+	}
+
+	/**
+	 * @return GDO_Module[]
+	 */
+	public static function getFriendencyModules(string $moduleName, bool $core = false): array
+	{
+		return self::toModules(self::getFriendencyModules($moduleName, $core));
+	}
+
+
+	/**
+	 * @return string[]
+	 */
+	public static function getFriendencyNames(string $moduleName, bool $core = false): array
+	{
+		return self::getDepModuleNames($moduleName, true, $core);
+	}
+
 
 	/**
 	 * Return all modules needed for a module.
 	 * Used in phpgdo-docs to generate a module list for a single module documentation output.
 	 *
-	 * @return GDO_Module[]
+	 * @return string[]
 	 */
-	public static function getDependencyModuleNames(string $moduleName, bool $friendencies = false, bool $noCore = true): array
+	private static function getDepModuleNames(string $moduleName, bool $friends = false, bool $core = false): array
 	{
 		$module = ModuleLoader::instance()->loadModuleFS($moduleName, true, false);
 		$moduleName = $module->getModuleName();
 		$deps = $module->getDependencies();
 		$frds = $module->getFriendencies();
-// 	    $frds[] = $module->getModuleName();
 		$deps[] = $module->getModuleName();
 		$deps[] = 'Core';
 		$cnt = 0;
@@ -77,28 +106,59 @@ class Installer
 
 		$frds = array_diff($frds, $deps);
 
-		$deps = $friendencies ? $frds : $deps;
+		$deps = $friends ? $frds : $deps;
 
-		if ($noCore)
-		{
-			$deps = array_filter($deps,
-				function (string $name) use ($moduleName)
+		$deps = array_filter($deps,
+			function (string $name) use ($moduleName, $core)
+			{
+				if (!$core)
 				{
 					if (ModuleProviders::isCoreModule($name))
 					{
 						return false;
 					}
-					return $name !== $moduleName;
-				});
-		}
-
+				}
+				return $name !== $moduleName;
+			});
 		sort($deps);
-
 		return $deps;
 	}
 
 	/**
+	 * Turn modules into their names... gnarf
+	 *
 	 * @param GDO_Module[] $modules
+	 *
+	 * @return string[]
+	 */
+	public static function toNames(array $modules): array
+	{
+		return array_map(function (GDO_Module $m)
+		{
+			return $m->getName();
+		}, $modules);
+	}
+
+	/**
+	 * Turn names into their modules.
+	 *
+	 * @param string[] $names
+	 *
+	 * @return GDO_Module[]
+	 */
+	public static function toModules(array $names): array
+	{
+		$loader = ModuleLoader::instance();
+		return array_map(function (string $moduleName) use ($loader)
+		{
+			return $loader->getModule($moduleName);
+		}, $names);
+	}
+
+	/**
+	 * @param GDO_Module[] $modules
+	 *
+	 * @throws GDO_DBException
 	 */
 	public static function installModules(array $modules, bool $forceMigrate = false): bool
 	{
@@ -150,6 +210,9 @@ class Installer
 		return true;
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public static function installModule(GDO_Module $module, bool $forceMigrate = false): void
 	{
 		if (!$module->isInstallable())
@@ -203,9 +266,6 @@ class Installer
 					{
 						self::installModuleClass($gdo);
 					}
-//					if (!$gdo->gdoAbstract())
-//					{
-//					}
 				}
 			}
 		}
@@ -216,6 +276,9 @@ class Installer
 		$gdo->createTable();
 	}
 
+	/**
+	 * @throws GDO_DBException
+	 */
 	public static function upgrade(GDO_Module $module): void
 	{
 		$version = self::increaseVersion($module, false);
@@ -225,6 +288,8 @@ class Installer
 
 	/**
 	 * Increase version by one patch level.
+	 *
+	 * @throws GDO_DBException
 	 */
 	private static function increaseVersion(GDO_Module $module, bool $write): string
 	{
@@ -248,13 +313,6 @@ class Installer
 		self::recreateDatabaseSchema($module, $version);
 	}
 
-// 	/**
-// 	 * Get intersecting columns of old and new table creatoin schema.
-// 	 * @return string[]
-// 	 */
-// 	private static function getColumnNames(GDO $gdo, string $temptable) : array
-// 	{
-// 	}
 
 	public static function includeUpgradeFile(GDO_Module $module, string $version): void
 	{
@@ -270,7 +328,7 @@ class Installer
 	 * I call this "automigration".
 	 * COPY table. DROP table. CREATE table. RE-IMPORT table. Works :)
 	 *
-	 * @version 7.0.1
+	 * @version 7.0.3
 	 * @since 6.11.5
 	 */
 	public static function recreateDatabaseSchema(GDO_Module $module): void
@@ -285,16 +343,16 @@ class Installer
 					/**
 					 * @var GDO $gdo
 					 */
-					$gdo = $classname::table();
+					$gdo = call_user_func([$classname, 'table']);
 					if ($gdo->gdoIsTable())
 					{
 						Database::DBMS()->dbmsAutoMigrate($gdo);
 					}
 				}
 			}
-			catch (Throwable $t)
+			catch (GDO_DBException $t)
 			{
-				throw $t;
+				echo Debug::debugException($t);
 			}
 			finally
 			{
@@ -303,12 +361,12 @@ class Installer
 		}
 	}
 
-	public static function installMethods(GDO_Module $module)
+	public static function installMethods(GDO_Module $module): void
 	{
 		self::loopMethods($module, [__CLASS__, 'installMethod']);
 	}
 
-	public static function loopMethods(GDO_Module $module, $callback)
+	public static function loopMethods(GDO_Module $module, $callback): void
 	{
 		$dir = $module->filePath('Method');
 		if (FileUtil::isDir($dir))
@@ -328,9 +386,9 @@ class Installer
 			$module->delete();
 			Cache::remove('gdo_modules');
 		}
-		catch (Exception $ex)
+		catch (GDO_DBException $ex)
 		{
-			throw $ex;
+			echo Debug::debugException($ex);
 		}
 		finally
 		{
@@ -347,7 +405,7 @@ class Installer
 				if (is_subclass_of($class, 'GDO\\Core\\GDO'))
 				{
 					$gdo = $class::table();
-					/** @var $gdo GDO * */
+					/** @var GDO $gdo * */
 					if (!$gdo->gdoAbstract())
 					{
 						$gdo->dropTable();
@@ -357,7 +415,7 @@ class Installer
 		}
 	}
 
-	public static function installMethod($entry, $path, GDO_Module $module)
+	public static function installMethod($entry, $path, GDO_Module $module): void
 	{
 		$method = self::loopMethod($module, $path);
 		if ($permissions = $method->getPermission())
@@ -372,13 +430,9 @@ class Installer
 	/**
 	 * Helper to get the method for a method loop.
 	 *
-	 * @param GDO_Module $module
-	 * @param string $path
-	 *
-	 * @return Method
-	 * @deprecated because the naming is horrible. Also the logic is not nice.
+	 * @deprecated because the naming is horrible. Also the logic is not nice. @TODO: Put methods in the database!
 	 */
-	public static function loopMethod(GDO_Module $module, $path)
+	public static function loopMethod(GDO_Module $module, string $path): Method
 	{
 		$entry = Strings::substrTo(basename($path), '.');
 		$class_name = "GDO\\{$module->getName()}\\Method\\$entry";
@@ -389,10 +443,6 @@ class Installer
 		return $module->getMethod($entry);
 	}
 
-	public static function getFriendencyModules(string $moduleName): array
-	{
-		return self::getDependencyModuleNames($moduleName, true);
-	}
 
 	########################
 	### Config Refresher ###
@@ -418,7 +468,7 @@ class Installer
 	public static function getModuleDescription(GDO_Module $module, bool $short=false): string
 	{
 		$back = '';
-		if ($readme = @file_get_contents($module->filePath('README.md')))
+		if ($readme = FileUtil::getContents($module->filePath('README.md')))
 		{
 			$matches = null;
 			if (preg_match("/^#.*[\\r\\n]+([^#]+)/", $readme, $matches))
@@ -467,10 +517,10 @@ class Installer
 	{
 		$klass = str_replace('\\', '/', $klass);
 		$filename = GDO_PATH . $klass . '.php';
-		if ($sourcecode = @file_get_contents($filename))
+		if ($sourcecode = FileUtil::getContents($filename))
 		{
 			$matches = null;
-			if (preg_match_all("/[\r\n]\/\*\*[\s\*\r\n]*([\.\s\w]+)/", $sourcecode, $matches))
+			if (preg_match_all("/[\r\n]\/\*\*[\s*\r\n]*([.\s\w]+)/", $sourcecode, $matches))
 			{
 				return trim($matches[1][0]) . "<br/>\n";
 			}

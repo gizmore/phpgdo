@@ -5,7 +5,7 @@ namespace GDO\Core;
 use GDO\DB\Cache;
 
 /**
- * Add temp variables to a GDT.
+ * Add temp variables to a GDO.
  *
  * @version 7.0.3
  * @since 7.0.0
@@ -45,24 +45,35 @@ trait WithTemp
 	/**
 	 * Set a temp var.
 	 */
-	public function tempSet(string $key, $value): static
+	public function tempSet(string $key, mixed $value): static
 	{
 		Cache::$TEMP_WRITE++; #PP#delete#
 		if (!isset($this->temp))
 		{
-			$this->temp = [];
+			$this->temp = [$key => $value];
 		}
-		$this->temp[$key] = $value;
+		else
+		{
+			$this->temp[$key] = $value;
+		}
 		return $this;
+#		$this->temp = $this->temp ?: [];
+		// A temp var does not make an IPC process utterly wrong... just outdated.
+//		return $this->recache();
 	}
 
 	/**
 	 * Remove a temp var.
+	 * This means we need to recache other servers via IPC.
 	 */
 	public function tempUnset(string $key): static
 	{
-		Cache::$TEMP_CLEAR++; #PP#delete#
-		unset($this->temp[$key]);
+		if (isset($this->temp[$key]))
+		{
+			Cache::$TEMP_CLEAR++; #PP#delete#
+			unset($this->temp[$key]);
+			return $this->recache();
+		}
 		return $this;
 	}
 
@@ -73,7 +84,7 @@ trait WithTemp
 	{
 		Cache::$TEMP_CLEAR_ALL++; #PP#delete#
 		unset($this->temp);
-		return $this;
+		return $this->recache();
 	}
 
 }

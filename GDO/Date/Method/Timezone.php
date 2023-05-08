@@ -45,7 +45,7 @@ final class Timezone extends MethodForm
 	{
 		$tz = GDO_User::current()->getTimezone();
 		$form->action(href('Date', 'Timezone'));
-		$form->slim()->noTitle();
+		$form->slim()->titleNone();
 		$form->addFields(
 			GDT_Timezone::make('timezone')->notNull()->initial($tz),
 		);
@@ -80,7 +80,6 @@ final class Timezone extends MethodForm
 		else
 		{
 			$user->tempSet('timezone', $new);
-			$user->recache();
 		}
 
 		if ($redirect)

@@ -61,6 +61,9 @@ final class AutomatedIconTest extends AutomatedTestCase
 		}
 	}
 
+	/**
+	 * @throws Throwable
+	 */
 	protected function runGDTTest(GDT $gdt): void
 	{
 		try
@@ -69,6 +72,7 @@ final class AutomatedIconTest extends AutomatedTestCase
 			if (isset($gdt->icon))
 			{
 				assert(isset(GDT_IconUTF8::$MAP[$gdt->icon]), 'Test if icon ' . $gdt->icon . ' exists for ' . $classname);
+				assert(GDT_IconUTF8::$MAP[$gdt->icon] !== '', 'Test if icon ' . $gdt->icon . ' does really exist for ' . $classname);
 			}
 			elseif (!$gdt->isHidden())
 			{
@@ -77,14 +81,19 @@ final class AutomatedIconTest extends AutomatedTestCase
 		}
 		catch (Throwable $ex)
 		{
-			Debug::debugException($ex);
 			echo "GDT: {$gdt->gdoClassName()}\n";
 			echo Debug::debugException($ex);
-			@ob_flush();
+			if (ob_get_level())
+			{
+				ob_flush();
+			}
 			throw $ex;
 		}
 	}
 
+	/**
+	 * @throws Throwable
+	 */
 	protected function runGDOTest(GDO $gdo): void
 	{
 		foreach ($gdo->gdoColumnsCache() as $gdt)

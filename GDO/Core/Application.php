@@ -97,10 +97,6 @@ class Application extends GDT
 
 	public function isUnitTestVerbose(): bool
 	{
-		if (!$this->isUnitTests())
-		{
-			return true; # Enable stacktraces when not in unit
-		}
 		return false;
 	}
 

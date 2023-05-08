@@ -15,6 +15,8 @@ use GDO\Util\WS;
 class GDT_Enum extends GDT_Select
 {
 
+	final public const MAX_EXAMPLE_VARS = 5;
+
 	public array $enumValues = GDT::EMPTY_ARRAY;
 
 	public function enumValues(string...$enumValues): static
@@ -45,7 +47,11 @@ class GDT_Enum extends GDT_Select
 
 	public function gdoExampleVars(): ?string
 	{
-		return implode('|', $this->enumValues);
+		$max = self::MAX_EXAMPLE_VARS;
+		$count = count($this->enumValues);
+		$app = $count > $max ? '|...' : '';
+		$items = array_slice($this->enumValues, 0, min($max, $count));
+		return implode('|', $items) . $app;
 	}
 
 	##############

@@ -25,7 +25,7 @@ abstract class MethodAjax extends Method
 	public function isSavingLastUrl(): bool { return false; }
 
 
-	public function isLocking(): bool { return false; }
+//	public function isLocking(): bool { return false; }
 
 
 	public function isShownInSitemap(): bool { return false; }

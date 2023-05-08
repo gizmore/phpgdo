@@ -59,6 +59,9 @@ class Configure extends MethodForm
 		];
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function execute(): GDT
 	{
 		# Response
@@ -104,10 +107,13 @@ class Configure extends MethodForm
 		return $this->gdoParameterValue('module');
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	private function getDependencyText(): string
 	{
 		$mod = $this->configModule();
-		$deps = Installer::getDependencyModuleNames($mod->getName());
+		$deps = Installer::getDependencyNames($mod->getName());
 		return $this->getDepsText($deps);
 	}
 
@@ -128,13 +134,19 @@ class Configure extends MethodForm
 		return Arrays::implodeHuman($deps);
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	private function getFriendencyText(): string
 	{
 		$mod = $this->configModule();
-		$deps = Installer::getFriendencyModules($mod->getName());
+		$deps = Installer::getFriendencyNames($mod->getName());
 		return $this->getDepsText($deps);
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function getMethodTitle(): string
 	{
 		return t('mt_admin_configure',
@@ -143,6 +155,9 @@ class Configure extends MethodForm
 			]);
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function getMethodDescription(): string
 	{
 		return t('md_admin_configure',
@@ -151,6 +166,9 @@ class Configure extends MethodForm
 			]);
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	protected function createForm(GDT_Form $form): void
 	{
 		$mod = $this->configModule();
@@ -188,27 +206,9 @@ class Configure extends MethodForm
 		$form->action($this->href("&module={$mod->getName()}"));
 	}
 
-// 	private function resetConfig()
-// 	{
-// 		$mod = $this->configModule();
-// 		foreach ($mod->getConfigCache() as $gdt)
-// 		{
-// 			$gdt->reset(true);
-// 		}
-// 	}
-
-// 	public function formInvalid(GDT_Form $form)
-// 	{
-// 		$this->resetConfig();
-// 		return parent::formInvalid($form);
-// 	}
-
-// 	public function afterExecute(): void
-// 	{
-// 		$this->resetConfig();
-// 		parent::afterExecute();
-// 	}
-
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function formValidated(GDT_Form $form): GDT
 	{
 		$mod = $this->configModule();
@@ -227,7 +227,6 @@ class Configure extends MethodForm
 				{
 					$info[] = Application::$INSTANCE->isCLIOrUnitTest() ? ' - ' : '<br/>';
 				}
-				$old = $gdt->var;
 				GDO_ModuleVar::createModuleVar($mod, $gdt);
 				$info[] = t('msg_modulevar_changed',
 					[

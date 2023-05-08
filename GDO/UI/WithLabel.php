@@ -20,27 +20,15 @@ trait WithLabel
 	use WithName;
 
 
-	public static function renderRequiredIcon(): string
-	{
-		static $req;
-		$req ??= '<span class="gdt-required">' . GDT_Icon::iconS('required', t('required')) . '</span>';
-		return $req;
-	}
+	public string $labelRaw;
 
 
 	#############
 	### Label ###
 	#############
-
-
-	public string $labelRaw;
-
 	public string $labelKey;
-
 	public ?array $labelArgs;
-
 	public bool $labelNone = true;
-
 
 	public static function make(string $name = null): static
 	{
@@ -77,11 +65,32 @@ trait WithLabel
 		return $this;
 	}
 
+	public function labelArgs(?array $args): self
+	{
+		$this->labelArgs = $args;
+		return $this;
+	}
+
 
 	##############
 	### Render ###
 	##############
 
+	public function labelRaw(string $label): self
+	{
+		$this->labelRaw = $label;
+		unset($this->labelKey);
+		$this->labelArgs = null;
+		return $this->labelNone(false);
+	}
+
+	/**
+	 * HTML string: for="id"
+	 */
+	public function htmlForID(): string
+	{
+		return " for=\"{$this->name}\"";
+	}
 
 	/**
 	 * The label is the label text with the required star asterisk.
@@ -127,28 +136,25 @@ trait WithLabel
 		return $this->isRequired() ? self::renderRequiredIcon() : GDT::EMPTY_STRING;
 	}
 
-	public function renderTHead(): string
+	public static function renderRequiredIcon(): string
 	{
-		return $this->renderLabelText();
-	}
-
-	public function labelArgs(?array $args): self
-	{
-		$this->labelArgs = $args;
-		return $this;
-	}
-
-	public function labelRaw(string $label): self
-	{
-		$this->labelRaw = $label;
-		unset($this->labelKey);
-		$this->labelArgs = null;
-		return $this->labelNone(false);
+		static $req;
+		$req ??= '<span class="gdt-required">' . GDT_Icon::iconS('required', t('required')) . '</span>';
+		return $req;
 	}
 
 	############
 	### HTML ###
 	############
+
+	public function renderTHead(): string
+	{
+		return $this->renderLabelText();
+	}
+
+	##############
+	### Render ###
+	##############
 
 	public function hasLabel(): bool
 	{
@@ -161,18 +167,6 @@ trait WithLabel
 			return true;
 		}
 		return !$this->labelNone;
-	}
-
-	##############
-	### Render ###
-	##############
-
-	/**
-	 * HTML string: for="id"
-	 */
-	public function htmlForID(): string
-	{
-		return " for=\"{$this->name}\"";
 	}
 
 }

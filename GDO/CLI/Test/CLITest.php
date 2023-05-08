@@ -8,7 +8,6 @@ use GDO\Util\PP;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertStringContainsString;
 
 final class CLITest extends TestCase
 {

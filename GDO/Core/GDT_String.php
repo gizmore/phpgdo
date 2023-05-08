@@ -27,6 +27,8 @@ class GDT_String extends GDT_DBField
 	final public const ASCII = 2;
 	final public const UTF8 = 3;
 
+	public string $icon = 'text';
+
 	#######################
 	### CaseSensitivity ###
 	#######################

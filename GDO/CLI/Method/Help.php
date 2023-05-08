@@ -4,7 +4,6 @@ namespace GDO\CLI\Method;
 
 use GDO\CLI\CLI;
 use GDO\CLI\MethodCLI;
-use GDO\Core\GDO_Module;
 use GDO\Core\GDT;
 use GDO\Core\GDT_MethodSelect;
 use GDO\Core\GDT_String;
@@ -63,7 +62,7 @@ final class Help extends MethodCLI
 		foreach (Method::$CLI_ALIASES as $alias => $command)
 		{
 			$me = call_user_func([$command, 'make']);
-			/** @var Method $me **/
+			/** @var Method $me * */
 			$name = $me->getModuleName();
 			$grps[$name] = isset($grps[$name]) ? $grps[$name] : [];
 			$grps[$name][] = $me;
@@ -75,10 +74,12 @@ final class Help extends MethodCLI
 			/** @var Method $me * */
 			foreach ($mes as $me)
 			{
-				if (($me->isCLI()) &&
+				if (
+					($me->isCLI()) &&
 					(!$me->isHiddenMethod()) &&
 					(null === $me->checkPermission($user, true)) &&
-					(!$me->isAjax()))
+					(!$me->isAjax())
+				)
 				{
 					$triggers[] = $me;
 				}
@@ -98,7 +99,8 @@ final class Help extends MethodCLI
 		ksort($trgs);
 		foreach ($trgs as $mon => $triggers)
 		{
-			$aliases = array_map(function (Method $me) {
+			$aliases = array_map(function (Method $me)
+			{
 				return $me->getCLITrigger();
 			}, $triggers);
 			$back[] = sprintf('%s: %s.', TextStyle::bold($mon), implode(', ', $aliases));

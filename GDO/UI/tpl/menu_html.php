@@ -9,7 +9,7 @@ $field->addClass('gdt-menu');
 <div<?=$field->htmlAttributes()?>>
 	<?php
 	if ($field->hasLabel()) : ?>
-        <div class="menu-title"><?=$field->renderLabel()?></div>
+		<div class="menu-title"><?=$field->renderLabel()?></div>
 	<?php
 	endif; ?>
 	<?php

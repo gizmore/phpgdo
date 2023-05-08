@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\User;
 
 use GDO\Core\GDO;
@@ -16,7 +17,7 @@ use GDO\DB\Result;
  *
  * @hook UserSettingChange(GDO_User, key, var)
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.0.0
  * @author gizmore@wechall.net
  * @see GDO_Module for user settings API.
@@ -61,7 +62,7 @@ class GDO_UserSetting extends GDO
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$gdt = $module->setting($key);
 		$key = quote($key);
-		$all = $var === $gdt->initial;
+		$all = $var === $gdt->getInitial();
 
 		$query = GDO_User::table()->select("gdo_user.*, uset_var AS {$key}");
 		$query->join("LEFT JOIN gdo_usersetting ON user_id=uset_user AND uset_name={$key}");
@@ -113,6 +114,7 @@ class GDO_UserSetting extends GDO
 			GDT_Level::make('uset_level'),
 			GDT_Permission::make('uset_permission'),
 			GDT_Index::make('uset_user_index')->indexColumns('uset_user'),
+			GDT_Index::make('uset_name_index')->indexColumns('uset_name'),
 		];
 	}
 

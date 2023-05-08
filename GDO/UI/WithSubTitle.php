@@ -1,13 +1,13 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
 
 /**
  * Adds a subtitle to a GDT.
- * This subtitle is not rendered with a H tag.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 7.0.0
  * @author gizmore
  * @see WithTitle
@@ -20,17 +20,17 @@ trait WithSubTitle
 	public string $subtitleRaw;
 	public string $subtitleKey;
 	public ?array $subtitleArgs;
-	public $subtitleEscaped = false;
+	public bool $subtitleEscaped = false;
 
-	public function subtitle(string $key, array $args = null): self
+	public function subtitle(string $key, array $args = null, bool $escaped = false): self
 	{
 		unset($this->subtitleRaw);
 		$this->subtitleKey = $key;
 		$this->subtitleArgs = $args;
-		return $this;
+		return $this->subtitleEscaped($escaped);
 	}
 
-	public function subtitleRaw(?string $subtitle): self
+	public function subtitleRaw(?string $subtitle, bool $escaped = false): self
 	{
 		unset($this->subtitleRaw);
 		if ($subtitle)
@@ -39,7 +39,7 @@ trait WithSubTitle
 		}
 		unset($this->subtitleKey);
 		unset($this->subtitleArgs);
-		return $this;
+		return $this->subtitleEscaped($escaped);
 	}
 
 	public function noSubTitle(): self
@@ -47,10 +47,10 @@ trait WithSubTitle
 		unset($this->subtitleRaw);
 		unset($this->subtitleKey);
 		unset($this->subtitleArgs);
-		return $this;
+		return $this->subtitleEscaped(false);
 	}
 
-	public function subtitleEscaped(bool $escaped = true)
+	public function subtitleEscaped(bool $escaped = true): self
 	{
 		$this->subtitleEscaped = $escaped;
 		return $this;
@@ -66,18 +66,16 @@ trait WithSubTitle
 
 	public function renderSubTitle(): string
 	{
+		$t = GDT::EMPTY_STRING;
 		if (isset($this->subtitleKey))
 		{
-			return t($this->subtitleKey, $this->subtitleArgs);
+			$t = t($this->subtitleKey, $this->subtitleArgs);
 		}
 		elseif (isset($this->subtitleRaw))
 		{
-			return $this->subtitleRaw;
+			$t = $this->subtitleRaw;
 		}
-		else
-		{
-			return GDT::EMPTY_STRING;
-		}
+		return $this->subtitleEscaped ? html($t) : $t;
 	}
 
 }

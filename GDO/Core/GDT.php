@@ -263,7 +263,7 @@ abstract class GDT
 	public function renderCLI() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderXML() : string { return $this->renderHTML(); }
-	public function renderJSON(): array|string|null { return $this->renderCLI(); }
+	public function renderJSON(): array|string|null|int|bool|float { return $this->renderCLI(); }
 	public function renderGTK(): null { return null; }
 	public function renderWebsite() : string { return GDT::EMPTY_STRING; }
 	# HTML rendering
@@ -324,11 +324,16 @@ abstract class GDT
 	 */
 	public function renderMode(int $mode): null|string|array
 	{
-		$old = Application::$MODE;
-		Application::$MODE = $mode;
-		$result = $this->renderGDT();
-		Application::$MODE = $old;
-		return $result;
+		try
+		{
+			$old = Application::$MODE;
+			Application::$MODE = $mode;
+			return $this->renderGDT();
+		}
+		finally
+		{
+			Application::$MODE = $old;
+		}
 	}
 
 	###################
@@ -625,7 +630,7 @@ abstract class GDT
 		return null;
 	}
 
-	public function getValue(): bool|int|float|string|array|null|object
+	public function getValue(): mixed
 	{
 		return null;
 	}

@@ -154,7 +154,7 @@ class Result
 	 */
 	public function &fetchAllArray2dObject(GDO $table = null, $json = false): array
 	{
-		$table = $table ? $table : $this->table;
+		$table = $table ?: $this->table;
 		$array2d = [];
 		while ($object = $this->fetchAs($table))
 		{
@@ -188,15 +188,6 @@ class Result
 	}
 
 	/**
-	 * Fetch the first var of the next row.
-	 */
-	public function fetchVar(): ?string
-	{
-		$row = $this->fetchRow();
-		return $row ? $row[0] : null;
-	}
-
-	/**
 	 * Fetch all, but only a single column as simple array.
 	 */
 	public function fetchAllVars(): array
@@ -207,6 +198,15 @@ class Result
 			$values[] = $value;
 		}
 		return $values;
+	}
+
+	/**
+	 * Fetch the first var of the next row.
+	 */
+	public function fetchVar(): ?string
+	{
+		$row = $this->fetchRow();
+		return $row ? $row[0] : null;
 	}
 
 	public function getDummy(): GDO

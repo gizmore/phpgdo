@@ -25,6 +25,6 @@ class GDT_Paragraph extends GDT
 
 	public function renderCLI(): string { return $this->renderText() . "\n"; }
 
-	public function renderJSON(): array|string|null { return $this->renderText(); }
+	public function renderJSON(): array|string|null|int|bool|float { return $this->renderText(); }
 
 }

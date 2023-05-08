@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 namespace GDO\CLI\lang;
+
 return [
 
 	'module_cli' => 'Command-Line',

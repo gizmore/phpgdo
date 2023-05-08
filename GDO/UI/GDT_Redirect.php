@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\Application;
@@ -6,14 +7,15 @@ use GDO\Core\GDT;
 use GDO\Core\Website;
 use GDO\Session\GDO_Session;
 use GDO\User\GDO_User;
-use GDO\User\Module_User;
 
 /**
  * A redirect.
  * Renders <script> in ajax mode.
  * Sets headers in html and can display a message after a redirect (session required).
  *
- * @version 7.0.2
+ * @TODO Only allow the first redirect for a request, then error: already redirecting!
+ *
+ * @version 7.0.3
  * @since 6.11.5
  * @author gizmore
  */
@@ -25,8 +27,11 @@ final class GDT_Redirect extends GDT
 
 	final public const CODE = 307;
 
-	public static bool $REDIRECTED = false; # Only once
-	public int $redirectTime = 0;
+	final public const DEFAULT_TIMEOUT = 8;
+
+//	@TODO public static bool $REDIRECTED = false; # Only once
+
+	public int $redirectTime = self::DEFAULT_TIMEOUT;
 
 	############
 	### Back ###
@@ -37,11 +42,14 @@ final class GDT_Redirect extends GDT
 	 * Works by injecting to top response.
 	 * Default redirect target is hrefBack.
 	 */
-	public static function to(string $href = null): void
+	public static function to(string $href = null, string $key = null, array $args = null, int $time = self::DEFAULT_TIMEOUT): self
 	{
-		$href = $href ? $href : self::hrefBack();
-		$top = GDT_Page::instance()->topResponse();
-		$top->addField(GDT_Redirect::make()->href($href));
+		$re = self::make()->href($href ?: self::hrefBack())
+						  ->text($key, $args);
+		$re->time($key ? $time : 0);
+		GDT_Page::instance()->topResponse()
+							->addField($re);
+		return $re;
 	}
 
 	/**
@@ -51,13 +59,7 @@ final class GDT_Redirect extends GDT
 	{
 		if (Application::$INSTANCE->isCLI())
 		{
-			return $default ? $default : hrefDefault();
-		}
-
-		$sess = null;
-		if (class_exists('GDO\\Session\\GDO_Session', false))
-		{
-			$sess = GDO_Session::instance();
+			return $default ?: hrefDefault();
 		}
 
 		$url = GDO_User::current()->settingVar('User', 'last_url');
@@ -73,14 +75,9 @@ final class GDT_Redirect extends GDT
 	### Time ###
 	############
 
-	public function back(): self
+	public function time(int $time = self::DEFAULT_TIMEOUT): self
 	{
-		return $this->href(self::hrefBack());
-	}
-
-	public function redirectTime(int $redirectTime = 8): self
-	{
-		$this->redirectTime = $redirectTime;
+		$this->redirectTime = $time;
 		return $this;
 	}
 
@@ -97,6 +94,7 @@ final class GDT_Redirect extends GDT
 			{
 				GDO_Session::set('redirect_error', t($key, $args));
 			}
+			$this->time(0);
 		}
 		return $this;
 	}
@@ -111,6 +109,7 @@ final class GDT_Redirect extends GDT
 			{
 				GDO_Session::set('redirect_message', t($key, $args));
 			}
+			$this->time(0);
 		}
 		return $this;
 	}
@@ -120,14 +119,20 @@ final class GDT_Redirect extends GDT
 	##############
 	public function renderCLI(): string
 	{
-		return GDT::EMPTY_STRING;
+		$text = $this->renderText();
+		if (isset($this->href))
+		{
+			$text .= ' ( ' . html($this->href) . ' )';
+		}
+		return $text;
 	}
 
 	public function renderHTML(): string
 	{
 		$app = Application::$INSTANCE;
 
-		$url = isset($this->href) ? $this->href : $this->hrefBack();
+		$url = $this->href ?? self::hrefBack();
+
 		if ($app->isAjax())
 		{
 			return $this->renderAjaxRedirect();
@@ -152,7 +157,7 @@ final class GDT_Redirect extends GDT
 
 	private function renderAjaxRedirect(): string
 	{
-		return sprintf('<script>setTimeout(function(){ window.location.href="%s" }, %d)</script>',
+		return sprintf("<script>setTimeout(function(){ window.location.href=\"%s\" }, %d)</script>\n",
 			$this->href, $this->redirectTime * 1000);
 	}
 

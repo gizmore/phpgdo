@@ -65,11 +65,11 @@ final class GDT_RangeSlider extends GDT_Slider
 		return $this;
 	}
 
-	public function toVar(null|bool|int|float|string|object|array $value): ?string { return $value === null ? null : json_encode($value); }
-
-	public function initialLow() { return $this->var ? json_decode($this->var)[0] : null; }
+	public function initialLow() { return $this->var ? json_decode($this->var)[0] : null; }	public function toVar(null|bool|int|float|string|object|array $value): ?string { return $value === null ? null : json_encode($value); }
 
 	public function initialHigh() { return $this->var ? json_decode($this->var)[1] : null; }
+
+
 
 	public function toValue(null|string|array $var): null|bool|int|float|string|object|array { return $var === null ? null : json_decode($var); }
 

@@ -5,7 +5,6 @@ use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Exception;
-use GDO\Core\GDO_ExceptionFatal;
 use GDO\Core\GDO_MethodError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
@@ -112,11 +111,11 @@ if (CLI::isInteractive())
 		die(0);
 	}
 }
- else
- {
- 	while ($line = fgets(STDIN))
- 	{
- 		$exp = GDT_Expression::fromLine($line);
- 		echo $line;
- 	}
- }
+else
+{
+	while ($line = fgets(STDIN))
+	{
+		$exp = GDT_Expression::fromLine($line);
+		echo $line;
+	}
+}

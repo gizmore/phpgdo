@@ -5,9 +5,7 @@ use GDO\Core\GDT;
 use GDO\Tests\TestCase;
 use GDO\UI\GDT_Label;
 use GDO\UI\GDT_Page;
-use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsString;
-use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
 final class UITest extends TestCase
 {
@@ -30,6 +28,7 @@ final class UITest extends TestCase
 	{
 		$content = GDT_Page::instance()->renderHTML();
 		assertStringContainsString('window.GDO_REVISION', $content, 'Test if page rendering works.');
+		self::assertEquals(1, substr_count($content, 'window.GDO_REVISION'), 'Test if Javascript is only rendered once!');
 	}
 
 }

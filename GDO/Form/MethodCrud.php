@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Form;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_CreatedBy;
@@ -68,10 +69,11 @@ abstract class MethodCrud extends MethodForm
 
 	/**
 	 * @throws GDO_Exception
-	 * @throws GDO_Exception
 	 */
 	public function hasPermission(GDO_User $user, string &$error, array &$args): bool
 	{
+		parent::hasPermission($user, $error, $args);
+
 		$this->crudMode = self::CREATED;
 		$table = $this->gdoTable();
 		if ($id = $this->getCRUDID())
@@ -110,13 +112,15 @@ abstract class MethodCrud extends MethodForm
 			$args = [$table->gdoHumanName()];
 			return false;
 		}
-//		$this->resetForm();
-		return true;
+		return !$error;
 	}
 
+	/**
+	 * @throws GDO_ArgError
+	 */
 	public function getCRUDID(): ?string
 	{
-		return $this->gdoParameterVar($this->crudName(), true, false);
+		return $this->gdoParameterVar($this->crudName(), false);
 	}
 
 	public function featureRead(): bool { return true; }

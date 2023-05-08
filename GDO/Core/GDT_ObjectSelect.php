@@ -71,7 +71,7 @@ class GDT_ObjectSelect extends GDT_Select
 	### Render ###
 	##############
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		/**
 		 * @var GDO $value

@@ -2,7 +2,6 @@
 namespace GDO\UI;
 
 use GDO\Core\GDT_Enum;
-use GDO\Core\GDT_Response;
 
 /**
  * A selection for which navbar to use.

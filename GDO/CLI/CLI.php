@@ -147,6 +147,11 @@ final class CLI
 
 	public static function bold(string $s): string { return self::typemode($s, '1'); }
 
+	private static function typemode(string $s, string $mode): string
+	{
+		return sprintf("\033[%sm%s\033[0m", $mode, $s);
+	}
+
 	public static function dim(string $s): string { return self::typemode($s, '2'); }
 
 	public static function italic(string $s): string { return self::typemode($s, '3'); }
@@ -157,48 +162,10 @@ final class CLI
 
 	public static function invisible(string $s): string { return self::typemode($s, '6'); }
 
-	private static function typemode(string $s, string $mode): string
-	{
-		return sprintf("\033[%sm%s\033[0m", $mode, $s);
-	}
-
 
 	##############
 	### Server ###
 	##############
-
-
-	/**
-	 * Simulate PHP $_SERVER vars.
-	 */
-	public static function setServerVars(): void
-	{
-		$_SERVER['HTTPS'] = 'off';
-		$_SERVER['HTTP_HOST'] = GDO_DOMAIN;
-		$_SERVER['SERVER_NAME'] = GDO_DOMAIN; # @TODO use machines host name.
-		$_SERVER['SERVER_PORT'] = def('GDO_PORT', GDO_PROTOCOL === 'https' ? 443 : 80);
-		$_SERVER['SERVER_ADDR'] = '127.0.0.1';
-		$_SERVER['REMOTE_ADDR'] = '127.0.0.1'; # @TODO use machines IP
-		$_SERVER['HTTP_USER_AGENT'] = 'Firefox Gecko MS Opera';
-		$_SERVER['REQUEST_URI'] = '/index.php?_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
-		$_SERVER['HTTP_REFERER'] = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/referrer';
-		$_SERVER['HTTP_ORIGIN'] = '127.0.0.1';
-		$_SERVER['SCRIPT_NAME'] = GDO_WEB_ROOT . 'index.php';
-		$_SERVER['SERVER_SOFTWARE'] = 'Apache/2.4.41 (Win64) PHP/7.4.0';
-		$_SERVER['HTTPS'] = 'off';
-		$_SERVER['CONTENT_TYPE'] = 'application/gdo';
-		$_SERVER['PHP_SELF'] = '/index.php';
-		$_SERVER['REQUEST_URI'] = '/index.php';
-		$_SERVER['QUERY_STRING'] = '_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
-		$_SERVER['REQUEST_METHOD'] = GDT_Form::GET;
-//		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = locale_get_default(); #'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
-		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
-	}
-
-
-	#############
-	### Usage ###
-	#############
 
 	/**
 	 * Own implementation of escapeshellarg, because PHP limits it to 8kb.
@@ -210,6 +177,11 @@ final class CLI
 			self::escapeShellLinux($s);
 	}
 
+
+	#############
+	### Usage ###
+	#############
+
 	private static function escapeShellWindows(string $s): string
 	{
 		return '"' . addcslashes($s, '\\"') . '"';
@@ -219,11 +191,6 @@ final class CLI
 	{
 		return '\'' . str_replace('\'', '\\', $s) . '\'';
 	}
-
-	##############
-	### Escape ###
-	##############
-
 
 	/**
 	 * Render help line for gdt parameters.
@@ -260,8 +227,12 @@ final class CLI
 		$usage = trim($usage, ', ');
 		$mome = $method->getCLITrigger();
 		return t('cli_usage', [
-				trim(strtolower($mome) . ' ' . $usage), $method->getMethodDescription()]);
+			trim(strtolower($mome) . ' ' . $usage), $method->getMethodDescription()]);
 	}
+
+	##############
+	### Escape ###
+	##############
 
 	public static function isCLI(): bool
 	{
@@ -273,7 +244,35 @@ final class CLI
 		self::setServerVars();
 	}
 
+	/**
+	 * Simulate PHP $_SERVER vars.
+	 */
+	public static function setServerVars(): void
+	{
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_HOST'] = GDO_DOMAIN;
+		$_SERVER['SERVER_NAME'] = GDO_DOMAIN; # @TODO use machines host name.
+		$_SERVER['SERVER_PORT'] = def('GDO_PORT', GDO_PROTOCOL === 'https' ? 443 : 80);
+		$_SERVER['SERVER_ADDR'] = '127.0.0.1';
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1'; # @TODO use machines IP
+		$_SERVER['HTTP_USER_AGENT'] = 'Firefox Gecko MS Opera';
+		$_SERVER['REQUEST_URI'] = '/index.php?_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
+		$_SERVER['HTTP_REFERER'] = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/referrer';
+		$_SERVER['HTTP_ORIGIN'] = '127.0.0.1';
+		$_SERVER['SCRIPT_NAME'] = GDO_WEB_ROOT . 'index.php';
+		$_SERVER['SERVER_SOFTWARE'] = 'Apache/2.4.41 (Win64) PHP/7.4.0';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['CONTENT_TYPE'] = 'application/gdo';
+		$_SERVER['PHP_SELF'] = '/index.php';
+		$_SERVER['REQUEST_URI'] = '/index.php';
+		$_SERVER['QUERY_STRING'] = '_mo=' . GDO_MODULE . '&_me=' . GDO_METHOD;
+		$_SERVER['REQUEST_METHOD'] = GDT_Form::GET;
+//		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = locale_get_default(); #'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
+		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7';
+	}
+
 }
+
 #PP#start#
 # Required gdo constants
 deff('GDO_DOMAIN', 'localhost');

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\Application;
@@ -10,7 +11,7 @@ use GDO\Core\WithName;
  * A panel that un/collapses on click to the title.
  * Content is inherited via container.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 6.10.0
  * @author gizmore
  */
@@ -66,10 +67,16 @@ final class GDT_Accordeon extends GDT_Container
 
 	public function renderCard(): string
 	{
-		$old = Application::$MODE;
-		Application::$MODE = GDT::RENDER_CARD;
-		return $this->renderAccordeon(GDT::RENDER_CARD);
-		Application::$MODE = $old;
+		try
+		{
+			$old = Application::$MODE;
+			Application::$MODE = GDT::RENDER_CARD;
+			return $this->renderAccordeon(GDT::RENDER_CARD);
+		}
+		finally
+		{
+			Application::$MODE = $old;
+		}
 	}
 
 }

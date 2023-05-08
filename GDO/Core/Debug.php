@@ -28,9 +28,19 @@ use Throwable;
 final class Debug
 {
 
-	final public const CLI_MAX_ARG_LEN = 100; # it's intersting that CLI can handle longer output
-	final public const WWW_MAX_ARG_LEN = 50;
+	public static int $ERRORS = 0;
 
+	public static int $EXCEPTIONS_UNHANDLED = 0;
+
+	/**
+	 * Total processed exceptios.
+	 */
+	public static int $EXCEPT_PROCESSED = 0;
+
+
+	final public const CLI_MAX_ARG_LEN = 100; # it's intersting that CLI can handle longer output
+
+	final public const WWW_MAX_ARG_LEN = 50;
 	public static int $MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;
 
 	private static bool $DIE = false;
@@ -150,6 +160,8 @@ final class Debug
 	 */
 	public static function error_handler(int $errno, string $errstr, string $errfile, int $errline, mixed $errcontext = null): void
 	{
+		self::$ERRORS++; #PP#delete#
+
 		if (!(error_reporting() & $errno))
 		{
 			return;
@@ -259,10 +271,10 @@ final class Debug
 		// Fix full path disclosure
 		$message = self::shortpath($message);
 
-		if ( (!GDO_ERROR_STACKTRACE) || (!Application::instance()->isUnitTestVerbose()) )
-		{
-			return $html ? sprintf('<div class="gdo-exception">%s</div>', $message) . PHP_EOL : $message;
-		}
+//		if ( (!GDO_ERROR_STACKTRACE) || (!Application::instance()->isUnitTestVerbose()) )
+//		{
+//			return $html ? sprintf('<div class="gdo-exception">%s</div>', $message) . PHP_EOL : $message;
+//		}
 
 		// Append PRE header.
 		$back = $html ? "<div class=\"gdo-exception\">\n" : '';
@@ -383,7 +395,7 @@ final class Debug
 		else
 		{
 			$arg2 = $arg;
-			$arg = json_encode($arg);
+			$arg = json_encode($arg2);
 			if ($arg === false)
 			{
 				$arg = print_r($arg2, true);
@@ -445,11 +457,13 @@ final class Debug
 
 	public static function exception_handler($ex): void
 	{
+		self::$EXCEPTIONS_UNHANDLED++; #PP#delete#
 		echo self::debugException($ex);
 	}
 
 	public static function debugException(Throwable $ex, bool $render = true): string
 	{
+		self::$EXCEPT_PROCESSED++; #PP#delete#
 		$app = Application::instance();
 		$is_html = $app->isHTML() && (!$app->isUnitTests());
 		$firstLine = sprintf('%s in %s Line %s',
@@ -516,7 +530,7 @@ final class Debug
 			}
 		}
 
-		if ($url = trim(@urldecode(@$_SERVER['REQUEST_URI']), '/'))
+		if ($url = trim(urldecode($_SERVER['REQUEST_URI']), '/'))
 		{
 			$url = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/' . $url;
 			$url = "<a href=\"{$url}\">{$url}</a>";

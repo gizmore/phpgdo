@@ -32,7 +32,7 @@ final class Module_Core extends GDO_Module
 {
 
 	final public const GDO_VERSION = '7.0.3';
-	final public const GDO_REVISION = '7.0.3-r1788';
+	final public const GDO_REVISION = '7.0.3-r1790';
 
 	final public const GDO_CODENAME = 'Idiomatic Indian';
 
@@ -86,19 +86,24 @@ final class Module_Core extends GDO_Module
 
 	public function checkSystemDependencies(): bool
 	{
+		$ok = true;
 		if (PHP_MAJOR_VERSION < 8)
 		{
-			return $this->errorSystemDependency('err_php_major_version', ['8.0']);
+			$ok = $this->errorSystemDependency('err_php_major_version', ['8.0']);
+		}
+		if (!function_exists('mime_content_type'))
+		{
+			$ok = $this->errorSystemDependency('err_php_extension', ['fileinfo']);
 		}
 		if (!function_exists('mb_strcut'))
 		{
-			return $this->errorSystemDependency('err_php_extension', ['mbstring']);
+			$ok = $this->errorSystemDependency('err_php_extension', ['mbstring']);
 		}
 		if (!function_exists('iconv'))
 		{
-			return $this->errorSystemDependency('err_php_extension', ['iconv']);
+			$ok = $this->errorSystemDependency('err_php_extension', ['iconv']);
 		}
-		return true;
+		return $ok;
 	}
 
 	##############

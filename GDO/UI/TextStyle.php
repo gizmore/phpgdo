@@ -45,7 +45,7 @@ final class TextStyle
 		return self::bold(self::italic($s));
 	}
 
-	public static function bold(string $s, bool $apply=true): string
+	public static function bold(string $s, bool $apply = true): string
 	{
 		return $apply ? self::display($s, 'b', 'b', 'bold') : $s;
 	}

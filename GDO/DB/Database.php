@@ -112,6 +112,21 @@ class Database
 		return self::$COLUMNS[$classname];
 	}
 
+	/**
+	 * Extract name from gdo columns for hashmap.
+	 *
+	 * @return GDT[]
+	 */
+	private static function hashedColumns(GDO $gdo): array
+	{
+		$columns = [];
+		foreach ($gdo->gdoColumns() as $gdt)
+		{
+			$columns[$gdt->getName()] = $gdt;
+		}
+		return $columns;
+	}
+
 	public static function tableS(string $classname): ?GDO
 	{
 		if (!isset(self::$TABLES[$classname]))
@@ -133,21 +148,6 @@ class Database
 			self::$COLUMNS[$classname] = self::hashedColumns($gdo);
 		}
 		return self::$TABLES[$classname];
-	}
-
-	/**
-	 * Extract name from gdo columns for hashmap.
-	 *
-	 * @return GDT[]
-	 */
-	private static function hashedColumns(GDO $gdo): array
-	{
-		$columns = [];
-		foreach ($gdo->gdoColumns() as $gdt)
-		{
-			$columns[$gdt->getName()] = $gdt;
-		}
-		return $columns;
 	}
 
 	public function db(string $db): self
@@ -229,7 +229,7 @@ class Database
 		{
 			throw new GDO_DBException('err_db_connect', [$e->getMessage()]);
 		}
-		#PP#start#
+			#PP#start#
 		finally
 		{
 			$timeTaken = microtime(true) - $t1;
@@ -247,11 +247,6 @@ class Database
 		return self::DBMS(false)->dbmsOpen($this->host, $this->user, $this->pass, $this->db, $this->port);
 	}
 
-	public function isConnected(): bool
-	{
-		return isset($this->link);
-	}
-
 	/**
 	 * @throws GDO_DBException
 	 */
@@ -261,10 +256,6 @@ class Database
 		$this->reads++; #PP#delete#
 		return $this->query($query, $buffered);
 	}
-
-	###################
-	### Table cache ###
-	###################
 
 	/**
 	 * @throws GDO_DBException
@@ -306,6 +297,10 @@ class Database
 		return $result;
 	}
 
+	###################
+	### Table cache ###
+	###################
+
 	/**
 	 * @throws GDO_DBException
 	 */
@@ -346,10 +341,6 @@ class Database
 		}
 	}
 
-	####################
-	### Table create ###
-	####################
-
 	/**
 	 * @throws GDO_DBException
 	 */
@@ -357,6 +348,10 @@ class Database
 	{
 		return Database::DBMS()->dbmsTableExists($tableName);
 	}
+
+	####################
+	### Table create ###
+	####################
 
 	/**
 	 * Create a database table from a GDO.
@@ -385,7 +380,7 @@ class Database
 		return $this->enableForeignKeyCheck(false);
 	}
 
-	public function enableForeignKeyCheck(bool $bool=true): bool
+	public function enableForeignKeyCheck(bool $bool = true): bool
 	{
 		try
 		{
@@ -404,10 +399,6 @@ class Database
 		return $this->dropTableName($gdo->gdoTableIdentifier());
 	}
 
-	###################
-	### DB Creation ###
-	###################
-
 	public function dropTableName(string $tableName): bool
 	{
 		try
@@ -420,6 +411,10 @@ class Database
 			return false;
 		}
 	}
+
+	###################
+	### DB Creation ###
+	###################
 
 	public function truncateTable(GDO $gdo): bool
 	{
@@ -450,10 +445,6 @@ class Database
 		}
 	}
 
-	###################
-	### Transaction ###
-	###################
-
 	public function dropDatabase(string $databaseName): bool
 	{
 		try
@@ -467,6 +458,10 @@ class Database
 			return false;
 		}
 	}
+
+	###################
+	### Transaction ###
+	###################
 
 	public function useDatabase(string $databaseName): bool
 	{
@@ -485,6 +480,11 @@ class Database
 			Debug::debugException($ex);
 			return false;
 		}
+	}
+
+	public function isConnected(): bool
+	{
+		return isset($this->link);
 	}
 
 	public function transactionBegin(): bool

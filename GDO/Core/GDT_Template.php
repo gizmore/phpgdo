@@ -238,7 +238,7 @@ class GDT_Template extends GDT
 		return self::php($this->templateModule, $this->templatePath, $tVars);
 	}
 
-	public function renderJSON(): array|string|null
+	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return null;
 	}

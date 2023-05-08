@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
@@ -8,12 +9,11 @@ use GDO\Core\WithName;
 /**
  * Basic text panel.
  *
- * @TODO document difference between display methods and render methods.
- *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.0.0
  * @author gizmore
  * @see GDT_Box
+ * @see GDT_Label
  */
 class GDT_Panel extends GDT
 {

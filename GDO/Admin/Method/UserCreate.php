@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\Admin\Method;
 
 use GDO\Admin\MethodAdmin;
@@ -16,7 +17,7 @@ use GDO\User\GDT_Username;
  * Manually create a user.
  * Only specify user_name, the rest can be done via UserEdit.
  *
- * @version 7.0.0
+ * @version 7.0.3
  * @since 3.1.2
  * @author gizmore
  */
