@@ -21,4 +21,8 @@ Which is way better as what other frameworks do *by design* to aid you.
 By the way, the same process, and F5 toolchain, also exists for
 [CSS](https://github.com/gizmore/phpgdo-css).
 
+
 ## GDOv7 Javascript: Guideline
+
+
+Always make things work without JS, as we want to use gdo methods on the CLI/Chat as well. Use JS *only* to enhance the experience in the web.

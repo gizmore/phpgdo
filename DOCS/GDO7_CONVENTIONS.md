@@ -36,6 +36,22 @@ Directories simply shall end with a "`/`".
 
 ---
 
+## GDOv7 Conventions: Resource Pathes
+
+In GDOv7, everything a module ships is put into the module's folders.
+There is no way to change the predefined folder names or locations i chose.
+This way, there is no confusion!
+
+Editing files is always done in the module folder.
+Asset stuff is magic and all happens automatically,
+so there is not much room for erros.
+
+Modules can provide stuff for these folders:
+
+- `lang/` - Actually, you can change the I18N folder name, but it is relative to the module path.
+
+
+
 ## GDOv7 Conventions: GDT Data Conversion
 
 A GDT needs to implement `toVar($value):string` and `toValue(string $var)`,

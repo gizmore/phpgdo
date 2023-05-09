@@ -1,12 +1,13 @@
 # GDOv7 Core: modules and functionality
 
-GDOv7 comes with a slim kernel.
+GDOv7 comes with a profound kernel.
 Basic things are hopefully done right,
 like timezones, foreign keys, emoticons,
 input validation, expression parsing, etc.
-GDOv7 is highly modular and quick dirty slim.
+GDOv7 is highly modular and quick and dirty.
 There is no big asset pipeline,
 just an **F5 toolchain**, optimized for maximum performance and productivity.
+
 
 ## List of GDOv7 core modules
 

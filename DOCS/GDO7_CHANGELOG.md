@@ -16,6 +16,7 @@ from bottom to top, and sometimes again.
 ## 7.0.4 (All ToDo)
 
 - Support for HTTP2/3.
+- Idea: Support for prepared statements, so persistent clients like the websocket server and the gdo dog chatbot.
 - Support for [GDT_Image](../GDO/UI/GDT_Image.php) with optional
 [Thumbhash](https://evanw.github.io/thumbhash/).
 - Support for CLI image rendering (would be just nice to have).
