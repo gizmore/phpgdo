@@ -138,6 +138,15 @@ final class gdo_test extends Application
 		return $this;
 	}
 
+	public bool $live = false;
+
+	public function live(bool $live = true): static
+	{
+		$this->live = $live;
+		$this->verboseMessage("The live mode got enabled!");
+		return $this;
+	}
+
 
 	public bool $methods = false;
 
@@ -257,6 +266,7 @@ final class gdo_test extends Application
 		echo "--double = Run the install process two times.\n";
 		echo "--friends = Treat all friendencies as dependency.\n";
 		echo "--icons = Run icon tests (DELETE?).\n";
+		echo "--live = Use the normal config.php. Do not erase the DB.\n";
 		echo "--methods = Run execution tests.\n";
 		echo "--nulls = Run all empty creation tests (DELETE?).\n";
 		echo "--parents = Run automated tests on all dependencies.\n";
