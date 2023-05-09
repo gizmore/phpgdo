@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
@@ -11,7 +12,7 @@ use GDO\Core\WithFields;
  * No template is used yet.
  * Has no input.
  *
- * @version 7.0.1
+ * @version 7.0.3
  * @since 5.7.1
  * @author gizmore
  * @see GDT_Panel
@@ -82,5 +83,14 @@ class GDT_Container extends GDT
 		}
 		return GDT::EMPTY_STRING;
 	}
+
+	/**
+	 * Add a @see GDT_Span to this container.
+	 */
+	public function addText(string $key, array $args = null): static
+	{
+
+	}
+
 
 }

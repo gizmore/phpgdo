@@ -6,6 +6,7 @@ use Exception;
 use GDO\CLI\CLI;
 use GDO\Language\Trans;
 use GDO\UI\Color;
+use GDO\UI\GDT_Error;
 use GDO\UI\TextStyle;
 use Throwable;
 
@@ -38,7 +39,7 @@ class GDO_Exception extends Exception
 		$message = t($key, $args);
 		parent::__construct($message, $code, $previous);
 		Application::setResponseCode($code);
-		hdr('X-GDO-ERROR: ' . CLI::removeColorCodes(str_replace("\n", ' | ', $message)));
+		hdr('X-GDO-ERROR: ' . GDT_Error::displayHeaderText($message));
 	}
 
 

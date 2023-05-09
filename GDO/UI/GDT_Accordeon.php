@@ -79,4 +79,5 @@ final class GDT_Accordeon extends GDT_Container
 		}
 	}
 
+
 }

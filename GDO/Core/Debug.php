@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace GDO\Core;
 
 use GDO\Mail\Mail;
+use GDO\Session\GDO_Session;
 use GDO\UI\Color;
+use GDO\UI\GDT_Page;
 use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 use GDO\Util\Strings;
@@ -13,10 +15,13 @@ use Throwable;
  * Debug backtrace and error handler.
  * Can send email on PHP errors, even fatals, if Module_Mail is installed.
  * Has a method to get debug timings.
+ * Has a counter for unhandled exceptions.
+ * Breakpoints for xdebug and a nice "global" scope can be set with @see break
  *
  * In Unit Test, verbose has to be enabled to show stack traces for exceptions.
+ * In Unit Test, you can can use @see surpress to be able to test exceptions.
  *
- * @version 7.0.3
+ * @version 7.0.4
  * @since 3.0.1
  *
  * @example Debug::enableErrorHandler(); fatal_ooops();
@@ -28,19 +33,31 @@ use Throwable;
 final class Debug
 {
 
-	public static int $ERRORS = 0;
+	/**
+	 * @var int - Surpress calculations
+	 */
+	private static int $ACTIVE = 1;
 
-	public static int $EXCEPTIONS_UNHANDLED = 0;
 
 	/**
-	 * Total processed exceptios.
+	 * @var int - PHP Errors not supressed
 	 */
-	public static int $EXCEPT_PROCESSED = 0;
+	public static int $ERRORS = 0; #PP#delete#
 
+	/**
+	 * @var int - Total exceptions not being handled by try/catch.
+	 */
+	public static int $EXCEPTIONS_UNHANDLED = 0; #PP#delete#
+
+	/**
+	 * @var int - Total execptions processed. Usually in catch() we process the exception normally, to not die.
+	 */
+	public static int $EXCEPTIONS_PROCESSED = 0; #PP#delete#
 
 	final public const CLI_MAX_ARG_LEN = 100; # it's intersting that CLI can handle longer output
 
 	final public const WWW_MAX_ARG_LEN = 50;
+
 	public static int $MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;
 
 	private static bool $DIE = false;
@@ -53,12 +70,35 @@ final class Debug
 	 */
 	public static function init(bool $die = false, bool $mail = false): void
 	{
-		self::enableErrorHandler();
-//		self::enableShutdownHandler();
-		self::enableExceptionHandler();
+		self::$MAX_ARG_LEN = php_sapi_name() === 'cli' ? self::CLI_MAX_ARG_LEN : self::WWW_MAX_ARG_LEN;
 		self::setDieOnError($die);
 		self::setMailOnError($mail);
+		self::enableErrorHandler();
+		self::enableExceptionHandler();
 	}
+
+	################
+	### Surpress ###
+	################
+
+
+	/**
+	 * Call something without Debug output and mail sending.
+	 * @since 7.0.3
+	 */
+	public static function surpress(callable $callable, ...$args)
+	{
+		try
+		{
+			self::$ACTIVE = 0;
+			return call_user_func_array($callable, $args);
+		}
+		finally
+		{
+			self::$ACTIVE = 1;
+		}
+	}
+
 
 	################
 	### Shutdown ###
@@ -69,7 +109,6 @@ final class Debug
 		if (!self::$ENABLED)
 		{
 			set_error_handler([self::class, 'error_handler']);
-// 			register_shutdown_function([self::class, 'shutdown_function']);
 			self::$ENABLED = true;
 		}
 	}
@@ -102,30 +141,23 @@ final class Debug
 		self::$MAIL_ON_ERROR = $bool;
 	}
 
-	public static function enableShutdownHandler(): void
+	/**
+	 * Trigger a breakpoint and gather global variables.
+	 */
+	public static function break(): bool
 	{
-		register_shutdown_function([self::class, 'shutdown_function']);
+		global $me;
+		$app = Application::$INSTANCE;
+		$page = GDT_Page::instance();
+		$user = GDO_User::current();
+		$modules = ModuleLoader::instance()->getModules();
+		if (module_enabled('Session'))
+		{
+			$session = GDO_Session::instance();
+		}
+		xdebug_break();
+		return $me && $app && $page && $user && $modules && isset($session);
 	}
-
-//	/**
-//	 * Trigger a breakpoint and gather global variables.
-//	 *
-//	 * @deprecated unused
-//	 */
-//	public static function break(): bool
-//	{
-//		global $me;
-//		$app = Application::$INSTANCE;
-//		$page = GDT_Page::instance();
-//		$user = GDO_User::current();
-//		$modules = ModuleLoader::instance()->getModules();
-//		if (module_enabled('Session'))
-//		{
-//			$session = GDO_Session::instance();
-//		}
-//		xdebug_break();
-//		return $me && $app && $page && $user && $modules && isset($session);
-//	}
 
 	#####################
 	## Error Handlers ###
@@ -141,31 +173,16 @@ final class Debug
 	}
 
 	/**
-	 * @TODO: shutdown function shall show debug stacktrace on fatal error. If an error was already shown, print nothing.
-	 * No stacktrace available and some vars are messed up.
-	 */
-	public static function shutdown_function(): void
-	{
-		if ($error = error_get_last())
-		{
-			$type = $error['type'];
-			self::error_handler($type, $error['message'], self::shortpath($error['file']), $error['line']);
-			die(Application::EXIT_FATAL);
-		}
-		die(0);
-	}
-
-	/**
 	 * Error handler creates some html backtrace and can die on _every_ warning etc.
 	 */
 	public static function error_handler(int $errno, string $errstr, string $errfile, int $errline, mixed $errcontext = null): void
 	{
-		self::$ERRORS++; #PP#delete#
-
-		if (!(error_reporting() & $errno))
+		if ( (!(error_reporting() & $errno)) || (!self::$ACTIVE) )
 		{
 			return;
 		}
+
+		self::$ERRORS += self::$ACTIVE; #PP#delete#
 
 		// Log as critical!
 		if (class_exists('GDO\Core\Logger', false))
@@ -177,44 +194,7 @@ final class Debug
 			Logger::flush();
 		}
 
-		switch ($errno)
-		{
-			case -1:
-				$errnostr = 'GDO Error';
-				break;
-			case E_ERROR:
-			case E_CORE_ERROR:
-				$errnostr = 'PHP Fatal Error';
-				break;
-			case E_WARNING:
-			case E_USER_WARNING:
-			case E_CORE_WARNING:
-				$errnostr = 'PHP Warning';
-				break;
-			case E_USER_NOTICE:
-			case E_NOTICE:
-				$errnostr = 'PHP Notice';
-				break;
-			case E_USER_ERROR:
-				$errnostr = 'PHP Error';
-				break;
-			case E_STRICT:
-				$errnostr = 'PHP Strict Error';
-				break;
-			case E_COMPILE_WARNING:
-			case E_COMPILE_ERROR:
-				$errnostr = 'PHP Compile Error';
-				break;
-			case E_PARSE:
-				$errnostr = 'PHP Parse Error';
-				break;
-			case E_DEPRECATED:
-				$errnostr = 'PHP Deprecation Error';
-				break;
-			default:
-				$errnostr = 'PHP Unknown Error';
-				break;
-		}
+		$errnostr = self::getPHPErrorName($errno);
 
 		$app = Application::$INSTANCE;
 		$is_html = !($app->isCLIOrUnitTest()) && $app->isHTML();
@@ -224,30 +204,12 @@ final class Debug
 		$message = $is_html ? $messageHTML : $messageCLI;
 
 		// Send error to admin
-		if (self::$MAIL_ON_ERROR)
-		{
-			try
-			{
-				self::sendDebugMail(self::backtrace($messageCLI, false));
-			}
-			catch (Throwable $ex)
-			{
-				echo $ex->getTraceAsString();
-			}
-		}
+		self::sendDebugMail(self::backtrace($messageCLI, false));
 
 		hdrc('HTTP/1.1 500 Server Error');
 
-		// Output error
-//		if ($app->isCLIOrUnitTest())
-//		{
-//			fwrite(STDERR, self::backtrace($messageCLI, false) . PHP_EOL);
-//		}
-//		else
-//		{
 		$message = GDO_ERROR_STACKTRACE ? self::backtrace($message, $is_html) : $message;
 		fwrite(STDERR, self::renderError($message));
-//		}
 
 		if (self::$DIE)
 		{
@@ -270,11 +232,6 @@ final class Debug
 	{
 		// Fix full path disclosure
 		$message = self::shortpath($message);
-
-//		if ( (!GDO_ERROR_STACKTRACE) || (!Application::instance()->isUnitTestVerbose()) )
-//		{
-//			return $html ? sprintf('<div class="gdo-exception">%s</div>', $message) . PHP_EOL : $message;
-//		}
 
 		// Append PRE header.
 		$back = $html ? "<div class=\"gdo-exception\">\n" : '';
@@ -319,7 +276,7 @@ final class Debug
 		}
 
 		$copy = [];
-		$cli = Application::$INSTANCE->isCLI();
+		$cli = Application::$INSTANCE->isCLIOrUnitTest();
 		$ajax = Application::$INSTANCE->isAjax();
 		foreach ($implode as $imp)
 		{
@@ -394,34 +351,18 @@ final class Debug
 		}
 		else
 		{
-			$arg2 = $arg;
-			$arg = json_encode($arg2);
-			if ($arg === false)
-			{
-				$arg = print_r($arg2, true);
-			}
+			$arg = json($arg);
 		}
 
-		$app = Application::$INSTANCE;
-//		$is_html = ($app->isCLIOrUnitTest()) ? false : $app->isHTML();
 		$arg = html($arg);
 		$arg = str_replace('&quot;', '"', $arg); # It is safe to inject quotes. Turn back to get length calc right.
 		$arg = str_replace('\\\\', '\\', $arg); # Double backslash was escaped always via json encode?
 		$arg = str_replace('\\/', '/', $arg); # Double backslash was escaped always via json encode?
 		if (mb_strlen($arg) > self::$MAX_ARG_LEN)
 		{
-			if ($app->isCLIOrUnitTest())
-			{
-				self::$MAX_ARG_LEN = self::CLI_MAX_ARG_LEN;
-			}
-			else
-			{
-				self::$MAX_ARG_LEN = self::WWW_MAX_ARG_LEN;
-			}
 			# @TODO: Debug parameter value output shows buggy parameter value for strings that are close to the limit. like {"foo":"bar", "bar":"fo..., "bar:foo"}. Only some basic math is needed.
 			return mb_substr($arg, 0, self::$MAX_ARG_LEN) . '…' . mb_substr($arg, -14);
 		}
-
 		return $arg;
 	}
 
@@ -432,7 +373,17 @@ final class Debug
 	{
 		if (module_enabled('Mail'))
 		{
-			return Mail::sendDebugMail('PHP Error', $message);
+			if (self::$MAIL_ON_ERROR)
+			{
+				try
+				{
+					return Mail::sendDebugMail('PHP Error', $message);
+				}
+				catch (Throwable $ex)
+				{
+					echo $ex->getTraceAsString();
+				}
+			}
 		}
 		return false;
 	}
@@ -440,13 +391,13 @@ final class Debug
 	private static function renderError(string $message): string
 	{
 		$app = Application::$INSTANCE;
-		if (!$app)
+		if ($app->isWebserver())
 		{
 			return html($message);
 		}
 		if ($app->isJSON())
 		{
-			return json_encode(['error' => $message]);
+			return json(['error' => $message]);
 		}
 		if ($app->isCLIOrUnitTest())
 		{
@@ -457,27 +408,27 @@ final class Debug
 
 	public static function exception_handler($ex): void
 	{
-		self::$EXCEPTIONS_UNHANDLED++; #PP#delete#
-		echo self::debugException($ex);
+		self::$EXCEPTIONS_UNHANDLED += self::$ACTIVE; #PP#delete#
+		if (self::$ACTIVE)
+		{
+			echo self::debugException($ex);
+		}
 	}
 
 	public static function debugException(Throwable $ex, bool $render = true): string
 	{
-		self::$EXCEPT_PROCESSED++; #PP#delete#
-		$app = Application::instance();
+		self::$EXCEPTIONS_PROCESSED += 1; #PP#delete#
+		$app = Application::$INSTANCE;
 		$is_html = $app->isHTML() && (!$app->isUnitTests());
 		$firstLine = sprintf('%s in %s Line %s',
 			$ex->getMessage(), $ex->getFile(), $ex->getLine());
 
-		$mail = self::$MAIL_ON_ERROR;
 		$message = self::backtraceException($ex, $is_html, ' (XH)');
 
 		// Send error to admin?
-		if ($mail)
-		{
-			self::sendDebugMail($firstLine . "\n\n" . $message);
-		}
+		self::sendDebugMail($firstLine . "\n\n" . $message);
 
+		// Log
 		Logger::logException($ex);
 		Logger::flush();
 
@@ -490,7 +441,9 @@ final class Debug
 			}
 			return '';
 		}
+
 		hdrc('HTTP/1.1 500 Server Error');
+
 		return $render ? self::renderError($message) : '';
 	}
 
@@ -572,6 +525,38 @@ REQUEST: %s\n\n";
 		$mo = isset($_REQUEST['_mo']) ? (string)$_REQUEST['_mo'] : '-none';
 		$me = isset($_REQUEST['_me']) ? (string)$_REQUEST['_me'] : 'none-';
 		return "{$mo}/{$me}";
+	}
+
+	private static function getPHPErrorName(int $errno): string
+	{
+		switch ($errno)
+		{
+			case -1:
+				return 'GDO Error';
+			case E_ERROR:
+			case E_CORE_ERROR:
+				return 'PHP Fatal Error';
+			case E_WARNING:
+			case E_USER_WARNING:
+			case E_CORE_WARNING:
+				return 'PHP Warning';
+			case E_USER_NOTICE:
+			case E_NOTICE:
+				return 'PHP Notice';
+			case E_USER_ERROR:
+				return 'PHP Error';
+			case E_STRICT:
+				return 'PHP Strict Error';
+			case E_COMPILE_WARNING:
+			case E_COMPILE_ERROR:
+				return 'PHP Compile Error';
+			case E_PARSE:
+				return 'PHP Parse Error';
+			case E_DEPRECATED:
+				return 'PHP Deprecation Error';
+			default:
+				return sprintf('PHP Unknown Error 0x%x', $errno);
+		}
 	}
 
 }

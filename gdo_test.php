@@ -67,7 +67,6 @@ Logger::disableBuffer();
 final class gdo_test extends Application
 {
 
-
 	public bool $all = false;
 
 	public function all(bool $all=true): static
@@ -75,7 +74,6 @@ final class gdo_test extends Application
 		$this->all = $all;
 		if ($all)
 		{
-			$this->verboseMessage('All tests will be run!');
 			$this->blanks = true;
 			$this->config = true;
 			$this->double = true;
@@ -275,9 +273,12 @@ final class gdo_test extends Application
 		if ($this->isUnitTestVerbose())
 		{
 			printf("%s: %s\n", TextStyle::italic('Note'), $string);
+			if (ob_get_level())
+			{
+				ob_flush();
+			}
 		}
 	}
-
 }
 
 $app = gdo_test::init()->modeDetected(GDT::RENDER_CLI)->cli();
@@ -377,17 +378,21 @@ if (isset($options['u']) || isset($options['utility']))
 	$opcount++;
 }
 
-
-/** @var array $argv * */
 $argv = array_slice($argv, $index);
 $argc = count($argv);
 
 switch ($argc)
 {
+	case 0:
+		$app->all();
+		$argv = ['%'];
+		$argc = 1;
+
 	case 1:
 		break;
+
 	default:
-		return $app->showHelp();
+		return $app->showHelp(-1);
 }
 
 
@@ -402,9 +407,9 @@ if (!REPL::confirm('Is this correct?', true))
 echo 'Dropping Test Database: ' . GDO_DB_NAME . ".\n";
 echo "If this hangs, something is locking the db.\n";
 $db->dropDatabase(GDO_DB_NAME);
-FileUtil::removeDir(GDO_PATH . 'files_test/');
+FileUtil::removedDir(GDO_PATH . 'files_test/');
 @mkdir(GDO_PATH . 'files_test/', GDO_CHMOD);
-FileUtil::removeDir(GDO_TEMP_PATH);
+FileUtil::removedDir(GDO_TEMP_PATH);
 $db->createDatabase(GDO_DB_NAME);
 $db->useDatabase(GDO_DB_NAME);
 

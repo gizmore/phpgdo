@@ -157,9 +157,7 @@ function gdoRouteMoMe(string $mo, string $me): Method
 			$method = $module->getDefaultMethod();
 		}
 	}
-	else
-	{
-		if ($module = ModuleLoader::instance()->getModule(GDO_MODULE, true, false))
+	elseif ($module = ModuleLoader::instance()->getModule(GDO_MODULE, true, false))
 		{
 			if (!($method = $module->getMethod(GDO_METHOD)))
 			{
@@ -172,7 +170,6 @@ function gdoRouteMoMe(string $mo, string $me): Method
 			$method = Error::make();
 			$_REQUEST['error'] = t('err_unknown_module', [GDO_MODULE]);
 		}
-	}
 	unset($_REQUEST['_mo']);
 	unset($_REQUEST['_me']);
 	unset($_REQUEST['_url']);
@@ -256,53 +253,33 @@ $gdtMethod = GDT_Method::make()->method($me)->inputs($_REQUEST);
 #
 try
 {
-	# exec and check
-	if (null === ($result = $gdtMethod->execute()))
+	$result = $gdtMethod->execute();
+	if (!($result instanceof GDT_Response))
 	{
-		$result = GDT_HTML::make(); # empty response... okay? Oo?
-	}
-	elseif (is_string($result)) # text response, we wanna support that?
-	{
-		$result = GDT_HTML::make()->var($result);
-	}
-
-	if ($app::isError())
-	{
-		if ($app->isAPI())
-		{
-			$result = GDT_Page::instance()->topResponse();
-		}
-		elseif ($app->isCLI())
-		{
-			CLI::flushTopResponse();
-		}
+		$result = GDT_Response::make()->addFields($result);
 	}
 }
-catch (Throwable $t)
+catch (Throwable $ex)
 {
 	# Send mail
-	Debug::debugException($t, false);
+	Debug::debugException($ex, false);
 	# Error message result
-	$result = GDT_Error::fromException($t);
+	$result = GDT_Error::fromException($ex);
 }
 
 #
 # If it is not a GDT_Response, wrap it.
 # Because GDT_Response renders the GDT_Page template (in website, non ajax mode)
 #
-if (!($result instanceof GDT_Response))
-{
-	$result = GDT_Response::make()->addFields($result);
-}
 ##############
 ### Finish ###
 ##############
-# Commit session changes.
+# Commit session changes before net transfer...
 if (isset($session) && $session)
 {
 	if (!Application::isCrash())
 	{
-		$session::commit(); # setting headers sometimes
+		GDO_Session::commit(); # setting headers sometimes
 	}
 }
 # Render the response.
@@ -318,5 +295,6 @@ echo $content; # asap
 ### fire IPC recaches ###
 #########################
 #Logger::flush(); # Done in Application
-# @TODO On application exit, send mails
+# @TODO On application exit, send mails while network is shuffleing
+
 Cache::recacheHooks(); # we have time to recache now.

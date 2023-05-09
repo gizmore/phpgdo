@@ -4,13 +4,14 @@
 
 Welcome to the GDOv7 changelog + combined roadmap.
 
-The current version is v7.0.3 is quite far and in the finishings.
+The current version, v7.0.3, is quite far and in the finishings.
 
 There is no keeping backwards compat, 
 and the ABI/API might change here and there.
 
 Please read this document upside down,
-from bottom to top and sometimes again.
+from bottom to top, and sometimes again.
+
 
 ## 7.0.4 (All ToDo)
 
@@ -33,10 +34,11 @@ just sequentiell. Exclusively use the new [WS](../GDO/Util/WS.php) rendererer.
 - Make use of faster version of `html()` named `htm()`, which can only be used inside double quotes. It skips `<>'`, down to 2 replacements, and never changes 
 the string length. However, markup can be invalid...
   length. 
-- All [GDT_Field](../GDO/Core/GDT_Field.php) are now required to have an icon via a new unit test.
 - New module [W3CValidator](https://github.com/gizmore/phpgdo-w3c-validator)
+- New Debug method: Debug::supressed(callable) - for supressing unit output pollution.
 
-## 7.0.3-r1 (*almost there*)
+
+## 7.0.3-r2 (*almost there*)
 
 - New admin function to check and fix configurations and settings for a module.
 - New [Config.php](../GDO/Install/Config.php) option: GDO_LOG_PROFILE, appending your xdebug trigger to urls generated with `href($methodName, $moduleName, 
@@ -50,6 +52,8 @@ the string length. However, markup can be invalid...
 - Methods and GDT can now be more easily debugged by overriding `Method->isDebugging()`. This triggers breakpoints at important spots.
 - The fuzzing unit tests do not crash the test application anymore when using `gdo_test.sh --all`. Until recently, most simple things turned the fuzzer 
 quite useless to analyze a problem.
+- New unit test: assert number of unhandled exceptions is zero :)
+- All [GDT_Field](../GDO/Core/GDT_Field.php) are now required to have an icon via a new unit test.
 
 
 ## 7.0.2-r2 26.Mar.2023

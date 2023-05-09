@@ -1,16 +1,19 @@
-# GDOv7 Testing with Unit Tests
+# GDOv7 Testing
 
 GDOv7 comes with an excellent test suite.
 Tests are generated on GDT signatures, plugging default test values in.
 This way a lot of code can be tested automatically.
+Of course some handwritten tests are priceless,
+but it is encouraging, give it a try:
 
-## GDOv7 Unit Test Installation
+
+## GDOv7 Testing: Quickstart
 
 To enable unit testing do as follows.
 
     cd phpgdo
     composer update
-    # Create a protected/config_test.php - This can be a copy of your config.php, but it should have an own database.
+    # Create a protected/config_test.php - This can be a copy of your config.php, but it should have an **own database**.
     ./gdo_test.sh # runs all tests
     ./gdo_test.sh <module> # runs test for a single module and all it's dependencies.
 

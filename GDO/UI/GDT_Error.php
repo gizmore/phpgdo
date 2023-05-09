@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace GDO\UI;
 
+use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Exception;
+use GDO\Util\Strings;
 use Throwable;
 
 /**
@@ -43,20 +45,34 @@ final class GDT_Error extends GDT_Panel
 		return $this;
 	}
 
-	public function fromException(Throwable $t): self
+	public static function fromException(Throwable $t): self
 	{
 		$is_html = Application::$INSTANCE->isHTML();
-		$this->title('exception');
-		$this->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
-		Application::setResponseCode($t->getCode());
-		return $this;
+		$error = self::make()->title('exception', [$t->getMessage()]);
+		$error->textRaw(Debug::backtraceException($t, $is_html, $t->getMessage()));
+		if (!($t instanceof GDO_Exception))
+		{
+			Application::setResponseCode(500);
+		}
+		return $error;
 	}
 
 	public function renderHTML(): string
 	{
-		hdrc('HTTP/1.1 ' . $this->code . ' GDT_Error');
-		hdr('X-GDO-ERROR: ' . str_replace(["\r", "\n"], ' - ', $this->renderText()));
+		hdr("X-GDO-ERROR: {$this->renderHeaderText()}");
 		return parent::renderHTML();
+	}
+
+	public function renderHeaderText(): string
+	{
+		return self::displayHeaderText($this->renderTitle());
+	}
+
+	public static function displayHeaderText(string $text): string
+	{
+		$text = $text ? str_replace(["\r", "\n"], ' | ', $text) : t('no_information');
+		$text = CLI::removeColorCodes($text);
+		return Strings::dotted($text, 1024);
 	}
 
 	public function renderCLI(): string

@@ -127,19 +127,21 @@ class Cache
 		$this->tableName = strtolower($gdo->gdoShortName());
 	}
 
-	/**
-	 * @throws GDO_Exception
-	 */
-	public static function init(): void
+	public static function init(): bool
 	{
-		if (GDO_MEMCACHE == 1)
+		try
 		{
-			self::$MEMCACHED = new Memcached();
-			self::$MEMCACHED->addServer(GDO_MEMCACHE_HOST, GDO_MEMCACHE_PORT);
+			if (GDO_MEMCACHE == 1)
+			{
+				self::$MEMCACHED = new Memcached();
+				self::$MEMCACHED->addServer(GDO_MEMCACHE_HOST, GDO_MEMCACHE_PORT);
+			}
+			return FileUtil::createDir(self::filePath());
 		}
-		if ((GDO_FILECACHE) || (GDO_MEMCACHE == 2))
+		catch (GDO_Exception $ex)
 		{
-			FileUtil::createDir(self::filePath());
+			Debug::debugException($ex);
+			return false;
 		}
 	}
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace bin;
 
 use GDO\CLI\CLI;
@@ -47,6 +48,7 @@ $gdo = new class extends Application
 };
 
 global $me;
+$me = Method\Stub::make();
 $gdo->cli()->verb(GDT_Form::GET)->modeDetected(GDT::RENDER_CLI);
 $loader = new ModuleLoader(GDO_PATH . 'GDO/');
 Database::init();

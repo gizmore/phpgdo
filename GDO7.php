@@ -9,6 +9,7 @@ use GDO\Core\ModuleLoader;
 use GDO\Date\Time;
 use GDO\Language\Trans;
 use GDO\Net\GDT_Url;
+use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 use GDO\Util\Regex;
 use GDO\Util\Strings;
@@ -16,7 +17,7 @@ use GDO\Util\Strings;
 /**
  * GDO Autoloader and global functions.
  *
- * @version 7.0.3
+ * @version 7.0.4
  * @since 6.0.0
  * @author gizmore
  */
@@ -206,9 +207,15 @@ function json_quote(string $s): string
 	return str_replace("'", '&#39;', $s);
 }
 
-function json(array|string|int|float|bool|null $value): string
+/**
+ * (almost) binary safe JSON.
+ * Normal json_encode fails with false on unencodable glyphs.
+ * In this case we use urlencode as a fallback :/
+ * Use $pretty = 0 to disable global pretty print.
+ */
+function json(mixed $value, int $pretty = JSON_PRETTY_PRINT): string
 {
-	$enc = json_encode($value, GDO_JSON_DEBUG ? JSON_PRETTY_PRINT : 0);
+	$enc = json_encode($value, GDO_JSON_DEBUG ? $pretty : 0);
 	return $enc ?: uriencode($value);
 }
 
@@ -263,6 +270,7 @@ function htm(?string $html): string
 	switch (Application::$MODE)
 	{
 		case GDT::RENDER_CLI:
+		case GDT::RENDER_IRC:
 		case GDT::RENDER_BINARY:
 		case GDT::RENDER_JSON:
 			return html($html);
@@ -311,7 +319,7 @@ function hdr(string $header, bool $replace = true): void
 	{
 		if ($app->isUnitTestVerbose())
 		{
-			printf("%s: %s\n", \GDO\UI\TextStyle::boldi('Header'), $header);
+			printf("%s: %s\n", TextStyle::boldi('Header'), $header);
 			if (ob_get_level())
 			{
 				ob_flush();
