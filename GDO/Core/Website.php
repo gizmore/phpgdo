@@ -182,7 +182,7 @@ final class Website
 		titleRaw($titleRaw)->
 		text($key, $args);
 		$response = GDT_Response::make()->code($code);
-		if ($app->isCLIOrUnitTest())
+		if ($app->isUnitTests() && $app->isUnitTestVerbose())
 		{
 			echo $error->renderCLI();
 			if (ob_get_level())
@@ -217,7 +217,7 @@ final class Website
 		titleRaw($titleRaw)->
 		text($key, $args);
 		$response = GDT_Response::make()->code($code);
-		if ($app->isCLIOrUnitTest())
+		if ($app->isUnitTests() && $app->isUnitTestVerbose())
 		{
 			echo $success->renderCLI();
 			if (ob_get_level())

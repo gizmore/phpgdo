@@ -63,7 +63,13 @@ final class GetTypes extends MethodAjax
 			}
 		}
 
-		# Build type hiararchy (GDTs that are no GDO)
+		foreach (ModuleLoader::instance()->getEnabledModules() as $module)
+		{
+			$module->getSettingsCache();
+		}
+
+
+			# Build type hiararchy (GDTs that are no GDO)
 		$types = [];
 		foreach (get_declared_classes() as $class)
 		{

@@ -216,7 +216,7 @@ function json_quote(string $s): string
 function json(mixed $value, int $pretty = JSON_PRETTY_PRINT): string
 {
 	$enc = json_encode($value, GDO_JSON_DEBUG ? $pretty : 0);
-	return $enc ?: uriencode($value);
+	return $enc ?: uriencode(print_r($value, true));
 }
 
 /**

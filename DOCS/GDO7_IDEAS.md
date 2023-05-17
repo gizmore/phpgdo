@@ -190,3 +190,7 @@ LATEST IDEAS LAST:
  - GDO_String - A better string storage engine. (PoC in phpgdo, as i love my cache).
 
  - new regex challenge like wordle but you have to manipulate the solution with sed/regex
+
+ - Botfinder: a matching / tinder platform for ChatGPT7 and up!
+
+ - Porneo: A parody version of matrix, where Neo is abusing his knowledge of the matrix for his own pleasure and advantages.
