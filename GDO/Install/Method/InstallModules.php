@@ -119,7 +119,7 @@ final class InstallModules extends Method
 
 	private function getCoreModuleNames(): array
 	{
-		return Installer::getDependencyModuleNames('Core', false, false);
+		return Installer::getDependencyNames('Core', true);
 	}
 
 	private function getSiteModuleNames(): array

@@ -227,7 +227,7 @@ class Database
 		}
 		catch (Throwable $e)
 		{
-			throw new GDO_DBException('err_db_connect', [$e->getMessage()]);
+			throw new GDO_DBException(-1, t('err_db_connect', [$e->getMessage()]), 'connect');
 		}
 			#PP#start#
 		finally

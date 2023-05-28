@@ -209,7 +209,14 @@ final class Debug
 		hdrc('HTTP/1.1 500 Server Error');
 
 		$message = GDO_ERROR_STACKTRACE ? self::backtrace($message, $is_html) : $message;
-		fwrite(STDERR, self::renderError($message));
+		if ($app->isCLIOrUnitTest())
+		{
+			fwrite(STDERR, self::renderError($message));
+		}
+		else
+		{
+			echo self::renderError($message);
+		}
 
 		if (self::$DIE)
 		{

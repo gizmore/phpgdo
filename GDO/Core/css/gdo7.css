@@ -170,3 +170,8 @@ img.gdo-language {
     width: 32px;
     border: 1px solid #555;
 }
+
+.gdt-image,
+.gdt-image img {
+    max-width: 100%;
+}

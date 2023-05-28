@@ -38,10 +38,10 @@ trait WithLabel
 	public static function makeWithLabel(string $name = null): static
 	{
 		$obj = self::makeNamed($name);
-//		if ($name)
-//		{
-//			return $obj->label($name);
-//		}
+		if ($name = $obj->getDefaultName())
+		{
+			return $obj->label($name);
+		}
 		return $obj->defaultLabel();
 	}
 

@@ -173,7 +173,7 @@ final class ModuleLoader
 	/**
 	 * Load a module from filesystem if it is not loaded yet.
 	 */
-	public function loadModuleFS(string $name): ?GDO_Module
+	public function loadModuleFS(string $name, bool $dirty = true): ?GDO_Module
 	{
 		$lowerName = strtolower($name);
 
@@ -184,8 +184,9 @@ final class ModuleLoader
 			{
 				$moduleData = GDO_Module::getBlankData([
 					'module_name' => $name,
+					'module_enabled' => $dirty ? '0' : '1',
 				]);
-				if ($module = self::instanciate($moduleData, true))
+				if ($module = self::instanciate($moduleData, $dirty))
 				{
 					$this->modules[$lowerName] = $module;
 				}
@@ -194,6 +195,10 @@ final class ModuleLoader
 			{
 				return null;
 			}
+		}
+		if (!$dirty)
+		{
+			$this->addEnabledModule($this->modules[$lowerName]);
 		}
 		return $this->modules[$lowerName];
 	}

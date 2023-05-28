@@ -32,10 +32,10 @@ final class wizard extends Application
 		return true;
 	}
 
-	public function &getThemes(): array
-	{
-		return $this->wizardThemes;
-	}
+//	public function &getThemes(): array
+//	{
+//		return $this->wizardThemes;
+//	}
 
 }
 
@@ -45,9 +45,11 @@ Logger::init('install');
 Debug::init(0, false);
 GDO_User::setCurrent(GDO_User::ghost());
 $loader = ModuleLoader::instance();
-$loader->loadModuleFS('Core');
-$install = $loader->loadModuleFS('Install', true, true);
+$loader->loadModuleFS('Core', false);
+$install = $loader->loadModuleFS('Install', false);
 Trans::$ISO = GDO_LANGUAGE;
+$loader->initModules();
+$loader->loadLangFiles();
 Trans::inited(true);
 define('GDO_CORE_STABLE', 1);
 global $me;
@@ -65,4 +67,4 @@ catch (Throwable $ex)
 	$result = GDT_Error::fromException($ex);
 }
 $response = GDT_Response::make()->addField($result);
-echo $response->render();
+echo $response->renderWebsite();

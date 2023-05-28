@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_Text;
 use GDO\Core\WithFields;
 
 /**
@@ -89,8 +90,8 @@ class GDT_Container extends GDT
 	 */
 	public function addText(string $key, array $args = null): static
 	{
-
+		$text = GDT_Label::make()->label($key, $args);
+		return $this->addField($text);
 	}
-
 
 }
