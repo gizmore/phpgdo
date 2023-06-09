@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\Core\Method\Welcome;
 use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\DB\Query;
@@ -110,7 +111,12 @@ class GDO_Module extends GDO
 		return $this->isSiteModule() ? GDT::ZERO : GDT::ONE;
 	}
 
-	public function isSiteModule(): bool
+    public function defaultMethod(): Method
+    {
+        return Welcome::make();
+    }
+
+    public function isSiteModule(): bool
 	{
 		return false;
 	}

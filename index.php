@@ -159,7 +159,7 @@ function gdoRouteMoMe(string $mo, string $me): Method
 	}
 	elseif ($module = ModuleLoader::instance()->getModule(GDO_MODULE, true, false))
 		{
-			if (!($method = $module->getMethod(GDO_METHOD)))
+			if (!($method = $module->defaultMethod()))
 			{
 				$method = Error::make();
 				$_REQUEST['error'] = t('err_unknown_method', [$module->gdoHumanName(), GDO_METHOD]);

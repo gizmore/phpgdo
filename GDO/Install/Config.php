@@ -105,7 +105,7 @@ class Config
 		deff('GDO_TIMEZONE', ini_get('date.timezone')); # @TODO use the full timezone name here for the default timezone in module date.
 		deff('GDO_THEMES', 'default');
 		deff('GDO_MODULE', 'Core');
-		deff('GDO_METHOD', 'Welcome');
+//		deff('GDO_METHOD', 'Welcome');
 		deff('GDO_SEO_URLS', false);
 		deff('GDO_IPC', 'none');
 		deff('GDO_IPC_DEBUG', false);
@@ -214,7 +214,7 @@ class Config
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
 			GDT_String::make('themes')->notNull()->initial(GDO_THEMES)->tooltipRaw('Comma separated themechain list. Tried from left to right. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
-			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
+//			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
 			GDT_Select::make('ipc')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initial(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
 			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG)->tooltipRaw('IPC event logging.'),
 			GDT_Int::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2)->tooltipRaw('GDT debugging level. 0: off, 1: counters, 2: instancelog.'),
