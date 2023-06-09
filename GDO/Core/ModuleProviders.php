@@ -208,7 +208,7 @@ final class ModuleProviders
 'DOMPDF' => ['File'],
 'DoubleAccounts' => [],
 'Download' => ['Category', 'File', 'Payment', 'Votes'],
-'DSGVO' => [],
+'DSGVO' => ['Session'],
 'EdwardSnowdenLand' => ['Bootstrap5Theme', 'Votes'],
 'Facebook' => [],
 'Favicon' => [],
