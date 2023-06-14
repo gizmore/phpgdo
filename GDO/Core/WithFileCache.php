@@ -29,10 +29,15 @@ trait WithFileCache
 
 	protected function executeB(): GDT
 	{
-		if (!$this->fileCacheEnabled())
-		{
-			return $this->execute();
-		}
+//		if (!$this->fileCacheEnabled())
+//		{
+//			return $this->execute();
+//		}
+
+        if (Application::isDev())
+        {
+            return $this->execute();
+        }
 
 		$key = $this->fileCacheKey();
 		if ($content = Cache::fileGetSerialized($key, $this->fileCacheExpire))
@@ -65,10 +70,10 @@ trait WithFileCache
 		}
 	}
 
-	protected function fileCacheEnabled(): bool
-	{
-		return true;
-	}
+//	protected function fileCacheEnabled(): bool
+//	{
+//		return true;
+//	}
 
 	/**
 	 * The filecache is unique for any parameter combination,
