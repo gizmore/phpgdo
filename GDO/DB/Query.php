@@ -483,8 +483,8 @@ final class Query
 			case self::UPDATE:
 				return 'UPDATE ';
 			case self::DELETE:
-//				return "DELETE FROM ";
-				return "DELETE FROM {$this->from}";
+				return "DELETE FROM ";
+//				return "DELETE FROM {$this->from}";
 			default:
 				return "!INVALID!QRY!TYPE!{$this->type}";
 		}
