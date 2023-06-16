@@ -89,7 +89,8 @@ function jxhref(string $module, string $method, string $append = '', bool $lang 
 
 function hrefDefault(): string
 {
-	return href(GDO_MODULE, GDO_METHOD);
+    $module = ModuleLoader::instance()->getModule(GDO_MODULE);
+    return $module->defaultMethod()->href();
 }
 
 /**
