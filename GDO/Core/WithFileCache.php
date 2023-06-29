@@ -34,10 +34,10 @@ trait WithFileCache
 //			return $this->execute();
 //		}
 
-        if (Application::isDev())
-        {
-            return $this->execute();
-        }
+//        if (Application::isDev())
+//        {
+//            return $this->execute();
+//        }
 
 		$key = $this->fileCacheKey();
 		if ($content = Cache::fileGetSerialized($key, $this->fileCacheExpire))

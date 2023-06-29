@@ -425,7 +425,7 @@ abstract class MethodTable extends MethodForm
 
 	public function onMethodInit(): ?GDT
 	{
-		$this->getTable();
+//		$this->getTable();
 		return null;
 	}
 
