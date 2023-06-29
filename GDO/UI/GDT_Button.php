@@ -45,7 +45,8 @@ class GDT_Button extends GDT
 	 */
 	public $checkEnabled;
 
-	##############
+
+    ##############
 	### Render ###
 	##############
 

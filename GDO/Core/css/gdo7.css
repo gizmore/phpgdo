@@ -1,5 +1,5 @@
 /** GDOv7 normalizer **/
-* {
+*, :after, :before {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -16,6 +16,28 @@ p {
 
 *[background-image] {
     background-size: cover;
+}
+
+div.gdt-submit {
+    position: relative;
+    flex-grow: 0;
+}
+div.gdt-submit span {
+    position: absolute;
+    left: 8px;
+    top: 0px;
+}
+div.gdt-submit input {
+    padding-left: 16px;
+    background: transparent;
+    border: none;
+    text-align: left;
+}
+div.gdt-submit:hover {
+    cursor: crosshair!important;
+}
+.gdt-button a {
+    width: 100%;
 }
 
 .cf:after {
