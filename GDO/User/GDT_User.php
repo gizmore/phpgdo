@@ -55,9 +55,9 @@ class GDT_User extends GDT_Object
 	### Deleted ###
 	###############
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('user');
+		return 'user';
 	}
 
 	public function withCompletion(): static

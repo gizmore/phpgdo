@@ -19,7 +19,10 @@ class GDT_CreatedAt extends GDT_Timestamp
 	public bool $notNull = true;
 	public bool $writeable = false;
 
-	public function defaultLabel(): self { return $this->label('created_at'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'created_at';
+    }
 
 	public function isDefaultAsc(): bool { return false; }
 

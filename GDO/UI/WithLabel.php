@@ -37,20 +37,21 @@ trait WithLabel
 
 	public static function makeWithLabel(string $name = null): static
 	{
-		$obj = self::makeNamed($name);
-        if ($name)
+		$obj = static::makeNamed($name);
+        if ($key = $obj->gdtDefaultLabel())
+        {
+            return $obj->label($key);
+        }
+        elseif ($name)
         {
             return $obj->label($name);
         }
-		elseif ($name = $obj->getDefaultName())
-		{
-			return $obj->label($name);
-		}
-        else
+        elseif ($name = $obj->gdtDefaultName())
         {
-            return $obj->defaultLabel();
+            return $obj->label($name);
         }
-	}
+        return $obj;
+    }
 
 	public function label(string $key, array $args = null): self
 	{

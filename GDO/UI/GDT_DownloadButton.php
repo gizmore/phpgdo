@@ -20,6 +20,7 @@ final class GDT_DownloadButton extends GDT_Button
 		$this->addClass('gdt-download-button');
 	}
 
-	public function defaultLabel(): self { return $this->label('btn_download'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'btn_download'; }
 
 }

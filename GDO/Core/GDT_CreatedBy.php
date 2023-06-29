@@ -25,7 +25,10 @@ final class GDT_CreatedBy extends GDT_User
 // 		$this->withCompletion();
 	}
 
-	public function defaultLabel(): self { return $this->label('created_by'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'created_by';
+    }
 
 	/**
 	 * Initial data.

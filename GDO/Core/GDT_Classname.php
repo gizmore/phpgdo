@@ -19,9 +19,9 @@ class GDT_Classname extends GDT_String
 	public bool $caseSensitive = true;
 	public string $pattern = "/^[A-Z][A-Z _0-9\\\\]{1,254}$/siD";
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('classname');
+		return 'classname';
 	}
 
 	public function plugVars(): array

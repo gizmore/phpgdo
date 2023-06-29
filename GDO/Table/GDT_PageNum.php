@@ -28,13 +28,14 @@ final class GDT_PageNum extends GDT_UInt
 
 	public function isSerializable(): bool { return false; }
 
-	public function getDefaultName(): string { return 'page'; }
+	public function gdtDefaultName(): ?string { return 'page'; }
 
 	#############
 	### Table ###
 	#############
 
-	public function defaultLabel(): self { return $this->label('page'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'page'; }
 
 	public function gdoExampleVars(): ?string
 	{

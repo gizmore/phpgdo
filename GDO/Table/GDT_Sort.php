@@ -27,7 +27,8 @@ class GDT_Sort extends GDT_UInt
 		$this->initial('0');
 	}
 
-	public function defaultLabel(): self { return $this->label('sorting'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'sorting'; }
 
 	public function gdoAfterCreate(GDO $gdo): void
 	{

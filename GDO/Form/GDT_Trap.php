@@ -13,9 +13,9 @@ use GDO\Core\GDT_String;
 final class GDT_Trap extends GDT_String
 {
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('trap');
+		return 'trap';
 	}
 
 	public function renderForm(): string

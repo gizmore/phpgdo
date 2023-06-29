@@ -16,7 +16,7 @@ class GDT_JSON extends GDT_Text
 
 	public bool $caseSensitive = true;
 
-	public function getDefaultName(): string { return 'data'; }
+	public function gdtDefaultName(): ?string { return 'data'; }
 
 	public function toVar(null|bool|int|float|string|object|array $value): ?string { return $value === null ? null : self::encode($value); }
 

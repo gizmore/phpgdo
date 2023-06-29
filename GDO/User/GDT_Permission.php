@@ -28,9 +28,9 @@ final class GDT_Permission extends GDT_ObjectSelect
 	### Permitted ###
 	#################
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('permission');
+		return 'permission';
 	}
 
 	protected function getChoices(): array

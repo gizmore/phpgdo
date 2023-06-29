@@ -26,7 +26,8 @@ class GDT_Font extends GDT_Select
 		$this->initChoices();
 	}
 
-	public function defaultLabel(): self { return $this->label('font'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'font'; }
 
 // 	public function renderForm() : string
 // 	{

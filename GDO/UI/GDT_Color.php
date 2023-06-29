@@ -34,9 +34,9 @@ class GDT_Color extends GDT_String
 		];
 	}
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('color');
+		return 'color';
 	}
 
 	public function getInputType(): string

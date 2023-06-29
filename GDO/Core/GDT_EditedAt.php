@@ -19,7 +19,10 @@ final class GDT_EditedAt extends GDT_Timestamp
 
 	public bool $writeable = false;
 
-	public function defaultLabel(): self { return $this->label('edited_at'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'edited_at';
+    }
 
 	public function isHidden(): bool { return true; }
 

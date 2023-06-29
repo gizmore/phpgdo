@@ -36,7 +36,10 @@ class GDT_Password extends GDT_String
 		return 'password';
 	}
 
-	public function defaultLabel(): self { return $this->label('password'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'password';
+    }
 
 	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{

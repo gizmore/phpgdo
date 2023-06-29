@@ -30,7 +30,8 @@ final class GDT_Language extends GDT_ObjectSelect
 		$this->cascadeRestrict();
 	}
 
-	public function defaultLabel(): self { return $this->label('language'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'language'; }
 
 	public function plugVars(): array
 	{

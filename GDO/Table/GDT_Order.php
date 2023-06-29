@@ -47,7 +47,7 @@ final class GDT_Order extends GDT_String
 
 	public function isTestable(): bool { return false; }
 
-	public function getDefaultName(): string { return 'order'; }
+	public function gdtDefaultName(): ?string { return 'order'; }
 
 	################
 	### Validate ###

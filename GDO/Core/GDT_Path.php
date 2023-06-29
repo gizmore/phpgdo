@@ -28,7 +28,10 @@ final class GDT_Path extends GDT_ComboBox
 	### Existance ###
 	#################
 
-	public function defaultLabel(): self { return $this->label('path'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'path';
+    }
 
 	public function htmlClass(): string
 	{

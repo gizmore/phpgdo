@@ -30,9 +30,9 @@ class GDT_Duration extends GDT_String
 	#################
 	public null|int|float $maxDuration = null;
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('duration');
+		return 'duration';
 	}
 
 	public function min(int|null $min): static

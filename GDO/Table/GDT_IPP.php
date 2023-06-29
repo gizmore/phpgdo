@@ -31,7 +31,7 @@ final class GDT_IPP extends GDT_UInt
 		return Module_Table::instance()->cfgItemsPerPage();
 	}
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'ipp';
 	}
@@ -40,9 +40,9 @@ final class GDT_IPP extends GDT_UInt
 	### Features ###
 	################
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('ipp');
+		return 'ipp';
 	}
 
 	public function isHidden(): bool { return true; }

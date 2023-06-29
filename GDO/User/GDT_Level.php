@@ -29,9 +29,9 @@ final class GDT_Level extends GDT_Badge
 		$this->icon('level');
 	}
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('user_level');
+		return 'user_level';
 	}
 
 	public function isSearchable(): bool { return false; }

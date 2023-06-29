@@ -20,7 +20,8 @@ final class GDT_Back extends GDT_Link
 		$this->href(GDT_Redirect::hrefBack());
 	}
 
-	public function defaultLabel(): self { return $this->label('btn_back'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'btn_back'; }
 
 	public function htmlClass(): string
 	{

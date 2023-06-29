@@ -64,14 +64,10 @@ abstract class GDT_Field extends GDT
 	### Validate ###
 	################
 
-	public function defaultLabel(): self
-	{
-		if ($name = $this->getName())
-		{
-			return $this->label($name);
-		}
-		return $this;
-	}
+//	public function gdtDefaultLabel(): ?string
+//	{
+//		return$this->getName();
+//	}
 
 	public function gdoColumnNames(): array
 	{

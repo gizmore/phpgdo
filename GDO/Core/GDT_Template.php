@@ -208,9 +208,9 @@ class GDT_Template extends GDT
 
 	public function isTestable(): bool { return false; }
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->labelNone();
+		return null;
 	}
 
 	public function htmlClass(): string

@@ -11,7 +11,7 @@ class GDT_ShowButton extends GDT_Button
 
 	public string $icon = 'show';
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'show';
 	}

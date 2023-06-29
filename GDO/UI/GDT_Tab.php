@@ -20,7 +20,7 @@ final class GDT_Tab extends GDT
 
 	private static $TABNUM = 0;
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'tab' . (++self::$TABNUM);
 	}

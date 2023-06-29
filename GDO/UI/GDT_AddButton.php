@@ -21,12 +21,12 @@ class GDT_AddButton extends GDT_Submit
 		$this->icon = 'add';
 	}
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('btn_add');
+		return 'btn_add';
 	}
 
-	public function getDefaultName(): ?string
+	public function gdtDefaultName(): ?string
 	{
 		return 'add';
 	}

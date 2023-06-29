@@ -35,7 +35,7 @@ final class GDT_Module extends GDT_ObjectSelect
 		$this->table(GDO_Module::table());
 	}
 
-	public function getDefaultName(): ?string
+	public function gdtDefaultName(): ?string
 	{
 		return 'module';
 	}

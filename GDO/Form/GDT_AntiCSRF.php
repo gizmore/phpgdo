@@ -120,7 +120,7 @@ class GDT_AntiCSRF extends GDT_String
 		GDO_Session::set('csrfs', json_encode($csrf));
 	}
 
-	public function getDefaultName(): ?string { return 'xsrf'; }
+	public function gdtDefaultName(): ?string { return 'xsrf'; }
 
 	public function isHidden(): bool { return true; }
 

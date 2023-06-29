@@ -32,7 +32,7 @@ trait WithProxy
 		return $this;
 	}
 
-//	public function getDefaultName(): string { return 'proxy'; }
+//	public function gdtDefaultName(): ?string { return 'proxy'; }
 
 	public function isTestable(): bool
 	{

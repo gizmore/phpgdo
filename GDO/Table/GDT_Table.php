@@ -127,7 +127,7 @@ class GDT_Table extends GDT
 		$this->action = urldecode($_SERVER['REQUEST_URI']);
 	}
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'table';
 	}

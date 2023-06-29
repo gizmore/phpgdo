@@ -19,7 +19,8 @@ final class GDT_MessageEditor extends GDT_Select
 		$this->notNull();
 	}
 
-	public function defaultLabel(): self { return $this->label('editor'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'editor'; }
 
 	protected function getChoices(): array
 	{

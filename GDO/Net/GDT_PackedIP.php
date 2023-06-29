@@ -22,7 +22,8 @@ final class GDT_PackedIP extends GDT_String
 		$this->icon = 'url';
 	}
 
-	public function defaultLabel(): self { return $this->label('ip'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'ip'; }
 
 	##############
 	### String ###

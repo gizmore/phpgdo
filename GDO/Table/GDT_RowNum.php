@@ -23,7 +23,7 @@ final class GDT_RowNum extends GDT_Checkbox
 
 	public function isOrderable(): bool { return false; }
 
-	public function getDefaultName(): ?string { return 'rbx'; }
+	public function gdtDefaultName(): ?string { return 'rbx'; }
 
 	public function renderTHead(): string
 	{

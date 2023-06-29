@@ -36,9 +36,9 @@ class GDT_Username extends GDT_Name
 	### Exists ###
 	##############
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('username');
+		return 'username';
 	}
 
 	public function renderCLI(): string

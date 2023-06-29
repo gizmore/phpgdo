@@ -14,7 +14,10 @@ use GDO\Util\FileUtil;
 final class GDT_Filesize extends GDT_UInt
 {
 
-	public function defaultLabel(): self { return $this->label('filesize'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'filesize';
+    }
 
 	public function renderHTML(): string
 	{

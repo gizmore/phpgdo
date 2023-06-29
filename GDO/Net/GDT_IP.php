@@ -76,7 +76,8 @@ final class GDT_IP extends GDT_String
 
 	public function isSearchable(): bool { return false; }
 
-	public function defaultLabel(): self { return $this->label('ip'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'ip'; }
 
 	public function plugVars(): array
 	{

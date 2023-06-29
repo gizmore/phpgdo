@@ -21,9 +21,10 @@ class GDT_DeleteButton extends GDT_Submit
 	### Text ###
 	############
 
-	public function defaultLabel(): self { return $this->label('btn_delete'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'btn_delete'; }
 
-	public function getDefaultName(): string { return 'delete'; }
+	public function gdtDefaultName(): ?string { return 'delete'; }
 
 	public function confirmText($key, array $args = null)
 	{

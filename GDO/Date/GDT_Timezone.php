@@ -28,12 +28,12 @@ final class GDT_Timezone extends GDT_ObjectSelect
 		$this->completionHref(href('Date', 'TimezoneComplete'));
 	}
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('gdo_timezone');
+		return 'gdo_timezone';
 	}
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'timezone';
 	}

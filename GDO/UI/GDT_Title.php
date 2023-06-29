@@ -28,7 +28,7 @@ class GDT_Title extends GDT_String
 	public int $encoding = self::UTF8;
 	public bool $caseSensitive = false;
 
-	public function defaultLabel(): self { return $this->label('title'); }
+	public function gdtDefaultLabel(): ?string { return 'title'; }
 
 	public function renderCLI(): string
 	{

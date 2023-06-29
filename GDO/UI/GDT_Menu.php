@@ -27,7 +27,7 @@ class GDT_Menu extends GDT_Container
 		$this->labelNone();
 	}
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'menu';
 	}

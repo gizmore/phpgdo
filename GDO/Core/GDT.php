@@ -146,7 +146,7 @@ abstract class GDT
 	final public const RENDER_JSON= 5;     # json
 	final public const RENDER_GTK = 6;     #### Enjoy!
 	final public const RENDER_IRC = 7;     # irc
-// 	final const RENDER_RESERVED_8 = 8; # who knows
+ 	final public const RENDER_MARKDOWN = 8; # who knows
 // 	final const RENDER_RESERVED_9 = 9; # :) ... maybe soap? maybe the new safe JSON?
 	# HTML format rendering   #### Your Flight!
 	final public const RENDER_WEBSITE= 10; # <html> page skeleton, html init mode that switches to RENDER_HTML.
@@ -595,9 +595,9 @@ abstract class GDT
 	/**
 	 * Setup the default label. None by default.
 	 */
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this;
+		return null;
 	}
 
 	public function hasInput() : bool

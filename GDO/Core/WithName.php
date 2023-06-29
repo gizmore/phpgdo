@@ -29,10 +29,10 @@ trait WithName
 	public static function makeNamed(string $name = null): static
 	{
 		$obj = new static();
-		return $obj->name($name ?? $obj->getDefaultName());
+		return $obj->name($name??$obj->gdtDefaultName());
 	}
 
-	public function getDefaultName(): ?string
+	public function gdtDefaultName(): ?string
 	{
 		return null;
 	}

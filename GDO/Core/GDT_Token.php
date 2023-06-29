@@ -46,9 +46,12 @@ class GDT_Token extends GDT_Char
 		];
 	}
 
-	public function getDefaultName(): string { return 'token'; }
+	public function gdtDefaultName(): ?string { return 'token'; }
 
-	public function defaultLabel(): self { return $this->label('token'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'token';
+    }
 
 	######################
 	### Static helpers ###

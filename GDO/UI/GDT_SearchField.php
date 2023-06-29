@@ -25,9 +25,10 @@ class GDT_SearchField extends GDT_String
 
 	public function isCLIHidden(): bool { return false; }
 
-	public function getDefaultName(): string { return 'search'; }
+	public function gdtDefaultName(): ?string { return 'search'; }
 
-	public function defaultLabel(): self { return $this->label('search'); }
+	public function gdtDefaultLabel(): ?string
+    { return 'search'; }
 
 	public function getInputType(): string { return 'search'; }
 

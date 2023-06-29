@@ -23,9 +23,9 @@ class GDT_Name extends GDT_String
 	public string $pattern = '/^[A-Za-z][-A-Za-z _0-9;:]{1,63}$/sD';
 	public bool $unique = true;
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('name');
+		return 'name';
 	}
 
 	##############

@@ -17,7 +17,7 @@ final class GDT_Tabs extends GDT
 
 	use WithFields;
 
-	public function getDefaultName(): string
+	public function gdtDefaultName(): ?string
 	{
 		return 'tabs';
 	}

@@ -22,11 +22,11 @@ final class GDT_LangSwitch extends GDT_Select
 		$this->choices(Module_Language::instance()->cfgSupported());
 	}
 
-	public function getDefaultName(): string { return '_lang'; }
+	public function gdtDefaultName(): ?string { return '_lang'; }
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('language');
+		return 'language';
 	}
 
 	public function renderHTML(): string

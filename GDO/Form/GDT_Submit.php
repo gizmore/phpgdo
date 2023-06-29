@@ -21,7 +21,7 @@ class GDT_Submit extends GDT_Button
 
 	public string $icon = 'check';
 
-	public function getDefaultName(): ?string
+	public function gdtDefaultName(): ?string
 	{
 		return 'submit';
 	}

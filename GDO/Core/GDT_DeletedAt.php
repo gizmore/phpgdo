@@ -15,6 +15,9 @@ final class GDT_DeletedAt extends GDT_Timestamp
 
 	public bool $writeable = false;
 
-	public function defaultLabel(): self { return $this->label('deleted_at'); }
+	public function gdtDefaultLabel(): ?string
+    {
+        return 'deleted_at';
+    }
 
 }

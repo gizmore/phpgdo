@@ -13,6 +13,6 @@ class GDT_EditButton extends GDT_Submit
 
 	public string $icon = 'edit';
 
-	public function getDefaultName(): string { return 'edit'; }
+	public function gdtDefaultName(): ?string { return 'edit'; }
 
 }

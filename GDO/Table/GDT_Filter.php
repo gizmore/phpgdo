@@ -17,7 +17,7 @@ final class GDT_Filter extends GDT
 	use WithName;
 	use WithInput;
 
-	public function getDefaultName(): ?string
+	public function gdtDefaultName(): ?string
 	{
 		return 'f';
 	}

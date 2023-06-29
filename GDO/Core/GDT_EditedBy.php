@@ -21,9 +21,9 @@ final class GDT_EditedBy extends GDT_User
 	public bool $writeable = false;
 
 
-	public function defaultLabel(): self
+	public function gdtDefaultLabel(): ?string
 	{
-		return $this->label('edited_by');
+		return 'edited_by';
 	}
 
 

@@ -13,6 +13,6 @@ class GDT_SearchButton extends GDT_Submit
 
 	public string $icon = 'search';
 
-	public function getDefaultName(): string { return 'search'; }
+	public function gdtDefaultName(): ?string { return 'search'; }
 
 }

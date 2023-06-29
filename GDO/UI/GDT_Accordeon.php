@@ -38,7 +38,7 @@ final class GDT_Accordeon extends GDT_Container
 		return $this;
 	}
 
-	public function getDefaultName(): ?string
+	public function gdtDefaultName(): ?string
 	{
 		$num = self::$ACCORDON_NUMBER++;
 		return "accordeon_{$num}";
