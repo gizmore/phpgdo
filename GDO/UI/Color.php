@@ -34,7 +34,7 @@ final class Color
 
 	public static function green(string $s): string
 	{
-		return self::colored($s, 'green', "\033[32m", '03');
+		return self::colored($s, '#002d00', "\033[32m", '03');
 	}
 
 
