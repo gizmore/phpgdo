@@ -31,8 +31,8 @@ final class ArrayResult extends Result
 
 	public function __construct(array $data, GDO $table)
 	{
-		$this->data = &$data;
-		$this->fullData = &$data;
+		$this->data = $data;
+		$this->fullData = $data;
 		$this->table = $table;
 		$this->reset();
 	}
@@ -139,25 +139,25 @@ final class ArrayResult extends Result
 	 */
 	public function searchResult(array $data, GDO $table, array $filters, string $searchTerm): self
 	{
-//		if ($searchTerm !== null)
-//		{
-		$hits = [];
-		foreach ($data as $gdo)
+		if (!empty($searchTerm))
 		{
-			foreach ($filters as $gdt)
-			{
-				if ($gdt->isSearchable())
-				{
-					if ($gdt->gdo($gdo)->searchGDO($searchTerm))
-					{
-						$hits[] = $gdo;
-						break;
-					}
-				}
-			}
+            $hits = [];
+            foreach ($data as $gdo)
+            {
+                foreach ($filters as $gdt)
+                {
+                    if ($gdt->isSearchable())
+                    {
+                        if ($gdt->gdo($gdo)->searchGDO($searchTerm))
+                        {
+                            $hits[] = $gdo;
+                            break;
+                        }
+                    }
+                }
+            }
+            $data = $hits;
 		}
-		$data = $hits;
-//		}
 
 		$this->data = $data;
 

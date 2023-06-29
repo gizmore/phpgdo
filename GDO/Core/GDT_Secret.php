@@ -17,6 +17,8 @@ class GDT_Secret extends GDT_String
 	public bool $hidden = false;
 	public bool $caseSensitive = true;
 
+    public bool $searchable = false;
+
 	public function isSerializable(): bool { return false; }
 
 	public function renderHTML(): string { return '****'; }

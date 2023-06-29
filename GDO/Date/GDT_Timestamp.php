@@ -12,6 +12,7 @@ use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
 use GDO\Table\WithOrder;
 use GDO\UI\WithLabel;
+use GDO\Util\WS;
 
 /**
  * The GDT_Timestamp field is the baseclass for all datefields.
@@ -328,5 +329,10 @@ class GDT_Timestamp extends GDT_DBField
 	{
 		return Time::displayAge($this->getVar());
 	}
+
+    public function renderBinary(): string
+    {
+        return WS::wr32((int)Time::getTimestamp($this->getVar()));
+    }
 
 }

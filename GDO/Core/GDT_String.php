@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\Country\GDT_Country;
 use GDO\DB\Query;
 use GDO\Form\GDT_Hidden;
 use GDO\Table\GDT_Filter;
@@ -255,6 +256,10 @@ class GDT_String extends GDT_DBField
 	public function renderBinary(): string
 	{
 		$binary = $this->getVar();
+        if ($this instanceof GDT_Country)
+        {
+            echo $binary."\n";
+        }
 		$binary = $binary ? urlencode($binary) : GDT::EMPTY_STRING;
 		return $binary . "\0";
 	}

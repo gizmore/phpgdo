@@ -123,7 +123,7 @@ class GDT_Url extends GDT_String
 	public function validateUrl(URL $url = null): bool
 	{
 		# null allowed by parent validator
-		if ((!$url) || (null === ($value = $url->raw)))
+		if ((!$url) || (null == ($value = $url->raw)))
 		{
 			return true;
 		}
@@ -138,7 +138,14 @@ class GDT_Url extends GDT_String
 			}
 
 			# Check by IP
-			$ip = gethostbyname($url->getHost());
+            if ($host = $url->getHost())
+            {
+                $ip = gethostbyname($host);
+            }
+            else
+            {
+                return $this->errorNull();
+            }
 			if (GDT_IP::isLocal($ip))
 			{
 				return $this->errorLocal($value);

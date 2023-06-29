@@ -26,6 +26,7 @@ final class GDT_IP extends GDT_String
 	public bool $caseSensitive = true;
 	public string $pattern = '/^[.:0-9a-f]{3,45}$/D';
 	public string $icon = 'url';
+    public bool $searchable = false;
 
 	###############
 	### Current ###

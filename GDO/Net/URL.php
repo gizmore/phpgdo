@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Net;
 
 use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Util\Regex;
 
 /**
@@ -31,7 +32,14 @@ final class URL
 	public function __construct($url)
 	{
 		$this->raw = $url;
-		$this->parts = parse_url($url);
+        if ($url === parse_url($url))
+        {
+            $this->parts = $url;
+        }
+        else
+        {
+            $this->parts = GDT::EMPTY_ARRAY;
+        }
 	}
 
 	public function getScheme(): ?string

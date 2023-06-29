@@ -57,4 +57,6 @@ return [
 	'activity_accuracy' => 'Activity Accuracy',
 	'tt_activity_accuracy' => 'Control how exact your online activity is shown / last seen on...',
 
+    'timezone' => 'Timezone',
+
 ];
