@@ -60,17 +60,17 @@ global $me;
 $app = Application::init();
 Logger::init(null, GDO_ERROR_LEVEL);
 Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
+GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 Database::init();
 Trans::$ISO = GDO_LANGUAGE;
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
 if (!module_enabled('Core'))
 {
-	require 'index_install.php';
+    require 'index_install.php';
 }
 if ($app->hasSession())
 {
-	GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 	$session = GDO_Session::instance();
 }
 $loader->initModules();    # @TODO lazy module initing. This requires a complete change of how Hooks are handled.
