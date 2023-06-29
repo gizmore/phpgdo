@@ -296,14 +296,14 @@ class GDT_Int extends GDT_DBField
 
 	/**
 	 * Comparing two integers is not that hard.
-	 *
-	 * @throws GDO_ExceptionFatal
 	 */
 	public function gdoCompare(GDO $a, GDO $b): int
 	{
-		return
-			$a->gdoValue($this->name) -
-			$b->gdoValue($this->name);
+        $n = $this->getName();
+        $va = $a->gdoValue($n);
+        $vb = $b->gdoValue($n);
+        return $va === $vb ? 0 :
+            ($va > $vb ? 1 : -1);
 	}
 
 	public function bytes(int $bytes): self

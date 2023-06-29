@@ -349,7 +349,7 @@ abstract class GDT
 	### Features ###
 	################
 	public function isSortable() : bool { return false; }
-	public function isOrderable() : bool { return false; }
+	public function isOrderable() : bool { return true; }
 	public function isDefaultAsc() : bool { return true; }
 	public function isSearchable() : bool { return false; }
 	public function isFilterable() : bool { return false; }
