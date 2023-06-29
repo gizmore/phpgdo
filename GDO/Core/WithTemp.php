@@ -56,10 +56,10 @@ trait WithTemp
 		{
 			$this->temp[$key] = $value;
 		}
-		return $this;
+//		return $this;
 #		$this->temp = $this->temp ?: [];
 		// A temp var does not make an IPC process utterly wrong... just outdated.
-//		return $this->recache();
+		return $this->recache();
 	}
 
 	/**

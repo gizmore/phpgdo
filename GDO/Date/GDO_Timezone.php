@@ -35,7 +35,7 @@ final class GDO_Timezone extends GDO
 	### Factory ###
 	###############
 
-	public function gdoCached(): bool { return false; }
+//	public function gdoCached(): bool { return false; }
 
 	###########
 	### GDO ###

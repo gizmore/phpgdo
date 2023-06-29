@@ -182,12 +182,19 @@ class Cache
 	public static function recacheHooks(): void
 	{
 		$app = Application::$INSTANCE;
-		if ($app->isIPC() && $app->isWebserver())
+		if ($app->isWebserver())
 		{
 			foreach (self::$RECACHING as $gdo)
-			{
-				GDT_Hook::callWithIPC('CacheInvalidate', $gdo->tbl()->cache->klass, $gdo->getID());
-			}
+            {
+                if ($app->isIPC())
+                {
+                    GDT_Hook::callWithIPC('CacheInvalidate', $gdo->tbl()->cache->klass, $gdo->getID());
+                }
+                if (GDO_MEMCACHE && $gdo->memCached())
+                {
+                    Cache::replace($gdo->gkey(), $gdo, GDO_MEMCACHE_TTL);
+                }
+            }
 		}
 	}
 
@@ -456,23 +463,23 @@ class Cache
 //		return $back;
 	}
 
-//	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
-//	{
-//		self::debug('replace', $key, $value); #PP#delete#
-//
-//		switch (GDO_MEMCACHE)
-//		{
-//			case 1:
-//				if (!defined('GDO_MEMCACHED_FALLBACK'))
-//				{
-//					self::$MEMCACHED->replace(MEMCACHEPREFIX . $key, $value, $expire);
-//				}
-//				break;
-//			case 2:
-//				self::fileSetSerialized($key, $value);
-//				break;
-//		}
-//	}
+	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void
+	{
+		self::debug('replace', $key, $value); #PP#delete#
+
+		switch (GDO_MEMCACHE)
+		{
+			case 1:
+				if (!defined('GDO_MEMCACHED_FALLBACK'))
+				{
+					self::$MEMCACHED->replace(MEMCACHEPREFIX . $key, $value, $expire);
+				}
+				break;
+			case 2:
+				self::fileSetSerialized($key, $value);
+				break;
+		}
+	}
 
 	# #################
 	# ## File cache ###

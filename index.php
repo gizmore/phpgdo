@@ -158,7 +158,7 @@ function gdoRouteMoMe(string $mo, string $me): Method
 		}
 		else
 		{
-			$method = $module->getDefaultMethod();
+			$method = $module->defaultMethod();
 		}
 	}
 	elseif ($module = ModuleLoader::instance()->getModule(GDO_MODULE, true, false))

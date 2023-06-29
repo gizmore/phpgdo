@@ -41,7 +41,12 @@ final class GDT_ProfileLink extends GDT_Link
 		return $this->getGDO()->hrefProfile();
 	}
 
-	##############
+    public function gdtDefaultLabel(): ?string
+    {
+        return 'user_name';
+    }
+
+    ##############
 	### Avatar ###
 	##############
 
