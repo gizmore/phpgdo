@@ -22,6 +22,8 @@ class PermissionAdd extends MethodForm
 
 	use MethodAdmin;
 
+    public function isCLI(): bool { return true; }
+
 	public function getPermission(): ?string { return 'staff'; }
 
 	public function execute(): GDT

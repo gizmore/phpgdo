@@ -29,6 +29,8 @@ class Modules extends MethodTable
 
 	use MethodAdmin;
 
+    public function isCLI(): bool { return true; }
+
 	/**
 	 * @var GDO_Module[]
 	 */

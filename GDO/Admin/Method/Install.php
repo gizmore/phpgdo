@@ -33,6 +33,8 @@ class Install extends MethodForm
 
 	use MethodAdmin;
 
+    public function isCLI(): bool { return true; }
+
 	public function isTrivial(): bool { return false; }
 
 	public function getFormName(): string

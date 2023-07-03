@@ -28,6 +28,8 @@ class ViewPermission extends MethodQueryTable
 
 	use MethodAdmin;
 
+    public function isCLI(): bool { return true; }
+
 	private GDO_Permission $permission;
 
 	public function getMethodTitle(): string

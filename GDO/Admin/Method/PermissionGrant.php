@@ -16,7 +16,9 @@ class PermissionGrant extends MethodForm
 
 	use MethodAdmin;
 
-	public function onRenderTabs(): void
+    public function isCLI(): bool { return true; }
+
+    public function onRenderTabs(): void
 	{
 		$this->renderAdminBar();
 		$this->renderPermissionBar();

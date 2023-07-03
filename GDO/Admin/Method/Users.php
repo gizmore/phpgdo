@@ -24,7 +24,9 @@ class Users extends MethodQueryTable
 
 	use MethodAdmin;
 
-	public function getMethodTitle(): string
+    public function isCLI(): bool { return true; }
+
+    public function getMethodTitle(): string
 	{
 		return t('btn_users');
 	}

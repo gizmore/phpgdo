@@ -19,7 +19,9 @@ use GDO\Form\MethodForm;
 final class Uppercase extends MethodForm
 {
 
-	public function getCLITrigger(): string
+    public function isCLI(): bool { return true; }
+
+    public function getCLITrigger(): string
 	{
 		return 'upper';
 	}

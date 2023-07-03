@@ -123,7 +123,7 @@ final class Fileserver extends Method
 				return true;
 			}
 			# other dotfile forbidden
-			if ($segment[0] === '.')
+			if ( isset($segment[0]) && ($segment[0] === '.') )
 			{
 				return false;
 			}

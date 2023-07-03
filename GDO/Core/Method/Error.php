@@ -16,11 +16,6 @@ use GDO\UI\MethodPage;
 final class Error extends MethodPage
 {
 
-	public function isCLI(): bool
-	{
-		return false;
-	}
-
 	public function isTrivial(): bool { return false; }
 
 	public function gdoParameters(): array

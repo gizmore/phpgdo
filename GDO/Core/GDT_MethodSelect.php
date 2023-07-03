@@ -27,6 +27,14 @@ final class GDT_MethodSelect extends GDT_Select
 		return $this;
 	}
 
+    public bool  $cliOnly = false;
+    public function cliOnly(bool $cliOnly = true): self
+    {
+        $this->cliOnly = $cliOnly;
+        return $this;
+    }
+
+
 	###############
 	### Choices ###
 	###############
@@ -37,6 +45,10 @@ final class GDT_MethodSelect extends GDT_Select
 		{
 			foreach ($module->getMethods($this->onlyPermitted) as $method)
 			{
+                if ($this->cliOnly && (!$method->isCLI()))
+                {
+                    continue;
+                }
 				$choices[$method->getCLITrigger()] = $method;
 			}
 		}

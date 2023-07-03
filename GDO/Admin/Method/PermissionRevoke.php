@@ -32,6 +32,7 @@ class PermissionRevoke extends MethodForm
 
 	public function getPermission(): ?string { return 'admin'; }
 
+    public function isCLI(): bool { return true; }
 
 	public function execute(): GDT
 	{

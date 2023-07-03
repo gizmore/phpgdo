@@ -19,7 +19,9 @@ use GDO\UI\GDT_Success;
 final class Wait extends MethodCLI
 {
 
-	public function getCLITrigger(): string { return 'wait'; }
+    public function isCLI(): bool { return true; }
+
+    public function getCLITrigger(): string { return 'wait'; }
 
 	protected function createForm(GDT_Form $form): void
 	{

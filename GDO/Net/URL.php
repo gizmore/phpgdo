@@ -5,6 +5,7 @@ namespace GDO\Net;
 use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\Util\Regex;
+use GDO\Util\Strings;
 
 /**
  * This class holds url parts and the raw url.
@@ -32,19 +33,19 @@ final class URL
 	public function __construct($url)
 	{
 		$this->raw = $url;
-        if ($url === parse_url($url))
-        {
-            $this->parts = $url;
-        }
-        else
-        {
-            $this->parts = GDT::EMPTY_ARRAY;
-        }
+        $this->parts = $this->parseURL($url);
 	}
 
 	public function getScheme(): ?string
 	{
-		return $this->parts['scheme'] ?? self::localScheme();
+        if (isset($this->parts['scheme']))
+        {
+            return $this->parts['scheme'];
+        }
+        else
+        {
+            return Strings::substrTo($this->raw, '://', self::localScheme());
+        }
 	}
 
 	public static function localScheme(): string
@@ -78,5 +79,33 @@ final class URL
 		}
 		return null;
 	}
+
+    private function parseURL($url)
+    {
+        if (str_starts_with($url, '/'))
+        {
+            if (str_starts_with($url, '//')) # use current https/http scheme
+            {
+                $url = GDO_PROTOCOL . ':' . $url;
+            }
+        }
+
+        $matches = [];
+        if (preg_match('/^([a-z]{3,8}):\\/\\/([.a-z]+):?([0-9]+)?\\/?([^?#]+)?(\\?[^#]+)?/i', $url, $matches))
+        {
+            $parts = [
+                'scheme' => $matches[1],
+                'host' => $matches[2],
+                'port' => (int) @$matches[3],
+                'path' => @$matches[4],
+                'query' => @$matches[5],
+            ];
+            return $parts;
+        }
+        else
+        {
+            return GDT::EMPTY_ARRAY;
+        }
+    }
 
 }

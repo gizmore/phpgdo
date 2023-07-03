@@ -167,7 +167,8 @@ class GDT_Url extends GDT_String
 		{
 			if ($this->schemes && count($this->schemes))
 			{
-				if (!in_array($url->getScheme(), $this->schemes, true))
+                $scheme = $url->getScheme();
+				if (!in_array($scheme, $this->schemes, true))
 				{
 					return $this->error('err_url_scheme', [Arrays::implodeHuman($this->schemes)]);
 				}

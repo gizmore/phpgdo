@@ -16,7 +16,7 @@ sleep 5
 
 echo "Creating module provider mappings..."
 sleep 1
-php provider_update.php
+#php provider_update.php
 
 echo "Syncing repositories..."
 echo "Do: git commit & push all repos"

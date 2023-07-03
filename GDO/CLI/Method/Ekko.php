@@ -18,6 +18,8 @@ use GDO\UI\GDT_Repeat;
 class Ekko extends Method
 {
 
+    public function isCLI(): bool { return true; }
+
 	public function getCLITrigger(): string
 	{
 		return 'echo';

@@ -34,7 +34,10 @@ class ClearCache extends MethodForm
 
 	use MethodAdmin;
 
-	public function getCLITrigger(): string { return 'cc'; }
+    public function isCLI(): bool { return true; }
+
+
+    public function getCLITrigger(): string { return 'cc'; }
 
 	public function getPermission(): ?string { return 'staff'; }
 

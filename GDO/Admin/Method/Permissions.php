@@ -19,6 +19,8 @@ class Permissions extends MethodQueryTable
 
 	use MethodAdmin;
 
+    public function isCLI(): bool { return true; }
+
 	public function gdoTable(): GDO { return GDO_Permission::table(); }
 
 	public function getTableTitle(): string

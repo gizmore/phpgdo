@@ -58,7 +58,7 @@ require 'vendor/autoload.php';
 require 'GDO7.php';
 CLI::init();
 Debug::init();
-Logger::init('gdo_test');
+Logger::init('gdo_test', Logger::ALL, 'protected/logs_test');
 Logger::disableBuffer();
 
 /**

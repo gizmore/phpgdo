@@ -27,7 +27,10 @@ use GDO\Util\Filewalker;
 final class Rename extends MethodCLI
 {
 
-	public static function rename(string $entry, string $fullpath, $args = null): int
+    public function isCLI(): bool { return true; }
+
+
+    public static function rename(string $entry, string $fullpath, $args = null): int
 	{
 		$count = 0;
 		[$pattern, $replacement, $pretend] = $args;

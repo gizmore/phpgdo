@@ -23,7 +23,9 @@ use GDO\User\GDO_User;
 final class Help extends MethodCLI
 {
 
-	public function getCLITrigger(): string
+    public function isCLI(): bool { return true; }
+
+    public function getCLITrigger(): string
 	{
 		return 'help';
 	}

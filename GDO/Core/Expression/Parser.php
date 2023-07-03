@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace GDO\Core\Expression;
 
 use GDO\Core\GDO_NoSuchCommandError;
-use GDO\Core\GDO_MethodError;
 use GDO\Core\GDT_Expression;
 use GDO\Core\Method;
 use GDO\Util\Strings;

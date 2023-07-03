@@ -416,51 +416,51 @@ class Cache
 	 */
 	public function recache(GDO $object): GDO
 	{
-		if (!$object->isPersisted())
-		{
-			return $object;
-		}
-		self::$RECACHING[] = $object->recaching();
-		return $object;
+//		if (!$object->isPersisted())
+//		{
+//			return $object;
+//		}
+//		self::$RECACHING[] = $object->recaching();
+//		return $object;
 
-//		$back = $object;
-//
-//		# GDO cache
-//		if ($back->gdoCached())
-//		{
-//			$id = $object->getID();
-//
-//			# GDO single cache
-//			if (isset($this->cache[$id]))
-//			{
-//				$old = $this->cache[$id];
-//				$old->setGDOVars($object->getGDOVars());
-//				$back = $old;
-//			}
-//			else
-//			{
-//				$this->cache[$id] = $back;
-//			}
-//		}
-//
-//		# Memcached
-//		if (GDO_MEMCACHE && $back->memCached())
-//		{
-//			self::replace($back->gkey(), $back, GDO_MEMCACHE_TTL);
-//		}
-//
-//		# Mark for recache
-//		if ($back->gdoCached())
-//		{
-//			if (isset($back->recache))
-//			{
-//				self::$RECACHING[] = $back->recaching();
-//			}
-//		}
-//
-//// 		$back->tempReset();
-//
-//		return $back;
+		$back = $object;
+
+		# GDO cache
+		if ($back->gdoCached())
+		{
+			$id = $object->getID();
+
+			# GDO single cache
+			if (isset($this->cache[$id]))
+			{
+				$old = $this->cache[$id];
+				$old->setGDOVars($object->getGDOVars());
+				$back = $old;
+			}
+			else
+			{
+				$this->cache[$id] = $back;
+			}
+		}
+
+		# Memcached
+		if (GDO_MEMCACHE && $back->memCached())
+		{
+			self::replace($back->gkey(), $back, GDO_MEMCACHE_TTL);
+		}
+
+		# Mark for recache
+		if ($back->gdoCached())
+		{
+			if (isset($back->recache))
+			{
+				self::$RECACHING[] = $back->recaching();
+			}
+		}
+
+// 		$back->tempReset();
+
+		return $back;
 	}
 
 	public static function replace(string $key, $value, int $expire = GDO_MEMCACHE_TTL): void

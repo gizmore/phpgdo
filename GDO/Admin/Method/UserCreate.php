@@ -26,7 +26,9 @@ final class UserCreate extends MethodForm
 
 	use MethodAdmin;
 
-	protected function createForm(GDT_Form $form): void
+    public function isCLI(): bool { return true; }
+
+    protected function createForm(GDT_Form $form): void
 	{
 		$form->addFields(
 			GDT_Username::make('user_name')->notNull()->exists(false),

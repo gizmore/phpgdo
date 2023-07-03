@@ -110,6 +110,11 @@ class Application extends GDT
 		return $this->isUnitTests() || $this->isCLI();
 	}
 
+    public function isCLI(): bool
+    {
+        return $this->cli;
+    }
+
 	public function isIPC(): bool
 	{
 		return GDO_IPC !== 'none';
@@ -261,8 +266,6 @@ class Application extends GDT
 	###################
 	### Render Mode ###
 	###################
-
-	public function isCLI(): bool { return $this->cli; }
 
 	public function isWebsocket(): bool { return false; }
 

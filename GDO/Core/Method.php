@@ -94,7 +94,7 @@ abstract class Method
 
 	}
 
-	public function isCLI(): bool { return true; }
+	public function isCLI(): bool { return false; }
 
 	# toggles
 
@@ -189,8 +189,6 @@ abstract class Method
 		$response = GDT_Response::make();
 		try
 		{
-			$this->applyInput();
-
 			#PP#begin#
 			if ($this->isDebugging())
 			{
@@ -198,12 +196,17 @@ abstract class Method
 			}
 			#PP#end#
 
-			# 0) Init
+            $this->beforeMethodInit(); # UGLY!
+
+            $this->applyInput();
+
+            # 0) Init
 			if ($result = $this->onMethodInit())
 			{
 				$response->addField($result);
 			}
-			if (Application::isError())
+
+            if (Application::isError())
 			{
 				return $response;
 			}
@@ -346,7 +349,10 @@ abstract class Method
 		}
 	}
 
-	public function onMethodInit(): ?GDT { return null; }
+    public function beforeMethodInit(): void {}
+
+
+    public function onMethodInit(): ?GDT { return null; }
 
 	# events
 
