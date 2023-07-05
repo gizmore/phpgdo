@@ -221,7 +221,7 @@ class Configure extends MethodForm
 			if (($gdt instanceof GDT_Field) &&
 				(!$gdt->isHidden()) &&
 				($gdt->isWriteable()) &&
-				($gdt->hasChangedFromDefault()))
+				($gdt->hasChanged()))
 			{
 				if (count($info))
 				{
@@ -231,7 +231,7 @@ class Configure extends MethodForm
 				$info[] = t('msg_modulevar_changed',
 					[
 						$gdt->renderLabel(),
-						TextStyle::italic($gdt->displayVar($gdt->getInitial())),
+						TextStyle::italic($gdt->displayVar($gdt->var)),
 						TextStyle::italic($gdt->displayVar($gdt->getVar())),
 					]);
 				$varsChanged = true;
