@@ -74,11 +74,20 @@ class GDT_Message extends GDT_Text
 	 * @var callable[]
 	 */
 	public static array $DECODERS = [
+        'RAW' => [
+            self::class,
+            'RAW',
+        ],
 		'Text' => [
 			self::class,
 			'ESCAPE',
 		],
 	];
+
+    public static function RAW(string $s): string
+    {
+        return $s;
+    }
 
 	public string $icon = 'message';
 
@@ -327,7 +336,10 @@ class GDT_Message extends GDT_Text
 	protected function getWantedEditorName(): string
 	{
 		return strtolower(self::$EDITOR_NAME);
-	}	public function blankData(): array
+	}
+
+
+    public function blankData(): array
 	{
 		return [
 			"{$this->name}_input" => $this->msgInput,

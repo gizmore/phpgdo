@@ -122,7 +122,7 @@ abstract class MethodTable extends MethodForm
 	 */
 	public function getDefaultIPP(): int { return Module_Table::instance()->cfgItemsPerPage(); }
 
-	protected function getPageName(): string { return 'page'; }
+	protected function getPageName(): string { return '_page'; }
 
 	/**
 	 * Override this.

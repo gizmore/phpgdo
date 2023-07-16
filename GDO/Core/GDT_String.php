@@ -256,11 +256,7 @@ class GDT_String extends GDT_DBField
 	public function renderBinary(): string
 	{
 		$binary = $this->getVar();
-        if ($this instanceof GDT_Country)
-        {
-            echo $binary."\n";
-        }
-		$binary = $binary ? urlencode($binary) : GDT::EMPTY_STRING;
+		$binary = is_string($binary) ? urlencode($binary) : GDT::EMPTY_STRING;
 		return $binary . "\0";
 	}
 

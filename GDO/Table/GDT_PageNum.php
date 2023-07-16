@@ -28,7 +28,7 @@ final class GDT_PageNum extends GDT_UInt
 
 	public function isSerializable(): bool { return false; }
 
-	public function gdtDefaultName(): ?string { return 'page'; }
+	public function gdtDefaultName(): ?string { return '_page'; }
 
 	#############
 	### Table ###

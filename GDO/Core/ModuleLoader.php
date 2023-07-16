@@ -94,9 +94,10 @@ final class ModuleLoader
 	public function &getEnabledModules(): array
 	{
 		if (!isset($this->enabledModules))
-		{
-			# Filter
-			$this->enabledModules = array_filter($this->modules, function (GDO_Module $module)
+        {
+//            $this->sortModules();
+            # Filter
+            $this->enabledModules = array_filter($this->modules, function (GDO_Module $module)
 			{
 				return $module->isEnabled();
 			});
