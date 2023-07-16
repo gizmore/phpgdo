@@ -1,6 +1,8 @@
 <?php
 namespace GDO\Core;
 
+use GDO\Util\WS;
+
 /**
  * Floating points return a float scalar as value.
  *
@@ -34,7 +36,12 @@ class GDT_Float extends GDT_Int
 		return self::displayS($this->var, $this->decimals);
 	}
 
-	public static function displayS(string $var = null, int $decimals = 4, string $dot = null, string $comma = null): string
+    public function renderBinary(): string
+    {
+        return WS::wrFloat($this->getVar());
+    }
+
+    public static function displayS(string $var = null, int $decimals = 4, string $dot = null, string $comma = null): string
 	{
 		if ($var !== null)
 		{
