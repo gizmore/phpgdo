@@ -18,7 +18,7 @@ final class GDO_DirectoryIndex extends GDO
 	{
 		return [
 //         	GDT_AutoInc::make('file_id'),
-			GDT_Url::make('file_name'),
+			GDT_DirectoryIndex::make('file_name'),
 			GDT_Icon::make('file_icon'),
 			GDT_String::make('file_type'),
 			GDT_Filesize::make('file_size'),
@@ -32,7 +32,7 @@ final class GDO_DirectoryIndex extends GDO
 
 	public function href_file_name()
 	{
-		return $_REQUEST['url'] . '/' . $this->getName();
+		return rtrim(GDO_WEB_ROOT, '/') . $_REQUEST['url'] . '/' . $this->getFileName();
 	}
 
 }

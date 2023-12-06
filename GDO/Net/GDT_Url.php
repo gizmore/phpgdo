@@ -108,7 +108,12 @@ class GDT_Url extends GDT_String
 		return GDT_Template::php('Net', 'url_html.php', ['field' => $this]);
 	}
 
-	###############
+    public function renderCell(): string
+    {
+        return $this->renderHTML();
+    }
+
+    ###############
 	### Options ###
 	###############
 
