@@ -38,7 +38,8 @@ class GDT_Float extends GDT_Int
 
     public function renderBinary(): string
     {
-        return WS::wrFloat($this->getVar());
+        $float = $this->getVar();
+        return WS::wrFloat($float);
     }
 
     public static function displayS(string $var = null, int $decimals = 4, string $dot = null, string $comma = null): string

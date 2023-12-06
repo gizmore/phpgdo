@@ -112,6 +112,10 @@ final class Cronjob
 	private static function shouldRunAt(MethodCronjob $method, $timestamp)
 	{
 		$at = $method->runAt();
+        $at = str_replace(
+            ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+            ['1', '2', '3', '4', '5', '6', '7'],
+            $at);
 		$at = preg_split("/[ \t]+/iD", $at);
 		$att = date('i H j m N', $timestamp);
 		$att = explode(' ', $att);

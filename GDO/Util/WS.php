@@ -12,14 +12,22 @@ use GDO\Core\Application;
 final class WS
 {
 
-	public static function wrFloat(float $float): string
+	public static function wrFloat(?float $float): string
 	{
+        if ($float === null)
+        {
+            $float = NAN;
+        }
 		return pack('f', floatval($float));
 	}
 
 
-	public static function wrDouble(float $double): string
+	public static function wrDouble(?float $double): string
 	{
+        if ($double === null)
+        {
+            $double = NAN;
+        }
 		return pack('d', doubleval($double));
 	}
 

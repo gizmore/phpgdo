@@ -107,4 +107,10 @@ abstract class MethodCronjob extends Method
 		return "0 {$hour} * * *";
 	}
 
+    protected function runMonthlyAt(int $hour=0, int $day=0): string
+    {
+        return "0 {$hour} {$day} * *";
+    }
+
+
 }

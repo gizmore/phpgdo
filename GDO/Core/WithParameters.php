@@ -111,9 +111,15 @@ trait WithParameters
 		{
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
+            $this->afterAddCompose();
 		}
 		return $this->parameterCache;
 	}
+
+    protected function afterAddCompose(): void
+    {
+
+    }
 
 	#############
 	### Cache ###

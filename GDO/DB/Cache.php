@@ -452,10 +452,13 @@ class Cache
 		# Mark for recache
 		if ($back->gdoCached())
 		{
-			if (isset($back->recache))
-			{
-				self::$RECACHING[] = $back->recaching();
-			}
+            if ($back->isPersisted())
+            {
+                if (isset($back->recache))
+                {
+                    self::$RECACHING[] = $back->recaching();
+                }
+            }
 		}
 
 // 		$back->tempReset();
