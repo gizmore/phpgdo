@@ -168,7 +168,12 @@ class GDT_Method extends GDT
 		return $this->result->render();
 	}
 
-	/**
+    public function renderHTML(): string
+    {
+        return $this->render();
+    }
+
+    /**
 	 * Exexute this method.
 	 */
 	public function execute(): GDT

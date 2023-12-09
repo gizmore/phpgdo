@@ -344,6 +344,10 @@ class Installer
 					 * @var GDO $gdo
 					 */
 					$gdo = call_user_func([$classname, 'table']);
+                    if (!$gdo)
+                    {
+                        xdebug_break();
+                    }
 					if ($gdo->gdoIsTable())
 					{
 						Database::DBMS()->dbmsAutoMigrate($gdo);

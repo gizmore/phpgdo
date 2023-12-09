@@ -16,10 +16,14 @@ use GDO\Date\Time;
 class GDT_CreatedAt extends GDT_Timestamp
 {
 
-	public bool $notNull = true;
-	public bool $writeable = false;
+    protected function __construct()
+    {
+        parent::__construct();
+        $this->notNull();
+        $this->writeable(false);
+    }
 
-	public function gdtDefaultLabel(): ?string
+    public function gdtDefaultLabel(): ?string
     {
         return 'created_at';
     }

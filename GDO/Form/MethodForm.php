@@ -90,7 +90,8 @@ abstract class MethodForm extends Method
 			$this->validated = false;
 			$this->pressedButton = null;
 			$this->form = GDT_Form::make($this->getFormName());
-			$this->createForm($this->form);
+            $this->form->titleRaw($this->getMethodTitle());
+            $this->createForm($this->form);
 			$this->form->inputs($inputs);
 			$this->addComposeParameters($this->form->getAllFields());
 			$this->addComposeParameters($this->form->actions()->getAllFields());
@@ -123,8 +124,6 @@ abstract class MethodForm extends Method
 		$form = $this->getForm(true);
 
 		$this->appliedInputs($this->getInputs());
-
-		$form->titleRaw($this->getMethodTitle());
 
 		### Flow upload
 		if ($flowField = ($this->inputs['flowField'] ?? null))
@@ -245,7 +244,7 @@ abstract class MethodForm extends Method
 	public function renderPage(): GDT
 	{
 		$form = $this->getForm();
-		$form->titleRaw($this->getMethodTitle());
+//		$form->titleRaw($this->getMethodTitle());
 		return $form;
 	}
 

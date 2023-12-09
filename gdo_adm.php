@@ -1145,9 +1145,18 @@ elseif ($command === 'pp')
 
 elseif ($command === 'migrate')
 {
-	if (count($argv) !== 3)
+    if ($app->all && count($argv) === 2)
+    {
+        $modules = ModuleLoader::instance()->loadModules(true, false);
+        foreach ($modules as $module)
+        {
+            Installer::installModule($module, true);
+        }
+        GDT_Success::make()->text('msg_gdoadm_migrated_all');
+    }
+	elseif (count($argv) !== 3)
 	{
-		Website::error('Admin', 'err_gdoadm_migrate');
+        echo GDT_Error::make()->text('err_gdoadm_migrate')->renderCLI();
 	}
 	elseif (!($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
 	{
