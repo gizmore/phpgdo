@@ -253,7 +253,6 @@ final class ModuleLoader
 	{
 		$modules = $this->loadModules(!!GDO_DB_ENABLED, !GDO_DB_ENABLED);
 		$this->initModules();
-		$this->initModuleVars();
 		return $modules;
 	}
 
@@ -438,7 +437,8 @@ final class ModuleLoader
 					GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
 				}
 			}
-			return $this->initModulesB();
+            $this->initModuleVars();
+            return $this->initModulesB();
 		}
 		catch (\Throwable $ex)
 		{
