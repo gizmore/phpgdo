@@ -4,6 +4,7 @@ namespace GDO\User;
 
 use GDO\Core\Application;
 use GDO\Core\GDO;
+use GDO\Core\GDO_DBException;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\GDT_AutoInc;
@@ -47,7 +48,10 @@ final class GDO_User extends GDO
 
 	private static self $CURRENT;
 
-	public static function system(): self
+    /**
+     * @throws GDO_Exception
+     */
+    public static function system(): self
 	{
 		self::$SYSTEM ??= self::findById('1');
 		return self::$SYSTEM;
@@ -70,11 +74,12 @@ final class GDO_User extends GDO
 		return $admins;
 	}
 
-	/**
-	 * Get all users with a permisison.
-	 *
-	 * @return GDO_User[]
-	 */
+    /**
+     * Get all users with a permisison.
+     *
+     * @return GDO_User[]
+     * @throws GDO_DBException
+     */
 	public static function withPermission(string $permission): array
 	{
 		return self::withPermissionQuery($permission)->exec()->fetchAllObjects();
@@ -96,9 +101,10 @@ final class GDO_User extends GDO
 		fetchTable(self::table())->where('perm_name=' . quote($permission));
 	}
 
-	/**
-	 * @return GDO_User[]
-	 */
+    /**
+     * @return GDO_User[]
+     * @throws GDO_DBException
+     */
 	public static function staff(): array
 	{
 		static $staff;
@@ -155,20 +161,32 @@ final class GDO_User extends GDO
 		return Module_Language::instance()->cfgUserLangID($this);
 	}
 
-	/**
-	 * Get a user by login, for auth mechanisms
-	 *
-	 * @TODO: getByLogin shall use a hook for mail module to login via email.
-	 */
+    /**
+     * Get a user by login, for auth mechanisms
+     *
+     * @TODO: getByLogin shall use a hook for mail module to login via email.
+     * @throws GDO_DBException
+     */
 	public static function getByLogin(string $name): ?self
 	{
 		return self::getByName($name);
 	}
 
-	public static function getByName(string $name): ?self
+    /**
+     * @throws GDO_DBException
+     */
+    public static function getByName(string $name): ?self
 	{
 		return self::getBy('user_name', $name);
 	}
+
+    /**
+     * @throws GDO_DBException
+     */
+    public static function getByGuestName(string $name): ?self
+    {
+        return self::getBy('user_guest_name', $name);
+    }
 
 	public static function getSingleWithSetting(string $moduleName, string $key, string $var, string $op = '='): ?self
 	{

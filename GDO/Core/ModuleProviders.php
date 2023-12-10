@@ -209,7 +209,7 @@ final class ModuleProviders
 'DoubleAccounts' => [],
 'Download' => ['Category', 'File', 'Payment', 'Votes'],
 'DSGVO' => ['Session'],
-'EdwardSnowdenLand' => ['AboutMe', 'Account', 'ActivationAlert', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Cronjob', 'IP2Country', 'Favicon', 'File', 'FontAwesome', 'Invite', 'JQueryAutocomplete', 'Mail', 'News', 'Register', 'Votes'],
+'EdwardSnowdenLand' => ['AboutMe', 'Account', 'ActivationAlert', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'Cronjob', 'IP2Country', 'Favicon', 'File', 'FontAwesome', 'Invite', 'JQueryAutocomplete', 'Mail', 'News', 'Register', 'Votes'],
 'Facebook' => [],
 'Favicon' => [],
 'FFMpeg' => ['CLI'],
