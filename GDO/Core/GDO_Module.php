@@ -262,10 +262,10 @@ class GDO_Module extends GDO
 
 	public function onIncludeScripts(): void {}
 
-	public function gdoRealClassName(): string
-	{
-		return static::class;
-	}
+//	public function gdoRealClassName(): string
+//	{
+//		return static::class;
+//	}
 
 	public function isEnabled(): bool
 	{

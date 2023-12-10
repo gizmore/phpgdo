@@ -1100,15 +1100,13 @@ elseif ($command === 'provide')
 
 elseif ($command === 'cronjob')
 {
-	$module = Module_Install::instance();
 	$method = InstallCronjob::make();
-	$result = $method->executeWithInit();
+	$result = $method->executeWithInit(false);
 	echo $result->renderCLI();
 }
 
 elseif ($command === 'secure')
 {
-	$module = Module_Install::instance();
 	$method = GDT_Method::make()->method(Security::make());
 	$result = $method->setupCLIButton()
 		->noChecks()
@@ -1290,4 +1288,5 @@ else
 	printUsage();
 }
 
+echo \GDO\UI\GDT_Page::instance()->topResponse()->renderCLI();
 Cache::flush();
