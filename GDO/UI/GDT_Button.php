@@ -34,7 +34,9 @@ class GDT_Button extends GDT
 	use WithFormAttributes;
 	use WithAnchorRelation;
 
-	#################
+    public function isOrderable() : bool { return false; }
+
+    #################
 	### Secondary ###
 	#################
 	public bool $secondary = false;
@@ -77,7 +79,9 @@ class GDT_Button extends GDT
 			return " href=\"{$href}\"";
 		}
 		return GDT::EMPTY_STRING;
-	}	public function renderHTML(): string
+	}
+
+    public function renderHTML(): string
 	{
 		return $this->renderHTMLCell(false);
 	}
@@ -97,11 +101,11 @@ class GDT_Button extends GDT
 		return null;
 	}
 
-	public function checkEnabled(callable $checkEnabled): self
-	{
-		$this->checkEnabled = $checkEnabled;
-		return $this;
-	}
+//	public function checkEnabled(callable $checkEnabled): self
+//	{
+//		$this->checkEnabled = $checkEnabled;
+//		return $this;
+//	}
 
 
 
