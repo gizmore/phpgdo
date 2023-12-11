@@ -15,4 +15,9 @@ class GDT_EditButton extends GDT_Submit
 
 	public function gdtDefaultName(): ?string { return 'edit'; }
 
+    public function gdtDefaultLabel(): ?string
+    {
+        return 'btn_edit';
+    }
+
 }
