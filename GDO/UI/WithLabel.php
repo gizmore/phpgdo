@@ -115,7 +115,7 @@ trait WithLabel
 
 	/**
 	 */
-	public function renderLabelText(): string
+	public function  renderLabelText(): string
 	{
 		if (isset($this->labelKey))
 		{

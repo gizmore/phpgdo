@@ -170,8 +170,8 @@ final class Trans
 			$text = $cache[$key];
 			if ($args)
 			{
-				$text = vsprintf($text, $args);
-			}
+                $text = vsprintf($text, $args);
+            }
 		}
 		else
 		{

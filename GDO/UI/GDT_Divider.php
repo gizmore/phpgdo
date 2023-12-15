@@ -30,7 +30,13 @@ class GDT_Divider extends GDT
 		return '<div class="gdt-divider">' . $text . '</div>';
 	}
 
-	/**
+//    public function renderCard(): string
+//    {
+//        $text = $this->renderLabelText();
+//        return '<div class="gdt-divider">' . $text . '</div>';
+//    }
+
+    /**
 	 * Render code block separator.
 	 */
 	public function renderCodeBlock(): string
