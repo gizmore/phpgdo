@@ -129,11 +129,10 @@ final class ModuleLoader
 				foreach ($data as $row)
 				{
 					$module = $this->getModuleByID($row[0]);
-                    if (!$module)
+                    if ($module)
                     {
-                        xdebug_break();
+                        $module->addConfigVarForCache($row[1], $row[2]);
                     }
-					$module->addConfigVarForCache($row[1], $row[2]);
 				}
 			}
 		}
