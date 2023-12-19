@@ -79,7 +79,12 @@ function sitename(): string
 
 function url(string $module, string $method, string $append = '', bool $lang = true): string
 {
-	return GDT_Url::absolute(href($module, $method, $append, $lang));
+    return GDT_Url::absolute(href($module, $method, $append, $lang));
+}
+
+function urlNoSeo(string $module, string $method, string $append = '', bool $lang = true): string
+{
+    return GDT_Url::absolute(hrefNoSeo($module, $method, $append));
 }
 
 function jxhref(string $module, string $method, string $append = '', bool $lang = true): string

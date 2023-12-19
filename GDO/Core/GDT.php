@@ -147,7 +147,7 @@ abstract class GDT
 	final public const RENDER_GTK = 6;     #### Enjoy!
 	final public const RENDER_IRC = 7;     # irc
  	final public const RENDER_MARKDOWN = 8; # who knows
-// 	final const RENDER_RESERVED_9 = 9; # :) ... maybe soap? maybe the new safe JSON?
+ 	final public const RENDER_MAIL = 9;    # for inline images
 	# HTML format rendering   #### Your Flight!
 	final public const RENDER_WEBSITE= 10; # <html> page skeleton, html init mode that switches to RENDER_HTML.
 	final public const RENDER_HTML   = 11; # <div> plain html mode
@@ -222,7 +222,8 @@ abstract class GDT
 				return $this->renderGTK();
 			case self::RENDER_IRC:
 				return $this->renderCLI();
-			# Reserved 1-2
+            case self::RENDER_MAIL:
+                return $this->renderMail();
 			case self::RENDER_WEBSITE:
 				return $this->renderHTML(); # HTML start mode
 			# HTML submodes
@@ -266,6 +267,7 @@ abstract class GDT
 	public function renderJSON(): array|string|null|int|bool|float { return $this->renderCLI(); }
 	public function renderGTK(): null { return null; }
 	public function renderWebsite() : string { return GDT::EMPTY_STRING; }
+    public function renderMail(): string { return $this->renderHTML(); }
 	# HTML rendering
 	public function renderHTML() : string { return $this->renderVar(); }
 	public function renderCard() : string { return $this->renderHTML(); }

@@ -342,7 +342,9 @@ trait WithFields
 	####################
  	public function renderNIL() : null { return null; } # hehe
 
-	public function renderWebsite(): string { return $this->renderFields(GDT::RENDER_WEBSITE); }
+    public function renderMail(): string { return $this->renderFields(GDT::RENDER_MAIL); }
+
+    public function renderWebsite(): string { return $this->renderFields(GDT::RENDER_WEBSITE); }
 
 	public function renderCell(): string { return $this->renderFields(GDT::RENDER_CELL); }
 
