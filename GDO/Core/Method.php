@@ -334,6 +334,7 @@ abstract class Method
 //		}
 		catch (Throwable $e)
 		{
+            Debug::debugException($e);
 			return $this->error('error', [$e->getMessage()]);
 		}
 		finally
