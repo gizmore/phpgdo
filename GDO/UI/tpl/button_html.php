@@ -11,9 +11,10 @@ if (!($href = $field->htmlGDOHREF()))
 {
 	$field->addClass('gdo-disabled');
 }
+$field->addClass('gdt-button');
 
 ?>
-<div class="gdt-button"<?=$field->htmlAttributes()?>><a
+<div<?=$field->htmlAttributes()?>><a
 		<?=$field->htmlRelation()?>
 		<?=$href?>
 		<?=$field->htmlDisabled()?>><?=$field->htmlIcon()?><?=$label?></a></div>
