@@ -109,6 +109,7 @@ if (isset($_REQUEST['_lang']))
 else
 {
 	$iso = Module_Language::instance()->detectISO();
+    Module_Language::instance()->saveUserSetting($user, 'language', $iso);
 }
 Trans::setISO($iso);
 #$loader->loadLangFiles();    # @TODO lazy module initing. This requires a complete change of how Hooks are handled.

@@ -156,7 +156,7 @@ final class GDO_User extends GDO
 		return Time::UTC;
 	}
 
-	public function getLangISO(): string
+	public function getLangISO(): ?string
 	{
 		return Module_Language::instance()->cfgUserLangID($this);
 	}

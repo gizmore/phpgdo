@@ -67,7 +67,7 @@ final class Module_Language extends GDO_Module
 	public function getUserSettings(): array
 	{
 		return [
-			GDT_Language::make('language')->notNull()->initial(GDO_LANGUAGE)->withCompletion(),
+			GDT_Language::make('language')->withCompletion(),
 		];
 	}
 
@@ -122,7 +122,7 @@ final class Module_Language extends GDO_Module
 	### Init ###
 	############
 
-	public function cfgUserLangID(GDO_User $user): string
+	public function cfgUserLangID(GDO_User $user): ?string
 	{
 		return $this->userSettingVar($user, 'language');
 	}

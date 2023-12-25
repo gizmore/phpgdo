@@ -19,8 +19,9 @@ final class GDT_LangSwitch extends GDT_Select
 	protected function __construct()
 	{
 		parent::__construct();
-		$this->choices(Module_Language::instance()->cfgSupported());
-	}
+        $this->choices(Module_Language::instance()->cfgSupported());
+        $this->initial(Trans::$ISO);
+    }
 
 	public function gdtDefaultName(): ?string { return '_lang'; }
 
