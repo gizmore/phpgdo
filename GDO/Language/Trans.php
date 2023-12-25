@@ -55,8 +55,12 @@ final class Trans
 	/**
 	 * Set the current ISO.
 	 */
-	public static function setISO(string $iso): void
+	public static function setISO(?string $iso): void
 	{
+        if ($iso === null)
+        {
+            $iso = GDO_LANGUAGE;
+        }
 		if ($iso !== self::$ISO)
 		{
 			# Set Trans locale
