@@ -184,7 +184,7 @@ final class Module_Language extends GDO_Module
 	{
 		$matches = [];
 		$languages = GDO_Language::table()->allSupported();
-		if (preg_match_all('/[-a-zA-Z,]+;q=[.\d]+/', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches))
+		if (preg_match_all('/[-a-zA-Z,]+;q=[.\d]+/', @$_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches))
 		{
 			foreach ($matches[0] as $match)
 			{

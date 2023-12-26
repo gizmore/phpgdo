@@ -123,8 +123,8 @@ $app->verb(strtolower($_SERVER['REQUEST_METHOD']));
 #
 if (isset($_REQUEST['_fmt']))
 {
-	$mode = $app::detectRenderMode((string)@$_REQUEST['_fmt']);
-	unset($_REQUEST['_fmt']);
+    $mode = $app::detectRenderMode((string)@$_REQUEST['_fmt']);
+    unset($_REQUEST['_fmt']);
 }
 else
 {

@@ -332,6 +332,10 @@ abstract class Method
 //			Logger::logException($e);
 //			return $this->error('error', [$e->getMessage()]);
 //		}
+        catch (GDO_ArgError $e)
+        {
+            return $this->error('error', [$e->getMessage()]);
+        }
 		catch (Throwable $e)
 		{
             Debug::debugException($e);

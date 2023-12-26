@@ -19,6 +19,7 @@ final class GDT_Response extends GDT_Tuple
 
 	public function render(): array|string|null
 	{
+        global $me;
 		switch (Application::$MODE)
 		{
 			case GDT::RENDER_BINARY:
@@ -30,6 +31,10 @@ final class GDT_Response extends GDT_Tuple
 				return $this->renderXML();
 			case GDT::RENDER_JSON:
 				hdr('Content-Type: application/json');
+                $code = Application::$RESPONSE_CODE;
+                $status = $me->getModule()->gdoHumanName();
+                $status = urlencode($status);
+                hdr("HTTP/1.1 {$code} {$status}");
 				$this->addFields(...GDT_Page::instance()->topResponse()->getAllFields());
 				return json($this->renderJSON());
 			case GDT::RENDER_CLI:
