@@ -32,7 +32,10 @@ class GDT_Select extends GDT_ComboBox
 
 	public string $emptyVar = GDT::ZERO;
 	public string $emptyLabelRaw;
-	public string $emptyLabelKey;	public function getSelectedVar(): ?string
+
+	public string $emptyLabelKey;
+
+    public function getSelectedVar(): ?string
 	{
 		$var = $this->getVar();
 		return $var === null ? $this->emptyVar : $var;
@@ -525,6 +528,13 @@ class GDT_Select extends GDT_ComboBox
 			return GDT_Template::php('Core', 'select_filter.php', ['field' => $this, 'f' => $f]);
 		}
 	}
+
+    public function filterVar(GDT_Filter $f): null|string|array
+    {
+        $var = parent::filterVar($f);
+        return $var === $this->emptyVar ? null : $var;
+    }
+
 
 	public function plugVars(): array
 	{

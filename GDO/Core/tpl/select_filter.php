@@ -8,7 +8,7 @@ use GDO\Table\GDT_Filter;
 /** @var $field GDT_Select * */
 ?>
 <select name="<?=$f->name?>[<?=$field->name?>]">
-    <option><?=t('sel_all')?></option>
+    <option value="<?=$field->emptyVar?>"><?=t('sel_all')?></option>
 	<?php
 	foreach ($field->initChoices() as $var => $value) : ?>
         <option value="<?=$var?>"><?=is_string($value) ? $field->displayVar($var) : $value->renderOption()?></option>

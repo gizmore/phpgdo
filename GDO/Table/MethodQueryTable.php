@@ -43,7 +43,7 @@ abstract class MethodQueryTable extends MethodTable
 	protected function createCollection(): GDT_Table
 	{
 		$table = parent::createCollection();
-		return $table->query($this->getQuery());
+		return $table->query($this->getQuery()->debug());
 	}
 
 	# ###############

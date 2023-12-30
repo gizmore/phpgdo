@@ -312,7 +312,7 @@ class GDT_String extends GDT_DBField
 		if ($this->isSearchable())
 		{
 			$search = GDO::escapeSearchS($searchTerm);
-			$query->orWhere("{$this->name} LIKE '%{$search}%'");
+			$query->orWhere("BINARY {$this->name} LIKE BINARY '%{$search}%'");
 		}
 		return $this;
 	}
