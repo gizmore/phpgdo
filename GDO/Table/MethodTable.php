@@ -133,7 +133,7 @@ abstract class MethodTable extends MethodForm
 	 */
 	public function isSearched(): bool { return true; }
 
-	protected function getSearchName(): string { return 'search'; }
+	protected function getSearchName(): string { return "search_{$this->getTableName()}"; }
 
 	/**
 	 * Override this.

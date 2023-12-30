@@ -21,7 +21,7 @@ class GDT_SearchField extends GDT_String
 	public ?int $min = 2;
 	public ?int $max = 256;
 
-	public bool $hidden = true;
+//	public bool $hidden = true;
 
 	public function isCLIHidden(): bool { return false; }
 

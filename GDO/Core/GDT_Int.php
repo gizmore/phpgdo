@@ -238,11 +238,25 @@ class GDT_Int extends GDT_DBField
 		return $this;
 	}
 
-	public function filterVar(GDT_Filter $f): null|string|array
-	{
-		$fv = parent::filterVar($f);
-		return Arrays::empty($fv) ? null : self::intFilterVar($fv);
-	}
+    public function filterVar(GDT_Filter $f): null|string|array
+    {
+        if ( ($flt = $f->getVar()) && ($name = $this->getName()) )
+        {
+            if (isset($flt[$name]))
+            {
+                return Arrays::empty($flt[$name]) ? null : self::intFilterVar($flt[$name]);
+//                $fv = trim($flt[$name]);
+//                return $fv === '' ? null : $fv;
+            }
+        }
+        return null;
+    }
+
+//    public function filterVar(GDT_Filter $f): null|string|array
+//	{
+////		$fv = parent::filterVar($f);
+//		return Arrays::empty($fv) ? null : self::intFilterVar($fv);
+//	}
 
 	private function intFilterVar(array $fv): array
 	{

@@ -12,6 +12,7 @@ use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
 use GDO\Table\WithOrder;
 use GDO\UI\WithLabel;
+use GDO\Util\Arrays;
 use GDO\Util\WS;
 
 /**
@@ -54,7 +55,7 @@ class GDT_Timestamp extends GDT_DBField
 	### Starting view ###
 	#####################
 
-	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
+    public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
 		return $var === null ? null : Time::parseDateDB($var);
 	}
@@ -237,7 +238,24 @@ class GDT_Timestamp extends GDT_DBField
 		return $this;
 	}
 
-	public function startWithYear(): static
+    public function filterVar(GDT_Filter $f): null|string|array
+    {
+        if ( ($flt = $f->getVar()) && ($name = $this->getName()) )
+        {
+            if (isset($flt[$name]))
+            {
+                return Arrays::empty($flt[$name]) ? null : self::dateFilterVar($flt[$name]);
+            }
+        }
+        return null;
+    }
+
+    private static function dateFilterVar(array $var)
+    {
+        return null;
+    }
+
+    public function startWithYear(): static
 	{
 		$this->dateStartView = 'year';
 		return $this;

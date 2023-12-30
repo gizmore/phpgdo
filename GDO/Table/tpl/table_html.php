@@ -9,9 +9,6 @@ use GDO\Table\GDT_Table;use GDO\UI\GDT_SearchField;
 $headers = $field->getHeaderFields();
 $pm = isset($field->pagemenu) ? $field->pagemenu->renderHTML() : '';
 $result = $field->getResult();
-
-die('AAAA');
-var_dump($field);
 ?>
 
 <div class="gdt-table"<?=$field->htmlID()?>>
@@ -23,8 +20,7 @@ var_dump($field);
 		<?php
 		endif; ?>
         <?php if ($field->searched) : ?>
-            aaa
-            <?=GDT_SearchField::make('s')->renderForm()?>
+            <?=GDT_SearchField::make("search_{$field->getName()}")->renderForm()?>
         <?php endif; ?>
 
         <?php if ($field->hasTitle()) : ?>
