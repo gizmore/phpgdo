@@ -54,8 +54,8 @@ abstract class MethodCompletion extends MethodAjax
 			{
 // 				if ($name = $gdt->getName())
 // 				{
-				// 				$query->orWhere("{$name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
-				$query->orWhere("{$name} LIKE '%{$eterm}%'");
+                $query->orWhere("{$name} COLLATE 'utf8_general_ci' LIKE '%{$eterm}%'");
+//				$query->orWhere("{$name} LIKE '%{$eterm}%'");
 // 				}
 			}
 		}
@@ -92,7 +92,7 @@ abstract class MethodCompletion extends MethodAjax
 
 	protected function getQuery(): Query
 	{
-		return $this->gdoTable()->select();
+		return $this->gdoTable()->select()->debug();
 	}
 
 	protected function gdoHeaderFields(): array

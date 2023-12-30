@@ -301,17 +301,17 @@ class GDT_Table extends GDT
 			}
 		}
 
-//		if ($this->searched)
-//		{
-//// 			$s = $this->headers->name;
-//// 			if (isset($_REQUEST[$s]['search']))
-//// 			{
-//// 				if ($searchTerm = trim($_REQUEST[$s]['search'], "\r\n\t "))
-//// 				{
-//// 					$this->bigSearchQuery($query, $searchTerm);
-//// 				}
-//// 			}
-//		}
+		if ($this->searched)
+		{
+ 			$s = $this->headers->name;
+ 			if (isset($_REQUEST[$s]['search']))
+ 			{
+ 				if ($searchTerm = trim($_REQUEST[$s]['search'], "\r\n\t "))
+ 				{
+ 					$this->bigSearchQuery($query, $searchTerm);
+ 				}
+ 			}
+		}
 
 		return $this->getOrderedQuery($query);
 	}
@@ -453,11 +453,11 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	public function noFormWrap(bool $noWrap = true): self
-	{
-		$this->noFormWrap = $noWrap;
-		return $this;
-	}
+//	public function noFormWrap(bool $noWrap = true): self
+//	{
+//		$this->noFormWrap = $noWrap;
+//		return $this;
+//	}
 
 	/**
 	 * Calculate the page for a gdo.
@@ -540,14 +540,14 @@ class GDT_Table extends GDT
 		}
 	}
 
-	public function renderForm(): string
-	{
-		return GDT_Template::php('Table', 'cell/table.php',
-			[
-				'field' => $this,
-				'form' => true,
-			]);
-	}
+//	public function renderForm(): string
+//	{
+//		return GDT_Template::php('Table', 'cell/table.php',
+//			[
+//				'field' => $this,
+//				'form' => true,
+//			]);
+//	}
 
 	public function renderCard(): string
 	{

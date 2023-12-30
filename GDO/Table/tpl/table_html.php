@@ -2,14 +2,18 @@
 namespace GDO\Table\tpl;
 
 use GDO\Core\GDT;
-use GDO\Table\GDT_Table;
+use GDO\Table\GDT_Table;use GDO\UI\GDT_SearchField;
 
 /** @var $field GDT_Table * */
 /** @var $form bool * */
 $headers = $field->getHeaderFields();
 $pm = isset($field->pagemenu) ? $field->pagemenu->renderHTML() : '';
 $result = $field->getResult();
+
+die('AAAA');
+var_dump($field);
 ?>
+
 <div class="gdt-table"<?=$field->htmlID()?>>
 	<?php
 	if (!$form) : ?>
@@ -18,8 +22,12 @@ $result = $field->getResult();
 		#GDT_Form::htmlHiddenMoMe()?>
 		<?php
 		endif; ?>
-		<?php
-		if ($field->hasTitle()) : ?>
+        <?php if ($field->searched) : ?>
+            aaa
+            <?=GDT_SearchField::make('s')->renderForm()?>
+        <?php endif; ?>
+
+        <?php if ($field->hasTitle()) : ?>
             <div class="gdo-table-caption">
                 <h3><?=$field->renderTitle()?></h3>
             </div>

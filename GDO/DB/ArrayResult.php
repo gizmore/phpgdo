@@ -107,6 +107,8 @@ final class ArrayResult extends Result
 	{
 		foreach ($filters as $gdt)
 		{
+            /** @var GDT $gdt */
+
 			if ($gdt->isFilterable())
 			{
 				$flt = $gdt->filterVar($f);
