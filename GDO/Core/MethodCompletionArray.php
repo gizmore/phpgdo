@@ -19,15 +19,9 @@ abstract class MethodCompletionArray extends MethodCompletion
     {
         $items = $this->getItems();
         $result = new ArrayResult($items, $this->gdoTable());
-        $f = GDT_Filter::make();
-        $result->filterResult($items, $this->getHeaders(), $f);
-        foreach ($items as $gdo)
-        {
-            foreach ($this->getHeaders() as $gdt)
-            {
-
-            }
-        }
+        $result = $result->searchResult($result->getData(), $this->gdoTable(), $this->getHeaders(), $this->getSearchTerm());
+        $json = $this->itemsToJSON($result->getData());
+        return GDT_Array::make()->value($json);
     }
 
 
