@@ -25,6 +25,7 @@ trait WithText
 	public ?array $textArgs;
 	public bool $textEscaped = false;
 
+    public bool $textNone = false;
 
 	public static function makeTexted(string $key, array $args = null): static
 	{
@@ -38,10 +39,12 @@ trait WithText
 		if (!$key)
 		{
 			unset($this->textKey);
+            $this->textNone = true;
 		}
 		else
 		{
 			$this->textKey = $key;
+            $this->textNone = false;
 		}
 		$this->textArgs = $args;
 		return $this->textEscaped($escaped);
@@ -73,6 +76,7 @@ trait WithText
 		}
 		unset($this->textKey);
 		unset($this->textArgs);
+        $this->textNone = false;
 		return $this->textEscaped($esacped);
 	}
 
@@ -81,6 +85,7 @@ trait WithText
 		unset($this->textRaw);
 		unset($this->textKey);
 		unset($this->textArgs);
+        $this->textNone = true;
 		return $this->textUnescaped();
 	}
 

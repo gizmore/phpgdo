@@ -4,7 +4,7 @@
     "ext-xdebug": "*"
   },
   "require": {
-    "php": "8.2",
+    "php": ">=8.3",
     "ext-bcmath": "*",
     "ext-fileinfo": "*",
     "ext-intl": "*",

@@ -17,7 +17,7 @@ use GDO\UI\GDT_Link;
 			if ($field->hasText()) : ?>
 				<?=$field->renderText()?>
 			<?php
-			else : ?>
+			elseif (!$field->textNone) : ?>
 				<?=html($field->href)?>
 			<?php
 			endif; ?>
