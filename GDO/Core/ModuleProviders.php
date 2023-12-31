@@ -260,7 +260,7 @@ final class ModuleProviders
 'News' => ['Comments', 'Category', 'Mail'],
 'OnlineUsers' => [],
 'OpenTimes' => [],
-'Payment' => ['Address', 'TCPDF', 'Mail'],
+'Payment' => ['Account', 'Address', 'TCPDF', 'Mail'],
 'PaymentBank' => ['Payment'],
 'PaymentCredits' => ['Payment'],
 'PaymentPaypal' => ['Payment'],

@@ -14,7 +14,6 @@ return [
 	'cfg_acl_permissions' => 'Visibility via Permissions?',
 	'cfg_acl_relations' => 'Visibility via Relations?',
 
-	'enum_none' => 'not specified',
 	'enum_male' => 'male',
 	'enum_female' => 'female',
 
@@ -25,8 +24,6 @@ return [
 	'profile_level' => 'This %s has a user level of %s.',
 
 	'link_your_profile' => '[%s]',
-
-	'tt_password' => 'Your password should be at least 9 chars and not be included in dictionaries.',
 
 	'lvlpopup_item_level' => 'Access level: %s',
 	'lvlpopup_your_level' => 'Your level: %s',

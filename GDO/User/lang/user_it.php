@@ -14,7 +14,6 @@ return [
 	'cfg_acl_permissions' => 'Visibilità tramite autorizzazioni?',
 	'cfg_acl_relations' => 'Visibilità tramite Relazioni?',
 
-	'enum_none' => 'Nessuna indicazione',
 	'enum_male' => 'Maschile',
 	'enum_female' => 'Femminile',
 
@@ -25,8 +24,6 @@ return [
 	'profile_level' => 'Questo utente è un %s con livello %s.',
 
 	'link_your_profile' => '[%s]',
-
-	'tt_password' => 'Il password dovrebbe avere minimo 9 caratteri e non essere presente in liste di parole.',
 
 	'lvlpopup_item_level' => 'Livello necessitato: %s',
 	'lvlpopup_your_level' => 'Il suo livello é: %s',

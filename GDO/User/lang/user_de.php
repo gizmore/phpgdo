@@ -14,7 +14,6 @@ return [
 	'cfg_acl_permissions' => 'Sichtbarkeit über Berechtigungen?',
 	'cfg_acl_relations' => 'Sichtbarkeit über Beziehungen?',
 
-	'enum_none' => 'keine Angabe',
 	'enum_male' => 'Männlich',
 	'enum_female' => 'Weiblich',
 
@@ -25,8 +24,6 @@ return [
 	'profile_level' => 'Dieser Nutzer ist ein %s mit Level %s.',
 
 	'link_your_profile' => '[%s]',
-
-	'tt_password' => 'Ihr password sollte mindestens 9 Zeichen enthalten und nicht in Wortlisten auftauchen.',
 
 	'lvlpopup_item_level' => 'Benötigter Level: %s',
 	'lvlpopup_your_level' => 'Ihr level: %s',

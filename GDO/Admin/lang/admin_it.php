@@ -7,8 +7,6 @@ return [
 ################################################################
 	'btn_admin' => 'Administratore',
 	'btn_phpinfo' => 'Info PHP',
-	'btn_clearcache' => 'Svuota Cache',
-	'btn_modules' => 'Moduli',
 	'btn_users' => 'Utente',
 	'btn_permissions' => 'Permessi',
 	'btn_cronjob' => 'Servizi di sottofondo',

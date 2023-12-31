@@ -68,7 +68,6 @@ return [
 	'err_string_length' => 'This text has to be between %s and %s chars in length.',
 	'err_unknown_order_column' => 'This column is unknown and cannot be sorted by: `%s`.',
 	'err_no_data_yet' => 'There is no data for this item yet.',
-	'err_pass_too_short' => 'Your password has to be at least %s characters long.',
 	'err_members_only' => 'You need to <a href="%s">authenticate</a> to do this.',
 	'err_only_member_access' => 'Only Members are allowed to access this.',
 	'err_only_friend_access' => 'Only their friends are allowed to access this.',
@@ -344,7 +343,6 @@ The %2$s System',
 
 	'confirm_delete' => 'Do you really want to delete this?',
 
-	'md_switch_language' => 'Switch language',
 	'gdt_redirect_to' => 'Redirecting to %s...',
 
 	'unknown_permission' => 'This permission is unknown',
@@ -355,7 +353,6 @@ The %2$s System',
 	'mt_crud_create' => 'New %s',
 	'mt_crud_update' => 'Edit %s',
 
-	'cronjob_method' => 'Cronjob Method',
 	'method' => 'Method',
 
 	'msg_installed_modules' => 'Installed modules: %s.',
