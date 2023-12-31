@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
 use GDO\Util\Arrays;
 
@@ -127,10 +128,10 @@ class GDT_ObjectSelect extends GDT_Select
 	### Value ###
 	#############
 
-	public function renderFilter(GDT_Filter $f): string
-	{
-		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
-	}
+//	public function renderFilter(GDT_Filter $f): string
+//	{
+//		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
+//	}
 
 	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
@@ -260,5 +261,10 @@ class GDT_ObjectSelect extends GDT_Select
 		}
 		return $selected;
 	}
+
+    public function filterQuery(Query $query, GDT_Filter $f): static
+    {
+        return parent::filterQuery($query, $f);
+    }
 
 }

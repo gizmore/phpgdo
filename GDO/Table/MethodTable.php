@@ -251,6 +251,7 @@ abstract class MethodTable extends MethodForm
 		$this->table->gdo($this->gdoTable());
 		$this->table->fetchAs($this->gdoFetchAs());
 		$this->gdoParameterCache();
+        $this->onCreateTable($this->table);
 		return $this->table;
 	}
 

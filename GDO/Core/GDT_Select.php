@@ -566,4 +566,11 @@ class GDT_Select extends GDT_ComboBox
 		return implode('|', $back);
 	}
 
+    public function filterSelected(GDT_Filter $f, string $var)
+    {
+        $flts = $f->getInputFor($f->getName());
+        $fvar = $flts ? $flts[$this->getName()] : null;
+        return $fvar === $var ? self::SELECTED : GDT::EMPTY_STRING;
+    }
+
 }

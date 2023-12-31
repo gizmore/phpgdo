@@ -166,8 +166,9 @@ final class Trans
 	/**
 	 * Translate key into a language.
 	 */
-	public static function tiso(string $iso, string $key, array $args = null): string|array
+	public static function tiso(?string $iso, string $key, array $args = null): string|array
 	{
+        $iso = $iso ?: self::$ISO;
 		$cache = self::load($iso);
 		if (isset($cache[$key]))
 		{

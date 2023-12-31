@@ -11,6 +11,10 @@ $pm = isset($field->pagemenu) ? $field->pagemenu->renderHTML() : '';
 $result = $field->getResult();
 ?>
 
+<?php if ($field->hasText() && $field->isFirstPage()) : ?>
+    <div class="gdo-table-info"><p><?=$field->renderText()?></p></div>
+<?php endif; ?>
+
 <div class="gdt-table"<?=$field->htmlID()?>>
 	<?php
 	if (!$form) : ?>
@@ -27,11 +31,6 @@ $result = $field->getResult();
             <div class="gdo-table-caption">
                 <h3><?=$field->renderTitle()?></h3>
             </div>
-		<?php
-		endif; ?>
-		<?php
-		if ($field->hasText() && $field->isFirstPage()) : ?>
-            <div class="gdo-table-info"><p><?=$field->renderText()?></p></div>
 		<?php
 		endif; ?>
         <table>

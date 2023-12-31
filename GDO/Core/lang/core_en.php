@@ -169,7 +169,8 @@ return [
 	'unknown_user' => 'Unknown User',
 
 	# GDTs
-	'expires' => 'Expires At',
+    'all' => 'All',
+    'expires' => 'Expires At',
 	'website_content' => 'Website Content',
 	'exception' => 'Exception',
 	'reason' => 'Reason',
