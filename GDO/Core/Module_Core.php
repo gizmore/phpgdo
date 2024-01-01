@@ -127,7 +127,7 @@ final class Module_Core extends GDO_Module
 		];
 	}
 
-	public function onInitSidebar(): void
+    public function onInitSidebar(): void
 	{
 		$page = GDT_Page::instance();
 		$bar = $page->bottomBar();

@@ -3,6 +3,8 @@ namespace GDO\UI;
 
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Checkbox;
+use GDO\Core\GDT_String;
+use GDO\Core\GDT_UInt;
 use GDO\User\GDO_User;
 
 /**
@@ -40,8 +42,9 @@ final class Module_UI extends GDO_Module
 	public function getConfig(): array
 	{
 		return [
-			GDT_Checkbox::make('allow_editor_choice')->initial('1'),
-			GDT_MessageEditor::make('default_editor')->initial('Text'),
+            GDT_Checkbox::make('allow_editor_choice')->notNull()->initial('1'),
+            GDT_Checkbox::make('store_device_info')->notNull()->initial('0'),
+			GDT_MessageEditor::make('default_editor')->notNull()->initial('Text'),
 		];
 	}
 
@@ -60,11 +63,36 @@ final class Module_UI extends GDO_Module
 		return $this->getConfigValue('allow_editor_choice');
 	}
 
+    public function cfgStoreDeviceInfo(): bool
+    {
+        return $this->getConfigValue('store_device_info');
+    }
+
 	################
 	### Settings ###
 	################
 
-	public function cfgDefaultEditor(): string
+    public function getUserConfig(): array
+    {
+        return [
+            GDT_UInt::make('device_width'),
+            GDT_UInt::make('device_height'),
+            GDT_String::make('device_version'),
+        ];
+    }
+
+    public function getPrivacyRelatedFields(): array
+    {
+        return [
+            GDT_Divider::make('privacy_info_ui_module'),
+            $this->setting('device_width'),
+            $this->setting('device_height'),
+            $this->setting('device_version'),
+        ];
+    }
+
+
+    public function cfgDefaultEditor(): string
 	{
 		$editor = $this->getConfigVar('default_editor');
 		return $editor ? $editor : GDT_Message::$EDITOR_NAME;
