@@ -110,6 +110,20 @@ final class Module_UI extends GDO_Module
 		$user = GDO_User::current();
 		$decoder = $user->settingVar('UI', 'text_editor');
 		GDT_Message::setDecoder($decoder);
+        $this->saveUserAgent();
 	}
+
+    private function saveUserAgent()
+    {
+        $user = GDO_User::current();
+        if ($newUserAgent = @$_SERVER['HTTP_USER_AGENT'])
+        {
+            $oldUserAgent = $user->settingVar('UI', 'device_version');
+            if ($newUserAgent !== $oldUserAgent)
+            {
+                $user->saveSettingVar('UI', 'device_version', $newUserAgent);
+            }
+        }
+    }
 
 }
