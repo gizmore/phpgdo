@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDT;
 use GDO\Core\Module_Core;
 use GDO\Mail\Mail;
 use GDO\Net\GDT_Url;
@@ -50,6 +51,12 @@ final class FileNotFound extends MethodPage
 			GDT_Url::make('url')->notNull()->allowInternal(),
 		];
 	}
+
+    public function execute(): GDT
+    {
+        hdrc('HTTP/1.1 404 File not found');
+        return parent::execute();
+    }
 
 	############
 	### Mail ###

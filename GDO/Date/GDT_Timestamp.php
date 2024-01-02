@@ -172,7 +172,7 @@ class GDT_Timestamp extends GDT_DBField
 		return GDT::EMPTY_STRING;
 	}
 
-	public function inputToVar(array|string|null|GDT_Method $input): ?string
+	public function inputToVar(array|int|string|null|GDT_Method $input): ?string
 	{
 		if ($input === null)
 		{

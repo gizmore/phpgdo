@@ -43,7 +43,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
 		return false;
 	}
 
-	public function inputToVar(array|string|null|GDT_Method $input): ?string
+	public function inputToVar(array|int|string|null|GDT_Method $input): ?string
 	{
 		if ($input !== null)
 		{

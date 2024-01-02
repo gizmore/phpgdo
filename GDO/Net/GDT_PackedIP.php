@@ -35,7 +35,7 @@ final class GDT_PackedIP extends GDT_String
 	### Pack ###
 	############
 
-	public function inputToVar(array|string|null|GDT_Method $input): string
+	public function inputToVar(array|int|string|null|GDT_Method $input): string
 	{
 		return self::ip2packed($input);
 	}

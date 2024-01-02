@@ -43,7 +43,7 @@ final class Module_UI extends GDO_Module
 	{
 		return [
             GDT_Checkbox::make('allow_editor_choice')->notNull()->initial('1'),
-            GDT_Checkbox::make('store_device_info')->notNull()->initial('0'),
+            GDT_Checkbox::make('store_device_info')->notNull()->initial('1'),
 			GDT_MessageEditor::make('default_editor')->notNull()->initial('Text'),
 		];
 	}
@@ -98,6 +98,14 @@ final class Module_UI extends GDO_Module
 		return $editor ? $editor : GDT_Message::$EDITOR_NAME;
 	}
 
+    public function onIncludeScripts(): void
+    {
+        if ($this->cfgStoreDeviceInfo())
+        {
+            $this->addJS('js/gdo7-ui.js');
+        }
+    }
+
 	##############
 	### Events ###
 	##############
@@ -107,13 +115,18 @@ final class Module_UI extends GDO_Module
 	 */
 	public function hookBeforeExecute(): void
 	{
-		$user = GDO_User::current();
-		$decoder = $user->settingVar('UI', 'text_editor');
-		GDT_Message::setDecoder($decoder);
+        $this->setupEditor();
         $this->saveUserAgent();
 	}
 
-    private function saveUserAgent()
+    private function setupEditor(): void
+    {
+        $user = GDO_User::current();
+        $decoder = $user->settingVar('UI', 'text_editor');
+        GDT_Message::setDecoder($decoder);
+    }
+
+    private function saveUserAgent(): void
     {
         $user = GDO_User::current();
         if ($newUserAgent = @$_SERVER['HTTP_USER_AGENT'])

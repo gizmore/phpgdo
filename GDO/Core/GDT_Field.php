@@ -99,7 +99,7 @@ abstract class GDT_Field extends GDT
 		return $this->var;
 	}
 
-	public function inputToVar(array|string|null|GDT_Method $input): ?string
+	public function inputToVar(array|int|string|null|GDT_Method $input): ?string
 	{
 		if (is_string($input))
 		{

@@ -97,7 +97,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this;
 	}
 
-	public function inputToVar(array|string|null|GDT_Method $input): ?string
+	public function inputToVar(array|int|string|null|GDT_Method $input): ?string
 	{
 		return parent::inputToVar($input === $this->emptyVar ? null : $input);
 	}
