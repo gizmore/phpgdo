@@ -2,7 +2,7 @@
 namespace GDO\Table\tpl;
 
 use GDO\Core\GDT;
-use GDO\Table\GDT_Table;use GDO\UI\GDT_SearchField;
+use GDO\Table\GDT_Table;use GDO\UI\GDT_Panel;use GDO\UI\GDT_SearchField;
 
 /** @var $field GDT_Table * */
 /** @var $form bool * */
@@ -11,18 +11,17 @@ $pm = isset($field->pagemenu) ? $field->pagemenu->renderHTML() : '';
 $result = $field->getResult();
 ?>
 
-<?php if ($field->hasText() && $field->isFirstPage()) : ?>
-    <div class="gdo-table-info"><p><?=$field->renderText()?></p></div>
-<?php endif; ?>
+<?php
+if ($field->hasText() && $field->isFirstPage()) :
+echo GDT_Panel::make()->textRaw($field->renderText())->render();
+endif;
+?>
 
 <div class="gdt-table"<?=$field->htmlID()?>>
 	<?php
-	if (!$form) : ?>
+if (!$form) : ?>
     <form method="post"<?=$field->htmlAction()?>>
-		<?
-		#GDT_Form::htmlHiddenMoMe()?>
-		<?php
-		endif; ?>
+<?php endif; ?>
         <?php if ($field->searched) : ?>
             <?=GDT_SearchField::make("search_{$field->getName()}")->renderForm()?>
         <?php endif; ?>
