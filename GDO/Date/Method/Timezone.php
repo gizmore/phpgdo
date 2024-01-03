@@ -29,7 +29,7 @@ final class Timezone extends MethodForm
 
 	public function isUserRequired(): bool { return false; }
 
-	public function getFormName(): string { return 'tzform'; }
+	public function getFormName(): string { return 'form_tzform'; }
 
 	public function getMethodTitle(): string
 	{

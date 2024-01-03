@@ -7,6 +7,7 @@ use GDO\DB\Cache;
 use GDO\DB\Database;
 use GDO\DB\Query;
 use GDO\Language\Trans;
+use GDO\Net\GDT_Url;
 use GDO\Table\GDT_Sort;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Divider;
@@ -474,6 +475,11 @@ class GDO_Module extends GDO
 	{
 		return $webRoot . "GDO/{$this->getName()}/{$path}";
 	}
+
+    public function wwwURL(string $path, string $webRoot = GDO_WEB_ROOT): string
+    {
+        return GDT_Url::absolute($this->wwwPath($path, $webRoot));
+    }
 
 	public function addConfigVarForCache(string $key, ?string $var): void
 	{
