@@ -279,6 +279,9 @@ catch (Throwable $ex)
 ##############
 ### Finish ###
 ##############
+# Render the response.
+$content = $result->render();
+
 # Commit session changes before net transfer...
 if (isset($session) && $session)
 {
@@ -287,8 +290,6 @@ if (isset($session) && $session)
 		GDO_Session::commit(); # setting headers sometimes
 	}
 }
-# Render the response.
-$content = $result->render();
 # The last thing we do before any output
 $app->timingHeader(); # :) so every GDO request can be measured quickly.
 ##############.
