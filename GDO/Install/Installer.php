@@ -388,6 +388,7 @@ class Installer
 			$module->onWipe();
 			self::dropModuleClasses($module);
 			$module->delete();
+            GDO_Module::table()->deleteWhere("module_name='{$module->getName()}'");
 			Cache::remove('gdo_modules');
 		}
 		catch (GDO_DBException $ex)

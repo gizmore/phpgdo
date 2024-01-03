@@ -31,6 +31,7 @@ use GDO\Install\Method\Webserver;
 use GDO\Install\Module_Install;
 use GDO\Language\Trans;
 use GDO\UI\GDT_Error;
+use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Success;
 use GDO\User\GDO_Permission;
 use GDO\User\GDO_User;
@@ -765,7 +766,7 @@ elseif ($command === 'wipe')
 	$response = Install::make()->executeWithInputs([
 		'module' => $module->getName(),
 		'uninstall' => '1',
-	]);
+	], false);
 
 	if (Application::isError())
 	{
@@ -1288,5 +1289,5 @@ else
 	printUsage();
 }
 
-echo \GDO\UI\GDT_Page::instance()->topResponse()->renderCLI();
+echo GDT_Page::instance()->topResponse()->renderCLI();
 Cache::flush();

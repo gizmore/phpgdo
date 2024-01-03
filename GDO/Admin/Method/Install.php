@@ -47,6 +47,7 @@ class Install extends MethodForm
 		return [
 			# Also modules that are not installed are allowed
 			GDT_Module::make('module')->installed()->uninstalled()->notNull(),
+            GDT_Submit::make('uninstall'),
 		];
 	}
 
