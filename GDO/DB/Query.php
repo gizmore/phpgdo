@@ -152,6 +152,7 @@ final class Query
 			$clone->write = $this->write;
 			$clone->cached = $this->cached;
 		}
+        $clone->debug = $this->debug;
 		return $clone;
 	}
 

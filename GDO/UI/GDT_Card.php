@@ -64,7 +64,7 @@ class GDT_Card extends GDT
 	### Footer ###
 	##############
 
-	public function image($image): self
+	public function image(GDT $image): self
 	{
 		$this->image = $image;
 		return $this;

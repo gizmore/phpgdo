@@ -197,6 +197,11 @@ class GDT_Int extends GDT_DBField
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
 
+    public function renderCard(): string
+    {
+        return $this->renderLabel() . $this->renderHTML();
+    }
+
 	public function renderJSON(): array|string|null|int|bool|float
 	{
 		return $this->getVar();
@@ -245,18 +250,10 @@ class GDT_Int extends GDT_DBField
             if (isset($flt[$name]))
             {
                 return Arrays::empty($flt[$name]) ? null : self::intFilterVar($flt[$name]);
-//                $fv = trim($flt[$name]);
-//                return $fv === '' ? null : $fv;
             }
         }
         return null;
     }
-
-//    public function filterVar(GDT_Filter $f): null|string|array
-//	{
-////		$fv = parent::filterVar($f);
-//		return Arrays::empty($fv) ? null : self::intFilterVar($fv);
-//	}
 
 	private function intFilterVar(array $fv): array
 	{
