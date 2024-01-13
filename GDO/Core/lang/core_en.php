@@ -63,7 +63,7 @@ return [
 	'forbidden' => 'Forbidden!',
 	'err_forbidden' => 'You are not allowed to access this.',
 	'err_unknown_field' => 'The field `%s` in this form is either unknown or not writeable.',
-	'err_user_required' => 'You need to signup to continue. You can also <a href="%s">continue as guest</a>',
+	'err_user_required' => 'You need to <a href="%s">signup</a> to continue. You can also <a href="%s">continue as guest</a>',
 	'err_select_candidates' => 'There are multiple matches: `%s`.',
 	'err_string_length' => 'This text has to be between %s and %s chars in length.',
 	'err_unknown_order_column' => 'This column is unknown and cannot be sorted by: `%s`.',

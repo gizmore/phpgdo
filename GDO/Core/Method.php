@@ -412,9 +412,10 @@ abstract class Method
 		{
 			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
 			{
-				$hrefGuest = href('Register', 'Guest', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+                $hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+                $hrefGuest = href('Register', 'Guest', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
 				$error = 'err_user_required';
-				$args = [$hrefGuest];
+				$args = [$hrefAuth, $hrefGuest];
 			}
 			else
 			{
