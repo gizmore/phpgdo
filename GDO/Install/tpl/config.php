@@ -25,7 +25,7 @@ $ep = ini_get('error_reporting');
 $ep = $ep ?? 'E_ALL';
 $de = ini_get('display_errors');
 $de = $de ? 'On' : 'Off'; ?>
-    error_reporting(E_ALL); # Should be not less than E_All & ~E_DEPRECATED & ~E_STRICT.
+    error_reporting(E_ALL&~E_DEPRECATED); # Should be not less than E_All & ~E_DEPRECATED & ~E_STRICT.
     ini_set('display_errors', 'On'); # Should be enabled / does not matter because of \GDO\Core\Debug.
 
     /**

@@ -176,7 +176,9 @@ final class Numeric
 
     public static function floatsEqual(float $a, float $b, int $digits): bool
     {
-        return abs($a - $b) < (10 ^ -$digits);
+        $abs = abs($a - $b);
+        $min = pow(10, -$digits);
+        return $abs < $min;
     }
 
 }

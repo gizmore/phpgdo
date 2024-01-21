@@ -43,7 +43,7 @@ class GDO_Exception extends Exception
 	}
 
 
-	public static function raw(string $message, int $code = self::GDO_ERROR_CODE, Throwable $previous): static
+	public static function raw(string $message, int $code = self::GDO_ERROR_CODE, Throwable $previous = null): static
 	{
 		return new static('%s', [$message], $code, $previous);
 	}
