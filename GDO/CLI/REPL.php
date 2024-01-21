@@ -69,9 +69,9 @@ final class REPL
 		}
 	}
 
-	public static function acknowledge(string $prompt, ?bool $default = null): bool
+	public static function acknowledge(string $prompt, ?bool $default = null, bool $allowNull=false): bool
 	{
-		return self::confirm($prompt, $default, false);
+		return self::confirm($prompt, $default, $allowNull);
 	}
 
 	public static function changedGDTVar(GDT $gdt, string $prompt = ''): bool

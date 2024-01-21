@@ -162,7 +162,7 @@ final class Numeric
 	 *
 	 * @return int
 	 */
-	public static function digitSum($n)
+	public static function digitSum(string $n): int
 	{
 		$sum = 0;
 		$n = (string)$n;
@@ -173,5 +173,10 @@ final class Numeric
 		}
 		return $sum;
 	}
+
+    public static function floatsEqual(float $a, float $b, int $digits): bool
+    {
+        return abs($a - $b) < (10 ^ -$digits);
+    }
 
 }
