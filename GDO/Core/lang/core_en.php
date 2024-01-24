@@ -418,4 +418,7 @@ The %2$s System',
 	'cfg_default_editor' => 'Default Editor',
 	'cfg_fav_color' => 'Favorite Color',
 	'section' => 'Section',
+    'member' => 'Member',
+    'staff' => 'Staff Member',
+    'administrator' => 'Administrator',
 ];

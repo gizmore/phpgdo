@@ -1118,7 +1118,7 @@ elseif ($command === 'secure')
 elseif ($command === 'update')
 {
 	system('php gdo_adm.php -qc provide');
-	$loader->loadModules(true, true, true);
+	$loader->loadModules(true, false, true);
 	$modules = ModuleLoader::instance()->getModules();
 	foreach ($modules as $module)
 	{

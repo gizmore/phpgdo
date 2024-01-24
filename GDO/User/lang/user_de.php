@@ -61,11 +61,11 @@ return [
 	'lbl_own_acl_relation' => '%s Usertype',
 	'lbl_own_acl_permission' => '%s Permission',
 
-	'err_only_user_access' => 'Only users can see this',
+	'err_only_user_access' => 'Nur Mitglieder können das sehen.',
 	'err_only_friend_friend_access' => 'Sie müssen zumindest Freundesfreund sein um dies zu sehen.',
-	'err_only_level_access' => 'You need level %s to see this.',
+	'err_only_level_access' => 'Sie benötigen einen Benutzerlevel von %s um dies zu sehen.',
 
 	'link_account' => 'Your account',
-	'p_info_own_profile' => 'This is your own Profile. You can edit it here: %s',
+	'p_info_own_profile' => 'Dies ist ihr eigenes Profil. Sie können es hier editieren: %s.',
 	'relation_for' => 'Sichtbarkeit für `%s`',
 ];
