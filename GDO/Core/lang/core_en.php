@@ -421,4 +421,7 @@ The %2$s System',
     'member' => 'Member',
     'staff' => 'Staff Member',
     'administrator' => 'Administrator',
+    'device_width' => 'Device Width',
+    'device_height' => 'Device Height',
+    'device_version' => 'Device Version',
 ];

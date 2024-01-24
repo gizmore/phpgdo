@@ -197,10 +197,10 @@ class GDT_Int extends GDT_DBField
 		return GDT_Float::displayS($this->getVar(), 0);
 	}
 
-    public function renderCard(): string
-    {
-        return $this->renderLabel() . $this->renderHTML();
-    }
+//    public function renderCard(): string
+//    {
+//        return $this->renderLabel() . $this->renderHTML();
+//    }
 
 	public function renderJSON(): array|string|null|int|bool|float
 	{
