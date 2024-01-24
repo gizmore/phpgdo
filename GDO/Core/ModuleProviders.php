@@ -237,7 +237,7 @@ final class ModuleProviders
 'Install' => [],
 'Invite' => [],
 'IP2Country' => ['Country'],
-'ITMB' => ['Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'FontAtkinson', 'Markdown', 'Mibbit', 'News', 'Perf', 'PM', 'Register', 'Recovery'],
+'ITMB' => ['Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'FontAtkinson', 'Markdown', 'Mibbit', 'News', 'Perf', 'PM', 'Recovery'],
 'Javascript' => [],
 'JPGraph' => [],
 'JQuery' => [],

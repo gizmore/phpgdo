@@ -290,7 +290,7 @@ trait WithFields
 	### Iterate recursively ###
 	###########################
 
-	protected function renderFieldsB(int $renderMode): string
+	public function renderFieldsB(int $renderMode): string
 	{
 		$app = Application::$INSTANCE;
 		$rendered = '';

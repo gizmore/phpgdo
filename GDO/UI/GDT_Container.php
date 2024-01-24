@@ -44,7 +44,7 @@ class GDT_Container extends GDT
 	 */
 	protected function setupHTML(): void
 	{
-		$this->addClass('gdt-container');
+		$this->addClass('gdt-container container-fluid');
 		if ($this->flex)
 		{
 			$this->addClass("flx {$this->flexClass()}");
@@ -90,7 +90,7 @@ class GDT_Container extends GDT
 	 */
 	public function addText(string $key, array $args = null): static
 	{
-		$text = GDT_Label::make()->label($key, $args);
+		$text = GDT_Paragraph::make()->text($key, $args);
 		return $this->addField($text);
 	}
 

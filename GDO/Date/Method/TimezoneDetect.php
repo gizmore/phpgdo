@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Date\Method;
 
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Date\GDO_Timezone;
@@ -18,7 +19,7 @@ use GDO\Form\MethodForm;
 final class TimezoneDetect extends MethodForm
 {
 
-	public function formName() { return 'tzform'; }
+	public function getFormName(): string { return 'tzform'; }
 
 	public function isUserRequired(): bool { return false; }
 
@@ -44,23 +45,26 @@ final class TimezoneDetect extends MethodForm
 		$form->actions()->addField(GDT_Submit::make()->label('btn_set'));
 	}
 
-	public function formValidated(GDT_Form $form): GDT
+    /**
+     * @throws GDO_ArgError
+     */
+    public function formValidated(GDT_Form $form): GDT
 	{
+        $timezone = $this->gdoParameterValue('timezone');
 		$inputs = [
-			'timezone' => $this->gdoParameterValue('timezone')->getID(),
+			'timezone' => $timezone->getID(),
 			'submit' => '1',
 		];
-		$set = Timezone::make()->inputs($inputs);
-		return $set->executeWithInit();
+		return Timezone::make()->executeWithInputs($inputs);
 	}
 
-	public function validateTimezoneName(GDT_Form $form, GDT_String $string, $value)
-	{
-		if (!($this->tz = GDO_Timezone::getBy('tz_name', $value->getName())))
-		{
-			return $string->error('err_unknown_timezone');
-		}
-		return true;
-	}
+//	public function validateTimezoneName(GDT_Form $form, GDT_String $string, $value)
+//	{
+//		if (!($this->tz = GDO_Timezone::getBy('tz_name', $value->getName())))
+//		{
+//			return $string->error('err_unknown_timezone');
+//		}
+//		return true;
+//	}
 
 }
