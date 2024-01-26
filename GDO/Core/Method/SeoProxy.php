@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\Application;
+use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
@@ -32,13 +33,14 @@ final class SeoProxy extends Method
 		return $method->exec();
 	}
 
-	/**
-	 * Create a method with parameters from a GDOv7 SEO URL.
-	 */
+    /**
+     * Create a method with parameters from a GDOv7 SEO URL.
+     * @throws GDO_Exception
+     */
 	public static function makeProxied(string $url): Method
 	{
 		$loader = ModuleLoader::instance();
-		$args = explode('/', trim($url, '/ '));
+		$args = explode('_', trim($url, '/ -_'));
 
 		# Module
 		$mo = array_shift($args);
@@ -83,7 +85,7 @@ final class SeoProxy extends Method
 		}
 
 		# Remove filetype suffix from last parameter.
-		if ($i)
+		if ($i && $key)
 		{
 			$_REQUEST[$key] = Strings::rsubstrTo($_REQUEST[$key], '.', $_REQUEST[$key]);
 		}

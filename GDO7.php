@@ -79,7 +79,7 @@ function sitename(): string
 
 function profile_link(string $username): string
 {
-    return $username;
+    return \GDO\User\GDT_ProfileLink::make()->username($username)->render();
 }
 
 function url(string $module, string $method, string $append = '', bool $lang = true): string
@@ -118,7 +118,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 
 	if ($seo)
 	{
-		$href = GDO_WEB_ROOT . "{$module}/{$method}";
+		$href = GDO_WEB_ROOT . "{$module}_{$method}_";
 		$q = [];
 		$hash = '';
 		$fmt = 'html';
@@ -142,17 +142,18 @@ function href(string $module, string $method, string $append = null, bool $seo =
 						$kv = explode('=', $part);
 						$k = $kv[0];
 						$v = seo($kv[1]);
-						$href .= "/{$k}/{$v}";
+						$href .= "{$k}_{$v}_";
 					}
 					else
 					{
 						$q[] = $part;
 					}
 				}
-			}
-		}
+            }
+        }
 
-		$href .= ".{$fmt}";
+        $href = trim($href, '_');
+        $href .= ".{$fmt}";
 
 		if ($q)
 		{
@@ -205,7 +206,7 @@ function hrefNoSeo(string $module, string $method, string $append = null): strin
 
 function seo(string $str): string
 {
-	return trim(preg_replace('#[^\\-{}.\\p{L}0-9]#', '_', $str), '_');
+	return trim(preg_replace('#[^{}\\-.\\p{L}0-9]#', '-', $str), '_-');
 }
 
 function quote($value): string
@@ -350,7 +351,8 @@ function uridecode(string $url = null): string
 
 function uriencode(string $url = null): string
 {
-	return $url ? urlencode($url) : GDT::EMPTY_STRING;
+
+	return $url ? str_replace('_', '-', urlencode($url)) : GDT::EMPTY_STRING;
 }
 
 /**

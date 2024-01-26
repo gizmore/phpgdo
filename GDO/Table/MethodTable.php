@@ -73,12 +73,16 @@ abstract class MethodTable extends MethodForm
 	 */
 	public function &gdoParameterCache(): array
 	{
-		if (!isset($this->parameterCache))
-		{
-			parent::gdoParameterCache();
-			$this->addComposeParameters($this->gdoTableFeatures());
-		}
-		return $this->parameterCache;
+        if (!isset($this->parameterCache))
+        {
+            $this->parameterCache = [];
+            $this->addComposeParameters($this->gdoParameters());
+            $this->addComposeParameters($this->gdoTableFeatures());
+            $form = $this->getForm(true);
+            $this->addComposeParameters($form->getAllFields());
+            $this->addComposeParameters($form->actions()->getAllFields());
+        }
+        return $this->parameterCache;
 	}
 
 	/**
@@ -319,7 +323,8 @@ abstract class MethodTable extends MethodForm
 
 	public function getIPP(): int
 	{
-		return $this->gdoParameterValue($this->getIPPName());
+        $name = $this->getIPPName();
+		return $this->gdoParameterValue($name);
 	}
 
 	public function getPage(): int

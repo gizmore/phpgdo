@@ -2,6 +2,7 @@
 namespace GDO\User;
 
 use GDO\Core\GDO;
+use GDO\Core\GDO_DBException;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithGDO;
 use GDO\UI\GDT_Link;
@@ -77,7 +78,15 @@ final class GDT_ProfileLink extends GDT_Link
 		return $this;
 	}
 
-	##############
+    /**
+     * @throws GDO_DBException
+     */
+    public function username(string $username): self
+    {
+        return $this->gdo(GDO_User::getByName($username));
+    }
+
+    ##############
 	### Render ###
 	##############
 	public function renderHTML(): string

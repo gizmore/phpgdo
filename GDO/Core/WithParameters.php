@@ -157,7 +157,8 @@ trait WithParameters
 	 */
 	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): mixed
 	{
-		return $this->gdoParameter($key, $validate)?->getValue();
+        $gdt = $this->gdoParameter($key, $validate);
+		return $gdt?->getValue();
 	}
 
 }

@@ -81,6 +81,7 @@ abstract class MethodForm extends Method
 	{
 		if ($reset)
 		{
+//            $this->resetForm();
 			unset($this->form);
 		}
 		if (!isset($this->form))
@@ -90,12 +91,12 @@ abstract class MethodForm extends Method
 			$this->validated = false;
 			$this->pressedButton = null;
 			$this->form = GDT_Form::make($this->getFormName());
-            $this->form->titleRaw($this->getMethodTitle());
             $this->createForm($this->form);
 			$this->form->inputs($inputs);
 			$this->addComposeParameters($this->form->getAllFields());
 			$this->addComposeParameters($this->form->actions()->getAllFields());
 			$this->applyInput();
+            $this->form->titleRaw($this->getMethodTitle());
 		}
 		return $this->form;
 	}

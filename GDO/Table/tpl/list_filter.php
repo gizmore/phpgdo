@@ -44,7 +44,7 @@ if (isset($field->headers))
 		{
 			if ($gdt->isOrderable())
 			{
-				if (!$gdt->hidden)
+				if (!$gdt->isHidden())
 				{
 					$orderable[$gdt->name] = $gdt->renderLabel();
 				}
