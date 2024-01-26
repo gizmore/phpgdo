@@ -40,7 +40,7 @@ final class SeoProxy extends Method
 	public static function makeProxied(string $url): Method
 	{
 		$loader = ModuleLoader::instance();
-		$args = explode('_', trim($url, '/ -_'));
+		$args = explode(GDO_SEO_SEP, trim($url, '/'));
 
 		# Module
 		$mo = array_shift($args);
@@ -85,7 +85,7 @@ final class SeoProxy extends Method
 		}
 
 		# Remove filetype suffix from last parameter.
-		if ($i && $key)
+		if ($i && isset($key))
 		{
 			$_REQUEST[$key] = Strings::rsubstrTo($_REQUEST[$key], '.', $_REQUEST[$key]);
 		}

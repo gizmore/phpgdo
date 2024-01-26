@@ -21,7 +21,9 @@ use GDO\Util\Strings;
  * @since 6.0.0
  * @author gizmore
  */
-define('GDO_PATH', __DIR__ . '/');
+const GDO_PATH = __DIR__ . '/';
+
+const GDO_SEO_SEP = ';';
 #
 ##
 ########################
@@ -113,13 +115,13 @@ function hrefDefault(): string
  */
 function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS): string
 {
-	$module = strtolower($module);
-	$method = strtolower($method);
-
-	if ($seo)
-	{
-		$href = GDO_WEB_ROOT . "{$module}_{$method}_";
-		$q = [];
+    $sep = GDO_SEO_SEP;
+    $module = strtolower($module);
+    $method = strtolower($method);
+    if ($seo)
+    {
+        $href = GDO_WEB_ROOT . "{$module}{$sep}{$method}{$sep}";
+        $q = [];
 		$hash = '';
 		$fmt = 'html';
 		if ($append)
@@ -142,7 +144,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 						$kv = explode('=', $part);
 						$k = $kv[0];
 						$v = seo($kv[1]);
-						$href .= "{$k}_{$v}_";
+						$href .= "{$k}{$sep}{$v}{$sep}";
 					}
 					else
 					{
@@ -152,7 +154,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
             }
         }
 
-        $href = trim($href, '_');
+        $href = rtrim($href, $sep);
         $href .= ".{$fmt}";
 
 		if ($q)
@@ -206,7 +208,7 @@ function hrefNoSeo(string $module, string $method, string $append = null): strin
 
 function seo(string $str): string
 {
-	return trim(preg_replace('#[^{}\\-.\\p{L}0-9]#', '-', $str), '_-');
+	return trim(preg_replace('#[^{}\\-_.,\\p{L}0-9]#', '_', $str), '_');
 }
 
 function quote($value): string
