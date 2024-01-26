@@ -21,20 +21,21 @@ p {
 div.gdt-submit {
     position: relative;
     flex-grow: 0;
+    pointer-events: auto;
 }
-div.gdt-submit span {
-    position: absolute;
-    left: 8px;
-    top: 0px;
-}
+/*div.gdt-submit span {*/
+    /*position: absolute;*/
+    /*left: 8px;*/
+    /*top: 0px;*/
+/*}*/
 div.gdt-submit input {
-    padding-left: 16px;
+    padding-left: 4px;
     background: transparent;
     border: none;
     text-align: left;
 }
 div.gdt-submit:hover {
-    cursor: crosshair!important;
+    cursor: pointer!important;
 }
 .gdt-button a {
     width: 100%;
