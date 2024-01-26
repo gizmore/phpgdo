@@ -77,6 +77,11 @@ function sitename(): string
 	return t('sitename');
 }
 
+function profile_link(string $username): string
+{
+    return $username;
+}
+
 function url(string $module, string $method, string $append = '', bool $lang = true): string
 {
     return GDT_Url::absolute(href($module, $method, $append, $lang));
