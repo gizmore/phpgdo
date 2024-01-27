@@ -211,7 +211,7 @@ final class Arrays
 
     public static function last(array $a): mixed
     {
-        return $a[array_key_last($a)];
+        return self::empty($a) ? null : $a[array_key_last($a)];
     }
 
 }

@@ -28,7 +28,10 @@ final class SeoProxy extends Method
 	 */
 	public function isTrivial(): bool { return false; }
 
-	public function execute(): GDT
+    /**
+     * @throws GDO_Exception
+     */
+    public function execute(): GDT
 	{
 		$method = self::makeProxied($_REQUEST['url']);
 		return $method->exec();
@@ -63,7 +66,7 @@ final class SeoProxy extends Method
         $me = Strings::rsubstrTo($me, '.', $me);
 
         # Remove possible .mode from lat arg
-        $suffix = Strings::rsubstrFrom(Arrays::last($args), '.', 'html');
+        $suffix = Strings::rsubstrFrom( (string)Arrays::last($args), '.', 'html');
         $app = Application::$INSTANCE;
         $app->modeDetected($app->detectRenderMode($suffix));
 
