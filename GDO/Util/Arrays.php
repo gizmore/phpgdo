@@ -209,4 +209,9 @@ final class Arrays
 		return $back;
 	}
 
+    public static function last(array $a): mixed
+    {
+        return $a[array_key_last($a)];
+    }
+
 }

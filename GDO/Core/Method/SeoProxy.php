@@ -7,6 +7,7 @@ use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
+use GDO\Util\Arrays;
 use GDO\Util\Strings;
 
 /**
@@ -58,12 +59,13 @@ final class SeoProxy extends Method
 			return FileNotFound::make();
 		}
 
-		if ($suffix = Strings::rsubstrFrom($me, '.'))
-		{
-			$me = Strings::rsubstrTo($me, '.');
-			$app = Application::$INSTANCE;
-			$app->modeDetected($app->detectRenderMode($suffix));
-		}
+        # Remove possible .mode from method
+        $me = Strings::rsubstrTo($me, '.', $me);
+
+        # Remove possible .mode from lat arg
+        $suffix = Strings::rsubstrFrom(Arrays::last($args), '.', 'html');
+        $app = Application::$INSTANCE;
+        $app->modeDetected($app->detectRenderMode($suffix));
 
 		if (!($method = $module->getMethodByName($me, false)))
 		{
