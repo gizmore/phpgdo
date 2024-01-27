@@ -400,7 +400,7 @@ final class Debug
 		$app = Application::$INSTANCE;
 		if ($app->isWebserver())
 		{
-			return html($message);
+			return $message;
 		}
 		if ($app->isJSON())
 		{
