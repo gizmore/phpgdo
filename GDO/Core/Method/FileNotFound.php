@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Core\Method;
 
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
 use GDO\Core\Module_Core;
 use GDO\Mail\Mail;
@@ -61,43 +62,51 @@ final class FileNotFound extends MethodPage
 	############
 	### Mail ###
 	############
-	public function beforeExecute(): void
+    /**
+     * @throws GDO_ArgError
+     */
+    public function beforeExecute(): void
 	{
 		if (Module_Core::instance()->cfgMail404())
 		{
 			if (module_enabled('Mail'))
 			{
-				$this->send404Mails();
+				$this->send404Mail(GDO_ERROR_EMAIL);
 			}
 		}
 	}
 
-	private function send404Mails(): void
-	{
-		$url = $this->gdoParameterVar('url');
-		if (!str_ends_with($url, '.map'))
-		{
-			foreach (GDO_User::admins() as $user)
-			{
-				$this->send404Mail($user);
-			}
-		}
-	}
+//	private function send404Mails(): void
+//	{
+//		$url = $this->gdoParameterVar('url');
+//		if (!str_ends_with($url, '.map'))
+//		{
+//
+//			foreach (GDO_User::admins() as $user)
+//			{
+//				$this->send404Mail($user);
+//			}
+//		}
+//	}
 
-	private function send404Mail(GDO_User $user): void
+    /**
+     * @throws GDO_ArgError
+     */
+    private function send404Mail(string $recipient): void
 	{
 		$url = $this->gdoParameterVar('url');
 		$mail = Mail::botMail();
 		$mail->setSubject(t('mail_title_404', [sitename(), html($url)]));
 		$args = [
-			html($user->renderUserName()),
+			t('staff'),
 			sitename(),
 			html($url),
 			GDO_User::current()->renderName(),
 			html(@$_SERVER['HTTP_REFERER']),
 		];
 		$mail->setBody(t('mail_body_404', $args));
-		$mail->sendToUser($user);
+        $mail->setReceiver($recipient);
+		$mail->sendAsText();
 	}
 
 }

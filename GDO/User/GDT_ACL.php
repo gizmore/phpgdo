@@ -162,8 +162,8 @@ final class GDT_ACL extends GDT
 
 	public function setupLabels(GDT $gdt): void
 	{
-		$label = $gdt->renderLabel();
-		$this->aclLevel->label('lbl_acl_level', [$label]);
+        $label = $gdt->renderLabel();
+        $this->aclLevel->label('lbl_acl_level', [$label]);
 		$this->aclRelation->label('lbl_acl_relation', [$label]);
 		$this->aclPermission->label('lbl_acl_permission', [$label]);
 	}

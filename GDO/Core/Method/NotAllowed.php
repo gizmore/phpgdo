@@ -57,33 +57,34 @@ final class NotAllowed extends MethodPage
 		{
 			if (module_enabled('Mail'))
 			{
-				$this->send403Mails();
+				$this->send403Mail(GDO_ERROR_EMAIL);
 			}
 		}
 	}
 
-	private function send403Mails(): void
-	{
-		foreach (GDO_User::admins() as $user)
-		{
-			$this->send403Mail($user);
-		}
-	}
+//	private function send403Mails(): void
+//	{
+//		foreach (GDO_User::admins() as $user)
+//		{
+//			$this->send403Mail($user);
+//		}
+//	}
 
-	private function send403Mail(GDO_User $user): void
+	private function send403Mail(string $recipient): void
 	{
 		$url = $this->gdoParameterVar('url');
 		$mail = Mail::botMail();
 		$mail->setSubject(t('mail_title_403', [
 			sitename(), html($url)]));
 		$tVars = [
-			html($user->renderUserName()),
+			html(t('staff')),
 			sitename(),
 			html($url),
 			GDO_User::current()->renderUserName(),
 		];
 		$mail->setBody(t('mail_body_403', $tVars));
-		$mail->sendToUser($user);
+        $mail->setReceiver($recipient);
+		$mail->sendAsText();
 	}
 
 }

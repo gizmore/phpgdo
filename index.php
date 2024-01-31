@@ -66,7 +66,7 @@ if (file_exists(GDO_PATH . 'GDO/Session/GDO_Session.php'))
     GDO_Session::init(GDO_SESS_NAME, GDO_SESS_DOMAIN, GDO_SESS_TIME, !GDO_SESS_JS, GDO_SESS_HTTPS, GDO_SESS_SAMESITE);
 }
 Database::init();
-Trans::$ISO = GDO_LANGUAGE;
+Trans::setISO(GDO_LANGUAGE);
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
 if (!module_enabled('Core'))

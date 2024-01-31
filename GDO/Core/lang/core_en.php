@@ -426,4 +426,6 @@ The %2$s System',
     'device_version' => 'Device Version',
 
     'toggle_sidebar' => 'Toggle Sidebar',
+    'mt_core_fileserver' => 'Fileserver',
+    'privacy_info_ui_module' => 'User Interface Settings',
 ];

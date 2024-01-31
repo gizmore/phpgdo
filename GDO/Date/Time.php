@@ -429,15 +429,14 @@ final class Time
 
 	public static function displayAgeTS(int|float $timestamp): string
 	{
-		$timestamp = Application::$MICROTIME - $timestamp;
-		return self::humanDuration($timestamp);
+		return self::humanDuration(Application::$MICROTIME - $timestamp);
 	}
 
 	/**
 	 * Return a human readable duration.
 	 * Example: 666 returns 11 minutes 6 seconds.
 	 */
-	public static function humanDuration(float|int|null $seconds, int $nUnits = 2, bool $withMillis = false): string
+	public static function humanDuration(float|int $seconds, int $nUnits = 2, bool $withMillis = false): string
 	{
 		return self::humanDurationISO(Trans::$ISO, $seconds, $nUnits, $withMillis);
 	}
@@ -449,19 +448,19 @@ final class Time
 	public static function humanDurationISO(string $iso, int|float|null $seconds, int $nUnits = 2, bool $withMillis = false): string
 	{
 // 		static $cache = [];
-// 		if (!isset($cache[$iso]))
-// 		{
+ 		if (!isset($cache[$iso]))
+ 		{
 		$cache[$iso] = [
 // 				tiso($iso, 'tu_ms') => 1000,
 			tiso($iso, 'tu_s') => 60,
 			tiso($iso, 'tu_m') => 60,
 			tiso($iso, 'tu_h') => 24,
 			tiso($iso, 'tu_d') => 7,
-			tiso($iso, 'tu_w') => 53,
+			tiso($iso, 'tu_w') => 52.14,
 // 				tiso($iso, 'tu_mo') => 4,
-			tiso($iso, 'tu_y') => 1000000,
+			tiso($iso, 'tu_y') => 9999,
 		];
-// 		}
+ 		}
 		return self::humanDurationRaw($seconds, $nUnits, $cache[$iso], $withMillis);
 	}
 
@@ -479,12 +478,15 @@ final class Time
 		$duration = (int)$seconds;
 		foreach ($units as $text => $mod)
 		{
-			if (0 < ($remainder = $duration % $mod))
-			{
-				$calced[] = $remainder . $text;
-			}
-			$duration = intval($duration / $mod);
-			if ($duration === 0)
+            $duration *= 1000;
+            $mod *= 1000;
+
+            if (0 < ($remainder = ($duration % $mod)/1000.0))
+            {
+                $calced[] = round($remainder) . $text;
+            }
+			$duration /= $mod;
+			if ($duration == 0)
 			{
 				break;
 			}

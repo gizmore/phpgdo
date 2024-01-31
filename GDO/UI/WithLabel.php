@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\Application;
+use GDO\Core\Debug;
 use GDO\Core\GDT;
 use GDO\Core\WithName;
 use GDO\Language\Trans;
@@ -115,7 +116,7 @@ trait WithLabel
 
 	/**
 	 */
-	public function  renderLabelText(): string
+	public function renderLabelText(): string
 	{
 		if (isset($this->labelKey))
 		{
