@@ -93,7 +93,7 @@ class Configure extends MethodForm
 			'form' => $form,
 		]);
 		FileUtil::createDir(dirname($path));
-		return !!file_put_contents($path, $content);
+        return FileUtil::putContents($path, $content);
 	}
 
 	# ###########

@@ -161,151 +161,51 @@ final class ModuleProviders
 	];
 	public static $DEPENDENCIES = [
 		### BEGIN_DEPENDENCIES ###
-'AboutMe' => ['Account'],
-'Account' => ['Login'],
-'ACME' => ['Net'],
-'ActivationAlert' => [],
-'Address' => ['Mail', 'Country'],
-'Admin' => ['Table'],
-'Ads' => ['Payment'],
-'Aprilfools' => [],
-'Avatar' => ['File'],
-'Backup' => ['ZIP', 'Cronjob'],
-'BasicAuth' => [],
-'Birthday' => [],
-'Bootstrap5' => ['JQuery'],
-'Bootstrap5Theme' => ['Bootstrap5', 'Moment'],
-'Captcha' => ['Session'],
-'Category' => [],
-'ChatGPT' => ['File'],
-'CKEditor' => ['HTML', 'JQuery'],
-'Classic' => [],
-'CLI' => [],
-'Codinggeex' => ['Admin', 'Bootstrap5Theme', 'Download', 'Login', 'Perf'],
-'Comments' => ['Votes', 'File'],
-'Contact' => ['Mail'],
-'Core' => ['Crypto', 'Date', 'DBMS', 'Form', 'Language', 'UI', 'User'],
-'CORS' => [],
-'Country' => [],
-'CountryCoordinates' => ['Country', 'Maps'],
-'CountryRestrictions' => [],
-'Cronjob' => [],
-'Crypto' => [],
-'CSS' => [],
-'Currency' => ['Cronjob'],
-'Date' => [],
-'DBMS' => [],
-'Diary' => ['Admin', 'Birthday', 'Classic', 'Contact', 'Login', 'News'],
-'Dog' => ['CLI', 'Cronjob', 'Net'],
-'DogAuth' => ['Dog', 'Login', 'Register'],
-'DogBlackjack' => ['Dog'],
-'DogChatGPT' => ['ChatGPT', 'Dog'],
-'DogGreetings' => ['Dog'],
-'DogIRC' => ['DogAuth'],
-'DogIRCAutologin' => ['DogAuth', 'DogIRC'],
-'DogIRCSpider' => ['DogIRC'],
-'DogShadowdogs' => ['DogAuth'],
-'DogTeams' => ['Dog'],
-'DogTick' => ['Country', 'DogIRC'],
-'DogWebsite' => ['Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'Dog', 'DogAuth', 'DogBlackjack', 'DogGreetings', 'DogIRC', 'DogIRCAutologin', 'DogIRCSpider', 'DogShadowdogs', 'DogTick', 'Download', 'Forum', 'JQuery', 'Links', 'Markdown', 'News', 'Perf', 'PM', 'Quotes', 'Shoutbox', 'Todo'],
-'DOMPDF' => ['File'],
-'DoubleAccounts' => [],
-'Download' => ['Category', 'File', 'Payment', 'Votes'],
-'DSGVO' => ['Session'],
-'EdwardSnowdenLand' => ['AboutMe', 'Account', 'ActivationAlert', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Captcha', 'Contact', 'Cronjob', 'IP2Country', 'Favicon', 'File', 'FontAwesome', 'Forum', 'Invite', 'Javascript', 'JQueryAutocomplete', 'Mail', 'News', 'PM', 'Register', 'Votes'],
-'Facebook' => [],
-'Favicon' => [],
-'FFMpeg' => ['CLI'],
-'File' => ['Session'],
-'Fineprint' => ['Admin', 'Classic', 'Contact', 'CSS', 'DOMPDF', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Login', 'Perf'],
-'Follower' => [],
-'FontAtkinson' => [],
-'FontAwesome' => [],
-'Form' => [],
-'Forum' => ['File'],
-'Friends' => [],
-'Gallery' => ['File'],
-'Geo2City' => ['Geo2Country', 'ZIP'],
-'Geo2Country' => ['Account', 'Admin', 'Classic', 'CountryCoordinates', 'CSS', 'FontAwesome', 'Javascript', 'Login', 'News', 'Perf', 'Recovery', 'Register'],
-'GTranslate' => [],
-'Guestbook' => ['Admin'],
-'Hash' => [],
-'Helpdesk' => ['Comments'],
-'HTML' => [],
-'Hydra' => [],
-'ImageMagick' => [],
-'Instagram' => [],
-'Install' => [],
-'Invite' => [],
-'IP2Country' => ['Country'],
-'ITMB' => ['Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'FontAtkinson', 'Markdown', 'Mibbit', 'News', 'Perf', 'PM', 'Recovery'],
-'Javascript' => [],
-'JPGraph' => [],
-'JQuery' => [],
-'JQueryAutocomplete' => ['JQuery'],
-'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5', 'Bootstrap5Theme', 'Captcha', 'Category', 'CKEditor', 'Contact', 'CountryCoordinates', 'CountryRestrictions', 'Cronjob', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'GTranslate', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'Sitemap', 'TorDetection', 'VPNDetect', 'YouTube'],
-'Language' => [],
-'Licenses' => [],
-'Links' => ['Votes', 'Tags', 'Cronjob'],
-'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DSGVO', 'Facebook', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Websocket'],
-'LoC' => [],
-'Login' => ['Session'],
-'Mail' => ['Mailer', 'Net'],
-'Mailer' => ['Mail'],
-'Maintenance' => [],
-'Maps' => ['JQuery'],
-'Markdown' => ['HTML', 'JQuery', 'FontAwesome'],
-'Math' => [],
-'Mettwitze' => ['Account', 'Admin', 'Bootstrap5Theme', 'Classic', 'Comments', 'JQueryAutocomplete', 'Login', 'Recovery', 'Register', 'Sitemap', 'Votes'],
-'Mibbit' => [],
-'Moment' => [],
-'Net' => [],
-'News' => ['Comments', 'Category', 'Mail'],
-'OnlineUsers' => [],
-'OpenTimes' => [],
-'Payment' => ['Account', 'Address', 'TCPDF', 'Mail'],
-'PaymentBank' => ['Payment'],
-'PaymentCredits' => ['Payment'],
-'PaymentPaypal' => ['Payment'],
-'PaypalDonations' => [],
-'PDFParser' => [],
-'Perf' => [],
-'PHPGDO' => [],
-'PM' => ['Account'],
-'PMA' => [],
-'Poll' => [],
-'Prism' => [],
-'Python' => [],
-'QRCode' => [],
-'Quotes' => ['Address', 'Votes'],
-'Recalcolo' => ['Login', 'Register', 'Account', 'Forum', 'Contact', 'Admin', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal'],
-'Recovery' => ['Mail'],
-'Register' => [],
-'Security' => ['Hash'],
-'Session' => [],
-'Shadowlamb' => [],
-'Shoutbox' => [],
-'SimpleMDE' => ['HTML'],
-'Sitemap' => [],
-'Statistics' => [],
-'Table' => [],
-'Tags' => [],
-'TBS' => ['Admin', 'Avatar', 'Captcha', 'Classic', 'Country', 'Contact', 'Cronjob', 'CSS', 'Favicon', 'FontAwesome', 'Forum', 'Javascript', 'JQueryAutocomplete', 'Login', 'Markdown', 'Mibbit', 'News', 'OnlineUsers', 'Perf', 'PM', 'Python', 'Recovery', 'Register', 'Statistics'],
-'TCPDF' => [],
-'TesseractOCR' => ['ImageMagick'],
-'Tests' => [],
-'Todo' => ['Table'],
-'TorChallenge' => [],
-'TorDetection' => ['Net'],
-'Tradestation' => ['Account', 'Admin', 'CLI', 'PDFParser', 'TesseractOCR'],
-'UI' => [],
-'User' => ['Core'],
-'Votes' => [],
-'VPNDetect' => [],
-'Websocket' => ['Session'],
-'YouTube' => ['File'],
-'YTBest' => ['Admin', 'Classic', 'Comments', 'Login', 'Recovery', 'Register', 'Votes', 'YouTube'],
-'ZIP' => [],
+
+Warning: Undefined array key "REMOTE_ADDR" in D:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php on line 181
+
+Warning: Cannot modify header information - headers already sent by (output started at D:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181) in D:\ProjektPHPGDO\phpgdo\GDO7.php on line 345
+<div class="gdo-exception">
+<em><p>PHP Warning(EH 2):&nbsp;Undefined array key "REMOTE_ADDR"&nbsp;in&nbsp;<b style=/"font-size:16px;/">D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php</b>&nbsp;line&nbsp;<b style=/"font-size:16px;/">181</b></p></em><div class="gdt-hr"></div><pre>Backtrace starts in [unknown file] line ?.
+ - GDO\Core\Logger::logException(ParseError) ............................................................................................................... D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 317.
+ - GDO\Core\Logger::log(&quot;critical&quot;, &quot;syntax error, unexpected token \&quot;}\&quot; in D:/ProjektPHPGDO/phpgdo/GDO/TorChallenge/Module_TorChalleng…php Line 35\n&quot;, 8)  D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181.</pre>
+
+Warning: Undefined array key "REMOTE_ADDR" in D:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php on line 181
+
+Warning: Cannot modify header information - headers already sent by (output started at D:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181) in D:\ProjektPHPGDO\phpgdo\GDO7.php on line 345
+<div class="gdo-exception">
+<em><p>PHP Warning(EH 2):&nbsp;Undefined array key "REMOTE_ADDR"&nbsp;in&nbsp;<b style=/"font-size:16px;/">D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php</b>&nbsp;line&nbsp;<b style=/"font-size:16px;/">181</b></p></em><div class="gdt-hr"></div><pre>Backtrace starts in [unknown file] line ?.
+ - GDO\Core\Logger::logException(ParseError) ............................................................................................................... D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 319.
+ - GDO\Core\Logger::log(&quot;critical&quot;, &quot;&amp;lt;span style=\&quot;color: red;\&quot;&amp;gt;ParseError&amp;lt;/span&amp;gt;: \u00b4&amp;lt;i&amp;gt;syntax error, unexpected … line 35.\r\n&quot;, 8)  D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181.</pre>
+
+Warning: Undefined array key "REMOTE_ADDR" in D:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php on line 181
+
+Warning: Cannot modify header information - headers already sent by (output started at D:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181) in D:\ProjektPHPGDO\phpgdo\GDO7.php on line 345
+<div class="gdo-exception">
+<em><p>PHP Warning(EH 2):&nbsp;Cannot modify header information - headers already sent by (output started at D:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php:181)&nbsp;in&nbsp;<b style=/"font-size:16px;/">D:/ProjektPHPGDO/phpgdo/GDO7.php</b>&nbsp;line&nbsp;<b style=/"font-size:16px;/">345</b></p></em><div class="gdt-hr"></div><pre>Backtrace starts in [unknown file] line ?.
+ - hdrc(&quot;HTTP/1.1 500 Server Error&quot;) ........ D:/ProjektPHPGDO/phpgdo/GDO7.php line 324.
+ - hdr(&quot;HTTP/1.1 500 Server Error&quot;, true) ... D:/ProjektPHPGDO/phpgdo/GDO7.php line 345.
+ - header(&quot;HTTP/1.1 500 Server Error&quot;, true)  [unknown file] line ?.</pre>
+<div class="gdo-exception">
+<em><span style="color: red;">ParseError</span>: ´<i>syntax error, unexpected token "}"</i>´ in <b>D:/ProjektPHPGDO/phpgdo/GDO/TorChallenge/Module_TorChallenge.php</b> line <b>35</b></em><div class="gdt-hr"></div><pre>Backtrace starts in D:/ProjektPHPGDO/phpgdo/provider_dependencies.php line 26.
+ - GDO\Core\ModuleLoader-&gt;loadModules(false, true, true) ................................................................. D:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 277.
+ - GDO\Core\ModuleLoader-&gt;loadModulesFS(false) ........................................................................... D:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 353.
+ - GDO\Util\Filewalker::traverse(&quot;D:\ProjektPHPGDO\phpgdo/GDO/&quot;, NULL, NULL, [
+    {},
+    &quot;_loadModuleFS&quot;
+], , false) ... D:/ProjektPHPGDO/phpgdo/GDO/Util/Filewalker.php line 24.
+ - gizmore\Filewalker::traverse(&quot;D:\ProjektPHPGDO\phpgdo/GDO&quot;, NULL, NULL, [
+    {},
+    &quot;_loadModuleFS&quot;
+], , false, &quot;\&quot;)  D:/ProjektPHPGDO/phpgdo/GDO/Util/php-filewalker/gizmore/Filewalker.php line 104.
+ - call_user_func([
+    {},
+    &quot;_loadModuleFS&quot;
+], &quot;TorChallenge&quot;, &quot;D:\ProjektPHPGDO\phpgdo/GDO\TorChallenge&quot;, false) .... [unknown file] line ?.
+ - GDO\Core\ModuleLoader-&gt;_loadModuleFS(&quot;TorChallenge&quot;, &quot;D:\ProjektPHPGDO\phpgdo/GDO\TorChallenge&quot;, false) ............... D:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 506.
+ - GDO\Core\ModuleLoader-&gt;loadModuleFS(&quot;TorChallenge&quot;) ................................................................... D:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 187.
+ - class_exists(&quot;GDO\TorChallenge\Module_TorChallenge&quot;) .................................................................. [unknown file] line ?.
+ - {closure}(&quot;GDO/TorChallenge/Module_TorChallenge&quot;) ..................................................................... D:/ProjektPHPGDO/phpgdo/GDO/TorChallenge/Module_TorChallenge.php line 35.</pre>
 ### END_DEPENDENCIES ###
 	];
 

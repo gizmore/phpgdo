@@ -7,6 +7,7 @@ use GDO\Core\Debug;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDT_Float;
 use GDO\Core\Logger;
+use GDO\Core\Module_Core;
 use GDO\File\Module_File;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -427,5 +428,16 @@ final class FileUtil
 	{
 		return self::isFile($filename) ? file_get_contents($filename) : null;
 	}
+
+    public static function putContents(string $filename, string $content): bool
+    {
+        $tempname = tempnam(GDO_TEMP_PATH, 'newfile');
+        $written = file_put_contents($tempname, $content);
+        if ($written === strlen($content))
+        {
+            return rename($tempname, $filename);
+        }
+        return false;
+    }
 
 }
