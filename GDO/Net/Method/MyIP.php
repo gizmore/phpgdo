@@ -12,5 +12,5 @@ final class MyIP extends Method
     {
         return GDT_IP::make('your_ip')->useCurrent();
     }
-    
+
 }
