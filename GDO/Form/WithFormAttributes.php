@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace GDO\Form;
 
+use GDO\Core\Debug;
+
 /**
  * Add HTML Form helpers to a GDT.
  *
@@ -21,6 +23,8 @@ trait WithFormAttributes
 
 	public function hidden(bool $hidden = true): static
 	{
+//        var_dump($this->getName(), $hidden);
+//        echo Debug::backtrace('TEST');
 		$this->hidden = $hidden;
 		return $this;
 	}

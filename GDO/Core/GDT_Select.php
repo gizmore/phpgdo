@@ -455,6 +455,10 @@ class GDT_Select extends GDT_ComboBox
 
 	public function renderForm(): string
 	{
+        if ($this->isHidden())
+        {
+            return $this->renderFormHidden();
+        }
 		return GDT_Template::php('Core', 'select_form.php', ['field' => $this]);
 	}
 

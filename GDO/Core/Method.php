@@ -315,14 +315,14 @@ abstract class Method
 //			}
 //			return $this->error('error', [$e->getMessage()]);
 //		}
-//		catch (GDO_RedirectError $e)
-//		{
-////			if ($transactional)
-////			{
-////				$db->transactionRollback();
-////			}
-//			return GDT_Redirect::make()->redirectError($e->key, $e->args)->href($e->href);
-//		}
+		catch (GDO_RedirectError $e)
+		{
+//			if ($transactional)
+//			{
+//				$db->transactionRollback();
+//			}
+			return GDT_Redirect::make()->redirectError('%s', [$e->getMessage()])->href($e->href);
+		}
 //		catch (GDO_PermissionException $e)
 //		{
 //			if ($transactional)

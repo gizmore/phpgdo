@@ -6,6 +6,7 @@ use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\WithGDO;
 use GDO\DB\Query;
+use GDO\Form\WithFormAttributes;
 use GDO\UI\GDT_Container;
 use GDO\UI\WithIcon;
 use GDO\UI\WithLabel;
@@ -33,6 +34,7 @@ final class GDT_ACL extends GDT
 	use WithGDO;
 	use WithIcon;
 	use WithLabel;
+    use WithFormAttributes;
 
 	public GDT_ACLRelation $aclRelation;
 
@@ -162,10 +164,12 @@ final class GDT_ACL extends GDT
 
 	public function setupLabels(GDT $gdt): void
 	{
+        $hidden = $gdt->isHidden();
+        $this->hidden($hidden);
         $label = $gdt->renderLabel();
-        $this->aclLevel->label('lbl_acl_level', [$label]);
-		$this->aclRelation->label('lbl_acl_relation', [$label]);
-		$this->aclPermission->label('lbl_acl_permission', [$label]);
+        $this->aclLevel->hidden($hidden)->label('lbl_acl_level', [$label]);
+		$this->aclRelation->hidden($hidden)->label('lbl_acl_relation', [$label]);
+		$this->aclPermission->hidden($hidden)->label('lbl_acl_permission', [$label]);
 	}
 
 	public function noPermission():	self
