@@ -45,6 +45,7 @@ final class SeoProxy extends Method
 	{
 		$loader = ModuleLoader::instance();
 		$args = explode(GDO_SEO_SEP, trim($url, '/'));
+        $last = Arrays::last($args);
 
 		# Module
 		$mo = array_shift($args);
@@ -66,7 +67,7 @@ final class SeoProxy extends Method
         $me = Strings::rsubstrTo($me, '.', $me);
 
         # Remove possible .mode from lat arg
-        $suffix = Strings::rsubstrFrom( (string)Arrays::last($args), '.', 'html');
+        $suffix = Strings::rsubstrFrom( $last, '.', 'html');
         $app = Application::$INSTANCE;
         $app->modeDetected($app->detectRenderMode($suffix));
 

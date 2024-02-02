@@ -253,6 +253,11 @@ class GDT_String extends GDT_DBField
 		]);
 	}
 
+    public function renderJSON(): float|array|bool|int|string|null
+    {
+        return $this->getVar();
+    }
+
 	public function renderBinary(): string
 	{
 		$binary = $this->getVar();

@@ -204,7 +204,7 @@ class GDT_Int extends GDT_DBField
 
 	public function renderJSON(): array|string|null|int|bool|float
 	{
-		return $this->getVar();
+		return $this->getValue();
 	}
 
 	public function configJSON(): array
