@@ -106,9 +106,12 @@ class GDT_Card extends GDT
 		if (!$byField)
 		{
 			$byField = $this->gdo->gdoColumnOf(GDT_User::class);
-		}
+        }
 
-		/** @var GDO_User $user * */
+        /** @var GDT_CreatedBy $byField **/
+
+		/** @var GDO_User $user **/
+
 		$user = $byField?->getValue();
 
 		if ($atField)

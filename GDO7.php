@@ -208,7 +208,7 @@ function hrefNoSeo(string $module, string $method, string $append = null): strin
 
 function seo(string $str): string
 {
-	return trim(preg_replace('#[^{}\\-_.,\\p{L}0-9]#', '_', $str), '_');
+	return trim(preg_replace('#[^~{}\\-_.,\\p{L}0-9]#', '_', $str), '_');
 }
 
 function quote($value): string

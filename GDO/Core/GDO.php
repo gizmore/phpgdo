@@ -110,7 +110,7 @@ abstract class GDO extends GDT
 	 *
 	 * @var string[]
 	 */
-	private array $gdoVars;
+	protected array $gdoVars;
 
 
 	public static function tableGDO(): static

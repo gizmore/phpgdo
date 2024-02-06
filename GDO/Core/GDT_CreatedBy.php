@@ -30,10 +30,11 @@ final class GDT_CreatedBy extends GDT_User
         return 'created_by';
     }
 
-	/**
-	 * Initial data.
-	 * Force persistance on current user.
-	 */
+    /**
+     * Initial data.
+     * Force persistance on current user.
+     * @throws GDO_Exception
+     */
 	public function blankData(): array
 	{
 		if ($this->var)
@@ -48,10 +49,13 @@ final class GDT_CreatedBy extends GDT_User
 		return [$this->name => $user->getID()];
 	}
 
-	public function getValue(): mixed
+    /**
+     * @throws GDO_Exception
+     */
+    public function getValue(): mixed
 	{
 		$value = parent::getValue();
-		return $value ? $value : GDO_User::system();
+		return $value ?: GDO_User::system();
 	}
 
 }

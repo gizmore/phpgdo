@@ -4,6 +4,7 @@ namespace GDO\Table;
 
 use GDO\Core\GDT;
 use GDO\Core\GDT_Template;
+use GDO\Date\Time;
 use GDO\UI\GDT_Card;
 
 /**
@@ -19,6 +20,7 @@ final class GDT_ListItem extends GDT_Card
 {
 
 	public GDT $right;
+    public string $date;
 
 	public function right(GDT $content): self
 	{
@@ -55,5 +57,28 @@ final class GDT_ListItem extends GDT_Card
 		}
 		return $data;
 	}
+
+    public function date(?string $date): self
+    {
+        if ($date)
+        {
+            $this->date = $date;
+        }
+        else
+        {
+            unset($this->date);
+        }
+        return $this;
+    }
+
+    public function hasDate(): bool
+    {
+        return isset($this->date);
+    }
+
+    public function renderDate(): string
+    {
+        return Time::displayDate($this->date);
+    }
 
 }

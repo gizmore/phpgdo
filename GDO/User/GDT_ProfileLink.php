@@ -83,7 +83,8 @@ final class GDT_ProfileLink extends GDT_Link
      */
     public function username(string $username): self
     {
-        return $this->gdo(GDO_User::getByName($username));
+        $user = GDO_User::getById($username);
+        return $this->gdo($user);
     }
 
     ##############

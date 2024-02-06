@@ -162,6 +162,25 @@ final class GDO_User extends GDO
 	}
 
     /**
+     * @throws GDO_DBException
+     */
+    public static function getById(string...$id): null|static
+    {
+        if (is_numeric($id[0]))
+        {
+            return self::getBy('user_id', $id[0]);
+        }
+        elseif (str_starts_with($id[0], self::GUEST_NAME_PREFIX))
+        {
+            return self::getByGuestName(trim($id[0], self::GUEST_NAME_PREFIX));
+        }
+        else
+        {
+            return self::getByName($id[0]);
+        }
+    }
+
+    /**
      * Get a user by login, for auth mechanisms
      *
      * @TODO: getByLogin shall use a hook for mail module to login via email.
@@ -317,7 +336,8 @@ final class GDO_User extends GDO
 
 	public function hrefProfile(): string
 	{
-		return href('User', 'Profile', "&for={$this->renderUserName()}");
+        $name = $this->renderUserName();
+		return href('User', 'Profile', "&for={$name}");
 	}
 
 	public function renderUserName(): string
