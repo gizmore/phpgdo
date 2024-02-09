@@ -2,6 +2,7 @@
 namespace GDO\User\Method;
 
 use GDO\Avatar\GDO_Avatar;
+use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT;
@@ -16,6 +17,7 @@ use GDO\UI\MethodCard;
 use GDO\User\GDO_Profile;
 use GDO\User\GDO_User;
 use GDO\User\Module_User;
+use Ratchet\App;
 
 /**
  * Show a user's profile.
@@ -57,14 +59,18 @@ final class Profile extends MethodCard
 			sitename(),
 			$this->getCLIOutput(),
 		]);
-		return t('md_user_profile');
+//		return t('md_user_profile');
 	}
 
 	private function getCLIOutput(): string
 	{
+        $old = Application::$MODE;
+        Application::$MODE = GDT::RENDER_TEXT;
 		$profile = GDO_Profile::forUser($this->getUser());
 		$card = $this->getCard($profile);
-		return $card->renderCLI();
+		$back = $card->render();
+        Application::$MODE = $old;
+        return $back;
 	}
 
 	public function afterExecute(): void
@@ -118,11 +124,11 @@ final class Profile extends MethodCard
 		$user = $card->gdo->getUser();
 //		$user = $card->gdo->getUser();
 		$card->creatorHeader('profile_user', 'profile_activity');
-		$card->title('mt_user_profile', [$user->renderUserName()]);
+		$card->titleRaw(t('mt_user_profile', [$user->renderUserName()]));
 		$modules = ModuleLoader::instance()->getEnabledModules();
-		$card->subtitle('profile_level', [
+		$card->subtitleRaw(t('profile_level', [
 			self::getHighestPermission($user),
-			$user->getLevel()]);
+			$user->getLevel()]));
 		foreach ($modules as $module)
 		{
 			$this->createCardB($card, $module);

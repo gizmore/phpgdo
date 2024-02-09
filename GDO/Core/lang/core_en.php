@@ -50,7 +50,7 @@ return [
 	'err_method_disabled' => 'The method %2$s in module %1$s is currently disabled.',
 	'err_method_is_stub' => 'This function is not implemented yet: `%s`',
 	'err_username_taken' => 'This username is already taken.',
-	'err_form_invalid' => 'Your formular is invalid or incomplete. %s errors have been found: %s',
+	'err_form_invalid' => 'Your formular is invalid or incomplete. %s errors have been found.',
 	'err_unknown_module' => 'The module `%s` is unknown',
 	'err_unknown_method' => 'The method `%2$s` is unknown to module `%1$s`.',
 	'err_unknown_parameter' => 'Unknown parameter `%s` in method `%s`.',
@@ -364,7 +364,7 @@ The %2$s System',
 	'mt_core_pathcompletion' => 'Path completion',
 	'mt_ajax' => '%s Data Retrieval',
 
-	'creator_header' => '%s added this on %s.',
+	'creator_header' => '%s added this %s.',
 
 	'please_choose' => 'Please choose...',
 	'required' => 'This field is required and has to be filled out.',

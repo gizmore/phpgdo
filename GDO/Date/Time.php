@@ -480,10 +480,10 @@ final class Time
 		{
             $duration *= 1000;
             $mod *= 1000;
-
-            if (0 < ($remainder = ($duration % $mod)/1000.0))
+            $remainder = ($duration % $mod)/1000.0;
+            if (floor($remainder) > 0)
             {
-                $calced[] = round($remainder) . $text;
+                $calced[] = floor($remainder) . $text;
             }
 			$duration /= $mod;
 			if ($duration == 0)

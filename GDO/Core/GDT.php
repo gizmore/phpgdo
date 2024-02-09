@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\CLI\CLI;
 use GDO\DB\Query;
 use GDO\DBMS\Module_DBMS;
 use GDO\Table\GDT_Filter;
@@ -163,6 +164,8 @@ abstract class GDT
 	final public const RENDER_THEAD  = 20; # table <thead>
 	final public const RENDER_TFOOT  = 21; # table <tfoot>
 
+    final public const RENDER_TEXT = 22; # plain text, like CLI but without any decoration
+
 // 	/**
 // 	 * Switchable rendering callmap.
 // 	 * @var callable[]
@@ -248,6 +251,8 @@ abstract class GDT
 				return $this->renderHTML();
 			case self::RENDER_TFOOT:
 				return $this->renderTFoot();
+            case self::RENDER_TEXT:
+                return CLI::htmlToCLI($this->renderCLI());
 		}
 		return null;
 	}

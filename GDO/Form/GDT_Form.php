@@ -182,9 +182,9 @@ final class GDT_Form extends GDT
 	{
 		$numErrors = $this->countErrors();
 //		Application::setResponseCode(GDO_Exception::DEFAULT_ERROR_CODE);
-		$errors = $this->renderError();
+//		$errors = $this->renderError();
 //		Website::errorRaw($this->getModule()->gdoHumanName(), $errors);
-		return $this->error('err_form_invalid', [$numErrors, $errors]);
+		return $this->error('err_form_invalid', [$numErrors]);
 	}
 
 	private function countErrors(): int

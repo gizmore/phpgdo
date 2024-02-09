@@ -96,7 +96,7 @@ abstract class MethodForm extends Method
 			$this->addComposeParameters($this->form->getAllFields());
 			$this->addComposeParameters($this->form->actions()->getAllFields());
 			$this->applyInput();
-            $this->form->titleRaw($this->getMethodTitle());
+            $this->form->titleRaw($this->getMethodTitle(), false);
 		}
 		return $this->form;
 	}

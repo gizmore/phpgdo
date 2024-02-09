@@ -11,6 +11,7 @@ use GDO\Core\GDT_EditedBy;
 use GDO\Core\GDT_Template;
 use GDO\Core\WithFields;
 use GDO\Core\WithGDO;
+use GDO\Core\WithTitleGDT;
 use GDO\Date\GDT_DateDisplay;
 use GDO\Form\WithActions;
 use GDO\User\GDO_User;
@@ -29,8 +30,7 @@ class GDT_Card extends GDT
 {
 
 	use WithGDO;
-	use WithTitle;
-	use WithSubTitle;
+	use WithTitleGDT;
 	use WithImage;
 	use WithAvatar;
 	use WithFields;
@@ -43,7 +43,7 @@ class GDT_Card extends GDT
 	### Content ###
 	###############
 	public GDT $image;
-	public GDT $footer;
+//	public GDT $footer;
 
 	#############
 	### Image ###
@@ -70,18 +70,19 @@ class GDT_Card extends GDT
 		return $this;
 	}
 
-	public function footer(?GDT $footer): self
-	{
-		if ($footer)
-		{
-			$this->footer = $footer;
-		}
-		else
-		{
-			unset($this->footer);
-		}
-		return $this;
-	}
+//	public function footer(?GDT $footer): self
+//	{
+//		if ($footer)
+//		{
+//			$this->footer = $footer;
+//		}
+//		else
+//		{
+//			unset($this->footer);
+//		}
+//		return $this;
+//	}
+
 
 	##############
 	### Render ###
@@ -139,7 +140,8 @@ class GDT_Card extends GDT
 			{
 				$date = GDT_DateDisplay::make($atField->getName())->gdo($this->gdo)->render();
 			}
-			$this->subtitle('creator_header', [$profileLink->render(), $date]);
+            $subtitle = GDT_Headline::make()->text('creator_header', [$profileLink->render(), $date])->level(5);
+			$this->subtitle($subtitle);
 		}
 		return $this;
 	}
@@ -148,7 +150,8 @@ class GDT_Card extends GDT
 	{
 		switch (Application::$MODE)
 		{
-			case GDT::RENDER_CLI:
+            case GDT::RENDER_TEXT:
+            case GDT::RENDER_CLI:
 				return $this->renderCLI();
 			case GDT::RENDER_BINARY:
 				return $this->renderBinary();
@@ -169,11 +172,11 @@ class GDT_Card extends GDT
 
 		if ($this->hasTitle())
 		{
-			$back[] = $this->renderTitle();
+			$back[] = $this->titleGDT->render();
 		}
 		if ($this->hasSubTitle())
 		{
-			$back[] = $this->renderSubTitle();
+			$back[] = $this->subtitleGDT->render();
 		}
 		foreach ($this->getAllFields() as $gdt)
 		{
@@ -182,11 +185,14 @@ class GDT_Card extends GDT
 // 	    		$label .= ': ';
 // 	    	}
 // $back[] = $gdt->cliIcon() . $label . $gdt->renderCLI();
-			$back[] = $gdt->cliIcon() . $gdt->renderCLI();
+            if ((!$gdt->isHidden()) && ($gdt->getName()))
+            {
+                $back[] = $gdt->cliIcon() . $gdt->render();
+            }
 		}
 		if (isset($this->footer))
 		{
-			$back[] = $this->footer->renderCLI();
+			$back[] = $this->footer->render();
 		}
 		return implode(', ', $back);
 	}
@@ -225,9 +231,5 @@ class GDT_Card extends GDT
 		return $this;
 	}
 
-	public function hasFooter(): bool
-	{
-		return isset($this->footer);
-	}
 
 }

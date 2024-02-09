@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\UI;
 
 use GDO\Core\GDT;
+use GDO\Core\GDT_String;
 
 /**
  * Adds a title to a GDT.
@@ -15,6 +16,7 @@ use GDO\Core\GDT;
  */
 trait WithTitle
 {
+
 
 	public string $titleRaw;
 	public string $titleKey;
@@ -68,7 +70,7 @@ trait WithTitle
 		$t = GDT::EMPTY_STRING;
 		if (isset($this->titleKey))
 		{
-			$t = t($this->titleKey, $this->titleArgs);
+			return t($this->titleKey, $this->titleArgs);
 		}
 		elseif (isset($this->titleRaw))
 		{
