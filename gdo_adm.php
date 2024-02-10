@@ -378,11 +378,14 @@ $command = $cmd;
 $db = (bool)GDO_DB_ENABLED;
 switch ($command)
 {
+    case 'install':
+        Database::init();
+        # fallthrough
 	case 'configure':
 	case 'systemtest':
 	case 'wipe':
 	case 'provide':
-	case 'revendor':
+    case 'revendor':
 		$db = false;
 		break;
 	default:
@@ -403,11 +406,11 @@ if (!$db)
 }
 
 $loader->loadModules($db, true);
-if ($db && ($command !== 'install'))
-{
-	$loader->initModuleVars();
-}
-$loader->initModules();
+//if ($db && ($command !== 'install'))
+//{
+//	$loader->initModuleVars();
+//}
+$loader->initModules($db);
 
 # Run!
 if ($command === 'cc')
@@ -587,11 +590,11 @@ elseif ($command === 'modules')
 
 elseif ($command === 'install')
 {
-	if (!$db)
-	{
-		echo \GDO\UI\TextStyle::bold("You do not have GDO_DB_ENABLED. I cannot install anything.\n", true, 'red');
-		die(-1);
-	}
+//	if (!$db)
+//	{
+//		echo \GDO\UI\TextStyle::bold("You do not have GDO_DB_ENABLED. I cannot install anything.\n", true, 'red');
+//		die(-1);
+//	}
 
 	$deps = [];
 

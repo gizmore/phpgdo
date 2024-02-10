@@ -429,7 +429,7 @@ final class ModuleLoader
 		}
 	}
 
-	public function initModules(): bool
+	public function initModules(bool $withVars=true): bool
 	{
 		try
 		{
@@ -440,7 +440,10 @@ final class ModuleLoader
 					GDT_Template::registerTheme($theme, $module->filePath("thm/$theme/"));
 				}
 			}
-            $this->initModuleVars();
+            if ($withVars)
+            {
+                $this->initModuleVars();
+            }
             return $this->initModulesB();
 		}
 		catch (\Throwable $ex)
