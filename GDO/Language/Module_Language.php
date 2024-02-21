@@ -5,8 +5,13 @@ namespace GDO\Language;
 use GDO\Core\Application;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT_Checkbox;
+use GDO\Core\GDT_Enum;
+use GDO\Core\GDT_EnumNoI18n;
+use GDO\Core\GDT_Method;
+use GDO\Core\GDT_Template;
 use GDO\Core\Javascript;
 use GDO\Core\Website;
+use GDO\Language\Method\SwitchLang;
 use GDO\Net\GDT_Url;
 use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Divider;
@@ -52,7 +57,7 @@ final class Module_Language extends GDO_Module
 	{
 		return [
 			GDT_Language::make('languages')->all()->multiple()->initial('["' . GDO_LANGUAGE . '"]'),
-			GDT_Checkbox::make('langswitch_left')->initial('1'),
+			GDT_EnumNoI18n::make('langswitch_left')->enumValues('large', 'flags', 'none')->initial('flags'),
 			GDT_Checkbox::make('use_in_javascript')->initial('1'),
 		];
 	}
@@ -85,12 +90,19 @@ final class Module_Language extends GDO_Module
 
 	public function onInitSidebar(): void
 	{
-		if ($this->cfgSwitchLeft())
-		{
-			$navbar = GDT_Page::instance()->leftBar();
-			$navbar->addField(GDT_LangSwitch::make());
-			$navbar->addField(GDT_Divider::make());
-		}
+        switch ($this->cfgSwitchLeft())
+        {
+            case 'large':
+                $navbar = GDT_Page::instance()->leftBar();
+                $navbar->addField(GDT_Method::make()->method(SwitchLang::make()));
+                $navbar->addField(GDT_Divider::make());
+                break;
+            case 'flags':
+                $navbar = GDT_Page::instance()->leftBar();
+                $navbar->addField(GDT_Template::make()->template('Language', 'langswitch_html.php'));
+                $navbar->addField(GDT_Divider::make());
+                break;
+        }
 	}
 
 	public function cfgSwitchLeft(): string { return $this->getConfigVar('langswitch_left'); }

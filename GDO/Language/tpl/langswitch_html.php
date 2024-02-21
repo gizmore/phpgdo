@@ -6,23 +6,15 @@ use GDO\Language\Module_Language;
 use GDO\Language\Trans;
 
 $languages = Module_Language::instance()->cfgSupported();
+$ref = urldecode($_SERVER['REQUEST_URI']);
 ?>
 <div class="gdo-lang-switch">
-    <form method="post" action="<?=href('Language', 'SwitchLanguage')?>">
-        <input type="hidden" name="_mo" value="Language"/>
-        <input type="hidden" name="_me" value="SwitchLanguage"/>
-        <input type="hidden" name="_ref" value="<?=html(urldecode($_SERVER['REQUEST_URI']))?>"/>
-        <label><?=t('language')?></label>
-        <select name="lang">
-			<?php
-			foreach ($languages as $language)
-			{
-				$language instanceof GDO_Language;
-				$sel = Trans::$ISO === $language->getISO() ? ' selected="selected"' : '';
-				printf("<option value=\"%s\"%s>%s</option>", $language->getISO(), $sel, $language->renderOption());
-			}
-			?>
-        </select>
-        <input type="submit" value="<?=t('btn_set')?>"/>
-    </form>
+<?php foreach ($languages as $lang) : ?>
+<?php
+$href = href('Language', 'SwitchLang', sprintf('&_ref=%s&lang=%s&submit=1', $ref, $lang->getISO()));
+$flag = $lang->renderFlag();
+$alt = t('md_switch_language', [$lang->renderName()]);
+?>
+    <a href="<?=$href?>" aria-label="<?=$alt?>" title="<?=$alt?>"><?=$flag?></a>
+    <?php endforeach; ?>
 </div>

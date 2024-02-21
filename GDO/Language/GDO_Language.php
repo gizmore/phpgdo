@@ -5,6 +5,7 @@ namespace GDO\Language;
 use GDO\Core\GDO;
 use GDO\Core\GDT_Char;
 use GDO\Core\GDT_Template;
+use GDO\Country\GDO_Country;
 
 /**
  * Language table.
@@ -117,5 +118,14 @@ final class GDO_Language extends GDO
 	{
 		return Module_Language::instance()->cfgSupported();
 	}
+
+    public function renderFlag(): string
+    {
+        $iso = $this->getISO();
+        $href = Module_Language::instance()->wwwPath("img/{$iso}.png");
+        $alt = $this->renderName();
+        return "<img src=\"{$href}\" alt=\"{$alt}\" />";
+
+    }
 
 }

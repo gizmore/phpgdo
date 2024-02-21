@@ -91,12 +91,12 @@ abstract class MethodForm extends Method
 			$this->validated = false;
 			$this->pressedButton = null;
 			$this->form = GDT_Form::make($this->getFormName());
-            $this->createForm($this->form);
-			$this->form->inputs($inputs);
-			$this->addComposeParameters($this->form->getAllFields());
-			$this->addComposeParameters($this->form->actions()->getAllFields());
-			$this->applyInput();
             $this->form->titleRaw($this->getMethodTitle(), false);
+            $this->createForm($this->form);
+            $this->form->inputs($inputs);
+            $this->addComposeParameters($this->form->getAllFields());
+            $this->addComposeParameters($this->form->actions()->getAllFields());
+            $this->applyInput();
 		}
 		return $this->form;
 	}
