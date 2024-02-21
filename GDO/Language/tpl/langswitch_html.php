@@ -6,7 +6,7 @@ use GDO\Language\Module_Language;
 use GDO\Language\Trans;
 
 $languages = Module_Language::instance()->cfgSupported();
-$ref = urldecode($_SERVER['REQUEST_URI']);
+$ref = urlencode($_SERVER['REQUEST_URI']);
 ?>
 <div class="gdo-lang-switch">
 <?php foreach ($languages as $lang) : ?>
