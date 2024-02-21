@@ -15,6 +15,6 @@ $href = href('Language', 'SwitchLang', sprintf('&_ref=%s&lang=%s&submit=1', $ref
 $flag = $lang->renderFlag();
 $alt = t('md_switch_language', [$lang->renderName()]);
 ?>
-    <a href="<?=$href?>" aria-label="<?=$alt?>" title="<?=$alt?>"><?=$flag?></a>
+    <a href="<?=$href?>" aria-label="<?=$alt?>" title="<?=$alt?>" rel="nofollow"><?=$flag?></a>
     <?php endforeach; ?>
 </div>
