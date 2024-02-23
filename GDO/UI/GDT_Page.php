@@ -80,6 +80,11 @@ final class GDT_Page extends GDT
 		return GDT_Template::php('UI', $page, ['page' => $this]);
 	}
 
+    public function renderPDF(): string
+    {
+        return GDT_Template::php('UI', 'page_blank.php', ['page' => $this]);
+    }
+
 	public function topBar(): GDT_Bar
 	{
 		if (!isset($this->topBar))

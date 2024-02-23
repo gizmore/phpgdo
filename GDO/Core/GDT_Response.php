@@ -39,6 +39,8 @@ final class GDT_Response extends GDT_Tuple
 				return json($this->renderJSON());
 			case GDT::RENDER_CLI:
 				return CLI::getTopResponse() . $this->renderCLI();
+            case GDT::RENDER_PDF:
+                return $this->renderPDF();
 			default:
 				return parent::render();
 		}
@@ -57,6 +59,13 @@ final class GDT_Response extends GDT_Tuple
 		$page = GDT_Page::instance();
 		return $page->html($content)->renderMode(GDT::RENDER_HTML);
 	}
+
+    public function renderPDF(): string
+    {
+        $content = $this->renderFields(GDT::RENDER_HTML);
+        $page = GDT_Page::instance();
+        return $page->html($content)->renderMode(GDT::RENDER_PDF);
+    }
 
 	public function hasError(): bool
 	{
