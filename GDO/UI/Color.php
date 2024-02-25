@@ -57,6 +57,7 @@ final class Color
 			case GDT::RENDER_JSON:
 			case GDT::RENDER_XML:
 			case GDT::RENDER_BINARY:
+            case GDT::RENDER_TELEGRAM:
 				return $s;
 
 			case GDT::RENDER_CLI:

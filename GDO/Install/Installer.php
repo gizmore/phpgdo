@@ -223,12 +223,20 @@ class Installer
 
 		if (!$module->isPersisted())
 		{
-			$module->setVars([
-				'module_name' => $module->getModuleName(),
-				'module_enabled' => '1',
-				'module_version' => $module->version,
-				'module_priority' => (string) $module->priority,
-			])->insert();
+            if (!($module2 = GDO_Module::getBy('module_name', $module->getModuleName())))
+            {
+                $module->setVars([
+                    'module_name' => $module->getModuleName(),
+                    'module_enabled' => '1',
+                    'module_version' => $module->version,
+                    'module_priority' => (string) $module->priority,
+                ])->insert();
+            }
+            else
+            {
+                $module->setVars($module2->getGDOVars());
+                ModuleLoader::instance()->setModule($module);
+            }
 		}
 		else
 		{

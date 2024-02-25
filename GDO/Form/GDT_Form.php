@@ -112,6 +112,12 @@ final class GDT_Form extends GDT
 	##############
 	### Render ###
 	##############
+    public function renderTelegram(): string
+    {
+        return $this->renderCLI();
+    }
+
+
 	public function renderCLI(): string
 	{
 		if (!$this->hasError())

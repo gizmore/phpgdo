@@ -273,12 +273,17 @@ trait WithFields
 		return null;
 	}
 
-	public function renderCLI(): string
-	{
-		return $this->renderFields(GDT::RENDER_CLI);
-	}
+    public function renderCLI(): string
+    {
+        return $this->renderFields(GDT::RENDER_CLI);
+    }
 
-	/**
+    public function renderTelegram(): string
+    {
+        return $this->renderFields(GDT::RENDER_TELEGRAM);
+    }
+
+    /**
 	 * WithFields, we simply iterate over them and render current mode.
 	 */
 	public function renderFields(int $renderMode): string

@@ -166,6 +166,8 @@ abstract class GDT
 
     final public const RENDER_TEXT = 22; # plain text, like CLI but without any decoration
 
+    final public const RENDER_TELEGRAM = 23; # plain text, like CLI but without any decoration
+
 // 	/**
 // 	 * Switchable rendering callmap.
 // 	 * @var callable[]
@@ -253,9 +255,16 @@ abstract class GDT
 				return $this->renderTFoot();
             case self::RENDER_TEXT:
                 return CLI::htmlToCLI($this->renderCLI());
-		}
+            case self::RENDER_TELEGRAM:
+                return $this->renderTelegram();
+        }
 		return null;
 	}
+
+    public function renderTelegram(): string
+    {
+        return $this->renderCLI();
+    }
 
 	#############################
 	### render default stubs ####
@@ -266,7 +275,7 @@ abstract class GDT
 	public function render(): array|string|null { return $this->renderGDT(); }
 	public function renderNIL() : null { return null; }
 	public function renderBinary() : string { return GDT::EMPTY_STRING; }
-	public function renderCLI() : string { return $this->renderHTML(); }
+    public function renderCLI() : string { return $this->renderHTML(); }
 	public function renderPDF() : string { return $this->renderHTML(); }
 	public function renderXML() : string { return $this->renderHTML(); }
 	public function renderJSON(): array|string|null|int|bool|float { return $this->renderCLI(); }

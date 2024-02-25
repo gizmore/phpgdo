@@ -12,6 +12,7 @@ use GDO\Core\ModuleLoader;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
+use GDO\UI\GDT_HTML;
 use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 
@@ -108,7 +109,7 @@ final class Help extends MethodCLI
 			$back[] = sprintf('%s: %s.', TextStyle::bold($mon), implode(', ', $aliases));
 		}
 
-		return GDT_String::make()->var(implode(' ', $back));
+		return GDT_HTML::make()->var(implode(' ', $back));
 	}
 
 }

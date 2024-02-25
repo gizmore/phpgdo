@@ -6,6 +6,7 @@ use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\GDT;
 use GDO\DogIRC\IRCLib;
+use GDO\DogTelegram\Connector\Telegram;
 
 /**
  * A utility class that renders strings with a text style.
@@ -31,6 +32,8 @@ final class TextStyle
 		$app = Application::$INSTANCE;
 		switch (Application::$MODE)
 		{
+            case GDT::RENDER_TELEGRAM:
+                return "<{$tagStart}>{$s}</{$tagEnd}>";
 			case GDT::RENDER_IRC:
 				return call_user_func([IRCLib::class, $cliMethod], $s);
 			case GDT::RENDER_CLI:

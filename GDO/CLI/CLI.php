@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace GDO\CLI;
 
+use GDO\Core\Application;
+use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -214,6 +216,10 @@ final class CLI
 				$xmplvars = $xmplvars ?
 					sprintf('<%s>(%s)', $label, $xmplvars) :
 					sprintf('<%s>', $label);
+                if (Application::$MODE === GDT::RENDER_TELEGRAM)
+                {
+                    $xmplvars = html($xmplvars);
+                }
 				$xmplvars = isset($gdt->notNull) && $gdt->notNull ? $xmplvars : "[{$xmplvars}]";
 				$usage1[] = $xmplvars;
 			}
