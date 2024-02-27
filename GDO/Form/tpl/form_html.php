@@ -1,10 +1,12 @@
 <?php
 namespace GDO\Form\tpl;
-
 use GDO\Form\GDT_Form;
 use GDO\UI\GDT_Error;
-
 /** @var GDT_Form $field * */
+if ($field->focus)
+{
+    $field->addClass('focusable');
+}
 ?>
 <?php
 if ($field->hasError()) : ?>

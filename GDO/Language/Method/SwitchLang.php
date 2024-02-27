@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Language\Method;
 
+use GDO\Core\Application;
 use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
 use GDO\Form\GDT_Form;
@@ -19,6 +20,16 @@ use GDO\User\GDO_User;
  */
 final class SwitchLang extends MethodForm
 {
+
+    public function getCLITrigger(): string
+    {
+        return 'lang';
+    }
+
+    public function isCLI(): bool
+    {
+        return true;
+    }
 
     public function isUserRequired(): bool
     {
@@ -48,9 +59,12 @@ final class SwitchLang extends MethodForm
     protected function createForm(GDT_Form $form): void
     {
         $form->titleNone();
+        if (!Application::instance()->isCLI())
+        {
+            $form->addField(GDT_Url::make('_ref')->allowInternal()->writeable(false)->hidden()->initial(urldecode($_SERVER['REQUEST_URI'])));
+        }
         $form->addFields(
-            GDT_Url::make('_ref')->allowInternal()->writeable(false)->hidden()->initial(urldecode($_SERVER['REQUEST_URI'])),
-            GDT_Language::make('lang')->initial(Trans::$ISO),
+            GDT_Language::make('lang')->notNull()->initial(Trans::$ISO),
         );
         $form->actions()->addField(GDT_Submit::make());
         $form->slim();
@@ -70,6 +84,7 @@ final class SwitchLang extends MethodForm
      */
     public function formValidated(GDT_Form $form): GDT
     {
+        var_dump($this->inputs);
         # Set new ISO language
         $lang = $this->getLanguage();
         $iso = $lang->getISO();

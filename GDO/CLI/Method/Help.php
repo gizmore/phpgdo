@@ -67,7 +67,7 @@ final class Help extends MethodCLI
 			$me = call_user_func([$command, 'make']);
 			/** @var Method $me * */
 			$name = $me->getModuleName();
-			$grps[$name] = isset($grps[$name]) ? $grps[$name] : [];
+			$grps[$name] = $grps[$name] ?? [];
 			$grps[$name][] = $me;
 		}
 		foreach ($grps as $mon => $mes)

@@ -19,6 +19,14 @@ abstract class MethodForm extends Method
 
 	public bool $submitted = false;
 
+    public bool $focusable = true;
+
+    public function focusable(bool $focusable=true): static
+    {
+        $this->focusable = $focusable;
+        return $this;
+    }
+
 	public ?string $pressedButton = null;
 
 	#################
@@ -90,7 +98,7 @@ abstract class MethodForm extends Method
 			$this->submitted = false;
 			$this->validated = false;
 			$this->pressedButton = null;
-			$this->form = GDT_Form::make($this->getFormName());
+			$this->form = GDT_Form::make($this->getFormName())->focus($this->focusable);
             $this->form->titleRaw($this->getMethodTitle(), false);
             $this->createForm($this->form);
             $this->form->inputs($inputs);

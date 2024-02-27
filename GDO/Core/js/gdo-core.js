@@ -11,11 +11,11 @@ window.GDO = {};
  * If none, all is ok.
  */
 window.GDO.autofocusForm = function() {
-	let el = window.document.querySelector('[gdo-focus-required]');
+	let el = window.document.querySelector('.focusable [gdo-focus-required]');
 	if (el) {
 		el.focus();
 	} else {
-		el = window.document.querySelector('[gdo-focus]');
+		el = window.document.querySelector('.focusable [gdo-focus]');
 		el && el.focus();
 	}
 };

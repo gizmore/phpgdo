@@ -7,6 +7,7 @@ use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO_Exception;
 use GDO\Core\GDO_MethodError;
+use GDO\Core\GDO_NoSuchCommandError;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Expression;
 use GDO\Core\GDT_Response;
@@ -100,11 +101,15 @@ if (CLI::isInteractive())
 			echo t('msg_module_methods', [
 				$module->gdoShortName(), $methods]);
 		}
+        catch (GDO_NoSuchCommandError $ex)
+        {
+            echo $ex->getMessage();
+        }
 		catch (Throwable $ex)
 		{
 			Debug::debugException($ex, false);
 			CLI::flushTopResponse();
-			echo GDT_Error::fromException($ex)->render();
+//			echo GDT_Error::fromException($ex)->render();
 		}
 	}
 	else

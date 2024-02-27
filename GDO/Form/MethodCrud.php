@@ -41,6 +41,8 @@ abstract class MethodCrud extends MethodForm
 
 	public function isShownInSitemap(): bool { return false; }
 
+    public function isCLI(): bool { return false; }
+
 	################
 	### Override ###
 	################

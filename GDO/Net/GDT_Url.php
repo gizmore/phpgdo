@@ -84,7 +84,9 @@ class GDT_Url extends GDT_String
 	}
 
 	public function gdtDefaultLabel(): ?string
-    { return 'url'; }
+    {
+        return 'url';
+    }
 
 	###################
 	### Var / Value ###
