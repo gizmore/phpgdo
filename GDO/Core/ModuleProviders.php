@@ -283,7 +283,7 @@ final class ModuleProviders
 'Python' => [],
 'QRCode' => [],
 'Quotes' => ['Address', 'Votes'],
-'Recalcolo' => ['Bootstrap5Theme', 'Login', 'Register', 'Account', 'Forum', 'Contact', 'Admin', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal'],
+'Recalcolo' => ['Account', 'Admin', 'Bootstrap5Theme', 'Contact', 'Forum', 'JQueryAutocomplete', 'Login', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'Register'],
 'Recovery' => ['Mail'],
 'Register' => [],
 'Security' => ['Hash'],

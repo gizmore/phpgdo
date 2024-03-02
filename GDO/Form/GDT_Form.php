@@ -40,7 +40,7 @@ use GDO\UI\WithTitle;
  * @see WithAction
  * @see WithActions
  */
-final class GDT_Form extends GDT
+class GDT_Form extends GDT
 {
 
     use WithGDO;
