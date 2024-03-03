@@ -25,6 +25,13 @@ final class GDT_Tab extends GDT
 		return 'tab' . (++self::$TABNUM);
 	}
 
+    public bool $active = false;
+    public function active(bool $active): self
+    {
+        $this->active = $active;
+        return $this;
+    }
+
 	##############
 	### Render ###
 	##############
