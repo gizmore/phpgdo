@@ -101,6 +101,7 @@ abstract class MethodForm extends Method
 			$this->form = GDT_Form::make($this->getFormName())->focus($this->focusable);
             $this->form->titleRaw($this->getMethodTitle(), false);
             $this->createForm($this->form);
+            $this->form->pack();
             $this->form->inputs($inputs);
             $this->addComposeParameters($this->form->getAllFields());
             $this->addComposeParameters($this->form->actions()->getAllFields());

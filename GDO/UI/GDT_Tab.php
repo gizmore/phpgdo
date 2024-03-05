@@ -26,7 +26,7 @@ final class GDT_Tab extends GDT
 	}
 
     public bool $active = false;
-    public function active(bool $active): self
+    public function active(bool $active=true): self
     {
         $this->active = $active;
         return $this;

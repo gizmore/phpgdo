@@ -264,4 +264,29 @@ class GDT_Form extends GDT
         return t('lbl_search_criteria', [implode(', ', $data)]);
     }
 
+
+    public function pack(): void
+    {
+        $this->fieldsFlat = [];
+        $this->packB($this->getFields());
+        $this->packB($this->actions()->getFields());
+    }
+
+    /**
+     * @param GDT[] $fields
+     */
+    private function packB(array $fields): void
+    {
+        foreach ($fields as $gdt)
+        {
+            if ($name = $gdt->getName())
+            {
+                $this->fieldsFlat[$name] = $gdt;
+            }
+            if ($gdt->hasFields())
+            {
+                $this->packB($gdt->getFields());
+            }
+        }
+    }
 }
