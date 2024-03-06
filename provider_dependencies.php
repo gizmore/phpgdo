@@ -45,3 +45,5 @@ foreach ($modules as $module)
 
 	echo "'" . $module->getName() . "' => " . $deps . ",\n";
 }
+
+return 0;

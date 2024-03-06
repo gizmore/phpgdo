@@ -58,3 +58,5 @@ Filewalker::traverse('GDO', null, null,
 			}
 		}
 	}, 0);
+
+return 0;

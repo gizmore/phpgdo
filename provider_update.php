@@ -16,7 +16,7 @@ $file = file_get_contents($filename);
 #################
 $output = [];
 $return_var = 0;
-$out = exec('php providers.php --for_gizmore', $output, $return_var);
+$out = exec('php providers.php --for_gizmore >> out.txt 2>&1 &', $output, $return_var);
 if ($return_var != 0)
 {
 	echo $out;
@@ -32,7 +32,7 @@ $file = preg_replace("/{$bd}.*{$ed}/s", "{$bd}\n{$deps}\n{$ed}", $file);
 ############
 $output = [];
 $return_var = 0;
-$out = exec('php provider_dependencies.php --for_gizmore', $output, $return_var);
+$out = exec('php provider_dependencies.php --for_gizmore >> out.txt 2>&1 &', $output, $return_var);
 if ($return_var != 0)
 {
 	echo $out;
