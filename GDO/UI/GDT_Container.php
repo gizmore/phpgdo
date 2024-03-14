@@ -5,6 +5,7 @@ namespace GDO\UI;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Text;
 use GDO\Core\WithFields;
+use GDO\Core\WithName;
 
 /**
  * Simple collection of GDTs.
@@ -23,6 +24,7 @@ class GDT_Container extends GDT
 
 	use WithFlex;
 	use WithFields;
+    use WithName;
 	use WithPHPJQuery;
 
 	final public const HORIZONTAL = 1;

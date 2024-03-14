@@ -1154,11 +1154,12 @@ elseif ($command === 'migrate')
         {
             Installer::installModule($module, true);
         }
-        GDT_Success::make()->text('msg_gdoadm_migrated_all');
+        echo GDT_Success::make()->text('msg_gdoadm_migrated_all')->render();
     }
 	elseif (count($argv) !== 3)
 	{
         echo GDT_Error::make()->text('err_gdoadm_migrate')->renderCLI();
+        printUsage(-1, 'migrate');
 	}
 	elseif (!($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
 	{
@@ -1169,9 +1170,9 @@ elseif ($command === 'migrate')
 	else
 	{
 		Installer::installModule($module, true);
-		GDT_Success::make()->text('msg_gdoadm_migrated', [
+		echo GDT_Success::make()->text('msg_gdoadm_migrated', [
 			$module->renderName(),
-		]);
+		])->render();
 	}
 }
 

@@ -12,7 +12,7 @@ use GDO\Core\WithFields;
  * @since 6.0.2
  * @author gizmore
  */
-final class GDT_Tab extends GDT
+class GDT_Tab extends GDT
 {
 
 	use WithLabel;
