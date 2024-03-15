@@ -2,6 +2,7 @@
 namespace GDO\Cronjob;
 
 use GDO\Core\Application;
+use GDO\Core\GDO_DBException;
 use GDO\Core\GDO_Module;
 use GDO\Core\ModuleLoader;
 use GDO\Date\Time;
@@ -78,7 +79,15 @@ final class Cronjob
 
 	private static function shouldRun(MethodCronjob $method)
 	{
-		if (self::$FORCE)
+        if (GDO_Cronjob::getByVars([
+            'cron_method' => get_class($method),
+            'cron_success' => null,
+        ]))
+        {
+            return false;
+        }
+
+        if (self::$FORCE)
 		{
 			return true;
 		}
@@ -130,7 +139,7 @@ final class Cronjob
 					$matches++;
 					break;
 				}
-				if (strpos($aaa, '-') !== false)
+				if (str_contains($aaa, '-'))
 				{
 					$aaa = explode('-', $aaa);
 					for ($j = $aaa[0]; $j <= $aaa[1]; $j++)
@@ -142,7 +151,7 @@ final class Cronjob
 						}
 					}
 				}
-				elseif (strpos($aaa, '/') === 0)
+				elseif (str_starts_with($aaa, '/'))
 				{
 					$aaa = substr($aaa, 1);
 					if (($att[$i] % $aaa) === 0)
@@ -164,8 +173,12 @@ final class Cronjob
 		return $matches === 5;
 	}
 
-	public static function executeCronjob(MethodCronjob $method)
-	{
+    /**
+     * @throws GDO_DBException
+     * @throws Throwable
+     */
+    public static function executeCronjob(MethodCronjob $method): void
+    {
 		try
 		{
 			$db = Database::instance();
