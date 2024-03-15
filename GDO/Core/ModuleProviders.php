@@ -167,7 +167,7 @@ final class ModuleProviders
 'Account' => ['Login'],
 'ACME' => ['Net'],
 'ActivationAlert' => [],
-'Address' => ['Mail', 'Country'],
+'Address' => ['Mail', 'Maps', 'Country'],
 'Admin' => ['Table'],
 'Ads' => ['Payment'],
 'Aprilfools' => [],

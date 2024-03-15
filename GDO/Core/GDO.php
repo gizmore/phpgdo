@@ -708,6 +708,7 @@ abstract class GDO extends GDT
 
 	/**
 	 * @throws GDO_DBException
+     * @param GDT[] $fields
 	 */
 	private static function _bulkInsert(array $fields, array $data, string $insert = 'INSERT'): bool
 	{
@@ -715,7 +716,7 @@ abstract class GDO extends GDT
 		$table = self::table();
 		foreach ($fields as $field)
 		{
-			$names[] = $field->name;
+			$names[] = $field->getName();
 		}
 		$names = implode('`, `', $names);
 
