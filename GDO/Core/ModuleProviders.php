@@ -169,158 +169,116 @@ final class ModuleProviders
 	];
 	public static $DEPENDENCIES = [
 		### BEGIN_DEPENDENCIES ###
-'AboutMe' => ['Account'],
-'Account' => ['Login'],
-'ACME' => ['Net'],
-'ActivationAlert' => [],
-'Address' => ['Mail', 'Maps', 'Country'],
-'Admin' => ['Table'],
-'Ads' => ['Payment'],
-'Aprilfools' => [],
-'Avatar' => ['File'],
-'Backup' => ['Cronjob', 'ZIP'],
-'BasicAuth' => [],
-'Birthday' => [],
-'Bootstrap5' => ['JQuery'],
-'Bootstrap5Theme' => ['Bootstrap5', 'Moment'],
-'Captcha' => ['Session'],
-'Category' => [],
-'ChatGPT' => ['File'],
-'CKEditor' => ['HTML', 'JQuery'],
-'Classic' => [],
-'CLI' => [],
-'Codinggeex' => ['Admin', 'Bootstrap5Theme', 'Download', 'Login', 'Perf'],
-'Comments' => ['Votes', 'File'],
-'Contact' => ['Mail'],
-'Core' => ['Crypto', 'Date', 'DBMS', 'Form', 'Language', 'UI', 'User'],
-'CORS' => [],
-'Country' => [],
-'CountryCoordinates' => ['Country', 'Maps'],
-'CountryRestrictions' => [],
-'Cronjob' => [],
-'Crypto' => [],
-'CSS' => [],
-'Currency' => ['Cronjob'],
-'Date' => [],
-'DBMS' => [],
-'Diary' => ['Admin', 'Birthday', 'Classic', 'Contact', 'Login', 'News'],
-'Dog' => ['CLI', 'Cronjob', 'Net'],
-'DogAuth' => ['Dog', 'Login', 'Register'],
-'DogBlackjack' => ['Dog'],
-'DogChatGPT' => ['ChatGPT', 'Dog'],
-'DogGreetings' => ['Dog'],
-'DogIRC' => ['DogAuth'],
-'DogIRCAutologin' => ['DogAuth', 'DogIRC'],
-'DogIRCSpider' => ['DogIRC'],
-'DogOracle' => ['DogAuth', 'Poll', 'Subscription'],
-'DogShadowdogs' => ['DogAuth'],
-'DogTeams' => ['Dog'],
-'DogTelegram' => ['Dog', 'Subscription'],
-'DogTick' => ['Country', 'DogIRC'],
-'DogTwitter' => [],
-'DogWebsite' => ['Admin', 'Avatar', 'Bootstrap5Theme', 'Captcha', 'Contact', 'Dog', 'DogAuth', 'DogBlackjack', 'DogGreetings', 'DogIRC', 'DogIRCAutologin', 'DogIRCSpider', 'DogOracle', 'DogShadowdogs', 'DogTelegram', 'DogTick', 'Download', 'Forum', 'JQuery', 'Links', 'Markdown', 'News', 'Perf', 'PM', 'Quotes', 'Shoutbox', 'Todo'],
-'DogWhatsApp' => ['Dog'],
-'DOMPDF' => ['File'],
-'DoubleAccounts' => [],
-'Download' => ['Category', 'File', 'Payment', 'Votes'],
-'DSGVO' => ['Session'],
-'EdwardSnowdenLand' => ['AboutMe', 'Account', 'ActivationAlert', 'Admin', 'Avatar', 'Backup', 'Bootstrap5Theme', 'Captcha', 'Contact', 'Cronjob', 'IP2Country', 'Favicon', 'File', 'FontAwesome', 'Forum', 'Invite', 'Javascript', 'JQueryAutocomplete', 'Mail', 'News', 'PM', 'Recovery', 'Register', 'TorChallenge', 'Votes'],
-'Facebook' => [],
-'Favicon' => [],
-'FFMpeg' => ['CLI'],
-'File' => ['Session'],
-'Fineprint' => ['Admin', 'Classic', 'Contact', 'CSS', 'DOMPDF', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Login', 'Perf'],
-'Follower' => [],
-'FontAtkinson' => [],
-'FontAwesome' => [],
-'Form' => [],
-'Forum' => ['File'],
-'Friends' => [],
-'Gallery' => ['File'],
-'GDO6DB' => [],
-'Geo2City' => ['Geo2Country', 'ZIP'],
-'Geo2Country' => ['Account', 'Admin', 'Classic', 'CountryCoordinates', 'CSS', 'FontAwesome', 'Javascript', 'Login', 'News', 'Perf', 'Recovery', 'Register'],
-'GTranslate' => [],
-'Guestbook' => ['Admin'],
-'Hash' => [],
-'Helpdesk' => ['Comments'],
-'HTML' => [],
-'Hydra' => [],
-'ImageMagick' => [],
-'Instagram' => [],
-'Install' => [],
-'Invite' => [],
-'IP2City' => ['Address', 'Country', 'Cronjob'],
-'IP2Country' => ['Country'],
-'ITMB' => ['Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'FontAtkinson', 'Markdown', 'Mibbit', 'News', 'Perf', 'PM', 'Recovery', 'TCPDF'],
-'Javascript' => [],
-'JPGraph' => [],
-'JQuery' => [],
-'JQueryAutocomplete' => ['JQuery'],
-'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5', 'Bootstrap5Theme', 'Captcha', 'Category', 'CKEditor', 'Contact', 'CountryCoordinates', 'CountryRestrictions', 'Cronjob', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'GTranslate', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'Sitemap', 'TorDetection', 'VPNDetect', 'YouTube'],
-'Language' => [],
-'Licenses' => [],
-'Links' => ['Votes', 'Tags', 'Cronjob'],
-'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DSGVO', 'Facebook', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Websocket'],
-'LoC' => [],
-'Login' => ['Session'],
-'Mail' => ['Mailer', 'Net'],
-'Mailer' => ['Mail'],
-'Maintenance' => [],
-'Maps' => ['JQuery'],
-'Markdown' => ['HTML', 'JQuery', 'FontAwesome'],
-'Math' => [],
-'Mettwitze' => ['Account', 'Admin', 'Bootstrap5Theme', 'Classic', 'Comments', 'GDO6DB', 'JQueryAutocomplete', 'Login', 'Recovery', 'Register', 'Sitemap', 'Votes'],
-'Mibbit' => [],
-'Moment' => [],
-'Net' => [],
-'News' => ['Comments', 'Category', 'Mail'],
-'OnlineUsers' => [],
-'OpenTimes' => [],
-'Payment' => ['Account', 'Address', 'TCPDF', 'Mail'],
-'PaymentBank' => ['Payment'],
-'PaymentCredits' => ['Payment'],
-'PaymentPaypal' => ['Payment'],
-'PaypalDonations' => [],
-'PDFParser' => [],
-'Perf' => [],
-'PHPGDO' => [],
-'PM' => ['Account'],
-'PMA' => [],
-'Poll' => ['Subscription'],
-'Prism' => [],
-'Python' => [],
-'QRCode' => [],
-'Quotes' => ['Address', 'Votes'],
-'Recalcolo' => ['Account', 'Admin', 'Bootstrap5Theme', 'CLI', 'Contact', 'Forum', 'IP2City', 'JQueryAutocomplete', 'Login', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'Register'],
-'Recovery' => ['Mail'],
-'Register' => [],
-'Security' => ['Hash'],
-'Session' => [],
-'Shadowlamb' => [],
-'Shoutbox' => [],
-'SimpleMDE' => ['HTML'],
-'Sitemap' => [],
-'Statistics' => [],
-'Subscription' => [],
-'Table' => [],
-'Tags' => [],
-'TBS' => ['Admin', 'Avatar', 'Captcha', 'Classic', 'Country', 'Contact', 'Cronjob', 'CSS', 'Favicon', 'FontAwesome', 'Forum', 'Javascript', 'JQueryAutocomplete', 'Login', 'Markdown', 'Mibbit', 'News', 'OnlineUsers', 'Perf', 'PM', 'Python', 'Recovery', 'Register', 'Statistics'],
-'TCPDF' => [],
-'TesseractOCR' => ['ImageMagick'],
-'Tests' => [],
-'Todo' => ['Table'],
-'TorChallenge' => ['TorDetection'],
-'TorDetection' => ['Net'],
-'Tradestation' => ['Account', 'Admin', 'CLI', 'PDFParser', 'TesseractOCR'],
-'UI' => [],
-'User' => ['Core'],
-'Votes' => [],
-'VPNDetect' => [],
-'Websocket' => ['Session'],
-'YouTube' => ['File'],
-'YTBest' => ['Admin', 'Classic', 'Comments', 'Login', 'Recovery', 'Register', 'Votes', 'YouTube'],
-'ZIP' => [],
+
+Warning: Undefined array key "REMOTE_ADDR" in C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php on line 181
+
+Call Stack:
+    0.4942    4657688   1. GDO\Core\Debug::exception_handler($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:0
+    0.4942    4657688   2. GDO\Core\Debug::debugException($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }, $render = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:421
+    0.5165    4698272   3. GDO\Core\Logger::logException($e = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:439
+    0.5165    4698592   4. GDO\Core\Logger::log($filename = 'critical', $message = 'syntax error, unexpected token "}", expecting variable in C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Module_DogNinja.php Line 44\n', $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:317
+    0.5175    4774032   5. GDO\Core\Debug::error_handler($errno = 2, $errstr = 'Undefined array key "REMOTE_ADDR"', $errfile = 'C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php', $errline = 181, $errcontext = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181
+    0.5176    4775024   6. GDO\Core\Logger::logCritical($message = 'Undefined array key "REMOTE_ADDR" in C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181\nBacktrace starts in [unknown file] line ?.\n - GDO\Core\Logger::logException(ParseError) ............................................................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 317.\n - GDO\Core\Logger::log(&quot;critical&quot;, &quot;syntax error, unexpected token \&quot;}\&quot;, expecting variable in C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Mo…php '...) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:193
+    0.5176    4775024   7. GDO\Core\Logger::log($filename = 'critical', $message = 'Undefined array key "REMOTE_ADDR" in C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181\nBacktrace starts in [unknown file] line ?.\n - GDO\Core\Logger::logException(ParseError) ............................................................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 317.\n - GDO\Core\Logger::log(&quot;critical&quot;, &quot;syntax error, unexpected token \&quot;}\&quot;, expecting variable in C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Mo…php '..., $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:311
+
+
+Warning: Cannot modify header information - headers already sent by (output started at C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181) in C:\ProjektPHPGDO\phpgdo\GDO7.php on line 345
+
+Call Stack:
+    0.4942    4657688   1. GDO\Core\Debug::exception_handler($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:0
+    0.4942    4657688   2. GDO\Core\Debug::debugException($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }, $render = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:421
+    0.5165    4698272   3. GDO\Core\Logger::logException($e = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:439
+    0.5165    4698592   4. GDO\Core\Logger::log($filename = 'critical', $message = 'syntax error, unexpected token "}", expecting variable in C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Module_DogNinja.php Line 44\n', $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:317
+    0.5175    4774032   5. GDO\Core\Debug::error_handler($errno = 2, $errstr = 'Undefined array key "REMOTE_ADDR"', $errfile = 'C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php', $errline = 181, $errcontext = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181
+    0.5420    4775968   6. hdrc($header = 'HTTP/1.1 500 Server Error', $replace = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:209
+    0.5420    4775968   7. hdr($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:324
+    0.5420    4775968   8. header($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+
+<div class="gdo-exception">
+<em><p>PHP Warning(EH 2):&nbsp;Undefined array key "REMOTE_ADDR"&nbsp;in&nbsp;<b style=/"font-size:16px;/">C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php</b>&nbsp;line&nbsp;<b style=/"font-size:16px;/">181</b></p></em><div class="gdt-hr"></div><pre>Backtrace starts in [unknown file] line ?.
+ - GDO\Core\Logger::logException(ParseError) ............................................................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 317.
+ - GDO\Core\Logger::log(&quot;critical&quot;, &quot;syntax error, unexpected token \&quot;}\&quot;, expecting variable in C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Mo…php Line 44\n&quot;, 8)  C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181.</pre>
+
+Warning: Undefined array key "REMOTE_ADDR" in C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php on line 181
+
+Call Stack:
+    0.4942    4657688   1. GDO\Core\Debug::exception_handler($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:0
+    0.4942    4657688   2. GDO\Core\Debug::debugException($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }, $render = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:421
+    0.5165    4698272   3. GDO\Core\Logger::logException($e = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:439
+    0.5538    4779528   4. GDO\Core\Logger::log($filename = 'critical', $message = '<span style="color: red;">ParseError</span>: ´<i>syntax error, unexpected token "}", expecting variable</i>´ in <b>C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Module_DogNinja.php</b> line <b>44</b>\nBacktrace starts in C:/ProjektPHPGDO/phpgdo/provider_dependencies.php line 26.\n - GDO\Core\ModuleLoader-&gt;loadModules(false, true, true) ................................................................. C:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 277.\n - GDO\Core\ModuleLoader-&gt;loadModulesFS(false) ....'..., $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:319
+    0.5538    4779592   5. GDO\Core\Debug::error_handler($errno = 2, $errstr = 'Undefined array key "REMOTE_ADDR"', $errfile = 'C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php', $errline = 181, $errcontext = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181
+    0.5543    4780552   6. GDO\Core\Logger::logCritical($message = 'Undefined array key "REMOTE_ADDR" in C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181\nBacktrace starts in [unknown file] line ?.\n - GDO\Core\Logger::logException(ParseError) ............................................................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 319.\n - GDO\Core\Logger::log(&quot;critical&quot;, &quot;&amp;lt;span style=\&quot;color: red;\&quot;&amp;gt;ParseError&amp;lt;/span&amp;gt;: \u00b4&amp;lt;i&amp;gt;syntax e'...) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:193
+    0.5543    4780552   7. GDO\Core\Logger::log($filename = 'critical', $message = 'Undefined array key "REMOTE_ADDR" in C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181\nBacktrace starts in [unknown file] line ?.\n - GDO\Core\Logger::logException(ParseError) ............................................................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 319.\n - GDO\Core\Logger::log(&quot;critical&quot;, &quot;&amp;lt;span style=\&quot;color: red;\&quot;&amp;gt;ParseError&amp;lt;/span&amp;gt;: \u00b4&amp;lt;i&amp;gt;syntax e'..., $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:311
+
+
+Warning: Cannot modify header information - headers already sent by (output started at C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181) in C:\ProjektPHPGDO\phpgdo\GDO7.php on line 345
+
+Call Stack:
+    0.4942    4657688   1. GDO\Core\Debug::exception_handler($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:0
+    0.4942    4657688   2. GDO\Core\Debug::debugException($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }, $render = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:421
+    0.5165    4698272   3. GDO\Core\Logger::logException($e = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:439
+    0.5538    4779528   4. GDO\Core\Logger::log($filename = 'critical', $message = '<span style="color: red;">ParseError</span>: ´<i>syntax error, unexpected token "}", expecting variable</i>´ in <b>C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Module_DogNinja.php</b> line <b>44</b>\nBacktrace starts in C:/ProjektPHPGDO/phpgdo/provider_dependencies.php line 26.\n - GDO\Core\ModuleLoader-&gt;loadModules(false, true, true) ................................................................. C:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 277.\n - GDO\Core\ModuleLoader-&gt;loadModulesFS(false) ....'..., $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:319
+    0.5538    4779592   5. GDO\Core\Debug::error_handler($errno = 2, $errstr = 'Undefined array key "REMOTE_ADDR"', $errfile = 'C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php', $errline = 181, $errcontext = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181
+    0.5701    4780360   6. hdrc($header = 'HTTP/1.1 500 Server Error', $replace = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:209
+    0.5701    4780360   7. hdr($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:324
+    0.5701    4780360   8. header($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+
+<div class="gdo-exception">
+<em><p>PHP Warning(EH 2):&nbsp;Undefined array key "REMOTE_ADDR"&nbsp;in&nbsp;<b style=/"font-size:16px;/">C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php</b>&nbsp;line&nbsp;<b style=/"font-size:16px;/">181</b></p></em><div class="gdt-hr"></div><pre>Backtrace starts in [unknown file] line ?.
+ - GDO\Core\Logger::logException(ParseError) ............................................................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 319.
+ - GDO\Core\Logger::log(&quot;critical&quot;, &quot;&amp;lt;span style=\&quot;color: red;\&quot;&amp;gt;ParseError&amp;lt;/span&amp;gt;: \u00b4&amp;lt;i&amp;gt;syntax error, unexpected … line 44.\r\n&quot;, 8)  C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php line 181.</pre>
+
+Warning: Undefined array key "REMOTE_ADDR" in C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php on line 181
+
+Call Stack:
+    0.4942    4657688   1. GDO\Core\Debug::exception_handler($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:0
+    0.4942    4657688   2. GDO\Core\Debug::debugException($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }, $render = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:421
+    0.5868    4777064   3. hdrc($header = 'HTTP/1.1 500 Server Error', $replace = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:452
+    0.5868    4777064   4. hdr($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:324
+    0.5868    4777064   5. header($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+    0.5868    4777288   6. GDO\Core\Debug::error_handler($errno = 2, $errstr = 'Cannot modify header information - headers already sent by (output started at C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181)', $errfile = 'C:\ProjektPHPGDO\phpgdo\GDO7.php', $errline = 345, $errcontext = ???) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+    0.5870    4778248   7. GDO\Core\Logger::logCritical($message = 'Cannot modify header information - headers already sent by (output started at C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php:181) in C:/ProjektPHPGDO/phpgdo/GDO7.php line 345\nBacktrace starts in [unknown file] line ?.\n - hdrc(&quot;HTTP/1.1 500 Server Error&quot;) ........ C:/ProjektPHPGDO/phpgdo/GDO7.php line 324.\n - hdr(&quot;HTTP/1.1 500 Server Error&quot;, true) ... C:/ProjektPHPGDO/phpgdo/GDO7.php line 345.\n - header(&quot;HTTP/1.1 500 Server Error&quot;, true)  [unknown file] line ?.') C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:193
+    0.5870    4778248   8. GDO\Core\Logger::log($filename = 'critical', $message = 'Cannot modify header information - headers already sent by (output started at C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php:181) in C:/ProjektPHPGDO/phpgdo/GDO7.php line 345\nBacktrace starts in [unknown file] line ?.\n - hdrc(&quot;HTTP/1.1 500 Server Error&quot;) ........ C:/ProjektPHPGDO/phpgdo/GDO7.php line 324.\n - hdr(&quot;HTTP/1.1 500 Server Error&quot;, true) ... C:/ProjektPHPGDO/phpgdo/GDO7.php line 345.\n - header(&quot;HTTP/1.1 500 Server Error&quot;, true)  [unknown file] line ?.', $logmode = 8) C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:311
+
+
+Warning: Cannot modify header information - headers already sent by (output started at C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181) in C:\ProjektPHPGDO\phpgdo\GDO7.php on line 345
+
+Call Stack:
+    0.4942    4657688   1. GDO\Core\Debug::exception_handler($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:0
+    0.4942    4657688   2. GDO\Core\Debug::debugException($ex = class ParseError { protected $message = 'syntax error, unexpected token "}", expecting variable'; private string ${Error}string = ''; protected $code = 0; protected string $file = 'C:\ProjektPHPGDO\phpgdo\GDO\DogNinja\Module_DogNinja.php'; protected int $line = 44; private array ${Error}trace = [0 => [...], 1 => [...], 2 => [...], 3 => [...], 4 => [...], 5 => [...], 6 => [...], 7 => [...], 8 => [...]]; private ?Throwable ${Error}previous = NULL }, $render = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:421
+    0.5868    4777064   3. hdrc($header = 'HTTP/1.1 500 Server Error', $replace = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:452
+    0.5868    4777064   4. hdr($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:324
+    0.5868    4777064   5. header($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+    0.5868    4777288   6. GDO\Core\Debug::error_handler($errno = 2, $errstr = 'Cannot modify header information - headers already sent by (output started at C:\ProjektPHPGDO\phpgdo\GDO\Core\Logger.php:181)', $errfile = 'C:\ProjektPHPGDO\phpgdo\GDO7.php', $errline = 345, $errcontext = ???) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+    0.6017    4778536   7. hdrc($header = 'HTTP/1.1 500 Server Error', $replace = ???) C:\ProjektPHPGDO\phpgdo\GDO\Core\Debug.php:209
+    0.6017    4778536   8. hdr($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:324
+    0.6017    4778536   9. header($header = 'HTTP/1.1 500 Server Error', $replace = TRUE) C:\ProjektPHPGDO\phpgdo\GDO7.php:345
+
+<div class="gdo-exception">
+<em><p>PHP Warning(EH 2):&nbsp;Cannot modify header information - headers already sent by (output started at C:/ProjektPHPGDO/phpgdo/GDO/Core/Logger.php:181)&nbsp;in&nbsp;<b style=/"font-size:16px;/">C:/ProjektPHPGDO/phpgdo/GDO7.php</b>&nbsp;line&nbsp;<b style=/"font-size:16px;/">345</b></p></em><div class="gdt-hr"></div><pre>Backtrace starts in [unknown file] line ?.
+ - hdrc(&quot;HTTP/1.1 500 Server Error&quot;) ........ C:/ProjektPHPGDO/phpgdo/GDO7.php line 324.
+ - hdr(&quot;HTTP/1.1 500 Server Error&quot;, true) ... C:/ProjektPHPGDO/phpgdo/GDO7.php line 345.
+ - header(&quot;HTTP/1.1 500 Server Error&quot;, true)  [unknown file] line ?.</pre>
+<div class="gdo-exception">
+<em><span style="color: red;">ParseError</span>: ´<i>syntax error, unexpected token "}", expecting variable</i>´ in <b>C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Module_DogNinja.php</b> line <b>44</b></em><div class="gdt-hr"></div><pre>Backtrace starts in C:/ProjektPHPGDO/phpgdo/provider_dependencies.php line 26.
+ - GDO\Core\ModuleLoader-&gt;loadModules(false, true, true) ................................................................. C:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 277.
+ - GDO\Core\ModuleLoader-&gt;loadModulesFS(false) ........................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 353.
+ - GDO\Util\Filewalker::traverse(&quot;C:\ProjektPHPGDO\phpgdo/GDO/&quot;, NULL, NULL, [
+    {},
+    &quot;_loadModuleFS&quot;
+], , false) ... C:/ProjektPHPGDO/phpgdo/GDO/Util/Filewalker.php line 24.
+ - gizmore\Filewalker::traverse(&quot;C:\ProjektPHPGDO\phpgdo/GDO&quot;, NULL, NULL, [
+    {},
+    &quot;_loadModuleFS&quot;
+], , false, &quot;\&quot;)  C:/ProjektPHPGDO/phpgdo/GDO/Util/php-filewalker/gizmore/Filewalker.php line 104.
+ - call_user_func([
+    {},
+    &quot;_loadModuleFS&quot;
+], &quot;DogNinja&quot;, &quot;C:\ProjektPHPGDO\phpgdo/GDO\DogNinja&quot;, false) ............ [unknown file] line ?.
+ - GDO\Core\ModuleLoader-&gt;_loadModuleFS(&quot;DogNinja&quot;, &quot;C:\ProjektPHPGDO\phpgdo/GDO\DogNinja&quot;, false) ....................... C:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 509.
+ - GDO\Core\ModuleLoader-&gt;loadModuleFS(&quot;DogNinja&quot;) ....................................................................... C:/ProjektPHPGDO/phpgdo/GDO/Core/ModuleLoader.php line 187.
+ - class_exists(&quot;GDO\DogNinja\Module_DogNinja&quot;) .......................................................................... [unknown file] line ?.
+ - {closure}(&quot;GDO/DogNinja/Module_DogNinja&quot;) ............................................................................. C:/ProjektPHPGDO/phpgdo/GDO/DogNinja/Module_DogNinja.php line 44.</pre>
 ### END_DEPENDENCIES ###
 	];
 
