@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use GDO\CLI\CLI;
 use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO_SEO_URL;

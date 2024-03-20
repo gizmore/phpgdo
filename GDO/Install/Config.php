@@ -105,7 +105,6 @@ class Config
 		deff('GDO_TIMEZONE', ini_get('date.timezone')); # @TODO use the full timezone name here for the default timezone in module date.
 		deff('GDO_THEMES', 'default');
 		deff('GDO_MODULE', 'Core');
-//		deff('GDO_METHOD', 'Welcome');
 		deff('GDO_SEO_URLS', false);
 		deff('GDO_IPC', 'none');
 		deff('GDO_IPC_DEBUG', false);

@@ -31,8 +31,8 @@ final class GDT_DocsFile extends GDT_Select
 	 */
 	public function _buildEnum(string $entry, string $fullpath): void
 	{
-		$key = substr($entry, 0, -3);
-		self::$DOCS[$key] = $fullpath;
+        $n = count(self::$DOCS) + 1;
+		self::$DOCS[$n] = $fullpath . "($n)";
 	}
 
 	public function getDocsPath(): ?string

@@ -13,6 +13,7 @@ use GDO\Core\WithInput;
  * Used for CLI parameter lists, like $sum 1,2,3,...
  * These need to be notNull and may not have an initial value.
  * This means it is always a positional finisher.
+ * Create a repeat with ::makeAs()
  * It is probably not possible at the moment to proxy a GDT_Composite like GDT_Message or GDT_Position.
  *
  * @version 7.0.3

@@ -172,7 +172,7 @@ class GDT_Url extends GDT_String
 		# Check schemes (if external). internal are always prefixed with /
 		if ($this->allowExternal)
 		{
-			if ($this->schemes && count($this->schemes))
+			if (isset($this->schemes) && count($this->schemes))
 			{
                 $scheme = $url->getScheme();
 				if (!in_array($scheme, $this->schemes, true))
@@ -262,5 +262,15 @@ class GDT_Url extends GDT_String
 		return $this;
 	}
 
+
+    public function getURL(): URL
+    {
+        return $this->getValue();
+    }
+
+    public function getAbsoluteURL(): URL
+    {
+        return $this->getURL();
+    }
 
 }

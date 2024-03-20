@@ -52,7 +52,7 @@ class GDO_UserSetting extends GDO
 	 * Get all users with a specified setting.
 	 * Return as DB result.
 	 */
-	public static function usersWith(string $moduleName, string $key, string $var, string $op = '='): Result
+	public static function usersWith(string $moduleName, string $key, ?string $var, string $op = '='): Result
 	{
 		return self::usersWithQuery($moduleName, $key, $var, $op)->exec();
 	}
@@ -71,18 +71,23 @@ class GDO_UserSetting extends GDO
 		if ($op === 'LIKE')
 		{
 			$query->where("uset_var LIKE \"{$var}\"");
+            if ($all)
+            {
+                $query->orWhere('uset_var IS NULL');
+            }
 		}
 		else
 		{
-			$op = $var === null ? 'IS' : $op;
+//			$op = $var === null ? 'IS' : $op;
 			$var = quote($var);
 			$query->where("uset_var $op $var");
 		}
 
-		if ($all)
-		{
-			$query->orWhere('uset_var IS NULL');
-		}
+//        if ($all)
+//        {
+//            $query->orWhere('uset_var IS NULL');
+//        }
+
 
 		return $query->fetchTable(GDO_User::table());
 	}

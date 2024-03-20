@@ -20,6 +20,7 @@ use GDO\User\GDO_User;
 abstract class MethodQueryTable extends MethodTable
 {
 
+
 	public function gdoHeaders(): array
 	{
 		return array_merge($this->gdoButtonHeaders(), $this->gdoTable()->gdoColumnsCache());

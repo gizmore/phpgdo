@@ -283,6 +283,10 @@ class GDT_Form extends GDT
             {
                 $this->fieldsFlat[$name] = $gdt;
             }
+            else
+            {
+                $this->fieldsFlat[] = $gdt;
+            }
             if ($gdt->hasFields())
             {
                 $this->packB($gdt->getFields());

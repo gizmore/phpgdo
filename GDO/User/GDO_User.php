@@ -224,7 +224,7 @@ final class GDO_User extends GDO
 		return self::withSettingResult($moduleName, $key, $var, $op)->fetchAllObjects();
 	}
 
-	public static function withSettingResult(string $moduleName, string $key, string $var, string $op = '='): Result
+	public static function withSettingResult(string $moduleName, string $key, ?string $var, string $op = '='): Result
 	{
 		return GDO_UserSetting::usersWith($moduleName, $key, $var, $op);
 	}

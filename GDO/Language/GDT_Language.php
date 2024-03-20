@@ -80,7 +80,7 @@ final class GDT_Language extends GDT_ObjectSelect
 
 	public function initialCurrent(bool $bool = true): self
 	{
-		return $this->initial(GDO_User::current()->getLangISO());
+		return $this->initial(Trans::$ISO);
 	}
 
 	##################

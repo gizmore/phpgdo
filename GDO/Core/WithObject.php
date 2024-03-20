@@ -117,7 +117,7 @@ trait WithObject
 	 * Analyze seearch hits for getGDOsByName.
 	 * Maybe only one user starts with the input.
 	 */
-	private function getByName(string $var): ?GDO
+	protected function getByName(string $var): ?GDO
 	{
 		$gdos = $this->getGDOsByName($var);
 		if (count($gdos) === 0)

@@ -175,7 +175,14 @@ final class Trans
 			$text = $cache[$key];
 			if ($args)
 			{
-                $text = vsprintf($text, $args);
+                try
+                {
+                    $text = vsprintf($text, $args);
+                }
+                catch (\Throwable $ex)
+                {
+                    $text = $key .  ': ' . json_encode($args);
+                }
             }
 		}
 		else

@@ -86,78 +86,78 @@ use GDO\Util\Strings;
  */
 function printUsage(int $code = -1, string $cmd = null): void
 {
-	global $app, $exe;
-	$commands = [
+    global $app, $exe;
+    $commands = [
 
-		'DIV-Spawn',
-		'docs' => "$exe -iv %CMD% - To print and run install instructions from the DOCS at https://github.com/gizmore/phpgdo",
-		'systemtest' => "$exe %CMD% [<config.php>] - To run the gdo core systemtest.",
-		'configure' => "$exe -iF %CMD% [<config.php>] - To generate a `protected/config.php.`.",
-		'test' => "$exe %CMD% [<config.php>] - To test a `protected/config.php.`.",
-		'admin' => "$exe -d %CMD% <username> [<password>] - To (re)-set or delete an admin.",
-		'cronjob' => "$exe %CMD% - To print cronjob instructions.",
-		'webconf' => "$exe %CMD% - To print webserver configuration examples.",
-		'secure' => "$exe %CMD% - To secure your installation after an install.",
+        'DIV-Spawn',
+        'docs' => "$exe -iv %CMD% - To print and run install instructions from the DOCS at https://github.com/gizmore/phpgdo",
+        'systemtest' => "$exe %CMD% [<config.php>] - To run the gdo core systemtest.",
+        'configure' => "$exe -iF %CMD% [<config.php>] - To generate a `protected/config.php.`.",
+        'test' => "$exe %CMD% [<config.php>] - To test a `protected/config.php.`.",
+        'admin' => "$exe -d %CMD% <username> [<password>] - To (re)-set or delete an admin.",
+        'cronjob' => "$exe %CMD% - To print cronjob instructions.",
+        'webconf' => "$exe %CMD% - To print webserver configuration examples.",
+        'secure' => "$exe %CMD% - To secure your installation after an install.",
 
-		'DIV-Modules',
-		'modules' => "$exe -a %CMD% [<module>] - To show a list of modules or show module details.",
-		'provide' => "$exe -a %CMD% [<module>] - To download all modules that are required to provide a module,",
-		'install' => "$exe -ac %CMD% [<module>] - To install a module and it's dependencies,",
-		'wipe' => "$exe -a %CMD% [<module>] - To uninstall modules,",
+        'DIV-Modules',
+        'modules' => "$exe -a %CMD% [<module>] - To show a list of modules or show module details.",
+        'provide' => "$exe -a %CMD% [<module>] - To download all modules that are required to provide a module,",
+        'install' => "$exe -ac %CMD% [<module>] - To install a module and it's dependencies,",
+        'wipe' => "$exe -a %CMD% [<module>] - To uninstall modules,",
 
-		'DIV-Updates',
-		'cc' => "$exe %CMD% - To clear all caches. Convinient for developing.",
-		'update' => "$exe %CMD% - To run post processing CI steps after `gdo_update.sh`.",
-		'confgrade' => "$exe %CMD% - Upgrade your config.php with new config vars.",
-		'vendor' => "$exe -af %CMD% [<module>] - Clear, needs force, and reinstall, third party libraries.",
-		'migrate' => "$exe -afv %CMD% [<module>] - To migrate gdo db tables for an installed module. Handle with care.!",
-		'pp' => "$exe %CMD% - To run the PP php-preprocessor on all files.",
+        'DIV-Updates',
+        'cc' => "$exe %CMD% - To clear all caches. Convinient for developing.",
+        'update' => "$exe %CMD% - To run post processing CI steps after `gdo_update.sh`.",
+        'confgrade' => "$exe %CMD% - Upgrade your config.php with new config vars.",
+        'vendor' => "$exe -af %CMD% [<module>] - Clear, needs force, and reinstall, third party libraries.",
+        'migrate' => "$exe -afv %CMD% [<module>] - To migrate gdo db tables for an installed module. Handle with care.!",
+        'pp' => "$exe %CMD% - To run the PP php-preprocessor on all files.",
 
-		'DIV-Config',
-		'config' => "$exe -ar %CMD% [<module>] - To show or reset all config variables for modules,",
-		'config ' => "$exe -r %CMD% <module> <key> - To show or reset a single module config variable,",
-		'config  ' => "$exe %CMD% <module> <key> <var> - To set the value of a config variable.",
-		'configtest' => "$exe -af %CMD% [<module>] - To validate the config for modules.",
-	];
+        'DIV-Config',
+        'config' => "$exe -ar %CMD% [<module>] - To show or reset all config variables for modules,",
+        'config ' => "$exe -r %CMD% <module> <key> - To show or reset a single module config variable,",
+        'config  ' => "$exe %CMD% <module> <key> <var> - To set the value of a config variable.",
+        'configtest' => "$exe -af %CMD% [<module>] - To validate the config for modules.",
+    ];
 
-	if ($app->verbose)
-	{
-		echo "Tip: you can have a 'cli-only' `protected/config_cli.php`.\n";
-		echo "Note: PHP getopts syntax is used here.\n";
-		echo "\n";
-		echo "Toggles:\n";
-		echo "-a == --all - To select all available modules.\n";
-		echo "-c == --configured - To select all installed modules.\n";
-		echo "-d == --delete - To delete admins.\n";
-		echo "-f == --fix - To fix entries in module configurations and settings.\n";
-		echo "-F == --force - To force auto detection and recreation of a protected/config.php.\n";
-		echo "-r == --reset - To reset config vars.\n";
-		echo "-s == --ssh - To clone via ssh protocol, only for the developers.\n";
-		echo "-v == --verbose - For more output.\n";
-		echo "-3 == --libraries - To select third party libraries.\n";
-		echo "\n";
-	}
+    if ($app->verbose)
+    {
+        echo "Tip: you can have a 'cli-only' `protected/config_cli.php`.\n";
+        echo "Note: PHP getopts syntax is used here.\n";
+        echo "\n";
+        echo "Toggles:\n";
+        echo "-a == --all - To select all available modules.\n";
+        echo "-c == --configured - To select all installed modules.\n";
+        echo "-d == --delete - To delete admins.\n";
+        echo "-f == --fix - To fix entries in module configurations and settings.\n";
+        echo "-F == --force - To force auto detection and recreation of a protected/config.php.\n";
+        echo "-r == --reset - To reset config vars.\n";
+        echo "-s == --ssh - To clone via ssh protocol, only for the developers.\n";
+        echo "-v == --verbose - For more output.\n";
+        echo "-3 == --libraries - To select third party libraries.\n";
+        echo "\n";
+    }
 
-	if ($cmd)
-	{
-		foreach ($commands as $c => $usage)
-		{
-			if (str_starts_with((string)$c, $cmd))
-			{
-				$usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c,  $usage);
-				print("Usage: {$usage}\n");
-			}
-		}
-	}
-	else
-	{
-		foreach ($commands as $c => $usage)
-		{
-			$usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c, $usage);
-			print("Usage: {$usage}\n");
-		}
-	}
-	die($code);
+    if ($cmd)
+    {
+        foreach ($commands as $c => $usage)
+        {
+            if (str_starts_with((string)$c, $cmd))
+            {
+                $usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c,  $usage);
+                print("Usage: {$usage}\n");
+            }
+        }
+    }
+    else
+    {
+        foreach ($commands as $c => $usage)
+        {
+            $usage = is_numeric($c) ? $usage : str_replace('%CMD%', $c, $usage);
+            print("Usage: {$usage}\n");
+        }
+    }
+    die($code);
 }
 
 chdir(__DIR__);
@@ -167,117 +167,125 @@ require 'GDO7.php';
 # forced?
 if (FileUtil::isFile('protected/config_cli.php'))
 {
-	require 'protected/config_cli.php';
+    require 'protected/config_cli.php';
 }
-else
+elseif (FileUtil::isFile('protected/config.php'))
 {
-	@include 'protected/config.php';
+    require 'protected/config.php';
 }
 
 $app = new class extends Application
 {
 
-	public function __construct()
-	{
-		parent::__construct();
-		self::$INSTANCE = $this;
-	}
+    public function __construct()
+    {
+        parent::__construct();
+        self::$INSTANCE = $this;
+    }
 
 
-	public function isInstall(): bool
-	{
-		return true;
-	}
+    public function isInstall(): bool
+    {
+        return true;
+    }
 
-	###############
-	### Options ###
-	###############
-	public bool $all = false;
+    ###############
+    ### Options ###
+    ###############
+    public bool $all = false;
 
-	public function all(bool $all = true): self
-	{
-		$this->all = $all;
-		return $this;
-	}
+    public function all(bool $all = true): self
+    {
+        $this->all = $all;
+        return $this;
+    }
 
-	public bool $configured = false;
+    public bool $configured = false;
 
-	public function configured(bool $configured = true): self
-	{
-		$this->configured = $configured;
-		return $this;
-	}
+    public function configured(bool $configured = true): self
+    {
+        $this->configured = $configured;
+        return $this;
+    }
 
-	public bool $delete = false;
-	public function delete(bool $delete = true): self
-	{
-		$this->delete = $delete;
-		return $this;
-	}
+    public bool $delete = false;
+    public function delete(bool $delete = true): self
+    {
+        $this->delete = $delete;
+        return $this;
+    }
 
-	public bool $fix = false;
+    public bool $fix = false;
 
-	public function fix(bool $fix = true): self
-	{
-		$this->fix = $fix;
-		return $this;
-	}
+    public function fix(bool $fix = true): self
+    {
+        $this->fix = $fix;
+        return $this;
+    }
 
-	public bool $force = false;
+    public bool $force = false;
 
-	public function force(bool $force = true): self
-	{
-		$this->force = $force;
-		return $this;
-	}
+    public function force(bool $force = true): self
+    {
+        $this->force = $force;
+        return $this;
+    }
 
-	public bool $interactive = false;
+    public bool $interactive = false;
 
-	public function interactive(bool $interactive = true): self
-	{
-		$this->interactive = $interactive;
-		return $this;
-	}
+    public function interactive(bool $interactive = true): self
+    {
+        $this->interactive = $interactive;
+        return $this;
+    }
 
-	public bool $quiet = false;
+    public bool $postInstall = false;
 
-	public function quiet(bool $quiet = true): self
-	{
-		$this->quiet = $quiet;
-		return $this;
-	}
+    public function postInstall(bool $postInstall = true): self
+    {
+        $this->postInstall = $postInstall;
+        return $this;
+    }
 
-	public bool $reset = false;
+    public bool $quiet = false;
 
-	public function resetting(bool $r = true): self
-	{
-		$this->reset = $r;
-		return $this;
-	}
+    public function quiet(bool $quiet = true): self
+    {
+        $this->quiet = $quiet;
+        return $this;
+    }
 
-	public bool $ssh = false;
+    public bool $reset = false;
 
-	public function ssh(bool $ssh = true): self
-	{
-		$this->ssh = $ssh;
-		return $this;
-	}
+    public function resetting(bool $r = true): self
+    {
+        $this->reset = $r;
+        return $this;
+    }
 
-	public bool $verbose = false;
+    public bool $ssh = false;
 
-	public function verbose(bool $verbose = true): self
-	{
-		$this->verbose = $verbose;
-		return $this;
-	}
+    public function ssh(bool $ssh = true): self
+    {
+        $this->ssh = $ssh;
+        return $this;
+    }
 
-	public bool $vendor = false;
+    public bool $verbose = false;
 
-	public function vendor(bool $vendor = true): self
-	{
-		$this->vendor = $vendor;
-		return $this;
-	}
+    public function verbose(bool $verbose = true): self
+    {
+        $this->verbose = $verbose;
+        return $this;
+    }
+
+    public bool $vendor = false;
+
+    public function vendor(bool $vendor = true): self
+    {
+        $this->vendor = $vendor;
+        return $this;
+    }
 
 };
 
@@ -286,9 +294,9 @@ $app->modeDetected(GDT::RENDER_CLI)->cli()->verb(GDT_Form::POST);
 # Load config defaults
 if (!defined('GDO_CONFIGURED'))
 {
-	define('GDO_DB_ENABLED', false);
-	define('GDO_WEB_ROOT', '/');
-	Config::configure(); # autoconfig
+    define('GDO_DB_ENABLED', false);
+    define('GDO_WEB_ROOT', '/');
+    Config::configure(); # autoconfig
 }
 
 // new ModuleLoader(GDO_PATH . 'GDO/');
@@ -304,60 +312,64 @@ define('GDO_CORE_STABLE', true);
 
 if ($argc === 1)
 {
-	printUsage(0);
+    printUsage(0);
 }
 $exe = array_shift($argv);
 $argc = count($argv);
 $i = 0;
-$o = getopt('acdfFhiqrsv3', ['all', 'configured', 'delete', 'fix', 'force', 'help', 'interactive', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
+$o = getopt('acdfFhipqrsv3', ['all', 'configured', 'delete', 'fix', 'force', 'help', 'interactive', 'post-install', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
 if (isset($o['a']) || isset($o['all']))
 {
-	$app->all();
+    $app->all();
 }
 if (isset($o['c']) || isset($o['configured']))
 {
-	$app->configured();
+    $app->configured();
 }
 if (isset($o['d']) || isset($o['delete']))
 {
-	$app->delete();
+    $app->delete();
 }
 if (isset($o['f']) || isset($o['fix']))
 {
-	$app->fix();
+    $app->fix();
 }
 if (isset($o['F']) || isset($o['force']))
 {
-	$app->force();
+    $app->force();
 }
 if (isset($o['h']) || isset($o['help']))
 {
-	printUsage(0);
+    printUsage(0);
 }
 
 if (isset($o['i']) || isset($o['interactive']))
 {
-	$app->interactive();
+    $app->interactive();
+}
+if (isset($o['p']) || isset($o['post-install']))
+{
+    $app->postInstall();
 }
 if (isset($o['q']) || isset($o['quiet']))
 {
-	$app->quiet();
+    $app->quiet();
 }
 if (isset($o['r']) || isset($o['reset']))
 {
-	$app->resetting();
+    $app->resetting();
 }
 if (isset($o['s']) || isset($o['ssh']))
 {
-	$app->ssh();
+    $app->ssh();
 }
 if (isset($o['v']) || isset($o['verbose']))
 {
-	$app->verbose();
+    $app->verbose();
 }
 if (isset($o['3']) || isset($o['libraries']))
 {
-	$app->vendor();
+    $app->vendor();
 }
 
 array_unshift($argv, $exe);
@@ -368,7 +380,7 @@ $argc = count($argv);
 
 if (isset($o['h']) || isset($o['help']))
 {
-	printUsage(0, $cmd);
+    printUsage(0, $cmd);
 }
 
 # Fix argc/argv
@@ -380,29 +392,29 @@ switch ($command)
 {
     case 'install':
         Database::init();
-        # fallthrough
-	case 'configure':
-	case 'systemtest':
-	case 'wipe':
-	case 'provide':
+    # fallthrough
+    case 'configure':
+    case 'systemtest':
+    case 'wipe':
+    case 'provide':
     case 'revendor':
-		$db = false;
-		break;
-	default:
-		if ($db)
-		{
-			Database::init();
-		}
-		break;
+        $db = false;
+        break;
+    default:
+        if ($db)
+        {
+            Database::init();
+        }
+        break;
 }
 $modules = [];
 
 if (!$db)
 {
-	$core = $loader->loadModuleFS('Core');
-	$core->onLoadLanguage();
-	$inst = $loader->loadModuleFS('Install');
-	$inst->onLoadLanguage();
+    $core = $loader->loadModuleFS('Core');
+    $core->onLoadLanguage();
+    $inst = $loader->loadModuleFS('Install');
+    $inst->onLoadLanguage();
 }
 
 $loader->loadModules($db, true);
@@ -415,177 +427,177 @@ $loader->initModules($db);
 # Run!
 if ($command === 'cc')
 {
-	ClearCache::make()->execute();
-	echo "Caches cleared!\n";
+    ClearCache::make()->execute();
+    echo "Caches cleared!\n";
 }
 
 elseif ($command === 'docs')
 {
-	echo "Welcome to the GDOv7 interactive installer.\n";
-	$gdt = GDT_DocsFile::make('file');
-	$now = 'first';
-	while (REPL::confirm('Do you want, here, to print a few lines of the phpgdo DOCS of https://github.com/gizmore/phpgdo?', false))
-	{
-		while (!$gdt->hasError())
-		{
-			$gdt->reset();
-			if (REPL::changedGDTVar($gdt, "Which File $now? "))
-			{
-				echo file_get_contents($gdt->getDocsPath());
-				echo "\n";
-				$now = 'now';
-			}
-			else
-			{
-				break 2;
-			}
-		}
-	}
-	REPL::confirmOrDie("The biggest requirements are mysql/mariadb, git[4window] and PHP>=8.0, OK?\n", false);
-	if (REPL::confirm('You can check the requirements with `./gdo_adm.sh systemtest`.', false))
-	{
-		system('php gdo_adm.php systemtest');
-		REPL::confirmOrDie("Was the system test OK?\n");
-	}
-	echo "You need a file named `protected/config.php`.\n";
-	if (REPL::confirm('Shall i run `php gdo_adm.php configure` for you?', true))
-	{
-		system('php gdo_adm.php configure -i');
-	}
-	REPL::abortable('Next we will run `php gdo_adm.php test`, Ok? ');
-	if ($code = system('php gdo_adm.php test'))
-	{
-		die("`php gdo_adm.php test` failed with exit code $code");
-	}
-	echo "Good, you can connect to your database.\n";
-	if (REPL::confirm('Do you want to install the core now? ', true))
-	{
-		echo "Ok, running `php gdo_adm.php install core` in a second...\n";
-		sleep(1);
-		echo "Hehe\n";
-		if ($code = system('php gdo_adm.php install core --post-install'))
-		{
-			die("`php gdo_adm.php install core` failed with exit code $code");
-		}
-	}
+    echo "Welcome to the GDOv7 interactive installer.\n";
+    $gdt = GDT_DocsFile::make('file');
+    $now = 'first';
+    while (REPL::confirm('Do you want, here, to print a few lines of the phpgdo DOCS of https://github.com/gizmore/phpgdo?', false))
+    {
+        while (!$gdt->hasError())
+        {
+            $gdt->reset();
+            if (REPL::changedGDTVar($gdt, "Which File $now? "))
+            {
+                echo file_get_contents($gdt->getDocsPath());
+                echo "\n";
+                $now = 'now';
+            }
+            else
+            {
+                break 2;
+            }
+        }
+    }
+    REPL::confirmOrDie("The biggest requirements are mysql|postgres|sqlite, git[4window] and PHP>=8.2, OK?", false);
+    if (REPL::confirm('You can check the requirements with `./gdo_adm.sh systemtest`.', false))
+    {
+        system('php gdo_adm.php systemtest');
+        REPL::confirmOrDie("Was the system test OK?");
+    }
+    echo "You need a file named `protected/config.php`.\n";
+    if (REPL::confirm('Shall i run `php gdo_adm.php configure` for you?', true))
+    {
+        system('php gdo_adm.php -i configure');
+    }
+    REPL::abortable('Next we will run `php gdo_adm.php test`, Ok? ');
+    if ($code = system('php gdo_adm.php test'))
+    {
+        die("`php gdo_adm.php test` failed with exit code $code");
+    }
+    echo "Good, you can connect to your database.\n";
+    if (REPL::confirm('Do you want to install the core now? ', true))
+    {
+        echo "Ok, running `php gdo_adm.php install core` in a second...\n";
+        sleep(1);
+        echo "Hehe\n";
+        if ($code = system('php gdo_adm.php install core --post-install'))
+        {
+            die("`php gdo_adm.php install core` failed with exit code $code");
+        }
+    }
 
-	$folder = GDO_PATH . 'bin/';
-	echo "You now can add $folder to your PATH environment variable.\n";
-	if (REPL::acknowledge('Do you want to see instructions?'))
-	{
-		echo "TODO\n";
-	}
+    $folder = GDO_PATH . 'bin/';
+    echo "You now can add $folder to your PATH environment variable.\n";
+    if (REPL::acknowledge('Do you want to see instructions?'))
+    {
+        echo "TODO\n";
+    }
 
 
-	echo "See you around!\n";
+    echo "See you around!\n";
 }
 
 elseif ($command === 'systemtest')
 {
-	if ($argc !== 2)
-	{
-		printUsage(1);
-	}
-	echo SystemTest::make()->execute()->renderCLI();
+    if ($argc !== 2)
+    {
+        printUsage(1);
+    }
+    echo SystemTest::make()->execute()->renderCLI();
 }
 
 elseif ($command === 'configure')
 {
-	if ($argc === 2)
-	{
-		$argc++;
-		$argv[2] = 'config.php'; # default config filename
-	}
+    if ($argc === 2)
+    {
+        $argc++;
+        $argv[2] = 'config.php'; # default config filename
+    }
 
-	$inputs = [
-		'filename' => $argv[2],
-		'save_config' => '1',
-	];
+    $inputs = [
+        'filename' => $argv[2],
+        'save_config' => '1',
+    ];
 
-	if ($app->interactive)
-	{
-		$n = 0;
-		$fields = Config::fields();
-		$count = count($fields);
-		while ($n < $count)
-		{
-			$gdt = $fields[$n];
-			$gdt->reset(true);
-			if (!$gdt->isWriteable())
-			{
-				$n++;
-			}
-			else
-			{
-				REPL::changeGDT($gdt);
-				if (!$gdt->hasError())
-				{
-					$n++;
-				}
-			}
-		}
-	}
+    if ($app->interactive)
+    {
+        $n = 0;
+        $fields = Config::fields();
+        $count = count($fields);
+        while ($n < $count)
+        {
+            $gdt = $fields[$n];
+            $gdt->reset(true);
+            if (!$gdt->isWriteable())
+            {
+                $n++;
+            }
+            else
+            {
+                REPL::changeGDT($gdt);
+                if (!$gdt->hasError())
+                {
+                    $n++;
+                }
+            }
+        }
+    }
 
-	$response = Configure::make()->executeWithInputs($inputs, false);
-	echo $response->render();
-	if (Application::isSuccess())
-	{
-		Security::make()->protectFolders();
-		echo "You should now edit this file by hand.\n";
-		echo "Afterwards execute {$argv[0]} test config.\n";
-	}
+    $response = Configure::make()->executeWithInputs($inputs, false);
+    echo $response->render();
+    if (Application::isSuccess())
+    {
+        Security::make()->protectFolders();
+        echo "You should now edit this file by hand.\n";
+        echo "Afterwards execute {$argv[0]} test config.\n";
+    }
 }
 
 elseif ($command === 'test')
 {
-	echo Configure::make()->onTestConfig()->renderCLI();
+    echo Configure::make()->onTestConfig()->renderCLI();
 
-	echo "---\n\n\n";
-	echo "Your configuration seems solid.\n";
-	echo "You can now try to php {$argv[0]} install <module>.\n";
-	echo "A list of official modules is shown via php {$argv[0]} modules.\n";
-	echo "Before you can install a module, you have to clone it.\n";
-	echo "Example: cd GDO; git clone --recursive https://github.com/gizmore/gdo6-session-cookie Session; cd ..\n";
-	echo 'Please note that some modules have multiple providesrs.';
-	echo "E.g, for the session module, you can choose between phpgdo-session-db and phpgdo-session-cookie.\n";
-	echo "Any Session provider has just to be cloned as a folder named GDO/Session/, voila.\n";
+    echo "---\n\n\n";
+    echo "Your configuration seems solid.\n";
+    echo "You can now try to php {$argv[0]} install <module>.\n";
+    echo "A list of official modules is shown via php {$argv[0]} modules.\n";
+    echo "Before you can install a module, you have to clone it.\n";
+    echo "Example: cd GDO; git clone --recursive https://github.com/gizmore/gdo6-session-cookie Session; cd ..\n";
+    echo 'Please note that some modules have multiple providesrs.';
+    echo "E.g, for the session module, you can choose between phpgdo-session-db and phpgdo-session-cookie.\n";
+    echo "Any Session provider has just to be cloned as a folder named GDO/Session/, voila.\n";
 }
 
 elseif ($command === 'modules')
 {
 
-	$modules = [];
-	if ($app->all)
-	{
-		$modules = $loader->getModules();
-	}
-	elseif ($argc == 3)
-	{
-		$module = $loader->loadModuleFS($argv[2]);
-		if (!$module)
-		{
-			echo "Module {$argv[2]} not found.\n";
-		}
-		else
-		{
-			$modules = [$module];
-		}
-	}
-	else
-	{
-		printUsage(-409, $command);
-	}
+    $modules = [];
+    if ($app->all)
+    {
+        $modules = $loader->getModules();
+    }
+    elseif ($argc == 3)
+    {
+        $module = $loader->loadModuleFS($argv[2]);
+        if (!$module)
+        {
+            echo "Module {$argv[2]} not found.\n";
+        }
+        else
+        {
+            $modules = [$module];
+        }
+    }
+    else
+    {
+        printUsage(-409, $command);
+    }
 
-	foreach ($modules as $module)
-	{
-		printf("%16s (%s): %s\n", $module->getName(), $module->license, Strings::substrTo(Installer::getModuleDescription($module, true), "\n"));
+    foreach ($modules as $module)
+    {
+        printf("%16s (%s): %s\n", $module->getName(), $module->license, Strings::substrTo(Installer::getModuleDescription($module, true), "\n"));
 
-		if (count($modules) === 1)
-		{
-			printf("Dependencies: %s\n", implode(', ', $module->getDependencies()));
-			printf("Friendencies: %s\n", implode(', ', $module->getFriendencies()));
-		}
-	}
+        if (count($modules) === 1)
+        {
+            printf("Dependencies: %s\n", implode(', ', $module->getDependencies()));
+            printf("Friendencies: %s\n", implode(', ', $module->getFriendencies()));
+        }
+    }
 }
 
 elseif ($command === 'install')
@@ -596,553 +608,558 @@ elseif ($command === 'install')
 //		die(-1);
 //	}
 
-	$deps = [];
+    $deps = [];
 
-	$mode = $app->all ? 2 : 1;
+    $mode = $app->all ? 2 : 1;
 
-	$git = ModuleProviders::GIT_PROVIDER;
+    $git = ModuleProviders::GIT_PROVIDER;
 
-	if ($mode === 1)
-	{
-		if ($argc !== 3)
-		{
-			printUsage(409, $command);
-		}
+    if ($mode === 1)
+    {
+        if ($argc !== 3)
+        {
+            printUsage(409, $command);
+        }
 
-		$deps[] = 'Core';
-		$moduleNames = explode(',', $argv[2]);
-		foreach ($moduleNames as $moduleName)
-		{
-			$module = ModuleLoader::instance()->loadModuleFS($moduleName);
-			$deps[] = $module->getName();
-			if (!$module)
-			{
-				echo "Unknown module. Try {$argv[0]} modules.\n";
-				die(1);
-			}
-			$deps = array_merge($deps, $module->getDependencies());
-		}
-		$deps = array_unique($deps);
-	}
-	elseif ($mode === 2)
-	{
-		if ($argc !== 2)
-		{
-			printUsage(409, $command);
-		}
-		$modules = ModuleLoader::instance()->loadModules(true, true, true);
-		$modules = array_filter($modules, function (GDO_Module $module)
-		{
-			return $module->isInstallable();
-		});
-		$deps = array_map(function (GDO_Module $mod)
-		{
-			return $mod->getName();
-		}, $modules);
+        $deps[] = 'Core';
+        $moduleNames = explode(',', $argv[2]);
+        foreach ($moduleNames as $moduleName)
+        {
+            $module = ModuleLoader::instance()->loadModuleFS($moduleName);
+            $deps[] = $module->getName();
+            if (!$module)
+            {
+                echo "Unknown module. Try {$argv[0]} modules.\n";
+                die(1);
+            }
+            $deps = array_merge($deps, $module->getDependencies());
+        }
+        $deps = array_unique($deps);
+    }
+    elseif ($mode === 2)
+    {
+        if ($argc !== 2)
+        {
+            printUsage(409, $command);
+        }
+        $modules = ModuleLoader::instance()->loadModules(true, true, true);
+        $modules = array_filter($modules, function (GDO_Module $module)
+        {
+            return $module->isInstallable();
+        });
+        $deps = array_map(function (GDO_Module $mod)
+        {
+            return $mod->getName();
+        }, $modules);
 
-		$cnt = count($deps);
-		echo "Installing all {$cnt} modules.\n";
-	}
+        $cnt = count($deps);
+        echo "Installing all {$cnt} modules.\n";
+    }
 
-	$deps[] = 'Core';
-	$deps = array_unique($deps);
+    $deps[] = 'Core';
+    $deps = array_unique($deps);
 
-	$cnt = 0;
-	$allResolved = true; # All required modules provided?
-	while ($cnt !== count($deps))
-	{
-		$cnt = count($deps);
-		foreach ($deps as $dep)
-		{
-			$depmod = ModuleLoader::instance()->getModule($dep, true);
+    $cnt = 0;
+    $allResolved = true; # All required modules provided?
+    while ($cnt !== count($deps))
+    {
+        $cnt = count($deps);
+        foreach ($deps as $dep)
+        {
+            $depmod = ModuleLoader::instance()->getModule($dep, true);
 
-			if (!$depmod)
-			{
-				if ($allResolved === true)
-				{
-					echo "Missing dependencie(s)!\n";
-					echo "Please note that this list may not be complete, because missing modules might have more dependencies.\n";
-				}
-				$allResolved = false;
-				$providers = @ModuleProviders::$PROVIDERS[$dep];
-				if (!$providers)
-				{
-					echo "{$dep}: Not an official module or a typo somewhere. No Provider known.\n";
-				}
-				elseif (is_array($providers))
-				{
-					echo "{$dep}: Choose between multiple possible providers.\n";
-					foreach ($providers as $provider)
-					{
-						printf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n", $dep);
-					}
-				}
-				else
-				{
-					printf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n", $dep);
-				}
+            if (!$depmod)
+            {
+                if ($allResolved === true)
+                {
+                    echo "Missing dependencie(s)!\n";
+                    echo "Please note that this list may not be complete, because missing modules might have more dependencies.\n";
+                }
+                $allResolved = false;
+                $providers = @ModuleProviders::$PROVIDERS[$dep];
+                if (!$providers)
+                {
+                    echo "{$dep}: Not an official module or a typo somewhere. No Provider known.\n";
+                }
+                elseif (is_array($providers))
+                {
+                    echo "{$dep}: Choose between multiple possible providers.\n";
+                    foreach ($providers as $provider)
+                    {
+                        printf("%20s: cd GDO; git clone --recursive {$git}{$provider} {$dep}; cd ..\n", $dep);
+                    }
+                }
+                else
+                {
+                    printf("%20s: cd GDO; git clone --recursive {$git}{$providers} {$dep}; cd ..\n", $dep);
+                }
 
-				continue;
-			}
+                continue;
+            }
 
-			$deps = array_unique(array_merge($depmod->getDependencies(), $deps));
-		}
-	}
+            $deps = array_unique(array_merge($depmod->getDependencies(), $deps));
+        }
+    }
 
-	$deps = array_unique($deps);
+    $deps = array_unique($deps);
 
-	if (!$allResolved)
-	{
-		echo "Some required modules are not provided by your current GDO/ folder.\n";
-		echo "Please clone the modules like stated above.\n";
-		echo "Repeat the process until all dependencies are resolved.\n";
-		die(2);
-	}
+    if (!$allResolved)
+    {
+        echo "Some required modules are not provided by your current GDO/ folder.\n";
+        echo "Please clone the modules like stated above.\n";
+        echo "Repeat the process until all dependencies are resolved.\n";
+        die(2);
+    }
 
-	$deps2 = [];
-	foreach ($deps as $moduleName)
-	{
-		$mod = ModuleLoader::instance()->getModule($moduleName);
-		$deps2[$moduleName] = $mod->priority;
-	}
-	sort($deps);
-	asort($deps2);
-	echo t('msg_installing_modules', [
-			implode(', ', $deps),
-		]) . "\n";
+    $deps2 = [];
+    foreach ($deps as $moduleName)
+    {
+        $mod = ModuleLoader::instance()->getModule($moduleName);
+        $deps2[$moduleName] = $mod->priority;
+    }
+    sort($deps);
+    asort($deps2);
+    echo t('msg_installing_modules', [
+            implode(', ', $deps),
+        ]) . "\n";
 
-	$modules = array_map(function (string $moduleName)
-	{
-		return ModuleLoader::instance()->getModule($moduleName);
-	}, array_keys($deps2));
-	Installer::installModules($modules);
+    $modules = array_map(function (string $moduleName)
+    {
+        return ModuleLoader::instance()->getModule($moduleName);
+    }, array_keys($deps2));
+    Installer::installModules($modules);
 
-	echo "Done.\n";
+    if ($app->postInstall)
+    {
+        system('bash gdo_post_install.sh --quiet');
+    }
+
+    echo "Done.\n";
 }
 
 elseif ($command === 'admin')
 {
-	if ($argc !== 4)
-	{
-		printUsage(409, $command);
-	}
-	if (!($user = GDO_User::getByName($argv[2])))
-	{
-		$user = GDO_User::blank([
-			'user_name' => $argv[2],
-			'user_type' => GDT_UserType::MEMBER,
-		])->insert();
-		GDT_Hook::callWithIPC('UserActivated', $user, null);
-	}
-	if (module_enabled('Login'))
-	{
-		$user->saveSettingVar('Login', 'password', BCrypt::create($argv[3])->__toString());
-	}
-	$user->saveVar('user_deleted', null);
-	$user->saveVar('user_deletor', null);
-	foreach (GDO_Permission::table()->all() as $perm)
-	{
-		GDO_UserPermission::grant($user, $perm->getName());
-	}
-	$user->changedPermissions();
-	echo t('msg_admin_created', [
-			$argv[2],
-		]) . "\n";
+    if ($argc !== 4)
+    {
+        printUsage(409, $command);
+    }
+    if (!($user = GDO_User::getByName($argv[2])))
+    {
+        $user = GDO_User::blank([
+            'user_name' => $argv[2],
+            'user_type' => GDT_UserType::MEMBER,
+        ])->insert();
+        GDT_Hook::callWithIPC('UserActivated', $user, null);
+    }
+    if (module_enabled('Login'))
+    {
+        $user->saveSettingVar('Login', 'password', BCrypt::create($argv[3])->__toString());
+    }
+    $user->saveVar('user_deleted', null);
+    $user->saveVar('user_deletor', null);
+    foreach (GDO_Permission::table()->all() as $perm)
+    {
+        GDO_UserPermission::grant($user, $perm->getName());
+    }
+    $user->changedPermissions();
+    echo t('msg_admin_created', [
+            $argv[2],
+        ]) . "\n";
 }
 
 elseif (($command === 'wipe') && ($app->all))
 {
-	Database::instance()->dropDatabase(GDO_DB_NAME);
-	Database::instance()->createDatabase(GDO_DB_NAME);
-	printf("The database has been killed completely and created empty.\n");
+    Database::instance()->dropDatabase(GDO_DB_NAME);
+    Database::instance()->createDatabase(GDO_DB_NAME);
+    printf("The database has been killed completely and created empty.\n");
 }
 
 elseif ($command === 'wipe')
 {
-	if ($argc !== 3)
-	{
-		printUsage(409, $command);
-	}
+    if ($argc !== 3)
+    {
+        printUsage(409, $command);
+    }
 
-	$module = ModuleLoader::instance()->loadModuleFS($argv[2]);
+    $module = ModuleLoader::instance()->loadModuleFS($argv[2]);
 
-	$response = Install::make()->executeWithInputs([
-		'module' => $module->getName(),
-		'uninstall' => '1',
-	], false);
+    $response = Install::make()->executeWithInputs([
+        'module' => $module->getName(),
+        'uninstall' => '1',
+    ], false);
 
-	if (Application::isError())
-	{
-		echo $response->renderCLI();
-	}
-	else
-	{
-		if ($classes = $module->getClasses())
-		{
-			$classes = array_map(function ($class)
-			{
-				return Strings::rsubstrFrom($class, '\\');
-			}, $classes);
-		}
-		else
-		{
-			$classes = [];
-		}
-		printf("The %s module has been wiped from the database.\n", $module->getName());
-		if ($classes)
-		{
-			printf("The following GDOs have been wiped: %s.\n", implode(', ', $classes));
-		}
-	}
+    if (Application::isError())
+    {
+        echo $response->renderCLI();
+    }
+    else
+    {
+        if ($classes = $module->getClasses())
+        {
+            $classes = array_map(function ($class)
+            {
+                return Strings::rsubstrFrom($class, '\\');
+            }, $classes);
+        }
+        else
+        {
+            $classes = [];
+        }
+        printf("The %s module has been wiped from the database.\n", $module->getName());
+        if ($classes)
+        {
+            printf("The following GDOs have been wiped: %s.\n", implode(', ', $classes));
+        }
+    }
 }
 
 elseif (($command === 'config') || ($command === 'conf'))
 {
-	if (($argc < 2) || ($argc > 5))
-	{
-		printUsage();
-	}
+    if (($argc < 2) || ($argc > 5))
+    {
+        printUsage();
+    }
 
-	$loader->initModules();
+    $loader->initModules();
 
-	if ($argc === 2)
-	{
-		$modules = ModuleLoader::instance()->getEnabledModules();
-		$names = array_map(function (GDO_Module $module)
-		{
-			return $module->getName();
-		}, $modules);
-		echo t('msg_installed_modules', [
-				implode(', ', $names),
-			]) . '';
-		die(0);
-	}
-	if ($argc === 3)
-	{
-		$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
-		if ((!$module) || (!$module->isPersisted()))
-		{
-			echo t('err_module', [
-					html($argv[2]),
-				]) . "\n";
-			die(-1);
-		}
-		if ($config = $module->getConfigCache())
-		{
-			$vars = [];
-			foreach ($config as $key => $gdt)
-			{
-				$vars[] = $key;
-			}
-			$keys = implode(', ', $vars);
-			$keys = $keys ? $keys : t('none');
-			echo t('msg_available_config', [
-				$module->getName(),
-				$keys,
-			]);
-			echo PHP_EOL;
-			die(0);
-		}
-		else
-		{
-			echo t('msg_module_has_no_config');
-			die(1);
-		}
-	}
+    if ($argc === 2)
+    {
+        $modules = ModuleLoader::instance()->getEnabledModules();
+        $names = array_map(function (GDO_Module $module)
+        {
+            return $module->getName();
+        }, $modules);
+        echo t('msg_installed_modules', [
+                implode(', ', $names),
+            ]) . '';
+        die(0);
+    }
+    if ($argc === 3)
+    {
+        $module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
+        if ((!$module) || (!$module->isPersisted()))
+        {
+            echo t('err_module', [
+                    html($argv[2]),
+                ]) . "\n";
+            die(-1);
+        }
+        if ($config = $module->getConfigCache())
+        {
+            $vars = [];
+            foreach ($config as $key => $gdt)
+            {
+                $vars[] = $key;
+            }
+            $keys = implode(', ', $vars);
+            $keys = $keys ? $keys : t('none');
+            echo t('msg_available_config', [
+                $module->getName(),
+                $keys,
+            ]);
+            echo PHP_EOL;
+            die(0);
+        }
+        else
+        {
+            echo t('msg_module_has_no_config');
+            die(1);
+        }
+    }
 
-	$key = $argv[3];
-	if ($argc === 4)
-	{
-		$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
-		if ((!$module) || (!$module->isPersisted()))
-		{
-			echo t('err_module_disabled', [
-					html($argv[2]),
-				]) . "\n";
-			die(-1);
-		}
-		$config = $module->getConfigColumn($key);
-		echo t('msg_set_config', [
-			$key,
-			$module->getName(),
-			$config->initial,
-			$config->gdoExampleVars(),
-		]);
-		echo PHP_EOL;
-		die(0);
-	}
+    $key = $argv[3];
+    if ($argc === 4)
+    {
+        $module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
+        if ((!$module) || (!$module->isPersisted()))
+        {
+            echo t('err_module_disabled', [
+                    html($argv[2]),
+                ]) . "\n";
+            die(-1);
+        }
+        $config = $module->getConfigColumn($key);
+        echo t('msg_set_config', [
+            $key,
+            $module->getName(),
+            $config->initial,
+            $config->gdoExampleVars(),
+        ]);
+        echo PHP_EOL;
+        die(0);
+    }
 
-	$var = $argv[4];
-	if ($argc === 5)
-	{
-		$module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
-		if ((!$module) || (!$module->isPersisted()))
-		{
-			echo t('err_module_disabled', [
-					html($argv[2]),
-				]) . "\n";
-			die(-1);
-		}
-		$gdt = $module->getConfigColumn($key)->var($var);
-		if (!$gdt->validate($gdt->toValue($var)))
-		{
-			echo json_encode($gdt->configJSON());
-			echo PHP_EOL;
-			die(1);
-		}
-		GDO_ModuleVar::createModuleVar($module, $gdt);
-		echo t('msg_changed_config',
-			[
-				$gdt->renderLabel(),
-				$module->getName(),
-				$gdt->displayVar($gdt->initial),
-				$gdt->displayVar($gdt->var),
-			]);
-		echo PHP_EOL;
-		Cache::flush();
-		GDT_Hook::callHook('ModuleVarsChanged', $module);
-	}
+    $var = $argv[4];
+    if ($argc === 5)
+    {
+        $module = ModuleLoader::instance()->loadModuleFS($argv[2], false, true);
+        if ((!$module) || (!$module->isPersisted()))
+        {
+            echo t('err_module_disabled', [
+                    html($argv[2]),
+                ]) . "\n";
+            die(-1);
+        }
+        $gdt = $module->getConfigColumn($key)->var($var);
+        if (!$gdt->validate($gdt->toValue($var)))
+        {
+            echo json_encode($gdt->configJSON());
+            echo PHP_EOL;
+            die(1);
+        }
+        GDO_ModuleVar::createModuleVar($module, $gdt);
+        echo t('msg_changed_config',
+            [
+                $gdt->renderLabel(),
+                $module->getName(),
+                $gdt->displayVar($gdt->initial),
+                $gdt->displayVar($gdt->var),
+            ]);
+        echo PHP_EOL;
+        Cache::flush();
+        GDT_Hook::callHook('ModuleVarsChanged', $module);
+    }
 }
 
 elseif ($command === 'provide')
 {
-	$isme = $app->configured;
+    $isme = $app->configured;
 #		command === 'provide_me';
-	$isall = $app->all;
-	$isssh = $app->ssh;
+    $isall = $app->all;
+    $isssh = $app->ssh;
 
 #	$loader = ModuleLoader::instance();
 
 #	$loader->loadModules($isme, !$isme, true);
 
-	# Get all dependencies
-	$cd = 0;
-	if ($isall)
-	{
-		$deps = [
-			'Core',
-		];
-		foreach (ModuleProviders::$PROVIDERS as $name => $providers)
-		{
-			if ($providers)
-			{
-				$deps[] = $name;
-			}
-		}
-	}
-	elseif ($isme)
-	{
-		$deps = [];
-		foreach ($modules as $module)
-		{
-			$deps[] = $module->getModuleName();
-		}
-	}
-	else # Single
-	{
-		$deps = ModuleProviders::getDependencies($argv[2]);
-		if ($deps === null)
-		{
-			echo "Unknown module: {$argv[2]}\n";
-			die(-1);
-		}
-		$deps[] = 'Core';
-		$deps[] = $argv[2];
-		while ($cd != count($deps))
-		{
-			$cd = count($deps);
-			foreach ($deps as $dep)
-			{
-				if ($module = $loader->getModule($dep, false, false))
-				{
-					$moreDeps = $module->getDependencies();
-				}
-				else
-				{
-					$moreDeps = ModuleProviders::getDependencies($dep);
-				}
-				$deps = array_merge($deps, $moreDeps);
-				$deps = array_unique($deps);
-			}
-		}
-	}
+    # Get all dependencies
+    $cd = 0;
+    if ($isall)
+    {
+        $deps = [
+            'Core',
+        ];
+        foreach (ModuleProviders::$PROVIDERS as $name => $providers)
+        {
+            if ($providers)
+            {
+                $deps[] = $name;
+            }
+        }
+    }
+    elseif ($isme)
+    {
+        $deps = [];
+        foreach ($modules as $module)
+        {
+            $deps[] = $module->getModuleName();
+        }
+    }
+    else # Single
+    {
+        $deps = ModuleProviders::getDependencies($argv[2]);
+        if ($deps === null)
+        {
+            echo "Unknown module: {$argv[2]}\n";
+            die(-1);
+        }
+        $deps[] = 'Core';
+        $deps[] = $argv[2];
+        while ($cd != count($deps))
+        {
+            $cd = count($deps);
+            foreach ($deps as $dep)
+            {
+                if ($module = $loader->getModule($dep, false, false))
+                {
+                    $moreDeps = $module->getDependencies();
+                }
+                else
+                {
+                    $moreDeps = ModuleProviders::getDependencies($dep);
+                }
+                $deps = array_merge($deps, $moreDeps);
+                $deps = array_unique($deps);
+            }
+        }
+    }
 
-	$deps = array_unique($deps);
+    $deps = array_unique($deps);
 
-	# Sort by name
-	sort($deps);
+    # Sort by name
+    sort($deps);
 
-	# Check missing in fs
-	$missing = [];
-	foreach ($deps as $dep)
-	{
-		if (!$loader->getModule($dep, true, false))
-		{
-			$missing[] = $dep;
-		}
-	}
+    # Check missing in fs
+    $missing = [];
+    foreach ($deps as $dep)
+    {
+        if (!$loader->getModule($dep, true, false))
+        {
+            $missing[] = $dep;
+        }
+    }
 
-	if (count($missing))
-	{
-		echo "The following modules are not in your filesystem:\n";
-		echo implode(', ', $missing) . "\n";
-		echo 'Shall i git clone those modules? (y/n) [y]: ';
-		$input = $app->quiet ? "\n" : readline();
-		$input = trim(strtolower($input));
-		if (($input === 'y') || ($input === ''))
-		{
-			echo 'Cloning ' . count($missing) . " modules...\n";
-			foreach ($missing as $module)
-			{
-				$providers = ModuleProviders::getProviders($module);
+    if (count($missing))
+    {
+        echo "The following modules are not in your filesystem:\n";
+        echo implode(', ', $missing) . "\n";
+        echo 'Shall i git clone those modules? (y/n) [y]: ';
+        $input = $app->quiet ? "\n" : readline();
+        $input = trim(strtolower($input));
+        if (($input === 'y') || ($input === ''))
+        {
+            echo 'Cloning ' . count($missing) . " modules...\n";
+            foreach ($missing as $module)
+            {
+                $providers = ModuleProviders::getProviders($module);
 
-				if (!$providers)
-				{
-					echo "No provider for $module\n";
-					die(1);
-				}
-				$n = 1;
-				if (is_array($providers))
-				{
-					echo "The {$module} Module has more than 1 possible provider. Please choose: \n";
-					$n = 0;
-					foreach ($providers as $provider)
-					{
-						$n++;
-						echo "{$n}: {$provider}\n";
-					}
-					echo "Please choose: [1-{$n}]: ";
-					$n = $app->quiet ? 1 : ((int)readline());
-					if (($n < 1) || ($n > count($providers)))
-					{
-						echo "Invalid choice!\nExit 1\n";
-						die(1);
-					}
-				}
-				$url = ModuleProviders::getGitUrl($module, $n, $isssh);
-				$module = ModuleProviders::getCleanModuleName($module);
-				$cmd = "cd GDO && git clone --recursive {$url} {$module}";
-				echo $cmd . "\n";
-				$output = [];
-				$retval = 0;
-				exec($cmd, $output, $retval);
-				echo implode("\n", $output) . "\n";
-				echo 'Return code: ' . $retval . "\n";
-				if ($retval != 0)
-				{
-					echo "Error upon clone. Exiting\n";
-					die($retval);
-				}
-			}
-			echo "You should now have all dependencies cloned in your GDO/ folder.\n";
+                if (!$providers)
+                {
+                    echo "No provider for $module\n";
+                    die(1);
+                }
+                $n = 1;
+                if (is_array($providers))
+                {
+                    echo "The {$module} Module has more than 1 possible provider. Please choose: \n";
+                    $n = 0;
+                    foreach ($providers as $provider)
+                    {
+                        $n++;
+                        echo "{$n}: {$provider}\n";
+                    }
+                    echo "Please choose: [1-{$n}]: ";
+                    $n = $app->quiet ? 1 : ((int)readline());
+                    if (($n < 1) || ($n > count($providers)))
+                    {
+                        echo "Invalid choice!\nExit 1\n";
+                        die(1);
+                    }
+                }
+                $url = ModuleProviders::getGitUrl($module, $n, $isssh);
+                $module = ModuleProviders::getCleanModuleName($module);
+                $cmd = "cd GDO && git clone --recursive {$url} {$module}";
+                echo $cmd . "\n";
+                $output = [];
+                $retval = 0;
+                exec($cmd, $output, $retval);
+                echo implode("\n", $output) . "\n";
+                echo 'Return code: ' . $retval . "\n";
+                if ($retval != 0)
+                {
+                    echo "Error upon clone. Exiting\n";
+                    die($retval);
+                }
+            }
+            echo "You should now have all dependencies cloned in your GDO/ folder.\n";
 
-			if ($isall || $isme)
-			{
-				echo "You can now:\n./gdoadm.sh -a install\n";
-			}
-			else
-			{
-				echo "You can now:\n./gdoadm.sh install {$argv[2]}\n";
-			}
-			$r = $app->quiet ? 'y' : readline('Shall i do this now? [Y/n]');
-			$r = $r ? $r : 'y';
-			if (($r[0] === 'y') || ($r[0] === 'Y'))
-			{
+            if ($isall || $isme)
+            {
+                echo "You can now:\n./gdoadm.sh -a install\n";
+            }
+            else
+            {
+                echo "You can now:\n./gdoadm.sh install {$argv[2]}\n";
+            }
+            $r = $app->quiet ? 'y' : readline('Shall i do this now? [Y/n]');
+            $r = $r ? $r : 'y';
+            if (($r[0] === 'y') || ($r[0] === 'Y'))
+            {
 
-				if ($isall)
-				{
-					system('php gdo_adm.php -a install');
-				}
-				elseif ($isme)
-				{
-					system('php gdo_adm.php -c install');
-				}
-				else
-				{
-					system("php gdo_adm.php install {$argv[2]}");
-				}
-			}
-		}
-	}
-	else
-	{
-		if ($isall || $isme)
-		{
-			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh -a install\n";
-		}
-		else
-		{
-			echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install {$argv[2]}\n";
-		}
-		$r = $app->quiet ? 'y' : readline('Shall i do this now? [Y/n]');
-		$r = $r ? $r : 'y';
-		if (($r[0] === 'y') || ($r[0] === 'Y'))
-		{
-			if ($isall)
-			{
-				system('php gdo_adm.php -a install');
-			}
-			elseif ($isme)
-			{
-				system('php gdo_adm.php -a install'); # @TODO: use -c option in adm.sh
-			}
-			else
-			{
-				system("php gdo_adm.php install {$argv[2]}");
-			}
+                if ($isall)
+                {
+                    system('php gdo_adm.php -a install');
+                }
+                elseif ($isme)
+                {
+                    system('php gdo_adm.php -c install');
+                }
+                else
+                {
+                    system("php gdo_adm.php install {$argv[2]}");
+                }
+            }
+        }
+    }
+    else
+    {
+        if ($isall || $isme)
+        {
+            echo "Your filesystem has all the required modules. You can: ./gdoadm.sh -a install\n";
+        }
+        else
+        {
+            echo "Your filesystem has all the required modules. You can: ./gdoadm.sh install {$argv[2]}\n";
+        }
+        $r = $app->quiet ? 'y' : readline('Shall i do this now? [Y/n]');
+        $r = $r ? $r : 'y';
+        if (($r[0] === 'y') || ($r[0] === 'Y'))
+        {
+            if ($isall)
+            {
+                system('php gdo_adm.php -a install');
+            }
+            elseif ($isme)
+            {
+                system('php gdo_adm.php -a install'); # @TODO: use -c option in adm.sh
+            }
+            else
+            {
+                system("php gdo_adm.php install {$argv[2]}");
+            }
 
-			if (GDO_PREPROCESSOR && Application::isPro())
-			{
-				echo 'Running PP php-preprocessor on GDOv7 files.';
-				system('php gdo_adm.php pp');
-			}
+            if (GDO_PREPROCESSOR && Application::isPro())
+            {
+                echo 'Running PP php-preprocessor on GDOv7 files.';
+                system('php gdo_adm.php pp');
+            }
 
-			system('bash gdo_post_install.sh --quiet');
-		}
-	}
+            system('bash gdo_post_install.sh --quiet');
+        }
+    }
 }
 
 elseif ($command === 'cronjob')
 {
-	$method = InstallCronjob::make();
-	$result = $method->executeWithInit(false);
-	echo $result->renderCLI();
+    $method = InstallCronjob::make();
+    $result = $method->executeWithInit(false);
+    echo $result->renderCLI();
 }
 
 elseif ($command === 'secure')
 {
-	$method = GDT_Method::make()->method(Security::make());
-	$result = $method->setupCLIButton()
-		->noChecks()
-		->execute();
-	echo $result->renderCLI();
+    $method = GDT_Method::make()->method(Security::make());
+    $result = $method->setupCLIButton()
+        ->noChecks()
+        ->execute();
+    echo $result->renderCLI();
 }
 
 elseif ($command === 'update')
 {
-	system('php gdo_adm.php -qc provide');
-	$loader->loadModules(true, false, true);
-	$modules = ModuleLoader::instance()->getModules();
-	foreach ($modules as $module)
-	{
-		Installer::installModule($module);
-	}
-	if (GDO_PREPROCESSOR && Application::isPro())
-	{
-		system('php gdo_adm.php pp');
-	}
-	echo "Update finished.\n";
+    system('php gdo_adm.php -qc provide');
+    $loader->loadModules(true, false, true);
+    $modules = ModuleLoader::instance()->getModules();
+    foreach ($modules as $module)
+    {
+        Installer::installModule($module);
+    }
+    if (GDO_PREPROCESSOR && Application::isPro())
+    {
+        system('php gdo_adm.php pp');
+    }
+    echo "Update finished.\n";
 }
 
 elseif ($command === 'pp')
 {
-	echo "Running php-preprocessor on all modules.\n";
-	$pp = PP::init();
-	$pp->input(GDO_PATH)->recurse()->replace();
-	if ($pp->execute())
-	{
-		echo "Completed.\n";
-	}
+    echo "Running php-preprocessor on all modules.\n";
+    $pp = PP::init();
+    $pp->input(GDO_PATH)->recurse()->replace();
+    if ($pp->execute())
+    {
+        echo "Completed.\n";
+    }
 }
 
 elseif ($command === 'migrate')
@@ -1156,24 +1173,24 @@ elseif ($command === 'migrate')
         }
         echo GDT_Success::make()->text('msg_gdoadm_migrated_all')->render();
     }
-	elseif (count($argv) !== 3)
-	{
+    elseif (count($argv) !== 3)
+    {
         echo GDT_Error::make()->text('err_gdoadm_migrate')->renderCLI();
         printUsage(-1, 'migrate');
-	}
-	elseif (!($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
-	{
-		echo GDT_Error::make()->text('err_module', [
-			html($argv[2]),
-		])->renderCLI();
-	}
-	else
-	{
-		Installer::installModule($module, true);
-		echo GDT_Success::make()->text('msg_gdoadm_migrated', [
-			$module->renderName(),
-		])->render();
-	}
+    }
+    elseif (!($module = ModuleLoader::instance()->getModule($argv[2], true, false)))
+    {
+        echo GDT_Error::make()->text('err_module', [
+            html($argv[2]),
+        ])->renderCLI();
+    }
+    else
+    {
+        Installer::installModule($module, true);
+        echo GDT_Success::make()->text('msg_gdoadm_migrated', [
+            $module->renderName(),
+        ])->render();
+    }
 }
 
 //elseif ($command === 'migrate_all')
@@ -1218,79 +1235,79 @@ elseif ($command === 'migrate')
 
 elseif ($command === 'confgrade')
 {
-	switch ($argc)
-	{
-		default:
-			printUsage();
-		case 2:
-			$argv[2] = 'config.php';
-		case 3:
-			$path = $argv[2];
-	}
+    switch ($argc)
+    {
+        default:
+            printUsage();
+        case 2:
+            $argv[2] = 'config.php';
+        case 3:
+            $path = $argv[2];
+    }
 
-	Installer::refreshConfig("protected/{$path}");
+    Installer::refreshConfig("protected/{$path}");
 
-	echo "Config file `{$path}` has been rewritten.\n";
+    echo "Config file `{$path}` has been rewritten.\n";
 }
 
 elseif ($command === 'apache')
 {
-	$docs = Webserver::make()->apache24();
-	echo $docs->render();
+    $docs = Webserver::make()->apache24();
+    echo $docs->render();
 }
 
 elseif ($command === 'configtest')
 {
-	if ($app->all)
-	{
-		if ($argc === 2)
-		{
-			$modules = $loader->getEnabledModules();
-			$n = count($modules);
-			echo "Checking configuration for {$n} modules.\n";
-		}
-		else
-		{
-			echo "Either specify --all or test a single module.\n";
-			printUsage(-1, $command);
-		}
-	}
-	elseif ($argc === 3)
-	{
-		if (!($module = $loader->getModule($argv[2], false)))
-		{
-			echo "Unknown module!\n";
-		}
-		else
-		{
-			$modules  = [$module];
-		}
-	}
-	else
-	{
-		printUsage(-1, 'configtest');
-	}
+    if ($app->all)
+    {
+        if ($argc === 2)
+        {
+            $modules = $loader->getEnabledModules();
+            $n = count($modules);
+            echo "Checking configuration for {$n} modules.\n";
+        }
+        else
+        {
+            echo "Either specify --all or test a single module.\n";
+            printUsage(-1, $command);
+        }
+    }
+    elseif ($argc === 3)
+    {
+        if (!($module = $loader->getModule($argv[2], false)))
+        {
+            echo "Unknown module!\n";
+        }
+        else
+        {
+            $modules  = [$module];
+        }
+    }
+    else
+    {
+        printUsage(-1, 'configtest');
+    }
 
-	if ($app->fix)
-	{
-		echo "Okay, i will try to fix things...\n";
-	}
+    if ($app->fix)
+    {
+        echo "Okay, i will try to fix things...\n";
+    }
 
-	# GO!
-	$checker = Install::make();
-	foreach ($modules as $module)
-	{
-		echo "Checking config for {$module->getName()}\n";
-		$btn = $app->fix ? 'fix_config' : 'check_config';
-		$res = $checker->inputs(['module' => $module->getName()])->checkConfiguration($module, $app->fix);
-		echo $res->render();
-	}
+    # GO!
+    $checker = Install::make();
+    foreach ($modules as $module)
+    {
+        echo "Checking config for {$module->getName()}\n";
+        $btn = $app->fix ? 'fix_config' : 'check_config';
+        $res = $checker->inputs(['module' => $module->getName()])->checkConfiguration($module, $app->fix);
+        echo $res->render();
+    }
 }
 
 else
 {
-	echo "Unknown command {$command}\n\n";
-	printUsage();
+    echo "Unknown command {$command}\n\n";
+    printUsage();
 }
 
 echo GDT_Page::instance()->topResponse()->renderCLI();
