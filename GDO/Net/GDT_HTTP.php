@@ -12,4 +12,9 @@ final class GDT_HTTP extends GDT_Url
         return HTTP::getFromURL($this->getAbsoluteURL()->raw);
     }
 
+    public function renderCLI(): string
+    {
+        return $this->renderHTML();
+    }
+
 }

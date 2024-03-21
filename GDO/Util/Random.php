@@ -71,13 +71,18 @@ final class Random
 
 	/**
 	 * Pick a random array item securely.
+     * @TODO Create a new utility: FantasyNameGenerator. Use syllables and implement Random::randomItem() like Random::MrandomItem().
 	 *
 	 * @param array $array
 	 */
-	public static function randomItem(array $array)
+	public static function randomItem(array $array): mixed
 	{
-		# Implement me :)
-		# @TODO Create a new utility: FantasyNameGenerator. Use syllables and implement Random::randomItem() like Random::MrandomItem().
+        if (empty($array))
+        {
+            return null;
+        }
+        $keys = array_keys($array);
+        return $array[$keys[self::rand(1, count($keys) - 1)]];
 	}
 
 	################
