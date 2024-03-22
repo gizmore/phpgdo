@@ -1,3 +1,3 @@
 #!/bin/bash
 cd "$(dirname "$0")"
-php gdo_cronjob.php
+php gdo_cronjob.php "$@"
