@@ -63,7 +63,12 @@ class GDT_Container extends GDT
 		}
 	}
 
-	public function renderCLI(): string
+    public function renderTelegram(): string
+    {
+        return $this->renderCLI();
+    }
+
+    public function renderCLI(): string
 	{
 		$rendered = '';
 		$newline = $this->flexDirection === self::HORIZONTAL ? ' | ' : "\n";
