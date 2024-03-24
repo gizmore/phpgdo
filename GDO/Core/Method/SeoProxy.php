@@ -44,7 +44,7 @@ final class SeoProxy extends Method
 	public static function makeProxied(string $url): Method
 	{
 		$loader = ModuleLoader::instance();
-		$args = explode(GDO_SEO_SEP, trim($url, '/'));
+		$args = explode(GDO_SEO_SEP, trim($url, '/'.GDO_SEO_SEP));
         $last = Arrays::last($args);
 
 		# Module

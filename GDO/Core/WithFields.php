@@ -278,6 +278,11 @@ trait WithFields
         return $this->renderFields(GDT::RENDER_CLI);
     }
 
+    public function renderIRC(): string
+    {
+        return $this->renderFields(GDT::RENDER_IRC);
+    }
+
     public function renderTelegram(): string
     {
         return $this->renderFields(GDT::RENDER_TELEGRAM);

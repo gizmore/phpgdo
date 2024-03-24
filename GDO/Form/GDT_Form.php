@@ -198,7 +198,7 @@ class GDT_Form extends GDT
     ###########
     ### Var ###
     ###########
-    public function getFormVar(string $key): ?string
+    public function getFormVar(string $key): string|array|null
     {
         return $this->getField($key)->getVar();
     }

@@ -91,6 +91,7 @@ return [
 	'err_invalid_user_setting' => 'Module %s has an invalid user setting named %s: %s (%s)',
 	'err_gdt_column_define_missing' => 'Your DBMS module cannot create database definitions for the field `%s`, which is a `%s`.',
     'err_no_such_command' => 'The command `%s` is unknown.',
+    'err_user' => 'This user is unknown.',
 
 	# err_path
 	'is_dir' => 'directory',

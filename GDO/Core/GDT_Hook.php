@@ -24,7 +24,7 @@ final class GDT_Hook extends GDT
 {
 
 	# Hook cache key
-	final public const CACHE_KEY = 'HOOKS.GDOv7';
+    final public const CACHE_KEY = 'HOOKS.GDOv7';
 
 	/**
 	 * @var int Num total calls.
@@ -88,7 +88,11 @@ final class GDT_Hook extends GDT
 	{
 		if (!self::$CACHE)
 		{
-			if ($hooks = Cache::fileGetSerialized(self::CACHE_KEY))
+            if (Application::instance()->isCLI())
+            {
+                self::$CACHE = self::buildHookCache();
+            }
+			elseif ($hooks = Cache::fileGetSerialized(self::CACHE_KEY))
 			{
 				self::$CACHE = $hooks;
 			}
@@ -135,9 +139,10 @@ final class GDT_Hook extends GDT
 			$methods = get_class_methods($module);
 			foreach ($methods as $methodName)
 			{
-				if (str_starts_with($methodName, 'hook'))
+                $start = Application::instance()->isCLI() ? 'clihook' : 'hook';
+				if (str_starts_with($methodName, $start))
 				{
-					$event = substr($methodName, 4);
+					$event = substr($methodName, strlen($start));
 					$cache[$event] ??= [];
 					$cache[$event][] = $module->getName();
 				}
@@ -159,8 +164,8 @@ final class GDT_Hook extends GDT
 		# Call hooks for this HTTP/www process.
 		if ($moduleNames = self::getHookModuleNames($event))
 		{
-			$method_name = "hook$event";
-			$loader = ModuleLoader::instance();
+            $loader = ModuleLoader::instance();
+            $method_name = Application::instance()->isCLI() ? "clihook{$event}" : "hook{$event}";
 			foreach ($moduleNames as $moduleName)
 			{
 				if ($module = $loader->getModule($moduleName))

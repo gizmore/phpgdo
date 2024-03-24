@@ -30,7 +30,12 @@ class GDT_Repeat extends GDT
 	public int $minRepeat = 1;
 	public int $maxRepeat = 10;
 
-	public function proxy(GDT_Field $proxy): static
+    public function isWriteable(): bool
+    {
+        return $this->proxy->isWriteable();
+    }
+
+    public function proxy(GDT_Field $proxy): static
 	{
 		$this->proxy = $proxy;
 		$proxy->notNull();
@@ -162,7 +167,17 @@ class GDT_Repeat extends GDT
 		return $this->proxy->renderLabel();
 	}
 
-	public function validate(int|float|string|array|null|object|bool $value): bool
+    public function renderError(): string
+    {
+        return $this->proxy->renderError();
+    }
+
+    public function hasError(): bool
+    {
+        return $this->proxy->hasError();
+    }
+
+    public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 		$p = $this->proxy;
 
@@ -182,11 +197,6 @@ class GDT_Repeat extends GDT
 			}
 		}
 		return true;
-	}
-
-	public function renderError(): string
-	{
-		return $this->proxy->renderError();
 	}
 
 	public function minRepeat(int $minRepeat): static

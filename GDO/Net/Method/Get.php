@@ -17,7 +17,12 @@ use GDO\Net\HTTP;
 final class Get extends MethodForm
 {
 
-	public function getCLITrigger(): string
+    public function isCLI(): bool
+    {
+        return true;
+    }
+
+    public function getCLITrigger(): string
 	{
 		return 'wget';
 	}

@@ -161,7 +161,13 @@ class Config
 		deff('GDO_ADMIN_EMAIL', 'administrator@' . GDO_DOMAIN);
 		deff('GDO_ERROR_EMAIL', 'errors@' . GDO_DOMAIN);
 		deff('GDO_DEBUG_EMAIL', true);
-	}
+        # SMTP
+        deff('GDO_SMTP_HOST', GDO_DOMAIN);
+        deff('GDO_SMTP_PORT', 587);
+        deff('GDO_SMTP_USER', '');
+        deff('GDO_SMTP_PASS', '');
+
+    }
 
 	private static function detectServerSoftware(): string
 	{
@@ -285,6 +291,14 @@ class Config
 			GDT_String::make('admin_email')->notNull()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail')->tooltipRaw('Administrator Mail'),
 			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail')->tooltipRaw('Error Mail recipients. separate by comma.'),
 			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL)->tooltipRaw('Enable Print to Screen debugging?'),
+
+            # Email sending
+            GDT_Divider::make()->label('install_config_section_smtp'),
+            GDT_String::make('smtp_host')->notNull()->initialValue(GDO_SMTP_HOST)->label('smtp_host')->tooltipRaw('SMTP host'),
+            GDT_UInt::make('smtp_port')->notNull()->initialValue(GDO_SMTP_PORT)->label('smtp_port')->tooltipRaw('SMTP port'),
+            GDT_String::make('smtp_user')->notNull()->initialValue(GDO_SMTP_USER)->label('smtp_user')->tooltipRaw('SMTP username'),
+            GDT_String::make('smtp_pass')->notNull()->initialValue(GDO_SMTP_PASS)->label('smtp_pass')->tooltipRaw('SMTP password'),
+
 		];
 
 		return $fields;

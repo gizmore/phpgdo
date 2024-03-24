@@ -11,6 +11,7 @@ use GDO\Session\GDO_Session;
 use GDO\UI\Color;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Repeat;
 use GDO\UI\TextStyle;
 use GDO\User\GDO_User;
 
@@ -212,6 +213,10 @@ final class CLI
 			if ($gdt->isPositional())
 			{
 				$label = $gdt->renderLabel();
+                if ($gdt instanceof GDT_Repeat)
+                {
+                    $label = "{$label},...";
+                }
 				$xmplvars = $gdt->gdoExampleVars();
 				$xmplvars = $xmplvars ?
 					sprintf('<%s>(%s)', $label, $xmplvars) :

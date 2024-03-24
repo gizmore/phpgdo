@@ -506,6 +506,32 @@ class GDT_Select extends GDT_ComboBox
 		}
 		$this->initChoices();
 
+        if ($this->multiple && str_starts_with($var, '['))
+        {
+            $out = [];
+            $choices = json_decode($var, true);
+            foreach ($choices as $choice)
+            {
+                if (!isset($this->choices[$choice]))
+                {
+                    $out[] = t('invalid');
+                }
+                else
+                {
+                    $value = $this->choices[$choice];
+                    if (is_string($value))
+                    {
+                        $out[] = $value;
+                    }
+                    else
+                    {
+                        $out[] = $value->renderName();
+                    }
+                }
+            }
+            return Arrays::implodeHuman($out);
+        }
+
 		if (!isset($this->choices[$var]))
 		{
 			return GDT::EMPTY_STRING;
@@ -520,6 +546,7 @@ class GDT_Select extends GDT_ComboBox
 
 		return $value->renderName();
 	}
+
 
 	public function renderFilter(GDT_Filter $f): string
 	{

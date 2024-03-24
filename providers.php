@@ -23,7 +23,7 @@ $mode = isset($argv[1]);
 $multi = [
 	'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],
 	'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],
-	'Mailer' => ['phpgdo-mailer', 'phpgdo-mailer-symfony'],
+	'Mailer' => ['phpgdo-mailer', 'phpgdo-phpmailer', 'phpgdo-mailer-symfony'],
 	'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],
 ];
 

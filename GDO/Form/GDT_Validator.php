@@ -27,7 +27,7 @@ class GDT_Validator extends GDT
 	/**
 	 * Dummy signature
 	 */
-	public function validator_func_dummy(GDT_Form $form, GDT $field, $value) {}
+	public function validator_func_dummy(GDT_Form $form, GDT $field, $value): bool { return true; }
 
 	###########
 	### GDT ###

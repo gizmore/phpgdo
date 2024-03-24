@@ -37,7 +37,9 @@ final class GDT_Response extends GDT_Tuple
                 hdr("HTTP/1.1 {$code} {$status}");
 				$this->addFields(...GDT_Page::instance()->topResponse()->getAllFields());
 				return json($this->renderJSON());
-			case GDT::RENDER_CLI:
+            case GDT::RENDER_IRC:
+                return $this->renderIRC();
+            case GDT::RENDER_CLI:
 				return CLI::getTopResponse() . $this->renderCLI();
             case GDT::RENDER_PDF:
                 return $this->renderPDF();

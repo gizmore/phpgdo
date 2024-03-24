@@ -161,7 +161,10 @@ final class Module_Date extends GDO_Module
 	 */
 	public function hookUserAuthenticated(GDO_User $user): void
 	{
-		Module_Date::instance()->saveUserSetting($user, 'timezone', $user->getTimezone());
+        if (Application::instance()->isWebserver())
+        {
+            Module_Date::instance()->saveUserSetting($user, 'timezone', $user->getTimezone());
+        }
 	}
 
 }

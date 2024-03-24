@@ -162,6 +162,11 @@ class GDT_User extends GDT_Object
 	################
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
+        if ($this->hasError())
+        {
+            return false;
+        }
+
 		/** @var GDO_User $user * */
 		$user = $value;
 

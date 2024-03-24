@@ -3,6 +3,8 @@ namespace GDO\Net;
 
 use GDO\Core\GDO_Module;
 use GDO\Core\GDO_SEO_URL;
+use GDO\Core\GDT_Checkbox;
+use GDO\User\GDO_User;
 
 /**
  * Network related stuff.
@@ -46,5 +48,32 @@ final class Module_Net extends GDO_Module
 		}
 		return true;
 	}
+
+    public function getConfig(): array
+    {
+        return [
+            GDT_Checkbox::make('record_current_ip')->notNull()->initial('0'),
+        ];
+    }
+
+    public function getUserConfig(): array
+    {
+        return [
+            GDT_IP::make('last_ip'),
+        ];
+    }
+
+    public function cfgRecordIP(): bool
+    {
+        return $this->getConfigValue('record_current_ip');
+    }
+
+    public function hookBeforeExecute(): void
+    {
+        if ($this->cfgRecordIP())
+        {
+            GDO_User::current()->saveSettingVar('Net', 'last_ip', GDT_IP::current());
+        }
+    }
 
 }
