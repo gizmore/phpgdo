@@ -1,6 +1,9 @@
 <?php
 namespace GDO\Install\tpl;
 
+use GDO\Core\GDT_Checkbox;
+use GDO\Core\GDT_Int;
+use GDO\Core\GDT_Select;
 use GDO\Core\Module_Core;
 use GDO\Date\Time;
 use GDO\Form\GDT_Form;
@@ -56,6 +59,21 @@ foreach ($form->getAllFields() as $field) :
 		$name = $field->name;
 
 		$value = $field->getValue();
+        if ($field instanceof GDT_Int)
+        {
+            $value = intval($value);
+        }
+
+        if ($field instanceof GDT_Select)
+        {
+            $value = $field->getVar();
+        }
+
+        if ($field instanceof GDT_Checkbox)
+        {
+            $value = $field->getValue();
+        }
+
 		if (is_string($value))
 		{
 			if ($name === 'chmod')
