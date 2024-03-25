@@ -189,7 +189,7 @@ final class ModuleProviders
 'Bootstrap5Theme' => ['Bootstrap5', 'Moment'],
 'Captcha' => ['Session'],
 'Category' => [],
-'ChatGPT' => ['File'],
+'ChatGPT' => ['Dog'],
 'CKEditor' => ['HTML', 'JQuery'],
 'Classic' => [],
 'CLI' => [],

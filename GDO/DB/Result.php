@@ -113,12 +113,18 @@ class Result
 		return null;
 	}
 
+    /**
+     * @return GDO[]
+     */
 	public function fetchAllObjects(bool $json = false): array
 	{
 		return $this->fetchAllObjectsAs($this->table, $json);
 	}
 
-	public function fetchAllObjectsAs(GDO $table, bool $json = false): array
+    /**
+     * @return GDO[]
+     */
+    public function fetchAllObjectsAs(GDO $table, bool $json = false): array
 	{
 		$objects = [];
 		while ($object = $this->fetchAs($table))
