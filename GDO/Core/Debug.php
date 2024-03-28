@@ -490,7 +490,7 @@ final class Debug
 			}
 		}
 
-		if ($url = trim(urldecode($_SERVER['REQUEST_URI']), '/'))
+		if ($url = trim(urldecode((string)@$_SERVER['REQUEST_URI']), '/'))
 		{
 			$url = GDO_PROTOCOL . '://' . GDO_DOMAIN . '/' . $url;
 			$url = "<a href=\"{$url}\">{$url}</a>";

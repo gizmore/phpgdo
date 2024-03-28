@@ -260,6 +260,7 @@ final class CLI
 	 */
 	public static function setServerVars(): void
 	{
+        return;
 		$_SERVER['HTTPS'] = 'off';
 		$_SERVER['HTTP_HOST'] = GDO_DOMAIN;
 		$_SERVER['SERVER_NAME'] = GDO_DOMAIN; # @TODO use machines host name.

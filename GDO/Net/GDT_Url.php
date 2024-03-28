@@ -72,9 +72,9 @@ class GDT_Url extends GDT_String
 	### Options ###
 	###############
 
-	public static function port(): ?int { return def('GDO_PORT', $_SERVER['SERVER_PORT']); }
+	public static function port(): ?int { return def('GDO_PORT', @$_SERVER['SERVER_PORT']?$_SERVER['SERVER_PORT']:443); }
 
-	public static function host(): string { return $_SERVER['SERVER_NAME']; }
+	public static function host(): string { return def('GDO_DOMAIN', @$_SERVER['SERVER_NAME']?$_SERVER['SERVER_NAME']:GDO_DOMAIN); }
 
 	public static function relative($url): string { return GDO_WEB_ROOT . $url; }
 
@@ -158,7 +158,7 @@ class GDT_Url extends GDT_String
 			{
 				return $this->errorLocal($value);
 			}
-			if ($ip === $_SERVER['SERVER_ADDR'])
+			if ($ip === @$_SERVER['SERVER_ADDR'])
 			{
 				return $this->errorLocal($value);
 			}

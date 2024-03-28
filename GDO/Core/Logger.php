@@ -178,7 +178,7 @@ final class Logger
 		if (self::isEnabled($logmode))
 		{
 			$time = Time::displayTimestamp(0, 'db');
-			$ip = self::isDisabled(self::IP) ? '' : @$_SERVER['REMOTE_ADDR'];
+			$ip = self::isDisabled(self::IP) ? '' : (@$_SERVER['REMOTE_ADDR']?$_SERVER['REMOTE_ADDR']:'0');
 			$username = self::$username ?: ':~guest~';
 			self::logB($filename, sprintf(self::$logformat, $time, $ip, $username, $message));
 		}

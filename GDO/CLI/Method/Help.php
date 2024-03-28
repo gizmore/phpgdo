@@ -104,12 +104,12 @@ final class Help extends MethodCLI
 		{
 			$aliases = array_map(function (Method $me)
 			{
-				return $me->getCLITrigger();
+				return "\${$me->getCLITrigger()}";
 			}, $triggers);
 			$back[] = sprintf('%s: %s.', TextStyle::bold($mon), implode(', ', $aliases));
 		}
 
-		return GDT_HTML::make()->var(implode(' ', $back));
+		return GDT_HTML::make()->var(t('msg_cli_all_commands', [implode(' ', $back)]));
 	}
 
 }

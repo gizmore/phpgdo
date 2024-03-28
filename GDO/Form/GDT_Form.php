@@ -78,7 +78,7 @@ class GDT_Form extends GDT
         parent::__construct();
         $this->verb(self::POST);
         $this->addClass('gdt-form');
-        $this->action(urldecode($_SERVER['REQUEST_URI']));
+        $this->action(isset($_SERVER['REQUEST_URI'])?urldecode($_SERVER['REQUEST_URI']):'?');
     }
 
     #############

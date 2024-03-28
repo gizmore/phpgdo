@@ -26,6 +26,7 @@ return [
 	'md_cli_wait' => 'Wait a specified duration.',
 
 	'mt_cli_help' => 'Help',
+    'msg_cli_all_commands' => 'All bot commands: %s',
 	'md_cli_help' => 'Print short help for a method.',
 
 	'mt_cli_collect' => 'Collect Files',

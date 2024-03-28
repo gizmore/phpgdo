@@ -91,7 +91,7 @@ final class URL
         }
 
         $matches = [];
-        if (preg_match('/^([a-z]{3,8}):\\/\\/([.a-z]+):?([0-9]+)?\\/?([^?#]+)?(\\?[^#]+)?/i', $url, $matches))
+        if (preg_match('/^([a-z]{3,8}):\\/\\/([-.a-z]+):?([0-9]+)?\\/?([^?#]+)?(\\?[^#]+)?/i', $url, $matches))
         {
             $parts = [
                 'scheme' => $matches[1],
