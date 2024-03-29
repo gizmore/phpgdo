@@ -229,7 +229,7 @@ final class ModuleProviders
 'DogTick' => ['Country', 'DogIRC'],
 'DogTwitter' => [],
 'DogWeather' => ['Dog'],
-'DogWebsite' => ['Admin', 'Avatar', 'Bootstrap5Theme', 'Captcha', 'Contact', 'Dog', 'DogAuth', 'DogBlackjack', 'DogFriends', 'DogGreetings', 'DogIRC', 'DogIRCAutologin', 'DogIRCSpider', 'DogOracle', 'DogShadowdogs', 'DogSlapwarz', 'DogTelegram', 'DogTick', 'DogWeather', 'Download', 'Forum', 'JQuery', 'Links', 'Markdown', 'News', 'Perf', 'PM', 'Quotes', 'Shoutbox', 'Todo'],
+'DogWebsite' => ['Admin', 'Avatar', 'Bootstrap5Theme', 'Captcha', 'ChatGPT', 'Contact', 'Dog', 'DogAuth', 'DogBlackjack', 'DogFriends', 'DogGreetings', 'DogIRC', 'DogIRCAutologin', 'DogIRCSpider', 'DogOracle', 'DogShadowdogs', 'DogSlapwarz', 'DogTelegram', 'DogTick', 'DogWeather', 'Download', 'Forum', 'JQuery', 'Links', 'Markdown', 'Moment', 'News', 'Perf', 'PM', 'Quotes', 'Shoutbox', 'Todo'],
 'DogWhatsApp' => ['Dog'],
 'DOMPDF' => ['File'],
 'DoubleAccounts' => [],

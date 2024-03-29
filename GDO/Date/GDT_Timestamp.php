@@ -51,6 +51,13 @@ class GDT_Timestamp extends GDT_DBField
 	public int $millis = 3;
 	public bool $defaultNow = false;
 
+    protected function __construct()
+    {
+        parent::__construct();
+        $this->addClass('gdt-timestamp');
+    }
+
+
 	#####################
 	### Starting view ###
 	#####################

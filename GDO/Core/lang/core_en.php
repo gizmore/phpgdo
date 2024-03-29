@@ -105,6 +105,7 @@ return [
 	'msg_binary_detected' => 'The %s binary has been detected.',
 	'msg_module_methods' => '%s methods: %s.',
 	'msg_abort' => 'User abort.',
+    'msg_gdoadm_migrated' => 'The module %s got all it\'s tables migrated.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',

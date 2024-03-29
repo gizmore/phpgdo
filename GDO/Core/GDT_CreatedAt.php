@@ -36,13 +36,13 @@ class GDT_CreatedAt extends GDT_Timestamp
 		return [$this->name => $var];
 	}
 
-	public function htmlClass(): string
-	{
-		return ' gdt-datetime';
-	}
+//	public function htmlClass(): string
+//	{
+//		return ' gdt-datetime';
+//	}
 
-	public function displayValue($var)
-	{
+	public function displayValue($var): string
+    {
 		return $this->gdo->gdoColumn($var)->renderLabel();
 	}
 

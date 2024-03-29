@@ -279,6 +279,7 @@ class GDT_Table extends GDT
 	public function result(Result $result): self
 	{
 		$this->result = $result;
+        $this->fetchAs = $result->table;
 		return $this;
 	}
 

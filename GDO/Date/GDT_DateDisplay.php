@@ -132,6 +132,7 @@ final class GDT_DateDisplay extends GDT
 	public function renderHTML(): string
 	{
 		$display = $this->renderDateOrAge();
+        $this->addClass('gdt-age');
 		return GDT_Template::php('Date', 'date_html.php', [
 			'field' => $this,
 			'display' => $display,

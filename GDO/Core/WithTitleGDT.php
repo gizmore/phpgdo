@@ -27,9 +27,9 @@ trait WithTitleGDT
         return isset($this->titleGDT);
     }
 
-    public function titleRaw(string $title): static
+    public function titleRaw(string $title, bool $escaped=true): static
     {
-        $this->titleGDT = GDT_Title::make()->titleRaw($title);
+        $this->titleGDT = GDT_Title::make()->titleRaw($title, $escaped);
         return $this;
     }
 

@@ -162,8 +162,6 @@ class GDT_Form extends GDT
     ################
     /**
      * Validate the form fields.
-     *
-     * @throws GDO_ArgError
      */
     public function validate(int|float|string|array|null|object|bool $value): bool
     {

@@ -158,11 +158,6 @@ abstract class GDO extends GDT
 	#PP#end## # end of PP
 	#########
 
-//	public static function escapeIdentifierS(string $identifier): string
-//	{
-//		return str_replace('`', "\\`", $identifier);
-//	}
-
 	public static function escapeSearchS(string $var): string
 	{
 		return Module_DBMS::instance()->dbmsEscapeSearch($var);
@@ -190,7 +185,7 @@ abstract class GDO extends GDT
 	/**
 	 * @param string[] $gdoVars
 	 */
-	public static function  entity(array $gdoVars): static
+	public static function entity(array $gdoVars): static
 	{
 		$instance = new static();
 		$instance->gdoVars = $gdoVars;
