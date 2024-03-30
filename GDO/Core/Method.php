@@ -402,7 +402,7 @@ abstract class Method
 
 		if (($this->isUserRequired()) && (!$this->isGuestAllowed()) && (!$user->isMember()))
 		{
-			$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+			$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode((string)@$_SERVER['REQUEST_URI']));
 			$error = 'err_members_only';
 			$args = [$hrefAuth];
 			return false;
@@ -412,14 +412,14 @@ abstract class Method
 		{
 			if (GDO_Module::config_var('Register', 'guest_signup', '0'))
 			{
-                $hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
-                $hrefGuest = href('Register', 'Guest', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+                $hrefAuth = href('Login', 'Form', '&_backto=' . urlencode((string)@$_SERVER['REQUEST_URI']));
+                $hrefGuest = href('Register', 'Guest', '&_backto=' . urlencode((string)@$_SERVER['REQUEST_URI']));
 				$error = 'err_user_required';
 				$args = [$hrefAuth, $hrefGuest];
 			}
 			else
 			{
-				$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode($_SERVER['REQUEST_URI']));
+				$hrefAuth = href('Login', 'Form', '&_backto=' . urlencode((string)@$_SERVER['REQUEST_URI']));
 				$error = 'err_members_only';
 				$args = [$hrefAuth];
 			}

@@ -32,7 +32,7 @@ final class GDO_DirectoryIndex extends GDO
 
 	public function href_file_name()
 	{
-		return rtrim(GDO_WEB_ROOT, '/') . $_REQUEST['url'] . '/' . $this->getFileName();
+		return rtrim(GDO_WEB_ROOT, '/') . $_REQUEST['_url'] . '/' . $this->getFileName();
 	}
 
 }

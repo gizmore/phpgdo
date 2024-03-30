@@ -193,13 +193,13 @@ else
 	# Wrap url
 	$url = (string)@$_REQUEST['_url'];
 	$url = $url ? "/{$url}" : '/index.html';
-	$_REQUEST['url'] = $url;
+    $_REQUEST['_url'] = $url;
 	$url2 = ltrim($url, '/');
 
 	# Cleanup
 	unset($_REQUEST['_v']); # gdo version
 	unset($_REQUEST['_av']); # asset version
-	unset($_REQUEST['_url']); # seo url
+//	unset($_REQUEST['_url']); # seo url
 
 	# Choose method for url
 	if (is_dir($url2))
@@ -212,7 +212,7 @@ else
 	}
 	elseif (GDO_SEO_URLS)
 	{
-		unset($_REQUEST['url']);
+//		unset($_REQUEST['url']);
 		if ($url2 = GDO_SEO_URL::getSEOUrl($url))
 		{
 			if (!($me = GDO_SEO_URL::getSEOMethod($url2)))

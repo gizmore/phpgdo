@@ -33,7 +33,7 @@ final class SeoProxy extends Method
      */
     public function execute(): GDT
 	{
-		$method = self::makeProxied($_REQUEST['url']);
+		$method = self::makeProxied($_REQUEST['_url']);
 		return $method->exec();
 	}
 
@@ -52,14 +52,14 @@ final class SeoProxy extends Method
 		$module = $loader->getModule($mo, false, false);
 		if (!$module)
 		{
-			$_REQUEST['url'] = $url; # and a step back for 404 url :)
+			$_REQUEST['_url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
 		}
 
 		# Method
 		if (!($me = array_shift($args)))
 		{
-			$_REQUEST['url'] = $url; # and a step back for 404 url :)
+			$_REQUEST['_url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
 		}
 
@@ -73,7 +73,7 @@ final class SeoProxy extends Method
 
 		if (!($method = $module->getMethodByName($me, false)))
 		{
-			$_REQUEST['url'] = $url; # and a step back for 404 url :)
+			$_REQUEST['_url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
 		}
 

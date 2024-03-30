@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Core\Method;
 
 use GDO\Core\Application;
+use GDO\Core\GDO_ArgError;
 use GDO\Core\GDO_FileCache;
 use GDO\Core\GDT;
 use GDO\Core\GDT_Hook;
@@ -35,13 +36,16 @@ final class Fileserver extends Method
 	public function gdoParameters(): array
 	{
 		return [
-			GDT_Url::make('url')->allowExternal(false),
+			GDT_Url::make('_url')->allowExternal(false),
 		];
 	}
 
-	public function execute(): GDT
+    /**
+     * @throws GDO_ArgError
+     */
+    public function execute(): GDT
 	{
-		$url = $this->gdoParameterVar('url', false);
+		$url = $this->gdoParameterVar('_url', false);
 		$url = ltrim($url, '/');
 
 		# Deny by asset rule?
