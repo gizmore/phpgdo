@@ -335,7 +335,7 @@ final class ModuleLoader
 		}
 		catch (GDO_DBException $ex)
 		{
-			if (Application::instance()->isInstall())
+			if (Application::instance()->isCLI())
 			{
 				fwrite(STDERR, "A Database exception occured.\nOn installations this might be fine, as the gdo_module table does not exist yet.\n");
 			}
@@ -461,7 +461,7 @@ final class ModuleLoader
 		# Init modules
 		$app = Application::$INSTANCE;
 		Trans::inited();
-		if (!$app->isInstall())
+//		if (!$app->isInstall())
 		{
 			foreach ($this->getEnabledModules() as $module)
 			{

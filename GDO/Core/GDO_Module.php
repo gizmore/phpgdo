@@ -238,7 +238,7 @@ class GDO_Module extends GDO
 		if (!$this->inited)
 		{
 			$this->inited = true;
-			if (!Application::$INSTANCE->isInstall())
+//			if (!Application::$INSTANCE->isInstall())
 			{
 				$this->onModuleInit();
 			}

@@ -839,9 +839,9 @@ abstract class GDO extends GDT
 				if ($this->gdoVars[$k] !== $v)
 				{
 					$this->gdoVars[$k] = $v;
-					$d = true;
-				}
-			}
+                    $d = true;
+                }
+            }
 		}
 		return ($markDirty && $d) ? $this->markDirty($key) : $this;
 	}

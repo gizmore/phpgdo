@@ -252,4 +252,9 @@ class GDT_Method extends GDT
 		return $last;
 	}
 
+    public function isAsync(): bool
+    {
+        return $this->method->isAsync();
+    }
+
 }

@@ -83,6 +83,11 @@ abstract class Method
 		return new static();
 	}
 
+    public function isAsync(): bool
+    {
+        return false;
+    }
+
 	public function getCLITrigger(): string
 	{
 		return strtolower("{$this->getModule()->getCLITrigger()}.{$this->getMethodName()}");

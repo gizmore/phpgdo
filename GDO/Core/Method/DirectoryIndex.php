@@ -46,7 +46,7 @@ final class DirectoryIndex extends MethodTable
 	public function gdoParameters(): array
 	{
 		return [
-			GDT_Url::make('url')->allowInternal()->notNull(),
+			GDT_Url::make('_url')->allowInternal()->notNull(),
 		];
 	}
 
@@ -75,7 +75,7 @@ final class DirectoryIndex extends MethodTable
 
 	public function getUrl(): string
 	{
-		$var = $this->gdoParameterVar('url');
+		$var = $this->gdoParameterVar('_url');
 		return ltrim($var, '/ ');
 	}
 

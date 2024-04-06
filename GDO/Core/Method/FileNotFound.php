@@ -49,7 +49,7 @@ final class FileNotFound extends MethodPage
 	public function gdoParameters(): array
 	{
 		return [
-			GDT_Url::make('url')->notNull()->allowInternal(),
+			GDT_Url::make('_url')->notNull()->allowInternal(),
 		];
 	}
 
@@ -94,7 +94,7 @@ final class FileNotFound extends MethodPage
      */
     private function send404Mail(string $recipient): void
 	{
-		$url = $this->gdoParameterVar('url');
+		$url = $this->gdoParameterVar('_url');
 		$mail = Mail::botMail();
 		$mail->setSubject(t('mail_title_404', [sitename(), html($url)]));
 		$args = [

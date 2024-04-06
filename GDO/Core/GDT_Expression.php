@@ -89,4 +89,9 @@ final class GDT_Expression extends GDT
 		$this->method->method->inputs($this->inputs);
 	}
 
+    public function isAsync(): bool
+    {
+        return $this->method->isAsync();
+    }
+
 }

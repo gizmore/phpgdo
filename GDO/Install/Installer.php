@@ -225,12 +225,20 @@ class Installer
 		{
             if (!($module2 = GDO_Module::getBy('module_name', $module->getModuleName())))
             {
-                $module->setVars([
+                $module2 = GDO_Module::blank([
                     'module_name' => $module->getModuleName(),
                     'module_enabled' => '1',
                     'module_version' => $module->version,
                     'module_priority' => (string) $module->priority,
                 ])->insert();
+
+                $module->setVars([
+                    'module_id' => $module2->getID(),
+                    'module_name' => $module->getModuleName(),
+                    'module_enabled' => '1',
+                    'module_version' => $module->version,
+                    'module_priority' => (string) $module->priority,
+                ]);
             }
             else
             {
@@ -257,6 +265,7 @@ class Installer
 
 		self::installMethods($module);
 
+        $module->initOnce();
 		$module->onInstall();
 
 		ModuleLoader::instance()->addEnabledModule($module);

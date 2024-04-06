@@ -47,7 +47,7 @@ final class NotAllowed extends MethodPage
 	public function gdoParameters(): array
 	{
 		return [
-			GDT_Url::make('url')->notNull()->allowInternal(),
+			GDT_Url::make('_url')->notNull()->allowInternal(),
 		];
 	}
 
@@ -72,7 +72,7 @@ final class NotAllowed extends MethodPage
 
 	private function send403Mail(string $recipient): void
 	{
-		$url = $this->gdoParameterVar('url');
+		$url = $this->gdoParameterVar('_url');
 		$mail = Mail::botMail();
 		$mail->setSubject(t('mail_title_403', [
 			sitename(), html($url)]));
