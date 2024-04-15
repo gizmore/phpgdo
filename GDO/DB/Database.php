@@ -150,7 +150,12 @@ class Database
 		return self::$TABLES[$classname];
 	}
 
-	public function db(string $db): self
+    public function reconnect(): void
+    {
+        unset($this->link);
+    }
+
+    public function db(string $db): self
 	{
 		$this->db = $db;
 		return $this;

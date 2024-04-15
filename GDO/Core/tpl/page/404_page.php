@@ -6,10 +6,10 @@ use GDO\UI\GDT_Error;
 use GDO\UI\TextStyle;
 
 /**
- * @var $url URL
+ * @var $_url URL
  */
 $error = GDT_Error::make()->title('file_not_found')->code(404);
 $error->text('err_file_not_found', [
-	TextStyle::boldi(html($url->raw)),
+	TextStyle::boldi(html($_url->raw)),
 ]);
 echo $error->render();
