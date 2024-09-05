@@ -8,6 +8,7 @@
 .buildpath
 .project
 .settings/
+/eclipse/
 
 # PHPStorm
 .idea/
@@ -34,6 +35,7 @@ vendor/
 
 # Various
 hax.php
+/secret/
 
 # GDO
 assets/
@@ -66,4 +68,3 @@ GDO/*
 !GDO/UI/
 !GDO/User/
 !GDO/Util/
-/eclipse/
