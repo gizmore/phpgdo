@@ -12,7 +12,7 @@ use GDO\Util\WS;
  * @since 6.0.0
  * @author gizmore
  */
-class GDT_Enum extends GDT_Select
+class  GDT_Enum extends GDT_Select
 {
 
 	final public const MAX_EXAMPLE_VARS = 5;

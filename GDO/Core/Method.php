@@ -8,6 +8,7 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Language\Trans;
+use GDO\Session\GDO_Session;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Redirect;
 use GDO\UI\WithDescription;
@@ -636,15 +637,17 @@ abstract class Method
 	 */
 	private function storeLastActivity(): void
 	{
-		if (Application::$INSTANCE->verb === GDT_Form::POST)
+//		if (Application::$INSTANCE->verb === GDT_Form::POST)
 		{
 			$user = GDO_User::current();
 			if ($user->isPersisted())
 			{
 				$time = Application::$TIME;
-				$time -= $time % $user->settingValue('Date', 'activity_accuracy');
+                $accuracy = $user->settingValue('Date', 'activity_accuracy');
+				$time -= $time % $accuracy;
 				$date = Time::getDate($time);
 				$user->saveSettingVar('User', 'last_activity', $date);
+                GDO_Session::instance()->saveVar('sess_time', Time::getDate($time));
 			}
 		}
 	}
@@ -803,5 +806,13 @@ abstract class Method
 		$this->button = $button;
 		return $this->addInput($button, '1');
 	}
+
+    ##############
+    ### Render ###
+    ##############
+    public function renderList(GDO $gdo): string|array
+    {
+        return $gdo->renderList();
+    }
 
 }

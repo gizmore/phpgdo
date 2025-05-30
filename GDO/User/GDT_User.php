@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace GDO\User;
 
+use GDO\Core\Application;
 use GDO\Core\GDO;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Object;
+use GDO\Date\Time;
 use GDO\DB\Query;
+use GDO\Session\GDO_Session;
 use GDO\Table\GDT_Filter;
 
 /**
@@ -31,12 +33,11 @@ class GDT_User extends GDT_Object
 	public bool $fallbackCurrentUser = false;
 	public string $withType;
 
-	#############
-	### Ghost ###
-	#############
 	public string $withPermission;
 	public bool $noFilter = false;
-	public bool $ghost = false;
+    public bool $ghost = false;
+    public bool $notSelf = false;
+    public int $online = 0;
 
 	protected function __construct()
 	{
@@ -51,7 +52,19 @@ class GDT_User extends GDT_Object
 		return $this;
 	}
 
-	###############
+    public function notSelf(bool $not_self=true): static
+    {
+        $this->notSelf = $not_self;
+        return $this;
+    }
+
+    public function online(int $online=600): static
+    {
+        $this->online = $online;
+        return $this;
+    }
+
+    ###############
 	### Deleted ###
 	###############
 
@@ -142,7 +155,7 @@ class GDT_User extends GDT_Object
 		return null;
 	}
 
-	protected function getGDOsByName(string $var): array
+    protected function getGDOsByName(string $var): array
 	{
 		$field = 'user_name';
 		$p = GDO_User::GUEST_NAME_PREFIX;
@@ -207,6 +220,23 @@ class GDT_User extends GDT_Object
 				return $this->error('err_user_deleted', [$user->gdoDisplay('user_deletor'), $user->gdoDisplay('user_deleted')]);
 			}
 		}
+
+        if($this->notSelf)
+        {
+            if($user === GDO_User::current())
+            {
+                return $this->error('err_choose_youself');
+            }
+        }
+
+        if ($this->online)
+        {
+            $cut = Time::getDate(Application::$MICROTIME - $this->online);
+            if(!GDO_Session::table()->select('1')->where("sess_user={$user->getID()} AND sess_time > '$cut'")->first()->exec()->fetchVar())
+            {
+                return $this->error('err_not_online', [$user->renderUserName()]);
+            }
+        }
 
 		return true;
 	}

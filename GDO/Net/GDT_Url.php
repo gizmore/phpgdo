@@ -72,7 +72,7 @@ class GDT_Url extends GDT_String
 	### Options ###
 	###############
 
-	public static function port(): ?int { return def('GDO_PORT', @$_SERVER['SERVER_PORT']?$_SERVER['SERVER_PORT']:443); }
+	public static function port(): ?int { return def('GDO_PORT', (int)(@$_SERVER['SERVER_PORT']?$_SERVER['SERVER_PORT']:443)); }
 
 	public static function host(): string { return def('GDO_DOMAIN', @$_SERVER['SERVER_NAME']?$_SERVER['SERVER_NAME']:GDO_DOMAIN); }
 

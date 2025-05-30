@@ -66,7 +66,7 @@ abstract class GDT
 	public static int $GDT_KILLS = 0; # total deallocs
 	public static int $GDT_PEAKS = 0; # highest simultan. alive
 
-	public function __construct()
+	protected function __construct()
 	{
 		$this->afterLoaded(); #PP#delete#
 	}

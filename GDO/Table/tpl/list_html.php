@@ -54,7 +54,8 @@ echo $pagemenu;
 		<?php
 		$gdo = $field->fetchAs->cache->getDummy();
 		while ($gdo = $result->fetchInto($gdo)) :
-			echo $gdo->renderList();
+            $me->renderList($gdo);
+//			echo $gdo->renderList();
 		endwhile;
 		?>
     </div>

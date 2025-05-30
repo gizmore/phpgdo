@@ -38,9 +38,16 @@ final class Install
 		$data = [];
 		foreach ($list as $tzName)
 		{
-			$tz = new DateTimeZone($tzName);
-			$of = $tz->getOffset($dt);
-			$data[] = [$tzName, $of];
+            try
+            {
+                $tz = new DateTimeZone($tzName);
+                $of = $tz->getOffset($dt);
+                $data[] = [$tzName, $of];
+            }
+            catch (\Exception $e)
+            {
+
+            }
 		}
 		$table = GDO_Timezone::table();
 		$columns = $table->gdoColumnsOnly('tz_name', 'tz_offset');

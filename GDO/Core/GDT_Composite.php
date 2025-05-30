@@ -13,7 +13,7 @@ use GDO\UI\WithLabel;
  * @since 7.0.1
  * @author gizmore
  */
-class GDT_Composite extends GDT_Container
+abstract class GDT_Composite extends GDT_Container
 {
 
 	use WithLabel;
@@ -29,10 +29,7 @@ class GDT_Composite extends GDT_Container
 		return $obj;
 	}
 
-	public function gdoCompositeFields(): array
-	{
-		return GDT::EMPTY_ARRAY;
-	}
+	public abstract function gdoCompositeFields(): array;
 
 	###############
 	### NotNull ###
