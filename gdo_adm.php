@@ -247,6 +247,15 @@ $app = new class extends Application
         return $this;
     }
 
+    public bool $export = false;
+
+    public function export(bool $export = true): self
+    {
+        $this->export = $export;
+        return $this;
+    }
+
+
     public bool $quiet = false;
 
     public function quiet(bool $quiet = true): self
@@ -317,7 +326,7 @@ if ($argc === 1)
 $exe = array_shift($argv);
 $argc = count($argv);
 $i = 0;
-$o = getopt('acdfFhipqrsv3', ['all', 'configured', 'delete', 'fix', 'force', 'help', 'interactive', 'post-install', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
+$o = getopt('acdefFhipqrsv3', ['all', 'configured', 'delete', 'export', 'fix', 'force', 'help', 'interactive', 'post-install', 'quiet', 'reset', 'ssh', 'verbose', 'vendor'], $i);
 if (isset($o['a']) || isset($o['all']))
 {
     $app->all();
@@ -330,10 +339,8 @@ if (isset($o['d']) || isset($o['delete']))
 {
     $app->delete();
 }
-if (isset($o['f']) || isset($o['fix']))
-{
-    $app->fix();
-}
+$app->export(isset($o['e']) || isset($o['export']));
+$app->fix(isset($o['f']) || isset($o['fix']));
 if (isset($o['F']) || isset($o['force']))
 {
     $app->force();
@@ -732,6 +739,91 @@ elseif ($command === 'install')
     if ($app->postInstall)
     {
         system('bash gdo_post_install.sh --quiet');
+    }
+
+    if ($app->export)
+    {
+        $exportPath = GDO_TEMP_PATH . 'export/';
+        $sourcePath = $exportPath . 'src/';
+        $distPath   = $exportPath . 'dist/';
+        $archive    = $distPath . 'code_export.tar.gz';
+
+        FileUtil::removeDir($exportPath);
+        FileUtil::createDir($sourcePath);
+        FileUtil::createDir($distPath);
+
+        foreach ($modules as $module)
+        {
+            $modulePath = rtrim($module->filePath(), '/');
+            $moduleName = $module->getName();
+            $targetPath = $sourcePath . 'GDO/' . $moduleName . '/';
+
+            FileUtil::createDir($targetPath);
+
+            # Only export files tracked by git.
+            $command = sprintf(
+                'git -C %s ls-files -z',
+                escapeshellarg($modulePath),
+            );
+
+            $gitFiles = shell_exec($command);
+
+            if ($gitFiles === null)
+            {
+                echo $app->error('%s', ['Could not list git files for module: '.$moduleName]);
+                continue;
+            }
+
+            foreach (explode("\0", rtrim($gitFiles, "\0")) as $relativeFile)
+            {
+                if ($relativeFile === '')
+                {
+                    continue;
+                }
+
+                $sourceFile = $modulePath . '/' . $relativeFile;
+                $targetFile = $targetPath . $relativeFile;
+
+                $ext = Strings::rsubstrFrom($targetFile, '.');
+                if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png', 'pdf', 'mp3', 'csv', 'pfx', 'odt', 'ttf', 'ico']))
+                {
+                    continue;
+                }
+
+                # git may contain symlinks.
+                FileUtil::createDir(dirname($targetFile));
+
+                if (is_link($sourceFile))
+                {
+                    symlink(readlink($sourceFile), $targetFile);
+                }
+                elseif (is_file($sourceFile))
+                {
+                    if (!copy($sourceFile, $targetFile))
+                    {
+                        throw new \GDO\Core\GDO_Exception(
+                            '%s', ["Could not export file: $sourceFile"]
+                        );
+                    }
+                }
+            }
+        }
+
+        # Archive contains the same plain source tree found in export/src/.
+        $command = sprintf(
+            'tar -C %s -czf %s .',
+            escapeshellarg($sourcePath),
+            escapeshellarg($archive),
+        );
+
+        exec($command, $output, $exitCode);
+
+        if ($exitCode !== 0)
+        {
+            throw new \GDO\Core\GDO_Exception(
+                '%s', ['Could not create source export archive.'],
+            );
+        }
     }
 
     echo "Done.\n";
