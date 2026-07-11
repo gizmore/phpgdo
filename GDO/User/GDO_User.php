@@ -385,7 +385,7 @@ final class GDO_User extends GDO
 	public function getCard(): GDT_Card
 	{
 		$card = GDT_Card::make('user-card-' . $this->getID());
-		$card->titleRaw($this->renderProfileLink());
+		$card->titleRaw($this->renderProfileLink(), false);
 		return $card;
 	}
 
