@@ -280,7 +280,7 @@ final class ModuleProviders
 'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DSGVO', 'Facebook', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Websocket'],
 'LoC' => [],
 'Login' => ['Session'],
-'Lounge' => [],
+'Lounge' => ['Cronjob'],
 'Mail' => ['Mailer', 'Net'],
 'Mailer' => ['Mail'],
 'Maintenance' => [],
