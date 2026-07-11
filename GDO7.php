@@ -113,7 +113,7 @@ function hrefDefault(): string
  *
  * @see seo()
  */
-function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS): string
+function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS, $fmt='html'): string
 {
     $sep = GDO_SEO_SEP;
     $module = strtolower($module);
@@ -123,7 +123,6 @@ function href(string $module, string $method, string $append = null, bool $seo =
         $href = GDO_WEB_ROOT . "{$module}{$sep}{$method}{$sep}";
         $q = [];
 		$hash = '';
-		$fmt = 'html';
 		if ($append)
 		{
 			$append = ltrim($append, '&');
