@@ -103,6 +103,7 @@ abstract class MethodForm extends Method
             $this->createForm($this->form);
             $this->form->pack();
             $this->form->inputs($inputs);
+            $this->addComposeParameters($this->gdoParameters());
             $this->addComposeParameters($this->form->getAllFields());
             $this->addComposeParameters($this->form->actions()->getAllFields());
             $this->applyInput();

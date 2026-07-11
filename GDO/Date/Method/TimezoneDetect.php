@@ -3,6 +3,8 @@ namespace GDO\Date\Method;
 
 use GDO\Core\GDO_ArgError;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Array;
+use GDO\Core\GDT_JSON;
 use GDO\Core\GDT_String;
 use GDO\Date\GDO_Timezone;
 use GDO\Date\GDT_Timezone;
@@ -50,12 +52,16 @@ final class TimezoneDetect extends MethodForm
      */
     public function formValidated(GDT_Form $form): GDT
 	{
+        /**
+         * @var GDO_Timezone $timezone
+         */
         $timezone = $this->gdoParameterValue('timezone');
 		$inputs = [
 			'timezone' => $timezone->getID(),
 			'submit' => '1',
 		];
-		return Timezone::make()->executeWithInputs($inputs);
+        Timezone::make()->executeWithInputs($inputs);
+        return GDT_Array::make()->value($timezone->getGDOVars());
 	}
 
 //	public function validateTimezoneName(GDT_Form $form, GDT_String $string, $value)

@@ -248,6 +248,11 @@ $app->ajax($ajax);
 ############
 ### Exec ###
 ############
+if (@$_SERVER['REQUEST_METHOD'] === 'OPTIONS')
+{
+    die(0);
+}
+
 #$_GET = null; # from this point we have everything only in gdo.
 #$_POST = null;
 # plug together GDT_Method

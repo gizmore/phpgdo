@@ -1612,7 +1612,7 @@ abstract class GDO extends GDT
 
 		foreach ($vars as $key => $var)
 		{
-			$this->gdoVars[$key] = $var;
+			$this->gdoVars[$key] = (string)$var;
 		}
 
 		if ($withHooks)
