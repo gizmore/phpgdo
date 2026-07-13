@@ -10,11 +10,12 @@ use GDO\Core\GDT_Int;
     <input
 		<?=$field->htmlFocus()?>
 		<?=$field->htmlID()?>
-            type="number"
+            type="text"
+            pattern="[0-9]*"
 		<?=$field->htmlConfig()?>
             min="<?=$field->min?>"
             max="<?=$field->max?>"
-            step="<?=$field->step?>"
+            <?=$field->htmlStep()?>
 		<?=$field->htmlName()?>
 		<?=$field->htmlDisabled()?>
 		<?=$field->htmlRequired()?>

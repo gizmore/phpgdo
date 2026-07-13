@@ -10,8 +10,10 @@ use GDO\Util\WS;
  */
 class GDT_Float extends GDT_Int
 {
+    public int|float $step = 0;
 
-	#######################
+
+    #######################
 	### Input/Var/Value ###
 	#######################
 	public int $decimals = 4;

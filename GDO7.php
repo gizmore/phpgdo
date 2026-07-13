@@ -252,7 +252,7 @@ function html(?string $s): string
 			return $s;
 
 		case GDT::RENDER_JSON:
-			return json($s);
+			return $s;
 
 		default:
 			return str_replace(

@@ -29,7 +29,7 @@ abstract class MethodCompletion extends MethodAjax
 
 	protected function getSearchTermMinLength(): int
 	{
-		return 2;
+		return 1;
 	}
 
 	public function execute(): GDT

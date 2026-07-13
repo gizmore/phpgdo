@@ -28,11 +28,6 @@ class GDT_ObjectSelect extends GDT_Select
 		return $this;
 	}
 
-// 	public function multiple(bool $multiple=true): self
-// 	{
-// 		return parent::multiple($multiple);
-// 	}
-
 	/**
 	 * @throws GDO_DBException
 	 */

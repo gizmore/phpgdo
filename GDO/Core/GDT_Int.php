@@ -329,6 +329,11 @@ class GDT_Int extends GDT_DBField
 		return $this;
 	}
 
+    public function htmlStep(): string
+    {
+        return $this->step ? "step=\"{$this->step}\"" : '';
+    }
+
 	public function unsigned(bool $unsigned = true): self
 	{
 		$this->unsigned = $unsigned;
