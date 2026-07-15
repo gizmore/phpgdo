@@ -41,7 +41,6 @@ class GDT_AntiCSRF extends GDT_String
 			$this->fixed();
 		}
 		$this->csrfExpire((int)$mod->cfgXSRFDuration());
-		$this->token = $this->csrfToken();
 	}
 
 	###########
@@ -51,7 +50,7 @@ class GDT_AntiCSRF extends GDT_String
 	public function fixed(bool $fixed = true): self
 	{
 		$this->fixed = $fixed;
-		return $this;
+        return $this;
 	}
 
 	public function csrfExpire(int $csrfExpire): self
