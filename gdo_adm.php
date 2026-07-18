@@ -752,7 +752,7 @@ elseif ($command === 'install')
         FileUtil::createDir($sourcePath);
         FileUtil::createDir($distPath);
 
-        FileUtil::copy("$sourcePath/index.php", "$distPath/index.php");
+        FileUtil::copy("index.php", "{$sourcePath}index.php");
 
         foreach ($modules as $module)
         {
