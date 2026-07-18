@@ -352,4 +352,9 @@ class GDT_Int extends GDT_DBField
 		return $this;
 	}
 
+    public function getInputType(): string
+    {
+        return 'number';
+    }
+
 }

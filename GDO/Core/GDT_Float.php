@@ -74,7 +74,12 @@ class GDT_Float extends GDT_Int
 			(($va > $vb) ? 1 : -1);
 	}
 
-	public function _inputToVar($input)
+    public function getInputType(): string
+    {
+        return 'text';
+    }
+
+    public function _inputToVar($input)
 	{
 		if (parent::_inputToVar($input))
 		{
