@@ -91,8 +91,8 @@ final class Module_User extends GDO_Module
 			GDT_Checkbox::make('hook_sidebar')->initial('1'),
 			GDT_Checkbox::make('fav_color')->initial('1'),
 			GDT_Checkbox::make('acl_relations')->initial('1'),
-			GDT_Checkbox::make('acl_levels')->initial('0'),
-			GDT_Checkbox::make('acl_permissions')->initial('0'),
+			GDT_Checkbox::make('acl_levels')->initial('1'),
+			GDT_Checkbox::make('acl_permissions')->initial('1'),
 		];
 	}
 

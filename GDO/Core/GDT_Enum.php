@@ -81,7 +81,7 @@ class  GDT_Enum extends GDT_Select
 
 	public function renderBinary(): string
 	{
-		return WS::wr8($this->enumIndex());
+		return WS::wr16($this->enumIndex());
 	}
 
 }

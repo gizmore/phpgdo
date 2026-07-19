@@ -357,7 +357,7 @@ class GDT_Timestamp extends GDT_DBField
 
     public function renderBinary(): string
     {
-        return WS::wr32((int)Time::getTimestamp($this->getVar()));
+        return WS::wrDouble((int)Time::getTimestamp($this->getVar()));
     }
 
 }

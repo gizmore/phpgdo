@@ -61,10 +61,9 @@ final class WS
 		return urlencode($string) . "\0";
 	}
 
-
 	public static function wrN(int $bytes, int $value): string
 	{
-		$value = (int)$value;
+		$value = $value;
 		$write = '';
 		for ($i = 0; $i < $bytes; $i++)
 		{
