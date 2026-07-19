@@ -178,7 +178,6 @@ elseif (FileUtil::isFile('protected/config.php'))
 
 $app = new class extends Application
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -615,12 +614,6 @@ elseif ($command === 'modules')
 
 elseif ($command === 'install')
 {
-//	if (!$db)
-//	{
-//		echo \GDO\UI\TextStyle::bold("You do not have GDO_DB_ENABLED. I cannot install anything.\n", true, 'red');
-//		die(-1);
-//	}
-
     $deps = [];
 
     $mode = $app->all ? 2 : 1;
@@ -752,9 +745,11 @@ elseif ($command === 'install')
         $exportPath = GDO_TEMP_PATH . 'export/';
         $sourcePath = $exportPath . 'src/';
         $distPath   = $exportPath . 'dist/';
-        $archive    = $distPath . 'code_export.tar.gz';
+        $archive    = $distPath . date('Ymd_His').'_phpgdo_'.\GDO\Core\Module_Core::GDO_REVISION.'.tar.gz';
 
-        FileUtil::removeDir($exportPath);
+        system('rm -rf '.escapeshellarg($exportPath));
+
+        FileUtil::createDir($exportPath);
         FileUtil::createDir($sourcePath);
         FileUtil::createDir($distPath);
 
@@ -771,6 +766,8 @@ elseif ($command === 'install')
         FileUtil::copyDir('GDO/Util', "{$sourcePath}GDO/Util");
         FileUtil::copyDir('GDO/CLI', "{$sourcePath}GDO/CLI");
         FileUtil::copyDir('GDO/DB', "{$sourcePath}GDO/DB");
+        @FileUtil::copyDir('GDO/DBMS', "{$sourcePath}GDO/DBMS");
+        q@FileUtil::copyDir('GDO/Captcha', "{$sourcePath}GDO/Captcha");
         FileUtil::copyDir('GDO/Install', "{$sourcePath}GDO/Install");
         FileUtil::copyDir('bin', "{$sourcePath}bin");
 
