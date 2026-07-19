@@ -104,15 +104,21 @@ final class FileUtil
 	}
 
 	/**
-	 * Copy a file.
+	 * Copy a file (not a dir!).
 	 */
-	public static function copy(string $src, string $dest): bool
+	public static function copy(string $src, string $dest, bool $follow_symlinks=true, bool $create_dest_dir=true): bool
 	{
 		try
 		{
 			$destDir = Strings::rsubstrTo($dest, '/');
-			self::createDir($destDir);
-			return copy($src, $dest);
+            if (!is_dir($destDir) && $create_dest_dir) {
+                self::createDir($destDir);
+            }
+            if (is_link($src) && !$follow_symlinks)
+            {
+                return symlink(readlink($src), $dest);
+            }
+            return copy($src, $dest);
 		}
 		catch (GDO_Exception $ex)
 		{
@@ -120,6 +126,63 @@ final class FileUtil
 		}
 		return false;
 	}
+
+    /**
+     * Copy a directory.
+     * @author chappy
+     * TODO: Write a test/t
+     */
+    public static function copyDir(string $src, string $dest, bool $create_dest=true, bool $follow_symlinks=true, bool $recursive=true, bool $hidden=true): bool
+    {
+        try
+        {
+            $src = rtrim($src, '/\\');
+            $dest = rtrim($dest, '/\\');
+            if (!is_dir($dest) && $create_dest)
+            {
+                self::createDir($dest);
+            }
+            $success = true;
+            foreach (new \FilesystemIterator($src, \FilesystemIterator::SKIP_DOTS) as $item)
+            {
+                $name = $item->getFilename();
+                if ($hidden || !str_starts_with($name, '.'))
+                {
+                    $sourcePath = $item->getPathname();
+                    $targetPath = "$dest/$name";
+
+                    if ($item->isLink() && !$follow_symlinks)
+                    {
+                        if ($linkTarget = readlink($sourcePath))
+                        {
+                            $success = !!symlink($linkTarget, $targetPath) && $success;
+                        }
+                        else
+                        {
+                            $success = false;
+                        }
+                    }
+
+                    elseif ($item->isDir() && $recursive)
+                    {
+                        $create_dest = true;
+                        $success = self::copyDir($sourcePath, $targetPath, $create_dest, $follow_symlinks, $recursive, $hidden) && $success;
+                    }
+
+                    elseif ($item->isFile())
+                    {
+                        $success = self::copy($sourcePath, $targetPath, $follow_symlinks) && $success;
+                    }
+                }
+            }
+            return $success;
+        }
+        catch (\Throwable $ex)
+        {
+            Logger::logException($ex);
+            return false;
+        }
+    }
 
 	################
 	### Platform ###

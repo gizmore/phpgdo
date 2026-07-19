@@ -753,6 +753,20 @@ elseif ($command === 'install')
         FileUtil::createDir($distPath);
 
         FileUtil::copy("index.php", "{$sourcePath}index.php");
+        FileUtil::copy("gdo_adm.sh", "{$sourcePath}gdo_adm.sh");
+        FileUtil::copy("gdo_yarn.sh", "{$sourcePath}gdo_adm.sh");
+        FileUtil::copy("gdo_post_install.sh", "{$sourcePath}gdo_adm.sh");
+        FileUtil::copy("gdo_adm.php", "{$sourcePath}gdo_adm.php");
+        FileUtil::copy("gdo_adm.php", "{$sourcePath}gdo_adm.php");
+        FileUtil::copy("gdo_test.php", "{$sourcePath}gdo_adm.php");
+        FileUtil::copy("gdo_cronjob.sh", "{$sourcePath}gdo_adm.php");
+        FileUtil::copy("gdo_cronjob.php", "{$sourcePath}gdo_adm.php");
+
+        FileUtil::copyDir('GDO/Util', "{$sourcePath}GDO/Util");
+        FileUtil::copyDir('GDO/CLI', "{$sourcePath}GDO/CLI");
+        FileUtil::copyDir('GDO/DB', "{$sourcePath}GDO/DB");
+        FileUtil::copyDir('GDO/Install', "{$sourcePath}GDO/Install");
+        FileUtil::copyDir('bin', "{$sourcePath}bin");
 
         foreach ($modules as $module)
         {
