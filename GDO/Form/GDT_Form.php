@@ -145,6 +145,10 @@ class GDT_Form extends GDT
             {
                 $json['errors'][$name] = $gdt->renderError();
             }
+            else
+            {
+                $json['errors'][] = $gdt->renderError();
+            }
         }
         $json['form_error'] = $this->renderError();
         return $json;

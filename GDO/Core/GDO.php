@@ -386,10 +386,7 @@ abstract class GDO extends GDT
 				$data = $gdt->gdo($this)->getGDOData();
 				foreach ($data as $k => $v)
 				{
-					if ($v !== null)
-					{
-						$values[$k] = $v;
-					}
+					$values[$k] = $v;
 				}
 			}
 		}
