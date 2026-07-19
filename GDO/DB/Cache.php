@@ -316,7 +316,7 @@ class Cache
 	 *
 	 * @since 7.0.1
 	 */
-	public function getCachedBy(string $key, string $var): ?GDO
+	public function getCachedBy(string $key, ?string $var): ?GDO
 	{
 		if (isset($this->all))
 		{

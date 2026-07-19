@@ -41,6 +41,8 @@ final class GDT_Response extends GDT_Tuple
                 return $this->renderIRC();
             case GDT::RENDER_CLI:
 				return CLI::getTopResponse() . $this->renderCLI();
+            case GDT::RENDER_TEXT:
+                return $this->renderFields(GDT::RENDER_TEXT);
             case GDT::RENDER_PDF:
                 return $this->renderPDF();
 			default:

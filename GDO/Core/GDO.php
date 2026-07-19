@@ -432,7 +432,7 @@ abstract class GDO extends GDT
 	 *
 	 * @throws GDO_DBException
 	 */
-	public static function getBy(string $key, string $var): ?static
+	public static function getBy(string $key, ?string $var): ?static
 	{
 		if ($gdo = self::getCachedBy($key, $var))
 		{
@@ -441,7 +441,7 @@ abstract class GDO extends GDT
 		return self::table()->getWhere($key . '=' . self::quoteS($var));
 	}
 
-	private static function getCachedBy(string $key, string $var): ?static
+	private static function getCachedBy(string $key, ?string $var): ?static
 	{
 		return self::table()->cache->getCachedBy($key, $var);
 	}

@@ -194,7 +194,7 @@ final class GDO_User extends GDO
     /**
      * @throws GDO_DBException
      */
-    public static function getByName(string $name): ?self
+    public static function getByName(?string $name): ?self
 	{
 		return self::getBy('user_name', $name);
 	}

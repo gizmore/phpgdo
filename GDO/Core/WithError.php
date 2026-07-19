@@ -86,13 +86,16 @@ trait WithError
 			return t($this->errorKey, $this->errorArgs);
 		}
 		$errors = [];
-		foreach ($this->getFields() as $gdt)
-		{
-			if ($gdt->hasError())
-			{
-				$errors[] = $gdt->renderError();
-			}
-		}
+        if ($this->hasFields())
+        {
+            foreach ($this->getAllFields() as $gdt)
+            {
+                if ($gdt->hasError())
+                {
+                    $errors[] = $gdt->renderError();
+                }
+            }
+        }
 		if ($errors)
 		{
 			return implode(" ", $errors);

@@ -10,6 +10,7 @@ return [
 
 	# Errors
 	'error' => 'Error: %s',
+    'err_hidden' => 'You may not know this.',
 	'err_php_extension' => 'The PHP-Extension `%s`.',
 	'err_system_dependency' => 'Module %s has the following unmet requirement: %s',
 	'warn_system_dependency' => 'Module %s recommends the following: %s',

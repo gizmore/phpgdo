@@ -5,6 +5,7 @@ namespace GDO\Form;
 use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Method;
 use GDO\Core\GDT_Template;
 use GDO\Core\Website;
 use GDO\Core\WithError;
@@ -125,14 +126,28 @@ class GDT_Form extends GDT
             $text = $this->renderText();
             return trim("{$title} {$text}");
         } else {
-            $rendered = '';
+            $rendered = $this->renderError();
             foreach ($this->getAllFields() as $gdt) {
                 if ($gdt->hasError()) {
-                    $rendered .= $this->renderCLIError($gdt);
+                    $rendered .= ' '.$this->renderCLIError($gdt);
                 }
             }
             return $rendered;
         }
+    }
+
+    public function renderJSON(): array|string|null|int|bool|float
+    {
+        $json = ['errors' => []];
+        foreach ($this->getAllFields() as $gdt)
+        {
+            if ($name = $gdt->getName())
+            {
+                $json['errors'][$name] = $gdt->renderError();
+            }
+        }
+        $json['form_error'] = $this->renderError();
+        return $json;
     }
 
     private function renderCLIError(GDT $gdt): string

@@ -217,6 +217,8 @@ abstract class GDT
 				return $this->renderBinary();
 			case self::RENDER_CLI:
 				return $this->renderCLI();
+            case self::RENDER_TEXT:
+                return $this->renderTxt();
 			case self::RENDER_PDF:
 				return $this->renderPDF();
 			case self::RENDER_XML:
@@ -276,9 +278,10 @@ abstract class GDT
 	public function renderNIL() : null { return null; }
 	public function renderBinary() : string { return GDT::EMPTY_STRING; }
     public function renderCLI() : string { return $this->renderHTML(); }
-	public function renderPDF() : string { return $this->renderHTML(); }
-	public function renderXML() : string { return $this->renderHTML(); }
-	public function renderJSON(): array|string|null|int|bool|float { return $this->renderCLI(); }
+    public function renderTxt() : string { return $this->getVar() ?: ''; }
+    public function renderPDF() : string { return $this->renderHTML(); }
+	public function renderXML() : string { return $this->renderCell(); }
+	public function renderJSON(): array|string|null|int|bool|float { return $this->renderCell(); }
 	public function renderGTK(): null { return null; }
 	public function renderWebsite() : string { return GDT::EMPTY_STRING; }
     public function renderMail(): string { return $this->renderHTML(); }

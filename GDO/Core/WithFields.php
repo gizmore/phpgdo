@@ -72,7 +72,7 @@ trait WithFields
 		# Add children in flatten only
 		if ($gdt->hasFields())
 		{
-			foreach ($gdt->getAllFields() as $gdt)
+			foreach ($gdt->getFields() as $gdt)
 			{
 				if ($name = $gdt->getName())
 				{
@@ -185,7 +185,7 @@ trait WithFields
 
 	public function getField(string $key): ?GDT
 	{
-		return isset($this->fieldsFlat[$key]) ? $this->fieldsFlat[$key] : null;
+		return $this->fieldsFlat[$key] ?? null;
 	}
 
 	public function addFieldAfter(GDT $gdt, GDT $after): static
@@ -291,7 +291,7 @@ trait WithFields
     /**
 	 * WithFields, we simply iterate over them and render current mode.
 	 */
-	public function renderFields(int $renderMode): string
+	public function renderFields(int $renderMode): string|array
 	{
 		return $this->renderFieldsB($renderMode);
 	}
@@ -300,15 +300,29 @@ trait WithFields
 	### Iterate recursively ###
 	###########################
 
-	public function renderFieldsB(int $renderMode): string
+	public function renderFieldsB(int $renderMode): string|array
 	{
 		$app = Application::$INSTANCE;
-		$rendered = '';
+		$rendered = $renderMode === GDT::RENDER_JSON ? [] : '';
 		$old = Application::$MODE;
 		$app->mode($renderMode);
-		foreach ($this->getFields() as $gdt)
+		foreach ($this->getAllFields() as $gdt)
 		{
-			$rendered .= $gdt->render();
+            if ($renderMode === GDT::RENDER_JSON)
+            {
+                if ($name = $gdt->getName())
+                {
+                    $rendered[$name] = $gdt->renderJSON();
+                }
+                else
+                {
+                    $rendered[] = $gdt->renderJSON();
+                }
+            }
+            else
+            {
+                $rendered .= $gdt->renderMode($renderMode);
+            }
 		}
 		$app->mode($old);
 		return $rendered;
