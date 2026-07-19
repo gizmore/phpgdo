@@ -767,7 +767,8 @@ elseif ($command === 'install')
         FileUtil::copyDir('GDO/CLI', "{$sourcePath}GDO/CLI");
         FileUtil::copyDir('GDO/DB', "{$sourcePath}GDO/DB");
         @FileUtil::copyDir('GDO/DBMS', "{$sourcePath}GDO/DBMS");
-        q@FileUtil::copyDir('GDO/Captcha', "{$sourcePath}GDO/Captcha");
+        @FileUtil::copyDir('GDO/Captcha', "{$sourcePath}GDO/Captcha");
+        @FileUtil::copyDir('GDO/Session', "{$sourcePath}GDO/Session");
         FileUtil::copyDir('GDO/Install', "{$sourcePath}GDO/Install");
         FileUtil::copyDir('bin', "{$sourcePath}bin");
 
