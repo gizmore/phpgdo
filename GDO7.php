@@ -113,7 +113,7 @@ function hrefDefault(): string
  *
  * @see seo()
  */
-function href(string $module, string $method, string $append = null, bool $seo = GDO_SEO_URLS, $fmt='html'): string
+function href(string $module, string $method, ?string $append = null, bool $seo = GDO_SEO_URLS, string $fmt='html'): string
 {
     $sep = GDO_SEO_SEP;
     $module = strtolower($module);
@@ -200,7 +200,7 @@ function href(string $module, string $method, string $append = null, bool $seo =
 	return $href;
 }
 
-function hrefNoSeo(string $module, string $method, string $append = null): string
+function hrefNoSeo(string $module, string $method, ?string $append = null): string
 {
 	return href($module, $method, $append, false);
 }
@@ -345,12 +345,12 @@ function hdr(string $header, bool $replace = true): void
 	}
 }
 
-function uridecode(string $url = null): string
+function uridecode(?string $url = null): string
 {
 	return $url ? urldecode($url) : GDT::EMPTY_STRING;
 }
 
-function uriencode(string $url = null): string
+function uriencode(?string $url = null): string
 {
 
 	return $url ? str_replace('_', '-', urlencode($url)) : GDT::EMPTY_STRING;
@@ -375,7 +375,7 @@ function module_enabled(string $moduleName): bool
 /**
  * Global translate function to translate into current language ISO.
  */
-function t(string $key, array $args = null): string|array
+function t(string $key, ?array $args = null): string|array
 {
 	return Trans::t($key, $args);
 }
@@ -383,7 +383,7 @@ function t(string $key, array $args = null): string|array
 /**
  * Global translate function to translate into english.
  */
-function ten(string $key, array $args = null): string|array
+function ten(string $key, ?array $args = null): string|array
 {
 	return Trans::tiso('en', $key, $args);
 }
@@ -391,7 +391,7 @@ function ten(string $key, array $args = null): string|array
 /**
  * Global translate function to translate into an ISO language code.
  */
-function tiso(string $iso, string $key, array $args = null): string|array
+function tiso(string $iso, string $key, ?array $args = null): string|array
 {
 	return Trans::tiso($iso, $key, $args);
 }
@@ -399,7 +399,7 @@ function tiso(string $iso, string $key, array $args = null): string|array
 /**
  * Global translate function to translate into a user's language.
  */
-function tusr(GDO_User $user, string $key, array $args = null): string|array
+function tusr(GDO_User $user, string $key, ?array $args = null): string|array
 {
 	return Trans::tiso($user->getLangISO(), $key, $args);
 }
@@ -407,7 +407,7 @@ function tusr(GDO_User $user, string $key, array $args = null): string|array
 /**
  * Display a date value into current language iso.
  */
-function tt(string $date = null, string $format = 'short', string $default = '---'): string
+function tt(?string $date = null, string $format = 'short', string $default = '---'): string
 {
 	return Time::displayDate($date, $format, $default);
 }
