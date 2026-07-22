@@ -14,21 +14,13 @@ final class WS
 
 	public static function wrFloat(?float $float): string
 	{
-        if ($float === null)
-        {
-            $float = NAN;
-        }
-		return pack('f', floatval($float));
+		return pack('f', $float === null ? NAN : $float);
 	}
 
 
 	public static function wrDouble(?float $double): string
 	{
-        if ($double === null)
-        {
-            $double = NAN;
-        }
-		return pack('d', doubleval($double));
+		return pack('d', $double === null ? NAN : $double);
 	}
 
 
@@ -63,8 +55,7 @@ final class WS
 
 	public static function wrN(int $bytes, int $value): string
 	{
-		$value = $value;
-		$write = '';
+        $write = '';
 		for ($i = 0; $i < $bytes; $i++)
 		{
 			$write = chr($value & 0xFF) . $write;
@@ -72,6 +63,4 @@ final class WS
 		}
 		return $write;
 	}
-
-
 }

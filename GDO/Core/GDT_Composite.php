@@ -198,4 +198,14 @@ abstract class GDT_Composite extends GDT_Container
 		return $this;
 	}
 
+    public function renderBinary(): string
+    {
+        $payload = '';
+        foreach ($this->getFields() as $gdt)
+        {
+            $payload .= $gdt->renderBinary();
+        }
+        return $payload;
+    }
+
 }

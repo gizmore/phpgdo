@@ -5,6 +5,7 @@ namespace GDO\Core;
 use GDO\DB\Query;
 use GDO\Table\GDT_Filter;
 use GDO\Util\Arrays;
+use GDO\Util\WS;
 
 /**
  * A select WithObject trait.
@@ -91,7 +92,12 @@ class GDT_ObjectSelect extends GDT_Select
 		return null;
 	}
 
-	public function validate(int|float|string|array|null|object|bool $value): bool
+    public function renderBinary(): string
+    {
+        return WS::wr32((int)$this->getVar());
+    }
+
+    public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 // 		$this->initChoices();
 		if ($value === null)

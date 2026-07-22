@@ -15,7 +15,12 @@ class GDT_Divider extends GDT
 
 	use WithLabel;
 
-	##############
+    public function isSerializable(): bool
+    {
+        return false;
+    }
+
+    ##############
 	### Render ###
 	##############
 	public function renderCLI(): string

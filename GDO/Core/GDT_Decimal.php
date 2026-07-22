@@ -52,7 +52,7 @@ class GDT_Decimal extends GDT_Int
 
 	public function renderBinary(): string
 	{
-		return WS::wrDouble($this->getVar());
+		return WS::wrDouble($this->getValue());
 	}
 
 	#############

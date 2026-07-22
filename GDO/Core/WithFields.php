@@ -306,7 +306,7 @@ trait WithFields
 		$rendered = $renderMode === GDT::RENDER_JSON ? [] : '';
 		$old = Application::$MODE;
 		$app->mode($renderMode);
-		foreach ($this->getAllFields() as $gdt)
+		foreach ($this->getFields() as $gdt)
 		{
             if ($renderMode === GDT::RENDER_JSON)
             {
