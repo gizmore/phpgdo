@@ -68,10 +68,6 @@ class GDT_String extends GDT_DBField
 
 	public function utf8(): static { return $this->encoding(self::UTF8); }
 
- 	public function isUTF8() : bool { return $this->encoding === self::UTF8; }
-
- 	public function isASCII() : bool { return $this->encoding === self::ASCII; }
-
 	public function encoding(int $encoding): static
 	{
 		$this->encoding = $encoding;
@@ -261,8 +257,7 @@ class GDT_String extends GDT_DBField
 	public function renderBinary(): string
 	{
 		$binary = $this->getVar();
-		$binary = is_string($binary) ? urlencode($binary) : GDT::EMPTY_STRING;
-		return $binary . "\0";
+		return (is_string($binary) ? urlencode($binary) : GDT::EMPTY_STRING) . "\0";
 	}
 
 	public function renderForm(): string
@@ -280,26 +275,10 @@ class GDT_String extends GDT_DBField
 		return $hidden->renderForm();
 	}
 
-// 	public function renderList() : string
-// 	{
-// 		$text = $this->renderLabelText();
-// 		if ($text)
-// 		{
-// 			$text .= ':&nbsp;';
-// 		}
-// 		$text .= $this->displayVar($this->getVar());
-// 		return "<div class=\"gdt-li-string\">$text</div>";
-// 	}
-
 	public function renderFilter(GDT_Filter $f): string
 	{
 		return GDT_Template::php('Core', 'string_filter.php', ['field' => $this, 'f' => $f]);
 	}
-
-// 	public function displayVar(string $var=null) : string
-// 	{
-// 		return $var === null ? GDT::EMPTY_STRING : html($var);
-// 	}
 
 	public function plugVars(): array
 	{

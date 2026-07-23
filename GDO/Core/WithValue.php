@@ -25,7 +25,9 @@ trait WithValue
 
 	public ?string $initial = null;
 
-	public ?string $var = null;
+    public ?string $prev = null;
+
+    public ?string $var = null;
 
 	public bool $valueConverted = false;
 
@@ -54,19 +56,22 @@ trait WithValue
 	public function initial(?string $initial): static
 	{
 		$this->initial = $initial;
+        $this->prev = $initial;
 		return $this->var($initial);
 	}
 
 	public function var(?string $var): static
 	{
-		$this->var = $var;
+		$this->prev = $this->var;
+        $this->var = $var;
 		$this->valueConverted = false;
 		return $this;
 	}
 
 	public function value($value): static
 	{
-		$this->var = $this->toVar($value);
+        $this->prev = $this->var;
+        $this->var = $this->toVar($value);
 		$this->value = $value;
 		$this->valueConverted = true;
 		return $this;
@@ -97,7 +102,7 @@ trait WithValue
 	{
 		if (null !== ($input = $this->getInput()))
 		{
-			$this->var($this->inputToVar($input));
+            return $this->inputToVar($input);
 		}
 		return $this->var;
 	}
@@ -106,11 +111,7 @@ trait WithValue
 	{
 		if (!$this->valueConverted)
 		{
-			$var = $this->var;
-			if ($this->isWriteable())
-			{
-				$var = $this->getVar();
-			}
+			$var = $this->isWriteable() ? $this->getVar() : $this->var;
 			$this->value = $this->toValue($var);
 			$this->valueConverted = true;
 		}
@@ -121,12 +122,6 @@ trait WithValue
 	{
 		return $this->getVar() !== $this->initial;
 	}
-
-//	public  function addInputValue($value): GDT
-//	{
-//		$this->addInput($this->getName(), (string)$value);
-//		return $this->value($value);
-//	}
 
 	/**
 	 * Setup this GDT from a GDO.
@@ -141,9 +136,8 @@ trait WithValue
 			}
 			return $this->var($gdo->gdoVar($this->name));
 		}
-		return $this->var(null);
+		return $this->var($this->initial);
 	}
-
 
 	public function setGDOData(array $data): static
 	{

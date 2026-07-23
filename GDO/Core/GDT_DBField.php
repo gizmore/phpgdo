@@ -26,7 +26,6 @@ abstract class GDT_DBField extends GDT_Field
 	###############
 	public bool $primary = false;
 
-
 	public function primary(bool $primary = true): static
 	{
 		$this->primary = $primary;

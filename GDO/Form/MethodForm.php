@@ -70,11 +70,11 @@ abstract class MethodForm extends Method
 	{
 		if (isset($this->form))
 		{
-			$fields = $this->form->getAllFields();
-			foreach ($fields as $gdt)
-			{
-				$gdt->reset();
-			}
+//			$fields = $this->form->getAllFields();
+//			foreach ($fields as $gdt)
+//			{
+//				$gdt->reset();
+//			}
 			unset($this->form);
 		}
 		if ($removeInput)
@@ -98,16 +98,18 @@ abstract class MethodForm extends Method
 			$this->submitted = false;
 			$this->validated = false;
 			$this->pressedButton = null;
-			$this->form = GDT_Form::make($this->getFormName())->focus($this->focusable);
-            $this->form->titleRaw($this->getMethodTitle(), false);
+	        $this->addComposeParameters($this->gdoParameters());
+            $this->form = GDT_Form::make($this->getFormName())->focus($this->focusable);
+            $this->applyInput();
             $this->createForm($this->form);
+            $this->applyInput();
             $this->form->pack();
             $this->form->inputs($inputs);
-            $this->addComposeParameters($this->gdoParameters());
             $this->addComposeParameters($this->form->getAllFields());
             $this->addComposeParameters($this->form->actions()->getAllFields());
             $this->applyInput();
-		}
+            $this->form->titleRaw($this->getMethodTitle(), false);
+        }
 		return $this->form;
 	}
 

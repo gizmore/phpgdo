@@ -390,10 +390,6 @@ trait WithFields
 
 	# html rendering
 
-
-	# html table rendering
-// 	public function renderTHead() : string { return $this->renderFields(GDT::RENDER_THEAD); }
-
 	public function renderJSON(): array|string|null|int|bool|float
 	{
 		$json = [];

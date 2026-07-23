@@ -79,14 +79,6 @@ class GDT_Float extends GDT_Int
         return 'text';
     }
 
-    public function _inputToVar($input)
-	{
-		if (parent::_inputToVar($input))
-		{
-			return self::inputToVarS($input);
-		}
-	}
-
 	/**
 	 * Handle german and english inputs by keeping only the most right separator.
 	 * More than one separator removes them all.

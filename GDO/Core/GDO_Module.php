@@ -773,7 +773,7 @@ class GDO_Module extends GDO
 		# If it's a saved field, build the ACL container.
 		if ($gdt->isACLCapable())
 		{
-			if (!($gdt instanceof GDT_ACL))
+			if ((!($gdt instanceof GDT_ACL)) && (!$gdt instanceof GDT_ACLRelation))
 			{
 				$this->_buildSettingsCacheD($gdt);
 			}
