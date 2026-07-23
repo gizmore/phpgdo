@@ -23,7 +23,7 @@ trait WithGDO
 	 */
 	public function gdo(?GDO $gdo): static
 	{
-		return $this->gdoVarInitial($gdo, true);
+		return $this->gdoVarInitial($gdo, false);
 	}
 
 	protected function gdoVarInitial(GDO $gdo = null, bool $initial = false): static
