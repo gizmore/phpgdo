@@ -8,7 +8,7 @@ echo "GDOv7 sync.sh: Sync message: $message"
 
 echo "Updating core submodules."
 git submodule foreach git reset --hard
-git submodule foreach git pull
+git submodule foreach --recursive git pull
 echo
 
 echo "Are you sure?"
