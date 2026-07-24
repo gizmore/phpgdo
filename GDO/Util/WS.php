@@ -20,7 +20,7 @@ final class WS
 
 	public static function wrDouble(?float $double): string
 	{
-		return pack('d', $double === null ? NAN : $double);
+		return pack('e', $double === null ? NAN : $double);
 	}
 
 

@@ -383,11 +383,9 @@ final class Time
 	/**
 	 * Get the timestamp for a database date (UTC).
 	 */
-	public static function getTimestamp(?string $date): int|float
+	public static function getTimestamp(?string $date): int|float|null
 	{
-		return $date ?
-			self::parseDate($date, self::UTC, 'db') :
-			Application::$MICROTIME;
+		return $date === null ? null: self::parseDate($date, self::UTC, 'db');
 	}
 
 	#################
