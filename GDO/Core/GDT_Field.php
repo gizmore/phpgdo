@@ -142,7 +142,8 @@ abstract class GDT_Field extends GDT
 	public function configJSON(): array
 	{
 		return array_merge(parent::configJSON(), [
-			'name' => $this->getName(),
+            'primary' => $this->isPrimary(),
+            'name' => $this->getName(),
 			'var' => $this->getVar(),
 		]);
 	} # is searched during big searches

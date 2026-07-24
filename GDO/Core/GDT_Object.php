@@ -105,6 +105,7 @@ class GDT_Object extends GDT_UInt
 		return array_merge(parent::configJSON(), [
 			'cascade' => $this->cascade,
 			'selected' => $selected,
+            'table' => get_class($this->table),
 			'completionHref' => $this->completionHref ?? null,
 		]);
 	}

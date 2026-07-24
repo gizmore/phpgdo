@@ -92,11 +92,6 @@ class GDT_ObjectSelect extends GDT_Select
 		return null;
 	}
 
-    public function renderBinary(): string
-    {
-        return WS::wr32((int)$this->getVar());
-    }
-
     public function validate(int|float|string|array|null|object|bool $value): bool
 	{
 // 		$this->initChoices();
@@ -114,11 +109,6 @@ class GDT_ObjectSelect extends GDT_Select
 		return true;
 	}
 
-//	public function getVar(): string|array|null
-//	{
-//		return parent::getVar(); # required to overwrite trait.
-//	}
-
 	public function errorNotFound(): bool
 	{
 		return $this->error('err_gdo_not_found', [
@@ -128,11 +118,6 @@ class GDT_ObjectSelect extends GDT_Select
 	#############
 	### Value ###
 	#############
-
-//	public function renderFilter(GDT_Filter $f): string
-//	{
-//		return GDT_Template::php('Core', 'object_filter.php', ['field' => $this, 'f' => $f]);
-//	}
 
 	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
@@ -227,6 +212,7 @@ class GDT_ObjectSelect extends GDT_Select
 	{
 		return array_merge(parent::configJSON(), [
 			'selected' => $this->configJSONSelected(),
+            'table' => get_class($this->table),
 		]);
 	}
 

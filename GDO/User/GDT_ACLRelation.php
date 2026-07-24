@@ -70,7 +70,7 @@ final class GDT_ACLRelation extends GDT_Enum
 					$reason = t('err_only_friend_friend_access');
 					return false;
 				}
-				return true;
+                return false;
 
 			case self::FRIENDS:
 				if (module_enabled('Friends'))
@@ -82,7 +82,7 @@ final class GDT_ACLRelation extends GDT_Enum
 					$reason = t('err_only_friend_access');
 					return false;
 				}
-				return true;
+                return false;
 
 			case self::NOONE:
 				$reason = t('err_only_private_access');

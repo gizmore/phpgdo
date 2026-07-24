@@ -407,5 +407,26 @@ trait WithObject
 		return $this->notNull();
 	}
 
+    public function renderBinary(): string
+    {
+        $back = '';
+        /** @var GDO $gdo */
+        if ($gdo = $this->getValue())
+        {
+            foreach ($this->table->gdoPrimaryKeyColumns() as $gdt)
+            {
+                $back .= $gdt->gdo($gdo)->renderBinary();
+            }
+        }
+        else
+        {
+            foreach ($this->table->gdoPrimaryKeyColumns() as $gdt)
+            {
+                $gdt->reset();
+                $back .= $gdt->renderBinary();
+            }
+        }
+        return $back;
+    }
 
 }
