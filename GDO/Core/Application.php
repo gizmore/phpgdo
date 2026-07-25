@@ -33,7 +33,7 @@ class Application extends GDT
 	################################
 	### HREF COLLECTOR FOR TESTS ###
 	################################
-	public static int $TIME; #PP#delete#
+	public static int $TIME;
 
 	################
 	### App Time ###
