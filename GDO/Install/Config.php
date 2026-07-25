@@ -200,26 +200,20 @@ class Config
 	 */
 	public static function fields(): array
 	{
-		static $fields = [];
-		if (count($fields))
-		{
-			return $fields;
-		}
-		$fields = [
+		return [
 			GDT_Hidden::make('configured')->var('1'),
 
 			# Site
 			GDT_Divider::make()->label('install_config_section_site'),
 			GDT_String::make('sitename')->initialValue(GDO_SITENAME)->max(16)->label('cfg_sitename')->tooltipRaw('should be configured via sitename language key.'),
 			GDT_String::make('hostname')->notNull()->initialValue(GDO_HOSTNAME)->tooltipRaw('Server hostname. Used in error emails so you can distingush different servers.'),
-			GDT_EnumNoI18n::make('env')->initial('dev')->enumValues('dev', 'tes', 'pro')->tooltipRaw('Environment can be dev, tes or pro.'),
+			GDT_EnumNoI18n::make('env')->initial(GDO_ENV)->enumValues('dev', 'tes', 'pro')->tooltipRaw('Environment can be dev, tes or pro.'),
 			GDT_Checkbox::make('seo_urls')->initialValue(!!GDO_SEO_URLS)->tooltipRaw('Enable SEO style URLs. Requires url rewriting for your httpd.'),
 			GDT_Hidden::make('sitecreated')->var(GDO_SITECREATED)->tooltipRaw('Automatically generated on config generation.'),
 			GDT_EnumNoI18n::make('language')->enumValues(...GDO_Language::gdoSupportedISOs())->initial(GDO_LANGUAGE)->notNull()->tooltipRaw('Default Language setting. Should be \'en\''),
 			GDT_String::make('timezone')->initialValue(GDO_TIMEZONE)->notNull()->tooltipRaw('Server Timezone for logfiles.'),
 			GDT_String::make('themes')->notNull()->initial(GDO_THEMES)->tooltipRaw('Comma separated themechain list. Tried from left to right. Example: \'tbs,classic,default\'.'),
 			GDT_String::make('module')->notNull()->initialValue(GDO_MODULE)->tooltipRaw('Default module for startpage.'),
-//			GDT_String::make('method')->notNull()->initialValue(GDO_METHOD)->tooltipRaw('Default method for startpage.'),
 			GDT_Select::make('ipc')->choices(['db' => 'Database', 'ipc' => 'IPC', 'none' => 'none'])->initial(GDO_IPC)->tooltipRaw('IPC mode can be: db, ipc or none.'),
 			GDT_Checkbox::make('ipc_debug')->initialValue(!!GDO_IPC_DEBUG)->tooltipRaw('IPC event logging.'),
 			GDT_Int::make('gdt_debug')->unsigned()->initialValue((int)GDO_GDT_DEBUG)->min(0)->max(2)->tooltipRaw('GDT debugging level. 0: off, 1: counters, 2: instancelog.'),
@@ -233,13 +227,13 @@ class Config
 			GDT_String::make('web_root')->notNull()->initialValue(GDO_WEB_ROOT)->tooltipRaw('Website root folder. Usually "/" or "/phpgdo/".')->pattern('/^(\\/[^\\/]*)+$/'),
 			GDT_Port::make('port')->notNull()->initialValue(GDO_PORT)->tooltipRaw('Default port for generating links.'),
 			GDT_Enum::make('protocol')->notNull()->enumValues('http', 'https')->initialValue(GDO_PROTOCOL)->tooltipRaw('Website preferred protocol. Either http or https.'),
-			GDT_Checkbox::make('force_ssl')->initial('0')->tooltipRaw('Allow only HTTPS?'),
+			GDT_Checkbox::make('force_ssl')->initialValue(GDO_FORCE_SSL)->tooltipRaw('Allow only HTTPS?'),
 
 			# Files
 			GDT_Divider::make()->label('install_config_section_files'),
 			GDT_Path::make('files_dir')->label('files_dir')->initial(GDO_FILES_DIR)->tooltipRaw('Filepath for physical files. Change this in config_test.php'),
 			GDT_Enum::make('chmod')->enumValues('0700', '0770', '0777')->initial('0' . (base_convert((string)GDO_CHMOD, 10, 8)))->tooltipRaw('File creation chmod value. Ignore on windows.'),
-			GDT_Checkbox::make('preprocessor')->initial('0')->tooltipRaw('File preprocessor to speed up dev code.'),
+			GDT_Checkbox::make('preprocessor')->initialValue(GDO_PREPROCESSOR)->tooltipRaw('File preprocessor to speed up dev code.'),
 
 			# Logging
 			GDT_Divider::make()->label('install_config_section_logging'),
@@ -262,7 +256,6 @@ class Config
 			GDT_String::make('db_name')->initialValue(GDO_DB_NAME)->tooltipRaw('DB database name or SQLite filename'),
 			GDT_EnumNoI18n::make('db_engine')->initial(GDO_DB_ENGINE)->enumValues(GDO::INNODB, GDO::MYISAM, GDO::SQL3_PERSIST, GDO::SQL3_WAL)->tooltipRaw('DB engine: InnoDB,MyIsam(MySQL), JournalMode(SQLite).'),
 			GDT_Int::make('db_debug')->unsigned()->initialValue((int)GDO_DB_DEBUG)->min(0)->max(2)->tooltipRaw('GDO debugging level. 0: off, 1: counters, 2: instancelog.'),
-
 
 			# Cache
 			GDT_Divider::make()->label('install_config_section_cache'),
@@ -298,10 +291,7 @@ class Config
             GDT_UInt::make('smtp_port')->notNull()->initialValue(GDO_SMTP_PORT)->label('smtp_port')->tooltipRaw('SMTP port'),
             GDT_String::make('smtp_user')->notNull()->initialValue(GDO_SMTP_USER)->label('smtp_user')->tooltipRaw('SMTP username'),
             GDT_String::make('smtp_pass')->notNull()->initialValue(GDO_SMTP_PASS)->label('smtp_pass')->tooltipRaw('SMTP password'),
-
 		];
-
-		return $fields;
 	}
 
 }

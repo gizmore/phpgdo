@@ -56,7 +56,6 @@ trait WithValue
 	public function initial(?string $initial): static
 	{
 		$this->initial = $initial;
-        $this->prev = $initial;
 		return $this->var($initial);
 	}
 
