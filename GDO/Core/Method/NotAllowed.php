@@ -53,6 +53,7 @@ final class NotAllowed extends MethodPage
 
 	public function beforeExecute(): void
 	{
+        hdrc('HTTP/1.1 403 Not Allowed');
 		if (Module_Core::instance()->cfgMail403())
 		{
 			if (module_enabled('Mail'))
