@@ -118,18 +118,16 @@ abstract class GDO extends GDT
 		return (new static());
 	}
 
+    #PP#start####
 	public function __construct()
 	{
 		parent::__construct(); #PP#delete#
 		$this->afterLoaded();  #PP#delete#
 	}
 
-
 	#############
-	#PP#start####
 	### DEBUG ###
 	#############
-
 
 	private function afterLoaded(): void
 	{
