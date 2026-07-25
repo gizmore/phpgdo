@@ -1176,11 +1176,6 @@ abstract class GDO extends GDT
 		return $this->insertOrReplace($query, $withHooks);
 	}
 
-	/**
-	 * Save this entity.
-	 *
-	 * @throws GDO_DBException
-	 */
 	public function save(bool $withHooks = true): static
 	{
 		if (!$this->persisted)

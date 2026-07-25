@@ -53,7 +53,7 @@ final class Module_UI extends GDO_Module
 		$settings = [];
 		if ($this->cfgAllowEditorChoice())
 		{
-			$settings[] = GDT_MessageEditor::make('text_editor')->initial($this->cfgDefaultEditor());
+			$settings[] = GDT_MessageEditor::make('text_editor')->initial($this->cfgDefaultEditor())->hidden();
 		}
 		return $settings;
 	}
@@ -75,9 +75,9 @@ final class Module_UI extends GDO_Module
     public function getUserConfig(): array
     {
         return [
-            GDT_UInt::make('device_width'),
-            GDT_UInt::make('device_height'),
-            GDT_String::make('device_version'),
+            GDT_UInt::make('device_width')->hidden(),
+            GDT_UInt::make('device_height')->hidden(),
+            GDT_String::make('device_version')->hidden(),
         ];
     }
 

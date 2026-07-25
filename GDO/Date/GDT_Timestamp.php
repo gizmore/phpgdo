@@ -51,6 +51,10 @@ class GDT_Timestamp extends GDT_DBField
 	public int $millis = 3;
 	public bool $defaultNow = false;
 
+    public bool $withAgo = false;
+    public bool $withDate = true;
+    public bool $withTime = true;
+
     protected function __construct()
     {
         parent::__construct();
@@ -223,6 +227,9 @@ class GDT_Timestamp extends GDT_DBField
 			'minDate' => $this->minDate,
 			'maxDate' => $this->maxDate,
 			'millis' => $this->millis,
+            'withAgo' => $this->withAgo,
+            'withDate' => $this->withDate,
+            'withTime' => $this->withTime,
 		]);
 	}
 
@@ -325,7 +332,36 @@ class GDT_Timestamp extends GDT_DBField
 		return $this->maxDate(Time::getDate());
 	}
 
-	##############
+    public function withAgo(bool $withAgo = true): static
+    {
+        $this->withAgo = $withAgo;
+        return $this;
+    }
+
+    public function withDate(bool $withDate = true): static
+    {
+        $this->withDate = $withDate;
+        return $this;
+    }
+
+    public function withoutDate(bool $withoutDate = true): static
+    {
+        return $this->withDate(!$withoutDate);
+    }
+
+
+    public function withTime(bool $withTime = true): static
+    {
+        $this->withTime = $withTime;
+        return $this;
+    }
+
+    public function withoutTime(bool $withoutTime = true): static
+    {
+        return $this->withTime(!$withoutTime);
+    }
+
+    ##############
 	### Config ###
 	##############
 

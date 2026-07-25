@@ -33,8 +33,6 @@ trait WithParameters
 
 	/**
 	 * Get a parameter's GDT db var string.
-	 *
-	 * @throws GDO_ArgError
 	 */
 	public function gdoParameterVar(string $key, bool $validate = true): ?string
 	{
@@ -44,8 +42,6 @@ trait WithParameters
 	/**
 	 * Get a parameter by key.
 	 * If key is an int, get positional parameter N.
-	 *
-	 * @throws GDO_ArgError
 	 */
 	public function gdoParameter(string $key, bool $validate = true): ?GDT
 	{
@@ -152,9 +148,6 @@ trait WithParameters
 		return GDT::EMPTY_ARRAY;
 	}
 
-	/**
-	 * @throws GDO_ArgError
-	 */
 	public function gdoParameterValue(string $key, bool $validate = true, bool $throw = true): mixed
 	{
         $gdt = $this->gdoParameter($key, $validate);

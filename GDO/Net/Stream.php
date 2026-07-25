@@ -17,7 +17,7 @@ use GDO\File\GDO_File;
 final class Stream
 {
 
-	public static function serve(GDO_File $file, string $variant = '', bool $disposition = true): GDT
+	public static function serve(GDO_File $file, ?string $variant = null, bool $disposition = true): GDT
 	{
 		hdr('Content-Type: ' . $file->getType());
 		hdr('Content-Size: ' . $file->getSize());
@@ -30,7 +30,7 @@ final class Stream
 		return GDT_Response::make();
 	}
 
-	public static function file(GDO_File $file, string $variant = ''): bool
+	public static function file(GDO_File $file, ?string $variant = null): bool
 	{
 		return self::path($file->getVariantPath($variant));
 	}

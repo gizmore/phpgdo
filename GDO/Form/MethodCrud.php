@@ -178,7 +178,10 @@ abstract class MethodCrud extends MethodForm
 		$gdo = $this->gdo ?? $table;
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
-			$this->createFormRec($form, $gdt->gdo($gdo));
+            if ($gdt->isWriteable())
+            {
+                $this->createFormRec($form, $gdt->gdo($gdo));
+            }
 		}
 		$this->createFormButtons($form);
 	}

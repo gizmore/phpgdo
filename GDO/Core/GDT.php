@@ -76,6 +76,11 @@ abstract class GDT
 		self::$GDT_KILLS++; #PP#delete#
 	}
 
+    public static function gdoField(GDO $gdo, string $name): static
+    {
+        return $gdo->gdoColumn($name);
+    }
+
 	#PP#start#
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.

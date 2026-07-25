@@ -59,7 +59,7 @@ final class Module_Net extends GDO_Module
     public function getUserConfig(): array
     {
         return [
-            GDT_IP::make('last_ip'),
+            GDT_IP::make('last_ip')->hidden(),
         ];
     }
 

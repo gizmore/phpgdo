@@ -114,7 +114,7 @@ final class Module_User extends GDO_Module
 	public function getUserConfig(): array
 	{
 		return [
-			GDT_Timestamp::make('last_activity'),
+			GDT_Timestamp::make('last_activity')->withAgo(),
 			GDT_Url::make('last_url')->noacl()->hidden()->allowInternal(),
 			GDT_UInt::make('profile_views')->initial('0'),
 			GDT_Level::make('level_spent')->initial('0')->label('level_spent')->tooltip('tt_level_spent')->noacl(),
