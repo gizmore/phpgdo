@@ -363,7 +363,7 @@ abstract class GDO extends GDT
 	public function __wakeup()
 	{
 		$this->recache = false;
-		$this->afterLoaded();
+		$this->afterLoaded(); #PP#delete#
 	}
 
 	public function renderJSON(): array|string|null|int|bool|float
