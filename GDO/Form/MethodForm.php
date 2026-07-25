@@ -167,7 +167,7 @@ abstract class MethodForm extends Method
 					# submit events
 					$this->onSubmitted();
 
-					#PP#begin#
+					#PP#start#
 					if ($this->isDebugging())
 					{
 						xdebug_break();

@@ -195,7 +195,7 @@ abstract class Method
 		$response = GDT_Response::make();
 		try
 		{
-			#PP#begin#
+			#PP#start#
 			if ($this->isDebugging())
 			{
 				xdebug_break();

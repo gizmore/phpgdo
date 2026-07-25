@@ -192,7 +192,7 @@ final class GDT_Hook extends GDT
 
 	private static function callIPCHooks(string $event, array $args): void
 	{
-		#PP#begin#
+		#PP#start#
 		self::$IPC_CALLS++;
 		if (GDO_IPC_DEBUG)
 		{

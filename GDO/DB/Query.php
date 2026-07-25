@@ -590,7 +590,7 @@ final class Query
 
 		$query = $this->buildQuery();
 
-		#PP#begin#
+		#PP#start#
 		if ($this->debug)
 		{
 			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
