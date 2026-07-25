@@ -115,7 +115,7 @@ class GDT_Checkbox extends GDT_Select
 
 	public function gdoExampleVars(): ?string
 	{
-		return '0|1';
+        return $this->undetermined ? '0|1|2' : '0|1';
 	}
 
 	public function undetermined(bool $undetermined = true): self

@@ -11,7 +11,6 @@ use GDO\Date\GDO_Timezone;
  *
  * @version 7.0.0
  * @since 6.10.6
- * @deprecated unneded?
  * @author gizmore
  */
 final class Timezones extends MethodAjax
@@ -29,7 +28,7 @@ final class Timezones extends MethodAjax
 
 	public function execute(): GDT
 	{
-		$data = GDO_Timezone::table()->allTimezones();
+		$data = GDO_Timezone::table()->allCached('tz_name', true);
 		return GDT_JSON::make()->value($data);
 	}
 

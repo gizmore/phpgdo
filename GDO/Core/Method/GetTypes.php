@@ -53,7 +53,7 @@ final class GetTypes extends MethodAjax
 			$fields[$table->gdoClassName()] = [];
 			foreach ($table->gdoColumnsCache() as $name => $gdt)
 			{
-				if ($gdt->isSerializable())
+				if ($gdt->isSerializable() && (!$gdt->isHidden()))
 				{
 					$fields[$table->gdoClassName()][$name] = [
 						'type' => $gdt->gdoClassName(),

@@ -41,6 +41,10 @@ final class GDT_ACLRelation extends GDT_Enum
 	 */
 	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason): bool
 	{
+        if (($user === $target) || ($user->isAdmin()))
+        {
+            return true;
+        }
 		switch ($this->var)
 		{
 			case self::ALL:
