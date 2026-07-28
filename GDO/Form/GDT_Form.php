@@ -106,8 +106,7 @@ class GDT_Form extends GDT
     ###
     public function isEmpty(): bool
     {
-        return (!$this->hasFields()) &&
-            (!$this->actions()->hasFields());
+        return (!$this->hasFields()) && (!$this->actions()->hasFields());
     }
 
     ##############
@@ -121,14 +120,19 @@ class GDT_Form extends GDT
 
     public function renderCLI(): string
     {
-        if (!$this->hasError()) {
+        if (!$this->hasError())
+        {
             $title = $this->renderTitle();
             $text = $this->renderText();
             return trim("{$title} {$text}");
-        } else {
+        }
+        else
+        {
             $rendered = $this->renderError();
-            foreach ($this->getAllFields() as $gdt) {
-                if ($gdt->hasError()) {
+            foreach ($this->getAllFields() as $gdt)
+            {
+                if ($gdt->hasError())
+                {
                     $rendered .= ' '.$this->renderCLIError($gdt);
                 }
             }
@@ -187,7 +191,8 @@ class GDT_Form extends GDT
         $valid = true;
         $inputs = $this->getInputs();
         foreach ($this->getAllFields() as $gdt) {
-            if (!$gdt->inputs($inputs)->validated()) {
+            if (!$gdt->inputs($inputs)->validated())
+            {
                 $valid = false;
             }
         }
@@ -206,7 +211,8 @@ class GDT_Form extends GDT
     private function countErrors(): int
     {
         $count = 0;
-        foreach ($this->getAllFields() as $gdt) {
+        foreach ($this->getAllFields() as $gdt)
+        {
             $count += $gdt->hasError();
         }
         return $count;
@@ -234,9 +240,12 @@ class GDT_Form extends GDT
         $inputs = $this->getInputs();
         foreach ($this->getAllFields() as $gdt) {
             $gdt->inputs($inputs);
-            if ($gdt instanceof GDT_Repeat) {
+            if ($gdt instanceof GDT_Repeat)
+            {
                 $back[$gdt->getName()] = $gdt->getRepeatInput();
-            } else {
+            }
+            else
+            {
                 $data = $gdt->var($gdt->getVar())->getGDOData();
                 $back = array_merge($back, $data);
             }
@@ -249,7 +258,8 @@ class GDT_Form extends GDT
     ############
     public function initFromGDO(?GDO $gdo): self
     {
-        foreach ($this->getAllFields() as $gdt) {
+        foreach ($this->getAllFields() as $gdt)
+        {
             $gdt->gdo($gdo);
         }
         return $this;
