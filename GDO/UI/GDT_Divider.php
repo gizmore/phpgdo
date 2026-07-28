@@ -15,9 +15,25 @@ class GDT_Divider extends GDT
 
 	use WithLabel;
 
+    private $direction = 'vertical';
+
     public function isSerializable(): bool
     {
         return false;
+    }
+
+    #################
+    ### Direction ###
+    #################
+    public function horizontal(bool $horizontal=true): static
+    {
+        $this->direction = $horizontal ? 'horizontal' : 'vertical';
+        return $this;
+    }
+
+    public function vertical(bool $vertical=true): static
+    {
+        return $this->horizontal(!$vertical);
     }
 
     ##############
@@ -32,7 +48,7 @@ class GDT_Divider extends GDT
 	{
 		$text = $this->renderLabelText();
 		$text = $text ? "<h5>{$text}</h5>" : $text;
-		return '<div class="gdt-divider">' . $text . '</div>';
+		return '<div class="gdt-divider '.$this->direction.'">' . $text . '</div>';
 	}
 
 //    public function renderCard(): string

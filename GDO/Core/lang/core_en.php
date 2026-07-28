@@ -93,6 +93,7 @@ return [
 	'err_gdt_column_define_missing' => 'Your DBMS module cannot create database definitions for the field `%s`, which is a `%s`.',
     'err_no_such_command' => 'The command `%s` is unknown.',
     'err_user' => 'This user is unknown.',
+    'err_file_is_dir' => 'Cannot delete a file because it is a dir: %s',
 
 	# err_path
 	'is_dir' => 'directory',

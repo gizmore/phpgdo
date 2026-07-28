@@ -35,7 +35,10 @@ abstract class MethodCrud extends MethodForm
 
 	protected int $crudMode = self::ERROR;
 
-	protected GDO $gdo;
+    /**
+     * @var GDO $gdo
+     */
+	protected mixed $gdo;
 
 	public function isUserRequired(): bool { return true; }
 
@@ -74,8 +77,6 @@ abstract class MethodCrud extends MethodForm
 	 */
 	public function hasPermission(GDO_User $user, string &$error, array &$args): bool
 	{
-		parent::hasPermission($user, $error, $args);
-
 		$this->crudMode = self::CREATED;
 		$table = $this->gdoTable();
 		if ($id = $this->getCRUDID())
@@ -175,25 +176,22 @@ abstract class MethodCrud extends MethodForm
 	protected function createForm(GDT_Form $form): void
 	{
 		$table = $this->gdoTable();
-		$gdo = $this->gdo ?? $table;
+		$gdo = $this->gdoParameterValue($this->crudName()) ?? $table;
 		foreach ($table->gdoColumnsCache() as $gdt)
 		{
             if ($gdt->isWriteable())
             {
-                $this->createFormRec($form, $gdt->gdo($gdo));
+                $this->createFormField($form, $gdt->gdo($gdo));
             }
 		}
 		$this->createFormButtons($form);
 	}
 
-	public function createFormRec(GDT_Form $form, GDT $gdt): void
+	private function createFormField(GDT_Form $form, GDT $gdt): void
 	{
-		if ($gdt->isWriteable())
+		if ($gdt->isWriteable() && (!$gdt->isVirtual()))
 		{
-			if (!$gdt->isVirtual())
-			{
-				$form->addField($gdt);
-			}
+			$form->addField($gdt);
 		}
 	}
 
@@ -201,7 +199,7 @@ abstract class MethodCrud extends MethodForm
 	{
 		$form->addField(GDT_AntiCSRF::make());
 
-		$gdo = $this->gdo ?? null;
+		$gdo = $this->gdoParameterValue($this->crudName());
 
 		if ((!$gdo) && ($this->featureCreate()))
 		{
@@ -209,13 +207,13 @@ abstract class MethodCrud extends MethodForm
 			$form->actions()->addField($c);
 		}
 
-		if ($gdo && $this->canUpdate($this->gdo) && $this->featureUpdate())
+		if ($gdo && $this->canUpdate($gdo) && $this->featureUpdate())
 		{
 			$u = GDT_EditButton::make('edit')->label('btn_edit')->icon('edit')->onclick([$this, 'onUpdate']);
 			$form->actions()->addField($u);
 		}
 
-		if ($gdo && $this->canDelete($this->gdo) && $this->featureDelete())
+		if ($gdo && $this->canDelete($gdo) && $this->featureDelete())
 		{
 			$d = GDT_DeleteButton::make()->onclick([$this, 'onDelete']);
 			$form->actions()->addField($d);
@@ -252,7 +250,7 @@ abstract class MethodCrud extends MethodForm
 		$gdo->insert();
 		$this->redirectMessage('msg_crud_created',
 			[$gdo->gdoHumanName(), $gdo->getID()],
-			$this->href('&' . $this->crudName() . '=' . $gdo->getID()));
+			$this->href("&{$this->crudName()}={$gdo->getID()}"));
 		$this->afterCreate($form, $gdo);
 		return GDT_Response::make();
 	}
@@ -268,7 +266,6 @@ abstract class MethodCrud extends MethodForm
 		$this->gdo->saveVars($form->getFormVars());
 		$this->message('msg_crud_updated', [$this->gdo->gdoHumanName()]);
 		$this->afterUpdate($form, $this->gdo);
-		$this->resetForm(true);
 		return $this->renderPage();
 	}
 

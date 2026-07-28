@@ -579,8 +579,6 @@ final class Query
 	/**
 	 * Execute a query.
 	 * Returns boolean on writes and a Result on reads.
-	 *
-	 * @throws GDO_DBException
 	 */
 	public function exec(): bool|Result
 	{

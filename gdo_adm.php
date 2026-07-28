@@ -18,6 +18,10 @@ use GDO\Core\ModuleProviders;
 use GDO\Crypto\BCrypt;
 use GDO\DB\Cache;
 use GDO\DB\Database;
+use GDO\File\GDO_File;
+use GDO\File\GDO_FileTable;
+use GDO\File\GDT_File;
+use GDO\File\GDT_Files;
 use GDO\Form\GDT_Form;
 use GDO\Install\Config;
 use GDO\Install\GDT_DocsFile;
@@ -389,34 +393,20 @@ if (isset($o['h']) || isset($o['help']))
     printUsage(0, $cmd);
 }
 
-# Fix argc/argv
+$command = $cmd; # TODO: get rid of that
 
-$command = $cmd;
-//$argc = count($argv);
-$db = (bool)GDO_DB_ENABLED;
-switch ($command)
+
+$db = false;
+if (in_array($cmd, ['wipe', 'conf', 'config'], true))
 {
-    case 'install':
-        Database::init();
-    # fallthrough
-    case 'configure':
-    case 'systemtest':
-    case 'apache':
-    case 'nginx':
-    case 'mysql':
-    case 'webconf':
-    case 'wipe':
-    case 'provide':
-    case 'revendor':
-        $db = false;
-        break;
-    default:
-        if ($db)
-        {
-            Database::init();
-        }
-        break;
+    if ((!GDO_DB_ENABLED) || (GDO_DB_READONLY && $cmd === 'wipe'))
+    {
+        fwrite(STDERR, 'You need to set GDO_DB_ENABLED to true, and for wipe to have GDO_DB_READONLY set to false, to run this command.');
+        exit(612);
+    }
+    $db = true;
 }
+
 $modules = [];
 
 if (!$db)
@@ -428,10 +418,6 @@ if (!$db)
 }
 
 $loader->loadModules($db, true);
-//if ($db && ($command !== 'install'))
-//{
-//	$loader->initModuleVars();
-//}
 $loader->initModules($db);
 
 # Run!
@@ -881,6 +867,7 @@ elseif (($command === 'wipe') && ($app->all))
 {
     Database::instance()->dropDatabase(GDO_DB_NAME);
     Database::instance()->createDatabase(GDO_DB_NAME);
+    FileUtil::emptyDir(GDO_File::filesDir());
     printf("The database has been killed completely and created empty.\n");
 }
 
@@ -892,7 +879,40 @@ elseif ($command === 'wipe')
     }
 
     $module = ModuleLoader::instance()->loadModuleFS($argv[2]);
+    ModuleLoader::instance()->initModuleVars();
 
+    // Cleanup files dir on gdo_adm.sh wipe <module>
+    $removedFiles = 0;
+    foreach ($module->getClasses() as $classname)
+    {
+        $gdo = Database::tableS($classname);
+        if ($gdo instanceof GDO_FileTable)
+        {
+            foreach ($gdo->all() as $entry)
+            {
+                $entry->delete();
+                $removedFiles++;
+            }
+        }
+        else
+        {
+            foreach ($gdo->gdoColumnsCache() as $gdt)
+            {
+                if (!($gdt instanceof GDT_Files) && ($gdt instanceof GDT_File))
+                {
+                    $name = $gdt->getName();
+                    $files = $gdo->select("{$name}_t.*")->where($name)->joinObject($name)->fetchTable(GDO_File::table())->exec();
+                    while ($file = GDO_File::fetchFrom($files))
+                    {
+                        $file->delete();
+                        $removedFiles++;
+                    }
+                }
+            }
+        }
+    }
+
+    $module->buildConfigCache();
     $response = Install::make()->executeWithInputs([
         'module' => $module->getName(),
         'uninstall' => '1',
@@ -919,6 +939,10 @@ elseif ($command === 'wipe')
         if ($classes)
         {
             printf("The following GDOs have been wiped: %s.\n", implode(', ', $classes));
+        }
+        if ($removedFiles)
+        {
+            printf("From those GDOs, in total $removedFiles files have been removed.");
         }
     }
 }

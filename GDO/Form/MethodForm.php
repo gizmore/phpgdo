@@ -70,11 +70,6 @@ abstract class MethodForm extends Method
 	{
 		if (isset($this->form))
 		{
-//			$fields = $this->form->getAllFields();
-//			foreach ($fields as $gdt)
-//			{
-//				$gdt->reset();
-//			}
 			unset($this->form);
 		}
 		if ($removeInput)
@@ -89,7 +84,6 @@ abstract class MethodForm extends Method
 	{
 		if ($reset)
 		{
-//            $this->resetForm();
 			unset($this->form);
 		}
 		if (!isset($this->form))
@@ -98,16 +92,19 @@ abstract class MethodForm extends Method
 			$this->submitted = false;
 			$this->validated = false;
 			$this->pressedButton = null;
+
+            # First the normal method params.
 	        $this->addComposeParameters($this->gdoParameters());
+            # Now these can be used in create form
             $this->form = GDT_Form::make($this->getFormName())->focus($this->focusable);
-            $this->applyInput();
             $this->createForm($this->form);
-            $this->applyInput();
             $this->form->pack();
             $this->form->inputs($inputs);
             $this->addComposeParameters($this->form->getAllFields());
             $this->addComposeParameters($this->form->actions()->getAllFields());
-            $this->applyInput();
+//            $this->applyInput();
+
+            # All is done... we can safely try to create the title.
             $this->form->titleRaw($this->getMethodTitle(), false);
         }
 		return $this->form;
@@ -120,11 +117,11 @@ abstract class MethodForm extends Method
 
 	abstract protected function createForm(GDT_Form $form): void;
 
-	protected function applyInput(): void
-	{
-		parent::applyInput();
-		$this->getForm();
-	}
+//	protected function applyInput(): void
+//	{
+//		parent::applyInput();
+//		$this->getForm();
+//	}
 
 	public function execute(): GDT
 	{
@@ -134,7 +131,7 @@ abstract class MethodForm extends Method
 		$this->pressedButton = null;
 
 		### Generate form
-		$form = $this->getForm(true);
+		$form = $this->getForm();
 
 		$this->appliedInputs($this->getInputs());
 
@@ -213,7 +210,7 @@ abstract class MethodForm extends Method
 		{
 			$this->parameterCache = [];
 			$this->addComposeParameters($this->gdoParameters());
-			$form = $this->getForm(true);
+			$form = $this->getForm();
 			$this->addComposeParameters($form->getAllFields());
 			$this->addComposeParameters($form->actions()->getAllFields());
 		}

@@ -57,8 +57,6 @@ abstract class GDO extends GDT
 
 	final public const INNODB = 'InnoDB'; # Foreign keys
 
-// 	final const MEMORY = 'Memory'; # Temp tables @TODO Temp memory tables not working? => remove
-
 	# sqlite
 	final public const SQL3_PERSIST = 'PERSIST';
 
@@ -113,16 +111,19 @@ abstract class GDO extends GDT
 	protected array $gdoVars;
 
 
+    /**
+     * Do not delete, as it is called via Database call_user_func().
+     */
 	public static function tableGDO(): static
 	{
-		return (new static());
+		return new static();
 	}
 
     #PP#start####
 	public function __construct()
 	{
-		parent::__construct(); #PP#delete#
-		$this->afterLoaded();  #PP#delete#
+		parent::__construct();
+		$this->afterLoaded();
 	}
 
 	#############
@@ -174,7 +175,34 @@ abstract class GDO extends GDT
 		return self::entity(self::getBlankData($initial))->dirty()->setPersisted(false);
 	}
 
-	public function dirty(mixed $dirty = true): self
+    /**
+     * This wrapper is to have type safety.
+     * Use it instead of $gdo->gdoValue() for getting GDO classes.
+     */
+    public static function gdoFrom(GDO $gdo, string $fieldName): ?static
+    {
+        return $gdo->gdoValue($fieldName);
+    }
+
+    /**
+     * This wrapper is to have type safety.
+     * Use it instead of $method->gdoParameterValue() for getting GDO classes.
+     */
+    public static function paramFrom(Method $method, string $key): ?static
+    {
+        return $method->gdoParameterValue($key);
+    }
+
+    /**
+     * Type hinted wrapping of Result->fetch()
+     * Use it instead of $result->fetchObject() for getting GDO classes.
+     */
+    public static function fetchFrom(Result $result): ?static
+    {
+        return $result->fetchObject();
+    }
+
+    public function dirty(mixed $dirty = true): self
 	{
 		$this->dirty = $dirty;
 		return $this;
@@ -443,8 +471,6 @@ abstract class GDO extends GDT
 
 	/**
 	 * Get a row by condition.
-	 *
-	 * @throws GDO_DBException
 	 */
 	public function getWhere(string $condition): ?static
 	{
@@ -491,7 +517,7 @@ abstract class GDO extends GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			call_user_func([$gdt->gdo($this), $methodName], $this, $query);
+			call_user_func([$gdt, $methodName], $this, $query);
 		}
 		call_user_func([$this, $methodName], $this, $query);
 		return $this;
@@ -862,7 +888,7 @@ abstract class GDO extends GDT
 	/**
 	 * Get the value of a column.
 	 */
-	public function gdoValue(string $key): null|bool|int|float|string|array|object
+	public function gdoValue(string $key): mixed
 	{
 		return $this->gdoColumn($key)->getValue();
 	}
@@ -988,8 +1014,6 @@ abstract class GDO extends GDT
 
 	/**
 	 * Copy a GDT column and assign my values.
-	 *
-	 * @throws GDO_Exception
 	 */
 	public function gdoColumnCopy(string $key, bool $throw = true): ?GDT
 	{
@@ -1169,8 +1193,8 @@ abstract class GDO extends GDT
 	public function insert(bool $withHooks = true): static
 	{
 		$query = $this->query()->
-		insert($this->gdoTableIdentifier())->
-		values($this->getDirtyVars());
+            insert($this->gdoTableIdentifier())->
+            values($this->getDirtyVars());
 		return $this->insertOrReplace($query, $withHooks);
 	}
 
@@ -1446,8 +1470,6 @@ abstract class GDO extends GDT
 
 	/**
 	 * Delete this entity.
-	 *
-	 * @throws GDO_DBException
 	 */
 	public function delete(bool $withHooks = true): self
 	{
@@ -1503,8 +1525,6 @@ abstract class GDO extends GDT
 
 	/**
 	 * Does an INSERT, ON DUPLICATE KEY UPDATE. Not all events are supported. I.e. we don't know what event to call before the query is fired.
-	 *
-	 * @throws GDO_DBException
 	 */
 	public function softReplace(bool $withHooks = true): self
 	{
@@ -1567,14 +1587,14 @@ abstract class GDO extends GDT
 
 	/**
 	 * @param string[] $vars
-	 *
-	 * @throws GDO_DBException
 	 */
-	public function saveVars(array $vars, bool $withHooks = true, bool &$worthy = false): static
+	public function saveVars(array $vars, bool $withHooks = true): static
 	{
 		$worthy = false; # Anything changed?
+
 		$query = $this->updateQuery();
-		foreach ($vars as $key => $var)
+
+        foreach ($vars as $key => $var)
 		{
 			if (array_key_exists($key, $this->gdoVars))
 			{
@@ -1587,18 +1607,15 @@ abstract class GDO extends GDT
 			}
 		}
 
-		if (!$worthy)
-		{
-			return $this;
-		}
+        if ($withHooks)
+        {
+            $this->beforeUpdate($query);
+        }
 
-		# Call hooks even when not needed. Because its needed on GDT_Files
-		if ($withHooks)
+        if ($worthy)
 		{
-			$this->beforeUpdate($query); # Can do trickery here... not needed?
+            $query->exec();
 		}
-
-		$query->exec();
 
 		foreach ($vars as $key => $var)
 		{
@@ -1736,7 +1753,6 @@ abstract class GDO extends GDT
 	}
 
 	/**
-	 * @throws GDO_DBException
 	 * @return static[]
 	 */
 	public function &all(string $order = null, bool $json = false): array

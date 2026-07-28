@@ -53,11 +53,17 @@ abstract class GDT
 		return new static();
 	}
 
-	public function blankData() : array
+    public static function fromGDO(GDO $gdo, string $name): static
+    {
+        return $gdo->gdoColumn($name);
+    }
+
+    public function blankData() : array
 	{
 		return self::EMPTY_ARRAY;
 	}
 
+    #PP#start#
 	#############
 	### Debug ###
 	#############
@@ -68,20 +74,14 @@ abstract class GDT
 
 	protected function __construct()
 	{
-		$this->afterLoaded(); #PP#delete#
+		$this->afterLoaded();
 	}
 
 	public function __destruct()
 	{
-		self::$GDT_KILLS++; #PP#delete#
+		self::$GDT_KILLS++;
 	}
 
-    public static function gdoField(GDO $gdo, string $name): static
-    {
-        return $gdo->gdoColumn($name);
-    }
-
-	#PP#start#
 	/**
 	 * For the performance counter to work, you have to make sure the constructor chain works.
 	 */
@@ -136,7 +136,7 @@ abstract class GDT
 	# --- GDT Render Core --- #
 	###########################
 	/**
-	 * @license GDOv7-LICENSE (c)2020-2023 C.B. gizmore@wechall.net
+	 * @license GDOv7-LICENSE (c)2020-2026 C.B. gizmore@wechall.net
 	 * @see Rendern gegen Mobbing.com
 	 */
 	##############
@@ -172,33 +172,6 @@ abstract class GDT
     final public const RENDER_TEXT = 22; # plain text, like CLI but without any decoration
 
     final public const RENDER_TELEGRAM = 23; # plain text, like CLI but without any decoration
-
-// 	/**
-// 	 * Switchable rendering callmap.
-// 	 * @var callable[]
-// 	 */
-// 	public static array $RENDER_CALLMAP = [
-// 		[null, 'renderNIL'],
-// 		[null, 'renderBinary'],
-// 		[null, 'renderXML'],
-// 		[null, 'renderJSON'],
-// 		[null, 'renderGTK'],
-// 		[null, 'renderNIL'],
-// 		[null, 'renderNIL'],
-// 		[null, 'renderNIL'],
-// 		[null, 'renderWebsite'],
-// 		[null, 'renderHTML'],
-// 		[null, 'renderCard'],
-// 		[null, 'renderList'],
-// 		[null, 'renderForm'],
-// 		[null, 'renderOption'],
-// 		[null, 'renderHeader'],
-// 		[null, 'renderNIL'],
-// 		[null, 'renderFilter'],
-// 		[null, 'renderCell'],
-// 		[null, 'renderTHead'],
-// 		[null, 'renderTFoot'],
-// 	];
 
 	/**
 	 * Call the applications mode rendering method.
@@ -268,11 +241,6 @@ abstract class GDT
 		return null;
 	}
 
-    public function renderTelegram(): string
-    {
-        return $this->renderCLI();
-    }
-
 	#############################
 	### render default stubs ####
 	#############################
@@ -310,6 +278,7 @@ abstract class GDT
 	public function renderLabelText() : string { return GDT::EMPTY_STRING; }
 	public function cliIcon() : string { return GDT::EMPTY_STRING; }
 	public function renderIconText(): string { return GDT::EMPTY_STRING; }
+    public function renderTelegram(): string { return $this->renderCLI(); }
 
 
 	#####################
@@ -439,7 +408,7 @@ abstract class GDT
 	 */
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
-		return true; # all empty GDT does nothing... what can it do? randomly fail?!
+		return true; # all empty GDT do nothing... what can it do? randomly fail?!
 	}
 
 	public function validated() : ?static
@@ -458,7 +427,6 @@ abstract class GDT
 	{
 		return false;
 	}
-
 
 	public function renderError(): string
 	{

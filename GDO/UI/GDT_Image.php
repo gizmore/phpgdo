@@ -21,7 +21,8 @@ class GDT_Image extends GDT
 
 	public const GIF = 'image/gif';
 	public const PNG = 'image/png';
-	public const JPG = 'image/jpeg';
+    public const JPG = 'image/jpeg';
+    public const WEBP = 'image/webp';
 
 	############
 	### Vars ###

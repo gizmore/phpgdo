@@ -238,10 +238,7 @@ class GDO_Module extends GDO
 		if (!$this->inited)
 		{
 			$this->inited = true;
-//			if (!Application::$INSTANCE->isInstall())
-			{
-				$this->onModuleInit();
-			}
+            $this->onModuleInit();
 		}
 	}
 
@@ -355,10 +352,10 @@ class GDO_Module extends GDO
 		return null;
 	}
 
-	public function canUpdate(): bool
-	{
-		return $this->version !== $this->getVersion()->__toString();
-	}
+//	public function canUpdate(): bool
+//	{
+//		return $this->version !== $this->getVersion()->__toString();
+//	}
 
 	# ############
 	# ## Hooks ###
@@ -414,7 +411,7 @@ class GDO_Module extends GDO
 		return GDT_Template::php($this->getName(), $path, $tVars);
 	}
 
-	/**
+    /**
 	 * Get a file without include.
 	 * Useful for assets with localized versions.
 	 */
@@ -526,8 +523,6 @@ class GDO_Module extends GDO
 	}
 
 	/**
-	 * Module config GDTs
-	 *
 	 * @return GDT[]
 	 */
 	public function getConfig(): array
@@ -535,16 +530,16 @@ class GDO_Module extends GDO
 		return GDT::EMPTY_ARRAY;
 	}
 
-	public function getConfigMemcache(): array
-	{
-		$key = $this->configCacheKey();
-		if (null === ($cache = Cache::get($key)))
-		{
-			$cache = $this->buildConfigCache();
-			Cache::set($key, $cache);
-		}
-		return $cache;
-	}
+//	public function getConfigMemcache(): array
+//	{
+//		$key = $this->configCacheKey();
+//		if (null === ($cache = Cache::get($key)))
+//		{
+//			$cache = $this->buildConfigCache();
+//			Cache::set($key, $cache);
+//		}
+//		return $cache;
+//	}
 
 	private function configCacheKey(): string
 	{
@@ -557,17 +552,13 @@ class GDO_Module extends GDO
 		Cache::remove('gdo_modules');
 	}
 
-	public function getConfigColumn(string $key): GDT
+	public function getConfigColumn(string $key): ?GDT
 	{
 		if (!isset($this->configCache))
 		{
 			$this->buildConfigCache();
 		}
-//		if (isset($this->configCache[$key]))
-//		{
-			return $this->configCache[$key];
-//		}
-//		return null;
+		return $this->configCache[$key] ?? null;
 	}
 
 	/**
@@ -728,7 +719,6 @@ class GDO_Module extends GDO
 
 	/**
 	 * User changeable settings.
-	 *
 	 * @return GDT[]
 	 */
 	public function getUserSettings(): array
@@ -739,7 +729,6 @@ class GDO_Module extends GDO
 	/**
 	 * User changeable settings in a blob table.
 	 * For e.g. signature.
-	 *
 	 * @return GDT[]
 	 */
 	public function getUserSettingBlobs(): array
@@ -830,8 +819,6 @@ class GDO_Module extends GDO
 	}
 
 	/**
-	 * Config that the user cannot change.
-	 *
 	 * @return GDT[]
 	 */
 	public function getUserConfig(): array
@@ -851,11 +838,6 @@ class GDO_Module extends GDO
 		return $settings;
 	}
 
-	/**
-	 * Load a user's settings into their temp cache.
-	 *
-	 * @throws GDO_DBException
-	 */
 	private function loadUserSettingsB(GDO_User $user): array
 	{
 		if (!$user->isPersisted())
@@ -865,9 +847,7 @@ class GDO_Module extends GDO
 		$uid = $user->getID();
 		$settings = GDO_UserSetting::table()->select('uset_name, uset_var')->where("uset_user={$uid}");
 		$blobs = GDO_UserSettingBlob::table()->select('uset_name, uset_var')->where("uset_user={$uid}");
-		return $settings->union($blobs)
-			->exec()
-			->fetchAllArray2dPair();
+		return $settings->union($blobs)->exec()->fetchAllArray2dPair();
 	}
 
 	public function getID(): ?string
@@ -918,9 +898,6 @@ class GDO_Module extends GDO
 		return self::saveUserSetting(GDO_User::current(), $key, $var);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function saveUserSetting(GDO_User $user, string $key, ?string $var): GDT
 	{
 		$gdt = $this->userSetting($user, $key);
@@ -969,8 +946,7 @@ class GDO_Module extends GDO
 
 	public function error(string $key, array $args = null): bool
 	{
-		Website::error($this->gdoHumanName(), $key, $args);
-		return false;
+		return !Website::error($this->gdoHumanName(), $key, $args);
 	}
 
 	private function getACLDataFor(GDO_User $user, GDT $gdt, string $key): array
@@ -986,8 +962,8 @@ class GDO_Module extends GDO
 	 */
 	private function _getACLDataCacheFor(GDO_User $user): array
 	{
-		try
-		{
+//		try
+//		{
 			$key = "uset_acl_{$user->getID()}";
 			if (null === ($cache = Cache::get($key)))
 			{
@@ -998,12 +974,12 @@ class GDO_Module extends GDO
 				Cache::set($key, $cache);
 			}
 			return $cache;
-		}
-		catch (\Throwable $ex)
-		{
-			Debug::debugException($ex);
-			return [];
-		}
+//		}
+//		catch (\Throwable $ex)
+//		{
+//			Debug::debugException($ex);
+//			return [];
+//		}
 	}
 
 	public function saveUserSettingACLRelation(GDO_User $user, string $key, string $relation): void
@@ -1023,7 +999,6 @@ class GDO_Module extends GDO
 			GDO_UserSetting::updateACL($user, $gdt, $aclField, $aclVar);
 		}
 	}
-
 
 	public function saveUserSettingACLLevel(GDO_User $user, string $key, ?string $level): void
 	{
@@ -1111,18 +1086,12 @@ class GDO_Module extends GDO
 	# ## ACL ###
 	# ##########
 
-	/**
-	 * Get the ACL field for a user-setting gdt.
-	 */
 	public function getSettingACL(string $name): ?GDT_ACL
 	{
 		$this->buildSettingsCache();
 		return $this->settingsACL[$name] ?? null;
 	}
 
-	/**
-	 * Join the settings table to a user field.
-	 */
 	public function joinSetting(Query $query, string $key, string $userFieldName = 'gdo_user.user_id'): Query
 	{
 		$setting = $this->getSetting($key);
@@ -1131,9 +1100,6 @@ class GDO_Module extends GDO
 		return $query->select("IFNULL( ( SELECT uset_var FROM gdo_usersetting {$jn} WHERE {$jn}.uset_name='{$key}' AND {$jn}.uset_user={$userFieldName} ), {$default} ) AS {$key}");
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function getUserConfigACLField(string $key, GDO_User $user = null): ?GDT_ACL
 	{
 		$c = $this->settingsACL;
@@ -1141,9 +1107,6 @@ class GDO_Module extends GDO
 		return isset($c[$key]) ? $this->_ucacl($key, $c[$key], $user) : null;
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	private function _ucacl(string $key, GDT_ACL $acl, GDO_User $user): GDT_ACL
 	{
 		$gdt = $this->userSetting($user, $key);
@@ -1171,8 +1134,6 @@ class GDO_Module extends GDO
 	}
 
 	/**
-	 * Get all methods for this module.
-	 *
 	 * @return Method[]
 	 */
 	public function getMethods(bool $withPermission = true): array
@@ -1195,10 +1156,7 @@ class GDO_Module extends GDO
 			function ($file)
 			{
 				$className = "\\GDO\\{$this->getName()}\\Method\\{$file}";
-				return call_user_func([
-					$className,
-					'make',
-				]);
+				return call_user_func([$className, 'make']);
 			}, $methods);
 		if ($withPermission)
 		{
@@ -1213,12 +1171,6 @@ class GDO_Module extends GDO
 		return $methods;
 	}
 
-	/**
-	 * Get a method by name.
-	 * Case insensitive.
-	 *
-	 * @throws GDO_Exception
-	 */
 	public function getMethodByName(string $methodName, bool $throw = true): ?Method
 	{
 		$files = scandir($this->filePath('Method'));
@@ -1256,18 +1208,12 @@ class GDO_Module extends GDO
 		}, $methods);
 	}
 
-	/**
-	 * Get the ".min" file suffix in case we want minification.
-	 */
 	public function cfgMinAppend(): string
 	{
 		$mode = self::config_var('Javascript', 'minify_js', 'no');
 		return $mode === 'no' ? GDT::EMPTY_STRING : '.min';
 	}
 
-	/**
-	 * Helper to get the config var for a module.
-	 */
 	public static function config_var(string $moduleName, string $key, string $default = null): ?string
 	{
 		if ($module = ModuleLoader::instance()->getModule($moduleName, false))
@@ -1277,7 +1223,16 @@ class GDO_Module extends GDO
 		return $default;
 	}
 
-	public function getConfigVar(string $key): ?string
+    public function gdoVar(string $key): ?string
+    {
+        if (isset($this->gdoVars[$key]))
+        {
+            return $this->gdoVars[$key];
+        }
+        return $this->configVarCache[$key] ?? null;
+    }
+
+    public function getConfigVar(string $key): ?string
 	{
 		if ($gdt = $this->getConfigColumn($key))
 		{
@@ -1297,14 +1252,11 @@ class GDO_Module extends GDO
 
 	public function addJS(string $path): void
 	{
-		$nc = $this->nocacheVersion();
-		Javascript::addJS($this->wwwPath("{$path}?{$nc}"));
+		Javascript::addJS($this->wwwPath("{$path}?{$this->nocacheVersion()}"));
 	}
 
 	/**
 	 * Get the cache poisoner.
-	 * Base is gdo revision string.
-	 * Additionally a cache clear triggers an increase of the assets version.
 	 */
 	public function nocacheVersion(): string
 	{
@@ -1324,15 +1276,13 @@ class GDO_Module extends GDO
 
 	public function addCSS(string $path): void
 	{
-		$nc = $this->nocacheVersion();
-		$path = $this->wwwPath("{$path}?{$nc}");
+		$path = $this->wwwPath("{$path}?{$this->nocacheVersion()}");
 		CSS::addFile($path);
 	}
 
 	public function message(string $key, array $args = null): bool
 	{
-		Website::message($this->gdoHumanName(), $key, $args);
-		return true;
+		return !!Website::message($this->gdoHumanName(), $key, $args);
 	}
 
 	public function getCLITrigger(): string
@@ -1342,24 +1292,46 @@ class GDO_Module extends GDO
 
 	protected function errorSystemDependency(string $key, array $args = null): bool
 	{
-		return $this->error('err_system_dependency', [
-			$this->gdoHumanName(),
-			t($key, $args),
-		]);
+		return $this->error('err_system_dependency', [$this->gdoHumanName(), t($key, $args)]);
 	}
 
 	protected function warningSystemDependency(string $key, array $args = null): bool
 	{
-		return $this->message('warn_system_dependency', [
-			$this->gdoHumanName(),
-			t($key, $args),
-		]);
+		return $this->message('warn_system_dependency', [$this->gdoHumanName(), t($key, $args)]);
 	}
 
 	public function isGDOLicense(): bool
-	{
-		return $this->license == GDO::LICENSE;
-	}
+    {
+        return $this->license === GDO::LICENSE;
+    }
 
+    ##############
+    ### Delete ###
+    ##############
+    public function gdoBeforeDelete(GDO $gdo, Query $query): void
+    {
+        $fields = array_merge($this->getConfigCache(), $this->getSettingsCache());
+        foreach ($fields as $gdt)
+        {
+            $gdt->gdo($this)->gdoBeforeDelete($this, $query);
+        }
+    }
+
+    public function gdoAfterDelete(GDO $gdo): void
+    {
+        $fields = array_merge($this->getConfigCache(), $this->getSettingsCache());
+        foreach ($fields as $gdt)
+        {
+            $gdt->gdo($this)->gdoAfterDelete($this);
+        }
+    }
 
 }
+
+
+
+
+
+
+
+# (c) 2023, 2024, 2025, 2026 gizmore@wechall.net

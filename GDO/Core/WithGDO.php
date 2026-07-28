@@ -34,15 +34,16 @@ trait WithGDO
 			$this->gdo = $gdo;
 			if ($name = $this->getName())
 			{
-				if ($gdo->hasVar($name))
-				{
-					$var = $gdo->gdoVar($name);
-				}
+//                if ($gdo->hasVar($name))
+//                {
+                    $var = $gdo->gdoVar($name);
+//                }
 			}
 		}
 		else
 		{
 			unset($this->gdo);
+//            $this->reset();
 		}
 		return $initial ? $this->initial($var) : $this->var($var);
 	}

@@ -262,9 +262,6 @@ class Database
 		return $this->query($query, $buffered);
 	}
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	private function query(string $query, bool $buffered = true): \mysqli_result|\SQLite3Result|bool
 	{
 		$dbms = self::DBMS();
@@ -276,7 +273,7 @@ class Database
 		{
 			$error = $dbms->dbmsError();
 			$errno = $dbms->dbmsErrno();
-			throw new GDO_DBException('err_db', [$errno, html($error), html($query)]);
+			throw new GDO_DBException(613, t('err_db', [$errno, html($error), html($query)]));
 		}
 
 		#PP#start#
@@ -306,14 +303,11 @@ class Database
 	### Table cache ###
 	###################
 
-	/**
-	 * @throws GDO_DBException
-	 */
 	public function queryWrite(string $query): bool
 	{
 		if (GDO_DB_READONLY)
 		{
-			throw new GDO_DBException('err_db_ro');
+			throw new GDO_DBException(612, t('err_db_ro'));
 		}
 		self::$WRITES++; #PP#delete#
 		$this->writes++; #PP#delete#

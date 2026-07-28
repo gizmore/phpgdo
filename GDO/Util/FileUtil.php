@@ -96,7 +96,7 @@ final class FileUtil
 	}
 
 	/**
-	 * Turn a string into a filec stream.
+	 * Turn a string into a file stream.
 	 */
 	public static function openString(string $string)
 	{
@@ -230,7 +230,7 @@ final class FileUtil
 	### Remove ###
 	##############
 
-	public static function removedFile(string $path): bool
+    public static function removedFile(string $path): bool
 	{
 		try
 		{
@@ -243,13 +243,7 @@ final class FileUtil
 		}
 	}
 
-
-	/**
-	 * Delete a single file.
-	 *
-	 * @throws GDO_Exception
-	 */
-	public static function removeFile(string $path): bool
+	public static function removeFile(string $path, bool $failOnNotExist=true): bool
 	{
 		if (is_file($path))
 		{
@@ -262,7 +256,10 @@ final class FileUtil
 		{
 			throw new GDO_Exception('err_file_is_dir', [$path]);
 		}
-		// Not there!
+        elseif ($failOnNotExist)
+        {
+            throw new GDO_Exception('err_file_not_there', [$path]);
+        }
 		return true;
 	}
 
@@ -279,41 +276,37 @@ final class FileUtil
 		}
 	}
 
-	/**
-	 * Remove a dir recursively, file by file.
-	 *
-	 * @throws GDO_Exception
-	 */
-	public static function removeDir(string $dir): true
-	{
-		if (is_dir($dir))
-		{
-			$objects = self::scandir($dir);
-			foreach ($objects as $object)
-			{
-				$obj = "{$dir}{$object}";
-				if (is_dir($obj))
-				{
-					return self::removeDir("{$obj}/");
-				}
-				elseif (!unlink($obj))
-				{
-					throw new GDO_Exception('err_delete_file', [$obj]);
-				}
-			}
-			if (!rmdir($dir))
-			{
-				throw new GDO_Exception('err_delete_dir', [$dir]);
-			}
-		}
-		elseif (is_file($dir))
-		{
-			throw new GDO_Exception('err_delete_file_is_dir', [$dir]);
-		}
-		return true;
-	}
+    public static function emptyDir(string $dir, bool $clearDotFiles = false): bool
+    {
+        $dir = rtrim($dir, "\\/");
+        if ($dir && is_dir($dir))
+        {
+            system("rm -rf $dir/*");
+            if ($clearDotFiles)
+            {
+                system("rm -rf $dir/.*");
+            }
+            return !self::scandir($dir);
+        }
+        return false;
+    }
 
-	################
+    /**
+     * Remove a dir recursively, file by file.
+     */
+    public static function removeDir(string $dir): bool
+    {
+        $dir = rtrim($dir, "\\/");
+        if ($dir && is_dir($dir))
+        {
+            $dir = escapeshellarg($dir);
+            system("rm -rf $dir");
+            return !is_dir($dir);
+        }
+        return false;
+    }
+
+    ################
 	### Filesize ###
 	################
 	/**
@@ -476,9 +469,6 @@ final class FileUtil
 		 */
 		while ($char !== false && $char !== "\n" && $char !== "\r")
 		{
-			/**
-			 * Prepend the new char
-			 */
 			$line = $char . $line;
 			fseek($fh, $cursor--, SEEK_END);
 			$char = fgetc($fh);

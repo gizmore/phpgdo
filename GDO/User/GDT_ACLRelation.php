@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace GDO\User;
 
+use GDO\Core\GDO_Exception;
+use GDO\Core\GDT_CreatedBy;
 use GDO\Core\GDT_Enum;
+use GDO\DB\Query;
 use GDO\Friends\GDO_Friendship;
 
 /**
@@ -37,7 +40,7 @@ final class GDT_ACLRelation extends GDT_Enum
 	}
 
 	/**
-	 * Check if a userpair allows access for this setting.
+	 * Check if an userpair allows access for this setting.
 	 */
 	public function hasAccess(GDO_User $user, GDO_User $target, string &$reason): bool
 	{
@@ -101,5 +104,36 @@ final class GDT_ACLRelation extends GDT_Enum
 				return false;
 		}
 	}
+
+    public function aclQuery(Query $query, GDO_User $user, ?string $user_field = null, ?string $aclr_field = null): void
+    {
+        $t = $this->gdo->gdoTableName();
+        $field = $aclr_field ?: $t.'.'.$this->getName();
+        $ufield = $user_field ?: $t.'.'.$this->gdo->gdoColumnOf(GDT_CreatedBy::class)->getName();
+        $uid = $user->getID();
+        if (!$user->isUser())
+        {
+            $query->where("$field = 'acl_all'");
+        }
+        elseif ($user->isStaff())
+        {
+            return;
+        }
+        elseif ($user->isGuest())
+        {
+            $query->where("$field IN ('acl_all', 'acl_guests')");
+        }
+        elseif ($user->isMember())
+        {
+            $cond = [];
+            $cond[] = "$field IN ('acl_all', 'acl_guests', 'acl_members')";
+            if (module_enabled('Friends'))
+            {
+                $cond[] = "$field = 'acl_friend_friends' AND ( SELECT 1 FROM gdo_friendship WHERE friend_user=$ufield AND friend_friend IN ( SELECT friend_friend FROM gdo_friendship WHERE friend_user=$uid ) )";
+                $cond[] = "$field = 'acl_friends' AND ( SELECT 1 FROM gdo_friendship WHERE friend_user=$ufield AND friend_friend=$uid )";
+            }
+            $query->where('('.implode(' OR ', $cond).')');
+        }
+    }
 
 }

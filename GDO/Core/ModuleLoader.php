@@ -337,7 +337,7 @@ final class ModuleLoader
 		{
 			if (Application::instance()->isCLI())
 			{
-				fwrite(STDERR, "A Database exception occured.\nOn installations this might be fine, as the gdo_module table does not exist yet.\n");
+				fwrite(STDOUT, "A Database exception occured.\nOn installations this might be fine, as the gdo_module table does not exist yet.\n");
 			}
 			else
 			{
