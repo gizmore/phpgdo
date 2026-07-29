@@ -517,7 +517,7 @@ abstract class GDO extends GDT
 	{
 		foreach ($this->gdoColumnsCache() as $gdt)
 		{
-			call_user_func([$gdt, $methodName], $this, $query);
+			call_user_func([$gdt->gdo($this), $methodName], $this, $query);
 		}
 		call_user_func([$this, $methodName], $this, $query);
 		return $this;
