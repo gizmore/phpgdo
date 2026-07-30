@@ -29,8 +29,11 @@ which is number of functions called.
 [Module_Perf](../GDO/Perf/)
 is a core module that does report this metric beside others.
 
-Here is an example CLI output of the GDT_PerfBar,
-after running all unit tests on all modules.
+The following is a historical example of `GDT_PerfBar` output after running
+the full suite. It is not a current benchmark: machine, PHP version, enabled
+modules, database state, and test options all affect the values. To reproduce
+a measurement, configure the isolated test database first and follow the
+[testing guide](GDO7_TESTING.md).
 
     $ ./gdo_test.sh
     ######################################

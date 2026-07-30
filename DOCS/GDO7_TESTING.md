@@ -12,17 +12,27 @@ but it is encouraging, give it a try:
 To enable unit testing do as follows.
 
     cd phpgdo
-    composer update
-    # Create a protected/config_test.php - This can be a copy of your config.php, but it should have an **own database**.
-    ./gdo_test.sh # runs all tests
-    ./gdo_test.sh <module> # runs test for a single module and all it's dependencies.
+    composer install
+    # Create protected/config_test.php with a dedicated test database.
+    ./gdo_test.sh # runs all modules and enabled test options
+    ./gdo_test.sh Tests # runs the Tests module and its dependencies
+    ./gdo_test.sh --quick '%' # quick run over all modules
+
+The test runner **drops and recreates** the database named in
+`protected/config_test.php`, clears `files_test/`, and removes the configured
+temporary directory. Never point it at a development or production database.
+
+The configured test database user must be able to connect to MySQL/MariaDB and
+create, drop, and use that dedicated database. Test options must come before
+the module selector; for example, use `./gdo_test.sh --quick '%'`, not
+`./gdo_test.sh '%' --quick`.
 
 ## GDOv7 Automated test case generation
 
 The GDOv7 Type System allows to automatically test a lot of methods and their paramters.
 
 There is a Test that fuzzes all Methods:
-[AutomatedTest](../GDO/Tests/Test/AutomatedTest.php)
+[AutomatedMethodTest](../GDO/Tests/Test/AutomatedMethodTest.php)
 
 There is a Test that fuzzes all rendering of all GDT+GDO:
 [AutomatedRenderingTest](../GDO/Tests/Test/AutomatedRenderingTest.php)
