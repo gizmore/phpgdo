@@ -52,7 +52,7 @@ final class GDT_IP extends GDT_String
 		return str_contains($ip, ':');
 	}
 
-	public static function isLocal(string $ip = null): bool
+	public static function isLocal(?string $ip = null): bool
 	{
 		$ip = $ip ?: self::$CURRENT;
 		return

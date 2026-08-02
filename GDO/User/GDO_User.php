@@ -461,7 +461,7 @@ final class GDO_User extends GDO
 	/**
 	 * @throws GDO_Exception
 	 */
-	public function hasPermissionID(string $permissionId = null): bool
+	public function hasPermissionID(?string $permissionId = null): bool
 	{
 		if ($permissionId)
 		{
@@ -620,7 +620,7 @@ final class GDO_User extends GDO
 	/**
 	 * Save all the ACL settings for a user's setting var.
 	 */
-	public function saveACLSettings(string $moduleName, string $key, string $relation, string $level = null, string $permission = null): self
+	public function saveACLSettings(string $moduleName, string $key, string $relation, ?string $level = null, ?string $permission = null): self
 	{
 		$module = ModuleLoader::instance()->getModule($moduleName);
 		$module->saveUserSettingACLRelation($this, $key, $relation);

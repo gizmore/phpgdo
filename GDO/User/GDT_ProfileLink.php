@@ -51,7 +51,7 @@ final class GDT_ProfileLink extends GDT_Link
 	### Avatar ###
 	##############
 
-	public function user(GDO $gdo = null): self
+	public function user(?GDO $gdo = null): self
 	{
 		return $this->gdo($gdo);
 	}

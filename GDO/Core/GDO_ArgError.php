@@ -9,7 +9,7 @@ namespace GDO\Core;
 class GDO_ArgError extends GDO_Exception
 {
 
-	public function __construct(GDT $field, \Throwable $previous = null)
+	public function __construct(GDT $field, ?\Throwable $previous = null)
 	{
 		parent::__construct('err_parameter', [$field->gdoHumanName(), $field->renderError()],
 			self::GDT_ERROR_CODE, $previous);

@@ -140,13 +140,13 @@ final class Module_Date extends GDO_Module
 
 	public function cfgClock(): string { return $this->getConfigVar('clock_sidebar'); }
 
-	public function cfgUserTimezoneId(GDO_User $user = null): string
+	public function cfgUserTimezoneId(?GDO_User $user = null): string
 	{
 		$user = $user ?: GDO_User::current();
 		return $this->userSettingVar($user, 'timezone');
 	}
 
-	public function cfgUserActivityAccuracy(GDO_User $user = null): int
+	public function cfgUserActivityAccuracy(?GDO_User $user = null): int
 	{
 		$user = $user ?: GDO_User::current();
 		return $this->userSettingValue($user, 'activity_accuracy');

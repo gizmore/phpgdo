@@ -246,7 +246,7 @@ final class Query
 	 * Continue to build a select but reset columns.
 	 * This may be useful in pagination queries.
 	 */
-	public function selectOnly(string $columns = null): self
+	public function selectOnly(?string $columns = null): self
 	{
 		unset($this->columns);
 		return $this->select($columns);
@@ -255,7 +255,7 @@ final class Query
 	/**
 	 * Build a select.
 	 */
-	public function select(string $columns = null): self
+	public function select(?string $columns = null): self
 	{
 		$this->type = self::SELECT;
 		if ($columns) # ignore empty
@@ -338,7 +338,7 @@ final class Query
 	/**
 	 * Order clause.
 	 */
-	public function order(string $order = null): self
+	public function order(?string $order = null): self
 	{
 		if ($order)
 		{

@@ -89,7 +89,7 @@ class GDT_Select extends GDT_ComboBox
 		return $this->emptyLabel($labelKey)->initial($emptyVar);
 	}
 
-	public function emptyLabel(string $key, array $args = null): static
+	public function emptyLabel(string $key, ?array $args = null): static
 	{
 		unset($this->emptyLabelRaw);
 		$this->emptyLabelKey = $key;
@@ -498,7 +498,7 @@ class GDT_Select extends GDT_ComboBox
 		}
 	}
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		if ($var === null)
 		{

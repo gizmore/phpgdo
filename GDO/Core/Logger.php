@@ -57,7 +57,7 @@ final class Logger
 	/**
 	 * Init the logger. If a username is given, the logger will log into a logs/username dir.
 	 */
-	public static function init(string $username = null, int $logbits = self::ALL, string $basedir = 'protected/logs'): void
+	public static function init(?string $username = null, int $logbits = self::ALL, string $basedir = 'protected/logs'): void
 	{
 		self::$username = $username;
 		self::$logbits = $logbits;
@@ -141,7 +141,7 @@ final class Logger
 	/**
 	 * Get the full log path, either for username log or site log.
 	 */
-	private static function getFullPath(string $filename, string $username = null): string
+	private static function getFullPath(string $filename, ?string $username = null): string
 	{
 		$date = Time::getDate(0, 'Ymd');
 		return $username

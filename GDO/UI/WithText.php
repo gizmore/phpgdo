@@ -27,13 +27,13 @@ trait WithText
 
     public bool $textNone = false;
 
-	public static function makeTexted(string $key, array $args = null): static
+	public static function makeTexted(string $key, ?array $args = null): static
 	{
 		return static::make()->text($key, $args);
 	}
 
 
-	public function text(?string $key, array $args = null, bool $escaped = false): self
+	public function text(?string $key, ?array $args = null, bool $escaped = false): self
 	{
 		unset($this->textRaw);
 		if (!$key)

@@ -46,7 +46,7 @@ final class GDT_DateDisplay extends GDT
 		return $this;
 	}
 
-	public function emptyText(string $key, array $args = null): self
+	public function emptyText(string $key, ?array $args = null): self
 	{
 		$this->emptyTextKey = $key;
 		$this->emptyTextArgs = $args;

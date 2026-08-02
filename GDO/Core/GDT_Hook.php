@@ -303,7 +303,7 @@ final class GDT_Hook extends GDT
 	### Init ###
 	############
 
-	public function event(string $event = null): self
+	public function event(?string $event = null): self
 	{
 		$this->event = $event;
 		return $this;

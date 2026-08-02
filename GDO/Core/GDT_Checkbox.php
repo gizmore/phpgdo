@@ -133,7 +133,7 @@ class GDT_Checkbox extends GDT_Select
 	##############
 	### Render ###
 	##############
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		if ($var === null)
 		{

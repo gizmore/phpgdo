@@ -27,7 +27,7 @@ class Entry
 		return $entry->every($every, $immediately);
 	}
 
-	public function __construct(callable $callable, array $args = null)
+	public function __construct(callable $callable, ?array $args = null)
 	{
 		$this->callable = $callable;
 		$this->args = $args;

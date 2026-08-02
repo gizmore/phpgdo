@@ -86,7 +86,7 @@ class GDT_AntiCSRF extends GDT_String
 	 *
 	 * @TODO verify crypto
 	 */
-	public static function fixedToken(GDO_User $user = null): string
+	public static function fixedToken(?GDO_User $user = null): string
 	{
 		$user = $user ?: GDO_User::current();
 		$time = 1337;

@@ -388,7 +388,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	# ## Lang ###
 	# ###########
 
-	protected function callMethod(Method $method, array $inputs=null, string $button=null, bool $assertOk = true): string
+	protected function callMethod(Method $method, ?array $inputs = null, ?string $button = null, bool $assertOk = true): string
 	{
 //		try
 //		{

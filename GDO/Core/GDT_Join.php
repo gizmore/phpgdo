@@ -31,7 +31,7 @@ final class GDT_Join extends GDT
 
 	public function isSearchable(): bool { return true; }
 
-// 	public static function make(string $name = null): self
+// 	public static function make(?string $name = null): self
 // 	{
 // 		return self::makeNamed($name);
 // 	}

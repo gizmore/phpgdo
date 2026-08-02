@@ -17,7 +17,7 @@ final class Strings
 	/**
 	 * Get a substring from a string until an occurance of another string.
 	 */
-	public static function substrTo(string $s, string $to, string $default = null): ?string
+	public static function substrTo(string $s, string $to, ?string $default = null): ?string
 	{
 		if (false !== ($index = strpos($s, $to)))
 		{
@@ -29,7 +29,7 @@ final class Strings
 	/**
 	 * Take the portion of a string after/from a portion. You can nibble tokens with that. slow?
 	 */
-	public static function substrFrom(string $s, string $from, string $default = null): ?string
+	public static function substrFrom(string $s, string $from, ?string $default = null): ?string
 	{
 		if (false !== ($index = strpos($s, $from)))
 		{
@@ -41,7 +41,7 @@ final class Strings
 	/**
 	 * Get a portion of $s from 0 to last occurance of $to.
 	 */
-	public static function rsubstrTo(string $s, string $to, string $default = null): ?string
+	public static function rsubstrTo(string $s, string $to, ?string $default = null): ?string
 	{
 		if (false !== ($index = strrpos($s, $to)))
 		{
@@ -53,7 +53,7 @@ final class Strings
 	/**
 	 * Get a portion of $s from the last occurance of $from.
 	 */
-	public static function rsubstrFrom(string $s, string $from, string $default = null): ?string
+	public static function rsubstrFrom(string $s, string $from, ?string $default = null): ?string
 	{
 		if (false !== ($index = strrpos($s, $from)))
 		{

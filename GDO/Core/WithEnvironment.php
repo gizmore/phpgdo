@@ -33,7 +33,7 @@ trait WithEnvironment
 	/**
 	 * Optional user for running the method. Default is GDO_User::current()
 	 */
-	public function runAs(GDO_User $runAs = null): self
+	public function runAs(?GDO_User $runAs = null): self
 	{
 		$this->runAs = $runAs ? $runAs : GDO_User::current();
 		return $this;

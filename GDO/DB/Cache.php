@@ -198,7 +198,7 @@ class Cache
 		}
 	}
 
-	public function getNewDummy(array $blankVars = null): GDO
+	public function getNewDummy(?array $blankVars = null): GDO
 	{
 		return call_user_func([
 			$this->klass,
@@ -572,7 +572,7 @@ class Cache
 	/**
 	 * Remove a file from filecache if it exists.
 	 */
-	public static function fileRemove(string $key = null): bool
+	public static function fileRemove(?string $key = null): bool
 	{
 		$filename = self::filePath($key);
 		if (FileUtil::isFile($filename))

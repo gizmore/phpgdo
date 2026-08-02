@@ -22,7 +22,7 @@ trait WithError
 	/**
 	 * @TODO Unlike the chain pattern, this returns false!
 	 */
-	public function error(string $key, array $args = null): bool
+	public function error(string $key, ?array $args = null): bool
 	{
 		$this->errorKey = $key;
 		$this->errorArgs = $args;

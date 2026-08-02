@@ -50,12 +50,12 @@ trait WithFields
 		return $this;
 	}
 
-	public function addField(GDT $gdt, GDT $after = null, bool $last = true): static
+	public function addField(GDT $gdt, ?GDT $after = null, bool $last = true): static
 	{
 		return $this->addFieldB($gdt, $after, $last);
 	}
 
-	protected function addFieldB(GDT $gdt, GDT $after = null, bool $last = true): static
+	protected function addFieldB(GDT $gdt, ?GDT $after = null, bool $last = true): static
 	{
 		$this->addFieldA($gdt, $after, $last);
 
@@ -88,7 +88,7 @@ trait WithFields
 		return $this;
 	}
 
-	protected function addFieldA(GDT $gdt, GDT $after = null, bool $last = true): void
+	protected function addFieldA(GDT $gdt, ?GDT $after = null, bool $last = true): void
 	{
 		# Init
 		if (!isset($this->fields))

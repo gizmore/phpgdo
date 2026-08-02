@@ -16,7 +16,7 @@ trait WithDescription
 	public $descrRaw;
 	public $descrEscaped = true;
 
-	public function description(string $key, array $args = null): self
+	public function description(string $key, ?array $args = null): self
 	{
 		$this->descrRaw = null;
 		$this->descrKey = $key;

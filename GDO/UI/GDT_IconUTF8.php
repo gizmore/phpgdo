@@ -146,7 +146,7 @@ final class GDT_IconUTF8
 		'write' => '✎',
 	];
 
-	public static function iconS(string $icon, string $iconText = null, string $style = null): string
+	public static function iconS(string $icon, ?string $iconText = null, ?string $style = null): string
 	{
 		$title = $iconText ? ' title="' . html($iconText) . '"' : GDT::EMPTY_STRING;
 		$_icon = self::$MAP[$icon] ?? $icon;

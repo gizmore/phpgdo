@@ -167,7 +167,7 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	public function sorted(string $sortableURL = null): static
+	public function sorted(?string $sortableURL = null): static
 	{
 		if ($sortableURL)
 		{
@@ -186,7 +186,7 @@ class GDT_Table extends GDT
 		return $this;
 	}
 
-	public function filtered(bool $filtered = true, GDT_Filter $filter = null): static
+	public function filtered(bool $filtered = true, ?GDT_Filter $filter = null): static
 	{
 		$this->filtered = $filtered;
 		unset($this->filter);
@@ -244,7 +244,7 @@ class GDT_Table extends GDT
 			Module_Table::instance()->cfgItemsPerPage());
 	}
 
-	public function paginated(bool $paginated = true, string $href = null, int $ipp = 0): self
+	public function paginated(bool $paginated = true, ?string $href = null, int $ipp = 0): self
 	{
 		unset($this->pagemenu);
 		if ($paginated)
@@ -435,7 +435,7 @@ class GDT_Table extends GDT
 	### Fetch As ###
 	################
 
-	public function fetchAs(GDO $fetchAs = null): self
+	public function fetchAs(?GDO $fetchAs = null): self
 	{
 		if ($fetchAs)
 		{

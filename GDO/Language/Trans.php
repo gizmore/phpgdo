@@ -158,7 +158,7 @@ final class Trans
 	/**
 	 * Translate into current ISO.
 	 */
-	public static function t(string $key, array $args = null): string|array
+	public static function t(string $key, ?array $args = null): string|array
 	{
 		return self::tiso(self::$ISO, $key, $args);
 	}
@@ -166,7 +166,7 @@ final class Trans
 	/**
 	 * Translate key into a language.
 	 */
-	public static function tiso(?string $iso, string $key, array $args = null): string|array
+	public static function tiso(?string $iso, string $key, ?array $args = null): string|array
 	{
         $iso = $iso ?: self::$ISO;
 		$cache = self::load($iso);

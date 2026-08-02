@@ -128,7 +128,7 @@ class GDT_Url extends GDT_String
 		return $this->validateUrl($value);
 	}
 
-	public function validateUrl(URL $url = null): bool
+	public function validateUrl(?URL $url = null): bool
 	{
 		# null allowed by parent validator
 		if ((!$url) || (null == ($value = $url->raw)))

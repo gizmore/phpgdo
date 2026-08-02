@@ -14,7 +14,7 @@ namespace GDO\Core;
 class GDT_EnumNoI18n extends GDT_Enum
 {
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		return $var === null ? t('none') : $var;
 	}

@@ -174,7 +174,7 @@ class GDT_Timestamp extends GDT_DBField
 		return (string) (Time::getTimestamp($this->getVar()) * 1000.0);
 	}
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		if ($dt = Time::parseDateTimeDB($var))
 		{

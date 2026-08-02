@@ -73,7 +73,7 @@ class Database
 	private ?string $db;
 	private int $debug;
 
-	public function __construct(string $host, string $user, string $pass, string $db = null, int $debug = 0)
+	public function __construct(string $host, string $user, string $pass, ?string $db = null, int $debug = 0)
 	{
 		self::$INSTANCE = $this;
 		$this->debug = $debug;

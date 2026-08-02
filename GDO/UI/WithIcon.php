@@ -30,7 +30,7 @@ trait WithIcon
 	public string $icon;
 	public string $iconTextRaw;
 	public string $iconTextKey;
-	public ?array $iconTextArgs;	public static function iconS(string $icon, string $iconText = null, float $size = null, string $color = null): string
+	public ?array $iconTextArgs;	public static function iconS(string $icon, ?string $iconText = null, ?float $size = null, ?string $color = null): string
 	{
 		$style = self::iconStyle($size, $color);
 		return call_user_func(GDT_Icon::$iconProvider, $icon, $iconText, $style);
@@ -39,7 +39,7 @@ trait WithIcon
 	public ?int $iconSize = null;
 	public ?string $iconColor = null;
 
-	public static function rawIconS(string $icon, string $iconText = null, float $size = null, string $color = null): string
+	public static function rawIconS(string $icon, ?string $iconText = null, ?float $size = null, ?string $color = null): string
 	{
 		$style = self::iconStyle($size, $color);
 		$title = $iconText ? " title=\"{$iconText}\"" : GDT::EMPTY_STRING;
@@ -61,7 +61,7 @@ trait WithIcon
 	############
 
 
-	public function icon(string $icon = null): self
+	public function icon(?string $icon = null): self
 	{
 		if ($icon)
 		{
@@ -81,7 +81,7 @@ trait WithIcon
 	}
 
 
-	public function iconText(string $textKey, array $textArgs = null): self
+	public function iconText(string $textKey, ?array $textArgs = null): self
 	{
 		unset($this->iconTextRaw);
 		$this->iconTextKey = $textKey;
@@ -110,7 +110,7 @@ trait WithIcon
 		return $this;
 	}
 
-	public function tooltip(string $textKey, array $textArgs = null): self
+	public function tooltip(string $textKey, ?array $textArgs = null): self
 	{
 		if (!isset($this->icon))
 		{

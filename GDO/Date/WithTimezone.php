@@ -15,7 +15,7 @@ trait WithTimezone
 
 	public $timezone = '1';
 
-	public function userTimezone(GDO_User $user = null)
+	public function userTimezone(?GDO_User $user = null)
 	{
 		$user = $user ? $user : GDO_User::current();
 		return $this->timezone($user->getTimezone());

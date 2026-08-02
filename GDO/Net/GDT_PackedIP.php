@@ -45,7 +45,7 @@ final class GDT_PackedIP extends GDT_String
 		return (string)inet_pton($ip);
 	}
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		return self::packed2ip($var);
 	}

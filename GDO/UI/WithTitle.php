@@ -23,7 +23,7 @@ trait WithTitle
 	public ?array $titleArgs;
 	public bool $titleEscaped = false;
 
-	public function title(string $key, array $args = null, bool $escaped = false): static
+	public function title(string $key, ?array $args = null, bool $escaped = false): static
 	{
 		unset($this->titleRaw);
 		$this->titleKey = $key;

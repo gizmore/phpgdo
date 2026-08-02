@@ -95,7 +95,7 @@ class GDT_Container extends GDT
 	/**
 	 * Add a @see GDT_Span to this container.
 	 */
-	public function addText(string $key, array $args = null): static
+	public function addText(string $key, ?array $args = null): static
 	{
 		$text = GDT_Paragraph::make()->text($key, $args);
 		return $this->addField($text);

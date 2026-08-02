@@ -41,7 +41,7 @@ trait WithValue
 		return $this->notNull ? self::HTML_REQUIRED : GDT::EMPTY_STRING;
 	}
 
-	public function gdoInitial(GDO $gdo = null): static
+	public function gdoInitial(?GDO $gdo = null): static
 	{
 		if ($gdo)
 		{

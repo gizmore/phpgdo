@@ -406,7 +406,7 @@ class GDO_Module extends GDO
 	/**
 	 * Render a template.
 	 */
-	public function php(string $path, array $tVars = null): string
+	public function php(string $path, ?array $tVars = null): string
 	{
 		return GDT_Template::php($this->getName(), $path, $tVars);
 	}
@@ -428,7 +428,7 @@ class GDO_Module extends GDO
 	 * Get a GDT_Template.
 	 * In JSON mode return a GDT_Array.
 	 */
-	public function responsePHP(string $file, array $tVars = null): GDT
+	public function responsePHP(string $file, ?array $tVars = null): GDT
 	{
 		switch (Application::$MODE_DETECTED)
 		{
@@ -442,7 +442,7 @@ class GDO_Module extends GDO
 	/**
 	 * Get a GDT_Template.
 	 */
-	public function templatePHP(string $path, array $tVars = null): GDT
+	public function templatePHP(string $path, ?array $tVars = null): GDT
 	{
 		return GDT_Template::make()->template($this->getName(), $path, $tVars);
 	}
@@ -944,7 +944,7 @@ class GDO_Module extends GDO
 		return $gdt;
 	}
 
-	public function error(string $key, array $args = null): bool
+	public function error(string $key, ?array $args = null): bool
 	{
 		return !Website::error($this->gdoHumanName(), $key, $args);
 	}
@@ -1100,7 +1100,7 @@ class GDO_Module extends GDO
 		return $query->select("IFNULL( ( SELECT uset_var FROM gdo_usersetting {$jn} WHERE {$jn}.uset_name='{$key}' AND {$jn}.uset_user={$userFieldName} ), {$default} ) AS {$key}");
 	}
 
-	public function getUserConfigACLField(string $key, GDO_User $user = null): ?GDT_ACL
+	public function getUserConfigACLField(string $key, ?GDO_User $user = null): ?GDT_ACL
 	{
 		$c = $this->settingsACL;
 		$user = $user ?: GDO_User::current();
@@ -1214,7 +1214,7 @@ class GDO_Module extends GDO
 		return $mode === 'no' ? GDT::EMPTY_STRING : '.min';
 	}
 
-	public static function config_var(string $moduleName, string $key, string $default = null): ?string
+	public static function config_var(string $moduleName, string $key, ?string $default = null): ?string
 	{
 		if ($module = ModuleLoader::instance()->getModule($moduleName, false))
 		{
@@ -1280,7 +1280,7 @@ class GDO_Module extends GDO
 		CSS::addFile($path);
 	}
 
-	public function message(string $key, array $args = null): bool
+	public function message(string $key, ?array $args = null): bool
 	{
 		return !!Website::message($this->gdoHumanName(), $key, $args);
 	}
@@ -1290,12 +1290,12 @@ class GDO_Module extends GDO
 		return strtolower($this->getModuleName());
 	}
 
-	protected function errorSystemDependency(string $key, array $args = null): bool
+	protected function errorSystemDependency(string $key, ?array $args = null): bool
 	{
 		return $this->error('err_system_dependency', [$this->gdoHumanName(), t($key, $args)]);
 	}
 
-	protected function warningSystemDependency(string $key, array $args = null): bool
+	protected function warningSystemDependency(string $key, ?array $args = null): bool
 	{
 		return $this->message('warn_system_dependency', [$this->gdoHumanName(), t($key, $args)]);
 	}

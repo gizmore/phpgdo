@@ -40,7 +40,7 @@ class  GDT_Enum extends GDT_Select
 		]);
 	}
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		return $var === null ? self::none() : t('enum_' . $var);
 	}

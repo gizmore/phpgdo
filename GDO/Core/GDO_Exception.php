@@ -34,7 +34,7 @@ class GDO_Exception extends Exception
 
 
 
-	public function __construct(string $key = null, array $args = null, int $code = self::GDT_ERROR_CODE, Throwable $previous = null)
+	public function __construct(?string $key = null, ?array $args = null, int $code = self::GDT_ERROR_CODE, ?Throwable $previous = null)
 	{
 		$message = t($key, $args);
 		parent::__construct($message, $code, $previous);
@@ -43,7 +43,7 @@ class GDO_Exception extends Exception
 	}
 
 
-	public static function raw(string $message, int $code = self::GDO_ERROR_CODE, Throwable $previous = null): static
+	public static function raw(string $message, int $code = self::GDO_ERROR_CODE, ?Throwable $previous = null): static
 	{
 		return new static('%s', [$message], $code, $previous);
 	}

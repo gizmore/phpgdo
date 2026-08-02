@@ -136,7 +136,7 @@ class GDT_Message extends GDT_Text
 	/**
 	 * On make, setup order and search field.
 	 */
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		$gdt = parent::make($name);
 		$gdt->num = self::$NUM++;

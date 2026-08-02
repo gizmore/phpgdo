@@ -31,12 +31,12 @@ trait WithLabel
 	public ?array $labelArgs;
 	public bool $labelNone = true;
 
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		return self::makeWithLabel($name);
 	}
 
-	public static function makeWithLabel(string $name = null): static
+	public static function makeWithLabel(?string $name = null): static
 	{
 		$obj = static::makeNamed($name);
         if ($key = $obj->gdtDefaultLabel())
@@ -54,7 +54,7 @@ trait WithLabel
         return $obj;
     }
 
-	public function label(string $key, array $args = null): self
+	public function label(string $key, ?array $args = null): self
 	{
 		unset($this->labelRaw);
 		$this->labelKey = $key;

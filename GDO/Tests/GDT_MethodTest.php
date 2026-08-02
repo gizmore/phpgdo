@@ -37,7 +37,7 @@ final class GDT_MethodTest extends GDT_Method
 	############
 	### Exec ###
 	############
-	public function execute(string $button = null): GDT
+	public function execute(?string $button = null): GDT
 	{
 		$this->inputs = $this->inputs ?? [];
 		if ($button)

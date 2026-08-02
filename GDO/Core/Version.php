@@ -22,7 +22,7 @@ final class Version
 	public int $minor = 0;
 	public int $patch = 0;
 
-	public function __construct(string $var = null)
+	public function __construct(?string $var = null)
 	{
 		if ($var)
 		{

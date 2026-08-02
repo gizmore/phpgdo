@@ -26,7 +26,7 @@ class GDT_DeleteButton extends GDT_Submit
 
 	public function gdtDefaultName(): ?string { return 'delete'; }
 
-	public function confirmText($key, array $args = null)
+	public function confirmText($key, ?array $args = null)
 	{
 		# put in form rendering
 		$this->confirmKey = $key;

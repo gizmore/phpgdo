@@ -61,13 +61,13 @@ class GDT_Link extends GDT_Url
 	/**
 	 * Output a link / anchor. Not the default GDT behaviour?
 	 */
-	public static function anchor(string $href, string $textRaw = null): string
+	public static function anchor(string $href, ?string $textRaw = null): string
 	{
 		$textRaw = $textRaw !== null ? $textRaw : $href;
 		return self::make()->href($href)->textRaw($textRaw)->render();
 	}
 
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		$obj = self::makeWithLabel($name);
 		return $obj->text($name);

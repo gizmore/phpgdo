@@ -169,7 +169,7 @@ final class Website
 		return self::error($titleRaw, '%s', [$errorRaw], $log, $code);
 	}
 
-	public static function error(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = GDO_Exception::GDT_ERROR_CODE): GDT_Response
+	public static function error(string $titleRaw, string $key, ?array $args = null, bool $log = true, int $code = GDO_Exception::GDT_ERROR_CODE): GDT_Response
 	{
 		$app = Application::$INSTANCE;
 		$app::setResponseCode($code);
@@ -204,7 +204,7 @@ final class Website
 	}
 
 
-	public static function message(string $titleRaw, string $key, array $args = null, bool $log = true, int $code = 200): GDT_Response
+	public static function message(string $titleRaw, string $key, ?array $args = null, bool $log = true, int $code = 200): GDT_Response
 	{
 		$app = Application::$INSTANCE;
 		$app::setResponseCode($code);

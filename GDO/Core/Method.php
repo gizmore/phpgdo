@@ -128,7 +128,7 @@ abstract class Method
 
 	public function isSidebarEnabled(): bool { return true; }
 
-	public function getAutoButton(array $keys = null): ?string
+	public function getAutoButton(?array $keys = null): ?string
 	{
 		$first = null;
 		$keys = Arrays::arrayed($keys);
@@ -483,7 +483,7 @@ abstract class Method
 		return $this->getModule()->isEnabled();
 	}
 
-	public function error(string $key, array $args = null, int $code = GDO_Exception::GDT_ERROR_CODE, bool $log = true): GDT
+	public function error(string $key, ?array $args = null, int $code = GDO_Exception::GDT_ERROR_CODE, bool $log = true): GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
 		return Website::error($titleRaw, $key, $args, $log, $code);
@@ -682,7 +682,7 @@ abstract class Method
 	### Input ###
 	#############
 
-	public function executeWithInputs(array $inputs = null, bool $checkPermission = true): GDT
+	public function executeWithInputs(?array $inputs = null, bool $checkPermission = true): GDT
 	{
 		$this->inputs = $inputs;
 		return $this->executeWithInit($checkPermission);
@@ -692,7 +692,7 @@ abstract class Method
 	 * Execute this method without any checks or events.
 	 * Used when invoking methods inside other methods.
 	 */
-	public function execWithInputs(array $inputs = null): GDT
+	public function execWithInputs(?array $inputs = null): GDT
 	{
 		$this->inputs = $inputs;
 		$this->applyInput();
@@ -742,7 +742,7 @@ abstract class Method
 	#############
 
 
-	public function message(string $key, array $args = null, int $code = 200, bool $log = true): GDT
+	public function message(string $key, ?array $args = null, int $code = 200, bool $log = true): GDT
 	{
 		$titleRaw = $this->getModule()->gdoHumanName();
 		return Website::message($titleRaw, $key, $args, $log, $code);
@@ -763,7 +763,7 @@ abstract class Method
 		return GDT_Response::make();
 	}
 
-	public function redirectMessage(string $key, array $args = null, string $href = null): GDT
+	public function redirectMessage(string $key, ?array $args = null, ?string $href = null): GDT
 	{
 		$re = GDT_Redirect::to($href)->time(20)->redirectMessage($key, $args);
 		GDT_Page::instance()->topResponse()->addField($re);
@@ -771,7 +771,7 @@ abstract class Method
 	}
 
 
-	public function redirectError(string $key, array $args = null, string $href = null): GDT
+	public function redirectError(string $key, ?array $args = null, ?string $href = null): GDT
 	{
 		$re = GDT_Redirect::to($href)->time(20)->redirectError($key, $args);
 		GDT_Page::instance()->topResponse()->addField($re);
@@ -783,7 +783,7 @@ abstract class Method
 	################
 
 
-	public function templatePHP(string $path, array $tVars = null): GDT_Template
+	public function templatePHP(string $path, ?array $tVars = null): GDT_Template
 	{
 		return GDT_Template::make()->template(
 			$this->getModuleName(), $path, $tVars);

@@ -49,7 +49,7 @@ final class GDT_ACL extends GDT
 
 //	public string $initial = '';
 
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		return static::makeNamed($name)->initACLFields()->label($name);
 	}
@@ -150,7 +150,7 @@ final class GDT_ACL extends GDT
 	### DB ###
 	##########
 
-	public function initialACL(string $relation, string $level = null, string $permission = null): static
+	public function initialACL(string $relation, ?string $level = null, ?string $permission = null): static
 	{
 		$this->aclRelation->initial($relation);
 		$this->aclLevel->initial($level);

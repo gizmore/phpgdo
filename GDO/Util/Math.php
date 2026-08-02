@@ -15,7 +15,7 @@ final class Math
 	#############
 	### Clamp ###
 	#############
-	public static function clampInt(int $number, int $min = null, int $max = null): int
+	public static function clampInt(int $number, ?int $min = null, ?int $max = null): int
 	{
 		if (($min !== null) && ($number < $min))
 		{
@@ -28,7 +28,7 @@ final class Math
 		return $number;
 	}
 
-	public static function clampFloat(float $number, float $min = null, float $max = null): float
+	public static function clampFloat(float $number, ?float $min = null, ?float $max = null): float
 	{
 		if (($min !== null) && ($number < $min))
 		{

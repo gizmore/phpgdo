@@ -42,7 +42,7 @@ final class GDT_Redirect extends GDT
 	 * Works by injecting to top response.
 	 * Default redirect target is hrefBack.
 	 */
-	public static function to(string $href = null, string $key = null, array $args = null, int $time = self::DEFAULT_TIMEOUT): self
+	public static function to(?string $href = null, ?string $key = null, ?array $args = null, int $time = self::DEFAULT_TIMEOUT): self
 	{
 		$re = self::make()->href($href ?: self::hrefBack())
 						  ->text($key, $args);
@@ -55,7 +55,7 @@ final class GDT_Redirect extends GDT
 	/**
 	 * Try to get a referrer URL for hrefBack.
 	 */
-	public static function hrefBack(string $default = null): string
+	public static function hrefBack(?string $default = null): string
 	{
 		if (Application::$INSTANCE->isCLI())
 		{
@@ -84,7 +84,7 @@ final class GDT_Redirect extends GDT
 	#############
 	### Flash ###
 	#############
-	public function redirectError(string $key, array $args = null, bool $log = true): self
+	public function redirectError(string $key, ?array $args = null, bool $log = true): self
 	{
 		Website::error(t('redirect'), $key, $args, $log, self::CODE);
 		if (module_enabled('Session'))
@@ -99,7 +99,7 @@ final class GDT_Redirect extends GDT
 		return $this;
 	}
 
-	public function redirectMessage(string $key, array $args = null, bool $log = true): self
+	public function redirectMessage(string $key, ?array $args = null, bool $log = true): self
 	{
 		Website::message(t('redirect'), $key, $args, $log, self::CODE);
 		if (module_enabled('Session'))

@@ -48,7 +48,7 @@ abstract class GDT
 	 * Create a GDT instance.
 	 * The very basic GDT don't know anything, don't have attributes or much functions.
 	 */
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		return new static();
 	}
@@ -114,7 +114,7 @@ abstract class GDT
 	}
 	#PP#end#
 
-	public function gdtCopy(string $name=null): static
+	public function gdtCopy(?string $name = null): static
 	{
 		$copy = call_user_func([$this, 'make'], $name);
 		foreach (get_object_vars($this) as $k => $v)
@@ -292,7 +292,7 @@ abstract class GDT
 	/**
 	 * Display a given var with this GDT.
 	 */
-	public function displayVar(string $var=null) : string
+	public function displayVar(?string $var = null) : string
 	{
 		return $var === null ? self::none() : html($var);
 	}
@@ -433,7 +433,7 @@ abstract class GDT
 		return GDT::EMPTY_STRING;
 	}
 
-	public function error(string $key, array $args = null) : bool
+	public function error(string $key, ?array $args = null) : bool
 	{
 		return false;
 	}
@@ -647,7 +647,7 @@ abstract class GDT
 	}
 
 
-	public function addField(GDT $field, GDT $after=null, bool $last=true): static
+	public function addField(GDT $field, ?GDT $after = null, bool $last=true): static
 	{
 		return $this->var($this->getVar() . $field->getVar());
 	}

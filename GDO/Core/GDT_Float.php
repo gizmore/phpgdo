@@ -44,7 +44,7 @@ class GDT_Float extends GDT_Int
         return WS::wrFloat($float);
     }
 
-    public static function displayS(string $var = null, int $decimals = 4, string $dot = null, string $comma = null): string
+    public static function displayS(?string $var = null, int $decimals = 4, ?string $dot = null, ?string $comma = null): string
 	{
 		if ($var !== null)
 		{
@@ -83,7 +83,7 @@ class GDT_Float extends GDT_Int
 	 * Handle german and english inputs by keeping only the most right separator.
 	 * More than one separator removes them all.
 	 */
-	public static function inputToVarS(string $input = null): ?string
+	public static function inputToVarS(?string $input = null): ?string
 	{
 		if ($input === null)
 		{

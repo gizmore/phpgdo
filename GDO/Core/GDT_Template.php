@@ -66,7 +66,7 @@ class GDT_Template extends GDT
 	 * Include a template for a user.
 	 * Sets/Wraps locale ISO for the template call.
 	 */
-	public static function phpUser(GDO_User $user, string $moduleName, string $path, array $tVars = null): string
+	public static function phpUser(GDO_User $user, string $moduleName, string $path, ?array $tVars = null): string
 	{
 		$old = Trans::$ISO;
 		Trans::setISO($user->getLangISO());
@@ -78,7 +78,7 @@ class GDT_Template extends GDT
 	/**
 	 * Render a template via PHP include.
 	 */
-	public static function php(string $moduleName, string $path, array $tVars = null): string
+	public static function php(string $moduleName, string $path, ?array $tVars = null): string
 	{
 		try
 		{
@@ -267,7 +267,7 @@ class GDT_Template extends GDT
 		return $this->renderTemplate($f);
 	}
 
-	public function templateHead(string $module, string $path, array $vars = null): self
+	public function templateHead(string $module, string $path, ?array $vars = null): self
 	{
 		$this->templateHeadModule = $module;
 		$this->templateHeadPath = $path;
@@ -289,7 +289,7 @@ class GDT_Template extends GDT
 	# ########################
 //	private static $PATHES = [];
 
-	public function template(string $moduleName, string $path, array $tVars = null): self
+	public function template(string $moduleName, string $path, ?array $tVars = null): self
 	{
 		$this->templateModule = $moduleName;
 		$this->templatePath = $path;

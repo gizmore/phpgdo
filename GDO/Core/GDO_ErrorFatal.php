@@ -10,7 +10,7 @@ namespace GDO\Core;
 class GDO_ExceptionFatal extends GDO_Exception
 {
 
-	public function __construct(string $key, array $args = null, $code = GDO_Exception::GDO_ERROR_CODE, \Throwable $previous = null)
+	public function __construct(string $key, ?array $args = null, $code = GDO_Exception::GDO_ERROR_CODE, ?\Throwable $previous = null)
 	{
 		parent::__construct($key, $args, $code, $previous);
 	}

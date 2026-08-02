@@ -22,7 +22,7 @@ trait WithSubTitle
 	public ?array $subtitleArgs;
 	public bool $subtitleEscaped = false;
 
-	public function subtitle(string $key, array $args = null, bool $escaped = false): self
+	public function subtitle(string $key, ?array $args = null, bool $escaped = false): self
 	{
 		unset($this->subtitleRaw);
 		$this->subtitleKey = $key;

@@ -29,7 +29,7 @@ class GDT_Image extends GDT
 	############
 	public string $src;
 
-	public static function fromFile(GDO_File $file, string $name = null)
+	public static function fromFile(GDO_File $file, ?string $name = null)
 	{
 		return self::make($name)->src($file->getHref());
 	}

@@ -11,7 +11,7 @@ class GDT_Percent extends GDT_Decimal
 		$this->icon('percent');
 	}
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		$back = $var === null ? '∞' : parent::displayVar($var);
 		return $back . '%';

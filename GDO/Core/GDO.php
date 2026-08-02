@@ -170,7 +170,7 @@ abstract class GDO extends GDT
 	/**
 	 * Create a new entity instance.
 	 */
-	public static function blank(array $initial = null): static
+	public static function blank(?array $initial = null): static
 	{
 		return self::entity(self::getBlankData($initial))->dirty()->setPersisted(false);
 	}
@@ -225,7 +225,7 @@ abstract class GDO extends GDT
 	/**
 	 * Raw initial string data.
 	 */
-	public static function getBlankData(array $initial = null): array
+	public static function getBlankData(?array $initial = null): array
 	{
 		$table = self::table();
 
@@ -833,7 +833,7 @@ abstract class GDO extends GDT
 		return $this;
 	}
 
-	public function setVars(array $vars = null, $markDirty = true): self
+	public function setVars(?array $vars = null, $markDirty = true): self
 	{
 		foreach ($vars as $key => $var)
 		{
@@ -898,7 +898,7 @@ abstract class GDO extends GDT
 	 *
 	 * @throws GDO_Exception
 	 */
-	public function getValue(string $var = null): mixed
+	public function getValue(?string $var = null): mixed
 	{
 		throw new GDO_Exception('err_gdo_no_gdt', ['getValue', $this->gdoHumanName()]);
 	}
@@ -916,7 +916,7 @@ abstract class GDO extends GDT
 	### DB ###
 	##########
 
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		return new static();
 	}
@@ -1755,7 +1755,7 @@ abstract class GDO extends GDT
 	/**
 	 * @return static[]
 	 */
-	public function &all(string $order = null, bool $json = false): array
+	public function &all(?string $order = null, bool $json = false): array
 	{
 		$order = $order ?: $this->gdoPrimaryKeyColumn()->getName();
 		return self::allWhere('true', $order, $json);
@@ -1814,7 +1814,7 @@ abstract class GDO extends GDT
 	 * @throws GDO_DBException
 	 * @return static[]
 	 */
-	public function &allCached(string $order = null, bool $json = false): array
+	public function &allCached(?string $order = null, bool $json = false): array
 	{
 		if ($this->cached())
 		{

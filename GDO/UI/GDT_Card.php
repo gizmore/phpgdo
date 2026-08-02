@@ -94,7 +94,7 @@ class GDT_Card extends GDT
 	 * You can override the ago subtitle.
 	 * If you do not want anything, just don't use this method.
 	 */
-	public function creatorHeader(string $byField = null, string $atField = null, string $subtitleOverride = null, bool $subtitleNoUser = false): self
+	public function creatorHeader(?string $byField = null, ?string $atField = null, ?string $subtitleOverride = null, bool $subtitleNoUser = false): self
 	{
 		if ($byField)
 		{

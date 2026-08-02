@@ -63,7 +63,7 @@ class GDT_Dialog extends GDT
 		return $this;
 	}
 
-	public function okButton($key = 'btn_ok', array $args = null)
+	public function okButton($key = 'btn_ok', ?array $args = null)
 	{
 		$btn = GDT_Button::make('ok')->label($key, $args);
 		$btn->attr('onclick', "GDO.closeDialog('{$this->id()}', 'ok')");
@@ -71,7 +71,7 @@ class GDT_Dialog extends GDT
 		return $this;
 	}
 
-	public function cancelButton($key = 'btn_cancel', array $args = null)
+	public function cancelButton($key = 'btn_cancel', ?array $args = null)
 	{
 		$btn = GDT_Button::make('cancel')->label($key, $args);
 		$btn->attr('onclick', "GDO.closeDialog('{$this->id()}', 'cancel')");

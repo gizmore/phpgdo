@@ -73,7 +73,7 @@ trait WithHeaders
 	 *
 	 * @return ArrayResult
 	 */
-	public function multisort(string $defaultOrder = null): ArrayResult
+	public function multisort(?string $defaultOrder = null): ArrayResult
 	{
 		$result = $this->getResult();
 		$orders = $this->getOrders($defaultOrder);
@@ -87,7 +87,7 @@ trait WithHeaders
 	 *
 	 * @return bool[string]
 	 */
-	private function getOrders(string $defaultOrder = null): array
+	private function getOrders(?string $defaultOrder = null): array
 	{
 		$orders = [];
 		$this->getHeaders()->inputs($this->getInputs());

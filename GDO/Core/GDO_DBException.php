@@ -17,7 +17,7 @@ final class GDO_DBException extends GDO_Exception
 	public string $errmsg;
 
 
-	public function __construct(int $errcode, string $errmsg, string $query, \Throwable $previous = null)
+	public function __construct(int $errcode, string $errmsg, string $query, ?\Throwable $previous = null)
 	{
 		parent::__construct('err_db', [$errcode, $errmsg, $query], self::DB_ERROR_CODE, $previous);
 		$this->errcode = $errcode;

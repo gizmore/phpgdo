@@ -15,7 +15,7 @@ trait WithPlaceholder
 	public string $placeholderKey;
 	public array $placeholderArgs;
 
-	public function placeholder(string $key, array $args = null): self
+	public function placeholder(string $key, ?array $args = null): self
 	{
 		unset($this->placeholderRaw);
 		$this->placeholderKey = $key;

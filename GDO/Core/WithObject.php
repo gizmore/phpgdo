@@ -63,7 +63,7 @@ trait WithObject
 		return $value ? $value->getID() : null;
 	}
 
-	public function displayVar(string $var = null): string
+	public function displayVar(?string $var = null): string
 	{
 		if (isset($this->multiple) && $this->multiple)
 		{

@@ -117,7 +117,7 @@ final class HTTP
 	 *
 	 * @return string content from curl request.
 	 */
-	public static function getFromURL($url, $returnHeader = false, $cookie = false, array $httpHeaders = null, string &$error = '')
+	public static function getFromURL($url, $returnHeader = false, $cookie = false, ?array $httpHeaders = null, string &$error = '')
 	{
 		# Cleanup URL
 // 		$url = trim($url);

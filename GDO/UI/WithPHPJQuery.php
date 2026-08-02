@@ -53,7 +53,7 @@ trait WithPHPJQuery
 	 *
 	 * @return self|string
 	 */
-	public function attr(string $attr, string $value = null)
+	public function attr(string $attr, ?string $value = null)
 	{
 		if (!isset($this->htmlAttributes))
 		{

@@ -27,7 +27,7 @@ trait WithTarget
 		return $this->target('_blank');
 	}
 
-	public function target(string $target = null): self
+	public function target(?string $target = null): self
 	{
 		if ($target === null)
 		{

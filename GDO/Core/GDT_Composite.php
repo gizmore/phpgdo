@@ -22,7 +22,7 @@ abstract class GDT_Composite extends GDT_Container
 	use WithError;
 	use WithFormAttributes;
 
-	public static function make(string $name = null): static
+	public static function make(?string $name = null): static
 	{
 		$obj = self::makeNamed($name);
 		$obj->addFields(...$obj->gdoCompositeFields());
@@ -189,7 +189,7 @@ abstract class GDT_Composite extends GDT_Container
 		return implode(' - ', $errors);
 	}
 
-	public function tooltip(string $key, array $args = null): self
+	public function tooltip(string $key, ?array $args = null): self
 	{
 		foreach ($this->getAllFields() as $gdt)
 		{

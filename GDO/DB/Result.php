@@ -158,7 +158,7 @@ class Result
 	 *
 	 * @return GDO[]
 	 */
-	public function &fetchAllArray2dObject(GDO $table = null, $json = false): array
+	public function &fetchAllArray2dObject(?GDO $table = null, $json = false): array
 	{
 		$table = $table ?: $this->table;
 		$array2d = [];
@@ -172,7 +172,7 @@ class Result
 	/**
 	 * @return GDO[]
 	 */
-	public function fetchAllArrayAssoc2dObject(GDO $table = null): array
+	public function fetchAllArrayAssoc2dObject(?GDO $table = null): array
 	{
 		$table = $table ? $table : $this->table;
 		$array2d = [];

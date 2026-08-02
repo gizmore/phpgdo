@@ -14,7 +14,7 @@ final class GDO_RedirectError extends GDO_Exception
 
 	use WithHREF;
 
-	public function __construct(string $key, ?array $args, string $href, int $code = GDO_Exception::GDT_ERROR_CODE, \Throwable $previous = null)
+	public function __construct(string $key, ?array $args, string $href, int $code = GDO_Exception::GDT_ERROR_CODE, ?\Throwable $previous = null)
 	{
 		parent::__construct($key, $args, $code, $previous);
 		$this->href = $href;

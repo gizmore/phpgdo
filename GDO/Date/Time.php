@@ -168,7 +168,7 @@ final class Time
 	 *
 	 * @throws GDO_Exception
 	 */
-	public static function parseDate(?string $date, string $timezone = null, string $format = 'parse'): ?float
+	public static function parseDate(?string $date, ?string $timezone = null, string $format = 'parse'): ?float
 	{
 		return self::parseDateIso(Trans::$ISO, $date, $timezone, $format);
 	}
@@ -181,7 +181,7 @@ final class Time
 	 *
 	 * @throws GDO_Exception
 	 */
-	public static function parseDateIso(string $iso, ?string $date, string $timezone = null, string $format = 'parse'): ?float
+	public static function parseDateIso(string $iso, ?string $date, ?string $timezone = null, string $format = 'parse'): ?float
 	{
 		if ($d = self::parseDateTimeISO($iso, $date, $timezone, $format))
 		{
@@ -195,7 +195,7 @@ final class Time
 	 *
 	 * @throws GDO_Exception
 	 */
-	public static function parseDateTimeISO(string $iso, ?string $date, string $timezone = null, string $format = 'parse'): ?DateTime
+	public static function parseDateTimeISO(string $iso, ?string $date, ?string $timezone = null, string $format = 'parse'): ?DateTime
 	{
 		if (!$date)
 		{
@@ -237,7 +237,7 @@ final class Time
 		return DateTime::createFromFormat($format, $date, $timezone);
 	}
 
-	public static function getTimezoneObject(string $timezoneId = null): DateTimeZone
+	public static function getTimezoneObject(?string $timezoneId = null): DateTimeZone
 	{
 		return $timezoneId === null ?
 			self::$UTC :
@@ -274,7 +274,7 @@ final class Time
 	/**
 	 * @throws GDO_Exception
 	 */
-	public static function parseDateTime(?string $date, string $timezone = null, string $format = 'parse'): ?DateTime
+	public static function parseDateTime(?string $date, ?string $timezone = null, string $format = 'parse'): ?DateTime
 	{
 		return self::parseDateTimeISO(Trans::$ISO, $date, $timezone, $format);
 	}
@@ -282,12 +282,12 @@ final class Time
 	/**
 	 * Display a timestamp.
 	 */
-	public static function displayTimestamp(int|float $timestamp, string $format = 'short', string $default_return = '---',string $timezone = null): string
+	public static function displayTimestamp(int|float $timestamp, string $format = 'short', string $default_return = '---',?string $timezone = null): string
 	{
 		return self::displayTimestampISO(Trans::$ISO, $timestamp, $format, $default_return, $timezone);
 	}
 
-	public static function displayTimestampISO(string $iso, int|float $timestamp, string $format = 'short', string $default_return = '---', string $timezone = null): string
+	public static function displayTimestampISO(string $iso, int|float $timestamp, string $format = 'short', string $default_return = '---', ?string $timezone = null): string
 	{
 		if ($timestamp <= 0)
 		{
@@ -300,7 +300,7 @@ final class Time
 	/**
 	 * Display a localized datetime.
 	 */
-	public static function displayDateTimeISO(string $iso, DateTime $datetime = null, $format = 'short', ?string $default_return = '---', string $timezoneId = null): string
+	public static function displayDateTimeISO(string $iso, ?DateTime $datetime = null, $format = 'short', ?string $default_return = '---', ?string $timezoneId = null): string
 	{
 		$format = tiso($iso, "df_$format");
 		return self::displayDateTimeFormat(
@@ -314,7 +314,7 @@ final class Time
 	/**
 	 * Display a formatted datetime.
 	 */
-	public static function displayDateTimeFormat(DateTime $datetime = null, string $format = 'Y-m-d H:i:s.v', ?string $default_return = '---', string $timezoneId = null): string
+	public static function displayDateTimeFormat(?DateTime $datetime = null, string $format = 'Y-m-d H:i:s.v', ?string $default_return = '---', ?string $timezoneId = null): string
 	{
 		if (!$datetime)
 		{
@@ -328,7 +328,7 @@ final class Time
 	/**
 	 * Display a datetime string.
 	 */
-	public static function displayDate(string $date = null, string $format = 'short', string $default_return = '---', string $timezone = null): string
+	public static function displayDate(?string $date = null, string $format = 'short', string $default_return = '---', ?string $timezone = null): string
 	{
 		return self::displayDateISO(Trans::$ISO, $date, $format, $default_return, $timezone);
 	}
@@ -336,7 +336,7 @@ final class Time
 	/**
 	 * Display a datestring.
 	 */
-	public static function displayDateISO(string $iso, string $date = null, string $format = 'short', string $default_return = '---', string $timezone = null): string
+	public static function displayDateISO(string $iso, ?string $date = null, string $format = 'short', string $default_return = '---', ?string $timezone = null): string
 	{
 		if ($date === null)
 		{
@@ -359,12 +359,12 @@ final class Time
 		return self::parseDateTimeISO('en', $date, $timezone, 'db');
 	}
 
-	public static function displayDateTime(DateTime $datetime = null, string $format = 'short', string $default_return = '---', string $timezone = null): string
+	public static function displayDateTime(?DateTime $datetime = null, string $format = 'short', string $default_return = '---', ?string $timezone = null): string
 	{
 		return self::displayDateTimeISO(Trans::$ISO, $datetime, $format, $default_return, $timezone);
 	}
 
-	public static function displayTimeISO(string $iso, $time = null, string $format = 'short', string $default_return = '---', string $timezoneId = null): string
+	public static function displayTimeISO(string $iso, $time = null, string $format = 'short', string $default_return = '---', ?string $timezoneId = null): string
 	{
 		$dt = self::getDateTime($time);
 		return self::displayDateTimeISO($iso, $dt, $format, $default_return, $timezoneId);

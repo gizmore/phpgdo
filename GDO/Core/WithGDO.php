@@ -26,7 +26,7 @@ trait WithGDO
 		return $this->gdoVarInitial($gdo, false);
 	}
 
-	protected function gdoVarInitial(GDO $gdo = null, bool $initial = false): static
+	protected function gdoVarInitial(?GDO $gdo = null, bool $initial = false): static
 	{
 		$var = $this->initial ?? null;
 		if ($gdo)
@@ -60,7 +60,7 @@ trait WithGDO
 	/**
 	 * Assign the current GDO to this GDT. Copy it's data and load it as intial var.
 	 */
-	public function gdoInitial(GDO $gdo = null): static
+	public function gdoInitial(?GDO $gdo = null): static
 	{
 		return $this->gdoVarInitial($gdo, true);
 	}

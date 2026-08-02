@@ -313,7 +313,7 @@ final class Debug
 		return trim($path, ' /');
 	}
 
-	private static function backtraceArgs(array $args = null): string
+	private static function backtraceArgs(?array $args = null): string
 	{
 		$out = [];
 		if ($args)
@@ -326,7 +326,7 @@ final class Debug
 		return implode(', ', $out);
 	}
 
-	private static function backtraceArg(mixed $arg=null): string
+	private static function backtraceArg(mixed $arg = null): string
 	{
 		if ($arg === null)
 		{
@@ -552,8 +552,6 @@ REQUEST: %s\n\n";
 				return 'PHP Notice';
 			case E_USER_ERROR:
 				return 'PHP Error';
-			case E_STRICT:
-				return 'PHP Strict Error';
 			case E_COMPILE_WARNING:
 			case E_COMPILE_ERROR:
 				return 'PHP Compile Error';
