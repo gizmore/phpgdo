@@ -257,7 +257,7 @@ abstract class Method
 			# 4) Execute
 			if ($result = $this->executeB())
 			{
-				if ($result->hasError())
+				if ($result->hasError() || Application::isError())
 				{
 					$response->code(GDO_Exception::GDT_ERROR_CODE);
 					$response->errorRaw($result->renderError());
@@ -266,10 +266,10 @@ abstract class Method
 			}
 
 			# 4b) Error
-			if (Application::isError())
-			{
-				return $response;
-			}
+//			if (Application::isError())
+//			{
+//				return $response;
+//			}
 
 			# 5) After execute
 			$this->afterExecute();

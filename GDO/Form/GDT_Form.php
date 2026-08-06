@@ -16,6 +16,7 @@ use GDO\Core\WithName;
 use GDO\Core\WithVerb;
 use GDO\Table\GDT_Order;
 use GDO\UI\Color;
+use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Repeat;
 use GDO\UI\GDT_SearchField;
 use GDO\UI\WithPHPJQuery;
@@ -155,6 +156,7 @@ class GDT_Form extends GDT
             }
         }
         $json['form_error'] = $this->renderError();
+        $json['top'] = GDT_Page::instance()->topResponse()->renderJSON();
         return $json;
     }
 
