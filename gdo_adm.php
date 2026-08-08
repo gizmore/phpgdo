@@ -1016,7 +1016,7 @@ elseif (($command === 'config') || ($command === 'conf'))
         echo t('msg_set_config', [
             $key,
             $module->getName(),
-            $config->initial,
+            $config->var,
             $config->gdoExampleVars(),
         ]);
         echo PHP_EOL;
