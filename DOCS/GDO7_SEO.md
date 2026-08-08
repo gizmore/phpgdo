@@ -9,6 +9,21 @@ Automated tests shall point out weak titles and descriptions.
 SEO urls are automagically generated.
 It is planned to have an additional canoncial link mapper module.
 
+### Apache setup
+
+`GDO_SEO_URLS` requires the web server to route SEO paths to `index.php`.
+For a regular Apache installation, copy the tracked template once:
+
+```bash
+cp .htaccess.example .htaccess
+```
+
+Enable `mod_rewrite` and allow the rules in the vhost (`AllowOverride FileInfo`
+or `AllowOverride All`). The supplied template also requires
+`AllowEncodedSlashes NoDecode`. If `GDO_WEB_ROOT` is not `/`, adjust the
+`index.php` paths in `.htaccess` as its comments describe. Do not overwrite an
+existing project-specific `.htaccess` without merging its rules first.
+
 ## GDOv7 SEO: SEO URL generation
 
 Example URL: /webroot/contact/form
