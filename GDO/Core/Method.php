@@ -647,7 +647,7 @@ abstract class Method
 				$time -= $time % $accuracy;
 				$date = Time::getDate($time);
 				$user->saveSettingVar('User', 'last_activity', $date);
-                GDO_Session::instance()->saveVar('sess_time', Time::getDate($time));
+                GDO_Session::instance()->setVar('sess_time', Time::getDate($time));
 			}
 		}
 	}
