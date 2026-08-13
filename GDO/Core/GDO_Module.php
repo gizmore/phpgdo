@@ -589,6 +589,9 @@ class GDO_Module extends GDO
 		return [
 			GDT_AutoInc::make('module_id'),
 			GDT_Sort::make('module_priority'),
+			// Presentation order. Keep this separate from module_priority, which
+			// controls dependency-safe module loading.
+			GDT_Sort::make('module_sort')->initial('1000'),
 			GDT_Name::make('module_name')->notNull()->unique(),
 			GDT_Version::make('module_version')->notNull(),
 			GDT_Checkbox::make('module_enabled')->notNull()->initial('0'),
