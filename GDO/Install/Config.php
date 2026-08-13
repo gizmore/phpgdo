@@ -150,6 +150,7 @@ class Config
 		deff('GDO_SESS_NAME', 'GDO');
 		deff('GDO_SESS_DOMAIN', GDO_DOMAIN);
 		deff('GDO_SESS_TIME', Time::ONE_DAY * 7);
+		deff('GDO_SESS_IP_CHECK', true);
 		deff('GDO_SESS_JS', false);
 		deff('GDO_SESS_HTTPS', Application::$INSTANCE->isTLS());
 		deff('GDO_SESS_SAMESITE', 'lax');
@@ -271,6 +272,7 @@ class Config
 			GDT_String::make('sess_name')->ascii()->caseS()->initialValue(GDO_SESS_NAME)->notNull()->tooltipRaw('Cookie name'),
 			GDT_Hidden::make('sess_domain')->initialValue(GDO_SESS_DOMAIN)->tooltipRaw('Cookie domain. Use .domain.com for all subdomains.'),
 			GDT_UInt::make('sess_time')->initialValue((int)GDO_SESS_TIME)->notNull()->min(30)->tooltipRaw('Session lifetime in seconds'),
+			GDT_Checkbox::make('sess_ip_check')->initialValue(!!GDO_SESS_IP_CHECK)->tooltipRaw('Bind sessions to the exact client IP? Disable for mobile networks or reverse proxies with unstable client IPs.'),
 			GDT_Checkbox::make('sess_js')->initialValue(!!GDO_SESS_JS)->tooltipRaw('Session cookie only secure via JS?'),
 			GDT_Checkbox::make('sess_https')->initialValue(!!GDO_SESS_HTTPS)->tooltipRaw('Session only for https?'),
 			GDT_Checkbox::make('sess_lock')->initialValue(!!GDO_SESS_LOCK)->tooltipRaw('Lock sessions during request?'),

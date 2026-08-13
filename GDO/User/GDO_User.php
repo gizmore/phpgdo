@@ -183,12 +183,19 @@ final class GDO_User extends GDO
     /**
      * Get a user by login, for auth mechanisms
      *
-     * @TODO: getByLogin shall use a hook for mail module to login via email.
-     * @throws GDO_DBException
-     */
+	 * @throws GDO_DBException
+	 */
 	public static function getByLogin(string $name): ?self
 	{
-		return self::getByName($name);
+		if ($user = self::getByName($name))
+		{
+			return $user;
+		}
+
+		# E-mail addresses are provided by the optional Mail user setting.
+		return module_enabled('Mail') && str_contains($name, '@')
+			? self::getSingleWithSetting('Mail', 'email', $name)
+			: null;
 	}
 
     /**

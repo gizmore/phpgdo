@@ -146,7 +146,9 @@ final class Trans
 			$pathISO = "{$path}_{$iso}.php";
 			if (!FileUtil::isFile($pathISO))
 			{
-				$en = GDO_LANGUAGE;
+				// A module is allowed to omit a translation. Always fall back to
+				// its English source, not to the configured default language.
+				$en = 'en';
 				$pathISO = "{$path}_{$en}.php";
 			}
 			self::$CACHE[$iso] = array_merge(self::$CACHE[$iso], include($pathISO));
