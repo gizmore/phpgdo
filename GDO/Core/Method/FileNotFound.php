@@ -71,7 +71,7 @@ final class FileNotFound extends MethodPage
 		{
 			if (module_enabled('Mail'))
 			{
-				$this->send404Mail(GDO_ERROR_EMAIL);
+				$this->send404Mail(GDO_ERROR_MAIL_RECIPIENTS);
 			}
 		}
 	}

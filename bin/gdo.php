@@ -57,7 +57,7 @@ CLI::init();
 Cache::init();
 Trans::$ISO = GDO_LANGUAGE;
 Logger::init(null, GDO_ERROR_LEVEL); # init without username
-Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
+Debug::init(GDO_ERROR_DIE, GDO_SEND_ERROR_MAILS);
 $loader->loadModulesCache();
 $loader->initModules();
 if (!module_enabled('CLI'))

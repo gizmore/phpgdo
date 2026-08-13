@@ -35,7 +35,7 @@ $me = Stub::make();
 
 gdo_cronjob::instance();
 CLI::setServerVars();
-Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
+Debug::init(GDO_ERROR_DIE, GDO_SEND_ERROR_MAILS);
 Logger::init('cronjob', Logger::ALL, 'protected/logs');
 Database::init();
 Trans::setISO('en');

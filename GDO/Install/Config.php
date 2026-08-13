@@ -127,7 +127,7 @@ class Config
 		deff('GDO_ERROR_LEVEL', Logger::ALL);
 		deff('GDO_ERROR_STACKTRACE', true);
 		deff('GDO_ERROR_DIE', true);
-		deff('GDO_ERROR_MAIL', false);
+		deff('GDO_SEND_ERROR_MAILS', false);
 		# Database
 		deff('GDO_SALT', Random::randomKey(16));
 		deff('GDO_DB_ENABLED', true);
@@ -160,7 +160,7 @@ class Config
 		deff('GDO_BOT_NAME', GDO_SITENAME . ' Support System');
 		deff('GDO_BOT_EMAIL', 'support@' . GDO_DOMAIN);
 		deff('GDO_ADMIN_EMAIL', 'administrator@' . GDO_DOMAIN);
-		deff('GDO_ERROR_EMAIL', 'errors@' . GDO_DOMAIN);
+		deff('GDO_ERROR_MAIL_RECIPIENTS', 'errors@' . GDO_DOMAIN);
 		deff('GDO_DEBUG_EMAIL', true);
         # SMTP
         deff('GDO_SMTP_HOST', GDO_DOMAIN);
@@ -243,7 +243,7 @@ class Config
 			GDT_Hidden::make('error_level')->initialValue((int)GDO_ERROR_LEVEL)->tooltipRaw('Log level'),
 			GDT_Checkbox::make('error_stacktrace')->initialValue(!!GDO_ERROR_STACKTRACE)->tooltipRaw('Show stacktrace to users?'),
 			GDT_Checkbox::make('error_die')->initialValue(!!GDO_ERROR_DIE)->tooltipRaw('Die on every little warning and notice?'),
-			GDT_Checkbox::make('error_mail')->initialValue(!!GDO_ERROR_MAIL)->tooltipRaw('Send an email on errors?'),
+			GDT_Checkbox::make('send_error_mails')->initialValue(!!GDO_SEND_ERROR_MAILS)->tooltipRaw('Send PHP/GDO error report mails? Recipients are configured with error_mail_recipients below.'),
 
 			# Database
 			GDT_Divider::make()->label('install_config_section_database'),
@@ -284,7 +284,7 @@ class Config
 			GDT_String::make('bot_name')->notNull()->initialValue(GDO_BOT_NAME)->label('bot_name')->tooltipRaw('Robot Mail sender Name'),
 			GDT_String::make('bot_email')->notNull()->initialValue(GDO_BOT_EMAIL)->label('bot_mail')->tooltipRaw('Robot Mail sender Mail'),
 			GDT_String::make('admin_email')->notNull()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail')->tooltipRaw('Administrator Mail'),
-			GDT_String::make('error_email')->notNull()->initialValue(GDO_ERROR_EMAIL)->label('error_mail')->tooltipRaw('Error Mail recipients. separate by comma.'),
+			GDT_String::make('error_mail_recipients')->notNull()->initialValue(GDO_ERROR_MAIL_RECIPIENTS)->label('error_mail')->tooltipRaw('Recipients of PHP/GDO errors and Core 403/404 notification mails; separate by comma.'),
 			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL)->tooltipRaw('Enable Print to Screen debugging?'),
 
             # Email sending

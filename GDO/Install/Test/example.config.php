@@ -65,7 +65,7 @@ define('GDO_LOG_PROFILE', ''); # Generate URLs with xdebug profiler trigger?
 define('GDO_ERROR_LEVEL', 0x37ff); # Log level
 define('GDO_ERROR_STACKTRACE', true); # Show stacktrace to users?
 define('GDO_ERROR_DIE', true); # Die on every little warning and notice?
-define('GDO_ERROR_MAIL', true); # Send an email on errors?
+define('GDO_SEND_ERROR_MAILS', true); # Send PHP/GDO error report mails?
 
 ################
 ### Database ###
@@ -109,7 +109,7 @@ define('GDO_ENABLE_EMAIL', false); # Enable E-Mail sending?
 define('GDO_BOT_NAME', 'GDOv7 Support Robot'); # Robot Mail sender Name
 define('GDO_BOT_EMAIL', 'support@localhost'); # Robot Mail sender Mail
 define('GDO_ADMIN_EMAIL', 'administrator@localhost'); # Administrator Mail
-define('GDO_ERROR_EMAIL', 'errors@localhost'); # Error Mail recipients. separate by comma.
+define('GDO_ERROR_MAIL_RECIPIENTS', 'errors@localhost'); # Recipients of PHP/GDO errors and Core 403/404 notification mails; separate by comma.
 define('GDO_DEBUG_EMAIL', true); # Enable Print to Screen debugging?
 
 #################

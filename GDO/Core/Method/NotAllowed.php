@@ -58,7 +58,7 @@ final class NotAllowed extends MethodPage
 		{
 			if (module_enabled('Mail'))
 			{
-				$this->send403Mail(GDO_ERROR_EMAIL);
+				$this->send403Mail(GDO_ERROR_MAIL_RECIPIENTS);
 			}
 		}
 	}

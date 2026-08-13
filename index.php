@@ -58,7 +58,7 @@ require 'GDO7.php';
 global $me;
 $app = Application::init();
 Logger::init(null, GDO_ERROR_LEVEL);
-Debug::init(GDO_ERROR_DIE, GDO_ERROR_MAIL);
+Debug::init(GDO_ERROR_DIE, GDO_SEND_ERROR_MAILS);
 # Ugly fix :(
 if (file_exists(GDO_PATH . 'GDO/Session/GDO_Session.php'))
 {
