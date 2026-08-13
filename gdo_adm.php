@@ -397,11 +397,11 @@ $command = $cmd; # TODO: get rid of that
 
 
 $db = false;
-if (in_array($cmd, ['wipe', 'conf', 'config'], true))
+if (in_array($cmd, ['wipe', 'conf', 'config', 'migrate'], true))
 {
-    if ((!GDO_DB_ENABLED) || (GDO_DB_READONLY && $cmd === 'wipe'))
+    if ((!GDO_DB_ENABLED) || (GDO_DB_READONLY && in_array($cmd, ['wipe', 'migrate'], true)))
     {
-        fwrite(STDERR, 'You need to set GDO_DB_ENABLED to true, and for wipe to have GDO_DB_READONLY set to false, to run this command.');
+        fwrite(STDERR, 'You need to set GDO_DB_ENABLED to true, and for wipe or migrate to have GDO_DB_READONLY set to false, to run this command.');
         exit(612);
     }
     $db = true;

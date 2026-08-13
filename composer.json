@@ -6,10 +6,8 @@
     "php": ">=8.3",
     "ext-bcmath": "*",
     "ext-fileinfo": "*",
-    "ext-intl": "*",
     "ext-mbstring": "*",
     "ext-mysqli": "*",
-    "ext-sqlite3": "*",
     "ext-readline": "*"
   }
 }
