@@ -45,4 +45,4 @@ push_repo() {
 push_repo .
 while IFS= read -r -d '' repo_git; do
     push_repo "${repo_git%/.git}"
-done < <(find gdo -type d -name .git -print0)
+done < <(find GDO -type d -name .git -print0)
