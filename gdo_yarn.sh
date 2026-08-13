@@ -5,4 +5,10 @@ CORE="$(dirname "$0")"
 
 echo "All modules: yarn install"
 echo "Thanks to greycat@freenode#bash"
-for d in GDO/*/; do (cd "$d" || exit; [[ -f package.json ]] || exit; echo $d; yarn install); done
+status=0
+for d in GDO/*/; do
+	[[ -f "${d}package.json" ]] || continue
+	echo "$d"
+	(cd "$d" && yarn install) || status=1
+done
+exit "$status"
