@@ -170,7 +170,14 @@ final class GDT_Hook extends GDT
 			{
 				if ($module = $loader->getModule($moduleName))
 				{
-					if ($result = call_user_func_array([$module, $method_name], $args))
+					// CLI-specific hooks are optional. A module that only exposes the
+					// normal hook must still participate in CLI method execution.
+					$moduleMethod = $method_name;
+					if (!is_callable([$module, $moduleMethod]))
+					{
+						$moduleMethod = "hook{$event}";
+					}
+					if ($result = call_user_func_array([$module, $moduleMethod], $args))
 					{
 						$response = $response ?? GDT_Response::make();
 						$response->addField($result);
