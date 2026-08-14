@@ -19,6 +19,8 @@ use PHPUnit\TextUI\Application;
  */
 final class Module_Tests extends GDO_Module
 {
+	/** @var string[] */
+	private static array $testDirs = [];
 
 	public int $priority = 1000; # very last
 
@@ -27,7 +29,9 @@ final class Module_Tests extends GDO_Module
 
 
 	/**
-	 * Run a php unit test suite on a module's /Test/ folder.
+	 * Queue a module's PHPUnit suite. PHPUnit 10 seals its global event facade
+	 * after a run, so one process can no longer create a fresh Application for
+	 * every module as PHPUnit 9 allowed.
 	 */
 	public static function runTestSuite(GDO_Module $module): void
 	{
@@ -61,22 +65,35 @@ final class Module_Tests extends GDO_Module
 		$testDir = $module->filePath('Test/');
 		if (FileUtil::isDir($testDir))
 		{
-			$bn = TextStyle::bold($name);
-			echo "\n---------------------------------------\n";
-			echo "Running tests for: {$bn}";
-			echo "\n---------------------------------------\n";
-			flush();
-			$argv = [
+			self::$testDirs[] = $testDir;
+		}
+	}
+
+	/**
+	 * Run every queued module suite in one PHPUnit process.
+	 */
+	public static function runQueuedSuites(): void
+	{
+		if (!self::$testDirs)
+		{
+			return;
+		}
+
+		$names = array_map(static fn(string $dir): string => basename(dirname($dir)), self::$testDirs);
+		echo "\n---------------------------------------\n";
+		echo 'Running tests for: ' . TextStyle::bold(implode(', ', $names));
+		echo "\n---------------------------------------\n";
+		flush();
+		$argv = [
 				'--bootstrap=vendor/autoload.php',
 				'--no-progress',
 				'--do-not-cache-result',
 				'--no-configuration',
-				$testDir,
 			];
-			$argc = count($argv);
-			$app = new Application();
-			$app->run($argv);
-		}
+		$argv = array_merge($argv, self::$testDirs);
+		$app = new Application();
+		$app->run($argv);
+		self::$testDirs = [];
 	}
 
 

@@ -593,6 +593,7 @@ if (Installer::installModules($modules))
 	{
 		Module_Tests::runTestSuite($module);
 	}
+	Module_Tests::runQueuedSuites();
 }
 
 //CLI::flushTopResponse();
