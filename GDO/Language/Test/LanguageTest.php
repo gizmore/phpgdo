@@ -55,6 +55,7 @@ final class LanguageTest extends TestCase
 
 	public function testHTTPLangDetection()
 	{
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE;q=1.0';
 		$iso = Module_Language::instance()->detectAcceptLanguage();
 		assertEquals('de', $iso, 'Test if german language is detected.');
 	}

@@ -446,7 +446,7 @@ if ($argc === 1) # Specifiy with module names, separated by comma.
 
 	$count = 0;
 	$modules2 = explode(',', $argv[0]);
-	$modules = [];
+	$modules = ['Session'];
 
 	foreach ($modules2 as $k => $modname)
 	{
@@ -603,4 +603,4 @@ if (Installer::installModules($modules))
 $time = microtime(true) - GDO_TIME_START;
 $perf = GDT_PerfBar::make('performance');
 $perf = $perf->renderMode(GDT::RENDER_CLI);
-printf("Finished with %s asserts after %s.\n%s", TestCase::$ASSERT_COUNT, Time::humanDuration($time), $perf);
+printf("Finished with %s asserts after %s.\n%s\n", TestCase::$ASSERT_COUNT, Time::humanDuration($time), $perf);
