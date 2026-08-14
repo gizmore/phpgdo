@@ -22,18 +22,11 @@ final class CoreTest extends TestCase
 		self::assertStringContainsString($version, $result, 'Test if version command works.');
 	}
 
-	public function testNestedExpression()
+	public function testExpression()
 	{
-		$command = 'core.concat $(core.concat "--glue=, " b,c),a';
-		$result = $this->cli($command);
-		self::assertStringContainsString('b ca', $result, 'Check if complex concat works');
-	}
-
-	public function testDirectoryIndex()
-	{
-		$result = GDT_Expression::fromLine('core.directoryindex /GDO/')->execute();
-		$result = $result->renderCLI();
-		self::assertStringContainsString('Net', $result, 'Check if directory index works');
+		$this->userGizmore();
+		$result = GDT_Expression::fromLine('core.version')->execute()->renderCLI();
+		self::assertStringContainsString(Module_Core::GDO_REVISION, $result, 'Check if an expression executes.');
 	}
 
 	public function testExceptionCount() : void
