@@ -1,0 +1,1368 @@
+GDOv7 sync.sh: Sync message: 'methodQueryTable- is now gdoQuery'
+Updating core submodules.
+Entering 'GDO/Util/php-filewalker'
+HEAD is now at c5e5e5c Variable directory_seperator
+Entering 'GDO/Util/php-preprocessor'
+HEAD is now at 8d73981 fix self destruction
+Entering 'GDO/Util/php-filewalker'
+Already up to date.
+Entering 'GDO/Util/php-preprocessor'
+Already up to date.
+
+Are you sure?
+Creating module provider mappings...
+<?php
+declare(strict_types=1);
+namespace GDO\Core;
+
+/**
+ * Official registered gdo6 module mapping.
+ * Installer can spit out repo urls for modules.
+ * Some modules have multiple providers, like gdo6-session-db and gdo6-session-cookie.
+ * Both provide Module_Session.
+ *
+ * You can generate providers and dependenices with providers.php and provider_dependenciews.php
+ *
+ * @version 7.0.3
+ * @since 6.10.0
+ * @author gizmore
+ */
+final class ModuleProviders
+{
+
+	final public const GIT_PROVIDER = 'https://github.com/gizmore/';
+	/**
+	 * Provider packages.
+	 * Multi-Provided is first
+	 */
+	public static array $PROVIDERS = [
+		### BEGIN_PROVIDERS ###
+'Captcha' => ['phpgdo-captcha', 'phpgdo-recaptcha2'],
+'DBMS' => ['phpgdo-mysql', 'phpgdo-postgres', 'phpgdo-sqlite'],
+'Mailer' => ['phpgdo-mailer', 'phpgdo-phpmailer', 'phpgdo-mailer-symfony'],
+'Session' => ['phpgdo-session-db', 'phpgdo-session-cookie'],
+'AboutMe' => 'phpgdo-about-me',
+'Account' => 'phpgdo-account',
+'ACME' => 'phpgdo-acme',
+'ActivationAlert' => 'phpgdo-activation-alert',
+'Address' => 'phpgdo-address',
+'Ads' => 'phpgdo-ads',
+'ApiHub' => 'phpgdo-apihub',
+'Aprilfools' => 'phpgdo-aprilfools',
+'Avatar' => 'phpgdo-avatar',
+'Backup' => 'phpgdo-backup',
+'Ban' => 'phpgdo-ban',
+'BasicAuth' => 'phpgdo-basic-auth',
+'Birthday' => 'phpgdo-birthday',
+'Bootstrap5' => 'phpgdo-bootstrap5',
+'Bootstrap5Theme' => 'phpgdo-bootstrap5-theme',
+'Category' => 'phpgdo-category',
+'ChatGPT' => 'phpgdo-chatgpt',
+'CKEditor' => 'phpgdo-ck-editor',
+'Classic' => 'phpgdo-classic',
+'Codinggeex' => 'phpgdo-codinggeex',
+'Comments' => 'phpgdo-comments',
+'Contact' => 'phpgdo-contact',
+'CORS' => 'phpgdo-cors',
+'Country' => 'phpgdo-country',
+'CountryCoordinates' => 'phpgdo-country-coordinates',
+'CountryRestrictions' => 'phpgdo-country-restrictions',
+'CSS' => 'phpgdo-css',
+'Currency' => 'phpgdo-currency',
+'Diary' => 'phpgdo-diary',
+'Dog' => 'gdo6-dog',
+'DogAuth' => 'gdo6-dog-auth',
+'DogBlackjack' => 'gdo6-dog-blackjack',
+'DogChatGPT' => 'phpgdo-dog-chatgpt',
+'DogFriends' => 'phpgdo-dog-friends',
+'DogGreetings' => 'gdo6-dog-greetings',
+'DogIRC' => 'gdo6-dog-irc',
+'DogIRCAutologin' => 'gdo6-dog-irc-autologin',
+'DogIRCSpider' => 'gdo6-dog-irc-spider',
+'DogMail' => 'phpgdo-dog-mail',
+'DogMastodon' => 'phpgdo-dog-mastodon',
+'DogNinja' => 'phpgdo-dog-ninja',
+'DogOracle' => 'phpgdo-dog-oracle',
+'DogRSS' => 'phpgdo-dog-rss',
+'DogShadowdogs' => 'gdo6-dog-shadowdogs',
+'DogSlapwarz' => 'phpgdo-dog-slapwarz',
+'DogTeams' => 'phpgdo-dog-teams',
+'DogTelegram' => 'phpgdo-dog-telegram',
+'DogTick' => 'gdo6-dog-tick',
+'DogTwitter' => 'phpgdo-dog-twitter',
+'DogWeather' => 'phpgdo-dog-weather',
+'DogWebsite' => 'gdo6-dog-website',
+'DogWhatsApp' => 'phpgdo-dog-whatsapp',
+'DOMPDF' => 'phpgdo-dompdf',
+'DoubleAccounts' => 'phpgdo-double-accounts',
+'Download' => 'phpgdo-download',
+'DSGVO' => 'phpgdo-dsgvo',
+'EdwardSnowdenLand' => 'phpgdo-esl',
+'Facebook' => 'phpgdo-facebook',
+'Favicon' => 'phpgdo-favicon',
+'FFMpeg' => 'phpgdo-ffmpeg',
+'File' => 'phpgdo-file',
+'Fineprint' => 'phpgdo-fineprint',
+'Follower' => 'phpgdo-follower',
+'FontAtkinson' => 'phpgdo-font-atkinson',
+'FontAwesome' => 'phpgdo-font-awesome',
+'Forum' => 'phpgdo-forum',
+'Friends' => 'phpgdo-friends',
+'Gallery' => 'phpgdo-gallery',
+'GDO6DB' => 'phpgdo-gdo6',
+'Geo2City' => 'phpgdo-geo2city',
+'Geo2Country' => 'phpgdo-geo2country',
+'GTranslate' => 'phpgdo-gtranslate',
+'Guestbook' => 'phpgdo-guestbook',
+'Hash' => 'phpgdo-hash',
+'Helpdesk' => 'phpgdo-helpdesk',
+'HOL' => 'phpgdo-hue-of-life',
+'HTML' => 'phpgdo-html',
+'Hydra' => 'phpgdo-hydra',
+'ImageMagick' => 'phpgdo-image-magick',
+'Instagram' => 'phpgdo-instagram',
+'Invite' => 'phpgdo-invite',
+'IP2City' => 'phpgdo-ip2city',
+'IP2Country' => 'phpgdo-ip2country',
+'ITMB' => 'phpgdo-itmb',
+'Javascript' => 'phpgdo-javascript',
+'JPGraph' => 'phpgdo-jpgraph',
+'JQuery' => 'phpgdo-jquery',
+'JQueryAutocomplete' => 'phpgdo-jquery-autocomplete',
+'KassiererCard' => 'phpgdo-kassierer-card',
+'Licenses' => 'phpgdo-licenses',
+'Links' => 'phpgdo-links',
+'LinkUUp' => 'phpgdo-linkuup',
+'LoC' => 'phpgdo-loc',
+'Login' => 'phpgdo-login',
+'Lounge' => 'phpgdo-lounge',
+'Mail' => 'phpgdo-mail',
+'Maintenance' => 'phpgdo-maintenance',
+'Maps' => 'phpgdo-maps',
+'Markdown' => 'phpgdo-markdown',
+'Math' => 'phpgdo-math',
+'Mettwitze' => 'phpgdo-mettwitze',
+'Mibbit' => 'phpgdo-mibbit',
+'Moment' => 'phpgdo-moment',
+'News' => 'phpgdo-news',
+'OnlineUsers' => 'phpgdo-online-users',
+'OnSocial' => 'phpgdo-on-social',
+'OpenTimes' => 'phpgdo-open-times',
+'Payment' => 'phpgdo-payment',
+'PaymentBank' => 'phpgdo-payment-bank',
+'PaymentCredits' => 'phpgdo-payment-credits',
+'PaymentPaypal' => 'phpgdo-payment-paypal',
+'PaypalDonations' => 'phpgdo-paypal-donations',
+'PDFParser' => 'phpgdo-pdf-parser',
+'PHPGDO' => 'phpgdo-phpgdo-website',
+'PM' => 'phpgdo-pm',
+'PMA' => 'phpgdo-pma',
+'Poll' => 'phpgdo-poll',
+'Prism' => 'phpgdo-prism',
+'Python' => 'phpgdo-python',
+'QRCode' => 'phpgdo-qrcode',
+'Quotes' => 'phpgdo-quotes',
+'Recovery' => 'phpgdo-recovery',
+'Register' => 'phpgdo-register',
+'RegisterID' => 'phpgdo-register-id',
+'Security' => 'phpgdo-security',
+'Shadowlamb' => 'phpgdo-shadowlamb',
+'Shoutbox' => 'phpgdo-shoutbox',
+'SimpleMDE' => 'phpgdo-simple-mde',
+'Sitemap' => 'phpgdo-sitemap',
+'Statistics' => 'phpgdo-statistics',
+'Subscription' => 'phpgdo-subscription',
+'Tags' => 'phpgdo-tags',
+'TBS' => 'phpgdo-tbs',
+'TCPDF' => 'phpgdo-tcpdf',
+'TesseractOCR' => 'phpgdo-tesseract-ocr',
+'Todo' => 'phpgdo-todo',
+'TorChallenge' => 'phpgdo-tor-challenge',
+'TorDetection' => 'phpgdo-tor-detection',
+'Votes' => 'phpgdo-votes',
+'VPNDetect' => 'phpgdo-vpn-detect',
+'Websocket' => 'phpgdo-websocket',
+'YouTube' => 'phpgdo-youtube',
+'YTBest' => 'phpgdo-ytbest',
+'ZIP' => 'phpgdo-zip',
+### END_PROVIDERS ###
+	];
+	public static $DEPENDENCIES = [
+		### BEGIN_DEPENDENCIES ###
+'AboutMe' => ['Account'],
+'Account' => ['Login'],
+'ACME' => ['Net'],
+'ActivationAlert' => [],
+'Address' => ['Mail', 'Maps', 'Country'],
+'Admin' => ['Table'],
+'Ads' => ['Payment'],
+'ApiHub' => ['Net'],
+'Aprilfools' => [],
+'Avatar' => ['File'],
+'Backup' => ['Cronjob', 'ZIP'],
+'Ban' => [],
+'BasicAuth' => [],
+'Birthday' => [],
+'Bootstrap5' => ['JQuery'],
+'Bootstrap5Theme' => ['Bootstrap5', 'Moment'],
+'Captcha' => ['Session'],
+'Category' => [],
+'ChatGPT' => ['Dog'],
+'CKEditor' => ['HTML', 'JQuery'],
+'Classic' => [],
+'CLI' => [],
+'Codinggeex' => ['Admin', 'Bootstrap5Theme', 'Download', 'Login', 'Perf'],
+'Comments' => ['Votes', 'File'],
+'Contact' => ['Mail'],
+'Core' => ['Crypto', 'Date', 'DBMS', 'Form', 'Language', 'UI', 'User'],
+'CORS' => [],
+'Country' => [],
+'CountryCoordinates' => ['Country', 'Maps'],
+'CountryRestrictions' => [],
+'Cronjob' => [],
+'Crypto' => [],
+'CSS' => [],
+'Currency' => ['Cronjob'],
+'Date' => [],
+'DBMS' => [],
+'Diary' => ['Admin', 'Birthday', 'Classic', 'Contact', 'Login', 'News'],
+'Dog' => ['CLI', 'Cronjob', 'Net'],
+'DogAuth' => ['Dog', 'Login', 'Register'],
+'DogBlackjack' => ['Dog'],
+'DogChatGPT' => ['ChatGPT', 'Dog'],
+'DogFriends' => ['Dog'],
+'DogGreetings' => ['Dog'],
+'DogIRC' => ['DogAuth'],
+'DogIRCAutologin' => ['DogAuth', 'DogIRC'],
+'DogIRCSpider' => ['DogIRC'],
+'DogMail' => ['Dog'],
+'DogMastodon' => [],
+'DogNinja' => ['Dog', 'Net'],
+'DogOracle' => ['DogAuth', 'Poll', 'Subscription'],
+'DogRSS' => ['Dog', 'Net', 'News'],
+'DogShadowdogs' => ['DogAuth'],
+'DogSlapwarz' => ['Dog'],
+'DogTeams' => ['Dog'],
+'DogTelegram' => ['Dog', 'Subscription'],
+'DogTick' => ['Country', 'DogIRC'],
+'DogTwitter' => [],
+'DogWeather' => ['Dog'],
+'DogWebsite' => ['Admin', 'Avatar', 'Bootstrap5Theme', 'Captcha', 'ChatGPT', 'Contact', 'Dog', 'DogAuth', 'DogBlackjack', 'DogFriends', 'DogGreetings', 'DogIRC', 'DogIRCAutologin', 'DogIRCSpider', 'DogOracle', 'DogRSS', 'DogShadowdogs', 'DogSlapwarz', 'DogTelegram', 'DogTick', 'DogWeather', 'Download', 'Forum', 'JQuery', 'Links', 'Markdown', 'Moment', 'News', 'Perf', 'PM', 'Quotes', 'Shoutbox', 'Todo'],
+'DogWhatsApp' => ['Dog'],
+'DOMPDF' => ['File'],
+'DoubleAccounts' => [],
+'Download' => ['Category', 'File', 'Payment', 'Votes'],
+'DSGVO' => ['Session'],
+'EdwardSnowdenLand' => ['AboutMe', 'Account', 'ActivationAlert', 'Admin', 'Avatar', 'Backup', 'Bootstrap5Theme', 'Captcha', 'Contact', 'Cronjob', 'IP2Country', 'Favicon', 'File', 'FontAwesome', 'Forum', 'Invite', 'Javascript', 'JQueryAutocomplete', 'Mail', 'News', 'PM', 'Recovery', 'Register', 'TorChallenge', 'Votes'],
+'Facebook' => [],
+'Favicon' => [],
+'FFMpeg' => ['CLI'],
+'File' => ['Session'],
+'Fineprint' => ['Admin', 'Classic', 'Contact', 'CSS', 'DOMPDF', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Login', 'Perf'],
+'Follower' => [],
+'FontAtkinson' => [],
+'FontAwesome' => [],
+'Form' => [],
+'Forum' => ['File'],
+'Friends' => [],
+'Gallery' => ['File'],
+'GDO6DB' => [],
+'Geo2City' => ['Geo2Country', 'ZIP'],
+'Geo2Country' => ['Account', 'Admin', 'Classic', 'CountryCoordinates', 'CSS', 'FontAwesome', 'Javascript', 'Login', 'News', 'Perf', 'Recovery', 'Register'],
+'GTranslate' => [],
+'Guestbook' => ['Admin'],
+'Hash' => [],
+'Helpdesk' => ['Comments'],
+'HOL' => ['Admin', 'Bootstrap5Theme', 'JQuery', 'Login', 'Register', 'Session'],
+'HTML' => [],
+'Hydra' => [],
+'ImageMagick' => [],
+'Instagram' => [],
+'Install' => [],
+'Invite' => [],
+'IP2City' => ['Address', 'Country', 'Cronjob'],
+'IP2Country' => ['Country'],
+'ITMB' => ['Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Bootstrap5Theme', 'Contact', 'FontAtkinson', 'Lounge', 'Markdown', 'Mibbit', 'News', 'Perf', 'PM', 'Recovery', 'TCPDF'],
+'Javascript' => [],
+'JPGraph' => [],
+'JQuery' => [],
+'JQueryAutocomplete' => ['JQuery'],
+'KassiererCard' => ['Account', 'AboutMe', 'ActivationAlert', 'Address', 'Admin', 'Ads', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5', 'Bootstrap5Theme', 'Captcha', 'Category', 'CKEditor', 'Contact', 'CountryCoordinates', 'CountryRestrictions', 'Cronjob', 'CSS', 'DoubleAccounts', 'FontAtkinson', 'FontAwesome', 'Forum', 'GTranslate', 'IP2Country', 'Javascript', 'JQueryAutocomplete', 'Licenses', 'Links', 'LoC', 'Login', 'Maps', 'Mail', 'Maps', 'News', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'Perf', 'Poll', 'PM', 'QRCode', 'Recovery', 'Register', 'Sitemap', 'TorDetection', 'VPNDetect', 'YouTube'],
+'Language' => [],
+'Licenses' => [],
+'Links' => ['Votes', 'Tags', 'Cronjob'],
+'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Facebook', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
+'LoC' => [],
+'Login' => ['Session'],
+'Lounge' => ['Cronjob'],
+'Mail' => ['Mailer', 'Net'],
+'Mailer' => ['Mail'],
+'Maintenance' => [],
+'Maps' => ['JQuery'],
+'Markdown' => ['HTML', 'JQuery', 'FontAwesome'],
+'Math' => [],
+'Mettwitze' => ['Account', 'Admin', 'Bootstrap5Theme', 'Classic', 'Comments', 'GDO6DB', 'JQueryAutocomplete', 'Login', 'Recovery', 'Register', 'Sitemap', 'Votes'],
+'Mibbit' => [],
+'Moment' => [],
+'Net' => [],
+'News' => ['Comments', 'Category', 'Mail'],
+'OnlineUsers' => [],
+'OnSocial' => [],
+'OpenTimes' => [],
+'Payment' => ['Account', 'Address', 'TCPDF', 'Mail'],
+'PaymentBank' => ['Payment'],
+'PaymentCredits' => ['Payment'],
+'PaymentPaypal' => ['Payment'],
+'PaypalDonations' => [],
+'PDFParser' => [],
+'Perf' => [],
+'PHPGDO' => [],
+'PM' => ['Account'],
+'PMA' => [],
+'Poll' => ['Subscription'],
+'Prism' => [],
+'Python' => [],
+'QRCode' => [],
+'Quotes' => ['Address', 'Votes'],
+'Recovery' => ['Mail'],
+'Register' => [],
+'RegisterID' => [],
+'Security' => ['Hash'],
+'Session' => [],
+'Shadowlamb' => [],
+'Shoutbox' => [],
+'SimpleMDE' => ['HTML'],
+'Sitemap' => [],
+'Statistics' => [],
+'Subscription' => [],
+'Table' => [],
+'Tags' => [],
+'TBS' => ['Admin', 'Avatar', 'Captcha', 'Classic', 'Country', 'Contact', 'Cronjob', 'CSS', 'Favicon', 'FontAwesome', 'Forum', 'Javascript', 'JQueryAutocomplete', 'Login', 'Markdown', 'Mibbit', 'News', 'OnlineUsers', 'Perf', 'PM', 'Python', 'Recovery', 'Register', 'Statistics'],
+'TCPDF' => [],
+'TesseractOCR' => ['ImageMagick'],
+'Tests' => [],
+'Todo' => ['Table'],
+'TorChallenge' => ['TorDetection'],
+'TorDetection' => ['Net'],
+'UI' => [],
+'User' => ['Core'],
+'Votes' => [],
+'VPNDetect' => [],
+'Websocket' => ['Session'],
+'YouTube' => ['File'],
+'YTBest' => ['Admin', 'Classic', 'Comments', 'Login', 'Recovery', 'Register', 'Votes', 'YouTube'],
+'ZIP' => [],
+### END_DEPENDENCIES ###
+	];
+
+	/**
+	 * Get the URL for a module.
+	 */
+	public static function getGitUrl(string $moduleName, int $which = 1, bool $ssh = false): string
+	{
+		$git = self::GIT_PROVIDER;
+		$which = (int)$which;
+		$providers = self::getProviders($moduleName);
+		$url = '';
+		if (is_array($providers))
+		{
+			if (($which < 1) || ($which > count($providers)))
+			{
+				throw new GDO_Exception(
+					'Invalid provider choice!');
+			}
+			$url = $git . $providers[$which - 1];
+		}
+		else
+		{
+			$url = $git . $providers;
+		}
+
+		if ($ssh)
+		{
+			$url = str_replace('https://', 'ssh://git@', $url);
+		}
+
+		return $url;
+	}
+
+	public static function getProviders(string $moduleName)
+	{
+		foreach (self::$PROVIDERS as $modname => $providers)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $providers;
+			}
+		}
+		return null;
+	}
+
+	public static function getCleanModuleName(string $moduleName): string
+	{
+		foreach (array_keys(self::$PROVIDERS) as $modname)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $modname;
+			}
+		}
+		throw new GDO_ExceptionFatal('err_unknown_module', [html($moduleName)]);
+	}
+
+	public static function getDependencies(string $moduleName): array
+	{
+		foreach (self::$DEPENDENCIES as $modname => $depNames)
+		{
+			if (strcasecmp($moduleName, $modname) === 0)
+			{
+				return $depNames;
+			}
+		}
+		return GDT::EMPTY_ARRAY;
+	}
+
+	public static function getMultiProviders(): array
+	{
+		$back = [];
+		foreach (self::$PROVIDERS as $modname => $providers)
+		{
+			if (is_array($providers))
+			{
+				$back[$modname] = $providers;
+			}
+		}
+		return $back;
+	}
+
+	public static function isCoreModule(string $moduleName): bool
+	{
+		return in_array($moduleName, self::getCoreModuleNames(), true);
+	}
+
+	/**
+	 * Get all core module names.
+	 *
+	 * @return string[]
+	 */
+	public static function getCoreModuleNames(): array
+	{
+		return ['Core', 'Date', 'Form', 'Language', 'UI', 'User'];
+	}
+
+}
+Syncing repositories...
+Do: git commit & push all repos
+/home/gizmore/www/phpgdo/GDO/Download
+[main a939464] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/DOMPDF
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Account
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Invite
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/PHPGDO
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/BasicAuth
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Mailer
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/PaypalDonations
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/PaymentBank
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Todo
+[main 3227cd7] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/GTranslate
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Maintenance
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/TorDetection
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogNinja
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Login
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/HTML
+Entering 'htmlpurifier'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ApiHub
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Sitemap
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogBlackjack
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DoubleAccounts
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Register
+[main a60aec0] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/Maps
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogTeams
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Country
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/FontAtkinson
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Session
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogMastodon
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ITMB
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/CSS
+Entering 'css-minify'
+Already up to date.
+Entering 'path-converter'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Favicon
+Entering 'php-ico'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Helpdesk
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Geo2Country
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/YouTube
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ImageMagick
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/CountryCoordinates
+Entering 'countries'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Contact
+[main 787aaf8] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/CKEditor
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/phpgdo-postgres
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Javascript
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DSGVO
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/LinkUUp
+[main f62f75a] 'methodQueryTable- is now gdoQuery'
+ 3 files changed, 37 insertions(+), 2 deletions(-)
+ create mode 100644 Method/Cuddlers.php
+/home/gizmore/www/phpgdo/GDO/Markdown
+Entering 'markdown'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Links
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/TBS
+[main 7122707] 'methodQueryTable- is now gdoQuery'
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+/home/gizmore/www/phpgdo/GDO/Moment
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/PM
+[main 2b41624] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/Comments
+[main a4d6883] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/phpgdo-mailer
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Birthday
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/VPNDetect
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Codinggeex
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogTelegram
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogRSS
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/JPGraph
+Entering 'jpgraph'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Tags
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Classic
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/RegisterID
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/File
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Address
+[main 8ad99a5] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/Forum
+[main 5112330] 'methodQueryTable- is now gdoQuery'
+ 5 files changed, 8 insertions(+), 8 deletions(-)
+/home/gizmore/www/phpgdo/GDO/Instagram
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Geo2City
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/TesseractOCR
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Facebook
+Entering 'php-graph-sdk'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/LoC
+Entering 'cli-parser'
+Updating 3000c69..0d3a81b
+Fast-forward
+ composer.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Entering 'complexity'
+Already up to date.
+Entering 'lines-of-code'
+Already up to date.
+Entering 'php-file-iterator'
+Already up to date.
+Entering 'php-parser'
+Already up to date.
+Entering 'phploc'
+Already up to date.
+[main e36dce7] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/QRCode
+Entering 'php-qrcode'
+Already up to date.
+Entering 'php-settings-container'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Avatar
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Fineprint
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogIRCAutologin
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Recovery
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/OnSocial
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/PaymentPaypal
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/YTBest
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/IP2Country
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogShadowdogs
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogWhatsApp
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Votes
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogFriends
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Python
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ChatGPT
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Aprilfools
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Category
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Gallery
+[main dfb8e97] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/PDFParser
+Entering 'pdfparser'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Guestbook
+[main 1c2d5fa] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+/home/gizmore/www/phpgdo/GDO/Payment
+[main 6211ad5] 'methodQueryTable- is now gdoQuery'
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+/home/gizmore/www/phpgdo/GDO/Ban
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/phpgdo-recaptcha2
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/FontAwesome
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Hydra
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/HOL
+[main 9bd0ae0] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/PMA
+Entering 'phpmyadmin'
+Updating 7ff5dd5b7e..e4adb98889
+Fast-forward
+ resources/po/af.po          | 464 +++++++++++-----------
+ resources/po/am.po          | 464 +++++++++++-----------
+ resources/po/ar.po          | 464 +++++++++++-----------
+ resources/po/ar_LY.po       | 464 +++++++++++-----------
+ resources/po/ast.po         | 464 +++++++++++-----------
+ resources/po/az.po          | 464 +++++++++++-----------
+ resources/po/be.po          | 464 +++++++++++-----------
+ resources/po/be@latin.po    | 464 +++++++++++-----------
+ resources/po/ber.po         | 464 +++++++++++-----------
+ resources/po/bg.po          | 464 +++++++++++-----------
+ resources/po/bn.po          | 464 +++++++++++-----------
+ resources/po/br.po          | 464 +++++++++++-----------
+ resources/po/brx.po         | 464 +++++++++++-----------
+ resources/po/bs.po          | 464 +++++++++++-----------
+ resources/po/ca.po          | 464 +++++++++++-----------
+ resources/po/ckb.po         | 464 +++++++++++-----------
+ resources/po/cs.po          | 466 +++++++++++-----------
+ resources/po/cy.po          | 464 +++++++++++-----------
+ resources/po/da.po          | 464 +++++++++++-----------
+ resources/po/de.po          | 464 +++++++++++-----------
+ resources/po/el.po          | 464 +++++++++++-----------
+ resources/po/en_GB.po       | 466 +++++++++++-----------
+ resources/po/enm.po         | 464 +++++++++++-----------
+ resources/po/eo.po          | 464 +++++++++++-----------
+ resources/po/es.po          | 466 +++++++++++-----------
+ resources/po/et.po          | 464 +++++++++++-----------
+ resources/po/eu.po          | 464 +++++++++++-----------
+ resources/po/fa.po          | 464 +++++++++++-----------
+ resources/po/fi.po          | 464 +++++++++++-----------
+ resources/po/fil.po         | 464 +++++++++++-----------
+ resources/po/fr.po          | 466 +++++++++++-----------
+ resources/po/fy.po          | 464 +++++++++++-----------
+ resources/po/gl.po          | 464 +++++++++++-----------
+ resources/po/gu.po          | 464 +++++++++++-----------
+ resources/po/he.po          | 464 +++++++++++-----------
+ resources/po/hi.po          | 464 +++++++++++-----------
+ resources/po/hr.po          | 464 +++++++++++-----------
+ resources/po/hu.po          | 464 +++++++++++-----------
+ resources/po/hy.po          | 464 +++++++++++-----------
+ resources/po/ia.po          | 464 +++++++++++-----------
+ resources/po/id.po          | 466 +++++++++++-----------
+ resources/po/ig.po          | 464 +++++++++++-----------
+ resources/po/it.po          | 464 +++++++++++-----------
+ resources/po/ja.po          | 466 +++++++++++-----------
+ resources/po/ka.po          | 464 +++++++++++-----------
+ resources/po/kab.po         | 464 +++++++++++-----------
+ resources/po/kk.po          | 464 +++++++++++-----------
+ resources/po/km.po          | 912 ++++++++++++++++----------------------------
+ resources/po/kn.po          | 464 +++++++++++-----------
+ resources/po/ko.po          | 466 +++++++++++-----------
+ resources/po/ksh.po         | 464 +++++++++++-----------
+ resources/po/ku.po          | 464 +++++++++++-----------
+ resources/po/ky.po          | 464 +++++++++++-----------
+ resources/po/li.po          | 464 +++++++++++-----------
+ resources/po/lo.po          | 466 +++++++++++-----------
+ resources/po/lt.po          | 464 +++++++++++-----------
+ resources/po/lv.po          | 495 ++++++++++++------------
+ resources/po/mk.po          | 464 +++++++++++-----------
+ resources/po/ml.po          | 464 +++++++++++-----------
+ resources/po/mn.po          | 464 +++++++++++-----------
+ resources/po/ms.po          | 464 +++++++++++-----------
+ resources/po/my.po          | 464 +++++++++++-----------
+ resources/po/nb.po          | 464 +++++++++++-----------
+ resources/po/ne.po          | 464 +++++++++++-----------
+ resources/po/nl.po          | 464 +++++++++++-----------
+ resources/po/nn.po          | 464 +++++++++++-----------
+ resources/po/pa.po          | 464 +++++++++++-----------
+ resources/po/phpmyadmin.pot | 462 +++++++++++-----------
+ resources/po/pl.po          | 466 +++++++++++-----------
+ resources/po/pt.po          | 464 +++++++++++-----------
+ resources/po/pt_BR.po       | 464 +++++++++++-----------
+ resources/po/rcf.po         | 464 +++++++++++-----------
+ resources/po/ro.po          | 464 +++++++++++-----------
+ resources/po/ru.po          | 466 +++++++++++-----------
+ resources/po/si.po          | 464 +++++++++++-----------
+ resources/po/sk.po          | 464 +++++++++++-----------
+ resources/po/sl.po          | 464 +++++++++++-----------
+ resources/po/sq.po          | 464 +++++++++++-----------
+ resources/po/sr.po          | 464 +++++++++++-----------
+ resources/po/sr@latin.po    | 464 +++++++++++-----------
+ resources/po/sv.po          | 464 +++++++++++-----------
+ resources/po/ta.po          | 466 +++++++++++-----------
+ resources/po/te.po          | 464 +++++++++++-----------
+ resources/po/th.po          | 464 +++++++++++-----------
+ resources/po/tk.po          | 464 +++++++++++-----------
+ resources/po/tr.po          | 470 ++++++++++++-----------
+ resources/po/tt.po          | 464 +++++++++++-----------
+ resources/po/tzm.po         | 464 +++++++++++-----------
+ resources/po/ug.po          | 464 +++++++++++-----------
+ resources/po/uk.po          | 468 ++++++++++++-----------
+ resources/po/ur.po          | 464 +++++++++++-----------
+ resources/po/uz.po          | 464 +++++++++++-----------
+ resources/po/uz@latin.po    | 464 +++++++++++-----------
+ resources/po/vi.po          | 530 +++++++++++++------------
+ resources/po/vls.po         | 464 +++++++++++-----------
+ resources/po/zh_CN.po       | 466 +++++++++++-----------
+ resources/po/zh_TW.po       | 464 +++++++++++-----------
+ 97 files changed, 22852 insertions(+), 22733 deletions(-)
+[main 8ae27b0] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/DogMail
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ACME
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Websocket
+Entering 'gwf4-ratchet'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/FFMpeg
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ZIP
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogWeather
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Lounge
+Entering 'thelounge'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Quotes
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogAuth
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Math
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Currency
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/OpenTimes
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/News
+[main f3e8cfe] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+/home/gizmore/www/phpgdo/GDO/GDO6DB
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Backup
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/OnlineUsers
+[main d3f70a0] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/phpgdo-captcha
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogIRCSpider
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/TCPDF
+Entering 'TCPDF'
+Updating 7b8de35..03139a5
+Fast-forward
+ .github/workflows/check.yml |  1 +
+ Makefile                    |  2 +-
+ VERSION                     |  2 +-
+ composer.json               | 12 ++++++------
+ mago.src.toml               |  2 +-
+ mago.test.toml              |  2 +-
+ tcpdf.php                   |  5 ++---
+ 7 files changed, 13 insertions(+), 13 deletions(-)
+[main 75d5074] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/Mettwitze
+[main 4bf9aa9] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/DogIRC
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogSlapwarz
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Hash
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Follower
+[main 9863562] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/Captcha
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Friends
+[main 56b914a] 'methodQueryTable- is now gdoQuery'
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+/home/gizmore/www/phpgdo/GDO/EdwardSnowdenLand
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Statistics
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/IP2City
+Entering 'ip-location-db'
+Updating 5b3e42a..0e692c5
+Fast-forward
+ geolite2-asn/geolite2-asn-ipv4.csv         | 5944 +++++++++++----------
+ geolite2-asn/geolite2-asn-ipv6.csv         | 2182 ++++----
+ geolite2-asn/package.json                  |    4 +-
+ geolite2-city/package.json                 |    4 +-
+ geolite2-country/geolite2-country-ipv4.csv | 3784 +++++++------
+ geolite2-country/geolite2-country-ipv6.csv |  987 +++-
+ geolite2-country/package.json              |    4 +-
+ origin-asn/origin-asn-ipv4.csv             | 4281 ++++++++-------
+ origin-asn/origin-asn-ipv6.csv             | 1827 +++----
+ origin-asn/package.json                    |    2 +-
+ server-country/package.json                |    2 +-
+ server-country/server-country-ipv4.csv     | 2098 ++++----
+ server-country/server-country-ipv6.csv     | 8001 ++++++++++++++-------------
+ user-country/package.json                  |    2 +-
+ user-country/user-country-ipv4.csv         | 2237 ++++----
+ user-country/user-country-ipv6.csv         | 8005 +++++++++++++++-------------
+ 16 files changed, 20904 insertions(+), 18460 deletions(-)
+[main e2c6709] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/gizmore/www/phpgdo/GDO/DogTick
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Licenses
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/JQuery
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/TorChallenge
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Diary
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Subscription
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogChatGPT
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Bootstrap5Theme
+Entering 'bootstrap-datepicker'
+Already up to date.
+Entering 'bootstrap4-datetimepicker'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogOracle
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/SimpleMDE
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/CountryRestrictions
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Bootstrap5
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/AboutMe
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Poll
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Security
+[main 015ab57] 'methodQueryTable- is now gdoQuery'
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+/home/gizmore/www/phpgdo/GDO/DogGreetings
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/KassiererCard
+[main 4cd638b] 'methodQueryTable- is now gdoQuery'
+ 11 files changed, 20 insertions(+), 20 deletions(-)
+/home/gizmore/www/phpgdo/GDO/JQueryAutocomplete
+Entering 'EasyAutocomplete'
+Already up to date.
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/PaymentCredits
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/phpgdo-sqlite
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Ads
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/phpgdo-session-cookie
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DBMS
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Prism
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/ActivationAlert
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/phpgdo-mysql
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Shadowlamb
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Dog
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/phpgdo-session-db
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Mail
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogTwitter
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/CORS
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Mibbit
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/DogWebsite
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+/home/gizmore/www/phpgdo/GDO/Shoutbox
+[main 04debd1] 'methodQueryTable- is now gdoQuery'
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+/home/gizmore/www/phpgdo
+Entering 'GDO/Util/php-filewalker'
+Already up to date.
+Entering 'GDO/Util/php-preprocessor'
+Already up to date.

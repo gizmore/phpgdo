@@ -82,7 +82,7 @@ class ViewPermission extends MethodQueryTable
 		return $this->href('&permission=' . $this->getConfigPermission()->getID());
 	}
 
-	public function getQuery(): Query
+	public function gdoQuery(): Query
 	{
 		return $this->gdoTable()->
 		select('*,perm_user_id_t.*, perm_perm_id_t.*')->

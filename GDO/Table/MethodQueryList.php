@@ -30,7 +30,7 @@ abstract class MethodQueryList extends MethodQueryTable
 		$this->table->href($this->gdoTableHREF());
 		$this->table->gdo($this->gdoTable());
 		$this->table->fetchAs($this->gdoFetchAs());
-		$this->table->query($this->getQuery());
+		$this->table->query($this->gdoQuery());
 		return $this->table;
 	}
 

@@ -44,7 +44,7 @@ abstract class MethodQueryTable extends MethodTable
 	protected function createCollection(): GDT_Table
 	{
 		$table = parent::createCollection();
-		return $table->query($this->getQuery());
+		return $table->query($this->gdoQuery());
 	}
 
 	# ###############
@@ -55,7 +55,7 @@ abstract class MethodQueryTable extends MethodTable
 	 * Override this function to return a query for your table.
 	 * Defaults to "select all" from your GDO table.
 	 */
-	public function getQuery(): Query
+	public function gdoQuery(): Query
 	{
 		return $this->gdoTable()->select();
 	}
