@@ -1366,3 +1366,6 @@ Entering 'GDO/Util/php-filewalker'
 Already up to date.
 Entering 'GDO/Util/php-preprocessor'
 Already up to date.
+[main 4c07793] 'methodQueryTable- is now gdoQuery'
+ 4 files changed, 1372 insertions(+), 4 deletions(-)
+ create mode 100644 getQuery

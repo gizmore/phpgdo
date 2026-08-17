@@ -171,13 +171,13 @@ final class GDT_Order extends GDT_String
 		switch ($this->state($gdt))
 		{
 			case self::ASC:
-				$replace = $asc ? "{$name}%20DESC" : '';
+				$replace = $asc ? "{$name} DESC" : '';
 				break;
 			case self::DESC:
-				$replace = $asc ? '' : "{$name}%20ASC";
+				$replace = $asc ? '' : "{$name} ASC";
 				break;
 			default:
-				$replace = $asc ? "{$name}%20ASC" : "{$name}%20DESC";
+				$replace = $asc ? "{$name} ASC" : "{$name} DESC";
 				break;
 		}
 		return $this->hrefReplaced($gdt, $replace);
@@ -197,28 +197,70 @@ final class GDT_Order extends GDT_String
 	}
 
 	/**
-	 * Generate a new href from the desigered replacement for the GDT.
+	 * Generate a new href from the desired replacement for the GDT.
+	 *
+	 * Keep every other order in its current precedence. This is shared by
+	 * regular GDT_Table instances and MethodTable, so both table types expose
+	 * the same ASC -> DESC -> none cycle and support multi-column ordering.
 	 */
 	private function hrefReplaced(GDT $gdt, string $replace): string
 	{
 		$name = $gdt->getName();
-		$href = preg_replace("#,? *{$name} *(?:DESC|ASC)#", '', urldecode($this->href));
-		$matches = null;
-		$old = '';
-		$con = strpos($href, '?') ? '&' : '?';
-		if (preg_match("#(&\\?)({$this->name}=[^&]*)#", $href, $matches))
+		$orders = [];
+		$replaced = false;
+		foreach ($this->orderParts() as $order)
 		{
-			$con = $matches[1];
-			$old = $matches[2];
+			if ($this->orderColumn($order) === $name)
+			{
+				if ($replace)
+				{
+					$orders[] = $replace;
+				}
+				$replaced = true;
+			}
+			else
+			{
+				$orders[] = $order;
+			}
 		}
-		$href = str_replace($old, '', $href);
-		$href .= $old ? "{$con}{$old}" : "{$con}{$this->name}=";
-		if ($replace)
+		if (!$replaced && $replace)
 		{
-			$href .= ",{$replace}";
+			$orders[] = $replace;
 		}
-		$href = str_replace('=,', '=', $href);
-		return $href;
+		return $this->hrefWithOrder(implode(',', $orders));
+	}
+
+	/** @return string[] */
+	private function orderParts(): array
+	{
+		$value = $this->getVar();
+		$value = is_array($value) ? implode(',', $value) : $value;
+		return array_values(array_filter(array_map('trim', explode(',', (string)$value))));
+	}
+
+	private function orderColumn(string $order): string
+	{
+		$column = Strings::substrTo($order, ' ', $order);
+		return Strings::rsubstrFrom($column, '.', $column);
+	}
+
+	/**
+	 * Replace this order parameter in a regular query string. An underscore
+	 * keeps it out of the SEO path and lets all table variants share this URL
+	 * contract.
+	 */
+	private function hrefWithOrder(string $order): string
+	{
+		[$href, $fragment] = array_pad(explode('#', $this->href, 2), 2, null);
+		[$path, $query] = array_pad(explode('?', $href, 2), 2, null);
+		$query = $query === null ? [] : explode('&', $query);
+		$query = array_values(array_filter($query, function (string $part): bool
+		{
+			return urldecode(Strings::substrTo($part, '=', $part)) !== $this->name;
+		}));
+		$query[] = $this->name . '=' . urlencode($order);
+		$href = $path . '?' . implode('&', $query);
+		return $fragment === null ? $href : "{$href}#{$fragment}";
 	}
 
 	###############

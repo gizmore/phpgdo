@@ -145,7 +145,7 @@ abstract class MethodTable extends MethodForm
 	 */
 	public function isOrdered(): bool { return true; }
 
-	protected function getOrderName(): string { return 'o'; }
+	protected function getOrderName(): string { return '_o'; }
 
 	public function getDefaultOrder(): ?string
 	{
