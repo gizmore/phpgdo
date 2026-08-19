@@ -38,7 +38,11 @@ final class Timezones extends MethodAjax
 
 	public function execute(): GDT
 	{
-		$data = GDO_Timezone::table()->allCached('tz_name', true);
+		// Send a plain scalar catalogue. allCached() currently returns cached GDO
+		// shells here, which JSON serialise as {"recache":false} and leave the
+		// client with no tz_id/tz_name values to render.
+		$data = GDO_Timezone::table()->select('tz_id, tz_name, tz_offset')->
+			order('tz_name')->exec()->fetchAllAssoc();
 		return GDT_JSON::make()->value($data);
 	}
 
