@@ -16,6 +16,16 @@ use GDO\Date\GDO_Timezone;
 final class Timezones extends MethodAjax
 {
 
+	/**
+	 * The timezone catalogue contains no account-specific data. Settings needs
+	 * it during bootstrap as well, before a browser session is necessarily
+	 * available to the backend origin.
+	 */
+	public function isUserRequired(): bool
+	{
+		return false;
+	}
+
 	public function getMethodTitle(): string
 	{
 		return t('mt_timezones');
