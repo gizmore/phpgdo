@@ -973,7 +973,10 @@ class GDO_Module extends GDO
 				$uid = $user->getID();
 				$query1 = GDO_UserSetting::table()->select('uset_name, gdo_usersetting.*')->where('uset_user=' . $uid);
 				$query2 = GDO_UserSettingBlob::table()->select('uset_name, gdo_usersettingblob.*')->where('uset_user=' . $uid);
-				$cache = $query1->union($query2)->exec()->fetchAllArray2dObject();
+				// ACLs are looked up by setting name below. Do not key this cache by
+				// GDO_UserSetting's composite primary key ("user_id:uset_name"), or
+				// every lookup misses and silently falls back to the module default.
+				$cache = $query1->union($query2)->exec()->fetchAllArrayAssoc2dObject();
 				Cache::set($key, $cache);
 			}
 			return $cache;
@@ -1113,13 +1116,13 @@ class GDO_Module extends GDO
 	private function _ucacl(string $key, GDT_ACL $acl, GDO_User $user): GDT_ACL
 	{
 		$gdt = $this->userSetting($user, $key);
-		foreach (array_keys($gdt->getGDOData()) as $k)
-		{
-			$data = $this->getACLDataFor($user, $gdt, $k);
-			$acl->aclRelation->var($data[0]);
-			$acl->aclLevel->var($data[1]);
-			$acl->aclPermission->var($data[2]);
-		}
+		// ACL metadata belongs to the requested setting key. Simple GDTs such as
+		// GDT_Language do not expose a GDO data column here, so iterating
+		// getGDOData() silently retained the module default (usually acl_all).
+		$data = $this->getACLDataFor($user, $gdt, $key);
+		$acl->aclRelation->var($data[0]);
+		$acl->aclLevel->var($data[1]);
+		$acl->aclPermission->var($data[2]);
 		return $acl;
 	}
 
