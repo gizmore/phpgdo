@@ -998,11 +998,11 @@ class GDO_Module extends GDO
 		$gdt = $this->getSetting($key);
 		if ($gdt instanceof GDT_Text)
 		{
-			GDO_UserSettingBlob::updateACL($user, $gdt, $aclField, $aclVar);
+			GDO_UserSettingBlob::updateACL($user, $key, $aclField, $aclVar);
 		}
 		else
 		{
-			GDO_UserSetting::updateACL($user, $gdt, $aclField, $aclVar);
+			GDO_UserSetting::updateACL($user, $key, $aclField, $aclVar);
 		}
 	}
 

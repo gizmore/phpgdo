@@ -4,7 +4,6 @@ namespace GDO\User;
 
 use GDO\Core\GDO;
 use GDO\Core\GDO_Module;
-use GDO\Core\GDT;
 use GDO\Core\GDT_Index;
 use GDO\Core\GDT_Name;
 use GDO\Core\GDT_String;
@@ -28,14 +27,11 @@ class GDO_UserSetting extends GDO
 	###########
 	### GDO ###
 	###########
-	public static function updateACL(GDO_User $user, GDT $gdt, string $aclField, ?string $aclVar): void
+	public static function updateACL(GDO_User $user, string $key, string $aclField, ?string $aclVar): void
 	{
-		foreach (array_keys($gdt->getGDOData()) as $key)
+		if ($row = self::getById($user->getID(), $key))
 		{
-			if ($row = self::getById($user->getID(), $key))
-			{
-				$row->saveVar($aclField, $aclVar);
-			}
+			$row->saveVar($aclField, $aclVar);
 		}
 	}
 
