@@ -278,7 +278,7 @@ final class ModuleProviders
 'Language' => [],
 'Licenses' => ['Markdown'],
 'Links' => ['Votes', 'Tags', 'Cronjob'],
-'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Facebook', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
+'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Facebook', 'Favicon', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
 'LoC' => [],
 'Login' => ['Session'],
 'Lounge' => ['Cronjob'],
