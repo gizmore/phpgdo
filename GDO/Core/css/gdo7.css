@@ -23,11 +23,6 @@ div.gdt-submit {
     flex-grow: 0;
     pointer-events: auto;
 }
-/*div.gdt-submit span {*/
-    /*position: absolute;*/
-    /*left: 8px;*/
-    /*top: 0px;*/
-/*}*/
 div.gdt-submit input {
     padding-left: 4px;
     background: transparent;
@@ -197,4 +192,9 @@ img.gdo-language {
 .gdt-image,
 .gdt-image img {
     max-width: 100%;
+}
+
+.gdt-pre {
+    white-space: pre-line;
+    word-break: break-all;
 }
