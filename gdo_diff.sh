@@ -4,6 +4,9 @@ set -euo pipefail
 core_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 cd -- "$core_dir"
 
+clear
+echo "===GDO_DIFF==="
+
 command -v git >/dev/null 2>&1 || {
     printf 'ERROR: git was not found\n' >&2
     exit 127
