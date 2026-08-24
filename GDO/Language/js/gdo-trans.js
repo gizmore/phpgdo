@@ -1,4 +1,3 @@
-"use strict";
 function GDO_Trans() {
 	
 	this.CACHE = {};
