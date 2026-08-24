@@ -108,6 +108,7 @@ return [
 	'msg_module_methods' => '%s methods: %s.',
 	'msg_abort' => 'User abort.',
     'msg_gdoadm_migrated' => 'The module %s got all it\'s tables migrated.',
+    'msg_device_dimension_saved' => 'Device display dimensions saved.',
 
 	# Checkbox
 	'enum_yes' => 'Yes',
