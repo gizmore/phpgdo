@@ -50,6 +50,12 @@ final class GDT_Index extends GDT
 		return true;
 	}
 
+	/** An index is virtual at runtime but still emits a CREATE TABLE definition. */
+	public function gdoColumnNames(): array
+	{
+		return [$this->getName()];
+	}
+
 	/**
 	 * Set the columns to index.
 	 * Set's GDT name to regarding value, if not set yet.
