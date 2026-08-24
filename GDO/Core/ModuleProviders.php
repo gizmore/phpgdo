@@ -122,6 +122,7 @@ final class ModuleProviders
 'LinkUUp' => 'phpgdo-linkuup',
 'LoC' => 'phpgdo-loc',
 'Login' => 'phpgdo-login',
+'Logs' => 'phpgdo-logs',
 'Lounge' => 'phpgdo-lounge',
 'Mail' => 'phpgdo-mail',
 'Maintenance' => 'phpgdo-maintenance',
@@ -278,9 +279,10 @@ final class ModuleProviders
 'Language' => [],
 'Licenses' => ['Markdown'],
 'Links' => ['Votes', 'Tags', 'Cronjob'],
-'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Facebook', 'Favicon', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
+'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'CLI', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Facebook', 'Favicon', 'Friends', 'Gallery', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
 'LoC' => [],
 'Login' => ['Session'],
+'Logs' => ['CLI', 'Cronjob', 'ZIP'],
 'Lounge' => ['Cronjob'],
 'Mail' => ['Mailer', 'Net'],
 'Mailer' => ['Mail'],
@@ -338,7 +340,7 @@ final class ModuleProviders
 'Websocket' => ['Session'],
 'YouTube' => ['File'],
 'YTBest' => ['Admin', 'Classic', 'Comments', 'Login', 'Recovery', 'Register', 'Votes', 'YouTube'],
-'ZIP' => [],
+'ZIP' => ['ZIP'],
 ### END_DEPENDENCIES ###
 	];
 
