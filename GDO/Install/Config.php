@@ -160,7 +160,8 @@ class Config
 		deff('GDO_BOT_NAME', GDO_SITENAME . ' Support System');
 		deff('GDO_BOT_EMAIL', 'support@' . GDO_DOMAIN);
 		deff('GDO_ADMIN_EMAIL', 'administrator@' . GDO_DOMAIN);
-		deff('GDO_ERROR_MAIL_RECIPIENTS', 'errors@' . GDO_DOMAIN);
+        deff('GDO_ERROR_MAILS', false);
+        deff('GDO_ERROR_MAIL_RECIPIENTS', 'errors@' . GDO_DOMAIN);
 		deff('GDO_DEBUG_EMAIL', true);
         # SMTP
         deff('GDO_SMTP_HOST', GDO_DOMAIN);
@@ -284,7 +285,8 @@ class Config
 			GDT_String::make('bot_name')->notNull()->initialValue(GDO_BOT_NAME)->label('bot_name')->tooltipRaw('Robot Mail sender Name'),
 			GDT_String::make('bot_email')->notNull()->initialValue(GDO_BOT_EMAIL)->label('bot_mail')->tooltipRaw('Robot Mail sender Mail'),
 			GDT_String::make('admin_email')->notNull()->initialValue(GDO_ADMIN_EMAIL)->label('admin_mail')->tooltipRaw('Administrator Mail'),
-			GDT_String::make('error_mail_recipients')->notNull()->initialValue(GDO_ERROR_MAIL_RECIPIENTS)->label('error_mail')->tooltipRaw('Recipients of PHP/GDO errors and Core 403/404 notification mails; separate by comma.'),
+            GDT_String::make('error_mails')->notNull()->initialValue(GDO_ERROR_MAILS)->label('error_mails')->tooltipRaw('Recipients of PHP/GDO errors and Core 403/404 notification mails; separate by comma.'),
+            GDT_String::make('error_mail_recipients')->notNull()->initialValue(GDO_ERROR_MAIL_RECIPIENTS)->label('error_mail_recipients')->tooltipRaw('Recipients of PHP/GDO errors and Core 403/404 notification mails; separate by comma.'),
 			GDT_Checkbox::make('debug_email')->initialValue(!!GDO_DEBUG_EMAIL)->tooltipRaw('Enable Print to Screen debugging?'),
 
             # Email sending
