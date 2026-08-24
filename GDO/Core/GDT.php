@@ -607,7 +607,7 @@ abstract class GDT
 		return self::EMPTY_ARRAY;
 	}
 
-	public function getInput() : ?string
+	public function getInput() : string|array|null
 	{
 		return null;
 	}

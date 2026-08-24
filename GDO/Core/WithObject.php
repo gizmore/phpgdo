@@ -60,7 +60,15 @@ trait WithObject
 
 	public function toVar(null|bool|int|float|string|object|array $value): ?string
 	{
-		return $value ? $value->getID() : null;
+		if ($value === null)
+		{
+			return null;
+		}
+		if (isset($this->multiple) && $this->multiple)
+		{
+			return json_encode(array_map(static fn (GDO $gdo): string => $gdo->getID(), $value));
+		}
+		return $value->getID();
 	}
 
 	public function displayVar(?string $var = null): string
@@ -96,15 +104,33 @@ trait WithObject
 
 	public function toValue(null|string|array $var): null|bool|int|float|string|object|array
 	{
-		if ($var !== null)
+		if ($var === null)
 		{
-			if (
-				($gdo = $this->table::getById($var)) ||
-				($gdo = $this->getByName($var))
-			)
+			return null;
+		}
+		if (isset($this->multiple) && $this->multiple)
+		{
+			$vars = is_array($var) ? $var : json_decode($var, true);
+			if (!is_array($vars))
 			{
-				return $gdo;
+				$vars = [$var];
 			}
+			$gdos = [];
+			foreach ($vars as $id)
+			{
+				if (($gdo = $this->table::getById($id)) || ($gdo = $this->getByName($id)))
+				{
+					$gdos[] = $gdo;
+				}
+			}
+			return $gdos;
+		}
+		if (
+			($gdo = $this->table::getById($var)) ||
+			($gdo = $this->getByName($var))
+		)
+		{
+			return $gdo;
 		}
 		return null;
 	}
@@ -178,11 +204,11 @@ trait WithObject
 
 	public function getVar(): string|array|null
 	{
-		if (!($var = $this->getInput()))
+		if (null !== ($input = $this->getInput()))
 		{
-			$var = $this->var;
+			return $this->inputToVar($input);
 		}
-		return $var ?? null;
+		return $this->var;
 	}
 
 	# ###############

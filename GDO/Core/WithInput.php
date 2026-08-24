@@ -56,7 +56,7 @@ trait WithInput
 		return $this->hasInputFor($this->getName());
 	}
 
-	public function getInput(): ?string
+	public function getInput(): string|array|null
 	{
 		return $this->inputs[$this->getName()] ?? null;
 	}
