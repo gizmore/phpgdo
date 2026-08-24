@@ -67,5 +67,6 @@ return [
 
 	'link_account' => 'Your account',
 	'p_info_own_profile' => 'Dies ist ihr eigenes Profil. Sie können es hier editieren: %s.',
+	'err_user_deleted' => 'Dieser Nutzer wurde am %2$s von %1$s gelöscht.',
 	'relation_for' => 'Sichtbarkeit für `%s`',
 ];

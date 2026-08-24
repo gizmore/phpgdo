@@ -28,6 +28,10 @@ return [
 	'msg_module_uninstalled' => 'Das %s Modul wurde deinstalliert. Alle seine Tabellen wurden gelöscht',
 ################################################################
 	'mt_admin_configure' => '%s konfigurieren',
+	'err_mod_config' => 'Die Konfiguration und Einstellungen des Moduls %s sind fehlerhaft. Von %s geprüften GDT waren %s fehlerhaft. Von %s Einträgen wurden %s zur Korrektur entfernt.',
+	'err_mod_config_error' => 'Der Modulwert `%s` von %s für %s ist ungültig: %s – Beispiel: `%s`.',
+	'msg_mod_config_fixed' => 'Der Modulwert `%s` von %s für %s war ungültig: %s. Er wurde auf den Standardwert `%s` zurückgesetzt.',
+	'msg_mod_config_ok' => 'Die Konfiguration und Einstellungen des Moduls %s sind in Ordnung. Für %s GDT wurden insgesamt %s Einträge geprüft.',
 	'module_version' => 'Version',
 	'version_available' => 'Version verfügbar',
 	'form_div_config_vars' => 'Konfiguration',
