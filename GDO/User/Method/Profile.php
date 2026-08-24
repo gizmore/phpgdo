@@ -167,7 +167,7 @@ final class Profile extends MethodCard
 		foreach ($cache as $gdt)
 		{
 			$name = $gdt->getName();
-			if (!$gdt->isSerializable())
+			if (!$gdt->isSerializable() || $gdt->isHidden())
 			{
 				continue; # skip passwords.
 			}
