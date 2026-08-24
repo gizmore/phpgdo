@@ -158,7 +158,7 @@ class GDO_UserSetting extends GDO
 		return $this->gdoVar('uset_relation');
 	}
 
-	public function getLevel(): string
+	public function getLevel(): ?string
 	{
 		return $this->gdoVar('uset_level');
 	}
