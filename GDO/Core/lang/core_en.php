@@ -150,6 +150,7 @@ return [
 	'btn_participate' => 'Participate',
 	'btn_preview' => 'Preview',
 	'btn_print' => 'Print',
+	'btn_search' => 'Search',
 	'btn_save' => 'Save',
 	'btn_send' => 'Send',
 	'btn_invisible' => 'Set Invisble',
