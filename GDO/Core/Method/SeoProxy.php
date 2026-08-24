@@ -7,8 +7,6 @@ use GDO\Core\GDO_Exception;
 use GDO\Core\GDT;
 use GDO\Core\Method;
 use GDO\Core\ModuleLoader;
-use GDO\Util\Arrays;
-use GDO\Util\Strings;
 
 /**
  * Proxy an HTTP request / URL to a Method via GDOv7 SEO url rules.
@@ -44,8 +42,15 @@ final class SeoProxy extends Method
 	public static function makeProxied(string $url): Method
 	{
 		$loader = ModuleLoader::instance();
-		$args = explode(GDO_SEO_SEP, trim($url, '/'.GDO_SEO_SEP));
-        $last = Arrays::last($args);
+		$path = trim($url, '/');
+		# The extension is not an argument. Remove it before splitting dotted
+		# routes, otherwise `.html` looks like a parameter without a value.
+		$suffix = pathinfo($path, PATHINFO_EXTENSION) ?: 'html';
+		$path = preg_replace('/\\.[A-Za-z0-9]+$/', '', $path);
+		$args = explode(GDO_SEO_SEP, trim($path, GDO_SEO_SEP));
+
+		$app = Application::$INSTANCE;
+		$app->modeDetected($app->detectRenderMode($suffix));
 
 		# Module
 		$mo = array_shift($args);
@@ -62,14 +67,6 @@ final class SeoProxy extends Method
 			$_REQUEST['_url'] = $url; # and a step back for 404 url :)
 			return FileNotFound::make();
 		}
-
-        # Remove possible .mode from method
-        $me = Strings::rsubstrTo($me, '.', $me);
-
-        # Remove possible .mode from lat arg
-        $suffix = Strings::rsubstrFrom( $last, '.', 'html');
-        $app = Application::$INSTANCE;
-        $app->modeDetected($app->detectRenderMode($suffix));
 
 		if (!($method = $module->getMethodByName($me, false)))
 		{
@@ -88,12 +85,6 @@ final class SeoProxy extends Method
 				$_REQUEST[$key] = @$args[$i];
 			}
 			$i++;
-		}
-
-		# Remove filetype suffix from last parameter.
-		if ($i && isset($key))
-		{
-			$_REQUEST[$key] = Strings::rsubstrTo($_REQUEST[$key], '.', $_REQUEST[$key]);
 		}
 
 		return $method;

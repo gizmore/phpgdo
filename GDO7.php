@@ -23,7 +23,7 @@ use GDO\Util\Strings;
  */
 const GDO_PATH = __DIR__ . '/';
 
-const GDO_SEO_SEP = ';';
+const GDO_SEO_SEP = '.';
 #
 ##
 ########################
@@ -207,7 +207,8 @@ function hrefNoSeo(string $module, string $method, ?string $append = null): stri
 
 function seo(string $str): string
 {
-	return trim(preg_replace('#[^~{}\\-_.,\\p{L}0-9]#', '_', $str), '_');
+	# A dot is the SEO path separator. Keep generated values unambiguous.
+	return trim(preg_replace('#[^~{}\\-_,\\p{L}0-9]#', '_', $str), '_');
 }
 
 function quote($value): string
