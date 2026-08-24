@@ -18,7 +18,7 @@ ini_set('display_errors', 'On'); # Should be enabled / does not matter because o
  * - There are 2 domain settings: GDO_DOMAIN and GDO_SESS_DOMAIN.
  * - GDO_DB_ENABLED is easily overlooked.
  *
- * (c)2021-2023 - gizmore@wechall.net
+ * (c)2021-2026 - gizmore@wechall.net
  * re-created by GDOv7.0.3-r1830 on ---.
  **/
 define('GDO_CONFIGURED', '1');

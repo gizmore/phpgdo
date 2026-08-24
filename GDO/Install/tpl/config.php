@@ -41,7 +41,7 @@ $de = $de ? 'On' : 'Off'; ?>
     * - There are 2 domain settings: GDO_DOMAIN and GDO_SESS_DOMAIN.
     * - GDO_DB_ENABLED is easily overlooked.
     *
-    * (c)2021-2023 - gizmore@wechall.net
+    * (c)2021-2026 - gizmore@wechall.net
     * re-created by GDOv<?=Module_Core::GDO_REVISION;?> on <?=Time::displayDate()?>.
     **/
 	<?php
