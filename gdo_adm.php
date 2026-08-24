@@ -868,6 +868,7 @@ elseif (($command === 'wipe') && ($app->all))
     Database::instance()->dropDatabase(GDO_DB_NAME);
     Database::instance()->createDatabase(GDO_DB_NAME);
     FileUtil::emptyDir(GDO_File::filesDir());
+    FileUtil::emptyDir(GDO_PATH . 'protected/logs');
     printf("The database has been killed completely and created empty.\n");
 }
 
