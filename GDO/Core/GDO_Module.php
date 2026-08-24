@@ -1029,9 +1029,9 @@ class GDO_Module extends GDO
 
 	public function hasUserSettings(): bool
 	{
-		foreach ($this->getSettingsCache() as $gdt)
+		foreach ($this->getSettingsSettings() as $gdt)
 		{
-			if (!$gdt->isHidden())
+			if ($gdt->isWriteable() && (!$gdt->isHidden()))
 			{
 				return true;
 			}
