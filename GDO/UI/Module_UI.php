@@ -122,7 +122,10 @@ final class Module_UI extends GDO_Module
     private function setupEditor(): void
     {
         $user = GDO_User::current();
-        $decoder = $user->settingVar('UI', 'text_editor');
+        // LinkUUp locks the editor choice. Do not resolve the now absent user
+        // setting, as an old persisted text_editor value has no GDT anymore.
+        $decoder = $this->cfgAllowEditorChoice() ?
+            $user->settingVar('UI', 'text_editor') : $this->cfgDefaultEditor();
         GDT_Message::setDecoder($decoder);
     }
 
