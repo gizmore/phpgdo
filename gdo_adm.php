@@ -417,8 +417,8 @@ if (!$db)
     $inst->onLoadLanguage();
 }
 
-$loader->loadModules($db, true);
-$loader->initModules($db);
+$loader->loadModules(GDO_DB_ENABLED, true);
+$loader->initModuleVars();
 
 # Run!
 if ($command === 'cc')

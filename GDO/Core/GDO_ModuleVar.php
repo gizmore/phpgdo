@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use GDO\DB\Cache;
+
 /**
  * Module config table.
  * As long as nothing is configured, the initial value from the config gdt is used.
@@ -58,6 +60,7 @@ final class GDO_ModuleVar extends GDO
 
 	public function gdoAfterCreate(GDO $gdo): void
 	{
+		Cache::remove('gdo_modulevars');
 		$gdo->reset();
 	}
 
@@ -67,6 +70,7 @@ final class GDO_ModuleVar extends GDO
 
 	public function gdoAfterUpdate(GDO $gdo): void
 	{
+		Cache::remove('gdo_modulevars');
 		$gdo->reset();
 	}
 
@@ -76,6 +80,7 @@ final class GDO_ModuleVar extends GDO
 
 	public function gdoAfterDelete(GDO $gdo): void
 	{
+		Cache::remove('gdo_modulevars');
 		$gdo->reset();
 	}
 
