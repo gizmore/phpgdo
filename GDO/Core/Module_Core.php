@@ -185,6 +185,13 @@ final class Module_Core extends GDO_Module
 	{
 		$user = GDO_User::current();
 		$data = $user->toJSON();
+		// Credits are a PaymentCredits user setting rather than a GDO_User column.
+		// Expose the current balance to app clients with the rest of their session
+		// data so a navigation badge can render without an extra request.
+		if (module_enabled('PaymentCredits'))
+		{
+			$data['user_credits'] = $user->getCredits();
+		}
 		$data['timezone'] = Module_Date::instance()->cfgUserTimezoneId($user);
 		$data['language'] = Module_Language::instance()->cfgUserLangID($user);
 		return $data;
