@@ -213,7 +213,14 @@ window.GDO.gdoxhr = function(module, method, append, verb, data) {
 
 var origOpen = window.XMLHttpRequest.prototype.open;
 window.XMLHttpRequest.prototype.open = function () {
-	let result = window.origOpen.apply(this, arguments);
+	let result = origOpen.apply(this, arguments);
+	// Do not turn third-party requests (for example Google Maps tiles and
+	// services) into CORS preflight requests. CSRF credentials belong only on
+	// requests back to this application.
+	let requestURL = new URL(arguments[1], window.location.href);
+	if (requestURL.origin !== window.location.origin) {
+		return result;
+	}
 	let token = document.querySelector('meta[name="csrf-token"]');
 	token = token ? token.getAttribute('content') : 'not-there';
 	this.setRequestHeader('X-CSRF-TOKEN', token);
