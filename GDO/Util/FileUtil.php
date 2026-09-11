@@ -337,7 +337,8 @@ final class FileUtil
 
 	private static function getTextArray(): array
 	{
-		return t('_filesize');
+		$units = t('_filesize');
+		return is_array($units) ? $units : ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 	}
 
 	/**
