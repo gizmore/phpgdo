@@ -1574,7 +1574,13 @@ abstract class GDO extends GDT
 	 */
 	public function increase(string $key, float $by = 1): self
 	{
-		return $this->saveVar($key, (string) ($this->gdoVar($key) + $by));
+		$operator = $by < 0 ? '-' : '+';
+		$query = $this->updateQuery()->set("{$key}={$key}{$operator}{$by}");
+		$this->beforeUpdate($query);
+		$query->exec();
+		$this->gdoVars[$key] = (string) ((float)$this->gdoVars[$key] + $by);
+		$this->afterUpdate();
+		return $this;
 	}
 
 	/**
