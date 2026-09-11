@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\Core;
 
+use DateTimeImmutable;
 use DateTimeZone;
 use GDO\Date\Time;
 use GDO\Form\GDT_Form;
@@ -177,7 +178,7 @@ final class Logger
 		# log it?
 		if (self::isEnabled($logmode))
 		{
-			$time = Time::displayTimestamp(0, 'db');
+			$time = (new DateTimeImmutable('now', self::$TIMEZONE))->format('Y-m-d H:i:s.v');
 			$ip = self::isDisabled(self::IP) ? '' : (@$_SERVER['REMOTE_ADDR']?$_SERVER['REMOTE_ADDR']:'0');
 			$username = self::$username ?: ':~guest~';
 			self::logB($filename, sprintf(self::$logformat, $time, $ip, $username, $message));
