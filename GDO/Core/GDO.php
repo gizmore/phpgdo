@@ -1204,9 +1204,13 @@ abstract class GDO extends GDT
 		{
 			return $this->insert($withHooks);
 		}
-		if ($setClause = $this->getSetClause())
+		if ($setVars = $this->getSetVars())
 		{
-			$query = $this->updateQuery()->set($setClause);
+			$query = $this->updateQuery();
+			foreach ($setVars as $key => $var)
+			{
+				$query->set($key, self::quoteS($var));
+			}
 
 			if ($withHooks)
 			{
@@ -1345,7 +1349,22 @@ abstract class GDO extends GDT
 
 	public function getSetClause(): string
 	{
-		$setClause = '';
+		$setClause = [];
+		foreach ($this->getSetVars() as $key => $value)
+		{
+			$setClause[] = $key . '=' . self::quoteS($value);
+		}
+		return implode(',', $setClause);
+	}
+
+	/**
+	 * Build the column-value map for an entity update.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getSetVars(): array
+	{
+		$setVars = [];
 		if ($this->dirty !== false)
 		{
 			foreach ($this->gdoColumnsCache() as $column)
@@ -1356,17 +1375,13 @@ abstract class GDO extends GDT
 					{
 						foreach ($column->gdo($this)->getGDOData() as $k => $v)
 						{
-							if ($setClause !== '')
-							{
-								$setClause .= ',';
-							}
-							$setClause .= $k . '=' . self::quoteS($v);
+							$setVars[$k] = $v;
 						}
 					}
 				}
 			}
 		}
-		return $setClause;
+		return $setVars;
 	}
 
 	/**
@@ -1575,7 +1590,7 @@ abstract class GDO extends GDT
 	public function increase(string $key, float $by = 1): self
 	{
 		$operator = $by < 0 ? '-' : '+';
-		$query = $this->updateQuery()->set("{$key}={$key}{$operator}{$by}");
+		$query = $this->updateQuery()->set($key, "{$key}{$operator}{$by}");
 		$this->beforeUpdate($query);
 		$query->exec();
 		$this->gdoVars[$key] = (string) ((float)$this->gdoVars[$key] + $by);
@@ -1606,7 +1621,7 @@ abstract class GDO extends GDT
 			{
 				if ($var !== $this->gdoVars[$key])
 				{
-					$query->set("{$key}=" . self::quoteS($var));
+					$query->set($key, self::quoteS($var));
 					$this->markClean($key);
 					$worthy = true; # We got a change
 				}

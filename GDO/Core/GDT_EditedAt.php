@@ -31,7 +31,7 @@ final class GDT_EditedAt extends GDT_Timestamp
 	public function gdoBeforeUpdate(GDO $gdo, Query $query): void
 	{
 		$now = Time::getDate();
-		$query->set($this->getName() . '=' . quote($now));
+		$query->set($this->getName(), quote($now));
 		$gdo->setVar($this->name, $now);
 	}
 

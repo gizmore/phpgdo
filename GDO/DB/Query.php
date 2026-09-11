@@ -65,7 +65,7 @@ final class Query
 	private ?string $having = null;
 	private ?string $from = null;
 	private int $type = self::RAW;
-	private ?string $set = null; # Is it a write query?
+	private array $set = []; # SET expressions indexed by column name.
 	private ?string $limit = null;
 	private ?string $raw = null;
 	private bool $write = false;
@@ -149,6 +149,7 @@ final class Query
 			$clone->having = $this->having;
 			$clone->order = $this->order;
 			$clone->limit = $this->limit;
+			$clone->set = $this->set;
 			$clone->write = $this->write;
 			$clone->cached = $this->cached;
 		}
@@ -303,16 +304,20 @@ final class Query
 	/**
 	 * Build part of the SET clause.
 	 */
-	public function set(string $set): self
+	public function set(string $key, ?string $value = null): self
 	{
-		if (isset($this->set))
+		# Keep the one-argument form compatible with existing callers.
+		if ($value === null)
 		{
-			$this->set .= ',' . $set;
+			if (($separator = strpos($key, '=')) === false)
+			{
+				$this->set[] = $key;
+				return $this;
+			}
+			$value = substr($key, $separator + 1);
+			$key = substr($key, 0, $separator);
 		}
-		else
-		{
-			$this->set = $set;
-		}
+		$this->set[trim($key)] = trim($value);
 		return $this;
 	}
 
@@ -544,7 +549,16 @@ final class Query
 
 	public function getSet(): string
 	{
-		return isset($this->set) ? " SET {$this->set}" : '';
+		if (!$this->set)
+		{
+			return '';
+		}
+		$set = [];
+		foreach ($this->set as $key => $value)
+		{
+			$set[] = is_int($key) ? $value : "{$key}={$value}";
+		}
+		return ' SET ' . implode(',', $set);
 	}
 
 	public function getWhere(): string

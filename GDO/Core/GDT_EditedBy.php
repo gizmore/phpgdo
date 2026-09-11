@@ -30,7 +30,7 @@ final class GDT_EditedBy extends GDT_User
 	public function gdoBeforeUpdate(GDO $gdo, Query $query): void
 	{
 		$userId = GDO_User::current()->getID() ?: GDT::ONE;
-		$query->set("{$this->name}={$userId}");
+		$query->set($this->name, $userId);
 		$this->gdo->setVar($this->name, $userId);
 	}
 
