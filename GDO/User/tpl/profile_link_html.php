@@ -28,7 +28,11 @@ if ($field->avatar) : ?>
 endif; ?>
 	<?php
 	if ($field->nickname) : ?>
-        <a href="<?=$href?>" class="gdt-nickname"><?=$field->getGDO()->renderUserName()?></a>
+		<?php if ($user->hasDisplayName()) : ?>
+        <a href="<?=$href?>" class="gdt-nickname">[<?=$user->renderDisplayName()?>]</a>
+		<?php else : ?>
+        <a href="<?=$href?>" class="gdt-nickname"><b><?=$field->getGDO()->renderUserName()?></b></a>
+		<?php endif; ?>
 	<?php
 	endif; ?>
 	<?php

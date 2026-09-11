@@ -21,6 +21,7 @@ return [
 	'last_activity' => 'Last activity',
 
 	'user_name' => 'Username',
+	'user_display_name' => 'Display name',
 	'profile_level' => 'This %s has a user level of %s.',
 
 	'link_your_profile' => '[%s]',

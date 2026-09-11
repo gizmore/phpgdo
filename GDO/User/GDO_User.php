@@ -12,6 +12,7 @@ use GDO\Core\GDT_DeletedAt;
 use GDO\Core\GDT_DeletedBy;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDT_Index;
+use GDO\Core\GDT_String;
 use GDO\Core\ModuleLoader;
 use GDO\Date\Module_Date;
 use GDO\Date\Time;
@@ -300,6 +301,7 @@ final class GDO_User extends GDO
 			GDT_AutoInc::make('user_id'),
 			GDT_UserType::make('user_type')->notNull(),
 			GDT_Username::make('user_name')->notNull(false)->unique(),
+			GDT_String::make('user_display_name')->utf8()->max(191)->notNull(false),
 			GDT_Username::make('user_guest_name')->unique()->notNull(false)->label('user_guest_name'),
 			GDT_Level::make('user_level'),
 			GDT_DeletedAt::make('user_deleted'),
@@ -370,6 +372,12 @@ final class GDO_User extends GDO
 	}
 
 	public function getName(): ?string { return $this->gdoVar('user_name'); }
+
+	public function getDisplayName(): ?string { return $this->gdoVar('user_display_name'); }
+
+	public function hasDisplayName(): bool { return trim((string)$this->getDisplayName()) !== ''; }
+
+	public function renderDisplayName(): string { return html((string)$this->getDisplayName()); }
 
 	public function getGuestName(): ?string { return $this->gdoVar('user_guest_name'); }
 
