@@ -236,6 +236,20 @@ final class Module_Core extends GDO_Module
 			return true;
 		}
 
+		if (preg_match('#^GDO/([^/]+)/(.*)$#D', $url, $matches))
+		{
+			if ($module = ModuleLoader::instance()->getModule($matches[1], false))
+			{
+				foreach ($module->thirdPartyFolders() as $folder)
+				{
+					if (str_starts_with($matches[2], $folder))
+					{
+						return true;
+					}
+				}
+			}
+		}
+
 		if (preg_match('/\\.(?:ttf|woff|woff2|png|gif|jpg|jpeg|webp|ico|svg)$/iD', $url))
 		{
 			return true;
