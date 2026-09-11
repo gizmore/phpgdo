@@ -38,6 +38,11 @@ class GDT_Float extends GDT_Int
 		return self::displayS($this->var, $this->decimals);
 	}
 
+	public function displayVar(?string $var = null): string
+	{
+		return self::displayS($var, $this->decimals);
+	}
+
     public function renderBinary(): string
     {
         $float = $this->getVar();
@@ -51,6 +56,11 @@ class GDT_Float extends GDT_Int
 			$dot = $dot !== null ? $dot : self::decimalPoint();
 			$comma = $comma != null ? $comma : self::thousandSeperator();
 			$display = number_format(floatval($var), $decimals, $dot, $comma);
+			if ($decimals > 0)
+			{
+				$display = rtrim($display, '0');
+				$display = str_ends_with($display, $dot) ? $display . '0' : $display;
+			}
 			return $display;
 		}
 		return self::none();
