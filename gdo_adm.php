@@ -419,6 +419,7 @@ if (!$db)
 
 $loader->loadModules(GDO_DB_ENABLED, true);
 $loader->initModuleVars();
+Trans::inited();
 
 # Run!
 if ($command === 'cc')
