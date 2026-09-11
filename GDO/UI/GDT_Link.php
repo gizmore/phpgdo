@@ -91,7 +91,7 @@ class GDT_Link extends GDT_Url
 
 	public function renderForm(): string
 	{
-		return $this->renderHTML();
+		return $this->isHidden() ? '' : $this->renderHTML();
 	}
 
 	/** Table cells should not get the inherited generic URL icon by default. */
