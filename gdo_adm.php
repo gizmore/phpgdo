@@ -884,6 +884,7 @@ elseif ($command === 'wipe')
 
     // Cleanup files dir on gdo_adm.sh wipe <module>
     $removedFiles = 0;
+    $deletedFileIDs = [];
     foreach ($module->getClasses() as $classname)
     {
         $gdo = Database::tableS($classname);
@@ -891,7 +892,12 @@ elseif ($command === 'wipe')
         {
             foreach ($gdo->all() as $entry)
             {
+                if (isset($deletedFileIDs[$entry->getID()]))
+                {
+                    continue;
+                }
                 $entry->delete();
+                $deletedFileIDs[$entry->getID()] = true;
                 $removedFiles++;
             }
         }
@@ -905,7 +911,12 @@ elseif ($command === 'wipe')
                     $files = $gdo->select("{$name}_t.*")->where($name)->joinObject($name)->fetchTable(GDO_File::table())->exec();
                     while ($file = GDO_File::fetchFrom($files))
                     {
+                        if (isset($deletedFileIDs[$file->getID()]))
+                        {
+                            continue;
+                        }
                         $file->delete();
+                        $deletedFileIDs[$file->getID()] = true;
                         $removedFiles++;
                     }
                 }
