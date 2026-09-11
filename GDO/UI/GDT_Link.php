@@ -94,6 +94,19 @@ class GDT_Link extends GDT_Url
 		return $this->renderHTML();
 	}
 
+	/** Table cells should not get the inherited generic URL icon by default. */
+	public function renderCell(): string
+	{
+		if (($this->icon ?? null) !== 'url')
+		{
+			return $this->renderHTML();
+		}
+		unset($this->icon);
+		$html = $this->renderHTML();
+		$this->icon = 'url';
+		return $html;
+	}
+
 	public function renderCLI(): string
 	{
 		return $this->renderJSON();
