@@ -28,7 +28,7 @@ trait WithName
 
 	public static function makeNamed(?string $name = null): static
 	{
-		$obj = static::make($name);
+		$obj = new static($name);
 		return $obj->name($name??$obj->gdtDefaultName());
 	}
 
