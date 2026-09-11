@@ -282,7 +282,7 @@ final class ModuleProviders
 'Language' => [],
 'Licenses' => ['Markdown'],
 'Links' => ['Votes', 'Tags', 'Cronjob'],
-'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'CLI', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Facebook', 'Favicon', 'Friends', 'Gallery', 'GoogleAuth', 'Instagram', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Logs', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
+'LinkUUp' => ['AboutMe', 'Account', 'ActivationAlert', 'Address', 'Admin', 'Avatar', 'Backup', 'Birthday', 'Bootstrap5Theme', 'Captcha', 'Classic', 'CLI', 'Comments', 'Contact', 'CORS', 'Country', 'CSS', 'Currency', 'DBMS', 'DSGVO', 'Favicon', 'Friends', 'Gallery', 'GoogleAuth', 'Javascript', 'JPGraph', 'JQueryAutocomplete', 'Licenses', 'Login', 'Logs', 'Maps', 'Markdown', 'News', 'OpenTimes', 'Perf', 'PaymentBank', 'PaymentCredits', 'PaymentPaypal', 'QRCode', 'Recovery', 'Register', 'Session', 'Websocket'],
 'LoC' => [],
 'Login' => ['Session'],
 'Logs' => ['CLI', 'Cronjob', 'ZIP'],
