@@ -84,9 +84,9 @@ function profile_link(string $username): string
     return \GDO\User\GDT_ProfileLink::make()->username($username)->render();
 }
 
-function url(string $module, string $method, string $append = '', bool $lang = true): string
+function url(string $module, string $method, string $append = '', string $fmt='html'): string
 {
-    return GDT_Url::absolute(href($module, $method, $append, $lang));
+    return GDT_Url::absolute(href($module, $method, $append, GDO_SEO_URLS, $fmt));
 }
 
 function urlNoSeo(string $module, string $method, string $append = '', bool $lang = true): string
