@@ -378,7 +378,7 @@ class GDT_Message extends GDT_Text
 	}
 
 
-	public function inputToVar(array|int|string|null|GDT_Method $input): ?string
+	public function inputToVar(array|int|float|string|null|GDT_Method $input): ?string
 	{
 		return parent::inputToVar(trim((string)$input));
 	}

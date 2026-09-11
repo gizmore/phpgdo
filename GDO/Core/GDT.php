@@ -775,7 +775,7 @@ abstract class GDT
 	/**
 	 * Convert user input to var.
 	 */
-	public function inputToVar(array|int|string|null|GDT_Method $input) : ?string
+	public function inputToVar(array|int|float|string|null|GDT_Method $input) : ?string
 	{
 		if ($input === null)
 		{

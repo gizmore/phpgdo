@@ -10,7 +10,7 @@ namespace GDO\Core;
 final class GDT_RegEx extends GDT_String
 {
 
-	public function inputToVar(array|int|string|null|GDT_Method $input): ?string
+	public function inputToVar(array|int|float|string|null|GDT_Method $input): ?string
 	{
 		if ($input === null)
 		{
