@@ -68,6 +68,7 @@ class Database
 	# Performance summed for all connections
 	public int $queries = 0;
 	public float $queryTime = 0.0;
+	public float $lastQueryTime = 0.0;
 	private int $port = 3306;
 	private string $host, $user, $pass;
 	private ?string $db;
@@ -268,6 +269,7 @@ class Database
 		$t1 = microtime(true); #PP#delete#
 
 		$result = $dbms->dbmsQuery($query, $buffered);
+		$this->lastQueryTime = microtime(true);
 
 		if (!$result)
 		{
