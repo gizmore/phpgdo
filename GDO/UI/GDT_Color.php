@@ -72,4 +72,19 @@ class GDT_Color extends GDT_String
 		}
 	}
 
+	public function renderCell(): string
+	{
+		if (!($hex = $this->getValue()))
+		{
+			return $this->renderHTML();
+		}
+		if (strlen($hex) === 4)
+		{
+			$hex = "#{$hex[1]}{$hex[1]}{$hex[2]}{$hex[2]}{$hex[3]}{$hex[3]}";
+		}
+		[$red, $green, $blue] = Color::fromHex($hex)->asRGB();
+		$background = (0.2126 * $red + 0.7152 * $green + 0.0722 * $blue) > 128 ? '#000' : '#fff';
+		return '<div class="gdt-color" style="background: ' . $background . '; color: ' . $hex . ';">' . $hex . '</div>';
+	}
+
 }
