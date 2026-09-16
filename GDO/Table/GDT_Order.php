@@ -184,6 +184,18 @@ final class GDT_Order extends GDT_String
 	}
 
 	/**
+	 * Toggle one explicit direction. A second click removes this column from
+	 * the order, so the table falls back to its default order.
+	 */
+	public function hrefDirection(GDT $gdt, int $direction): string
+	{
+		$name = $gdt->getName();
+		$replace = $this->state($gdt) === $direction ? '' :
+			"{$name} " . ($direction === self::ASC ? 'ASC' : 'DESC');
+		return $this->hrefReplaced($gdt, $replace);
+	}
+
+	/**
 	 * Calculate ordering state.
 	 */
 	private function state(GDT $gdt): int
@@ -233,7 +245,9 @@ final class GDT_Order extends GDT_String
 	/** @return string[] */
 	private function orderParts(): array
 	{
-		$value = $this->getVar();
+		# Keep URL state explicit. The initial/default order controls SQL and its
+		# highlighted arrow, but never leaks into a newly generated URL.
+		$value = $this->inputs[$this->name] ?? '';
 		$value = is_array($value) ? implode(',', $value) : $value;
 		return array_values(array_filter(array_map('trim', explode(',', (string)$value))));
 	}
@@ -277,6 +291,11 @@ final class GDT_Order extends GDT_String
 			default:
 				return GDT::EMPTY_STRING;
 		}
+	}
+
+	public function htmlOrderDirectionClass(GDT $gdt, int $direction): string
+	{
+		return $this->state($gdt) === $direction ? 'selected' : GDT::EMPTY_STRING;
 	}
 
 	public function htmlOrderIcon(GDT $gdt): string

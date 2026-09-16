@@ -39,4 +39,17 @@ final class TableTest extends TestCase
 		assertStringContainsString('_o=beta+DESC', $order->nextHref($alpha));
 	}
 
+	public function testExplicitOrderDirections(): void
+	{
+		$alpha = GDT_String::make('alpha');
+		$order = GDT_Order::make('_o')->
+			href('/table.html?_lang=en')-
+			setFields([$alpha])->
+			inputs(['_o' => 'alpha ASC'])->
+			orders(['alpha' => true]);
+
+		assertStringContainsString('_o=', $order->hrefDirection($alpha, GDT_Order::ASC));
+		assertStringContainsString('_o=alpha+DESC', $order->hrefDirection($alpha, GDT_Order::DESC));
+	}
+
 }

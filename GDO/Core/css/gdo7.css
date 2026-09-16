@@ -182,6 +182,28 @@ td span {
     display: inline-block;
 }
 
+.gdt-table-order {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.gdt-table-order > label {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.gdt-table-order a {
+    color: inherit;
+    opacity: .38;
+}
+
+.gdt-table-order a.selected {
+    color: #d9ac44;
+    opacity: 1;
+}
+
 /** Flags **/
 img.gdo-country,
 img.gdo-language {
