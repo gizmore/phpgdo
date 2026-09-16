@@ -28,7 +28,7 @@ echo "Updating and fixing submodules."
 git submodule foreach git reset --hard
 git submodule foreach git checkout main 2>/dev/null || true
 git submodule foreach git checkout master 2>/dev/null || true
-git submodule foreach git pull
+git submodule foreach --recursive 'if branch=$(git symbolic-ref --quiet --short HEAD); then git pull --ff-only; else branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD) && branch=${branch#origin/} && git checkout "$branch" && git pull --ff-only; fi'
 
 # Save the update
 #cd $mpath
