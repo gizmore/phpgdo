@@ -204,6 +204,13 @@ td span {
     opacity: 1;
 }
 
+.gdt-table-order-label.selected {
+    text-decoration: underline;
+    text-decoration-color: #d9ac44;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
 /** Flags **/
 img.gdo-country,
 img.gdo-language {

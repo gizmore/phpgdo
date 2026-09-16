@@ -272,7 +272,10 @@ final class GDT_Order extends GDT_String
 		{
 			return urldecode(Strings::substrTo($part, '=', $part)) !== $this->name;
 		}));
-		$query[] = $this->name . '=' . urlencode($order);
+		if ($order !== '')
+		{
+			$query[] = $this->name . '=' . urlencode($order);
+		}
 		$href = $path . '?' . implode('&', $query);
 		return $fragment === null ? $href : "{$href}#{$fragment}";
 	}

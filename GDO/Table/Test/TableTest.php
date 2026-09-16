@@ -5,6 +5,7 @@ use GDO\Core\GDT_String;
 use GDO\Table\GDT_Order;
 use GDO\Tests\TestCase;
 use function PHPUnit\Framework\assertStringContainsString;
+use function PHPUnit\Framework\assertStringNotContainsString;
 use function PHPUnit\Framework\assertTrue;
 
 /**
@@ -48,7 +49,7 @@ final class TableTest extends TestCase
 			inputs(['_o' => 'alpha ASC'])->
 			orders(['alpha' => true]);
 
-		assertStringContainsString('_o=', $order->hrefDirection($alpha, GDT_Order::ASC));
+		assertStringNotContainsString('_o=', $order->hrefDirection($alpha, GDT_Order::ASC));
 		assertStringContainsString('_o=alpha+DESC', $order->hrefDirection($alpha, GDT_Order::DESC));
 	}
 
