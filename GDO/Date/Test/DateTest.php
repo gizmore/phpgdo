@@ -47,6 +47,7 @@ final class DateTest extends TestCase
 		try
 		{
 			assertEquals('1789667728.268663', Time::getDateTime(1789667728.268663)->format('U.u'));
+			assertEquals('2026-09-17', Time::displayTimestampISO('en', 1789667728.268663, 'date'));
 		}
 		finally
 		{

@@ -301,7 +301,7 @@ final class Time
 		{
 			return $default_return;
 		}
-		$dt = DateTime::createFromFormat('U.u', sprintf('%.06f', $timestamp), self::$UTC);
+		$dt = self::getDateTime($timestamp);
 		return self::displayDateTimeISO($iso, $dt, $format, $default_return, $timezone);
 	}
 
