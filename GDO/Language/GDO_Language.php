@@ -60,7 +60,7 @@ final class GDO_Language extends GDO
 	 */
 	public static function gdoSupportedISOs(): array
 	{
-		return ['en', 'de', 'it', 'fr'];
+		return ['en', 'de', 'it', 'fr', 'ko'];
 	}
 
 	##############
