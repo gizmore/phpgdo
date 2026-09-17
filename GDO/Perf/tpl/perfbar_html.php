@@ -5,6 +5,16 @@ use GDO\Perf\GDT_PerfBar;
 
 /** @var $bar GDT_PerfBar * */
 $i = GDT_PerfBar::data();
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$parts = parse_url($requestUri) ?: ['path' => '/'];
+parse_str($parts['query'] ?? '', $query);
+$query['XDEBUG_TRIGGER'] = 'XDBGON';
+$xdebugHref = ($parts['path'] ?? '/') . '?' . http_build_query($query);
+if (isset($parts['fragment']))
+{
+	$xdebugHref .= '#' . $parts['fragment'];
+}
+$xdebugHref = htmlspecialchars($xdebugHref, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 printf('<span class="gdo-perf-bar">');
 printf('<i>%d&nbsp;Log</i>|<i>%d&nbsp;Qry</i>|<i>%d&nbsp;Wr</i>|<b>%d&nbsp;Tr</b> - ',
 	$i['logWrites'], $i['dbQueries'], $i['dbWrites'], $i['dbCommits']);
@@ -34,4 +44,6 @@ printf('%d/%d(V/IV ctx) - ',
 	$i['ctxSwitchV'], $i['ctxSwitchIV']);
 printf('%d swaps',
 	$i['ctxSwap']);
+printf(' - <a href="%s" target="_blank" rel="noopener" title="Open this request with Xdebug enabled">Xdebug</a>',
+	$xdebugHref);
 printf('</span>');

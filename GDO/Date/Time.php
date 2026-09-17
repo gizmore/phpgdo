@@ -137,7 +137,15 @@ final class Time
 			return null;
 		}
 		$time = $time <= 0 ? Application::$MICROTIME : $time;
-		return DateTime::createFromFormat('U.u', sprintf('%.06f', $time), self::$UTC);
+		if (!is_finite((float)$time))
+		{
+			return null;
+		}
+		// `sprintf('%f')` obeys LC_NUMERIC and produces a comma in locales such
+		// as de_DE. The U.u parser accepts only a literal decimal point.
+		$timestamp = number_format((float)$time, 6, '.', '');
+		$datetime = DateTime::createFromFormat('U.u', $timestamp, self::$UTC);
+		return $datetime === false ? null : $datetime;
 	}
 
 	public static function getDateSec(float|int $time=0): ?string

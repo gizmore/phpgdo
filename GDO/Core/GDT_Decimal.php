@@ -33,7 +33,7 @@ class GDT_Decimal extends GDT_Int
 		$this->digitsAfter = $after;
 		# compute step automatically nicely
 		$step = $after < 1 ? 1 : floatval('0.' . str_repeat('0', $after - 1) . '1');
-		return $after < 1 ? $this->step(1) : $this->step(sprintf("%.0{$after}f", $step));
+		return $this->step($step);
 	}
 
 	public function digitsAfter(int $after): self

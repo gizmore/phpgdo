@@ -87,7 +87,7 @@ final class Fileserver extends Method
 
 		$app = Application::$INSTANCE;
 
-		$mtime2 = @$_SERVER['HTTP_IF_MODIFIED_SINCE'] ?: Time::getDate();
+		$mtime2 = $_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? Time::getDate();
 
 		# cache hit
 		if (

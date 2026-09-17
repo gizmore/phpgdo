@@ -12,6 +12,7 @@ use GDO\Date\Time;
 use GDO\Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEquals;
+use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertTrue;
 
@@ -31,6 +32,26 @@ final class DateTest extends TestCase
 		$timezone = new DateTimeZone('Europe/Berlin');
 		$dt = DateTime::createFromFormat('m/d/Y H:i:s.u', '01/05/2020 22:01:25.000', $timezone);
 		assertTrue(!!$dt, 'Test if PHP datetime parsing is ok');
+	}
+
+	public function testInvalidTimestampReturnsNull(): void
+	{
+		assertNull(Time::getDateTime(NAN));
+		assertNull(Time::getDateTime(INF));
+	}
+
+	public function testTimestampParsingIgnoresNumericLocale(): void
+	{
+		$previous = setlocale(LC_NUMERIC, '0');
+		setlocale(LC_NUMERIC, 'de_DE.utf8');
+		try
+		{
+			assertEquals('1789667728.268663', Time::getDateTime(1789667728.268663)->format('U.u'));
+		}
+		finally
+		{
+			setlocale(LC_NUMERIC, $previous);
+		}
 	}
 
 	/**
