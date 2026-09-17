@@ -260,6 +260,7 @@ return [
 	'admin' => 'Administration',
 	'approve' => 'Accept',
 	'captcha' => 'Captcha',
+    'sort' => 'Sorting',
 
 	# CBX
 	'sel_all' => 'Select All',

@@ -117,7 +117,7 @@ final class GDT_IconUTF8
 		'remove' => '✕',
 		'reply' => '☞',
 		'required' => '❋',
-        'road' => '🚪',
+        'road' => '🛣',
 		'schedule' => '☷',
 		'search' => '🔍',
 		'select' => '🎚',
