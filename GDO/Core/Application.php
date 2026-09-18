@@ -186,7 +186,7 @@ class Application extends GDT
 
 	public function __destruct()
 	{
-		parent::__destruct();
+		parent::__destruct(); #PP#delete#
 		if (class_exists('GDO\\Core\\Logger', false))
 		{
 			Logger::flush();

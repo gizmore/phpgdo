@@ -19,7 +19,7 @@ class GDT_Sort extends GDT_UInt
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->min = 0;
 		$this->max = 65535;
 		$this->bytes = 2;
