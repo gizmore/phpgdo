@@ -9,6 +9,8 @@ return [
 	'profile_views' => 'Profiltreffer',
 	'profile_visibility' => 'Profil sichtbar für',
 	'probably_malicious' => 'Wahrscheinlicher Störenfried',
+	'bot' => 'Bot',
+	'msg_user_bot' => 'Bot-Markierung für %s: %s.',
 
 	'cfg_acl_levels' => 'Sichtbarkeit über Nutzerlevel?',
 	'cfg_acl_permissions' => 'Sichtbarkeit über Berechtigungen?',

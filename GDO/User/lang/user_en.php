@@ -9,6 +9,8 @@ return [
 	'profile_views' => 'Profile Views',
 	'profile_visibility' => 'Profile visible for',
 	'probably_malicious' => 'Probably Malicious',
+	'bot' => 'Bot',
+	'msg_user_bot' => 'Bot marker for %s: %s.',
 
 	'cfg_acl_levels' => 'Visibility via Levels?',
 	'cfg_acl_permissions' => 'Visibility via Permissions?',

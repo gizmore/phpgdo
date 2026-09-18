@@ -419,7 +419,7 @@ final class GDO_User extends GDO
 		GDT_Hook::callWithIPC('UserDeleted', $gdo, $this->isPersisted());
 	}
 
-	public function isBot(): bool { return $this->isType(GDT_UserType::BOT); }
+	public function isBot(): bool { return $this->settingValue('User', 'bot'); }
 
 	public function isLink(): bool { return $this->isType(GDT_UserType::LINK); }
 
