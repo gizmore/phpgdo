@@ -23,7 +23,7 @@ final class GDT_UserType extends GDT_Enum
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->enumValues(
 			self::SYSTEM, self::GHOST, self::GUEST,
 			self::MEMBER, self::BOT, self::LINK);
