@@ -131,7 +131,7 @@ class Cache
 	{
 		try
 		{
-			if (GDO_MEMCACHE == 1)
+			if (GDO_MEMCACHE == 1 && self::memcachedAvailable())
 			{
 				self::$MEMCACHED = new Memcached();
 				self::$MEMCACHED->addServer(GDO_MEMCACHE_HOST, GDO_MEMCACHE_PORT);
@@ -143,6 +143,12 @@ class Cache
 			Debug::debugException($ex);
 			return false;
 		}
+	}
+
+	/** The extension is optional and may differ between CLI and Apache SAPIs. */
+	private static function memcachedAvailable(): bool
+	{
+		return class_exists(Memcached::class, false);
 	}
 
 	/**
@@ -248,8 +254,14 @@ class Cache
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
-				return defined('GDO_MEMCACHED_FALLBACK') ? null :
-					self::$MEMCACHED->get(MEMCACHEPREFIX . $key);
+				if (!self::memcachedAvailable())
+				{
+					return null;
+				}
+				$value = self::$MEMCACHED->get(MEMCACHEPREFIX . $key);
+				// Memcached uses false for a miss; every other PHPGDO cache
+				// backend uses null, and callers consistently test for null.
+				return $value === false ? null : $value;
 			case 2:
 				return self::fileGetSerialized($key, $expire);
 			default:
@@ -473,7 +485,7 @@ class Cache
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
-				if (!defined('GDO_MEMCACHED_FALLBACK'))
+				if (self::memcachedAvailable())
 				{
 					self::$MEMCACHED->replace(MEMCACHEPREFIX . $key, $value, $expire);
 				}
@@ -558,7 +570,7 @@ class Cache
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
-				if (!defined('GDO_MEMCACHED_FALLBACK'))
+				if (self::memcachedAvailable())
 				{
 					self::$MEMCACHED->delete(MEMCACHEPREFIX . $key);
 				}
@@ -624,7 +636,7 @@ class Cache
 		switch (GDO_MEMCACHE)
 		{
 			case 1:
-				if (!defined('GDO_MEMCACHED_FALLBACK'))
+				if (self::memcachedAvailable())
 				{
 					self::$MEMCACHED->set(MEMCACHEPREFIX . $key, $value, $expire);
 				}
