@@ -6,9 +6,11 @@ use GDO\Core\Application;
 use GDO\Core\GDO;
 use GDO\Core\GDO_Module;
 use GDO\Core\GDT;
+use GDO\Core\GDT_Hook;
 use GDO\Core\ModuleLoader;
 use GDO\Core\Website;
 use GDO\UI\GDT_Card;
+use GDO\UI\GDT_Bar;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Page;
 use GDO\UI\GDT_Panel;
@@ -129,9 +131,22 @@ final class Profile extends MethodCard
 		$card->subtitleRaw(t('profile_level', [
 			self::getHighestPermission($user),
 			$user->getLevel()]));
+		$this->addProfileMenubar($card, $user);
 		foreach ($modules as $module)
 		{
 			$this->createCardB($card, $module);
+		}
+	}
+
+	/** Let modules contribute contextual actions for the profile being viewed. */
+	private function addProfileMenubar(GDT_Card $card, GDO_User $user): void
+	{
+		$bar = GDT_Bar::make('profile_menubar')->horizontal();
+		$bar->addClass('profile-menubar');
+		GDT_Hook::callHook('ProfileMenubar', $bar, $user);
+		if ($bar->hasFields())
+		{
+			$card->addField($bar);
 		}
 	}
 

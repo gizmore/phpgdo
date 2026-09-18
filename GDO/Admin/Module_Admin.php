@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace GDO\Admin;
 
 use GDO\Core\GDO_Module;
+use GDO\UI\GDT_Bar;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Menu;
 use GDO\UI\GDT_Page;
@@ -62,6 +63,16 @@ class Module_Admin extends GDO_Module
 	public function onIncludeScripts(): void
 	{
 		$this->addCSS('css/admin.css');
+	}
+
+	public function hookProfileMenubar(GDT_Bar $bar, GDO_User $user): void
+	{
+		if (GDO_User::current()->isStaff())
+		{
+			$bar->addField(GDT_Link::make('link_user_edit')
+				->href(href('Admin', 'UserEdit', '&user=' . $user->getID()))
+				->icon('edit'));
+		}
 	}
 
 	public function gdoHumanName(): string

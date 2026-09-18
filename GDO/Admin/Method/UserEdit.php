@@ -10,6 +10,7 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\UI\GDT_DeleteButton;
+use GDO\UI\GDT_Link;
 use GDO\User\GDO_User;
 use GDO\User\GDT_User;
 
@@ -65,6 +66,8 @@ class UserEdit extends MethodForm
 
 		# Add buttons
 		$form->actions()->addField(GDT_Submit::make());
+		$form->actions()->addField(GDT_Link::make('link_account_edit_user')
+			->href(href('Account', 'EditUser', '&user=' . $user->getID())));
 		$form->actions()->addField(GDT_DeleteButton::make()->onclick([$this, 'onDeleteUser']));
 		$form->addField(GDT_AntiCSRF::make());
 
