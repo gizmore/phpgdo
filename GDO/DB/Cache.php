@@ -243,7 +243,7 @@ class Cache
 		return null;
 	}
 
-	public static function get(string $key)
+	public static function get(string $key, int $expire = GDO_MEMCACHE_TTL)
 	{
 		switch (GDO_MEMCACHE)
 		{
@@ -251,7 +251,7 @@ class Cache
 				return defined('GDO_MEMCACHED_FALLBACK') ? null :
 					self::$MEMCACHED->get(MEMCACHEPREFIX . $key);
 			case 2:
-				return self::fileGetSerialized($key);
+				return self::fileGetSerialized($key, $expire);
 			default:
 				return null;
 		}

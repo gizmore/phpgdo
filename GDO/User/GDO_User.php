@@ -169,7 +169,8 @@ final class GDO_User extends GDO
     {
         if (is_numeric($id[0]))
         {
-            return self::getBy('user_id', $id[0]);
+            # Use the generic primary-key path so persistent caches are used.
+            return parent::getById(...$id);
         }
         elseif (str_starts_with($id[0], self::GUEST_NAME_PREFIX))
         {
