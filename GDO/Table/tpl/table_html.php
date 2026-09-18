@@ -20,7 +20,7 @@ endif;
 <div class="gdt-table"<?=$field->htmlID()?>>
 	<?php
 if (!$form) : ?>
-    <form method="post"<?=$field->htmlAction()?>>
+    <form method="get"<?=$field->htmlAction()?>>
 <?php endif; ?>
         <?php if ($field->searched) : ?>
             <?=GDT_SearchField::make("search_{$field->getName()}")->renderForm()?>

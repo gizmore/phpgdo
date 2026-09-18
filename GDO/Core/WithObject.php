@@ -339,47 +339,52 @@ trait WithObject
 	}
 
 	/**
-	 * Proxy filter to the pk filterColumn if specified.
-	 * else filter like parent.??
+	 * Filter an object field through the referenced object's searchable fields.
 	 */
 	public function filterQuery(Query $query, GDT_Filter $f): static
 	{
-		if (isset($this->filterField))
+		if (null !== ($filter = $this->filterVar($f)))
 		{
-			$this->table->gdoColumn($this->filterField)->filterQuery($query, $f);
-			return $this;
+			foreach (is_array($filter) ? $filter : [$filter] as $term)
+			{
+				$this->searchQuery($query, (string)$term);
+			}
 		}
-		else
-		{
-			$this->table->filterQuery($query, $f);
-			return $this;
-		}
+		return $this;
 	}
 
 	/**
-	 * Build a huge quicksearch query.
+	 * Search every searchable scalar column of the referenced object.
+	 *
+	 * The query itself belongs to the owning GDO, so the object's table has to
+	 * be joined first.  A copied field with the join alias as name lets the
+	 * normal GDT search implementations build their usual conditions without
+	 * teaching every GDT about object joins.
 	 */
 	public function searchQuery(Query $query, string $searchTerm): static
 	{
+		if ((!$this->isSearchable()) || (!isset($this->table)) || (!$key = $this->getName()))
+		{
+			return $this;
+		}
+
+		$query->joinObject($key, 'LEFT JOIN');
+		$prefix = "{$key}_t.";
+		foreach ($this->table->gdoColumnsCache() as $gdt)
+		{
+			// Nested object searches need another alias-aware join.  They are not
+			// scalar fields of this object and are deliberately left to their own
+			// table search.
+			if (($gdt instanceof GDT_Object) || ($gdt instanceof GDT_ObjectSelect) || ($gdt instanceof GDT_Join))
+			{
+				continue;
+			}
+			if ($name = $gdt->getName())
+			{
+				$gdt->gdtCopy($prefix . $name)->searchQuery($query, $searchTerm);
+			}
+		}
 		return $this;
-//		$table = $this->table;
-//		$nameT = GDO::escapeIdentifierS('t_' . $this->name);
-
-//		if ($first) // first time joined this table?
-//		{
-//			$name = GDO::escapeIdentifierS($this->name);
-//			$fk = $table->gdoPrimaryKeyColumn()->name;
-//			$fkI = GDO::escapeIdentifierS($fk);
-//			$myT = $this->gdtTable->gdoTableName();
-//			$query->join("LEFT JOIN {$table->gdoTableName()} {$nameT} ON {$myT}.{$name} = {$nameT}.{$fkI}");
-//		}
-
-//		$where = [];
-//		foreach ($table->gdoColumnsCache() as $gdt)
-//		{
-//			$gdt->searchQuery($query, $term);
-//		}
-//		return $this;
 	}
 
 	public function cascade(): static

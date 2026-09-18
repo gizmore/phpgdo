@@ -251,7 +251,14 @@ class GDT_ObjectSelect extends GDT_Select
 
     public function filterQuery(Query $query, GDT_Filter $f): static
     {
-        return parent::filterQuery($query, $f);
+        if (null !== ($filter = $this->filterVar($f)))
+        {
+            foreach (is_array($filter) ? $filter : [$filter] as $term)
+            {
+                $this->searchQuery($query, (string)$term);
+            }
+        }
+        return $this;
     }
 
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace GDO\DB;
 
+use GDO\Core\Application;
 use GDO\Core\Debug;
 use GDO\Core\GDO;
 use GDO\Core\GDO_DBException;
@@ -10,6 +11,8 @@ use GDO\Core\GDT_Join;
 use GDO\Core\GDT_Object;
 use GDO\Core\GDT_ObjectSelect;
 use GDO\Core\Logger;
+use GDO\UI\GDT_Page;
+use GDO\UI\GDT_Success;
 
 /**
  * GDO Query Builder.
@@ -603,9 +606,18 @@ final class Query
 		$query = $this->buildQuery();
 
 		#PP#start#
-		if ($this->debug)
+		if ($this->debug || GDO_DB_DEBUG)
 		{
-			printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
+			if (Application::instance()->isWebserver())
+			{
+				$sql = '<code class="gdo-query-debug">' . html($query) . '</code>';
+				GDT_Page::instance()->topResponse()->addField(
+					GDT_Success::make()->titleRaw('SQL')->textRaw($sql));
+			}
+			else
+			{
+				printf("<code class=\"gdo-query-debug\">%s</code>\n", html($query));
+			}
 			Logger::rawLog('query', $query);
 		}
 		#PP#end#

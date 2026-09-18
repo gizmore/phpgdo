@@ -7,7 +7,7 @@ use GDO\Table\GDT_Filter;
 /** @var $f GDT_Filter * */
 /** @var $field GDT_Select * */
 ?>
-<select name="<?=$f->name?>[<?=$field->name?>]">
+<select name="<?=$f->name?>[<?=$field->name?>]" onchange="this.form.requestSubmit()">
     <option value="<?=$field->emptyVar?>"><?=t('all')?></option>
 	<?php
 	foreach ($field->initChoices() as $var => $value) : ?>
