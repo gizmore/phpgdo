@@ -25,7 +25,7 @@ class GDT_Checkbox extends GDT_Select
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->emptyVar = '2';
 		$this->min = 0;
 		$this->max = 1;
