@@ -41,7 +41,7 @@ class GDT_User extends GDT_Object
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->table(GDO_User::table());
 		$this->icon('face');
 	}

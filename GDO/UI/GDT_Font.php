@@ -22,7 +22,7 @@ class GDT_Font extends GDT_Select
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->initChoices();
 	}
 

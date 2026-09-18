@@ -122,7 +122,7 @@ abstract class GDO extends GDT
     #PP#start####
 	public function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->afterLoaded();
 	}
 

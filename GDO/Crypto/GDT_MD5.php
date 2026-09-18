@@ -13,7 +13,7 @@ final class GDT_MD5 extends GDT_Char
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->length(32);
 		$this->caseS();
 		$this->ascii();

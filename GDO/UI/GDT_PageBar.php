@@ -14,7 +14,7 @@ final class GDT_PageBar extends GDT_Enum
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->enumValues('none', 'left', 'right', 'bottom');
 	}
 

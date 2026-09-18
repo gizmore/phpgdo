@@ -57,7 +57,7 @@ class GDT_Timestamp extends GDT_DBField
 
     protected function __construct()
     {
-        parent::__construct();
+        parent::__construct(); #PP#delete#
         $this->addClass('gdt-timestamp');
     }
 

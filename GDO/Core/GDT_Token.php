@@ -18,7 +18,7 @@ class GDT_Token extends GDT_Char
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->length(GDO::TOKEN_LENGTH);
 	}
 

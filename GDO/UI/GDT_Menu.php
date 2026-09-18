@@ -23,7 +23,7 @@ class GDT_Menu extends GDT_Container
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->labelNone();
 	}
 

@@ -20,7 +20,7 @@ class GDT_Gender extends GDT_Enum
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->icon('gender');
 		$this->label('gender');
 		$this->enumValues(self::MALE, self::FEMALE);

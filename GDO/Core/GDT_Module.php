@@ -31,7 +31,7 @@ final class GDT_Module extends GDT_ObjectSelect
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->table(GDO_Module::table());
 	}
 

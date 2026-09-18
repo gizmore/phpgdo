@@ -16,7 +16,7 @@ class GDT_Password extends GDT_String
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->min = 59;
 		$this->max = 60;
 		$this->encoding = self::ASCII;

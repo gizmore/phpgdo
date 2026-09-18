@@ -6,7 +6,7 @@ class GDT_Percent extends GDT_Decimal
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->digits(4, 1);
 		$this->icon('percent');
 	}

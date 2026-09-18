@@ -20,7 +20,7 @@ final class GDT_Timezone extends GDT_ObjectSelect
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->notNull();
 		$this->table(GDO_Timezone::table());
 		$this->initial('1'); # UTC

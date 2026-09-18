@@ -18,7 +18,7 @@ class GDT_CreatedAt extends GDT_Timestamp
 
     protected function __construct()
     {
-        parent::__construct();
+        parent::__construct(); #PP#delete#
         $this->notNull();
         $this->writeable(false);
     }

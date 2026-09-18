@@ -14,7 +14,7 @@ final class GDT_MessageEditor extends GDT_Select
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 // 		$this->initial(GDT_Message::$EDITOR_NAME);
 		$this->notNull();
 	}

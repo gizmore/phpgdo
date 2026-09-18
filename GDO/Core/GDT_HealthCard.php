@@ -15,7 +15,7 @@ final class GDT_HealthCard extends GDT_Card
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		Load::init();
 		$this->title('health');
 		$this->addFields(

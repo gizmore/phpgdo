@@ -26,7 +26,7 @@ class GDT_Panel extends GDT
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->addClass('gdt-panel');
 	}
 

@@ -17,7 +17,7 @@ final class GDT_PackedIP extends GDT_String
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->binary()->min(1)->max(16);
 		$this->icon = 'url';
 	}

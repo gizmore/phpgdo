@@ -8,7 +8,7 @@ final class GDT_SubDomain extends GDT_Object
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->table(GDO_SubDomain::table());
 	}
 

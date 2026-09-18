@@ -14,7 +14,7 @@ final class GDT_DownloadButton extends GDT_Button
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->name = 'download';
 		$this->icon('download');
 		$this->addClass('gdt-download-button');

@@ -19,7 +19,7 @@ final class GDT_IPP extends GDT_UInt
 	#############
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->initial($this->getDefaultIPP());
 		$this->min = 1;
 		$this->max = 1000;

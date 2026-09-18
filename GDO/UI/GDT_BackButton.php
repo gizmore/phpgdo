@@ -13,7 +13,7 @@ final class GDT_BackButton extends GDT_Button
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->icon('back');
 		$this->label('btn_back');
 		$this->href(GDT_Redirect::hrefBack());

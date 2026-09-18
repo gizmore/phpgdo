@@ -14,7 +14,7 @@ final class GDT_Back extends GDT_Link
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->name('back');
 		$this->icon('back');
 		$this->href(GDT_Redirect::hrefBack());

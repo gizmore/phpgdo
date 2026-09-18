@@ -28,7 +28,7 @@ final class GDT_Error extends GDT_Panel
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->icon = 'error';
 		$this->addClass('gdt-error');
 		$this->addClass('alert');

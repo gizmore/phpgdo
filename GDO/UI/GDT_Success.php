@@ -18,7 +18,7 @@ final class GDT_Success extends GDT_Panel
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->addClass('gdt-success');
 		$this->addClass('alert');
 		$this->addClass('alert-success');

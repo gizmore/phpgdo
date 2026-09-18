@@ -14,7 +14,7 @@ final class GDT_AdminBar extends GDT_Bar
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->addFields(
 			GDT_Link::make()->text('btn_clearcache')->href(
 				href('Core', 'ClearCache')),

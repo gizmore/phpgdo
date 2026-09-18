@@ -38,7 +38,7 @@ class GDT_Url extends GDT_String
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->icon = 'url';
 		$this->ascii()->caseS();
 		$this->min(1)->max(767);

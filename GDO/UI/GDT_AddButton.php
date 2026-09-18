@@ -16,7 +16,7 @@ class GDT_AddButton extends GDT_Submit
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 // 		$this->label('add');
 		$this->icon = 'add';
 	}

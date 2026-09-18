@@ -34,7 +34,7 @@ class GDT_AntiCSRF extends GDT_String
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$mod = Module_Form::instance();
 		if ($mod->cfgXSRFMode() === 'fixed')
 		{

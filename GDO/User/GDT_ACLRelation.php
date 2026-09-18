@@ -32,7 +32,7 @@ final class GDT_ACLRelation extends GDT_Enum
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->enumValues(self::ALL, self::GUESTS, self::MEMBERS, self::FRIEND_FRIENDS, self::FRIENDS, self::NOONE, self::HIDDEN);
 		$this->initial = self::NOONE;
 		$this->notNull = true;

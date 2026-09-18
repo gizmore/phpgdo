@@ -24,7 +24,7 @@ final class GDT_Level extends GDT_Badge
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->writeable(true);
 		$this->icon('level');
 	}

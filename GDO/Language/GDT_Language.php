@@ -23,7 +23,7 @@ final class GDT_Language extends GDT_ObjectSelect
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->table(GDO_Language::table());
 		$this->min = $this->max = 2;
 		$this->icon('language');

@@ -77,7 +77,7 @@ class GDT_Form extends GDT
 
     protected function __construct()
     {
-        parent::__construct();
+        parent::__construct(); #PP#delete#
         $this->verb(self::POST);
         $this->addClass('gdt-form');
         $this->action(isset($_SERVER['REQUEST_URI'])?urldecode($_SERVER['REQUEST_URI']):'?');

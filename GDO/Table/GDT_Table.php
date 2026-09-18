@@ -123,7 +123,7 @@ class GDT_Table extends GDT
 
 	protected function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); #PP#delete#
 		$this->action = urldecode($_SERVER['REQUEST_URI']);
 	}
 
