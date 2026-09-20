@@ -33,7 +33,9 @@ return [
 	'md_date_timezone' => 'Setzen Sie Ihre Zeitzone auf %s.',
 	'msg_timezone_changed' => 'Ihre Zeitzone ist nun %s.',
 	'cfg_tz_probe_js' => 'Zeitzone mit Javascript ermitteln?',
-	'cfg_tz_sidebar_select' => 'Zeitzohnenwahl in der Sidebar anzeigen?',
+	'cfg_tz_sidebar_select' => 'Zeitzonenauswahl in der Sidebar anzeigen?',
+	'tz_probe_js' => 'Zeitzone mit Javascript ermitteln?',
+	'tz_sidebar_select' => 'Zeitzonenauswahl in der Sidebar anzeigen?',
 
 	# Timezones
 	'mt_timezones' => 'Alle Zeitzonen',
@@ -51,6 +53,7 @@ return [
 
 	# Clock
 	'cfg_clock_sidebar' => 'Uhr in der Navigation anzeigen?',
+	'clock_sidebar' => 'Uhr in der Navigation anzeigen?',
 	'cfg_tz_default' => 'Standard-Zeitzone',
 
 	# Activity Accuracy

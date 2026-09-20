@@ -11,7 +11,8 @@ $ref = urlencode($_SERVER['REQUEST_URI']);
 <div class="gdo-lang-switch">
 <?php foreach ($languages as $lang) : ?>
 <?php
-$href = href('Language', 'SwitchLang', sprintf('&_ref=%s&lang=%s&submit=1', $ref, $lang->getISO()));
+$iso = $lang->getISO();
+$href = href('Language', 'SwitchLang', sprintf('&_ref=%s&lang=%s&submit=1&_lang=%s', $ref, $iso, $iso));
 $flag = $lang->renderFlag();
 $alt = t('md_switch_language', [$lang->renderName()]);
 ?>

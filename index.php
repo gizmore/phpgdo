@@ -68,6 +68,13 @@ Database::init();
 Trans::setISO(GDO_LANGUAGE);
 $loader = ModuleLoader::instance();
 $loader->loadModulesCache(); # @TODO lazy module loading. This requires a complete change in how Hooks work.
+
+# Asset hooks run during module initialization. Honour an explicit URL language
+# before they capture the current ISO for JavaScript and generated URLs.
+if (isset($_REQUEST['_lang']) && preg_match('/^[a-z]{2}$/', (string)$_REQUEST['_lang']))
+{
+	Trans::setISO((string)$_REQUEST['_lang']);
+}
 if (!module_enabled('Core'))
 {
     require 'index_install.php';

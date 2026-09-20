@@ -118,10 +118,11 @@ function href(string $module, string $method, ?string $append = null, bool $seo 
     $sep = GDO_SEO_SEP;
     $module = strtolower($module);
     $method = strtolower($method);
-    if ($seo)
-    {
-        $href = GDO_WEB_ROOT . "{$module}{$sep}{$method}{$sep}";
-        $q = [];
+	if ($seo)
+	{
+		$href = GDO_WEB_ROOT . "{$module}{$sep}{$method}{$sep}";
+		$q = [];
+		$has_lang = false;
 		$hash = '';
 		if ($append)
 		{
@@ -148,6 +149,7 @@ function href(string $module, string $method, ?string $append = null, bool $seo 
 					else
 					{
 						$q[] = $part;
+						$has_lang = $has_lang || str_starts_with($part, '_lang=');
 					}
 				}
             }
@@ -161,7 +163,7 @@ function href(string $module, string $method, ?string $append = null, bool $seo 
 			$href .= '?' . implode('&', $q);
 		}
 
-		if (!isset($q['_lang']))
+		if (!$has_lang)
 		{
 			$href .= $q ? '&' : '?';
 			$href .= '_lang=';

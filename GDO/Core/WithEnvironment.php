@@ -61,7 +61,12 @@ trait WithEnvironment
 	protected function changeUser(): self
 	{
 		$user = isset($this->runAs) ? $this->runAs : GDO_User::current();
-		GDO_User::setCurrent($user);
+		// Nested methods normally run as the already selected web user. Reapplying
+		// that user resets the requested language to the stored profile language.
+		if (GDO_User::current()->getID() !== $user->getID())
+		{
+			GDO_User::setCurrent($user);
+		}
 		return $this;
 	}
 

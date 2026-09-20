@@ -31,6 +31,11 @@ final class Module_UI extends GDO_Module
 
 	public int $priority = 20;
 
+	public function onLoadLanguage(): void
+	{
+		$this->loadLanguage('lang/ui');
+	}
+
 	public function isCoreModule(): bool
 	{
 		return true;
