@@ -89,7 +89,7 @@ final class GDT_Language extends GDT_ObjectSelect
 
 	public function withCompletion(): self
 	{
-		return $this->completionHref(href('Language', 'Completion'));
+		return $this->completionHref(href('Language', 'Completion', null, GDO_SEO_URLS, 'json'));
 	}
 
 }

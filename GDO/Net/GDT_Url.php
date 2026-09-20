@@ -112,7 +112,7 @@ class GDT_Url extends GDT_String
 
     public function renderCell(): string
     {
-        return $this->renderHTML();
+        return $this->getVar() ? $this->renderHTML() : '---';
     }
 
     ###############
