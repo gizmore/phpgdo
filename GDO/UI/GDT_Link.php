@@ -107,7 +107,12 @@ class GDT_Link extends GDT_Url
 		return $html;
 	}
 
-	public function renderCLI(): string
+    public function renderCard(): string
+    {
+        return $this->renderHTML();
+    }
+
+    public function renderCLI(): string
 	{
 		return $this->renderJSON();
 	}
