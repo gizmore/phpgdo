@@ -30,6 +30,22 @@ class GDT_String extends GDT_DBField
 
 	public string $icon = 'text';
 
+	/** @var array<string, \Collator> */
+	private static array $collators = [];
+
+	/** Return a cached ICU collator for locale-aware string ordering. */
+	public static function collator(?string $locale = null): \Collator
+	{
+		$locale ??= GDO_LANGUAGE;
+		return self::$collators[$locale] ??= new \Collator($locale);
+	}
+
+	/** Compare two strings using the active (or supplied) locale. */
+	public static function localeCompare(string $a, string $b, ?string $locale = null): int
+	{
+		return (int) self::collator($locale)->compare($a, $b);
+	}
+
 	#######################
 	### CaseSensitivity ###
 	#######################

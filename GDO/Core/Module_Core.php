@@ -103,6 +103,10 @@ final class Module_Core extends GDO_Module
 		{
 			$ok = $this->errorSystemDependency('err_php_extension', ['iconv']);
 		}
+		if (!class_exists(\Collator::class))
+		{
+			$ok = $this->errorSystemDependency('err_php_extension', ['intl']);
+		}
 		return $ok;
 	}
 
