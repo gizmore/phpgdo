@@ -208,4 +208,14 @@ abstract class GDT_Composite extends GDT_Container
         return $payload;
     }
 
+    public function renderCard(): string
+    {
+        $payload = '';
+        foreach ($this->getFields() as $gdt)
+        {
+            $payload .= $gdt->renderCard();
+        }
+        return $payload;
+    }
+
 }
