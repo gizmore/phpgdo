@@ -14,6 +14,8 @@ use GDO\Util\FileUtil;
 final class GDT_Filesize extends GDT_UInt
 {
 
+    public string $icon = 'storage';
+
 	public function gdtDefaultLabel(): ?string
     {
         return 'filesize';

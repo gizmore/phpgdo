@@ -8,6 +8,11 @@ use GDO\Net\GDT_IP;
 final class MyIP extends Method
 {
 
+    public function isShownInSitemap(): bool
+    {
+        return false;
+    }
+
     public function execute(): GDT
     {
         return GDT_IP::make('your_ip')->useCurrent();

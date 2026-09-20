@@ -15,7 +15,12 @@ use GDO\Perf\GDT_PerfBar;
 final class Bar extends Method
 {
 
-	public function execute(): GDT
+    public function isShownInSitemap(): bool
+    {
+        return false;
+    }
+
+    public function execute(): GDT
 	{
 		return GDT_PerfBar::make();
 	}

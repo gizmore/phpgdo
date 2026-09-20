@@ -29,7 +29,9 @@ final class Fileserver extends Method
 
 	public function isHiddenMethod(): bool { return false; }
 
-	public function isTrivial(): bool { return false; }
+    public function isShownInSitemap(): bool { return false; }
+
+    public function isTrivial(): bool { return false; }
 
 	public function isAlwaysAllowed(): bool { return true; }
 

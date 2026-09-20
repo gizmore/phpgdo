@@ -73,7 +73,7 @@ final class Module_User extends GDO_Module
 			{
 				$menu = GDT_Menu::make('menu_profile')->vertical();
 				GDT_Page::instance()->rightBar()->addField($menu);
-				$menu->addField(GDT_Link::make()->href($user->hrefProfile())->text('link_your_profile', [
+				$menu->addField(GDT_Link::make()->icon('account')->href($user->hrefProfile())->text('link_your_profile', [
 					$user->renderUserName()]));
 			}
 		}

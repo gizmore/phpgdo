@@ -24,6 +24,7 @@ class GDT_Version extends GDT_String
 	public int $encoding = self::ASCII;
 	public bool $caseSensitive = true;
 	public string $pattern = "/^\\d+\\.\\d+\\.\\d+$/iD";
+    public string $icon = 'version';
 
 	###################
 	### Var / Value ###

@@ -15,6 +15,8 @@ use GDO\Core\GDT_Float;
 final class GDT_Length extends GDT_Float
 {
 
+    public string $icon = 'ruler';
+
 	/**
 	 * For tests we try two sizes.
 	 */

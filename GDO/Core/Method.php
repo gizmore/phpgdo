@@ -89,6 +89,11 @@ abstract class Method
         return false;
     }
 
+    public function getDefaultRenderMode(): string
+    {
+        return 'html';
+    }
+
 	public function getCLITrigger(): string
 	{
 		return strtolower("{$this->getModule()->getCLITrigger()}.{$this->getMethodName()}");
@@ -117,7 +122,7 @@ abstract class Method
 
 	public function isSavingLastUrl(): bool { return true; }
 
-	public function isShownInSitemap(): bool { return true; }
+	public function isShownInSitemap(): bool { return !$this->isCLI() && !$this->isHiddenMethod(); }
 
 	public function isHiddenMethod(): bool { return false; }
 
@@ -657,7 +662,7 @@ abstract class Method
 
 	public function href(string $append = ''): string
 	{
-		return $this->getModule()->href($this->getMethodName(), $append);
+		return $this->getModule()->href($this->getMethodName(), $append, $this->getDefaultRenderMode());
 	}
 
 //	private function unlock(): bool

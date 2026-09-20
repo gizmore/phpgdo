@@ -19,7 +19,12 @@ use GDO\UI\MethodPage;
 final class OnWindows extends MethodPage
 {
 
-	public function getMethodTitle(): string
+    public function isShownInSitemap(): bool
+    {
+        return false;
+    }
+
+    public function getMethodTitle(): string
 	{
 		return 'phpgdo on Windows';
 	}

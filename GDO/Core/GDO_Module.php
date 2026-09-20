@@ -292,9 +292,9 @@ class GDO_Module extends GDO
 	/**
 	 * HREF generation helper.
 	 */
-	public function href(string $methodName, string $append = ''): string
+	public function href(string $methodName, string $append = '', $mode='html'): string
 	{
-		return href($this->getName(), $methodName, $append);
+		return href($this->getName(), $methodName, $append, GDO_SEO_URLS, $mode);
 	}
 
 	public function getName(): ?string

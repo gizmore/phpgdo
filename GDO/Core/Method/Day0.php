@@ -10,6 +10,11 @@ use GDO\UI\MethodPage;
 final class Day0 extends MethodPage
 {
 
+    public function isShownInSitemap(): bool
+    {
+        return false;
+    }
+
     public function gdoParameters(): array
     {
         return [

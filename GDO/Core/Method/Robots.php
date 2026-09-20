@@ -15,4 +15,9 @@ use GDO\UI\MethodPage;
 final class Robots extends MethodPage
 {
 
+    public function getDefaultRenderMode(): string
+    {
+        return 'txt';
+    }
+
 }

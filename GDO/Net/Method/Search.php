@@ -15,6 +15,11 @@ use GDO\Net\HTTP;
 final class Search extends MethodForm
 {
 
+    public function isShownInSitemap(): bool
+    {
+        return false;
+    }
+
     public function getDDGURL(string $query): string
     {
         return sprintf("http://api.duckduckgo.com/?q=%s&format=json", urlencode($query));

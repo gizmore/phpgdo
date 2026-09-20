@@ -80,9 +80,9 @@ final class Module_UI extends GDO_Module
     public function getUserConfig(): array
     {
         return [
-            GDT_UInt::make('device_width')->hidden(),
-            GDT_UInt::make('device_height')->hidden(),
-            GDT_String::make('device_version')->hidden(),
+            GDT_UInt::make('device_width')->hidden()->icon('ruler'),
+            GDT_UInt::make('device_height')->hidden()->icon('ruler'),
+            GDT_String::make('device_version')->hidden()->icon('version'),
         ];
     }
 

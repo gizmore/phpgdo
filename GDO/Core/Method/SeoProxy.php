@@ -20,6 +20,11 @@ use GDO\Core\ModuleLoader;
 final class SeoProxy extends Method
 {
 
+    public function isShownInSitemap(): bool
+    {
+        return false;
+    }
+
 	/**
 	 * Makes no sense to test this in the usual stack, as it builds method params.
 	 * @TODO Write a test for 403, 404 and SEOProxy.

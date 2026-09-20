@@ -2,6 +2,7 @@
 namespace GDO\Core;
 
 use GDO\UI\GDT_Card;
+use GDO\UI\GDT_Title;
 use GDO\Util\Load;
 
 /**
@@ -17,14 +18,14 @@ final class GDT_HealthCard extends GDT_Card
 	{
 		parent::__construct(); #PP#delete#
 		Load::init();
-		$this->title('health');
+		$this->title(GDT_Title::make('health'));
 		$this->addFields(
 			GDT_Version::make('gdo_version')->initial(Module_Core::GDO_VERSION),
-			GDT_String::make('gdo_revision')->initial(Module_Core::GDO_REVISION),
+			GDT_String::make('gdo_revision')->initial(Module_Core::GDO_REVISION)->icon('numeric'),
 			GDT_Version::make('php_version')->initial(PHP_VERSION),
-			GDT_UInt::make('health_cpus')->initial(Load::$STATE['cpus']),
+			GDT_UInt::make('health_cpus')->initial(Load::$STATE['cpus'])->icon('cpu'),
 			GDT_Percent::make('health_load')->digitsAfter(2)->initial(Load::$STATE['load']),
-			GDT_Decimal::make('health_clock')->digits(2, 2)->initial(Load::$STATE['clock']),
+			GDT_Decimal::make('health_clock')->digits(2, 2)->initial(Load::$STATE['clock'])->icon('speed'),
 			GDT_Filesize::make('health_mem')->label('health_mem')->initial(Load::$STATE['avail']),
 			GDT_Filesize::make('health_used')->label('health_used')->initial(Load::$STATE['used']),
 			GDT_Filesize::make('health_free')->label('health_free')->initial(Load::$STATE['free']),

@@ -16,6 +16,8 @@ use GDO\UI\GDT_Redirect;
 final class ForceSSL extends Method
 {
 
+    public function isShownInSitemap(): bool { return false; }
+
 	public function isHiddenMethod(): bool
 	{
 		return true;

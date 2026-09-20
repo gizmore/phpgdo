@@ -28,7 +28,12 @@ final class Module_Perf extends GDO_Module
 		$this->loadLanguage('lang/perf');
 	}
 
-	##############
+    public function onIncludeScripts(): void
+    {
+        $this->addCSS('css/gdo7-perf.css');
+    }
+
+    ##############
 	### Config ###
 	##############
 	public function getConfig(): array

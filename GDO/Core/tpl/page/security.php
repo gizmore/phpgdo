@@ -30,20 +30,20 @@ As no-one really uses this, it does not matter much.
 There is only one branch, the master one, and all installations should be up to date, always.
 Roughly you can say a security issue will patch all versions.
 
-v7(properitary) is under development. v6(free) would still receive security fixes.
+v7(properitary) is under development. v6(free) is end of life.
 
 +---------+-----------+
 | Version | Supported |
 +---------+-----+-----+
-| >=6.0.0 | Yes |
+| >=6.0.0 | No  |
 | >=7.0.0 | Yes |
 +---------+-----+
 
 
 ## GDOv7 SECURITY.md: Reporting a Vulnerability
 
-Just write me a mail (gizmore@wechall.net),
-open an issue, or contact on irc.wechall.net.
+Just write a mail to support@wechall.net,
+open an issue, or contact us on irc.wechall.net.
 A security problem will be fixed asap.
 There is no real reward, but helping the GDO project is a hacking challenge flag on www.wechall.net :)
 
@@ -51,6 +51,7 @@ There is no real reward, but helping the GDO project is a hacking challenge flag
 ### Credits
 
 Thanks for reading SECURITY.md!
+
 - gizmore
 
 
