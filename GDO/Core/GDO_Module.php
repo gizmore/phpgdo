@@ -1039,6 +1039,18 @@ class GDO_Module extends GDO
 		return false;
 	}
 
+    public function hasUserConfig(): bool
+    {
+        foreach ($this->getSettingsConfigs() as $gdt)
+        {
+            if ($gdt instanceof GDT_DBField)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * @return GDT[]
 	 */
