@@ -3,21 +3,20 @@
 There are plenty of modules to discover.
 
 This page is under construction.
-Please roughly refer to
-[gdo6_modules]()
+Please refer to the
+[GDO6 modules overview](https://github.com/gizmore/gdo6/blob/master/DOCS/GDO_MODULES.md)
 or use `./gdo_adm.sh modules`.
 
 ## GDO7_MODULES: Installation
 
-To install a module, please read [GDO7_INSTALLATION.md](GDO7_INSTALLATION.md#gdov7-installation-of-a-module).
-
+To install a module, please read [GDO7_INSTALLATION.md](GDO7_INSTALLATION.md#gdov7-installation-modules).
 ## GDO7_MODULES: Categorized Modules Overview
 
 To see the module overview you can issue a gdo_adm command.
 
     ./gdo_adm.sh modules
 
-Below i have listed the available modules, categorized a bit.
+Below I have listed the available modules, categorized a bit.
 
 To install a module type `./gdo_adm.sh provide <module_name>`.
 
