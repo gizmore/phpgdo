@@ -49,6 +49,7 @@ final class Module_UI extends GDO_Module
 		return [
             GDT_Checkbox::make('allow_editor_choice')->notNull()->initial('1'),
             GDT_Checkbox::make('store_device_info')->notNull()->initial('1'),
+			GDT_Color::make('gdo_theme_color')->label('gdo_theme_color')->notNull()->initial('#ff9900'),
 			GDT_MessageEditor::make('default_editor')->notNull()->initial('Text'),
 		];
 	}
@@ -72,6 +73,11 @@ final class Module_UI extends GDO_Module
     {
         return $this->getConfigValue('store_device_info');
     }
+
+	public function cfgThemeColor(): string
+	{
+		return $this->getConfigVar('gdo_theme_color') ?: '#ff9900';
+	}
 
 	################
 	### Settings ###
