@@ -24,6 +24,7 @@ vendor/
 
 # PHPUnit
 .phpunit.result.cache
+.phpunit.cache/
 
 # Yarn
 **/node_modules/
@@ -40,10 +41,10 @@ hax.php
 # GDO
 assets/
 files/
-files_test/
+files_*/
 protected/
 temp/
-temp_test/
+temp_*/
 
 # Installer
 install/*
