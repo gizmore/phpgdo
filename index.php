@@ -46,7 +46,7 @@ define('GDO_TIME_START', microtime(true));
 #######################
 ### Bootstrap GDOv7 ###
 #######################
-require (($_SERVER['GDO_BADGER_INSTANCE'] ?? '') === '1' ? 'protected/config_badger.php' : 'protected/config.php');
+require 'protected/config.php';
 if (!defined('GDO_CONFIGURED'))
 {
 	require 'index_install.php'; # no config. bail out

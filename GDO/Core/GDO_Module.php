@@ -382,7 +382,7 @@ class GDO_Module extends GDO
 	 */
 	public function tempPath(string $path = ''): string
 	{
-		$base = Application::$INSTANCE->isUnitTests() ? 'temp_test' : (defined('GDO_BADGER_INSTANCE') ? 'temp_badger' : 'temp');
+		$base = Application::$INSTANCE->isUnitTests() ? 'temp_test' : (defined('GDO_FILES_DIR') && GDO_FILES_DIR === 'files_badger' ? 'temp_badger' : 'temp');
 		$full = GDO_PATH . "{$base}/" . $this->getLowerName() . '/' . $path;
 		FileUtil::createdDir(dirname($full));
 		return $full;
