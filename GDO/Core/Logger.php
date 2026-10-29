@@ -237,6 +237,25 @@ final class Logger
 	}
 
 	/**
+	 * Redact password-like request keys, including nested form fields.
+	 */
+	public static function redactPasswords(array $data): array
+	{
+		foreach ($data as $key => $value)
+		{
+			if (stripos((string) $key, 'pass') !== false)
+			{
+				$data[$key] = 'xxxxx';
+			}
+			elseif (is_array($value))
+			{
+				$data[$key] = self::redactPasswords($value);
+			}
+		}
+		return $data;
+	}
+
+	/**
 	 * strip values from arraykeys which contain 'pass'
 	 */
 	private static function stripPassword(array $a): string

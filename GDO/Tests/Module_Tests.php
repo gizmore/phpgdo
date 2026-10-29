@@ -72,11 +72,11 @@ final class Module_Tests extends GDO_Module
 	/**
 	 * Run every queued module suite in one PHPUnit process.
 	 */
-	public static function runQueuedSuites(): void
+	public static function runQueuedSuites(): int
 	{
 		if (!self::$testDirs)
 		{
-			return;
+			return 0;
 		}
 
 		$names = array_map(static fn(string $dir): string => basename(dirname($dir)), self::$testDirs);
@@ -92,8 +92,9 @@ final class Module_Tests extends GDO_Module
 			];
 		$argv = array_merge($argv, self::$testDirs);
 		$app = new Application();
-		$app->run($argv);
+		$result = $app->run($argv);
 		self::$testDirs = [];
+		return $result;
 	}
 
 

@@ -136,6 +136,7 @@ final class Profile extends MethodCard
 		{
 			$this->createCardB($card, $module);
 		}
+		GDT_Hook::callHook('ProfileMainContent', $card, $user, GDO_User::current());
 	}
 
 	/** Let modules contribute contextual actions for the profile being viewed. */

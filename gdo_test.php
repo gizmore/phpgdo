@@ -593,7 +593,7 @@ if (Installer::installModules($modules))
 	{
 		Module_Tests::runTestSuite($module);
 	}
-	Module_Tests::runQueuedSuites();
+	$testExitCode = Module_Tests::runQueuedSuites();
 }
 
 //CLI::flushTopResponse();
@@ -605,3 +605,4 @@ $time = microtime(true) - GDO_TIME_START;
 $perf = GDT_PerfBar::make('performance');
 $perf = $perf->renderMode(GDT::RENDER_CLI);
 printf("Finished with %s asserts after %s.\n%s\n", TestCase::$ASSERT_COUNT, Time::humanDuration($time), $perf);
+exit($testExitCode ?? 0);

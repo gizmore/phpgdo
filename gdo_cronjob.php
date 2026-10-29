@@ -19,7 +19,7 @@ if (php_sapi_name() !== 'cli')
 }
 
 require 'GDO7.php';
-require 'protected/config.php';
+require (getenv('GDO_BADGER_INSTANCE') === '1' ? 'protected/config_badger.php' : 'protected/config.php');
 
 final class gdo_cronjob extends Application
 {
@@ -36,7 +36,7 @@ $me = Stub::make();
 gdo_cronjob::instance();
 CLI::setServerVars();
 Debug::init(GDO_ERROR_DIE, GDO_SEND_ERROR_MAILS);
-Logger::init('cronjob', Logger::ALL, 'protected/logs');
+Logger::init('cronjob', Logger::ALL, getenv('GDO_BADGER_INSTANCE') === '1' ? 'temp_badger/cronlogs' : 'protected/logs');
 Database::init();
 Trans::setISO('en');
 

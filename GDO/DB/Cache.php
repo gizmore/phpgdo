@@ -660,7 +660,7 @@ class Cache
 # config
 define('GDO_MEMCACHE_FALLBACK', !class_exists('Memcached', false));
 define('MEMCACHEPREFIX', GDO_DOMAIN . Module_Core::GDO_REVISION);
-define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : 'temp/'));
+define('GDO_TEMP_PATH', GDO_PATH . (Application::instance()->isUnitTests() ? 'temp_test/' : (defined('GDO_BADGER_INSTANCE') ? 'temp_badger/' : 'temp/')));
 #PP#start#
 deff('GDO_FILECACHE', 1);       # enable filecache
 deff('GDO_MEMCACHE', 2);        # fallback to it

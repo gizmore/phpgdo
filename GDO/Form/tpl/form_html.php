@@ -14,7 +14,7 @@ if ($field->hasError()) : ?>
 <?php
 endif; ?>
 <div<?=$field->htmlID()?><?=$field->htmlAttributes()?>>
-    <form<?=$field->htmlVerb()?><?=$field->htmlAction()?><?=$field->htmlTarget()?>>
+    <form<?=$field->htmlVerb()?><?=$field->htmlAction()?><?=$field->htmlTarget()?><?=$field->htmlEnctype()?>>
         <div class="gdt-form-inner">
 			<?php
 			if ($field->hasTitle() || $field->hasText()) : ?>

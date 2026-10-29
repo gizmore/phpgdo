@@ -27,7 +27,7 @@ use Throwable;
  * @var string[] $argv
  */
 # The GDOv7 CLI bootstrap.
-require __DIR__ . '/../protected/config.php';
+require __DIR__ . (getenv('GDO_BADGER_INSTANCE') === '1' ? '/../protected/config_badger.php' : '/../protected/config.php');
 if (!defined('GDO_CONFIGURED'))
 {
 	echo "GDOv7 is not installed here.\n";

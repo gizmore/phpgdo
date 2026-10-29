@@ -505,7 +505,7 @@ final class Debug
 			$_SERVER['USER_AGENT'] ?? 'NULL',
 			$user,
 			$message,
-			print_r($_REQUEST, true),
+			print_r(Logger::redactPasswords($_REQUEST), true),
 		];
 		foreach ($args as $i => $arg)
 		{

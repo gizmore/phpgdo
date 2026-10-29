@@ -70,6 +70,19 @@ class GDT_Form extends GDT
 
     public bool $slim = false;
 
+    private bool $multipart = false;
+
+    public function multipart(bool $multipart = true): self
+    {
+        $this->multipart = $multipart;
+        return $this;
+    }
+
+    public function htmlEnctype(): string
+    {
+        return $this->multipart ? ' enctype="multipart/form-data"' : '';
+    }
+
     ############
     ### Slim ###
     ############
