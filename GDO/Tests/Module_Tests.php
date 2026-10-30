@@ -90,9 +90,29 @@ final class Module_Tests extends GDO_Module
 				'--do-not-cache-result',
 				'--no-configuration',
 			];
+		if (($filter = \gdo_test::instance()->testFilter) !== null && $filter !== '')
+		{
+			// These two Language tests prepare identities and the English test
+			// locale that module suites also rely on in an unfiltered run.
+			$argv[] = '--filter=~(?:LanguageTest::testUserGeneration|LanguageTest::testSetToEnglish|' . preg_quote($filter, '~') . ')~i';
+		}
 		$argv = array_merge($argv, self::$testDirs);
 		$app = new Application();
 		$result = $app->run($argv);
+		if ($result === 0 && isset($filter) && $filter !== '')
+		{
+			$setupNames = [
+				'GDO\\Language\\Test\\LanguageTest::testUserGeneration',
+				'GDO\\Language\\Test\\LanguageTest::testSetToEnglish',
+			];
+			$matchesSetup = false;
+			foreach ($setupNames as $name) { if (stripos($name, $filter) !== false) $matchesSetup = true; }
+			if (!$matchesSetup && \PHPUnit\TestRunner\TestResult\Facade::result()->numberOfTestsRun() <= count($setupNames))
+			{
+				fwrite(STDERR, "No tests matched the requested filter.\n");
+				$result = 1;
+			}
+		}
 		self::$testDirs = [];
 		return $result;
 	}

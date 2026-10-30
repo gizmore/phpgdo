@@ -66,6 +66,7 @@ Logger::disableBuffer();
  */
 final class gdo_test extends Application
 {
+	public ?string $testFilter = null;
 
 	public bool $all = false;
 
@@ -256,7 +257,7 @@ final class gdo_test extends Application
 	{
 		global $argv;
 		$app = "php {$argv[0]}";
-		echo "{$app} 0 <module1,module2,... Use % as wildcard>\n";
+		echo "{$app} <module1,module2,... Use % as wildcard> [test-name substring]\n";
 		echo "\n";
 		echo "Use $app '%' to run tests on all modules\n";
 		echo "\n";
@@ -393,6 +394,10 @@ $argc = count($argv);
 
 switch ($argc)
 {
+	case 2:
+		$app->testFilter = $argv[1];
+		$argc = 1;
+		break;
 	case 0:
 		$app->all();
 		$argv = ['%'];
@@ -568,15 +573,37 @@ $modules = array_filter($modules, function (GDO_Module $module) use ($skip)
 # ## Install and run ###
 # ######################
 Trans::inited(); // Need langfiles for installer...
-if (Installer::installModules($modules))
+try
+{
+	$installed = Installer::installModules($modules);
+}
+catch (Throwable $ex)
+{
+	fwrite(STDERR, 'Test installation failed (' . get_class($ex) . ").\n");
+	exit(1);
+}
+if (!$installed)
+{
+	fwrite(STDERR, "Test installation failed.\n");
+	exit(1);
+}
+if ($installed)
 {
 	$loader->initModules(); # now we can init really...
 	if ($app->double)
 	{
 		$app->verboseMessage('Installing all selected modules again, for double installer check.');
-		assertTrue(
-			Installer::installModules($modules, true),
-			'Test if double install works with forced migration.');
+		try { $reinstalled = Installer::installModules($modules, true); }
+		catch (Throwable $ex)
+		{
+			fwrite(STDERR, 'Test reinstallation failed (' . get_class($ex) . ").\n");
+			exit(1);
+		}
+		if (!$reinstalled)
+		{
+			fwrite(STDERR, "Test reinstallation failed.\n");
+			exit(1);
+		}
 	}
 	$app->verboseMessage('Leaving installer mode.');
 	$app->install = false;
@@ -593,7 +620,12 @@ if (Installer::installModules($modules))
 	{
 		Module_Tests::runTestSuite($module);
 	}
-	$testExitCode = Module_Tests::runQueuedSuites();
+	try { $testExitCode = Module_Tests::runQueuedSuites(); }
+	catch (Throwable $ex)
+	{
+		fwrite(STDERR, 'Test execution failed (' . get_class($ex) . ").\n");
+		exit(1);
+	}
 }
 
 //CLI::flushTopResponse();

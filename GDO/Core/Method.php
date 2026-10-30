@@ -235,8 +235,11 @@ abstract class Method
 			# 1) Start the transaction
 			if ($this->transactional())
 			{
+				if (!$db->transactionBegin())
+				{
+					throw new \RuntimeException('Could not begin method transaction');
+				}
 				$transactional = true;
-				$db->transactionBegin();
 			}
 
 //			$this->lock();
@@ -300,7 +303,10 @@ abstract class Method
 			# 6) Commit transaction
 			if ($transactional)
 			{
-				$db->transactionEnd();
+				if (!$db->transactionEnd())
+				{
+					throw new \RuntimeException('Could not commit method transaction');
+				}
 			}
 
 			return $response;

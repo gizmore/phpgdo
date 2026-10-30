@@ -73,6 +73,8 @@ class Database
 	private string $host, $user, $pass;
 	private ?string $db;
 	private int $debug;
+	private bool $transactionActive = false;
+	private array $rollbackCallbacks = [];
 
 	public function __construct(string $host, string $user, string $pass, ?string $db = null, int $debug = 0)
 	{
@@ -493,6 +495,8 @@ class Database
 		try
 		{
 			self::DBMS()->dbmsBegin();
+			$this->transactionActive = true;
+			$this->rollbackCallbacks = [];
 			return true;
 		}
 		catch (GDO_DBException $ex)
@@ -514,6 +518,8 @@ class Database
 			$t1 = microtime(true); #PP#delete#
 
 			self::DBMS()->dbmsCommit();
+			$this->transactionActive = false;
+			$this->rollbackCallbacks = [];
 
 			$t2 = microtime(true); #PP#delete#
 			$tt = $t2 - $t1; #PP#delete#
@@ -537,6 +543,14 @@ class Database
 		try
 		{
 			self::DBMS()->dbmsRollback();
+			$this->transactionActive = false;
+			$callbacks = $this->rollbackCallbacks;
+			$this->rollbackCallbacks = [];
+			foreach ($callbacks as $callback)
+			{
+				try { $callback(); }
+				catch (Throwable $ex) { Debug::debugException($ex); }
+			}
 			return true;
 		}
 		catch (Throwable $ex)
@@ -544,6 +558,12 @@ class Database
 			Debug::debugException($ex);
 			return false;
 		}
+	}
+
+	/** Register cleanup for resources created during the current transaction. */
+	public function onRollback(callable $callback): void
+	{
+		if ($this->transactionActive) { $this->rollbackCallbacks[] = $callback; }
 	}
 
 	###############
