@@ -490,11 +490,16 @@ class Database
 		return isset($this->link);
 	}
 
-	public function transactionBegin(): bool
+	public function transactionBegin(bool $writeReservation = false): bool
 	{
 		try
 		{
-			self::DBMS()->dbmsBegin();
+			$dbms = self::DBMS();
+			if ($writeReservation && method_exists($dbms, 'dbmsBeginImmediate'))
+			{
+				$dbms->dbmsBeginImmediate();
+			}
+			else { $dbms->dbmsBegin(); }
 			$this->transactionActive = true;
 			$this->rollbackCallbacks = [];
 			return true;

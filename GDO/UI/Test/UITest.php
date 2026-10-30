@@ -26,7 +26,14 @@ final class UITest extends TestCase
 	 */
 	public function testHTMLPageRendering()
 	{
-		$content = GDT_Page::instance()->renderHTML();
+		$oldUri = $_SERVER['REQUEST_URI'] ?? null;
+		$_SERVER['REQUEST_URI'] ??= '/';
+		try { $content = GDT_Page::instance()->renderHTML(); }
+		finally
+		{
+			if ($oldUri === null) { unset($_SERVER['REQUEST_URI']); }
+			else { $_SERVER['REQUEST_URI'] = $oldUri; }
+		}
 		assertStringContainsString('window.GDO_REVISION', $content, 'Test if page rendering works.');
 		self::assertEquals(1, substr_count($content, 'window.GDO_REVISION'), 'Test if Javascript is only rendered once!');
 	}

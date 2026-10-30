@@ -50,7 +50,7 @@ final class Module_Tests extends GDO_Module
 			$skip[] = 'UI';
 			$skip[] = 'User';
 		}
-		if (in_array($name, $skip, true))
+		if (in_array($name, $skip, true) && ($app->all || !in_array($name, $app->childs, true)))
 		{
 			$app->verboseMessage("Skipping Module_{$name} for not checking utitlity tests.");
 			return;

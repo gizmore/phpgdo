@@ -225,6 +225,9 @@ class GDO_Module extends GDO
 
 	public function onInstall(): void {}
 
+	/** Explicit schema migrations normally preserve existing install hooks. */
+	public function onMigrate(): void { $this->onInstall(); }
+
 	# ##########
 	# ## GDO ###
 	# ##########

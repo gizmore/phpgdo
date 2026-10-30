@@ -266,7 +266,8 @@ class Installer
 		self::installMethods($module);
 
         $module->initOnce();
-		$module->onInstall();
+		if ($forceMigrate) { $module->onMigrate(); }
+		else { $module->onInstall(); }
 
 		ModuleLoader::instance()->addEnabledModule($module);
 	}
@@ -369,7 +370,7 @@ class Installer
 			}
 			catch (GDO_DBException $t)
 			{
-				echo Debug::debugException($t);
+				throw $t;
 			}
 			finally
 			{

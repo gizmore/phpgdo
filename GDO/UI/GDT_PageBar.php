@@ -35,7 +35,9 @@ final class GDT_PageBar extends GDT_Enum
 
 	public function validate(int|float|string|array|null|object|bool $value): bool
 	{
-		return true;
+		// toValue() resolves the selected name to a bar; validate the actual
+		// submitted enum value rather than accepting the fallback bar.
+		return $this->validateSingle($this->getVar());
 	}
 
 }
