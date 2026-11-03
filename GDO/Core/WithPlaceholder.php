@@ -2,7 +2,8 @@
 namespace GDO\Core;
 
 /**
- * Add a placeholder attribute.
+ * Add a placeholder attribute. A configured translated or raw placeholder is
+ * escaped for HTML; placeholderNone() removes the attribute.
  *
  * @version 7.0.0
  * @since 6.5.2
@@ -13,7 +14,7 @@ trait WithPlaceholder
 
 	public string $placeholderRaw;
 	public string $placeholderKey;
-	public array $placeholderArgs;
+	public ?array $placeholderArgs;
 
 	public function placeholder(string $key, ?array $args = null): self
 	{
@@ -51,7 +52,7 @@ trait WithPlaceholder
 	 */
 	public function htmlPlaceholder(): string
 	{
-		return isset($this->placeholder) ?
+		return (isset($this->placeholderKey) || isset($this->placeholderRaw)) ?
 			sprintf(' placeholder="%s"', $this->renderPlaceholder()) :
 			'';
 	}
